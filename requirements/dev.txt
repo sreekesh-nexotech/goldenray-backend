@@ -1,0 +1,12 @@
+-r base.txt
+pytest==9.1.1
+pytest-django==4.14.0
+pytest-cov==7.1.0
+factory_boy==3.3.3
+Faker==40.39.0
+freezegun==1.5.5
+responses==0.26.3
+black==26.5.1
+isort==9.0.1
+flake8==7.4.1
+import-linter==2.15

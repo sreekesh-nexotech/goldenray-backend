@@ -1,0 +1,178 @@
+[importlinter]
+root_packages =
+    flarize
+    engines
+    core
+    accounts
+    audit
+    media
+    documents
+    company
+    catalog
+    pricing
+    procurement
+    inventory
+    bom
+    packs
+    engineering
+    customers
+    leads
+    quotations
+    agreements
+    site_inspections
+    projects
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices
+    legacy
+    migrations_tools
+include_external_packages = True
+
+[importlinter:contract:engines-pure]
+name = engines/ is pure Python: no Django, no DRF, no Celery, no app, no project package
+type = forbidden
+source_modules =
+    engines
+forbidden_modules =
+    django
+    rest_framework
+    rest_framework_simplejwt
+    drf_spectacular
+    django_filters
+    celery
+    flarize
+    core
+    accounts
+    audit
+    media
+    documents
+    company
+    catalog
+    pricing
+    procurement
+    inventory
+    bom
+    packs
+    engineering
+    customers
+    leads
+    quotations
+    agreements
+    site_inspections
+    projects
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices
+    legacy
+    migrations_tools
+
+[importlinter:contract:layers]
+name = Platform below product master below configuration below sales (arrows point down only)
+type = layers
+layers =
+    customers : leads : quotations : agreements : site_inspections : projects
+    bom : packs : engineering
+    catalog : pricing : procurement : inventory
+    core : accounts : audit : media : documents
+
+[importlinter:contract:platform-is-the-bottom]
+name = The platform (core, accounts, audit, media, documents) imports no product, content, HR, legacy or migration code
+type = forbidden
+source_modules =
+    core
+    accounts
+    audit
+    media
+    documents
+forbidden_modules =
+    company
+    catalog
+    pricing
+    procurement
+    inventory
+    bom
+    packs
+    engineering
+    customers
+    leads
+    quotations
+    agreements
+    site_inspections
+    projects
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices
+    legacy
+    migrations_tools
+
+[importlinter:contract:content-and-hr-never-import-sales]
+name = Website content and HR never import sales
+type = forbidden
+source_modules =
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    company
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices
+forbidden_modules =
+    customers
+    leads
+    quotations
+    agreements
+    site_inspections
+    projects
+
+[importlinter:contract:product-master-ignores-content-and-hr]
+name = Product master and configuration import nothing from website content or HR
+type = forbidden
+source_modules =
+    catalog
+    pricing
+    procurement
+    inventory
+    bom
+    packs
+    engineering
+forbidden_modules =
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices

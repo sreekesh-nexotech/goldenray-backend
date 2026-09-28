@@ -1,0 +1,40 @@
+[project]
+name = "flarize-platform"
+version = "0.1.0"
+description = "Flarize Platform backend: one API for the website, Studio, quotations, agreements, site inspections and HR."
+requires-python = ">=3.12,<3.13"
+
+[tool.black]
+line-length = 200
+target-version = ["py312"]
+extend-exclude = '''
+(
+  /migrations/
+  | /\.venv/
+  | /var/
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 200
+skip_glob = ["*/migrations/*", ".venv/*", "var/*"]
+known_first_party = [
+  "flarize", "engines", "core", "accounts", "audit", "media", "documents", "company", "catalog", "pricing", "procurement",
+  "inventory", "bom", "packs", "engineering", "customers", "leads", "quotations", "agreements", "site_inspections", "projects",
+  "blog", "sitepages", "faqs", "careers", "seo", "reference", "calculators", "emi", "hr", "attendance", "devices", "legacy",
+  "migrations_tools",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "flarize.settings.test"
+python_files = ["test_*.py"]
+addopts = "-q --strict-markers"
+markers = [
+  "playwright: needs a Chromium install (documents rendering); deselect with -m 'not playwright'",
+  "slow: long-running test",
+]
+
+[tool.coverage.run]
+branch = true
+omit = ["*/migrations/*", "*/tests/*", "conftest.py", "manage.py", "flarize/settings/*"]

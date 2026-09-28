@@ -1,0 +1,28 @@
+# Runtime state (dev RSA keys, dev Fernet key, local media)
+var/
+
+# Environment files never go to git
+.env*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+
+# Build / collected output
+staticfiles/
+media/
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

@@ -8,3 +8,4 @@
 | DV-4 | §6.2 `/bom/**` "no shim" | `/legacy/bom/api/calculate/` is shimmed with byte-parity to the old `BomCalculator` | the website quotation page (`frontend/src/services/bomService.ts`) calls it directly |
 | DV-5 | §3.1 legacy "same paths" | Django serves old contracts only under `/legacy/…`; nginx rewrites the old public URLs to `/legacy/…` | keeps the application URL space strictly versioned |
 | DV-6 | §2.3 inventory tables | Implemented in a dedicated `inventory` app | the plan lists tables but no owning app |
+| DV-7 | §2.1 core_outbox_event | Three extra columns: `dedup_key` (partial unique, idempotent emit), `parked_at` (poison-pill rows after 5 attempts, distinct from `processed_at`), `delivered` (handlers that already succeeded, never re-run on retry) | the standard's outbox rules (§7.2: idempotency by unique constraint, poison-pill guard, no double-fire) need state the PLAN table does not carry |

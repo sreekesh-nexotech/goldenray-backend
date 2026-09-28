@@ -1,0 +1,14 @@
+[flake8]
+max-line-length = 200
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    migrations,
+    .venv,
+    var,
+    staticfiles,
+    media,
+    htmlcov
+per-file-ignores =
+    flarize/settings/*.py: F401, F403, F405

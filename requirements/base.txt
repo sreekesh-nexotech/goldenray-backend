@@ -1,0 +1,20 @@
+# Runtime dependencies (exact pins). Verified against Django 6.0 with `manage.py check` and the full test suite.
+Django==6.0.8
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+drf-spectacular==0.30.0
+django-filter==26.1
+psycopg[binary,pool]==3.3.6
+celery[redis]==5.4.0
+django-celery-beat==2.9.0
+redis==5.3.1
+argon2-cffi==25.1.0
+bcrypt==5.0.0
+cryptography==50.0.1
+python-decouple==3.8
+django-cors-headers==4.9.0
+Pillow==12.3.0
+openpyxl==3.1.5
+phonenumbers==9.0.40
+requests==2.34.2
+playwright==1.63.0
