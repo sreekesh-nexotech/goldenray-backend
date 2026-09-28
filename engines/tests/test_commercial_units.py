@@ -171,9 +171,13 @@ class TestPricingPython:
 
 class TestPackConfigPython:
     def test_validate_config(self):
-        pack_config.validate_config({"gst": {"ratePct": 8.9}, "pricing": {"mode": "GROSS_MARGIN"}, "extra": 1})
+        config = pack_config.seed_from_catalog({}, at="2026-09-20")["approved"]["config"]
+        pack_config.validate_config(config)
         with pytest.raises(pack_config.PackConfigError) as raised:
-            pack_config.validate_config({"gst": {"ratePct": 200}})
+            pack_config.validate_config({**config, "extra": 1})  # unknown sections are refused (review R2)
+        assert raised.value.code == "INVALID_SECTION"
+        with pytest.raises(pack_config.PackConfigError) as raised:
+            pack_config.validate_config({**config, "gst": {"ratePct": 200}})
         assert raised.value.code == "INVALID_VALUE"
         with pytest.raises(pack_config.PackConfigError):
             pack_config.validate_config([])

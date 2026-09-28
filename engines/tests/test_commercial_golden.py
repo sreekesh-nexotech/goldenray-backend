@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from engines._jscompat import JsError
-from engines.tests.golden_harness import MODULES, assert_error_same, assert_same, error_dict, load_fixtures, load_golden, normalize, run_case
+from engines.tests.golden_harness import MODULES, assert_error_same, assert_same, error_dict, expected_result, load_fixtures, load_golden, normalize, run_case
 
 CASES = [(module, case) for module in MODULES for case in load_golden(module)["cases"]]
 FLARIZE_ROOT = Path(os.environ.get("FLARIZE_ROOT", "/home/user/flarize-main/flarize"))
@@ -43,4 +43,4 @@ def test_golden_case(module, case):
         assert_error_same(case["error"], error_dict(error))
         return
     assert "error" not in case, f"JS threw {case['error']}; Python returned {actual!r}"
-    assert_same(case["result"], normalize(actual))
+    assert_same(expected_result(case), normalize(actual))

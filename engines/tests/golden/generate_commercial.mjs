@@ -358,7 +358,13 @@ function synthRegistry() {
     ] },
   ] };
 }
-Object.assign(SYNTH, { synthCatalog: synthCatalog(), synthRegistry: synthRegistry() });
+// A panel whose watt is the string '0' (truthy in JS): the panel count divides by zero → Infinity, never a crash.
+function zeroWattCatalog() {
+  const c = synthCatalog();
+  c.categories.panel.items.find((i) => i.id === 'p_a').watt = '0';
+  return c;
+}
+Object.assign(SYNTH, { synthCatalog: synthCatalog(), synthRegistry: synthRegistry(), zeroWattCatalog: zeroWattCatalog() });
 
 function runBom(fnName, config, env) {
   const cat = resolveRef(env.catalog.$ref);
@@ -497,6 +503,10 @@ for (const [i, cfg] of [
     { systemType: 'ongrid', size: '5sp', tier: 'value', futureSystemSize: '5' },
   ];
   synthSel.forEach((cfg, i) => bomCase(`bom/synth-selection/${i}`, 'buildBom', cfg, SYN));
+  // Division by zero is JS Infinity, not an exception (review R1).
+  const ZERO_WATT = { ...SYN, catalog: { $ref: 'zeroWattCatalog' } };
+  bomCase('bom/zero-watt/default', 'buildBom', { systemType: 'ongrid', size: '3', tier: 'base' }, ZERO_WATT);
+  bomCase('bom/zero-watt/selected', 'buildBom', { systemType: 'ongrid', size: '3', tier: 'value', selections: { panel: 'p_a' } }, ZERO_WATT);
 }
 // buildAllTierBoms and getAlternatives.
 bomCase('all-tiers/ongrid-5sp', 'buildAllTierBoms', { systemType: 'ongrid', size: '5sp', configSource: 'approved', actorRole: 'SALES', tierSelections: { value: { panel: 'p7' } } }, REAL);
@@ -563,6 +573,7 @@ fsCjs.readFileSync = realRead;
   const twoVehicles = clone(approved);
   twoVehicles.transportConfig.vehicles.push({ vehicleType: 'LORRY', vehicleName: 'Lorry', ratePerKm: 55 });
   const bare = { marketRates: { ongrid_value: { 3: 229000 } }, installationMatrix: { 3: { flat: 15000, sheet: 18000 } }, transportConfig: { vehicles: [{ vehicleType: 'ACE' }] } };
+  const gstMinus100 = { ...bare, gst: { ratePct: -100 } };  // 1 + gst/100 = 0: the pre-GST split divides by zero (review R1)
   const edge = [
     ['roof-invalid', { roofType: 'TIN' }], ['roof-missing', { roofType: { $js: 'undefined' } }], ['roof-lower', { roofType: 'sheet' }],
     ['distance-negative', { distanceKm: -1 }], ['distance-text', { distanceKm: 'abc' }], ['distance-missing', { distanceKm: { $js: 'undefined' } }],
@@ -575,6 +586,7 @@ fsCjs.readFileSync = realRead;
     ['lines-without-amount', { lines: [{ isVariable: true, category: 'panel', componentId: 'p7', defaultComponentId: 'p2', unitPrice: 13298, qty: 6, defaultUnitPrice: 13585, gst: 5 }, { unitPrice: 100, qty: 3 }, { amount: 50 }, { isVariable: true, defaultComponentId: 'x', componentId: 'y', unitPrice: 10, qty: 2, defaultUnitPrice: 10 }] }],
     ['swap-default-qty', { lines: [{ isVariable: true, category: 'inverter', componentId: 'i97', defaultComponentId: 'i20', unitPrice: 30000, qty: 1, defaultUnitPrice: 18250, defaultQty: 2, gst: 5, name: 'Inv', defaultName: 'Def' }] }],
     ['hybrid-bat-key', { systemType: 'hybrid', tier: 'value', batteryConfig: 2 }], ['hybrid-bat-null', { systemType: 'hybrid', tier: 'value', batteryConfig: null }],
+    ['gst-minus-100', { config: gstMinus100 }],
   ];
   for (const [id, over] of edge) {
     const args = { config: { $ref: 'packStore.approved.config' }, systemType: 'ongrid', size: '3', tier: 'value', roofType: 'FLAT', distanceKm: 130, lines: { $bomLines: 'pack/ongrid/3/value' }, ...over };
@@ -590,6 +602,11 @@ fsCjs.readFileSync = realRead;
   for (const [i, item] of [{}, { qty: {} }, { qty: { a: 1, 3: 2 } }, { qty: { '3.0': 2, 5: 4 } }, { qty: { 2: '4', 6: 10 } }].entries()) {
     call(cases, `structureQty/edge/${i}`, 'structureQty', PP.structureQty, [item, 4]);
   }
+  // A size key "0" (validateSection accepts it): scaling above the last size divides by 0 → Infinity (review R1).
+  for (const [i, [item, kw]] of [[{ qty: { 0: 11 } }, 4], [{ qty: { 0: 11 } }, 0], [{ qty: { '-2': 3, 0: 11 } }, 1], [{ qty: { '-2': 3, 0: 11 } }, -1]].entries()) {
+    call(cases, `structureQty/zero-size/${i}`, 'structureQty', PP.structureQty, [item, kw]);
+  }
+  call(cases, 'structureMaterial/zero-size', 'structureMaterial', PP.structureMaterial, [{ items: [{ name: 'T', type: 'fixed', price: 10, qty: { 0: 2 } }, { name: 'U', type: 'tube', weightKg: 12.2, qty: { 0: 0, 3: 3 } }] }, 4, 85]);
   call(cases, 'structureMaterial/none', 'structureMaterial', PP.structureMaterial, [null, 3, 85]);
   call(cases, 'structureMaterial/no-items', 'structureMaterial', PP.structureMaterial, [{ items: 'x' }, 3, 85]);
   for (const [i, [costs, tier]] of [[{}, 'base'], [{}, 'value'], [{ gpRatePerKg: 90, giRatePerKg: 101 }, 'base'], [{ gpRatePerKg: 90 }, 'premium'], [null, 'base']].entries()) {

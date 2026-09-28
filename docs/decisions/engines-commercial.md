@@ -5,7 +5,7 @@ Work package engines-commercial ports the commercial half of the Flarize Node ut
 are pure functions: no Django, no app, no I/O (import-linter contract `engines-pure`, and
 `engines/tests/test_commercial_units.py::test_engines_import_nothing_from_django_or_apps`). They are what the pricing,
 procurement, packs, bom, quotations and calculators packages call; this package adds **no table, column, endpoint or
-permission** — the PLAN tables they feed belong to those packages. Deviations: DV-17 … DV-20.
+permission** — the PLAN tables they feed belong to those packages. Deviations: DV-17 … DV-20, DV-25, DV-26 (review).
 
 ## What exists
 
@@ -22,11 +22,11 @@ permission** — the PLAN tables they feed belong to those packages. Deviations:
 | `engines/pack_config.py` | `src/lib/packConfig.js` (`flarize.pack-config/1`) | `validate_section`, **`validate_config`** (the `packs_config_version.config` schema), `seed_from_catalog`, `approved_config`, `draft_config`, `update_draft_section`, `update_draft_template`, `submit_draft`, `approve_draft`, `approve_draft_direct`, `reject_draft`, `reset_draft`, `describe_store`, `market_rate_key`, `approved_sizes`, `future_pairs_for`; re-exports the package-registry API below |
 | `engines/package_registry.py` | `src/lib/packageApproval.js` (V4), `packageAuthority.js`, `packageProjection.js` | `approve_package`, `reject_package`, `reset_package`, `bulk_approve_packages`, `list_packages_for_role`, `approval_summary`, `assert_package_selectable_by_actor`, `create_package`, `duplicate_package`, `create_revision`, `edit_package`, `submit_package`, `archive_package`, `run_package_checker(…, check_project_bom=)`, `resolve_package_architecture`, `combo_key_for`, `PackageIdFactory`, `derive_package_components`, `is_approved_selection`, `is_sales_editable`, `hydrate_registry`, `visible_for_runtime` |
 | `engines/flarize_rbac.py` | `src/lib/rbac.js` (`rbac.1`) | `assert_can` (the default `authorize` of the lifecycles), `allow_all`, `can`, `CAPABILITY_MATRIX`, `RbacError` |
-| `engines/_money_compat.py` | `src/lib/money.js` (`money.1`) | `round_money`, `sum_exact`, `mul_exact`, `is_money` — stand-in for `engines.money` (see "Merge notes") |
+| `engines/_money_compat.py` | `src/lib/money.js` (`money.1`) | `round_money`, `sum_exact`, `mul_exact`, `is_money` on doubles — the float twin of engines-core's Decimal-only `engines.money`; it stays after the merge (see "Merge notes") |
 | `engines/_jscompat.py` | — | the JavaScript value rules the ports need (below); private to `engines` |
 | `engines/tests/golden/generate_commercial.mjs` | — | runs the REAL JS against the real data + synthetic edge cases; writes the golden files |
-| `engines/tests/golden/commercial_*.json`, `fixtures/flarize_commercial.json` | — | 1 899 golden cases; the Flarize data the Python side replays them with |
-| `engines/tests/golden_harness.py`, `test_commercial_golden.py`, `test_commercial_reference.py`, `test_commercial_units.py` | — | exact-equality replay of every case; §20 references asserted literally; Python-only rules |
+| `engines/tests/golden/commercial_*.json`, `fixtures/flarize_commercial.json` | — | 1 907 golden cases; the Flarize data the Python side replays them with |
+| `engines/tests/golden_harness.py`, `test_commercial_golden.py`, `test_commercial_reference.py`, `test_commercial_units.py`, `test_commercial_review.py` | — | exact-equality replay of every case (documented deviations applied by `EXPECTED_DEVIATIONS`); §20 references asserted literally; Python-only rules; the review findings |
 
 ## Decisions not spelled out in the PLAN
 
@@ -89,7 +89,9 @@ permission** — the PLAN tables they feed belong to those packages. Deviations:
     `core.errors.DomainError`.
 11. **Malformed data is not a crash contract.** Where the JS would throw a `TypeError` on malformed input (a missing
     `items` array, a `null` special work), the port treats the container as empty or raises a Python exception; the
-    generator refuses to record any case that crashed the JS, so no golden depends on it.
+    generator refuses to record any case that crashed the JS, so no golden depends on it. Where the JS did NOT throw
+    — a division by zero is ±Infinity/NaN in JS — the port must not throw either: every JS `/` whose divisor can be
+    zero goes through `_jscompat.js_div` (review R1).
 12. **Golden files are minified JSON** (7.5 MB in all; git stores them zlib-compressed, ~0.5 MB). Each records the
     SHA-256 of every JS source and data file it was generated from (`sources`), the frozen clock and its synthetic
     fixtures.
@@ -145,14 +147,15 @@ pseudonymous ids (`admin-001`). The legacy-import contract does not apply: this 
 
 * Generator: `node engines/tests/golden/generate_commercial.mjs [FLARIZE_ROOT]` (default
   `/home/user/flarize-main/flarize`, Node 22). It writes only inside `engines/tests/golden/`.
-* **1 899 golden cases**, every one replayed with exact JSON equality (`engines/tests/test_commercial_golden.py`):
+* **1 907 golden cases**, every one replayed with exact JSON equality (`engines/tests/test_commercial_golden.py`;
+  the one documented deviation, DV-25, is applied to the recorded JS result by `golden_harness.EXPECTED_DEVIATIONS`):
 
   | Golden | Cases | Covers |
   |---|---|---|
   | `money` | 109 | `roundMoney`/`isMoney`/`mulExact`/`sumExact` incl. 1.005, ±x.5, 2⁵³+, strings, NaN |
   | `device_allocation` | 166 | exact cover, fewest units, tie bias, 8 candidate sets × 0–23 panels, invalid panels/candidates |
-  | `bom` | 257 | **every pack of the approved pack config** (ongrid 6 sizes × 3 tiers + 6 future-ready pairs; hybrid 4 sizes × 3 tiers × battery null/0/1/2 + 2 FR pairs = 108 BOMs), Sales swaps and refusals, unsupported configurations, catalog-only and registry-less builds, a synthetic catalog for every slot/default/filter/allocation branch, all-tier builds, alternatives per role |
-  | `pack_pricing` | 547 | every approved pack × FLAT/SHEET/ELEVATED with transport distances 0–1000 km, plus a full-market-rate config; swap deltas; every BLOCKED code; structure helpers for 12 kW values |
+  | `bom` | 259 | **every pack of the approved pack config** (ongrid 6 sizes × 3 tiers + 6 future-ready pairs; hybrid 4 sizes × 3 tiers × battery null/0/1/2 + 2 FR pairs = 108 BOMs), Sales swaps and refusals, unsupported configurations, catalog-only and registry-less builds, a synthetic catalog for every slot/default/filter/allocation branch, all-tier builds, alternatives per role, a panel with `watt: '0'` (review R1) |
+  | `pack_pricing` | 553 | every approved pack × FLAT/SHEET/ELEVATED with transport distances 0–1000 km, plus a full-market-rate config; swap deltas; every BLOCKED code; structure helpers for 12 kW values; zero-size structure keys and a −100 % GST rate (review R1) |
   | `pack_config` | 68 | every section valid/invalid, 6 lifecycle scenarios (submit/approve, reject/withdraw, direct approve, RBAC refusals, double submit, template patches), the real store, seeding |
   | `package_registry` | 74 | 7 registry scenarios (approve/supersede/archive, validation gates, component gate, reject/reset, authoring with generated ids, edit/submit, bulk/list/selectable), projection, authority derivation for every profile |
   | `cost` | 90 | full BOM snapshots of approved packs; 45 head-by-head variants (every error code, rate cards: seeded, real, banded, effective dates) |
@@ -190,26 +193,72 @@ pseudonymous ids (`admin-001`). The legacy-import contract does not apply: this 
 
 ## Hand-over notes
 
-* **pricing**: `LIST` prices come from `pricing.gross_margin_list_price`; pack prices from
+* **pricing**: `LIST` prices come from `pricing.gross_margin_list_price` (also exposed as
+  `cost.gross_margin_list_price`, where PLAN §2.3 places the gross-margin check); pack prices from
   `pack_pricing.price_pack(config=<PackConfig JSON>, lines=build_bom(...)["lines"], …)`; the publish report can reuse
   the `BLOCKED` error codes (`MARKET_RATE_NOT_SET`, `INSTALLATION_NOT_SET`, …). Offers: map PLAN FLAT/PERCENT to
-  `flat`/`percentage` before calling `engines.offers` (DV-19).
+  `flat`/`percentage` before calling `engines.offers` (DV-19); the engine matches `appliesToSize` against the size
+  KEY (`'3'`, `'5sp'`, `'5tp'`), which PLAN's numeric `applies_to_size_kw` cannot tell apart for 5 kW 1P/3P. Every
+  engine input is JSON-like: pass `Decimal` columns through `engines._jscompat.json_numbers` first (a `Decimal` is not
+  a JS number to `is_num`, so e.g. a Decimal market rate prices as `MARKET_RATE_NOT_SET`).
 * **procurement**: commit = `cost.allocate_landed(lines, charges, batch_id=…)`; write PURCHASE from
   `purchaseUnitPrice` and LANDED from `landedUnitCost` (or `landedUnitCostExact` quantized); refuse the commit when
-  `ok` is false (`errors[0].code`).
-* **packs**: validate `packs_config_version.config` with `pack_config.validate_config`; build the Flarize-shaped store
+  `ok` is false (`errors[0].code`). The charges are allocated in whole rupees (`roundMoney` of their sum, the JS
+  rule): a batch whose charges carry paise allocates their rounded sum, so compare `allocation.allocatedTotal` with
+  the rounded `charges_total`, not the paise figure. Quantities must be positive (`BATCH_LINE_INVALID`): a reversing
+  batch (PLAN §2.4 corrections) cannot be allocated by this function and needs its own rule in the procurement package.
+* **packs**: validate `packs_config_version.config` with `pack_config.validate_config` (exactly the ten sections, each
+  valid: an unknown key is `INVALID_SECTION`, a missing section `INVALID_VALUE`); build the Flarize-shaped store
   (`{"schema","approved","draft","history"}`) from the approved and draft rows to reuse the lifecycle functions, pass
-  `authorize=allow_all` after the registry check, persist what they return.
+  `authorize=allow_all` after the registry check, persist what they return. `create_package` / `duplicate_package` /
+  `create_revision` draw ids from `PackageIdFactory`; its sequence is thread-safe but per process, so a service with
+  several worker processes passes `id_factory=` a factory that is unique across processes (e.g. one built on a uid).
 * **bom / quotations**: `build_bom` needs the catalog in the Flarize shape (categories → items with `id`, `tiers`,
   `price`, `watt`, `kw`, `phase`, `type`, `status`, `deviceType`, `panelsPerDevice`, `microAccessoryRole`, …),
   `packageProfiles`, and the pack config; `BomBuildError.code` distinguishes Sales refusals from bad requests.
+  `actorRole` is Flarize's `rbac.1` vocabulary: pass `SALES` (or `SALES_HEAD`/`SALES_CRS`/`FIELD_SALES`) for a caller
+  held to the Project Head's swap rules and `PROJECT_HEAD`/`ADMIN` for an unrestricted one — any other string (a
+  platform role slug) is treated as Sales (DV-26); omit it only for internal builds (publishing). Sales-facing lines go
+  through `strip_cost_fields_for_sales`, which also removes `defaultUnitPrice` (DV-25); `totals` and the
+  `pack_pricing` `internal` block must be dropped by the service for Sales. Results never alias the catalog, registry
+  or pack config passed in.
 * **calculators / quotations**: offers via `find_applicable_offer(offers, system_type=…, tier=…, size=…, date=…)`;
   D-4 printing via `calculate_offer_amount`.
 
 ## Merge notes
 
-* `engines/_money_compat.py` is the stand-in for the engines-core `engines.money`: when that package lands, change the
-  four `from engines._money_compat import …` lines (`cost.py`, `pricing.py`, `tests/golden_harness.py`, `tests/test_commercial_units.py`) to `engines.money` and delete the module —
-  the rule is `money.js` in both.
-* `engines/_jscompat.py` is private to `engines`; if engines-core ships equivalent helpers, keep one copy.
+* **Keep `engines/_money_compat.py` when engines-core lands — do NOT switch these engines to `engines.money`.**
+  engines-core's `engines.money` (branch `wp/engines-core`) is Decimal-only: `round_money`, `is_money`, `sum_exact`
+  and `mul_exact` raise `TypeError` for a `float` and return `Decimal`. The commercial engines compute in doubles for
+  golden parity (DV-17) and call the money rule with floats on every path, so switching the four import sites
+  (`cost.py`, `pricing.py`, `tests/golden_harness.py`, `tests/test_commercial_units.py`) would break all of them (the
+  1 907 golden cases fail at once). The two modules do not collide (different names) and implement the same
+  `money.js` rule on different number types; they coexist after the merge. (The original note said to switch the
+  imports and delete this module; the engines-core review showed its API refuses floats.)
+* `engines/_jscompat.py` is private to `engines`; engines-core ships its own Decimal helpers (`money.js_number`,
+  `money.js_round`, `money.js_text`) with the Decimal contract — they are not interchangeable with these float ones.
+* DEVIATIONS numbering: the sibling branches already use DV-17 … DV-24 (`wp/engines-ops` DV-17/18, `wp/engines-core`
+  DV-21/22, `wp/hr`, `wp/leads-customers`, `wp/catalog`, `wp/content-*`, `wp/careers-reference`); this package's
+  DV-17 … DV-20, DV-25, DV-26 are renumbered when the branches meet.
 * No shared code (`flarize/`, `core/`, `accounts/`) was changed.
+
+## Review (adversarial pass)
+
+Each finding was reproduced by a failing test first (`engines/tests/test_commercial_review.py`, and new golden cases
+recorded from the real JavaScript); the tests stay. A differential fuzzer (≈ 69 000 random cases through the real JS
+and the port: `pricePack`, `structureQty`/`structureMaterial`, `buildBom`/`getAlternatives` on the real and synthetic
+catalogs, `calculateCost`, `calculatePricing`, landed allocation, device allocation, offers, battery compatibility and
+resolution, rate cards, pack-config validation and 300 random package-registry scenarios) found R1 and nothing else;
+its only other divergences are the intended DV-26 ones.
+
+| # | Finding | Fix |
+|---|---|---|
+| R1 | A JS division by zero (±Infinity / NaN) raised `ZeroDivisionError` in the port: a structure `qty` size key `"0"` (accepted by `validateSection`), a panel `watt` of `"0"`, a GST `ratePct` of −100 | `_jscompat.js_div` at every division whose divisor can be zero (`structure_qty`, panel count and `defaultQty`, the pre-GST split); golden cases `structureQty/zero-size/*`, `structureMaterial/zero-size`, `price/edge/gst-minus-100`, `bom/zero-watt/*` |
+| R2 | `validate_config` — the `packs_config_version.config` schema (PLAN §2.5) — accepted unknown top-level keys (a `marketRate` typo was stored and priced as "market rate not set") and configs missing sections (the BOM builder then silently used the catalog's copy) | exactly the ten sections: unknown key `INVALID_SECTION`, missing section `INVALID_VALUE` (`detail.missing`) |
+| R3 | The merge note told the integrator to replace `_money_compat` with engines-core's `engines.money`, which refuses floats — the switch would break every commercial engine | merge note corrected (above); `_money_compat` stays |
+| R4 | `build_bom` results aliased the caller's inputs: every line's `alternatives` was the pack config's (or registry's) own list and `profile` the catalog's own record, so a service mutating a result corrupted its cached catalog/config for every later build (the JS re-read the catalog file per call) | deep copies at the output (`alternatives`, `profile`, the `SELECTION_NOT_APPROVED` detail) |
+| R5 | `PackageIdFactory` read and bumped its sequence without a lock: 8 threads × 150 ids in one millisecond produced duplicate package ids (180 in 20 runs); `_find_package` then resolves a duplicate id to the wrong record | the sequence is taken under a lock; multi-process uniqueness is the service's `id_factory` (hand-over note) |
+| R6 | PLAN §2.3 places the gross-margin check in `engines.cost`; it existed only as `engines.pricing.gross_margin_list_price` | re-exported from `engines.cost` (`gross_margin_list_price`, `validate_gross_margin`, `PricingError`) |
+| R7 | `strip_cost_fields_for_sales` removed `unitPrice` but left `defaultUnitPrice`, which equals it on every unswapped line: Sales read every component price (a JS bug, ported faithfully) | `defaultUnitPrice` is stripped too (DV-25); the golden harness applies the deviation to the recorded JS result (`EXPECTED_DEVIATIONS`) |
+| R8 | `build_bom` / `get_alternatives` gave any `actorRole` outside Flarize's vocabulary Project Head powers: a platform role slug (`sales-executive`) could swap any component past the approved list and the locked slots, and read reference prices — contrary to spec §6 ("a Sales caller, or an unknown role, sees only swappable slots") | unknown roles are held to the Sales rules (`held_to_sales_rules`, DV-26); a missing role keeps the JS behaviour |
+

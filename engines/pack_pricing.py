@@ -24,6 +24,7 @@ from engines._jscompat import (
     is_num,
     js_add,
     js_ceil,
+    js_div,
     js_keys,
     js_max,
     js_number,
@@ -69,10 +70,10 @@ def structure_qty(item: Any, kw: Any) -> Any:
         return at(sizes[0])
     last = sizes[-1]
     if kw >= last:
-        return js_ceil(js_number(at(last)) * kw / last)
+        return js_ceil(js_div(js_number(at(last)) * kw, last))
     for low, high in zip(sizes, sizes[1:]):
         if low <= kw <= high:
-            ratio = (kw - low) / (high - low)
+            ratio = js_div(kw - low, high - low)
             return js_ceil(js_add(at(low), ratio * (js_number(at(high)) - js_number(at(low)))))
     return at(last)
 
@@ -254,7 +255,7 @@ def price_pack(
     roof_add_on = roof_add_on_pre_gst + roof_add_on_gst
 
     customer_price_incl_gst = r0(market_rate + swap_delta_total + roof_add_on)
-    pre_gst = r0(customer_price_incl_gst / (1 + gst_pct / 100))
+    pre_gst = r0(js_div(customer_price_incl_gst, 1 + gst_pct / 100))
     gst_amount = customer_price_incl_gst - pre_gst
 
     rate_per_km = jsget(vehicle, "ratePerKm")

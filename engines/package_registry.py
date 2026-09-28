@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import copy
 import functools
+import threading
 import time
 from typing import Any, Callable
 
@@ -130,11 +131,21 @@ class PackageIdFactory:
     """``generatePackageId``: ``CFGPKG-<SYS>-<size>-<PHASE>-<TIER>[-FR<size>]-<ms base36><seq base36>``.
 
     ``now_ms`` pins the millisecond stamp (tests, parity replays); without it the wall clock is used, like the JS.
+    The sequence is taken under a lock: the JS ran single-threaded, a Django worker does not, and two threads reading
+    the same ``seq`` in the same millisecond produced the same package id. The counter is per process, so services
+    running several worker processes pass a factory of their own (e.g. uid-based) — see docs/decisions.
     """
 
     def __init__(self, now_ms: int | None = None, seq: int = 0):
         self.now_ms = now_ms
         self.seq = seq
+        self._lock = threading.Lock()
+
+    def _next_seq(self) -> int:
+        with self._lock:
+            seq = self.seq
+            self.seq += 1
+        return seq
 
     def __call__(self, template: dict) -> str:
         system_type = js_str(template.get("systemType") if truthy(template.get("systemType")) else "PKG").upper()
@@ -143,8 +154,7 @@ class PackageIdFactory:
         tier = js_str(template.get("tier") if truthy(template.get("tier")) else "").upper()
         fr = f"-FR{js_str(template.get('systemSize'))}" if template.get("variant") == "FUTURE_READY" and truthy(template.get("systemSize")) else ""
         now_ms = self.now_ms if self.now_ms is not None else int(time.time() * 1000)
-        stamp = to_base36(now_ms) + to_base36(self.seq % 1296).rjust(2, "0")
-        self.seq += 1
+        stamp = to_base36(now_ms) + to_base36(self._next_seq() % 1296).rjust(2, "0")
         return f"CFGPKG-{system_type}-{size}-{phase}-{tier}{fr}-{stamp}"
 
 

@@ -1,7 +1,9 @@
 """The Flarize money rule (``src/lib/money.js``, ``money.1``) for the commercial engines.
 
-Stand-in until the engines-core package lands ``engines.money``; at the merge the commercial engines switch their
-import to ``engines.money`` and this module is deleted (the functions are identical: same names, same rule).
+The float-typed twin of engines-core's ``engines.money``. Same rule, different number type: ``engines.money`` is
+Decimal-only and raises ``TypeError`` for a ``float``, while the commercial engines compute in doubles for golden parity
+(DV-17) and call this rule with floats on every path. Keep this module after the merge; do not switch the commercial
+engines to ``engines.money`` (docs/decisions/engines-commercial.md, "Merge notes").
 
 Rule: compute at full double precision, round once when a figure is published, half away from zero to whole rupees,
 with an epsilon nudge so binary representation error never moves a rupee (1.005 → 1.01 at two places; here 0.5 → 1).

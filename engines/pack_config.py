@@ -280,12 +280,23 @@ def _validate_templates(value: Any) -> None:
 
 
 def validate_config(config: Any) -> None:
-    """Validate every section present in a whole configuration (the ``packs_config_version.config`` schema)."""
+    """Validate a whole configuration — the ``packs_config_version.config`` schema (PLAN §2.5).
+
+    Exactly the ten :data:`CONFIG_SECTIONS`, each valid by :func:`validate_section`. A key outside them is refused
+    like an unknown section (``INVALID_SECTION``: a typo such as ``marketRate`` would otherwise be stored and priced as
+    "market rate not set"); a missing section is ``INVALID_VALUE`` (every Flarize store carries all ten, and the BOM
+    builder would silently fall back to the catalog's copy of a missing one).
+    """
     if not isinstance(config, dict):
         _bad("config must be an object.")
+    unknown = [key for key in config if key not in CONFIG_SECTIONS]
+    if unknown:
+        raise PackConfigError(f'Unknown config section "{js_str(unknown[0])}".', PACK_CONFIG_ERROR["INVALID_SECTION"], {"section": unknown[0], "allowed": list(CONFIG_SECTIONS)})
+    missing = [section for section in CONFIG_SECTIONS if section not in config]
+    if missing:
+        _bad(f"config.{missing[0]} is required.", {"missing": missing})
     for section in CONFIG_SECTIONS:
-        if section in config:
-            validate_section(section, config[section])
+        validate_section(section, config[section])
 
 
 class schema:  # noqa: N801 — PLAN §2.5 names the config validator ``engines.pack_config.schema``

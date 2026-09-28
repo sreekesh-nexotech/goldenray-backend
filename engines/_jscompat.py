@@ -223,6 +223,16 @@ def js_round(value: Any) -> int | float:
     return _as_int(floor + 1 if x - floor >= 0.5 else floor)
 
 
+def js_div(a: Any, b: Any) -> int | float:
+    """``a / b`` on JS numbers: a zero divisor gives ±Infinity (NaN for 0/0 or NaN/0) instead of raising."""
+    x, y = js_number(a), js_number(b)
+    if y == 0:
+        if x != x or x == 0:
+            return math.nan
+        return math.copysign(math.inf, x) * math.copysign(1.0, y)
+    return x / y
+
+
 def js_floor(value: Any) -> int | float:
     x = js_number(value)
     return _as_int(math.floor(x)) if math.isfinite(x) else x

@@ -32,6 +32,10 @@ from engines._jscompat import (
     truthy,
 )
 from engines._money_compat import is_money, mul_exact, round_money, sum_exact
+
+# PLAN §2.3: "LIST is never derived by markup in code … gross-margin check lives in engines.cost". The one list-price
+# formula (cost / (1 − m); MARKUP raises) is defined next to the pricing engine and exposed here under that name.
+from engines.pricing import PricingError, gross_margin_list_price, validate_gross_margin  # noqa: F401
 from engines.rate_card import RATE_TYPE, installation_key, resolve_rate
 
 COST_ENGINE_VERSION = "costEngine.3"

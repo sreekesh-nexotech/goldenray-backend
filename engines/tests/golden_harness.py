@@ -387,6 +387,23 @@ def _normalize(value: Any) -> Any:
     return value
 
 
+def _dv25_strip_default_unit_price(expected: Any) -> Any:
+    """DV-25: ``strip_cost_fields_for_sales`` also removes ``defaultUnitPrice`` (the JS leaked it; it equals ``unitPrice``)."""
+    return [{k: v for k, v in line.items() if k != "defaultUnitPrice"} for line in expected]
+
+
+# Documented deviations from the JavaScript (docs/DEVIATIONS.md): the recorded JS result is adjusted by the rule the
+# platform adopted before it is compared; everything else in the result must still match exactly.
+EXPECTED_DEVIATIONS: dict[str, Callable[[Any], Any]] = {
+    "stripCostFieldsForSales": _dv25_strip_default_unit_price,
+}
+
+
+def expected_result(case: dict) -> Any:
+    """The JS result of a golden case, with any documented deviation applied."""
+    return EXPECTED_DEVIATIONS.get(case["fn"], lambda result: result)(case["result"])
+
+
 def error_dict(error: JsError) -> dict:
     return {"name": error.js_name, "message": error.message, "code": error.code, "detail": normalize(error.detail) if error.detail is not None else None}
 

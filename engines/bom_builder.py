@@ -17,6 +17,7 @@ wattage, Enphase accessories through :func:`engines.device_allocation.allocate_d
 
 from __future__ import annotations
 
+import copy
 from typing import Any, Callable, Mapping
 
 from engines._jscompat import (
@@ -28,6 +29,7 @@ from engines._jscompat import (
     is_nullish,
     is_number,
     js_ceil,
+    js_div,
     js_join,
     js_max,
     js_number,
@@ -41,6 +43,7 @@ from engines._jscompat import (
     truthy,
 )
 from engines.device_allocation import allocate_devices
+from engines.flarize_rbac import ALL_ROLES
 
 PACK_CONFIG_SECTIONS = (
     "bomTemplates",
@@ -56,7 +59,8 @@ PACK_CONFIG_SECTIONS = (
 )
 INDIVIDUAL_SALES_ROLES = ("SALES", "SALES_CRS", "FIELD_SALES")
 SALES_SELECTABLE_CATEGORIES = ("panel", "inverter", "structure_material")
-SENSITIVE_LINE_FIELDS = ("unitPrice", "amount", "gst", "gstAmt", "landedUnitCost", "purchasePrice", "supplier")
+# DV-25: ``defaultUnitPrice`` is stripped too — the JS left it, and on every unswapped line it IS the unitPrice.
+SENSITIVE_LINE_FIELDS = ("unitPrice", "amount", "gst", "gstAmt", "defaultUnitPrice", "landedUnitCost", "purchasePrice", "supplier")
 
 PackConfigSource = Mapping | Callable[[str], Any] | None
 
@@ -82,6 +86,17 @@ def load_catalog(catalog: Mapping, pack_config: PackConfigSource = None, source:
 
 def is_sales_role(role: Any) -> bool:
     return role in INDIVIDUAL_SALES_ROLES or role == "SALES_HEAD"
+
+
+def held_to_sales_rules(role: Any) -> bool:
+    """A Sales role, or any role the Flarize engines do not know (DV-26: least privilege).
+
+    ``actorRole`` speaks Flarize's ``rbac.1`` vocabulary (``SALES``, ``PROJECT_HEAD`` …). The JS let every other string
+    through with Project Head powers — a platform role slug such as ``sales-executive`` could swap any component and
+    read reference prices. Unknown roles now get the Sales view; only a *missing* role keeps the internal, unrestricted
+    build the JS gave it (pack publishing, catalog builds).
+    """
+    return is_sales_role(role) or role not in ALL_ROLES
 
 
 def get_profile_key(system_type: Any, tier: Any) -> str:
@@ -321,7 +336,7 @@ def build_bom(config: Mapping, *, catalog: Mapping, registry: Any = None, pack_c
     return {
         "lines": state["lines"],
         "totals": {"matTotal": mat_total, "allGst": state["allGst"], "sub": mat_total, "grand": mat_total + state["allGst"]},
-        "profile": js_or(profile, {}),
+        "profile": copy.deepcopy(js_or(profile, {})),  # never the caller's catalog record
         "systemConfig": clean(
             {
                 "systemType": system_type,
@@ -366,7 +381,7 @@ def _variable_slots(cat: dict, template: Any, state: dict, **ctx: Any) -> None:
         sales_swap = _slot_sales_swappable(slot)
         own_alternatives = jsget(slot, "alternatives")
         slot_alternatives = own_alternatives if is_array(own_alternatives) and own_alternatives else js_or(_approved_alternate_ids(ctx["registry_pkg"], slot_category), None)
-        is_sales_caller = truthy(ctx["actor_role"]) and is_sales_role(ctx["actor_role"])
+        is_sales_caller = truthy(ctx["actor_role"]) and held_to_sales_rules(ctx["actor_role"])
         default_id = jsget(default_item, "id")
         selection_id = jsget(ctx["selections"], slot_category)
         if truthy(selection_id):
@@ -384,7 +399,7 @@ def _variable_slots(cat: dict, template: Any, state: dict, **ctx: Any) -> None:
                     f'Component "{js_str(js_or(jsget(selected, "name"), selection_id))}" is not an approved alternative for {js_str(slot_category)}. '
                     "Sales may only select from the approved list for this pack.",
                     "SELECTION_NOT_APPROVED",
-                    {"category": slot_category, "approved": slot_alternatives},
+                    {"category": slot_category, "approved": copy.deepcopy(slot_alternatives)},
                 )
             selection_method = js_or(default_method, "PACKAGE_DEFAULT") if strict_equal(jsget(selected, "id"), default_id) else "SALES_SELECTION"
         else:
@@ -419,7 +434,7 @@ def _add_variable_line(cat, slot, category, selected, default_item, default_meth
     slot_category = jsget(slot, "category")
     size_watts = parse_float(ctx["size"]) * 1000
     if slot_category == "panel" and truthy(jsget(selected, "watt")):
-        qty = js_ceil(size_watts / js_number(selected["watt"]))
+        qty = js_ceil(js_div(size_watts, selected["watt"]))
         state["numPanels"] = qty
     unit_price = js_or(jsget(selected, "price"), 0)
     amount = js_number(qty) * js_number(unit_price)
@@ -452,9 +467,9 @@ def _add_variable_line(cat, slot, category, selected, default_item, default_meth
                 "defaultComponentId": nullish(jsget(default_item, "id"), None),
                 "defaultName": nullish(jsget(default_item, "name"), None),
                 "defaultUnitPrice": nullish(jsget(default_item, "price"), 0),
-                "defaultQty": js_ceil(size_watts / js_number(default_watt)) if slot_category == "panel" and truthy(default_watt) else qty,
+                "defaultQty": js_ceil(js_div(size_watts, default_watt)) if slot_category == "panel" and truthy(default_watt) else qty,
                 "defaultMethod": default_method,
-                "alternatives": slot_alternatives,
+                "alternatives": copy.deepcopy(slot_alternatives),  # never the caller's pack-config / registry list
             }
         )
     )
@@ -635,7 +650,7 @@ def get_alternatives(config: Mapping, *, catalog: Mapping, registry: Any = None,
     is_three_phase = jsget(config, "phase") == "3P" or includes(jsget(template, "threePhase"), sys_size)
     bat_qty = _resolve_battery_quantity(system_type, _project_battery_quantity(jsget(config, "batteryQuantity")), profile)
     phase = "3P" if is_three_phase else "1P"
-    is_sales = not truthy(actor_role) or is_sales_role(actor_role)
+    is_sales = not truthy(actor_role) or held_to_sales_rules(actor_role)
     registry_pkg = _find_registry_package(registry, system_type=system_type, size=sys_size, tier=tier, phase=phase)
     wanted = [jsget(config, "category")] if truthy(jsget(config, "category")) else None
     alternatives: dict = {}
@@ -737,6 +752,7 @@ __all__ = [
     "get_alternatives",
     "get_profile_key",
     "is_sales_role",
+    "held_to_sales_rules",
     "load_catalog",
     "strip_cost_fields_for_sales",
 ]
