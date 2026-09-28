@@ -1,0 +1,5824 @@
+{
+ "appliances": [
+  {
+   "defaultHours": 5,
+   "icon": "💡",
+   "id": "lights_fans",
+   "name": {
+    "en": "Lights + Fans",
+    "ml": "Lights + Fans"
+   },
+   "watts": 25
+  },
+  {
+   "defaultHours": 24,
+   "icon": "🧊",
+   "id": "refrigerator",
+   "name": {
+    "en": "Refrigerator",
+    "ml": "Refrigerator"
+   },
+   "watts": 60
+  },
+  {
+   "defaultHours": 1,
+   "icon": "🍳",
+   "id": "induction",
+   "name": {
+    "en": "Induction Stove",
+    "ml": "Induction Stove"
+   },
+   "watts": 1200
+  },
+  {
+   "defaultHours": 1,
+   "icon": "🪣",
+   "id": "washing_machine",
+   "name": {
+    "en": "Washing Machine",
+    "ml": "Washing Machine"
+   },
+   "watts": 500
+  },
+  {
+   "defaultHours": 5,
+   "icon": "📺",
+   "id": "tv_ott",
+   "name": {
+    "en": "TV + OTT",
+    "ml": "TV + OTT"
+   },
+   "watts": 100
+  },
+  {
+   "defaultHours": 5,
+   "icon": "❄️",
+   "id": "ac",
+   "name": {
+    "en": "Air Conditioner",
+    "ml": "Air Conditioner"
+   },
+   "watts": 1200
+  },
+  {
+   "defaultHours": 24,
+   "icon": "🔌",
+   "id": "inverter_chargers",
+   "name": {
+    "en": "Inverter + Chargers",
+    "ml": "Inverter + Chargers"
+   },
+   "watts": 20
+  },
+  {
+   "defaultHours": 1,
+   "icon": "🚰",
+   "id": "water_pump",
+   "name": {
+    "en": "Water Pump",
+    "ml": "Water Pump"
+   },
+   "optional": true,
+   "watts": 750
+  },
+  {
+   "defaultHours": 0.5,
+   "icon": "♨️",
+   "id": "water_heater",
+   "name": {
+    "en": "Water Heater",
+    "ml": "Water Heater"
+   },
+   "optional": true,
+   "watts": 2000
+  },
+  {
+   "defaultHours": 1,
+   "icon": "🛵",
+   "id": "ev_2w",
+   "name": {
+    "en": "EV Charging (2-wheeler)",
+    "ml": "EV Charging (2-wheeler)"
+   },
+   "optional": true,
+   "watts": 1000
+  },
+  {
+   "defaultHours": 1,
+   "icon": "🚗",
+   "id": "ev_car",
+   "name": {
+    "en": "EV Charging (car)",
+    "ml": "EV Charging (car)"
+   },
+   "optional": true,
+   "watts": 3300
+  }
+ ],
+ "responses": {
+  "device-types": [
+   {
+    "id": 16,
+    "name": "Iron",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/iron.svg",
+    "watts": 1000
+   },
+   {
+    "id": 5,
+    "name": "Air Fryer",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1400
+   },
+   {
+    "id": 6,
+    "name": "Cooker",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 800
+   },
+   {
+    "id": 4,
+    "name": "Printer",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/printer.svg",
+    "watts": 200
+   },
+   {
+    "id": 9,
+    "name": "Toaster",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/toaster.svg",
+    "watts": 1000
+   },
+   {
+    "id": 10,
+    "name": "Blender",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 400
+   },
+   {
+    "id": 13,
+    "name": "Electric Kettle",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/electric-kettle.svg",
+    "watts": 1500
+   },
+   {
+    "id": 14,
+    "name": "Fan",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/fan.svg",
+    "watts": 60
+   },
+   {
+    "id": 1,
+    "name": "AC 1 ton",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 1200
+   },
+   {
+    "id": 17,
+    "name": "AC 1.5 ton",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 1500
+   },
+   {
+    "id": 18,
+    "name": "AC 2 ton",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 2000
+   },
+   {
+    "id": 2,
+    "name": "Washing Machine",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/washing-machine.svg",
+    "watts": 500
+   },
+   {
+    "id": 11,
+    "name": "Dishwasher",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1000
+   },
+   {
+    "id": 7,
+    "name": "Refrigerator",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/refrigerator.svg",
+    "watts": 150
+   },
+   {
+    "id": 15,
+    "name": "Heater",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1500
+   },
+   {
+    "id": 8,
+    "name": "Microwave",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/microwave.svg",
+    "watts": 1000
+   },
+   {
+    "id": 3,
+    "name": "TV",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/tv.svg",
+    "watts": 100
+   },
+   {
+    "id": 12,
+    "name": "Vacuum Cleaner",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 800
+   }
+  ],
+  "ev-cars": [
+   {
+    "adjusted_real_world_range": 212,
+    "battery_capacity": 30.2,
+    "claimed_range": 312,
+    "energy_consumption": 0.152,
+    "ex_showroom_price": 1249000,
+    "id": 1,
+    "model": "Tata Nexon EV"
+   },
+   {
+    "adjusted_real_world_range": 150,
+    "battery_capacity": 26.0,
+    "claimed_range": 250,
+    "energy_consumption": 0.13,
+    "ex_showroom_price": 1199000,
+    "id": 2,
+    "model": "Tata Tigor EV"
+   },
+   {
+    "adjusted_real_world_range": 361,
+    "battery_capacity": 50.3,
+    "claimed_range": 461,
+    "energy_consumption": 0.49,
+    "ex_showroom_price": 1648000,
+    "id": 3,
+    "model": "MG ZS EV"
+   },
+   {
+    "adjusted_real_world_range": 352,
+    "battery_capacity": 39.2,
+    "claimed_range": 452,
+    "energy_consumption": 0.16,
+    "ex_showroom_price": 2384000,
+    "id": 4,
+    "model": "Hyundai Kona Electric"
+   },
+   {
+    "adjusted_real_world_range": 356,
+    "battery_capacity": 39.4,
+    "claimed_range": 456,
+    "energy_consumption": 0.156,
+    "ex_showroom_price": 1599000,
+    "id": 5,
+    "model": "Mahindra XUV400"
+   },
+   {
+    "adjusted_real_world_range": 150,
+    "battery_capacity": 24.0,
+    "claimed_range": 250,
+    "energy_consumption": 0.129,
+    "ex_showroom_price": 799000,
+    "id": 6,
+    "model": "Tata Tiago EV"
+   },
+   {
+    "adjusted_real_world_range": 130,
+    "battery_capacity": 17.3,
+    "claimed_range": 230,
+    "energy_consumption": 0.089,
+    "ex_showroom_price": 617000,
+    "id": 7,
+    "model": "MG Comet EV"
+   },
+   {
+    "adjusted_real_world_range": 215,
+    "battery_capacity": 25.0,
+    "claimed_range": 315,
+    "energy_consumption": 0.16,
+    "ex_showroom_price": 999000,
+    "id": 8,
+    "model": "Tata Punch EV"
+   },
+   {
+    "adjusted_real_world_range": 373,
+    "battery_capacity": 51.4,
+    "claimed_range": 473,
+    "energy_consumption": 0.121,
+    "ex_showroom_price": 1799000,
+    "id": 9,
+    "model": "Hyundai Creta Electric"
+   },
+   {
+    "adjusted_real_world_range": 456,
+    "battery_capacity": 59.0,
+    "claimed_range": 556,
+    "energy_consumption": 0.176,
+    "ex_showroom_price": 1890000,
+    "id": 10,
+    "model": "Mahindra BE 6"
+   },
+   {
+    "adjusted_real_world_range": 442,
+    "battery_capacity": 59.0,
+    "claimed_range": 542,
+    "energy_consumption": 0.185,
+    "ex_showroom_price": 2190000,
+    "id": 11,
+    "model": "Mahindra XEV 9e"
+   },
+   {
+    "adjusted_real_world_range": 232,
+    "battery_capacity": 38.0,
+    "claimed_range": 332,
+    "energy_consumption": 0.123,
+    "ex_showroom_price": 1400000,
+    "id": 12,
+    "model": "MG Windsor EV"
+   },
+   {
+    "adjusted_real_world_range": 330,
+    "battery_capacity": 45.0,
+    "claimed_range": 430,
+    "energy_consumption": 0.151,
+    "ex_showroom_price": 1749000,
+    "id": 13,
+    "model": "Tata Curvv EV"
+   },
+   {
+    "adjusted_real_world_range": 300,
+    "battery_capacity": 49.0,
+    "claimed_range": 400,
+    "energy_consumption": 0.148,
+    "ex_showroom_price": 1200000,
+    "id": 14,
+    "model": "Maruti Suzuki e Vitara"
+   }
+  ],
+  "ev-scooters": [
+   {
+    "adjusted_real_world_range": 81,
+    "battery_capacity": 4.0,
+    "claimed_range": 181,
+    "energy_consumption": 0.039,
+    "ex_showroom_price": 130000,
+    "id": 1,
+    "model": "Ola S1 Pro"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 3.7,
+    "claimed_range": 100,
+    "energy_consumption": 0.028,
+    "ex_showroom_price": 135000,
+    "id": 2,
+    "model": "Ather 450X"
+   },
+   {
+    "adjusted_real_world_range": 45,
+    "battery_capacity": 3.0,
+    "claimed_range": 145,
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 94434,
+    "id": 3,
+    "model": "TVS iQube"
+   },
+   {
+    "adjusted_real_world_range": 53,
+    "battery_capacity": 3.0,
+    "claimed_range": 153,
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 99998,
+    "id": 4,
+    "model": "Bajaj Chetak"
+   },
+   {
+    "adjusted_real_world_range": 65,
+    "battery_capacity": 3.9,
+    "claimed_range": 165,
+    "energy_consumption": 0.024,
+    "ex_showroom_price": 110000,
+    "id": 5,
+    "model": "Hero Vida V1"
+   },
+   {
+    "adjusted_real_world_range": 136,
+    "battery_capacity": 4.8,
+    "claimed_range": 236,
+    "energy_consumption": 0.002,
+    "ex_showroom_price": 110000,
+    "id": 6,
+    "model": "Simple One"
+   },
+   {
+    "adjusted_real_world_range": 2,
+    "battery_capacity": 3.0,
+    "claimed_range": 102,
+    "energy_consumption": 0.029,
+    "ex_showroom_price": 117000,
+    "id": 7,
+    "model": "Honda Activa e"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 3.0,
+    "claimed_range": 100,
+    "energy_consumption": 0.039,
+    "ex_showroom_price": 100000,
+    "id": 8,
+    "model": "Suzuki e-Access"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 0.9,
+    "claimed_range": 68,
+    "energy_consumption": 0.014,
+    "ex_showroom_price": 55555,
+    "id": 9,
+    "model": "Yulu Wynn"
+   },
+   {
+    "adjusted_real_world_range": 21,
+    "battery_capacity": 2.0,
+    "claimed_range": 121,
+    "energy_consumption": 0.019,
+    "ex_showroom_price": 77000,
+    "id": 10,
+    "model": "Ampere Magnus Neo"
+   },
+   {
+    "adjusted_real_world_range": 23,
+    "battery_capacity": 2.5,
+    "claimed_range": 123,
+    "energy_consumption": 0.022,
+    "ex_showroom_price": 99990,
+    "id": 11,
+    "model": "BGauss C12i"
+   },
+   {
+    "adjusted_real_world_range": 60,
+    "battery_capacity": 3.6,
+    "claimed_range": 160,
+    "energy_consumption": 0.022,
+    "ex_showroom_price": 121000,
+    "id": 12,
+    "model": "Okinawa Okhi-90"
+   },
+   {
+    "adjusted_real_world_range": 50,
+    "battery_capacity": 3.2,
+    "claimed_range": 150,
+    "energy_consumption": 0.021,
+    "ex_showroom_price": 124000,
+    "id": 13,
+    "model": "Revolt RV400"
+   },
+   {
+    "adjusted_real_world_range": 67,
+    "battery_capacity": 3.5,
+    "claimed_range": 167,
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 120000,
+    "id": 14,
+    "model": "Ultraviolette Tesseract"
+   },
+   {
+    "adjusted_real_world_range": 23,
+    "battery_capacity": 2.9,
+    "claimed_range": 123,
+    "energy_consumption": 0.013,
+    "ex_showroom_price": 132000,
+    "id": 15,
+    "model": "Ather Rizta"
+   }
+  ],
+  "pincodes": [
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 63,
+    "office_name": "Fathimapuram BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 68,
+    "office_name": "Elamkadu BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 69,
+    "office_name": "Wembly BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 71,
+    "office_name": "Kanamala BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 72,
+    "office_name": "Venkurinji BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 73,
+    "office_name": "Karinilam BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 74,
+    "office_name": "Rajendraprasad Colony BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 124,
+    "office_name": "Chottupara Periyar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 125,
+    "office_name": "Keerikara BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 256,
+    "office_name": "Mancode BO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 260,
+    "office_name": "Chelikuzhy BO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 270,
+    "office_name": "Patharam BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 404,
+    "office_name": "Valiyaparamba BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 405,
+    "office_name": "Vavad BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 419,
+    "office_name": "Puducode  Feroke BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 431,
+    "office_name": "Cheeyambam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 432,
+    "office_name": "Kabanigiri BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 433,
+    "office_name": "Manal Vayal BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 434,
+    "office_name": "Kidanganad BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 435,
+    "office_name": "Moolan Kavu BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 436,
+    "office_name": "Pazhupathur BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 438,
+    "office_name": "Tharuvana BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 444,
+    "office_name": "Keezhallur BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 456,
+    "office_name": "Josegiri BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 457,
+    "office_name": "Kozhichal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 458,
+    "office_name": "Thabore BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 485,
+    "office_name": "Kalichanadukam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 486,
+    "office_name": "Kottamala Estate BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 487,
+    "office_name": "Madikai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Manjeri Division",
+    "id": 534,
+    "office_name": "Munderi BO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 588,
+    "office_name": "Cherukattupulam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 589,
+    "office_name": "EdakodePavukonam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 829,
+    "office_name": "Kalanjoor SO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 832,
+    "office_name": "Sooranad SO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 920,
+    "office_name": "Ramanattukara SO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 924,
+    "office_name": "Anjarakandy SO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 928,
+    "office_name": "Civil Station Kannur SO",
+    "pincode": "670002",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 1120,
+    "office_name": "Paluvally BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 1121,
+    "office_name": "Perayam BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1134,
+    "office_name": "Avilora BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1135,
+    "office_name": "Karuvampoyil BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1136,
+    "office_name": "Manipuram BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1137,
+    "office_name": "Pannikkottur BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 1160,
+    "office_name": "Azhinjilam BO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 1164,
+    "office_name": "Vazhayur East BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1177,
+    "office_name": "Bhoodanam Colony BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1178,
+    "office_name": "Kalanadi Kolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1179,
+    "office_name": "Palakolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1180,
+    "office_name": "Chedalath BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1181,
+    "office_name": "Moodakolli BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1182,
+    "office_name": "Muthanga BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1183,
+    "office_name": "Pambra BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1184,
+    "office_name": "Thovari Mala BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1185,
+    "office_name": "Vakeri BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1187,
+    "office_name": "Kammana BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1188,
+    "office_name": "Karakkamala BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1189,
+    "office_name": "Kunnamangalam Wayanad BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1190,
+    "office_name": "Pilakavu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 1195,
+    "office_name": "Vengad BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1213,
+    "office_name": "Kamballur BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1214,
+    "office_name": "Palavayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1215,
+    "office_name": "Thayyeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 1216,
+    "office_name": "Thirumeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1233,
+    "office_name": "Bheemanady BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1234,
+    "office_name": "Kollampara BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1235,
+    "office_name": "Thaikadapuram BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1236,
+    "office_name": "Uppilakai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1237,
+    "office_name": "West Eleri BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 1521,
+    "office_name": "Mukkulam East BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1522,
+    "office_name": "Parathanam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1523,
+    "office_name": "Yendayar BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 1526,
+    "office_name": "Thulappally BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1568,
+    "office_name": "Dymock BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1569,
+    "office_name": "Moongalar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1570,
+    "office_name": "Mount BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Idukki Division",
+    "id": 1571,
+    "office_name": "Pampa Dam BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1572,
+    "office_name": "Thengakal BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 1660,
+    "office_name": "Athikattukulangara BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Mavelikara Division",
+    "id": 1661,
+    "office_name": "Pallickal nooranad BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 1718,
+    "office_name": "Chayalode BO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 1721,
+    "office_name": "Kakkakunnu BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1775,
+    "office_name": "Koottickal SO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 1871,
+    "office_name": "Kadambanad South SO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1955,
+    "office_name": "Kotuvalli SO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1972,
+    "office_name": "Pulpalli SO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 2118,
+    "office_name": "Kunnamkary BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2127,
+    "office_name": "Muttappally BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2128,
+    "office_name": "Pampavally North BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2129,
+    "office_name": "Koruthode BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2130,
+    "office_name": "Madukka BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 2131,
+    "office_name": "Mundakayam East BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 2171,
+    "office_name": "Wallardie BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ERNAKULAM",
+    "division": "Irinjalakuda Division",
+    "id": 2209,
+    "office_name": "Thuruthippuram BO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 2251,
+    "office_name": "Panayil BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 2302,
+    "office_name": "Puthenambalam BO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 2303,
+    "office_name": "Padam BO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Quilon Division",
+    "id": 2352,
+    "office_name": "Thattakkattu Market BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Tiruvalla Division",
+    "id": 2382,
+    "office_name": "Arattupuzha BO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 2383,
+    "office_name": "Edanad BO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 2449,
+    "office_name": "Karimancode BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 2466,
+    "office_name": "Elettil BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 2486,
+    "office_name": "Vazhayur BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2498,
+    "office_name": "Amara Kuni BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2499,
+    "office_name": "Perikallur BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2500,
+    "office_name": "Sasimala BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2501,
+    "office_name": "Seetha Mount BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2502,
+    "office_name": "Veliyambam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2503,
+    "office_name": "Nulpuzha BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2504,
+    "office_name": "Poomulla BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2511,
+    "office_name": "Arattuthara BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2512,
+    "office_name": "Edavaka BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2513,
+    "office_name": "Ellumannam BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2514,
+    "office_name": "Mundakutty BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2515,
+    "office_name": "Nallurnad BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 2544,
+    "office_name": "Chunda BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 2545,
+    "office_name": "Prapoil BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2569,
+    "office_name": "Chathamath BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2570,
+    "office_name": "Elerithattu BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2571,
+    "office_name": "Erikulam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2572,
+    "office_name": "Karindala BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2573,
+    "office_name": "Ozhinhavalappu BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2574,
+    "office_name": "Periyanganam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2575,
+    "office_name": "Puthariadukkam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2824,
+    "office_name": "Vazhappally West SO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "THRISSUR",
+    "division": "Irinjalakuda Division",
+    "id": 2862,
+    "office_name": "Kottappuram SO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 2991,
+    "office_name": "Farook College SO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2997,
+    "office_name": "Sulthan Bathery SO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2999,
+    "office_name": "Mananthavady SO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3001,
+    "office_name": "Alavil SO",
+    "pincode": "670008",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3007,
+    "office_name": "Valapattanam SO",
+    "pincode": "670010",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3014,
+    "office_name": "Nileshwar SO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3103,
+    "office_name": "Chenkara BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Idukki Division",
+    "id": 3104,
+    "office_name": "Gavi BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3105,
+    "office_name": "Gramby BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3106,
+    "office_name": "Vallakadavu Periyar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "THRISSUR",
+    "division": "Irinjalakuda Division",
+    "id": 3158,
+    "office_name": "Anapuzha BO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 3210,
+    "office_name": "Payyanallur BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 3262,
+    "office_name": "Thengamom BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Tiruvalla Division",
+    "id": 3322,
+    "office_name": "Neervilakom BO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 3378,
+    "office_name": "Exservicemens Colony BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 3391,
+    "office_name": "Kilakkoth BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 3406,
+    "office_name": "Karad Paramba BO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 3409,
+    "office_name": "Vaidyarangadi BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3427,
+    "office_name": "Padichira BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3428,
+    "office_name": "Beenachi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3429,
+    "office_name": "Nenmeni BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3430,
+    "office_name": "Valluvadi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3432,
+    "office_name": "Anjukunnu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3433,
+    "office_name": "Kellur BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3440,
+    "office_name": "Munderi BO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3454,
+    "office_name": "Thattummal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3471,
+    "office_name": "Chayoth BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3472,
+    "office_name": "Kottapuram BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Manjeri Division",
+    "id": 3505,
+    "office_name": "Vengad BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "MALAPPURAM",
+    "division": "Manjeri Division",
+    "id": 3539,
+    "office_name": "Valiyaparamba BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 3573,
+    "office_name": "Pathankulam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3606,
+    "office_name": "Pudusseri BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Palghat Division",
+    "id": 3612,
+    "office_name": "Panayur BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3751,
+    "office_name": "Panachikavu BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 3755,
+    "office_name": "Kumarankary BO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 3760,
+    "office_name": "Mukkulam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3761,
+    "office_name": "Velanilam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 3762,
+    "office_name": "Chathenthara BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 3763,
+    "office_name": "Kuppakkayam BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3794,
+    "office_name": "Mundakayam SO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 3860,
+    "office_name": "Nooranad SO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 3892,
+    "office_name": "Nedumon SO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 3905,
+    "office_name": "Prayar SO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 3946,
+    "office_name": "Pacha SO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3968,
+    "office_name": "Eachur SO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3972,
+    "office_name": "Pallikunnu SO",
+    "pincode": "670004",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 4113,
+    "office_name": "Kidangara BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4115,
+    "office_name": "Ruby Nagar BO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4117,
+    "office_name": "Thalumkal BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4119,
+    "office_name": "Edakadathy BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4120,
+    "office_name": "Punchavayal BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 4156,
+    "office_name": "Arnakal BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 4294,
+    "office_name": "Manampuzha BO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 4342,
+    "office_name": "Alumpeedika BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 4343,
+    "office_name": "Azheekkalthura BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4373,
+    "office_name": "Piralassery BO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 4431,
+    "office_name": "Elavattom BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 4432,
+    "office_name": "Meenmutty BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOLLAM",
+    "division": "Trivandrum South Division",
+    "id": 4433,
+    "office_name": "Vattakarikkakom BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4478,
+    "office_name": "Chettapalam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4479,
+    "office_name": "Marakadavu BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4480,
+    "office_name": "Mullankolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4481,
+    "office_name": "Pakkom BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4482,
+    "office_name": "Chulliote BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4483,
+    "office_name": "Kuppadi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4484,
+    "office_name": "Naiketty BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4487,
+    "office_name": "Pudusserikadavu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4488,
+    "office_name": "Valery BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4489,
+    "office_name": "Vemom BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4490,
+    "office_name": "Vimalanagar BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4493,
+    "office_name": "Muringeri BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4509,
+    "office_name": "Edavaramba BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 4510,
+    "office_name": "Kadumeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4511,
+    "office_name": "Kanamvayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 4512,
+    "office_name": "Kannivayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4528,
+    "office_name": "Pakkom BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4533,
+    "office_name": "Bengalam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4534,
+    "office_name": "Kattipoil BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4535,
+    "office_name": "Padannakkad BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4536,
+    "office_name": "Pudukai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 4640,
+    "office_name": "Panayur BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOZHIKODE",
+    "division": "Tiruchirapalli Division",
+    "id": 4753,
+    "office_name": "Melanikuzhi SO",
+    "pincode": "612906",
+    "region": "Central Region Trichirapalli",
+    "state": "KERALA"
+   },
+   {
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4796,
+    "office_name": "Perunna SO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 4799,
+    "office_name": "Mukkoottuthara SO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 4817,
+    "office_name": "Vandiperiyar SO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4914,
+    "office_name": "Angadical Chengannur SO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4915,
+    "office_name": "Puthencavu SO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA"
+   },
+   {
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4972,
+    "office_name": "Sulthan Bathery East SO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4981,
+    "office_name": "Cherupuzha SO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   },
+   {
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 5009,
+    "office_name": "Vaniamkulam SO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA"
+   }
+  ],
+  "room-sizes": [
+   {
+    "bhk_type": 1,
+    "id": 1,
+    "size": 800,
+    "units": 130
+   },
+   {
+    "bhk_type": 2,
+    "id": 2,
+    "size": 1200,
+    "units": 180
+   },
+   {
+    "bhk_type": 2,
+    "id": 3,
+    "size": 1400,
+    "units": 210
+   },
+   {
+    "bhk_type": 3,
+    "id": 4,
+    "size": 1800,
+    "units": 250
+   },
+   {
+    "bhk_type": 3,
+    "id": 5,
+    "size": 2200,
+    "units": 320
+   },
+   {
+    "bhk_type": 4,
+    "id": 6,
+    "size": 3000,
+    "units": 400
+   },
+   {
+    "bhk_type": 4,
+    "id": 7,
+    "size": 4000,
+    "units": 600
+   }
+  ],
+  "tariffs": [
+   {
+    "id": 1,
+    "max_units": 300,
+    "min_units": 0,
+    "rate": "6.75"
+   },
+   {
+    "id": 2,
+    "max_units": 350,
+    "min_units": 301,
+    "rate": "7.60"
+   },
+   {
+    "id": 3,
+    "max_units": 400,
+    "min_units": 351,
+    "rate": "7.95"
+   },
+   {
+    "id": 4,
+    "max_units": 500,
+    "min_units": 401,
+    "rate": "8.25"
+   },
+   {
+    "id": 5,
+    "max_units": null,
+    "min_units": 501,
+    "rate": "9.20"
+   }
+  ],
+  "wattages": [
+   {
+    "id": 1,
+    "show_in_ui": true,
+    "value": 10
+   },
+   {
+    "id": 2,
+    "show_in_ui": true,
+    "value": 24
+   },
+   {
+    "id": 3,
+    "show_in_ui": true,
+    "value": 40
+   },
+   {
+    "id": 4,
+    "show_in_ui": true,
+    "value": 50
+   },
+   {
+    "id": 5,
+    "show_in_ui": true,
+    "value": 60
+   },
+   {
+    "id": 6,
+    "show_in_ui": true,
+    "value": 75
+   },
+   {
+    "id": 7,
+    "show_in_ui": true,
+    "value": 100
+   },
+   {
+    "id": 8,
+    "show_in_ui": true,
+    "value": 120
+   },
+   {
+    "id": 9,
+    "show_in_ui": true,
+    "value": 150
+   },
+   {
+    "id": 10,
+    "show_in_ui": true,
+    "value": 200
+   },
+   {
+    "id": 11,
+    "show_in_ui": true,
+    "value": 300
+   },
+   {
+    "id": 12,
+    "show_in_ui": true,
+    "value": 350
+   },
+   {
+    "id": 13,
+    "show_in_ui": true,
+    "value": 400
+   },
+   {
+    "id": 14,
+    "show_in_ui": true,
+    "value": 500
+   },
+   {
+    "id": 15,
+    "show_in_ui": true,
+    "value": 600
+   },
+   {
+    "id": 16,
+    "show_in_ui": true,
+    "value": 700
+   },
+   {
+    "id": 17,
+    "show_in_ui": true,
+    "value": 800
+   },
+   {
+    "id": 18,
+    "show_in_ui": true,
+    "value": 900
+   },
+   {
+    "id": 19,
+    "show_in_ui": true,
+    "value": 1000
+   },
+   {
+    "id": 20,
+    "show_in_ui": true,
+    "value": 1200
+   },
+   {
+    "id": 21,
+    "show_in_ui": true,
+    "value": 1500
+   },
+   {
+    "id": 22,
+    "show_in_ui": true,
+    "value": 1800
+   },
+   {
+    "id": 23,
+    "show_in_ui": true,
+    "value": 2000
+   },
+   {
+    "id": 24,
+    "show_in_ui": true,
+    "value": 2400
+   },
+   {
+    "id": 25,
+    "show_in_ui": true,
+    "value": 3000
+   }
+  ]
+ },
+ "rows": {
+  "device_types": [
+   {
+    "created_at": "2026-09-28T17:39:24.033988+00:00",
+    "id": 1,
+    "k_value": 0.35,
+    "name": "AC 1 ton",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.809898+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 1200
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.035296+00:00",
+    "id": 2,
+    "k_value": 1.0,
+    "name": "Washing Machine",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.815632+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/washing-machine.svg",
+    "watts": 500
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.036125+00:00",
+    "id": 3,
+    "k_value": 1.0,
+    "name": "TV",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.829290+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/tv.svg",
+    "watts": 100
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.036741+00:00",
+    "id": 4,
+    "k_value": 1.0,
+    "name": "Printer",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.840478+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/printer.svg",
+    "watts": 200
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.037502+00:00",
+    "id": 5,
+    "k_value": 1.0,
+    "name": "Air Fryer",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.834711+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1400
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.038119+00:00",
+    "id": 6,
+    "k_value": 1.0,
+    "name": "Cooker",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.838181+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 800
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.038900+00:00",
+    "id": 7,
+    "k_value": 1.0,
+    "name": "Refrigerator",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.821931+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/refrigerator.svg",
+    "watts": 150
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.039364+00:00",
+    "id": 8,
+    "k_value": 1.0,
+    "name": "Microwave",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.827050+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/microwave.svg",
+    "watts": 1000
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.039760+00:00",
+    "id": 9,
+    "k_value": 1.0,
+    "name": "Toaster",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.842938+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/toaster.svg",
+    "watts": 1000
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.040065+00:00",
+    "id": 10,
+    "k_value": 1.0,
+    "name": "Blender",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.844885+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 400
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.040366+00:00",
+    "id": 11,
+    "k_value": 1.0,
+    "name": "Dishwasher",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.817854+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1000
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.040666+00:00",
+    "id": 12,
+    "k_value": 1.0,
+    "name": "Vacuum Cleaner",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.830753+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 800
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.040952+00:00",
+    "id": 13,
+    "k_value": 1.0,
+    "name": "Electric Kettle",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.846799+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/electric-kettle.svg",
+    "watts": 1500
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.041213+00:00",
+    "id": 14,
+    "k_value": 1.0,
+    "name": "Fan",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.848832+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/fan.svg",
+    "watts": 60
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.041492+00:00",
+    "id": 15,
+    "k_value": 1.0,
+    "name": "Heater",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.825124+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 1500
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.041773+00:00",
+    "id": 16,
+    "k_value": 1.0,
+    "name": "Iron",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.832748+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/iron.svg",
+    "watts": 1000
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.646256+00:00",
+    "id": 17,
+    "k_value": 0.35,
+    "name": "AC 1.5 ton",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.811832+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 1500
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.649468+00:00",
+    "id": 18,
+    "k_value": 0.35,
+    "name": "AC 2 ton",
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:27.813600+00:00",
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+    "watts": 2000
+   }
+  ],
+  "ev_cars": [
+   {
+    "adjusted_real_world_range": 212,
+    "battery_capacity": 30.2,
+    "claimed_range": 312,
+    "created_at": "2026-09-28T17:39:24.113787+00:00",
+    "energy_consumption": 0.152,
+    "ex_showroom_price": 1249000,
+    "id": 1,
+    "k_value": 1.0,
+    "model": "Tata Nexon EV",
+    "updated_at": "2026-09-28T17:39:27.413705+00:00"
+   },
+   {
+    "adjusted_real_world_range": 150,
+    "battery_capacity": 26.0,
+    "claimed_range": 250,
+    "created_at": "2026-09-28T17:39:24.113807+00:00",
+    "energy_consumption": 0.13,
+    "ex_showroom_price": 1199000,
+    "id": 2,
+    "k_value": 1.0,
+    "model": "Tata Tigor EV",
+    "updated_at": "2026-09-28T17:39:27.416279+00:00"
+   },
+   {
+    "adjusted_real_world_range": 361,
+    "battery_capacity": 50.3,
+    "claimed_range": 461,
+    "created_at": "2026-09-28T17:39:24.113816+00:00",
+    "energy_consumption": 0.49,
+    "ex_showroom_price": 1648000,
+    "id": 3,
+    "k_value": 1.0,
+    "model": "MG ZS EV",
+    "updated_at": "2026-09-28T17:39:27.418003+00:00"
+   },
+   {
+    "adjusted_real_world_range": 352,
+    "battery_capacity": 39.2,
+    "claimed_range": 452,
+    "created_at": "2026-09-28T17:39:24.113824+00:00",
+    "energy_consumption": 0.16,
+    "ex_showroom_price": 2384000,
+    "id": 4,
+    "k_value": 1.0,
+    "model": "Hyundai Kona Electric",
+    "updated_at": "2026-09-28T17:39:27.420703+00:00"
+   },
+   {
+    "adjusted_real_world_range": 356,
+    "battery_capacity": 39.4,
+    "claimed_range": 456,
+    "created_at": "2026-09-28T17:39:24.113833+00:00",
+    "energy_consumption": 0.156,
+    "ex_showroom_price": 1599000,
+    "id": 5,
+    "k_value": 1.0,
+    "model": "Mahindra XUV400",
+    "updated_at": "2026-09-28T17:39:27.422545+00:00"
+   },
+   {
+    "adjusted_real_world_range": 150,
+    "battery_capacity": 24.0,
+    "claimed_range": 250,
+    "created_at": "2026-09-28T17:39:24.113842+00:00",
+    "energy_consumption": 0.129,
+    "ex_showroom_price": 799000,
+    "id": 6,
+    "k_value": 1.0,
+    "model": "Tata Tiago EV",
+    "updated_at": "2026-09-28T17:39:27.424475+00:00"
+   },
+   {
+    "adjusted_real_world_range": 130,
+    "battery_capacity": 17.3,
+    "claimed_range": 230,
+    "created_at": "2026-09-28T17:39:24.113850+00:00",
+    "energy_consumption": 0.089,
+    "ex_showroom_price": 617000,
+    "id": 7,
+    "k_value": 1.0,
+    "model": "MG Comet EV",
+    "updated_at": "2026-09-28T17:39:27.426548+00:00"
+   },
+   {
+    "adjusted_real_world_range": 215,
+    "battery_capacity": 25.0,
+    "claimed_range": 315,
+    "created_at": "2026-09-28T17:39:24.113860+00:00",
+    "energy_consumption": 0.16,
+    "ex_showroom_price": 999000,
+    "id": 8,
+    "k_value": 1.0,
+    "model": "Tata Punch EV",
+    "updated_at": "2026-09-28T17:39:27.428300+00:00"
+   },
+   {
+    "adjusted_real_world_range": 373,
+    "battery_capacity": 51.4,
+    "claimed_range": 473,
+    "created_at": "2026-09-28T17:39:24.113868+00:00",
+    "energy_consumption": 0.121,
+    "ex_showroom_price": 1799000,
+    "id": 9,
+    "k_value": 1.0,
+    "model": "Hyundai Creta Electric",
+    "updated_at": "2026-09-28T17:39:27.430148+00:00"
+   },
+   {
+    "adjusted_real_world_range": 456,
+    "battery_capacity": 59.0,
+    "claimed_range": 556,
+    "created_at": "2026-09-28T17:39:24.113876+00:00",
+    "energy_consumption": 0.176,
+    "ex_showroom_price": 1890000,
+    "id": 10,
+    "k_value": 1.0,
+    "model": "Mahindra BE 6",
+    "updated_at": "2026-09-28T17:39:27.432122+00:00"
+   },
+   {
+    "adjusted_real_world_range": 442,
+    "battery_capacity": 59.0,
+    "claimed_range": 542,
+    "created_at": "2026-09-28T17:39:24.113886+00:00",
+    "energy_consumption": 0.185,
+    "ex_showroom_price": 2190000,
+    "id": 11,
+    "k_value": 1.0,
+    "model": "Mahindra XEV 9e",
+    "updated_at": "2026-09-28T17:39:27.433932+00:00"
+   },
+   {
+    "adjusted_real_world_range": 232,
+    "battery_capacity": 38.0,
+    "claimed_range": 332,
+    "created_at": "2026-09-28T17:39:24.113894+00:00",
+    "energy_consumption": 0.123,
+    "ex_showroom_price": 1400000,
+    "id": 12,
+    "k_value": 1.0,
+    "model": "MG Windsor EV",
+    "updated_at": "2026-09-28T17:39:27.435989+00:00"
+   },
+   {
+    "adjusted_real_world_range": 330,
+    "battery_capacity": 45.0,
+    "claimed_range": 430,
+    "created_at": "2026-09-28T17:39:24.113903+00:00",
+    "energy_consumption": 0.151,
+    "ex_showroom_price": 1749000,
+    "id": 13,
+    "k_value": 1.0,
+    "model": "Tata Curvv EV",
+    "updated_at": "2026-09-28T17:39:27.438098+00:00"
+   },
+   {
+    "adjusted_real_world_range": 300,
+    "battery_capacity": 49.0,
+    "claimed_range": 400,
+    "created_at": "2026-09-28T17:39:24.113912+00:00",
+    "energy_consumption": 0.148,
+    "ex_showroom_price": 1200000,
+    "id": 14,
+    "k_value": 1.0,
+    "model": "Maruti Suzuki e Vitara",
+    "updated_at": "2026-09-28T17:39:27.439493+00:00"
+   }
+  ],
+  "ev_scooters": [
+   {
+    "adjusted_real_world_range": 81,
+    "battery_capacity": 4.0,
+    "claimed_range": 181,
+    "created_at": "2026-09-28T17:39:24.116139+00:00",
+    "energy_consumption": 0.039,
+    "ex_showroom_price": 130000,
+    "id": 1,
+    "k_value": 1.0,
+    "model": "Ola S1 Pro",
+    "updated_at": "2026-09-28T17:39:27.474871+00:00"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 3.7,
+    "claimed_range": 100,
+    "created_at": "2026-09-28T17:39:24.116155+00:00",
+    "energy_consumption": 0.028,
+    "ex_showroom_price": 135000,
+    "id": 2,
+    "k_value": 1.0,
+    "model": "Ather 450X",
+    "updated_at": "2026-09-28T17:39:27.476871+00:00"
+   },
+   {
+    "adjusted_real_world_range": 45,
+    "battery_capacity": 3.0,
+    "claimed_range": 145,
+    "created_at": "2026-09-28T17:39:24.116164+00:00",
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 94434,
+    "id": 3,
+    "k_value": 1.0,
+    "model": "TVS iQube",
+    "updated_at": "2026-09-28T17:39:27.478891+00:00"
+   },
+   {
+    "adjusted_real_world_range": 53,
+    "battery_capacity": 3.0,
+    "claimed_range": 153,
+    "created_at": "2026-09-28T17:39:24.116173+00:00",
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 99998,
+    "id": 4,
+    "k_value": 1.0,
+    "model": "Bajaj Chetak",
+    "updated_at": "2026-09-28T17:39:27.480683+00:00"
+   },
+   {
+    "adjusted_real_world_range": 65,
+    "battery_capacity": 3.9,
+    "claimed_range": 165,
+    "created_at": "2026-09-28T17:39:24.116182+00:00",
+    "energy_consumption": 0.024,
+    "ex_showroom_price": 110000,
+    "id": 5,
+    "k_value": 1.0,
+    "model": "Hero Vida V1",
+    "updated_at": "2026-09-28T17:39:27.482477+00:00"
+   },
+   {
+    "adjusted_real_world_range": 136,
+    "battery_capacity": 4.8,
+    "claimed_range": 236,
+    "created_at": "2026-09-28T17:39:24.116190+00:00",
+    "energy_consumption": 0.002,
+    "ex_showroom_price": 110000,
+    "id": 6,
+    "k_value": 1.0,
+    "model": "Simple One",
+    "updated_at": "2026-09-28T17:39:27.484248+00:00"
+   },
+   {
+    "adjusted_real_world_range": 2,
+    "battery_capacity": 3.0,
+    "claimed_range": 102,
+    "created_at": "2026-09-28T17:39:24.116199+00:00",
+    "energy_consumption": 0.029,
+    "ex_showroom_price": 117000,
+    "id": 7,
+    "k_value": 1.0,
+    "model": "Honda Activa e",
+    "updated_at": "2026-09-28T17:39:27.485982+00:00"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 3.0,
+    "claimed_range": 100,
+    "created_at": "2026-09-28T17:39:24.116207+00:00",
+    "energy_consumption": 0.039,
+    "ex_showroom_price": 100000,
+    "id": 8,
+    "k_value": 1.0,
+    "model": "Suzuki e-Access",
+    "updated_at": "2026-09-28T17:39:27.487832+00:00"
+   },
+   {
+    "adjusted_real_world_range": 0,
+    "battery_capacity": 0.9,
+    "claimed_range": 68,
+    "created_at": "2026-09-28T17:39:24.116216+00:00",
+    "energy_consumption": 0.014,
+    "ex_showroom_price": 55555,
+    "id": 9,
+    "k_value": 1.0,
+    "model": "Yulu Wynn",
+    "updated_at": "2026-09-28T17:39:27.489329+00:00"
+   },
+   {
+    "adjusted_real_world_range": 21,
+    "battery_capacity": 2.0,
+    "claimed_range": 121,
+    "created_at": "2026-09-28T17:39:24.116224+00:00",
+    "energy_consumption": 0.019,
+    "ex_showroom_price": 77000,
+    "id": 10,
+    "k_value": 1.0,
+    "model": "Ampere Magnus Neo",
+    "updated_at": "2026-09-28T17:39:27.490935+00:00"
+   },
+   {
+    "adjusted_real_world_range": 23,
+    "battery_capacity": 2.5,
+    "claimed_range": 123,
+    "created_at": "2026-09-28T17:39:24.116234+00:00",
+    "energy_consumption": 0.022,
+    "ex_showroom_price": 99990,
+    "id": 11,
+    "k_value": 1.0,
+    "model": "BGauss C12i",
+    "updated_at": "2026-09-28T17:39:27.492057+00:00"
+   },
+   {
+    "adjusted_real_world_range": 60,
+    "battery_capacity": 3.6,
+    "claimed_range": 160,
+    "created_at": "2026-09-28T17:39:24.116243+00:00",
+    "energy_consumption": 0.022,
+    "ex_showroom_price": 121000,
+    "id": 12,
+    "k_value": 1.0,
+    "model": "Okinawa Okhi-90",
+    "updated_at": "2026-09-28T17:39:27.493038+00:00"
+   },
+   {
+    "adjusted_real_world_range": 50,
+    "battery_capacity": 3.2,
+    "claimed_range": 150,
+    "created_at": "2026-09-28T17:39:24.116253+00:00",
+    "energy_consumption": 0.021,
+    "ex_showroom_price": 124000,
+    "id": 13,
+    "k_value": 1.0,
+    "model": "Revolt RV400",
+    "updated_at": "2026-09-28T17:39:27.494677+00:00"
+   },
+   {
+    "adjusted_real_world_range": 67,
+    "battery_capacity": 3.5,
+    "claimed_range": 167,
+    "created_at": "2026-09-28T17:39:24.116261+00:00",
+    "energy_consumption": 0.023,
+    "ex_showroom_price": 120000,
+    "id": 14,
+    "k_value": 1.0,
+    "model": "Ultraviolette Tesseract",
+    "updated_at": "2026-09-28T17:39:27.496871+00:00"
+   },
+   {
+    "adjusted_real_world_range": 23,
+    "battery_capacity": 2.9,
+    "claimed_range": 123,
+    "created_at": "2026-09-28T17:39:24.116270+00:00",
+    "energy_consumption": 0.013,
+    "ex_showroom_price": 132000,
+    "id": 15,
+    "k_value": 1.0,
+    "model": "Ather Rizta",
+    "updated_at": "2026-09-28T17:39:27.498518+00:00"
+   }
+  ],
+  "kseb_tariffs": [
+   {
+    "created_at": "2026-09-28T17:39:24.086501+00:00",
+    "id": 1,
+    "max_units": 300,
+    "min_units": 0,
+    "rate": "6.75",
+    "updated_at": "2026-09-28T17:39:24.086512+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.086522+00:00",
+    "id": 2,
+    "max_units": 350,
+    "min_units": 301,
+    "rate": "7.60",
+    "updated_at": "2026-09-28T17:39:24.086525+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.086533+00:00",
+    "id": 3,
+    "max_units": 400,
+    "min_units": 351,
+    "rate": "7.95",
+    "updated_at": "2026-09-28T17:39:24.086537+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.086543+00:00",
+    "id": 4,
+    "max_units": 500,
+    "min_units": 401,
+    "rate": "8.25",
+    "updated_at": "2026-09-28T17:39:24.086545+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.086553+00:00",
+    "id": 5,
+    "max_units": null,
+    "min_units": 501,
+    "rate": "9.20",
+    "updated_at": "2026-09-28T17:39:24.086556+00:00"
+   }
+  ],
+  "pincodes": [
+   {
+    "created_at": "2026-09-28T17:39:24.310517+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 63,
+    "office_name": "Fathimapuram BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.310522+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.312727+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 68,
+    "office_name": "Elamkadu BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.312731+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.313108+00:00",
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 69,
+    "office_name": "Wembly BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.313111+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.313801+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 71,
+    "office_name": "Kanamala BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.313805+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.314134+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 72,
+    "office_name": "Venkurinji BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.314137+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.314550+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 73,
+    "office_name": "Karinilam BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.314554+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.314918+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 74,
+    "office_name": "Rajendraprasad Colony BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.314921+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.331402+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 124,
+    "office_name": "Chottupara Periyar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.331407+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.331824+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 125,
+    "office_name": "Keerikara BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.331829+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.381110+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 256,
+    "office_name": "Mancode BO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.381119+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.384561+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 260,
+    "office_name": "Chelikuzhy BO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.384568+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.392454+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 270,
+    "office_name": "Patharam BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.392460+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.475519+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 404,
+    "office_name": "Valiyaparamba BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.475523+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.475894+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 405,
+    "office_name": "Vavad BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.475899+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.482180+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 419,
+    "office_name": "Puducode  Feroke BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.482184+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.486906+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 431,
+    "office_name": "Cheeyambam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.486910+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.487235+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 432,
+    "office_name": "Kabanigiri BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.487239+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.487541+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 433,
+    "office_name": "Manal Vayal BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.487545+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.487906+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 434,
+    "office_name": "Kidanganad BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.487910+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.488248+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 435,
+    "office_name": "Moolan Kavu BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.488252+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.488567+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 436,
+    "office_name": "Pazhupathur BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.488571+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.489398+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 438,
+    "office_name": "Tharuvana BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.489403+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.492196+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 444,
+    "office_name": "Keezhallur BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.492201+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.502794+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 456,
+    "office_name": "Josegiri BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.502801+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.503390+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 457,
+    "office_name": "Kozhichal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.503395+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.503952+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 458,
+    "office_name": "Thabore BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.503957+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.516824+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 485,
+    "office_name": "Kalichanadukam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.516828+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.517145+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 486,
+    "office_name": "Kottamala Estate BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.517149+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.517457+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 487,
+    "office_name": "Madikai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.517461+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.537037+00:00",
+    "district": "KANNUR",
+    "division": "Manjeri Division",
+    "id": 534,
+    "office_name": "Munderi BO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.537043+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.570910+00:00",
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 588,
+    "office_name": "Cherukattupulam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.570914+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.571173+00:00",
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 589,
+    "office_name": "EdakodePavukonam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.571177+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.787876+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 829,
+    "office_name": "Kalanjoor SO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.787884+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.790382+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 832,
+    "office_name": "Sooranad SO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.790391+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.841960+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 920,
+    "office_name": "Ramanattukara SO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.841963+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.843194+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 924,
+    "office_name": "Anjarakandy SO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.843200+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.844568+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 928,
+    "office_name": "Civil Station Kannur SO",
+    "pincode": "670002",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.844573+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.958164+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 1120,
+    "office_name": "Paluvally BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.958167+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.958413+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 1121,
+    "office_name": "Perayam BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.958416+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.962433+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1134,
+    "office_name": "Avilora BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.962439+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.962839+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1135,
+    "office_name": "Karuvampoyil BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.962843+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.963119+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1136,
+    "office_name": "Manipuram BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.963122+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.963367+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1137,
+    "office_name": "Pannikkottur BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.963371+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.969473+00:00",
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 1160,
+    "office_name": "Azhinjilam BO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.969476+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.970399+00:00",
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 1164,
+    "office_name": "Vazhayur East BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.970402+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.973988+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1177,
+    "office_name": "Bhoodanam Colony BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.973993+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.974298+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1178,
+    "office_name": "Kalanadi Kolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.974302+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.974603+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1179,
+    "office_name": "Palakolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.974606+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.974925+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1180,
+    "office_name": "Chedalath BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.974930+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.975188+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1181,
+    "office_name": "Moodakolli BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.975191+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.975432+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1182,
+    "office_name": "Muthanga BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.975436+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.975673+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1183,
+    "office_name": "Pambra BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.975676+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.975916+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1184,
+    "office_name": "Thovari Mala BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.975921+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.976210+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1185,
+    "office_name": "Vakeri BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.976214+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.976849+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1187,
+    "office_name": "Kammana BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.976853+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.977098+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1188,
+    "office_name": "Karakkamala BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.977102+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.977404+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1189,
+    "office_name": "Kunnamangalam Wayanad BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.977410+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.977770+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 1190,
+    "office_name": "Pilakavu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.977775+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.979091+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 1195,
+    "office_name": "Vengad BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.979095+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.983979+00:00",
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1213,
+    "office_name": "Kamballur BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.983982+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.984183+00:00",
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1214,
+    "office_name": "Palavayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.984186+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.984403+00:00",
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 1215,
+    "office_name": "Thayyeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.984407+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.984615+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 1216,
+    "office_name": "Thirumeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.984618+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.988679+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1233,
+    "office_name": "Bheemanady BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.988683+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.988913+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1234,
+    "office_name": "Kollampara BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.988916+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.989126+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1235,
+    "office_name": "Thaikadapuram BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.989129+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.989348+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1236,
+    "office_name": "Uppilakai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.989351+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.989556+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 1237,
+    "office_name": "West Eleri BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:24.989559+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.106279+00:00",
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 1521,
+    "office_name": "Mukkulam East BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.106287+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.107089+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1522,
+    "office_name": "Parathanam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.107097+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.107801+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1523,
+    "office_name": "Yendayar BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.107809+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.110133+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 1526,
+    "office_name": "Thulappally BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.110141+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.143762+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1568,
+    "office_name": "Dymock BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.143769+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.144313+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1569,
+    "office_name": "Moongalar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.144322+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.145434+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1570,
+    "office_name": "Mount BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.145443+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.146269+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Idukki Division",
+    "id": 1571,
+    "office_name": "Pampa Dam BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.146278+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.147260+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 1572,
+    "office_name": "Thengakal BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.147268+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.187868+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 1660,
+    "office_name": "Athikattukulangara BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.187871+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.188141+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Mavelikara Division",
+    "id": 1661,
+    "office_name": "Pallickal nooranad BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.188144+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.205515+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 1718,
+    "office_name": "Chayalode BO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.205518+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.206416+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 1721,
+    "office_name": "Kakkakunnu BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.206420+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.296213+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 1775,
+    "office_name": "Koottickal SO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.296216+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.323020+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 1871,
+    "office_name": "Kadambanad South SO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.323024+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.347185+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 1955,
+    "office_name": "Kotuvalli SO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.347188+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.351890+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 1972,
+    "office_name": "Pulpalli SO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.351894+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.435455+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 2118,
+    "office_name": "Kunnamkary BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.435458+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.437534+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2127,
+    "office_name": "Muttappally BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.437537+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.437766+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2128,
+    "office_name": "Pampavally North BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.437769+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.438141+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2129,
+    "office_name": "Koruthode BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.438146+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.438712+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2130,
+    "office_name": "Madukka BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.438717+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.439099+00:00",
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 2131,
+    "office_name": "Mundakayam East BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.439103+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.452278+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 2171,
+    "office_name": "Wallardie BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.452281+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.464387+00:00",
+    "district": "ERNAKULAM",
+    "division": "Irinjalakuda Division",
+    "id": 2209,
+    "office_name": "Thuruthippuram BO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.464392+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.483963+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 2251,
+    "office_name": "Panayil BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.483969+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.504428+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 2302,
+    "office_name": "Puthenambalam BO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.504432+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.504757+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 2303,
+    "office_name": "Padam BO",
+    "pincode": "689694",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.504761+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.543401+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Quilon Division",
+    "id": 2352,
+    "office_name": "Thattakkattu Market BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.543412+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.571055+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Tiruvalla Division",
+    "id": 2382,
+    "office_name": "Arattupuzha BO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.571062+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.572007+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 2383,
+    "office_name": "Edanad BO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.572015+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.626965+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 2449,
+    "office_name": "Karimancode BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.626972+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.635367+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 2466,
+    "office_name": "Elettil BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.635371+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.640827+00:00",
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 2486,
+    "office_name": "Vazhayur BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.640831+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.643914+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2498,
+    "office_name": "Amara Kuni BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.643917+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.644139+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2499,
+    "office_name": "Perikallur BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.644142+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.644367+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2500,
+    "office_name": "Sasimala BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.644371+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.644707+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2501,
+    "office_name": "Seetha Mount BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.644711+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.644988+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2502,
+    "office_name": "Veliyambam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.644993+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.645381+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2503,
+    "office_name": "Nulpuzha BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.645386+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.645686+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2504,
+    "office_name": "Poomulla BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.645691+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.648193+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2511,
+    "office_name": "Arattuthara BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.648197+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.648509+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2512,
+    "office_name": "Edavaka BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.648512+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.648859+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2513,
+    "office_name": "Ellumannam BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.648864+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.649140+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2514,
+    "office_name": "Mundakutty BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.649143+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.649398+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2515,
+    "office_name": "Nallurnad BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.649401+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.658218+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 2544,
+    "office_name": "Chunda BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.658221+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.658509+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 2545,
+    "office_name": "Prapoil BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.658513+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.664595+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2569,
+    "office_name": "Chathamath BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.664598+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.664850+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2570,
+    "office_name": "Elerithattu BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.664853+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.665072+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2571,
+    "office_name": "Erikulam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.665075+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.665303+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2572,
+    "office_name": "Karindala BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.665306+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.665538+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2573,
+    "office_name": "Ozhinhavalappu BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.665542+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.665798+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2574,
+    "office_name": "Periyanganam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.665801+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.666048+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 2575,
+    "office_name": "Puthariadukkam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.666052+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.838933+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 2824,
+    "office_name": "Vazhappally West SO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.838940+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.870876+00:00",
+    "district": "THRISSUR",
+    "division": "Irinjalakuda Division",
+    "id": 2862,
+    "office_name": "Kottappuram SO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.870885+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.941275+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 2991,
+    "office_name": "Farook College SO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.941281+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.943487+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 2997,
+    "office_name": "Sulthan Bathery SO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.943492+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.945281+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 2999,
+    "office_name": "Mananthavady SO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.945291+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.946393+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3001,
+    "office_name": "Alavil SO",
+    "pincode": "670008",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.946401+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.949584+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3007,
+    "office_name": "Valapattanam SO",
+    "pincode": "670010",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.949590+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:25.952062+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3014,
+    "office_name": "Nileshwar SO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:25.952065+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.041267+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3103,
+    "office_name": "Chenkara BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.041277+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.042087+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Idukki Division",
+    "id": 3104,
+    "office_name": "Gavi BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.042096+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.042841+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3105,
+    "office_name": "Gramby BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.042851+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.043505+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 3106,
+    "office_name": "Vallakadavu Periyar BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.043515+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.082526+00:00",
+    "district": "THRISSUR",
+    "division": "Irinjalakuda Division",
+    "id": 3158,
+    "office_name": "Anapuzha BO",
+    "pincode": "680667",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.082535+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.129969+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 3210,
+    "office_name": "Payyanallur BO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.129980+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.160558+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 3262,
+    "office_name": "Thengamom BO",
+    "pincode": "690522",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.160561+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.178280+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Tiruvalla Division",
+    "id": 3322,
+    "office_name": "Neervilakom BO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.178283+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.192220+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 3378,
+    "office_name": "Exservicemens Colony BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.192223+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.195446+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 3391,
+    "office_name": "Kilakkoth BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.195449+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.199304+00:00",
+    "district": "MALAPPURAM",
+    "division": "Calicut Division",
+    "id": 3406,
+    "office_name": "Karad Paramba BO",
+    "pincode": "673632",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.199307+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.200435+00:00",
+    "district": "KOZHIKODE",
+    "division": "Calicut Division",
+    "id": 3409,
+    "office_name": "Vaidyarangadi BO",
+    "pincode": "673633",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.200439+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.205620+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3427,
+    "office_name": "Padichira BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.205623+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.205935+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3428,
+    "office_name": "Beenachi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.205939+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.206187+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3429,
+    "office_name": "Nenmeni BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.206191+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.206566+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 3430,
+    "office_name": "Valluvadi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.206571+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.207159+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3432,
+    "office_name": "Anjukunnu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.207162+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.207396+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3433,
+    "office_name": "Kellur BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.207399+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.209316+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3440,
+    "office_name": "Munderi BO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.209320+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.212698+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3454,
+    "office_name": "Thattummal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.212701+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.216885+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3471,
+    "office_name": "Chayoth BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.216889+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.217107+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 3472,
+    "office_name": "Kottapuram BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.217110+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.228621+00:00",
+    "district": "MALAPPURAM",
+    "division": "Manjeri Division",
+    "id": 3505,
+    "office_name": "Vengad BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.228626+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.240764+00:00",
+    "district": "MALAPPURAM",
+    "division": "Manjeri Division",
+    "id": 3539,
+    "office_name": "Valiyaparamba BO",
+    "pincode": "673572",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.240769+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.253207+00:00",
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 3573,
+    "office_name": "Pathankulam BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.253221+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.277675+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 3606,
+    "office_name": "Pudusseri BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.277682+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.279701+00:00",
+    "district": "PALAKKAD",
+    "division": "Palghat Division",
+    "id": 3612,
+    "office_name": "Panayur BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.279705+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.361774+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3751,
+    "office_name": "Panachikavu BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.361784+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.365091+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 3755,
+    "office_name": "Kumarankary BO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.365101+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.370754+00:00",
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 3760,
+    "office_name": "Mukkulam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.370765+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.371508+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3761,
+    "office_name": "Velanilam BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.371517+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.372252+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 3762,
+    "office_name": "Chathenthara BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.372261+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.372945+00:00",
+    "district": "IDUKKI",
+    "division": "Changanacherry Division",
+    "id": 3763,
+    "office_name": "Kuppakkayam BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.372954+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.449997+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 3794,
+    "office_name": "Mundakayam SO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.450002+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.471385+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Mavelikara Division",
+    "id": 3860,
+    "office_name": "Nooranad SO",
+    "pincode": "690504",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.471390+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.481370+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Pathanamthitta Division",
+    "id": 3892,
+    "office_name": "Nedumon SO",
+    "pincode": "691556",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.481374+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.485165+00:00",
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 3905,
+    "office_name": "Prayar SO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.485169+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.508008+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 3946,
+    "office_name": "Pacha SO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.508012+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.522233+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3968,
+    "office_name": "Eachur SO",
+    "pincode": "670591",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.522237+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.523442+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 3972,
+    "office_name": "Pallikunnu SO",
+    "pincode": "670004",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.523446+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.664456+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Changanacherry Division",
+    "id": 4113,
+    "office_name": "Kidangara BO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.664463+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.665847+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4115,
+    "office_name": "Ruby Nagar BO",
+    "pincode": "686103",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.665855+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.667099+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4117,
+    "office_name": "Thalumkal BO",
+    "pincode": "686514",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.667104+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.668020+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4119,
+    "office_name": "Edakadathy BO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.668025+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.668360+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4120,
+    "office_name": "Punchavayal BO",
+    "pincode": "686513",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.668364+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.678701+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 4156,
+    "office_name": "Arnakal BO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.678706+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.769864+00:00",
+    "district": "KOLLAM",
+    "division": "Pathanamthitta Division",
+    "id": 4294,
+    "office_name": "Manampuzha BO",
+    "pincode": "691553",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.769875+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.808246+00:00",
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 4342,
+    "office_name": "Alumpeedika BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.808256+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.808930+00:00",
+    "district": "KOLLAM",
+    "division": "Quilon Division",
+    "id": 4343,
+    "office_name": "Azheekkalthura BO",
+    "pincode": "690547",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.808937+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.834215+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4373,
+    "office_name": "Piralassery BO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.834222+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.877318+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 4431,
+    "office_name": "Elavattom BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.877323+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.877660+00:00",
+    "district": "THIRUVANANTHAPURAM",
+    "division": "Trivandrum South Division",
+    "id": 4432,
+    "office_name": "Meenmutty BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.877666+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.878057+00:00",
+    "district": "KOLLAM",
+    "division": "Trivandrum South Division",
+    "id": 4433,
+    "office_name": "Vattakarikkakom BO",
+    "pincode": "695562",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.878062+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.897428+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4478,
+    "office_name": "Chettapalam BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.897432+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.897742+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4479,
+    "office_name": "Marakadavu BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.897746+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.898019+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4480,
+    "office_name": "Mullankolli BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.898022+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.898314+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4481,
+    "office_name": "Pakkom BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.898357+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.898824+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4482,
+    "office_name": "Chulliote BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.898830+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.899176+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4483,
+    "office_name": "Kuppadi BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.899182+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.899463+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4484,
+    "office_name": "Naiketty BO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.899467+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.900581+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4487,
+    "office_name": "Pudusserikadavu BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.900587+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.901093+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4488,
+    "office_name": "Valery BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.901098+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.901506+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4489,
+    "office_name": "Vemom BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.901511+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.901852+00:00",
+    "district": "WAYANAD",
+    "division": "Thalassery Division",
+    "id": 4490,
+    "office_name": "Vimalanagar BO",
+    "pincode": "670645",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.901856+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.903234+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4493,
+    "office_name": "Muringeri BO",
+    "pincode": "670612",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.903239+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.909419+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4509,
+    "office_name": "Edavaramba BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.909426+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.909912+00:00",
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 4510,
+    "office_name": "Kadumeni BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.909919+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.910468+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4511,
+    "office_name": "Kanamvayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.910478+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.910977+00:00",
+    "district": "KASARAGOD",
+    "division": "Cannanore Division",
+    "id": 4512,
+    "office_name": "Kannivayal BO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.910983+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.917521+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4528,
+    "office_name": "Pakkom BO",
+    "pincode": "673579",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.917525+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.919534+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4533,
+    "office_name": "Bengalam BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.919538+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.919855+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4534,
+    "office_name": "Kattipoil BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.919859+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.920171+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4535,
+    "office_name": "Padannakkad BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.920179+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.920618+00:00",
+    "district": "KASARAGOD",
+    "division": "Kasaragod Division",
+    "id": 4536,
+    "office_name": "Pudukai BO",
+    "pincode": "671314",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.920624+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:26.954733+00:00",
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 4640,
+    "office_name": "Panayur BO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:26.954737+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.029904+00:00",
+    "district": "KOZHIKODE",
+    "division": "Tiruchirapalli Division",
+    "id": 4753,
+    "office_name": "Melanikuzhi SO",
+    "pincode": "612906",
+    "region": "Central Region Trichirapalli",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.029915+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.068562+00:00",
+    "district": "KOTTAYAM",
+    "division": "Changanacherry Division",
+    "id": 4796,
+    "office_name": "Perunna SO",
+    "pincode": "686102",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.068568+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.069624+00:00",
+    "district": "PATHANAMTHITTA",
+    "division": "Changanacherry Division",
+    "id": 4799,
+    "office_name": "Mukkoottuthara SO",
+    "pincode": "686510",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.069627+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.075458+00:00",
+    "district": "IDUKKI",
+    "division": "Idukki Division",
+    "id": 4817,
+    "office_name": "Vandiperiyar SO",
+    "pincode": "685533",
+    "region": "Kochi Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.075462+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.155833+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4914,
+    "office_name": "Angadical Chengannur SO",
+    "pincode": "689122",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.155845+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.156553+00:00",
+    "district": "ALAPPUZHA",
+    "division": "Tiruvalla Division",
+    "id": 4915,
+    "office_name": "Puthencavu SO",
+    "pincode": "689123",
+    "region": "DivReportingCircle",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.156562+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.195618+00:00",
+    "district": "WAYANAD",
+    "division": "Calicut Division",
+    "id": 4972,
+    "office_name": "Sulthan Bathery East SO",
+    "pincode": "673592",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.195626+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.202918+00:00",
+    "district": "KANNUR",
+    "division": "Cannanore Division",
+    "id": 4981,
+    "office_name": "Cherupuzha SO",
+    "pincode": "670511",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.202930+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:27.227725+00:00",
+    "district": "PALAKKAD",
+    "division": "Ottapalam Division",
+    "id": 5009,
+    "office_name": "Vaniamkulam SO",
+    "pincode": "679522",
+    "region": "Calicut Region",
+    "state": "KERALA",
+    "updated_at": "2026-09-28T17:39:27.227738+00:00"
+   }
+  ],
+  "room_size": [
+   {
+    "bhk_type": 1,
+    "id": 1,
+    "size": 800,
+    "units": 130
+   },
+   {
+    "bhk_type": 2,
+    "id": 2,
+    "size": 1200,
+    "units": 180
+   },
+   {
+    "bhk_type": 2,
+    "id": 3,
+    "size": 1400,
+    "units": 210
+   },
+   {
+    "bhk_type": 3,
+    "id": 4,
+    "size": 1800,
+    "units": 250
+   },
+   {
+    "bhk_type": 3,
+    "id": 5,
+    "size": 2200,
+    "units": 320
+   },
+   {
+    "bhk_type": 4,
+    "id": 6,
+    "size": 3000,
+    "units": 400
+   },
+   {
+    "bhk_type": 4,
+    "id": 7,
+    "size": 4000,
+    "units": 600
+   }
+  ],
+  "wattages": [
+   {
+    "created_at": "2026-09-28T17:39:24.059493+00:00",
+    "id": 1,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.059518+00:00",
+    "value": 10
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.060631+00:00",
+    "id": 2,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.060678+00:00",
+    "value": 24
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.061397+00:00",
+    "id": 3,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.061404+00:00",
+    "value": 40
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.061949+00:00",
+    "id": 4,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.061956+00:00",
+    "value": 50
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.062757+00:00",
+    "id": 5,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.062768+00:00",
+    "value": 60
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.063304+00:00",
+    "id": 6,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.063312+00:00",
+    "value": 75
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.063742+00:00",
+    "id": 7,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.063748+00:00",
+    "value": 100
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.064170+00:00",
+    "id": 8,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.064176+00:00",
+    "value": 120
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.064509+00:00",
+    "id": 9,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.064513+00:00",
+    "value": 150
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.064827+00:00",
+    "id": 10,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.064832+00:00",
+    "value": 200
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.065116+00:00",
+    "id": 11,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.065121+00:00",
+    "value": 300
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.065397+00:00",
+    "id": 12,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.065401+00:00",
+    "value": 350
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.065705+00:00",
+    "id": 13,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.065710+00:00",
+    "value": 400
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.065990+00:00",
+    "id": 14,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.065994+00:00",
+    "value": 500
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.066257+00:00",
+    "id": 15,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.066261+00:00",
+    "value": 600
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.066566+00:00",
+    "id": 16,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.066570+00:00",
+    "value": 700
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.066839+00:00",
+    "id": 17,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.066843+00:00",
+    "value": 800
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.067100+00:00",
+    "id": 18,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.067104+00:00",
+    "value": 900
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.067380+00:00",
+    "id": 19,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.067384+00:00",
+    "value": 1000
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.067618+00:00",
+    "id": 20,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.067621+00:00",
+    "value": 1200
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.067908+00:00",
+    "id": 21,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.067913+00:00",
+    "value": 1500
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.068180+00:00",
+    "id": 22,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.068184+00:00",
+    "value": 1800
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.068476+00:00",
+    "id": 23,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.068480+00:00",
+    "value": 2000
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.068753+00:00",
+    "id": 24,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.068757+00:00",
+    "value": 2400
+   },
+   {
+    "created_at": "2026-09-28T17:39:24.069010+00:00",
+    "id": 25,
+    "show_in_ui": true,
+    "updated_at": "2026-09-28T17:39:24.069014+00:00",
+    "value": 3000
+   }
+  ]
+ },
+ "source": {
+  "db": "legacy_goldenapp",
+  "flarize": "/home/user/flarize-main/flarize/data/quotation-content.json",
+  "url": "http://127.0.0.1:18012"
+ }
+}

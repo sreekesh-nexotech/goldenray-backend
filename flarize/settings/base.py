@@ -359,6 +359,14 @@ SPECTACULAR_SETTINGS = {
         "RenderJobKindEnum": "documents.models.render_job.RenderJob.Kind",
         "RenderJobStatusEnum": "documents.models.render_job.RenderJob.Status",
         "IntegrationKeyEnum": "company.models.integration.Integration.Key",
+        "JobPositionStatusEnum": "careers.models.position.JobPosition.Status",
+        "JobPositionEmploymentTypeEnum": "careers.models.position.JobPosition.EmploymentType",
+        "JobApplicationStatusEnum": "careers.models.application.JobApplication.Status",
+        "JobApplicationSourceEnum": "careers.models.application.JobApplication.Source",
+        "JobApplicationExperienceEnum": "careers.models.application.JobApplication.Experience",
+        "JobApplicationSalaryEnum": "careers.models.application.JobApplication.Salary",
+        "JobApplicationEventKindEnum": "careers.models.application.JobApplicationEvent.Kind",
+        "KsebTariffPhaseEnum": "reference.models.tariff.KsebTariff.Phase",
     },
 }
 

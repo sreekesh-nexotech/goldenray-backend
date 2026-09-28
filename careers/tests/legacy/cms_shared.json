@@ -1,0 +1,751 @@
+{
+ "careers_department": [
+  {
+   "created_at": "2026-09-28T17:43:51.478790+00:00",
+   "description": "",
+   "id": 1,
+   "is_active": true,
+   "name": "Engineering",
+   "slug": "engineering",
+   "sort_order": 0,
+   "updated_at": "2026-09-28T17:43:51.478802+00:00"
+  },
+  {
+   "created_at": "2026-09-28T17:43:51.481916+00:00",
+   "description": "",
+   "id": 2,
+   "is_active": true,
+   "name": "Sales",
+   "slug": "sales",
+   "sort_order": 0,
+   "updated_at": "2026-09-28T17:43:51.481927+00:00"
+  },
+  {
+   "created_at": "2026-09-28T17:43:51.484479+00:00",
+   "description": "",
+   "id": 3,
+   "is_active": true,
+   "name": "Operations",
+   "slug": "operations",
+   "sort_order": 0,
+   "updated_at": "2026-09-28T17:43:51.484490+00:00"
+  }
+ ],
+ "careers_job_position": [
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": null,
+   "created_at": "2026-09-28T17:43:51.487582+00:00",
+   "created_by_id": null,
+   "department_id": 1,
+   "description": "We are hiring a Solar Installation Engineer.",
+   "employment_type": "full_time",
+   "experience_required": "1-3 years",
+   "id": 1,
+   "location": "Alappuzha",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": "2026-05-01T03:30:00+00:00",
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "solar-installation-engineer",
+   "sort_order": 1,
+   "status": "published",
+   "title": "Solar Installation Engineer",
+   "updated_at": "2026-09-28T17:43:51.487589+00:00",
+   "updated_by_id": null
+  },
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": null,
+   "created_at": "2026-09-28T17:43:51.491232+00:00",
+   "created_by_id": null,
+   "department_id": 2,
+   "description": "We are hiring a Field Sales Executive.",
+   "employment_type": "full_time",
+   "experience_required": "1-3 years",
+   "id": 2,
+   "location": "Kochi",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": "2026-05-01T03:30:00+00:00",
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "field-sales-executive",
+   "sort_order": 2,
+   "status": "published",
+   "title": "Field Sales Executive",
+   "updated_at": "2026-09-28T17:43:51.491239+00:00",
+   "updated_by_id": null
+  },
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": null,
+   "created_at": "2026-09-28T17:43:51.494026+00:00",
+   "created_by_id": null,
+   "department_id": 2,
+   "description": "We are hiring a Customer Relations Executive.",
+   "employment_type": "full_time",
+   "experience_required": "1-3 years",
+   "id": 3,
+   "location": "Alappuzha",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": "2026-05-01T03:30:00+00:00",
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "crs-executive",
+   "sort_order": 3,
+   "status": "published",
+   "title": "Customer Relations Executive",
+   "updated_at": "2026-09-28T17:43:51.494033+00:00",
+   "updated_by_id": null
+  },
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": null,
+   "created_at": "2026-09-28T17:43:51.496886+00:00",
+   "created_by_id": null,
+   "department_id": 3,
+   "description": "We are hiring a Site Supervisor Intern.",
+   "employment_type": "internship",
+   "experience_required": "1-3 years",
+   "id": 4,
+   "location": "Kottayam",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": "2026-05-01T03:30:00+00:00",
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "site-supervisor-intern",
+   "sort_order": 4,
+   "status": "published",
+   "title": "Site Supervisor Intern",
+   "updated_at": "2026-09-28T17:43:51.496893+00:00",
+   "updated_by_id": null
+  },
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": null,
+   "created_at": "2026-09-28T17:43:51.499819+00:00",
+   "created_by_id": null,
+   "department_id": 1,
+   "description": "We are hiring a Design Engineer.",
+   "employment_type": "contract",
+   "experience_required": "1-3 years",
+   "id": 5,
+   "location": "Remote",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": null,
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "design-engineer-draft",
+   "sort_order": 5,
+   "status": "draft",
+   "title": "Design Engineer",
+   "updated_at": "2026-09-28T17:43:51.499827+00:00",
+   "updated_by_id": null
+  },
+  {
+   "application_deadline": "2026-12-31",
+   "application_instructions": "Apply with your resume.",
+   "benefits": "Health cover\nTravel allowance",
+   "canonical_url": "",
+   "closed_at": "2026-05-01T03:30:00+00:00",
+   "created_at": "2026-09-28T17:43:51.502675+00:00",
+   "created_by_id": null,
+   "department_id": 3,
+   "description": "We are hiring a Store Keeper.",
+   "employment_type": "full_time",
+   "experience_required": "1-3 years",
+   "id": 6,
+   "location": "Alappuzha",
+   "meta_description": "",
+   "noindex": false,
+   "og_image_id": null,
+   "published_at": null,
+   "requirements": "Relevant diploma\nTwo-wheeler licence",
+   "responsibilities": "Plan work\nExecute safely\nReport daily",
+   "schema_extra": {},
+   "schema_type": "none",
+   "seo_title": "",
+   "slug": "store-keeper-closed",
+   "sort_order": 6,
+   "status": "closed",
+   "title": "Store Keeper",
+   "updated_at": "2026-09-28T17:43:51.502682+00:00",
+   "updated_by_id": null
+  }
+ ],
+ "responses": {
+  "detail/crs-executive": {
+   "body": {
+    "data": {
+     "application_deadline": "2026-12-31",
+     "application_instructions": "Apply with your resume.",
+     "benefits": [
+      "Health cover",
+      "Travel allowance"
+     ],
+     "department": "Sales",
+     "description": "We are hiring a Customer Relations Executive.",
+     "employment_type": "Full-time",
+     "experience_required": "1-3 years",
+     "id": 3,
+     "is_open": true,
+     "location": "Alappuzha",
+     "published_at": "2026-05-01T03:30:00+00:00",
+     "requirements": [
+      "Relevant diploma",
+      "Two-wheeler licence"
+     ],
+     "responsibilities": [
+      "Plan work",
+      "Execute safely",
+      "Report daily"
+     ],
+     "seo": {
+      "canonical_url": "",
+      "description": "",
+      "noindex": false,
+      "title": "Customer Relations Executive"
+     },
+     "slug": "crs-executive",
+     "title": "Customer Relations Executive"
+    },
+    "meta": {
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "datePosted": "2026-05-01",
+      "description": "We are hiring a Customer Relations Executive.",
+      "employmentType": "full_time",
+      "experienceRequirements": "1-3 years",
+      "hiringOrganization": {
+       "@type": "Organization",
+       "sameAs": "http://localhost:3000"
+      },
+      "jobLocation": {
+       "@type": "Place",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Alappuzha"
+       }
+      },
+      "occupationalCategory": "Sales",
+      "title": "Customer Relations Executive",
+      "url": "http://localhost:3000/career/crs-executive",
+      "validThrough": "2026-12-31"
+     }
+    }
+   },
+   "status": 200
+  },
+  "detail/design-engineer-draft": {
+   "body": null,
+   "status": 404
+  },
+  "detail/field-sales-executive": {
+   "body": {
+    "data": {
+     "application_deadline": "2026-12-31",
+     "application_instructions": "Apply with your resume.",
+     "benefits": [
+      "Health cover",
+      "Travel allowance"
+     ],
+     "department": "Sales",
+     "description": "We are hiring a Field Sales Executive.",
+     "employment_type": "Full-time",
+     "experience_required": "1-3 years",
+     "id": 2,
+     "is_open": true,
+     "location": "Kochi",
+     "published_at": "2026-05-01T03:30:00+00:00",
+     "requirements": [
+      "Relevant diploma",
+      "Two-wheeler licence"
+     ],
+     "responsibilities": [
+      "Plan work",
+      "Execute safely",
+      "Report daily"
+     ],
+     "seo": {
+      "canonical_url": "",
+      "description": "",
+      "noindex": false,
+      "title": "Field Sales Executive"
+     },
+     "slug": "field-sales-executive",
+     "title": "Field Sales Executive"
+    },
+    "meta": {
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "datePosted": "2026-05-01",
+      "description": "We are hiring a Field Sales Executive.",
+      "employmentType": "full_time",
+      "experienceRequirements": "1-3 years",
+      "hiringOrganization": {
+       "@type": "Organization",
+       "sameAs": "http://localhost:3000"
+      },
+      "jobLocation": {
+       "@type": "Place",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kochi"
+       }
+      },
+      "occupationalCategory": "Sales",
+      "title": "Field Sales Executive",
+      "url": "http://localhost:3000/career/field-sales-executive",
+      "validThrough": "2026-12-31"
+     }
+    }
+   },
+   "status": 200
+  },
+  "detail/no-such-position": {
+   "body": null,
+   "status": 404
+  },
+  "detail/site-supervisor-intern": {
+   "body": {
+    "data": {
+     "application_deadline": "2026-12-31",
+     "application_instructions": "Apply with your resume.",
+     "benefits": [
+      "Health cover",
+      "Travel allowance"
+     ],
+     "department": "Operations",
+     "description": "We are hiring a Site Supervisor Intern.",
+     "employment_type": "Internship",
+     "experience_required": "1-3 years",
+     "id": 4,
+     "is_open": true,
+     "location": "Kottayam",
+     "published_at": "2026-05-01T03:30:00+00:00",
+     "requirements": [
+      "Relevant diploma",
+      "Two-wheeler licence"
+     ],
+     "responsibilities": [
+      "Plan work",
+      "Execute safely",
+      "Report daily"
+     ],
+     "seo": {
+      "canonical_url": "",
+      "description": "",
+      "noindex": false,
+      "title": "Site Supervisor Intern"
+     },
+     "slug": "site-supervisor-intern",
+     "title": "Site Supervisor Intern"
+    },
+    "meta": {
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "datePosted": "2026-05-01",
+      "description": "We are hiring a Site Supervisor Intern.",
+      "employmentType": "internship",
+      "experienceRequirements": "1-3 years",
+      "hiringOrganization": {
+       "@type": "Organization",
+       "sameAs": "http://localhost:3000"
+      },
+      "jobLocation": {
+       "@type": "Place",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kottayam"
+       }
+      },
+      "occupationalCategory": "Operations",
+      "title": "Site Supervisor Intern",
+      "url": "http://localhost:3000/career/site-supervisor-intern",
+      "validThrough": "2026-12-31"
+     }
+    }
+   },
+   "status": 200
+  },
+  "detail/solar-installation-engineer": {
+   "body": {
+    "data": {
+     "application_deadline": "2026-12-31",
+     "application_instructions": "Apply with your resume.",
+     "benefits": [
+      "Health cover",
+      "Travel allowance"
+     ],
+     "department": "Engineering",
+     "description": "We are hiring a Solar Installation Engineer.",
+     "employment_type": "Full-time",
+     "experience_required": "1-3 years",
+     "id": 1,
+     "is_open": true,
+     "location": "Alappuzha",
+     "published_at": "2026-05-01T03:30:00+00:00",
+     "requirements": [
+      "Relevant diploma",
+      "Two-wheeler licence"
+     ],
+     "responsibilities": [
+      "Plan work",
+      "Execute safely",
+      "Report daily"
+     ],
+     "seo": {
+      "canonical_url": "",
+      "description": "",
+      "noindex": false,
+      "title": "Solar Installation Engineer"
+     },
+     "slug": "solar-installation-engineer",
+     "title": "Solar Installation Engineer"
+    },
+    "meta": {
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "datePosted": "2026-05-01",
+      "description": "We are hiring a Solar Installation Engineer.",
+      "employmentType": "full_time",
+      "experienceRequirements": "1-3 years",
+      "hiringOrganization": {
+       "@type": "Organization",
+       "sameAs": "http://localhost:3000"
+      },
+      "jobLocation": {
+       "@type": "Place",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Alappuzha"
+       }
+      },
+      "occupationalCategory": "Engineering",
+      "title": "Solar Installation Engineer",
+      "url": "http://localhost:3000/career/solar-installation-engineer",
+      "validThrough": "2026-12-31"
+     }
+    }
+   },
+   "status": 200
+  },
+  "detail/store-keeper-closed": {
+   "body": {
+    "data": {
+     "application_deadline": "2026-12-31",
+     "application_instructions": "Apply with your resume.",
+     "benefits": [
+      "Health cover",
+      "Travel allowance"
+     ],
+     "department": "Operations",
+     "description": "We are hiring a Store Keeper.",
+     "employment_type": "Full-time",
+     "experience_required": "1-3 years",
+     "id": 6,
+     "is_open": false,
+     "location": "Alappuzha",
+     "published_at": null,
+     "requirements": [
+      "Relevant diploma",
+      "Two-wheeler licence"
+     ],
+     "responsibilities": [
+      "Plan work",
+      "Execute safely",
+      "Report daily"
+     ],
+     "seo": {
+      "canonical_url": "",
+      "description": "",
+      "noindex": false,
+      "title": "Store Keeper"
+     },
+     "slug": "store-keeper-closed",
+     "title": "Store Keeper"
+    },
+    "meta": {
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "description": "We are hiring a Store Keeper.",
+      "employmentType": "full_time",
+      "experienceRequirements": "1-3 years",
+      "hiringOrganization": {
+       "@type": "Organization",
+       "sameAs": "http://localhost:3000"
+      },
+      "jobLocation": {
+       "@type": "Place",
+       "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Alappuzha"
+       }
+      },
+      "occupationalCategory": "Operations",
+      "title": "Store Keeper",
+      "url": "http://localhost:3000/career/store-keeper-closed",
+      "validThrough": "2026-12-31"
+     }
+    }
+   },
+   "status": 200
+  },
+  "list": {
+   "body": {
+    "data": [
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Engineering",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 1,
+      "is_open": true,
+      "location": "Alappuzha",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "solar-installation-engineer",
+      "title": "Solar Installation Engineer"
+     },
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Sales",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 2,
+      "is_open": true,
+      "location": "Kochi",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "field-sales-executive",
+      "title": "Field Sales Executive"
+     },
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Sales",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 3,
+      "is_open": true,
+      "location": "Alappuzha",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "crs-executive",
+      "title": "Customer Relations Executive"
+     },
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Operations",
+      "employment_type": "Internship",
+      "experience_required": "1-3 years",
+      "id": 4,
+      "is_open": true,
+      "location": "Kottayam",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "site-supervisor-intern",
+      "title": "Site Supervisor Intern"
+     }
+    ],
+    "meta": {
+     "accepting_general_applications": true,
+     "count": 4,
+     "departments": [
+      {
+       "name": "Engineering",
+       "slug": "engineering"
+      },
+      {
+       "name": "Operations",
+       "slug": "operations"
+      },
+      {
+       "name": "Sales",
+       "slug": "sales"
+      }
+     ],
+     "intro": ""
+    }
+   },
+   "status": 200
+  },
+  "list?department=engineering": {
+   "body": {
+    "data": [
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Engineering",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 1,
+      "is_open": true,
+      "location": "Alappuzha",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "solar-installation-engineer",
+      "title": "Solar Installation Engineer"
+     }
+    ],
+    "meta": {
+     "accepting_general_applications": true,
+     "count": 1,
+     "departments": [
+      {
+       "name": "Engineering",
+       "slug": "engineering"
+      },
+      {
+       "name": "Operations",
+       "slug": "operations"
+      },
+      {
+       "name": "Sales",
+       "slug": "sales"
+      }
+     ],
+     "intro": ""
+    }
+   },
+   "status": 200
+  },
+  "list?department=operations": {
+   "body": {
+    "data": [
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Operations",
+      "employment_type": "Internship",
+      "experience_required": "1-3 years",
+      "id": 4,
+      "is_open": true,
+      "location": "Kottayam",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "site-supervisor-intern",
+      "title": "Site Supervisor Intern"
+     }
+    ],
+    "meta": {
+     "accepting_general_applications": true,
+     "count": 1,
+     "departments": [
+      {
+       "name": "Engineering",
+       "slug": "engineering"
+      },
+      {
+       "name": "Operations",
+       "slug": "operations"
+      },
+      {
+       "name": "Sales",
+       "slug": "sales"
+      }
+     ],
+     "intro": ""
+    }
+   },
+   "status": 200
+  },
+  "list?department=sales": {
+   "body": {
+    "data": [
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Sales",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 2,
+      "is_open": true,
+      "location": "Kochi",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "field-sales-executive",
+      "title": "Field Sales Executive"
+     },
+     {
+      "application_deadline": "2026-12-31",
+      "department": "Sales",
+      "employment_type": "Full-time",
+      "experience_required": "1-3 years",
+      "id": 3,
+      "is_open": true,
+      "location": "Alappuzha",
+      "published_at": "2026-05-01T03:30:00+00:00",
+      "slug": "crs-executive",
+      "title": "Customer Relations Executive"
+     }
+    ],
+    "meta": {
+     "accepting_general_applications": true,
+     "count": 2,
+     "departments": [
+      {
+       "name": "Engineering",
+       "slug": "engineering"
+      },
+      {
+       "name": "Operations",
+       "slug": "operations"
+      },
+      {
+       "name": "Sales",
+       "slug": "sales"
+      }
+     ],
+     "intro": ""
+    }
+   },
+   "status": 200
+  }
+ },
+ "site": {
+  "careers_accepting_general_applications": true,
+  "careers_intro": "",
+  "company_name": "",
+  "frontend_base_url": "http://localhost:3000"
+ },
+ "source": {
+  "captured_at": "2026-09-28T21:50:56+00:00",
+  "db": "legacy_blog_cms",
+  "url": "http://127.0.0.1:18009"
+ }
+}

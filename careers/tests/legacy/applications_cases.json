@@ -1,0 +1,1449 @@
+{
+ "source": {
+  "url": "http://127.0.0.1:18162",
+  "db": "legacy_goldenapp_careers_reference"
+ },
+ "cases": [
+  {
+   "name": "valid_general",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 1,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "valid_minimal",
+   "form": {
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "declaration_accepted": "true"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 2,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "",
+    "current_company": "",
+    "current_role": "",
+    "total_experience": "",
+    "relevant_experience": "",
+    "current_salary": "",
+    "expected_salary": "",
+    "notice_period": "",
+    "heard_about_us": "",
+    "availability": "",
+    "cover_note": "",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "valid_posting",
+   "form": {
+    "position": "Solar Installation Engineer",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": "",
+    "position_id": "1",
+    "position_title": "Solar Installation Engineer",
+    "department_name": "Engineering"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 3,
+   "stored": {
+    "position": "Solar Installation Engineer",
+    "position_id": 1,
+    "position_title": "Solar Installation Engineer",
+    "department_name": "Engineering",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "valid_docx_resume_and_doc_portfolio",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.docx",
+     "docx"
+    ],
+    "portfolio_file": [
+     "work.doc",
+     "doc"
+    ]
+   },
+   "status": 201,
+   "id": 4,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": true
+   }
+  },
+  {
+   "name": "valid_phone_with_91",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "919847012345",
+    "location": " Alappuzha ",
+    "linkedin": "https://in.linkedin.com/in/anu",
+    "portfolio_website": "https://anu.example",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 5,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://in.linkedin.com/in/anu",
+    "portfolio_website": "https://anu.example",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "valid_blank_optionals",
+   "form": {
+    "position": "",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 6,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "valid_general_with_area_of_interest",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": "",
+    "department_name": "Sales"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 7,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "Sales",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "blank_full_name",
+   "form": {
+    "position": "General application",
+    "full_name": "   ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "full_name": [
+     "This field may not be blank."
+    ]
+   }
+  },
+  {
+   "name": "missing_full_name",
+   "form": {
+    "position": "General application",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "full_name": [
+     "This field is required."
+    ]
+   }
+  },
+  {
+   "name": "bad_email",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": "not-an-email",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "email": [
+     "Enter a valid email address."
+    ]
+   }
+  },
+  {
+   "name": "short_phone",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "phone": [
+     "Enter a valid 10-digit Indian mobile number."
+    ]
+   }
+  },
+  {
+   "name": "phone_not_mobile",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "5847012345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "phone": [
+     "Enter a valid 10-digit Indian mobile number."
+    ]
+   }
+  },
+  {
+   "name": "blank_location",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": "",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "location": [
+     "This field may not be blank."
+    ]
+   }
+  },
+  {
+   "name": "linkedin_other_host",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "https://example.com/anu",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "linkedin": [
+     "Enter a valid LinkedIn URL (e.g. linkedin.com/in/username)."
+    ]
+   }
+  },
+  {
+   "name": "missing_linkedin",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "linkedin": [
+     "This field is required."
+    ]
+   }
+  },
+  {
+   "name": "bad_total_experience",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "10 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "total_experience": [
+     "\"10 years\" is not a valid choice."
+    ]
+   }
+  },
+  {
+   "name": "bad_expected_salary",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "a lot",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "expected_salary": [
+     "\"a lot\" is not a valid choice."
+    ]
+   }
+  },
+  {
+   "name": "bad_notice_period",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "6 months",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "notice_period": [
+     "\"6 months\" is not a valid choice."
+    ]
+   }
+  },
+  {
+   "name": "bad_heard_about",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "Newspaper",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "heard_about_us": [
+     "\"Newspaper\" is not a valid choice."
+    ]
+   }
+  },
+  {
+   "name": "cover_note_too_long",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "cover_note": [
+     "Ensure this field has no more than 3000 characters."
+    ]
+   }
+  },
+  {
+   "name": "availability_too_long",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "availability": [
+     "Ensure this field has no more than 32 characters."
+    ]
+   }
+  },
+  {
+   "name": "position_too_long",
+   "form": {
+    "position": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "position": [
+     "Ensure this field has no more than 200 characters."
+    ]
+   }
+  },
+  {
+   "name": "declaration_false",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "false",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "declaration_accepted": [
+     "Please accept the declaration to continue."
+    ]
+   }
+  },
+  {
+   "name": "declaration_missing",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "declaration_accepted": [
+     "Please accept the declaration to continue."
+    ]
+   }
+  },
+  {
+   "name": "resume_missing",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {},
+   "status": 400,
+   "errors": {
+    "resume": [
+     "No file was submitted."
+    ]
+   }
+  },
+  {
+   "name": "resume_txt",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.txt",
+     "txt"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "resume": [
+     "Only PDF or Word documents are allowed."
+    ]
+   }
+  },
+  {
+   "name": "resume_too_big",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "big_pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "resume": [
+     "File must be under 10MB."
+    ]
+   }
+  },
+  {
+   "name": "portfolio_txt",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ],
+    "portfolio_file": [
+     "work.txt",
+     "txt"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "portfolio_file": [
+     "Only PDF or Word documents are allowed."
+    ]
+   }
+  },
+  {
+   "name": "honeypot",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": "http://spam.example"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "non_field_errors": [
+     "Invalid submission."
+    ]
+   }
+  },
+  {
+   "name": "position_id_not_a_number",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": "",
+    "position_id": "abc"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 400,
+   "errors": {
+    "position_id": [
+     "A valid integer is required."
+    ]
+   }
+  },
+  {
+   "name": "fake_pdf_content",
+   "form": {
+    "position": "General application",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": ""
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "fake_pdf"
+    ]
+   },
+   "status": 201,
+   "id": 8,
+   "stored": {
+    "position": "General application",
+    "position_id": null,
+    "position_title": "",
+    "department_name": "",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  },
+  {
+   "name": "closed_posting",
+   "form": {
+    "position": "Store Keeper",
+    "full_name": "  Anu Thomas ",
+    "email": " Anu.Thomas@Example.com ",
+    "phone": "+91 98470-12345",
+    "location": " Alappuzha ",
+    "linkedin": "linkedin.com/in/anu-thomas",
+    "portfolio_website": "anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": "true",
+    "website": "",
+    "position_id": "6",
+    "position_title": "Store Keeper",
+    "department_name": "Operations"
+   },
+   "files": {
+    "resume": [
+     "cv.pdf",
+     "pdf"
+    ]
+   },
+   "status": 201,
+   "id": 9,
+   "stored": {
+    "position": "Store Keeper",
+    "position_id": 6,
+    "position_title": "Store Keeper",
+    "department_name": "Operations",
+    "status": "new",
+    "full_name": "Anu Thomas",
+    "email": "anu.thomas@example.com",
+    "phone": "9847012345",
+    "location": "Alappuzha",
+    "linkedin": "https://linkedin.com/in/anu-thomas",
+    "portfolio_website": "https://anuthomas.dev",
+    "current_company": "SunWorks",
+    "current_role": "Technician",
+    "total_experience": "1–3 years",
+    "relevant_experience": "0–1 years",
+    "current_salary": "Below ₹3 LPA",
+    "expected_salary": "₹3–5 LPA",
+    "notice_period": "1 month",
+    "heard_about_us": "LinkedIn",
+    "availability": "Immediately",
+    "cover_note": "I like solar.",
+    "declaration_accepted": true
+   },
+   "files_stored": {
+    "resume": true,
+    "portfolio_file": false
+   }
+  }
+ ],
+ "workflow": [
+  {
+   "id": 1,
+   "action": "status",
+   "body": {
+    "status": "reviewing",
+    "note": "Good CV"
+   },
+   "status": 200
+  },
+  {
+   "id": 1,
+   "action": "notes",
+   "body": {
+    "body": "Call back on Monday."
+   },
+   "status": 200
+  },
+  {
+   "id": 1,
+   "action": "assign",
+   "body": {
+    "position_id": 1,
+    "position_title": "Solar Installation Engineer",
+    "department_name": "Engineering"
+   },
+   "status": 200
+  },
+  {
+   "id": 1,
+   "action": "status",
+   "body": {
+    "status": "interview"
+   },
+   "status": 200
+  },
+  {
+   "id": 1,
+   "action": "status",
+   "body": {
+    "status": "selected",
+    "note": "Offer sent"
+   },
+   "status": 200
+  },
+  {
+   "id": 2,
+   "action": "status",
+   "body": {
+    "status": "rejected",
+    "note": "Not a fit"
+   },
+   "status": 200
+  },
+  {
+   "id": 2,
+   "action": "notes",
+   "body": {
+    "body": "Keep for the talent pool."
+   },
+   "status": 200
+  },
+  {
+   "id": 2,
+   "action": "delete",
+   "status": 204
+  },
+  {
+   "id": 2,
+   "action": "restore",
+   "status": 200
+  },
+  {
+   "id": 2,
+   "action": "delete",
+   "status": 204
+  }
+ ]
+}
