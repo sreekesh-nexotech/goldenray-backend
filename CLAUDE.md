@@ -41,7 +41,7 @@ Dependency direction (enforced by import-linter in `.importlinter`): core/accoun
 - No Django admin registration for business models.
 
 ## Services
-- All writes live in `<app>/services/*.py`, decorated `@transaction.atomic`, take the acting `user` explicitly, stamp `created_by/updated_by` explicitly (no `hasattr` magic), check `expected_version` via `core.services.check_version`, write an audit row via `audit.services.record(...)`, bump cache namespaces via `core.cache.bump(...)`, and emit outbox events via `core.outbox.emit(...)`.
+- All writes live in `<app>/services/*.py`, decorated `@transaction.atomic`, take the acting `user` explicitly, stamp `created_by/updated_by` explicitly (no `hasattr` magic), check `expected_version` via `core.services.check_version`, write an audit row via `audit.services.record(...)`, bump cache namespaces via `flarize.cache_utils.bump(...)`, and emit outbox events via `core.outbox.emit(...)`.
 - Errors: raise `core.errors.DomainError(code, message, status=400, errors=None)` or its subclasses (`NotFound`, `Conflict`, `PermissionDenied`, `StaleVersion`). The global handler renders `{code, message, errors, error_codes}`.
 - Celery tasks are enqueued only inside `transaction.on_commit`.
 - External providers (Twilio Verify, Bunny, SMTP) go through one thin client per provider in the owning app's `services/`, with a `console`/`fake` backend used in dev and tests. Secrets come from env via `decouple.config()` or `company_integration` (Fernet, fail-closed).
@@ -55,7 +55,7 @@ Dependency direction (enforced by import-linter in `.importlinter`): core/accoun
 - Trailing slashes on every versioned path. `uid` in every path and body (`lookup_field = "uid"`); integer ids never leave the service layer.
 - Staff views extend `core.views.BaseViewSet`/`core.views.BaseAPIView`: declare `module = "<registry module>"` and an explicit `action_permissions = {drf_action: registry_action}`; unmapped actions are denied. Record scope is applied by the base class (`scope_queryset`) — override `base_queryset()`, never `get_queryset()`.
 - Workflow transitions are POST sub-resources (`…/issue/`, `…/publish/`), never PATCH of `status`. PATCH/actions on versioned rows accept `expected_version` → 409 `stale_version`.
-- Pagination: `core.pagination.StandardPagination` (page_size 25, max 200) or cursor pagination for logs. No unbounded list.
+- Pagination: `flarize.pagination.StandardPagination` (page_size 25, max 200) or cursor pagination for logs. No unbounded list.
 - Every endpoint appears in the OpenAPI schema (drf-spectacular) with request/response serializers.
 
 ## RBAC
