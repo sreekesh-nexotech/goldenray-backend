@@ -446,6 +446,14 @@ SCENARIOS: tuple[Scenario, ...] = (
         equipment=(equipment("ON_GRID_INVERTER", all_results("ON_GRID_INVERTER", heat_source="NEEDS_REVIEW"), resolution_status="RESOLVED"),),
         readiness_fix="§J 16: resolution/waiver was ignored — there was no path to release",
     ),
+    Scenario(
+        "partial_fail_waived",
+        equipment=(equipment("ON_GRID_INVERTER", {"direct_sunlight": "FAIL"}, resolution_status="WAIVED_APPROVED"),),
+        ready=(OG_INCOMPLETE,),
+        completion=(OG_INCOMPLETE,),
+        readiness_fix="§J 16: status over the submitted keys only — one FAIL tap scored FAIL; waiving it must not stand in for the 13 checks never answered",
+        completion_fix="§J 16/20: completion ignored the equipment assessments",
+    ),
     Scenario("hybrid_complete", row={"system_type": "HYBRID"}, equipment=HYBRID_EQUIPMENT),
     Scenario(
         "hybrid_battery_missing",

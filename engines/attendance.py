@@ -427,6 +427,9 @@ def debounce(punches: Iterable[Punch], minutes: int) -> tuple[tuple[Punch, ...],
 # ---------------------------------------------------------------------------------------------------------------
 
 RULE_KEYS = ("half_day_after", "half_day_after_minutes", "half_day_under_minutes")
+#: A rule's minutes are a deadline allowance or a worked-minutes bar: a day at most. ``rules`` is JSON, so nothing else
+#: bounds them — an unbounded allowance pushed the deadline past year 9999 and every compute_day in scope raised.
+MAX_RULE_MINUTES = 24 * 60
 
 
 def _parse_time(value: Any) -> time | None:
@@ -443,20 +446,22 @@ def _parse_time(value: Any) -> time | None:
 
 
 def _parse_minutes(value: Any) -> int | None:
+    """Whole minutes in ``0 … MAX_RULE_MINUTES``, else ``None`` (malformed)."""
     if isinstance(value, bool) or value is None:
-        return None
-    if isinstance(value, float) and not value.is_integer():
         return None
     try:
         minutes = int(value)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):  # OverflowError: an infinite float or Decimal
         return None
-    return minutes if minutes >= 0 else None
+    if isinstance(value, (float, Decimal)) and minutes != value:  # 30.5 is not a whole number of minutes
+        return None
+    return minutes if 0 <= minutes <= MAX_RULE_MINUTES else None
 
 
 def rules_from_payload(payload: Mapping[str, Any] | None) -> DayRules:
-    """The recognised keys of one rule's JSON; anything unrecognised or malformed is ignored (v3)."""
-    data = payload or {}
+    """The recognised keys of one rule's JSON; anything unrecognised or malformed is ignored (v3) — a document that
+    is not an object included."""
+    data = payload if isinstance(payload, Mapping) else {}
     return DayRules(
         half_day_after=_parse_time(data.get("half_day_after")),
         half_day_after_minutes=_parse_minutes(data.get("half_day_after_minutes")),
@@ -476,7 +481,7 @@ def validate_rules_payload(payload: Any) -> dict[str, str]:
         errors["half_day_after"] = "Must be a clock time HH:MM or HH:MM:SS."
     for key in ("half_day_after_minutes", "half_day_under_minutes"):
         if payload.get(key) is not None and (isinstance(payload[key], str) or _parse_minutes(payload[key]) is None):
-            errors[key] = "Must be a whole number of minutes >= 0."
+            errors[key] = f"Must be a whole number of minutes between 0 and {MAX_RULE_MINUTES}."
     return errors
 
 

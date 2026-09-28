@@ -10,8 +10,10 @@ Fixes against the legacy engine (spec §C and §J):
   is unconfirmed, not a pass — :func:`normalise_suitability` maps legacy values;
 * neutral link and termination point are two fields compared as enums, each needing its own additional-work decision
   (legacy collapsed them and compared ``"not available"`` against the stored ``NOT_AVAILABLE``, so it never fired);
-* equipment status is recomputed from the answers over the full check definition; a FAIL/REQUIRES_REVIEW assessment
-  is one blocker, cleared by a RESOLVED or WAIVED review; an UNDECIDED system type blocks instead of waiving the checks;
+* equipment status is recomputed from the answers over the full check definition; an assessment with any check
+  unanswered is incomplete whatever its status (one FAIL tap scores FAIL); a fully answered FAIL/REQUIRES_REVIEW
+  assessment is one blocker, cleared by a RESOLVED or WAIVED review; an UNDECIDED system type blocks instead of waiving
+  the checks;
 * the customer approval stores a location snapshot and :func:`location_snapshot_matches` compares it with the current
   annotations (legacy never stored one, so an outdated approval could not be detected); a missing snapshot fails closed;
 * only *current* annotations document a location; a rectangle still in the legacy container space must be re-drawn
@@ -34,7 +36,7 @@ from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 from typing import Any, Hashable, Iterable, Mapping
 
-from engines.inspection_checks import CHECKS_VERSION, AssessmentStatus, EquipmentType, ReviewStatus, SystemType, compute_status, is_complete, is_resolved, required_equipment_types
+from engines.inspection_checks import CHECKS_VERSION, AssessmentStatus, EquipmentType, ReviewStatus, SystemType, compute_status, is_resolved, required_equipment_types, unanswered_checks
 
 
 class Suitability(StrEnum):
@@ -356,6 +358,11 @@ class EquipmentAssessment:
     def status(self) -> AssessmentStatus:
         return compute_status(self.equipment_type, self.results, self.checks_version)
 
+    @property
+    def unanswered(self) -> tuple[str, ...]:
+        """Checks not answered yet — a FAIL/REQUIRES_REVIEW status can still leave most of the checklist open."""
+        return unanswered_checks(self.equipment_type, self.results, self.checks_version)
+
 
 @dataclass(frozen=True)
 class AdditionalWork:
@@ -451,7 +458,10 @@ def _fixed(value: Any, places: int) -> str | None:
     number = _number(value)
     if number is None:
         return None
-    return str(number.quantize(Decimal(1).scaleb(-places)))
+    try:
+        return str(number.quantize(Decimal(1).scaleb(-places)))
+    except InvalidOperation:  # too many digits for fixed point (JSON geometry is unbounded): still one canonical form
+        return str(number.normalize())
 
 
 def _canonical_entry(entry: Mapping[str, Any] | None) -> dict[str, Any] | None:
@@ -596,7 +606,9 @@ def _equipment_blockers(state: InspectionState, *, completion_only: bool) -> lis
     for kind in required_equipment_types(state.system_type):
         assessment = assessments.get(kind)
         status = assessment.status if assessment is not None else AssessmentStatus.NOT_STARTED
-        if not is_complete(status):
+        if assessment is None or assessment.unanswered:
+            # Judged on the answers, not the status: one FAIL tap scores FAIL with 13 checks unanswered, and a
+            # RESOLVED/WAIVED review settles the answers given — it never assesses the rest.
             blockers.append(Blocker(incomplete_code(kind), {"status": str(status)}))
         elif not completion_only and not is_resolved(status, assessment.review_status):
             blockers.append(Blocker(needs_resolution_code(kind), {"status": str(status), "review_status": str(assessment.review_status)}))

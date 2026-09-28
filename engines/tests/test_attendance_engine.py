@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import ast
 from datetime import UTC, date, datetime, time, timedelta
+from decimal import Decimal
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -218,6 +219,33 @@ def test_validate_rules_payload():
     errors = att.validate_rules_payload({"half_day_after": "late", "half_day_after_minutes": -1, "half_day_under_minutes": "60", "colour": "red"})
     assert set(errors) == {"half_day_after", "half_day_after_minutes", "half_day_under_minutes", "colour"}
     assert att.validate_rules_payload(["half_day_after"]) == {"rules": "Must be an object."}
+
+
+@pytest.mark.parametrize("key", ["half_day_after_minutes", "half_day_under_minutes"])
+def test_rule_minutes_beyond_a_day_are_rejected_and_never_break_a_recompute(key):
+    """``hr_attendance_rule.rules`` is JSON: nothing but the validator bounds a number. A global/office rule with an
+    allowance of 10**10 minutes made every compute_day in its scope raise OverflowError (the deadline lands past year
+    9999), so one bad rule stopped the recompute and finalise_day for a whole office."""
+    huge = 10**10
+    assert set(att.validate_rules_payload({key: huge})) == {key}
+    assert set(att.validate_rules_payload({key: att.MAX_RULE_MINUTES + 1})) == {key}
+    assert att.validate_rules_payload({key: att.MAX_RULE_MINUTES}) == {}
+    assert att.rules_from_payload({key: huge}) == att.DayRules()  # out of range = malformed = ignored (v3)
+    gen = shift(GEN)
+    rules = att.rules_for([att.AttendanceRule(rules={key: huge})], office=None, shift=gen, work_date=DAY)
+    assert rules == att.DayRules()
+    result = att.compute_day(DAY, [_punch(1, "10:00"), _punch(2, "15:00")], gen, rules=rules)
+    assert result.status == att.Status.HALF_DAY  # the shift's own 09:30 deadline still applies
+
+
+def test_malformed_rule_documents_are_ignored_not_raised():
+    """A rules document that is not an object (imported JSON, a list) is ignored like any malformed value."""
+    assert att.rules_from_payload(["half_day_after", "11:00"]) == att.DayRules()
+    assert att.rules_from_payload("11:00") == att.DayRules()
+    rules = att.rules_for([att.AttendanceRule(rules=["half_day_after"]), att.AttendanceRule(rules={"half_day_after": "11:00"}, office="O1")], office="O1", shift=shift(GEN), work_date=DAY)
+    assert rules == att.DayRules(half_day_after=time(11, 0))
+    assert att.rules_from_payload({"half_day_after_minutes": Decimal("30.5"), "half_day_under_minutes": Decimal("Infinity")}) == att.DayRules()
+    assert att.rules_from_payload({"half_day_after_minutes": Decimal("45")}) == att.DayRules(half_day_after_minutes=45)
 
 
 def test_under_minutes_still_needs_a_late_arrival():

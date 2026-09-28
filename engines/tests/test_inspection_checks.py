@@ -129,6 +129,19 @@ def test_resolution_rules():
     assert ic.evidence_required("FAIL") and not ic.evidence_required("REQUIRES_REVIEW")
 
 
+def test_unanswered_checks_are_read_from_the_answers_not_the_status():
+    """A FAIL/REQUIRES_REVIEW status says nothing about the other checks: one FAIL tap leaves 13 checks unanswered."""
+    one_fail = {"direct_sunlight": "FAIL"}
+    assert ic.compute_status(ON_GRID, one_fail) == "FAIL" and ic.is_critical("FAIL")
+    assert len(ic.unanswered_checks(ON_GRID, one_fail)) == 13
+    assert "direct_sunlight" not in ic.unanswered_checks(ON_GRID, one_fail)
+    assert ic.unanswered_checks(ON_GRID, answers(ON_GRID, height="NOT_CHECKED")) == ("height",)
+    assert ic.unanswered_checks(ON_GRID, answers(ON_GRID, height="FAIL")) == ()
+    assert ic.unanswered_checks(BATTERY, None) == ic.checklist(BATTERY).ids
+    with pytest.raises(ValueError):
+        ic.unanswered_checks(ON_GRID, {"nope": "PASS"})
+
+
 def test_legacy_status_edge_cases():
     assert ic.legacy_status({}) == "NOT_STARTED"
     assert ic.legacy_status({"a": "PASS", "b": "NOT_APPLICABLE"}) == "PASS"

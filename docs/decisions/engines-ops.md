@@ -9,14 +9,14 @@ import (import-linter contract `engines-pure`, plus an AST test). Deviations: DV
 
 | Module | Public API | Tests |
 |---|---|---|
-| `engines/attendance.py` | data: `Shift` (PLAN `hr_shift` defaults), `Punch`, `RawPunch`, `DeviceLink`, `Employee`, `Holiday`, `Leave`, `AttendanceRule`, `DayContext`, `DayRules`, `DayResult`, `CalendarDay`; day: `compute_day`, `debounce`, `deduct_break`, `attribute_work_date`, `overnight_cutoff`, `shift_boundaries`, `is_working_day`, `effective_shift`, `half_day_deadline`, `describe_half_day_deadline`, `rules_for`, `rules_from_payload`, `validate_rules_payload`; window: `recompute`, `build_identity_map`, `unmapped_pins`, `affected_work_dates`, `HolidayCalendar`, `LeaveBook`, `day_context`, `context_lookup`; calendar: `calendar_fill`, `summarise`, `attendance_rate`, `combine_summaries`, `totals_by_date`, `month_bounds`, `hm`; clocks: `zone`, `is_valid_timezone`, `today_local`, `local_wall_clock`, `punch_at_from_device_time`, `clock_offset_seconds`, `finalise_target`, `punch_dedup_key`; corrections: `CORRECTABLE_FIELDS`, `apply_correction`; `PROCESSING_VERSION = "v4"`, `Status`, `STATUS_CODE`, `STATUS_LABEL`, `PRESENT_DAY_STATUSES`, `MISSING_OUT_LABEL` | `test_attendance_engine.py`, `test_attendance_recompute.py`, `test_attendance_calendar.py`, `test_attendance_parity.py` |
-| `engines/inspection_checks.py` | `CHECKS_VERSION = "v1"`, `DEFINITIONS`, `checklist(type, version)`, `required_equipment_types`, `validate_results`, `normalise_results`, `compute_status`, `is_complete`, `is_critical`, `is_resolved`, `evidence_required`, `result_counts`, `legacy_status`; enums `EquipmentType`, `SystemType`, `CheckResult`, `AssessmentStatus`, `ReviewStatus` | `test_inspection_checks.py`, `test_inspection_parity.py` |
+| `engines/attendance.py` | data: `Shift` (PLAN `hr_shift` defaults), `Punch`, `RawPunch`, `DeviceLink`, `Employee`, `Holiday`, `Leave`, `AttendanceRule`, `DayContext`, `DayRules`, `DayResult`, `CalendarDay`; day: `compute_day`, `debounce`, `deduct_break`, `attribute_work_date`, `overnight_cutoff`, `shift_boundaries`, `is_working_day`, `effective_shift`, `half_day_deadline`, `describe_half_day_deadline`, `rules_for`, `rules_from_payload`, `validate_rules_payload`, `MAX_RULE_MINUTES`; window: `recompute`, `build_identity_map`, `unmapped_pins`, `affected_work_dates`, `HolidayCalendar`, `LeaveBook`, `day_context`, `context_lookup`; calendar: `calendar_fill`, `summarise`, `attendance_rate`, `combine_summaries`, `totals_by_date`, `month_bounds`, `hm`; clocks: `zone`, `is_valid_timezone`, `today_local`, `local_wall_clock`, `punch_at_from_device_time`, `clock_offset_seconds`, `finalise_target`, `punch_dedup_key`; corrections: `CORRECTABLE_FIELDS`, `apply_correction`; `PROCESSING_VERSION = "v4"`, `Status`, `STATUS_CODE`, `STATUS_LABEL`, `PRESENT_DAY_STATUSES`, `MISSING_OUT_LABEL` | `test_attendance_engine.py`, `test_attendance_recompute.py`, `test_attendance_calendar.py`, `test_attendance_parity.py` |
+| `engines/inspection_checks.py` | `CHECKS_VERSION = "v1"`, `DEFINITIONS`, `checklist(type, version)`, `required_equipment_types`, `validate_results`, `normalise_results`, `compute_status`, `unanswered_checks`, `is_complete`, `is_critical`, `is_resolved`, `evidence_required`, `result_counts`, `legacy_status`; enums `EquipmentType`, `SystemType`, `CheckResult`, `AssessmentStatus`, `ReviewStatus` | `test_inspection_checks.py`, `test_inspection_parity.py` |
 | `engines/inspection_readiness.py` | `InspectionState` (+ `Annotation`, `Approval`, `EquipmentAssessment`, `AdditionalWork`, `EngineeringReview`), `evaluate`, `field_completion`, `Readiness`/`Blocker` (`codes`, `as_dict()`), `Code`, `STEPS`, `STEP_OF`, `BLOCKER_TEXT`, `FIELD_COMPLETION_CODES`, `build_location_snapshot`, `location_snapshot_matches`, `engineering_review_pending`, `has_value`, `is_positive`, `normalise_suitability`, `normalise_availability`, `state_fields` | `test_inspection_readiness.py`, `test_inspection_parity.py` |
 | `engines/tests/attendance_cases.py`, `inspection_cases.py` | the case tables shared by the tests and the parity capture scripts | — |
 | `engines/tests/golden/essl_v3_attendance.json`, `si_legacy.json` | outputs of the real legacy engines for every case (parity evidence below) | — |
 | `scripts/parity/capture_essl_v3.py`, `capture_si_legacy.py`, `si_legacy_runner.mjs` | re-capture the golden files from the legacy sources (not CI: the sources live outside the repo) | — |
 
-Coverage of `engines/`: 100 % statements and branches (593 tests).
+Coverage of `engines/`: 100 % statements and branches (604 tests after the review fixes below).
 
 ## Attendance v4 — where each A-row lives
 
@@ -51,6 +51,9 @@ Coverage of `engines/`: 100 % statements and branches (593 tests).
    rule that states it wins whichever way it states it (v3 let an office clock time beat a shift rule in minutes;
    case `v4.a5_specific_rule_in_minutes_beats_office_clock`). Within one rule the clock time wins (v3). Malformed
    values are ignored when merging (v3); `validate_rules_payload` gives field errors for the `attendance-rules/` API.
+   Rule minutes are bounded to `0 … MAX_RULE_MINUTES` (1440): `rules` is JSON, and an unbounded allowance pushed the
+   deadline past year 9999 (OverflowError in every compute of the rule's scope); out of range = malformed = ignored,
+   and a rules document that is not an object is ignored too.
 5. **Status with punches on a working day** stays v3's: half-day leave → HALF_DAY; arrival after the deadline short of
    a full day (credited = working + grace credit; `half_day_under_minutes` narrows it) → HALF_DAY; else LATE/PRESENT.
    The v3 `LATE only on a working day` branch is subsumed by A4 (off days never reach it).
@@ -68,9 +71,12 @@ Coverage of `engines/`: 100 % statements and branches (593 tests).
     A future wording change adds `"v2"`; stored assessments keep scoring against their pinned `checks_version`.
 11. **Status never trusted.** Readiness recomputes each assessment's status from its answers and pinned version; a
     stored status is informational. Unknown check ids or result values are errors (legacy scored them CONDITIONAL).
-12. **Critical assessments.** FAIL / REQUIRES_REVIEW is one blocker (`…_NEEDS_RESOLUTION`) until the review status is
-    RESOLVED or WAIVED; a waiver never completes an unanswered checklist. Field completion requires every required
-    checklist answered in full (FAIL allowed — the engineering review decides).
+12. **Critical assessments.** Completeness is read from the answers (`unanswered_checks`), never from the status:
+    FAIL / REQUIRES_REVIEW win over NOT_CHECKED, so one FAIL tap scores FAIL with 13 checks unanswered — that
+    assessment is `…_INCOMPLETE` at submit and at release, whatever its review says. A fully answered FAIL /
+    REQUIRES_REVIEW assessment is one blocker (`…_NEEDS_RESOLUTION`) until the review status is RESOLVED or WAIVED; a
+    waiver settles the answers given and never completes an unanswered checklist. Field completion requires every
+    required checklist answered in full (FAIL allowed — the engineering review decides).
 13. **Engineering review pending** = a review awaits a decision, or the latest decided review asked for changes, or the
     site is marked complex and no review found it routine/resolved it.
 14. **Location snapshot.** `build_location_snapshot` stores, per annotation type, the photo uid, the `{x, y, w, h}`
@@ -121,7 +127,7 @@ warning `LEGACY_ANNOTATION_GEOMETRY` (Plan 2 D2-13: re-draw before release).
 | 7 | approval snapshot never stored / invalidation dead | `build_location_snapshot` + `location_snapshot_matches` | scenarios `location_moved_*`, `approval_imported_without_snapshot`, `rectangle_resaved_unchanged`; snapshot tests |
 | 10 | no enum/value validation | enum-validated state, `validate_results` | `test_state_is_validated`, `test_parts_are_validated`, `test_validate_results` |
 | 13 | fresh PA inspection UNDECIDED hides the checklist | UNDECIDED blocks release (DV-17); the PA linking itself is the site_inspections package's | scenario `undecided_system_type` |
-| 16 | status over submitted keys; no waiver | `compute_status` over the full definition; RESOLVED/WAIVED resolve | scenarios `one_pass_tap`, `failed_check*`, `review_resolved`; `test_full_definition_status_differs_only_on_partial_answers` |
+| 16 | status over submitted keys; no waiver | `compute_status` over the full definition; completeness from `unanswered_checks`; RESOLVED/WAIVED resolve a fully answered checklist | scenarios `one_pass_tap`, `partial_fail_waived`, `failed_check*`, `review_resolved`; `test_full_definition_status_differs_only_on_partial_answers`, `test_a_critical_answer_never_completes_an_unanswered_checklist` |
 | 17 | equipment route read the snapshot, readiness the column | `required_equipment_types(system_type column)` only; `normalise_results` gives the full-replace PUT shape | scenario `system_type_only_in_snapshot` |
 | 18 | neutral link/termination collapsed, spelling never matched | two enum fields, one decision each | scenarios `neutral_*`, `termination_needs_modification_only`; `test_neutral_link_and_termination_each_need_their_own_decision` |
 | 19 | CONDITIONAL stored as 0; unknown strings pass | `Suitability` enum; `normalise_suitability` (recommendation first; unknown → unconfirmed) | scenarios `conditional_*`, `unknown_suitability` |
@@ -177,8 +183,8 @@ case tables the v4 tests use; the outputs are committed and every test run compa
   (differs exactly on 61–299, A2). The seven §C5 worked examples are identical in v3 and v4.
 * **Site Inspection V2** — `scripts/parity/capture_si_legacy.py` + `si_legacy_runner.mjs` run `lib/site-inspection.ts`
   (sha256 `1943dfe6…fc33939`) and `lib/equipment-assessment.ts` (sha256 `f638ff39…e09d`) under Node 22 type stripping
-  with an in-memory read-only fake of `./db`. 54 scenarios: readiness identical in 36, different in 18 — each a
-  documented §J/§C fix or decision; field completion identical in 43, different in 11 (documented). The legacy
+  with an in-memory read-only fake of `./db`. 55 scenarios: readiness identical in 36, different in 19 — each a
+  documented §J/§C fix or decision; field completion identical in 43, different in 12 (documented). The legacy
   checklist definitions equal `DEFINITIONS["v1"]` word for word (14/16/19); `legacy_status` reproduces the legacy scorer on
   all 15 answer maps; the full-definition status differs only on partial answers.
 
@@ -202,3 +208,14 @@ Not applicable: engines-ops owns no tables. The mapping above (and `normalise_su
   and `submit` on `field_completion(...).ready`; store `build_location_snapshot(annotations)` on every approval request;
   `PUT …/equipment/{type}/` validates with `validate_results` and stores `normalise_results` + `checks_version`; require an
   evidence photo when `evidence_required(status)` (D2-4); use `NEW_NEUTRAL_LINK` / `NEW_TERMINATION` as work types.
+
+## Review fixes (reviewer-fixer pass)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| R1 | A checklist with one FAIL (or NEEDS_REVIEW) answer and every other check unanswered scored FAIL, `is_complete(FAIL)` was true, so submit passed and a WAIVED/RESOLVED review released the inspection with 13 checks never assessed — v4 was more permissive than legacy here (legacy blocked it, ignoring waivers) | `inspection_checks.unanswered_checks`; `EquipmentAssessment.unanswered`; readiness and field completion report `EQUIPMENT_<TYPE>_INCOMPLETE` while any check is unanswered, whatever the status or review | `test_unanswered_checks_are_read_from_the_answers_not_the_status`, `test_a_critical_answer_never_completes_an_unanswered_checklist`, parity scenario `partial_fail_waived` (golden re-captured from the legacy TypeScript) |
+| R2 | `validate_rules_payload` accepted any non-negative integer; a rule allowance of 10**10 minutes put the deadline past year 9999 and every `compute_day` in the rule's scope raised OverflowError (one bad office/global rule stopped recompute and `finalise_day` for the office). A rules document that is not an object raised AttributeError; a non-integral or infinite Decimal was truncated or raised | `MAX_RULE_MINUTES = 1440`: out of range is a validation error and is ignored at compute (v3: malformed = ignored); non-object documents are ignored; only whole minutes count | `test_rule_minutes_beyond_a_day_are_rejected_and_never_break_a_recompute`, `test_malformed_rule_documents_are_ignored_not_raised` |
+| R3 | `build_location_snapshot` raised `decimal.InvalidOperation` (not a ValueError) for a JSONB geometry/measurement too large for the fixed-point form, failing every readiness evaluation of that inspection | canonical `normalize()` form when fixed point cannot hold the value | `test_out_of_range_numbers_never_crash_the_snapshot` |
+

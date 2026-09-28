@@ -504,6 +504,10 @@
    ],
    "ready": false
   },
+  "partial_fail_waived": {
+   "blockers": [],
+   "ready": true
+  },
   "rectangle_resaved_unchanged": {
    "blockers": [],
    "ready": true
@@ -776,6 +780,13 @@
   "panel_width_zero": {
    "blockers": [
     "Panel area measured width is required"
+   ],
+   "ready": false
+  },
+  "partial_fail_waived": {
+   "blockers": [
+    "ON GRID INVERTER requires engineering resolution",
+    "ON GRID INVERTER assessment must pass before installation"
    ],
    "ready": false
   },

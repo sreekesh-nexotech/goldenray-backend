@@ -342,6 +342,20 @@ def test_snapshot_detects_a_changed_location(changed):
     assert not ir.location_snapshot_matches(stored, (changed, EQUIPMENT))
 
 
+def test_out_of_range_numbers_never_crash_the_snapshot():
+    """``geometry`` is JSONB: a value outside what the snapshot's fixed-point form can hold raised
+    ``decimal.InvalidOperation`` (not a ValueError) from every readiness evaluation of that inspection."""
+    import json
+
+    huge = ir.Annotation("PANEL_AREA", "ph_panel", {"x": 1e30, "y": 0.1, "w": 0.5, "h": 0.4}, width_m=Decimal("1e40"), height_m=4, area_m2=20)
+    snapshot = ir.build_location_snapshot((huge, EQUIPMENT))
+    assert snapshot["PANEL_AREA"]["width_m"] == "1E+40" and snapshot["PANEL_AREA"]["geometry"]["x"] == "1E+30"
+    assert ir.location_snapshot_matches(json.loads(json.dumps(snapshot)), (huge, EQUIPMENT))
+    assert not ir.location_snapshot_matches(snapshot, (PANEL, EQUIPMENT))
+    state = ready_state(annotations=(huge, EQUIPMENT), approvals=(ir.Approval(1, "APPROVED", snapshot),))
+    assert ir.evaluate(state).ready
+
+
 def test_a_missing_or_malformed_snapshot_never_matches():
     assert not ir.location_snapshot_matches(None, (PANEL, EQUIPMENT))
     assert not ir.location_snapshot_matches({}, (PANEL, EQUIPMENT))
@@ -391,6 +405,27 @@ def test_field_completion_ignores_what_only_release_needs():
     assert ir.field_completion(state).ready
     failed = ready_state(equipment=(assessment("ON_GRID_INVERTER", height="FAIL"),))
     assert ir.field_completion(failed).ready  # answered in full; the review decides, not the submit
+
+
+@pytest.mark.parametrize(
+    "answer,review",
+    [("FAIL", "WAIVED"), ("FAIL", "RESOLVED"), ("NEEDS_REVIEW", "RESOLVED"), ("FAIL", "PENDING")],
+)
+def test_a_critical_answer_never_completes_an_unanswered_checklist(answer, review):
+    """One FAIL (or NEEDS_REVIEW) tap makes the status FAIL (REQUIRES_REVIEW), but the other 13 checks were never
+    answered: submit and release must still say the assessment is incomplete — a waiver of the one failed check is
+    not an assessment of the rest (§J 16, the one-PASS-tap defect in its FAIL form)."""
+    partial = ir.EquipmentAssessment("ON_GRID_INVERTER", results={"direct_sunlight": answer}, review_status=review)
+    assert partial.status in ("FAIL", "REQUIRES_REVIEW") and len(partial.unanswered) == 13
+    state = ready_state(equipment=(partial,))
+    release = ir.evaluate(state)
+    assert release.codes == (C.EQUIPMENT_ON_GRID_INVERTER_INCOMPLETE,)
+    assert release.blockers[0].details == {"status": str(partial.status)}
+    assert release.checks["equipment_resolved"] is False
+    assert ir.field_completion(state).codes == (C.EQUIPMENT_ON_GRID_INVERTER_INCOMPLETE,)
+    hybrid = ready_state(system_type="HYBRID", equipment=(assessment("HYBRID_INVERTER"), ir.EquipmentAssessment("HYBRID_BATTERY", {"flooding": answer}, review_status=review)))
+    assert ir.evaluate(hybrid).codes == (C.EQUIPMENT_HYBRID_BATTERY_INCOMPLETE,)
+    assert ir.field_completion(hybrid).codes == (C.EQUIPMENT_HYBRID_BATTERY_INCOMPLETE,)
 
 
 # ---------------------------------------------------------------------------------------------------------------

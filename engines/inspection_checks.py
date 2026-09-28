@@ -12,7 +12,9 @@ never re-scores old answers.
 Status is computed over the **full definition** (the legacy scorer looked only at the keys submitted, so one PASS tap
 made the whole assessment PASS): an unanswered check is ``NOT_CHECKED``; nothing answered → NOT_STARTED; any FAIL →
 FAIL; any NEEDS_REVIEW → REQUIRES_REVIEW; any check still NOT_CHECKED → IN_PROGRESS; every check PASS or N/A → PASS.
-A FAIL or REQUIRES_REVIEW assessment is resolved by an engineering review decision of RESOLVED or WAIVED.
+A FAIL or REQUIRES_REVIEW assessment is resolved by an engineering review decision of RESOLVED or WAIVED. Because FAIL
+and REQUIRES_REVIEW win over NOT_CHECKED, the status alone does not say the checklist was answered in full:
+:func:`unanswered_checks` does.
 """
 
 from __future__ import annotations
@@ -234,13 +236,24 @@ def is_critical(status: str) -> bool:
     return status in CRITICAL_STATUSES
 
 
+def unanswered_checks(equipment_type: str, results: Mapping[str, Any] | None, checks_version: str = CHECKS_VERSION) -> tuple[str, ...]:
+    """The checks of the definition still NOT_CHECKED (missing or explicit), in definition order.
+
+    Completeness is read from the answers, never from the status: FAIL and REQUIRES_REVIEW win over NOT_CHECKED, so
+    one FAIL tap scores FAIL with every other check unanswered.
+    """
+    return tuple(check_id for check_id, value in normalise_results(equipment_type, results, checks_version).items() if value == CheckResult.NOT_CHECKED)
+
+
 def is_complete(status: str) -> bool:
-    """Every check has an answer (PASS, FAIL or REQUIRES_REVIEW)."""
+    """The status is past NOT_STARTED/IN_PROGRESS. It does **not** say every check was answered — a FAIL or
+    REQUIRES_REVIEW status can be partial; use :func:`unanswered_checks` for that."""
     return status not in (AssessmentStatus.NOT_STARTED, AssessmentStatus.IN_PROGRESS)
 
 
 def is_resolved(status: str, review_status: str | None) -> bool:
-    """Ready for installation: PASS, or a critical status whose review was RESOLVED or WAIVED."""
+    """Ready for installation: PASS, or a critical status whose review was RESOLVED or WAIVED (of a checklist with no
+    check left unanswered — a review settles the answers given, it never answers the rest)."""
     if status == AssessmentStatus.PASS:
         return True
     return is_critical(status) and review_status in RESOLVING_REVIEW_STATUSES
