@@ -290,6 +290,28 @@ def test_live_nginx_routing(tmp_path):
         assert harness.get("/api/v1/auth/me/")[1]["server"] == "api"  # versioned surfaces unaffected
 
 
+@nginx_binary
+def test_live_nginx_access_log_redacts_capability_tokens(tmp_path):
+    """Security review: nginx logged $request_uri, i.e. signed media/document tokens, per-device terminal tokens and
+    customer link tokens in full. The upstream still receives the real path."""
+    from core.tests.nginx_harness import NginxHarness
+
+    requests = [
+        ("/api/v1/media/download/SIGNED-MEDIA-TOKEN/", "https", "/api/v1/media/download/[redacted]/"),
+        ("/api/v1/documents/download/SIGNED-DOC-TOKEN/", "https", "/api/v1/documents/download/[redacted]/"),
+        ("/api/customer/v1/inspection-approvals/CUSTOMER-LINK-TOKEN/send-otp/", "https", "/api/customer/v1/inspection-approvals/[redacted]/send-otp/"),
+        ("/iclock/DEVICE-SECRET-TOKEN/cdata?SN=ABC", "plain", "/iclock/[redacted]/cdata?SN=ABC"),
+        ("/api/v1/auth/me/?x=1", "https", "/api/v1/auth/me/?x=1"),
+    ]
+    with NginxHarness(tmp_path) as harness:
+        for path, port, _ in requests:
+            status, body = harness.get(path, port=port)
+            assert status == 200 and body["path"] == path  # proxied untouched
+    logged = [json.loads(line)["uri"] for line in (tmp_path / "logs" / "access.log").read_text().splitlines()]
+    assert logged == [expected for _, _, expected in requests]
+    assert "TOKEN" not in (tmp_path / "logs" / "access.log").read_text()
+
+
 ERROR_CODES = {403: "permission_denied", 413: "request_too_large", 429: "throttled", 502: "bad_gateway", 503: "service_unavailable", 504: "gateway_timeout"}
 API_LOCATIONS = [
     "location /api/public/v1/ {",

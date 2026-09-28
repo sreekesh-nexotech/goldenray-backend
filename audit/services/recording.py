@@ -4,9 +4,10 @@ Rules (PLAN §1.4, standard §3.2):
 
 * :func:`record` writes **synchronously inside the caller's transaction** — if the business write rolls back, so
   does its audit row, and a committed write always has one.
-* Values under sensitive keys (``password``, ``token``, ``secret``, ``otp``, ``account_number``, ``api_key``,
-  ``authorization`` — whole words of the key, any case/style, plurals included) are replaced by ``"***"`` at every
-  depth. Raw request bodies are never recorded; services pass explicit before/after snapshots.
+* Values under sensitive keys (``password``, ``passphrase``, ``token``, ``secret``, ``otp``, ``account_number``,
+  ``api_key``, ``access_key`` (Bunny), ``private_key``, ``authorization`` — whole words of the key, any case/style,
+  plurals included) are replaced by ``"***"`` at every depth. Raw request bodies are never recorded; services pass
+  explicit before/after snapshots.
 * The actor defaults to the one attached to the request's audit context (``audit.context``) when the caller names
   neither ``actor`` nor ``actor_kind``; outside a request the row is attributed to ``SYSTEM``.
 """
@@ -26,7 +27,7 @@ from audit import context
 from audit.models import AuditLog
 
 MASK = "***"
-SENSITIVE_TERMS: tuple[str, ...] = ("password", "token", "secret", "otp", "account_number", "api_key", "authorization")
+SENSITIVE_TERMS: tuple[str, ...] = ("password", "passphrase", "token", "secret", "otp", "account_number", "api_key", "access_key", "private_key", "authorization")
 ACTION_RE = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$")
 OBJECT_TYPE_RE = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$")
 _CAMEL_RE = re.compile(r"([a-z0-9])([A-Z])")

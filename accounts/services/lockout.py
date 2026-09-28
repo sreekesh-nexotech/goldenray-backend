@@ -7,14 +7,20 @@
 * Attempts refused *because* of a lockout are not recorded as failures (they are audited), so a lockout expires
   ``window`` after the failure that triggered it instead of being extended forever by an attacker.
 * Unknown e-mails are counted like known ones: a lockout reveals nothing about whether an account exists.
+* The check and the counting are one step (:func:`reserve`): under transaction-scoped advisory locks per e-mail and
+  per client IP, an attempt that passes the check is recorded as a failure *before* the password is verified, and
+  flipped to a success (:func:`succeed`) once it proves right. Concurrent attempts therefore cannot all pass the
+  check while each spends its Argon2 time verifying; the slow hash never runs inside the lock.
 """
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from datetime import datetime
 
 from django.conf import settings
+from django.db import connection, transaction
 from django.db.models import Max
 from django.utils import timezone
 
@@ -62,6 +68,51 @@ def check(email: str, ip: str | None, *, now: datetime | None = None) -> LockSta
 
 def record_attempt(email: str, ip: str | None, *, succeeded: bool) -> LoginAttempt:
     return LoginAttempt.objects.create(email=email_key(email), ip=ip or None, succeeded=succeeded)
+
+
+@dataclass(frozen=True)
+class Reservation:
+    """Outcome of :func:`reserve`: the lock state, and the attempt counted as a failure when not locked."""
+
+    state: LockState
+    attempt: LoginAttempt | None = None
+
+    @property
+    def locked(self) -> bool:
+        return self.state.locked
+
+
+def _advisory_key(name: str) -> int:
+    return int.from_bytes(hashlib.sha256(name.encode("utf-8")).digest()[:8], "big", signed=True)
+
+
+def _serialise(key: str, ip: str | None) -> None:
+    """Hold the transaction-scoped advisory locks of this e-mail and client IP (always in that order: no deadlock)."""
+    names = [f"accounts.login.email:{key}"] + ([f"accounts.login.ip:{ip}"] if ip else [])
+    with connection.cursor() as cursor:
+        for name in names:
+            cursor.execute("SELECT pg_advisory_xact_lock(%s)", [_advisory_key(name)])
+
+
+def reserve(email: str, ip: str | None, *, now: datetime | None = None) -> Reservation:
+    """Check the lockout and, unless locked, count this attempt as a failure — atomically (see module docstring).
+
+    The caller verifies the password afterwards and calls :func:`succeed` when it was right. A refused (locked)
+    attempt is not counted.
+    """
+    key = email_key(email)
+    with transaction.atomic():
+        _serialise(key, ip or None)
+        state = check(key, ip, now=now)
+        if state.locked:
+            return Reservation(state)
+        return Reservation(UNLOCKED, record_attempt(key, ip, succeeded=False))
+
+
+def succeed(reservation: Reservation) -> None:
+    """Turn a reserved attempt into a success (it then clears the e-mail's count; an IP's count never resets)."""
+    if reservation.attempt is not None:
+        LoginAttempt.objects.filter(pk=reservation.attempt.pk).update(succeeded=True)
 
 
 def purge_before(cutoff: datetime) -> int:

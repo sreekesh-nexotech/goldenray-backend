@@ -7,6 +7,7 @@ from django.core import mail
 from django.core.mail.backends.smtp import EmailBackend as SmtpBackend
 from django.db import connection
 
+from accounts.tests.factories import UserFactory, seeded_role, super_admin_role
 from audit.models import AuditLog
 from company.models import Integration
 from company.tests.factories import IntegrationFactory
@@ -18,8 +19,9 @@ SMTP = {"host": "smtp.zoho.in", "port": 465, "username": "mailer@flarize.com", "
 
 
 @pytest.fixture
-def admin(make_user):
-    return make_user(grants={"settings": ["view", "edit"]})
+def admin():
+    # SMTP decides where password-reset e-mail goes: only a Super Admin may change it (see TestSmtpNeedsASuperAdmin).
+    return UserFactory(role=super_admin_role())
 
 
 @pytest.fixture
@@ -39,6 +41,32 @@ class TestPermissions:
         client = auth_client(make_user(grants={"settings": ["view"]}))
         assert client.get(URL).status_code == 200 and put(client).status_code == 403
         assert auth_client(make_user(grants={"company": "*"})).get(URL).status_code == 403
+
+
+class TestSmtpNeedsASuperAdmin:
+    """Security review: whoever controls the SMTP relay reads every password-reset link, a Super Admin's included — so
+    an Admin (or any role with settings.edit) could take over a Super Admin account, which PLAN §3.2 reserves to Super
+    Admins ("everything except users.manage on Super Admins")."""
+
+    @pytest.mark.parametrize("holder", ["seeded-admin", "settings-editor"])
+    def test_other_settings_editors_cannot_change_smtp(self, auth_client, make_user, holder):
+        user = UserFactory(role=seeded_role("admin")) if holder == "seeded-admin" else make_user(grants={"settings": ["view", "edit"]})
+        client = auth_client(user)
+        response = put(client, config={**SMTP, "host": "relay.attacker.example"})
+        assert response.status_code == 403 and response.json()["code"] == "super_admin_required"
+        assert not Integration.objects.filter(key="SMTP").exists()
+        assert client.get(URL).status_code == 200  # reading stays with settings.view
+
+    def test_they_still_manage_the_other_providers(self, auth_client):
+        client = auth_client(UserFactory(role=seeded_role("admin")))
+        bunny = {"storage_zone": "flarize", "cdn_base_url": "https://cdn.flarize.com", "access_key": "k" * 36}
+        assert put(client, key="BUNNY", config=bunny).status_code == 200
+
+    def test_an_unchanged_smtp_put_is_harmless(self, auth_client, client):
+        assert put(client).status_code == 200
+        version = Integration.objects.get(key="SMTP").version
+        admin_client = auth_client(UserFactory(role=seeded_role("admin")))
+        assert put(admin_client, config={name: value for name, value in SMTP.items() if name != "password"}, expected_version=version).status_code == 200
 
 
 class TestReadAndWrite:

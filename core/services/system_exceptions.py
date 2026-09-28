@@ -8,7 +8,7 @@ import uuid
 
 from django.db import transaction
 
-from flarize.logging import current_request_id
+from flarize.logging import current_request_id, redact_path
 
 logger = logging.getLogger("flarize.errors")
 
@@ -38,7 +38,7 @@ def record_exception(exc: BaseException, *, request=None, source: str = "api", c
                 source=source,
                 request_id=_uuid_or_none(request_id),
                 method=(getattr(django_request, "method", "") or "")[:8],
-                path=(getattr(django_request, "path", "") or "")[:512],
+                path=redact_path(getattr(django_request, "path", "") or "")[:512],
                 user_uid=_uuid_or_none(user_uid),
                 exception_type=f"{type(exc).__module__}.{type(exc).__qualname__}"[:255],
                 message=str(exc)[:_MAX_MESSAGE],

@@ -116,12 +116,28 @@ def exif_captured_at(image: Image.Image) -> datetime | None:
     return timezone.make_aware(naive, timezone.get_default_timezone())
 
 
+# XMP properties that carry a position (exif:GPSLatitude/GPSLongitude, also written by Lightroom and phone apps).
+XMP_LOCATION_MARKERS = (b"GPSLatitude", b"GPSLongitude")
+
+
+def _xmp_packet(image: Image.Image) -> bytes:
+    raw = image.info.get("xmp") or image.info.get("XML:com.adobe.xmp") or b""
+    return raw.encode("utf-8", "ignore") if isinstance(raw, str) else bytes(raw)
+
+
 def exif_has_location(image: Image.Image) -> bool:
+    """Whether the image carries a position: a non-empty EXIF GPS IFD, or GPS properties in its XMP packet."""
     try:
         exif = image.getexif()
-        return GPS_IFD in exif and bool(exif.get_ifd(GPS_IFD))
+        if GPS_IFD in exif and bool(exif.get_ifd(GPS_IFD)):
+            return True
+    except Exception:  # noqa: BLE001 - malformed EXIF: fall through to the XMP check
+        pass
+    try:
+        packet = _xmp_packet(image)
     except Exception:  # noqa: BLE001
         return False
+    return any(marker in packet for marker in XMP_LOCATION_MARKERS)
 
 
 def open_image(fileobj: BinaryIO) -> Image.Image:

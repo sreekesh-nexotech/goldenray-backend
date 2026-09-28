@@ -2,7 +2,7 @@
 
 Work package *catalog* builds the `catalog` app of PLAN §2.2 / §3.3 (`products/*`) / §3.4 (Catalog) on top of the
 foundation (F1–F3, F-FIX), and its legacy importers for PLAN §7.3 (`solar_panels`, `solar_inverters`, `batteries`,
-`bom_*`) and §7.4 (Flarize `catalog.json` categories/items, `battery-master.json`). Deviations: DV-16 … DV-20.
+`bom_*`) and §7.4 (Flarize `catalog.json` categories/items, `battery-master.json`). Deviations: DV-17 … DV-21.
 
 ## What exists
 
@@ -56,12 +56,12 @@ Public list filters: all lists `search`, `brand` (slugs, comma-separated), `over
    `component_not_found`. DRAFT/ACTIVE/DEPRECATED pass; `selection_warning()` returns the deprecation warning.
 4. **SKUs.** Imported ids are kept (`p1`, `en7`, `pa_…`). Generated SKUs are `<category.sku_prefix>-<nnnn>` (next
    number over all rows including deleted, the category row locked) — upper-case with a dash, so they can never collide
-   with the lower-case Flarize ids that keep arriving until the cutover (DV-19). SKUs are unique case-insensitively
+   with the lower-case Flarize ids that keep arriving until the cutover (DV-20). SKUs are unique case-insensitively
    among live components and fixed once a component leaves DRAFT (409 `sku_locked`).
 5. **Brands.** Unique by `lower(name)` among live rows; names are trimmed and inner spaces collapsed. A component
    prints `brand_label` (the source spelling: legacy data spells one maker `DEYE`/`Deye`, `RenewSys`/`Renewsys`); it
    follows the brand name unless set explicitly, and renaming a brand relabels the components that printed the old
-   name. `brand` is nullable: many BOM consumables have none and none is invented (DV-16).
+   name. `brand` is nullable: many BOM consumables have none and none is invented (DV-17).
 6. **Change log.** `catalog_component_change` gets one row per changed field (`name`, `spec.wattage_w`, `tiers`,
    `status`, `created`, `deleted`, imported `source.<action>` rows from Flarize `changeLog`), JSON-safe old/new and the
    reason; `history/` is cursor-paginated newest first. Audit rows are written as well.
@@ -229,7 +229,7 @@ Flarize `battery-master.json` `batteries.<componentId>` (overlay on the battery 
 `engineeringStatus`, `procurementStatus`, `engineeringNotes`, `openItems`, `statusHistory`, `supplier`,
 `supplierReference` → the `battery_spec` columns of the same meaning · `purchasePrice`/`sellingPrice` → returned
 PURCHASE/LIST prices · `changeLog` → change rows · any other key → `attributes.master_<key>`. The file names no
-battery families, so `battery_spec.family` stays empty (DV-17).
+battery families, so `battery_spec.family` stays empty (DV-18).
 
 ## Parity evidence
 

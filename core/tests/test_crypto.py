@@ -127,3 +127,11 @@ def test_reencrypt_rejects_foreign_tokens():
     with override_settings(FERNET_KEYS=[NEW_KEY]):
         with pytest.raises(DecryptionError):
             reencrypt(token)
+
+
+@pytest.mark.parametrize("stored", ["clé-non-ascii", None, 42])
+def test_reencrypt_fails_closed_with_its_own_error_on_any_undecryptable_value(stored):
+    """Security review: a non-ASCII or non-string stored value escaped as UnicodeEncodeError/AttributeError, so
+    ``reencrypt_secrets`` crashed with a raw traceback instead of its fail-closed CommandError."""
+    with pytest.raises(DecryptionError):
+        reencrypt(stored)

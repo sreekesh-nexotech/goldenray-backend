@@ -52,10 +52,11 @@ def decrypt_str(token: str) -> str:
 
 
 def reencrypt(token: str) -> str:
-    """Re-encrypt ``token`` under the primary key (key rotation)."""
+    """Re-encrypt ``token`` under the primary key (key rotation). Any value no key can decrypt → ``DecryptionError``."""
+    fernet = get_fernet()
     try:
-        return get_fernet().rotate(token.encode("ascii")).decode("ascii")
-    except InvalidToken as exc:
+        return fernet.rotate(token.encode("ascii")).decode("ascii")
+    except (InvalidToken, UnicodeError, AttributeError) as exc:
         raise DecryptionError("Value cannot be decrypted with the configured FERNET_KEYS.") from exc
 
 

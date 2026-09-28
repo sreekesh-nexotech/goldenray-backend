@@ -13,7 +13,25 @@ EXIF_IFD = 0x8769
 GPS_IFD = 0x8825
 
 
-def image_bytes(fmt: str = "JPEG", size=(64, 48), *, captured: str | None = None, offset: str | None = None, gps: bool = False, mode: str = "RGB", color=(200, 120, 40)) -> bytes:
+# An XMP packet carrying a location the way Lightroom/Photoshop and several phone apps write it (no EXIF GPS IFD).
+XMP_WITH_LOCATION = (
+    b'<?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'
+    b'<rdf:Description rdf:about="" xmlns:exif="http://ns.adobe.com/exif/1.0/" exif:GPSLatitude="9,58.0N" exif:GPSLongitude="76,17.0E"/>'
+    b'</rdf:RDF></x:xmpmeta><?xpacket end="w"?>'
+)
+
+
+def image_bytes(
+    fmt: str = "JPEG",
+    size=(64, 48),
+    *,
+    captured: str | None = None,
+    offset: str | None = None,
+    gps: bool = False,
+    xmp: bytes | None = None,
+    mode: str = "RGB",
+    color=(200, 120, 40),
+) -> bytes:
     image = Image.new(mode, size, color if mode != "1" else 1)
     exif = Image.Exif()
     if captured:
@@ -25,6 +43,15 @@ def image_bytes(fmt: str = "JPEG", size=(64, 48), *, captured: str | None = None
         exif.get_ifd(GPS_IFD).update({1: "N", 2: (9.0, 58.0, 0.0), 3: "E", 4: (76.0, 17.0, 0.0)})
     output = io.BytesIO()
     options = {"exif": exif.tobytes()} if (captured or gps) else {}
+    if xmp is not None:
+        if fmt == "PNG":
+            from PIL.PngImagePlugin import PngInfo
+
+            info = PngInfo()
+            info.add_itxt("XML:com.adobe.xmp", xmp.decode("utf-8"))
+            options["pnginfo"] = info
+        else:
+            options["xmp"] = xmp
     if fmt == "HEIF":
         import pillow_heif  # noqa: F401 - registers the HEIF plugin
 
