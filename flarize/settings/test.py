@@ -43,6 +43,7 @@ PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
 PRIVATE_MEDIA_ROOT = MEDIA_ROOT / "private"
 USE_X_ACCEL = False
 DOCUMENTS_RENDERER = "stub"
+LEADS_OTP_BACKEND = "fake"
 
 LOGGING["root"]["level"] = "WARNING"
 LOGGING["loggers"]["django"]["level"] = "WARNING"

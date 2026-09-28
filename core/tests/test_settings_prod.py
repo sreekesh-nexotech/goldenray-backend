@@ -29,6 +29,7 @@ def _valid(**overrides):
         "EMAIL_BACKEND": "django.core.mail.backends.smtp.EmailBackend",
         "MEDIA_PUBLIC_BACKEND": "bunny",
         "DOCUMENTS_RENDERER": "playwright",
+        "LEADS_OTP_BACKEND": "twilio",
         "PUBLIC_MEDIA_ROOT": "/srv/flarize/media/public",
         "PRIVATE_MEDIA_ROOT": "/srv/flarize/media/private",
     }
@@ -57,6 +58,7 @@ def _valid(**overrides):
         ({"EMAIL_BACKEND": "django.core.mail.backends.console.EmailBackend"}, "EMAIL_BACKEND"),
         ({"MEDIA_PUBLIC_BACKEND": "local"}, "MEDIA_PUBLIC_BACKEND"),
         ({"DOCUMENTS_RENDERER": "stub"}, "DOCUMENTS_RENDERER"),
+        ({"LEADS_OTP_BACKEND": "fake"}, "LEADS_OTP_BACKEND"),
         ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public/private"}, "PRIVATE_MEDIA_ROOT"),
         ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public"}, "PRIVATE_MEDIA_ROOT"),
         ({"PRIVATE_MEDIA_ROOT": ""}, "PRIVATE_MEDIA_ROOT"),

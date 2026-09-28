@@ -42,6 +42,7 @@ def test_production_rates_match_the_plan():
         "public_read": "600/min",
         "public_write": "20/min",
         "otp": "5/10min",
+        "otp_ip": "20/10min",  # leads: OTP per client IP besides per phone
         "login": "10/15min",
         "token_refresh": "300/15min",  # DV-8
         "staff": "1200/min",

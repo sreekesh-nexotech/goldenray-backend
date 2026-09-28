@@ -1,0 +1,20 @@
+[
+ {
+  "id": 1,
+  "full_name": "Person 9111",
+  "phone": "9896887328",
+  "email": "partner.one@example.com",
+  "profession": "Real Estate Agent",
+  "district": "Ernakulam",
+  "created_at": "2026-09-28T22:02:35.416580+00:00"
+ },
+ {
+  "id": 2,
+  "full_name": "Person 2658",
+  "phone": "9804229187",
+  "email": "two@example.com",
+  "profession": "Society / RWA Representative",
+  "district": "Thiruvananthapuram",
+  "created_at": "2026-09-28T22:02:35.432766+00:00"
+ }
+]

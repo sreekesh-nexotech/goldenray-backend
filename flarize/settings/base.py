@@ -231,6 +231,9 @@ THROTTLE_RATES = {
     "public_read": "600/min",
     "public_write": "20/min",
     "otp": "5/10min",
+    # otp/send and otp/verify also per client IP: one address cycling through numbers cannot pump SMS (a CGNAT
+    # address is shared by many phones, hence a larger budget than the per-phone one).
+    "otp_ip": "20/10min",
     "login": "10/15min",
     # auth/refresh/ and auth/logout/ (DV-8): every active Studio user refreshes every 15 minutes, often from one
     # office NAT or the BFF host, so they cannot share the 10/15min login budget.
@@ -359,6 +362,19 @@ SPECTACULAR_SETTINGS = {
         "RenderJobKindEnum": "documents.models.render_job.RenderJob.Kind",
         "RenderJobStatusEnum": "documents.models.render_job.RenderJob.Status",
         "IntegrationKeyEnum": "company.models.integration.Integration.Key",
+        "CustomerSourceEnum": "customers.models.customer.Customer.Source",
+        "CustomerBillCycleEnum": "customers.models.customer.Customer.BillCycle",
+        "LeadKindEnum": "leads.models.lead.Lead.Kind",
+        "LeadStatusEnum": "leads.models.lead.Lead.Status",
+        "LeadOpenStatusEnum": "leads.models.lead.OPEN_STATUS_CHOICES",
+        "LeadFormEnum": "leads.models.lead.Lead.Form",
+        "AffiliateApplicationStatusEnum": "leads.models.forms.AffiliateApplication.Status",
+        "AffiliateProfessionEnum": "leads.models.forms.Profession",
+        "KeralaDistrictEnum": "leads.models.choices.KeralaDistrict",
+        "WarrantyRequestStatusEnum": "leads.models.forms.WarrantyRequest.Status",
+        "WarrantyIssueTypeEnum": "leads.models.forms.IssueType",
+        "InstallationStatusEnum": "leads.models.installation.CustomerInstallation.Status",
+        "InstallationSystemTypeEnum": "leads.models.installation.CustomerInstallation.SystemType",
     },
 }
 
@@ -447,6 +463,21 @@ CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="", cast=Csv())
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS = False
 CORS_EXPOSE_HEADERS = ["ETag", "Retry-After", "X-Request-ID"]
+
+# --------------------------------------------------------------------------------------------------------------------
+# Leads: website OTP (Twilio Verify) and the verification token POST leads requires
+# --------------------------------------------------------------------------------------------------------------------
+# "twilio" in staging/prod (prod.py refuses anything else); "fake" in dev/test (no SMS; the code is 000000).
+LEADS_OTP_BACKEND = config("LEADS_OTP_BACKEND", default="twilio")
+# Env fallback; an enabled TWILIO integration (Studio → Settings → Integrations) takes precedence.
+TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID", default="")
+TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN", default="")
+TWILIO_VERIFY_SERVICE_SID = config("TWILIO_VERIFY_SERVICE_SID", default="")
+TWILIO_TIMEOUT_SECONDS = 10
+LEADS_OTP_TTL_SECONDS = 600  # matches Twilio Verify's default code lifetime
+LEADS_OTP_MAX_ATTEMPTS = 5  # verification checks per sent code
+LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY = 10  # database backstop behind the (fail-open) otp throttle
+LEADS_VERIFICATION_TOKEN_TTL_SECONDS = 1800
 
 # --------------------------------------------------------------------------------------------------------------------
 # Logging: JSON lines to stdout with the request id on every record

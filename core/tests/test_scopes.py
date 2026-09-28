@@ -9,13 +9,22 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture
-def owned_customers_filter():
+def without_customers_filter():
+    """The customers app registers its own ``owned`` filter; these tests exercise the registry in isolation."""
+    previous = scopes._FILTERS.pop(("customers", "owned"), None)
+    yield
+    scopes._FILTERS.pop(("customers", "owned"), None)
+    if previous is not None:
+        scopes._FILTERS[("customers", "owned")] = previous
+
+
+@pytest.fixture
+def owned_customers_filter(without_customers_filter):
     def owned(queryset, user):
         return queryset.filter(pk=user.pk)
 
     scopes.register("customers", "owned")(owned)
     yield owned
-    scopes._FILTERS.pop(("customers", "owned"), None)
 
 
 def _qs():
@@ -43,7 +52,7 @@ def test_all_scope_is_the_identity(make_user):
     assert scopes.apply(_qs(), user, "customers").count() == 2
 
 
-def test_narrow_scope_without_a_registered_filter_fails_closed(make_user):
+def test_narrow_scope_without_a_registered_filter_fails_closed(make_user, without_customers_filter):
     user = make_user(grants={"customers": ["view"]}, scopes={"customers": "owned"})
     assert scopes.registered_filter("customers", "owned") is None
     assert list(scopes.apply(_qs(), user, "customers")) == []

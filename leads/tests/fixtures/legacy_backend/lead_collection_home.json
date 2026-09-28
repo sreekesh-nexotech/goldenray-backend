@@ -1,0 +1,148 @@
+[
+ {
+  "id": 1,
+  "name": "Person 3295",
+  "phone_number": "9897598771",
+  "created_at": "2026-09-28T22:02:35.289285+00:00",
+  "updated_at": "2026-09-28T22:02:35.289305+00:00",
+  "source": "footer",
+  "page": "/",
+  "details": {}
+ },
+ {
+  "id": 2,
+  "name": "Person 7558",
+  "phone_number": "9818785741",
+  "created_at": "2026-09-28T22:02:35.303867+00:00",
+  "updated_at": "2026-09-28T22:02:35.303882+00:00",
+  "source": "home_booking",
+  "page": "/",
+  "details": {}
+ },
+ {
+  "id": 3,
+  "name": "Person 2639",
+  "phone_number": "9834466054",
+  "created_at": "2026-09-28T22:02:35.318249+00:00",
+  "updated_at": "2026-09-28T22:02:35.318262+00:00",
+  "source": "contact_page",
+  "page": "/contact-us",
+  "details": {
+   "Pincode": "682016",
+   "Property type": "Residential"
+  }
+ },
+ {
+  "id": 4,
+  "name": "Person 8882",
+  "phone_number": "9847494910",
+  "created_at": "2026-09-28T22:02:35.332506+00:00",
+  "updated_at": "2026-09-28T22:02:35.332519+00:00",
+  "source": "group_purchase",
+  "page": "/group-purchase",
+  "details": {
+   "Role": "Organiser",
+   "Email": "group@example.com",
+   "District": "Ernakulam",
+   "Locality": "Kakkanad",
+   "Group name": "Green Flats",
+   "Monthly bill": "3000",
+   "Estimated homes": "25"
+  }
+ },
+ {
+  "id": 5,
+  "name": "Person 8078",
+  "phone_number": "9874445429",
+  "created_at": "2026-09-28T22:02:35.344769+00:00",
+  "updated_at": "2026-09-28T22:02:35.344781+00:00",
+  "source": "quotation",
+  "page": "/solar-calculator",
+  "details": {
+   "Address": "12 Beach Road",
+   "Pincode": "695001",
+   "Language": "ml",
+   "System size": "5 kW",
+   "Monthly bill": "₹4500",
+   "Subsidy eligibility": "Yes"
+  }
+ },
+ {
+  "id": 6,
+  "name": "Person 7941",
+  "phone_number": "9868659322",
+  "created_at": "2026-09-28T22:02:35.362005+00:00",
+  "updated_at": "2026-09-28T22:02:35.362030+00:00",
+  "source": "other",
+  "page": "",
+  "details": {}
+ },
+ {
+  "id": 7,
+  "name": "Person 1066",
+  "phone_number": "9898974134",
+  "created_at": "2026-09-28T22:02:35.378504+00:00",
+  "updated_at": "2026-09-28T22:02:35.378517+00:00",
+  "source": "other",
+  "page": "",
+  "details": {
+   "Flag": true,
+   "Note": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "Count": 3,
+   "Ratio": 1.5
+  }
+ },
+ {
+  "id": 8,
+  "name": "Person 9111",
+  "phone_number": "9896887328",
+  "created_at": "2026-09-28T22:02:35.419974+00:00",
+  "updated_at": "2026-09-28T22:02:35.419983+00:00",
+  "source": "referral_partner",
+  "page": "/solar-referral-program",
+  "details": {
+   "Email": "partner.one@example.com",
+   "District": "Ernakulam",
+   "Profession": "Real Estate Agent"
+  }
+ },
+ {
+  "id": 9,
+  "name": "Person 2658",
+  "phone_number": "9804229187",
+  "created_at": "2026-09-28T22:02:35.434832+00:00",
+  "updated_at": "2026-09-28T22:02:35.434842+00:00",
+  "source": "referral_partner",
+  "page": "/solar-referral-program",
+  "details": {
+   "Email": "two@example.com",
+   "District": "Thiruvananthapuram",
+   "Profession": "Society / RWA Representative"
+  }
+ },
+ {
+  "id": 10,
+  "name": "Person 7112",
+  "phone_number": "9843136866",
+  "created_at": "2026-09-28T22:02:35.465701+00:00",
+  "updated_at": "2026-09-28T22:02:35.465709+00:00",
+  "source": "warranty_service",
+  "page": "/solar-warranty",
+  "details": {
+   "Issue": "Inverter Fault",
+   "Description": "Inverter shows error E02"
+  }
+ },
+ {
+  "id": 11,
+  "name": "Person 1841",
+  "phone_number": "9863400987",
+  "created_at": "2026-09-28T22:02:35.478460+00:00",
+  "updated_at": "2026-09-28T22:02:35.478469+00:00",
+  "source": "warranty_service",
+  "page": "/solar-warranty",
+  "details": {
+   "Issue": "KSEB / Net Metering"
+  }
+ }
+]

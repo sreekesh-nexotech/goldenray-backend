@@ -6,6 +6,16 @@ pytestmark = pytest.mark.django_db
 URL = "/api/v1/dashboard/"
 
 
+@pytest.fixture(autouse=True)
+def _only_test_counters():
+    """Apps register real counters (leads, customers …); these tests look at the registry in isolation."""
+    saved = {module: list(fns) for module, fns in dashboard._COUNTERS.items()}
+    dashboard._COUNTERS.clear()
+    yield
+    dashboard._COUNTERS.clear()
+    dashboard._COUNTERS.update(saved)
+
+
 @pytest.fixture
 def counters():
     registered = []
