@@ -187,37 +187,54 @@ def ensure_grants_held(actor, permissions: Mapping | None, scopes: Mapping | Non
 # ----------------------------------------------------------------------------------------------------------------------
 # Self-action guard
 # ----------------------------------------------------------------------------------------------------------------------
-def _target_user_ref(target, depth: int = 0) -> tuple[int | None, uuid.UUID | None]:
-    """``(pk, uid)`` of the user ``target`` denotes: a User, a user uid, or a record with ``user``/``owner``."""
+_UNRESOLVED = (None, None, False)
+
+
+def _target_user_ref(target, depth: int = 0) -> tuple[int | None, uuid.UUID | None, bool]:
+    """``(pk, uid, recognised)`` of the user ``target`` denotes.
+
+    ``target`` is a User, a user uid, or a record linked to a user through ``user_id``/``owner_id`` or a ``user``,
+    ``owner`` or ``employee`` object (followed up to three hops: attendance day → employee → user). ``recognised`` is
+    False when ``target`` has none of these links (the caller cannot tell whose record it is); a link that is present
+    but empty (an employee without a Studio login) is recognised and belongs to nobody.
+    """
     from accounts.models import User
 
     if target is None or depth > 3:
-        return None, None
+        return _UNRESOLVED
     if isinstance(target, User):
-        return target.pk, target.uid
+        return target.pk, target.uid, True
     if isinstance(target, uuid.UUID):
-        return None, target
+        return None, target, True
     if isinstance(target, str):
         try:
-            return None, uuid.UUID(target)
+            return None, uuid.UUID(target), True
         except ValueError:
-            return None, None
+            return _UNRESOLVED
+    recognised = False
     for attribute in ("user_id", "owner_id"):
-        value = getattr(target, attribute, None)
-        if value is not None:
-            return value, None
-    for attribute in ("user", "owner"):
-        value = getattr(target, attribute, None)
-        if value is not None:
-            return _target_user_ref(value, depth + 1)
-    return None, None
+        if hasattr(target, attribute):
+            recognised = True
+            value = getattr(target, attribute)
+            if value is not None:
+                return value, None, True
+    # `employee_id` is an employee's key, never a user's: only the employee object is followed.
+    for attribute in ("user", "owner", "employee"):
+        if hasattr(target, attribute):
+            recognised = True
+            value = getattr(target, attribute)
+            if value is not None:
+                pk, uid, linked = _target_user_ref(value, depth + 1)
+                if pk is not None or uid is not None or not linked:
+                    return pk, uid, linked
+    return None, None, recognised
 
 
 def is_self(user, target) -> bool:
     """Whether ``target`` (a User, a user uid, or a record owned by / belonging to a user) is ``user``."""
     if user is None or getattr(user, "pk", None) is None:
         return False
-    pk, uid = _target_user_ref(target)
+    pk, uid, _ = _target_user_ref(target)
     return (pk is not None and pk == user.pk) or (uid is not None and uid == getattr(user, "uid", None))
 
 
@@ -231,5 +248,8 @@ def deny_self_action(user, target, *, module: str | None = None, action: str | N
         raise ValueError("Pass both module and action, or neither.")
     if module is not None and (module, action) not in SELF_ACTION_DENIED:
         raise ValueError(f"{module}.{action} is not a self-action-denied permission (accounts.registry.SELF_ACTION_DENIED).")
+    if not _target_user_ref(target)[2]:
+        # Fail closed: a record the guard cannot attribute is a programming error, never "not yours".
+        raise ValueError(f"deny_self_action cannot tell whose record {type(target).__name__} is (pass a User, a user uid, or a record with user/owner/employee).")
     if is_self(user, target):
         raise PermissionDenied("self_action_denied", message or "You cannot perform this action on your own record.")

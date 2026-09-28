@@ -77,3 +77,8 @@ def test_malformed_exif_date_is_ignored():
 def test_gps_presence():
     assert _sniff(files.jpeg(gps=True)).has_location is True
     assert _sniff(files.jpeg()).has_location is False
+
+
+@pytest.mark.parametrize("builder", [files.jpeg, files.png, files.webp, files.heic], ids=["jpeg", "png", "webp", "heic"])
+def test_a_location_written_only_as_xmp_is_detected(builder):
+    assert _sniff(builder(xmp=files.XMP_WITH_LOCATION)).has_location is True

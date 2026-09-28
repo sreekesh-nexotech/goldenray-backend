@@ -149,6 +149,29 @@ class TestDenySelfAction:
             assert excinfo.value.code == "self_action_denied"
             deny_self_action(user, SimpleNamespace(user=other), module=module, action=action)
 
+    # Security review: records were resolved through `user`/`owner` only, so the documented "attendance day → employee
+    # → user" shape (an `employee` FK, as the HR models have) resolved to nobody and the guard silently let a user
+    # edit their own attendance or approve their own leave; anything unrecognised was treated as "not yours".
+    def test_records_are_followed_through_their_employee(self, make_user):
+        user, other = make_user(), make_user()
+        day = SimpleNamespace(employee_id=41, employee=SimpleNamespace(user_id=user.pk, user=user))
+        leave = SimpleNamespace(employee=SimpleNamespace(user=user))
+        assert is_self(user, day) and is_self(user, leave)
+        for target, (module, action) in ((day, ("attendance", "edit")), (leave, ("leave", "approve"))):
+            with pytest.raises(PermissionDenied) as excinfo:
+                deny_self_action(user, target, module=module, action=action)
+            assert excinfo.value.code == "self_action_denied"
+            deny_self_action(other, target, module=module, action=action)
+
+    def test_an_employee_without_a_login_is_nobody_s_own_record(self, make_user):
+        unlinked = SimpleNamespace(employee_id=7, employee=SimpleNamespace(user_id=None, user=None))
+        deny_self_action(make_user(), unlinked, module="attendance", action="edit")
+
+    @pytest.mark.parametrize("target", [None, "not-a-uuid", SimpleNamespace(), SimpleNamespace(employee_id=7), SimpleNamespace(status="PENDING")])
+    def test_a_record_it_cannot_attribute_fails_closed(self, make_user, target):
+        with pytest.raises(ValueError):
+            deny_self_action(make_user(), target, module="leave", action="approve")
+
     def test_misuse_is_a_programming_error(self, make_user):
         user = make_user()
         with pytest.raises(ValueError):

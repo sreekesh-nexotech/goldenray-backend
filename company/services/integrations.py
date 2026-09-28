@@ -7,6 +7,10 @@ never returns a secret field — only whether it is set. ``PUT`` semantics per f
 * secret fields are **write-only**: absent → keep the stored value, a string → replace it, ``null``/``""`` → clear it;
 * unknown fields are refused; an *enabled* integration must have every required field (stored or sent).
 
+Only a Super Admin may change the ``SMTP`` integration (DV-16): whoever controls the relay reads every password-reset
+and invitation link — a Super Admin's included — which PLAN §3.2 keeps out of an Admin's reach. Reading it, and the
+other providers, stay with ``settings.view``/``settings.edit``.
+
 The platform reads enabled configurations through :func:`stored_config`, registered as the
 :mod:`core.integrations` resolver in ``CompanyConfig.ready`` (Bunny uploads, SMTP delivery, Twilio Verify).
 """
@@ -21,9 +25,10 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import URLValidator, validate_email
 from django.db import IntegrityError, transaction
 
+from accounts.services.authz import is_super_admin
 from audit.services import record
 from company.models import Integration
-from core.errors import DomainError, StaleVersion
+from core.errors import DomainError, PermissionDenied, StaleVersion
 from core.services import check_version, stamp_create
 
 HOST_RE = re.compile(r"^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$", re.IGNORECASE)
@@ -195,6 +200,8 @@ def put_integration(*, user, key: str, is_enabled: bool, config: dict, expected_
     stored = (row.config if row else {}) or {}
     merged, changed, secrets_changed = _merge(key, config, stored, enabled=is_enabled)
     was_enabled = bool(row and row.is_enabled)
+    if key == Integration.Key.SMTP and (row is None or changed or secrets_changed or was_enabled != is_enabled) and not is_super_admin(user):
+        raise PermissionDenied("super_admin_required", "Only a Super Admin may change the SMTP integration: it decides where password-reset e-mail is delivered.")
     if row is None:
         row = Integration(key=key, config=merged, is_enabled=is_enabled)
         stamp_create(row, user)

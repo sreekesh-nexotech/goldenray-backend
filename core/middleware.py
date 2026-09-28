@@ -6,7 +6,7 @@ import logging
 import time
 import uuid
 
-from flarize.logging import request_id_var, user_uid_var
+from flarize.logging import redact_path, request_id_var, user_uid_var
 
 logger = logging.getLogger("flarize.request")
 
@@ -45,7 +45,7 @@ class RequestIdMiddleware:
                 "request",
                 extra={
                     "method": request.method,
-                    "path": request.path,
+                    "path": redact_path(request.path),
                     "status": response.status_code,
                     "duration_ms": int((time.monotonic() - started) * 1000),
                 },

@@ -26,7 +26,10 @@ class IntegrationsView(BaseAPIView):
         request=IntegrationPutSerializer,
         responses={200: IntegrationSerializer, 400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer, 409: ErrorSerializer},
         tags=TAGS,
-        description="Replaces one integration's settings. Secret fields: omit to keep the stored value, send a string to replace it, null or '' to clear it.",
+        description=(
+            "Replaces one integration's settings. Secret fields: omit to keep the stored value, send a string to replace it, null or '' to clear it. "
+            "Changing SMTP needs a Super Admin (403 `super_admin_required`): it decides where password-reset e-mail goes."
+        ),
     )
     def put(self, request, *args, **kwargs):
         serializer = IntegrationPutSerializer(data=request.data)

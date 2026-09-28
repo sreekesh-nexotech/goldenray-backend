@@ -10,6 +10,7 @@ from PIL import Image
 from audit.models import AuditLog
 from media.models import MediaAsset
 from media.services import assets
+from media.services.sniffing import exif_has_location, open_image
 from media.services.storage import StorageError
 from media.tests import files
 from media.tests.factories import upload
@@ -171,6 +172,22 @@ class TestLocationPrivacy:
         exif = Image.open(io.BytesIO(stored)).getexif()
         assert 0x8825 not in exif
         assert body["captured_at"] is not None  # recorded from the original before stripping
+
+    # Security review: HEIC kept its GPS IFD through the re-encode (pillow-heif copies the source's metadata), and a
+    # location written only as XMP (no EXIF GPS IFD) was not detected at all.
+    @pytest.mark.parametrize("builder", [files.jpeg, files.png, files.webp, files.heic], ids=["jpeg", "png", "webp", "heic"])
+    def test_every_public_format_loses_its_exif_location(self, client, media_roots, builder):
+        body = post(client, builder(gps=True), name="site.img").json()
+        stored = (media_roots / "public" / MediaAsset.objects.get(uid=body["uid"]).file).read_bytes()
+        assert not exif_has_location(open_image(io.BytesIO(stored)))
+
+    @pytest.mark.parametrize("builder", [files.jpeg, files.png, files.webp, files.heic], ids=["jpeg", "png", "webp", "heic"])
+    def test_a_location_held_only_in_xmp_is_removed_too(self, client, media_roots, builder):
+        original = builder(xmp=files.XMP_WITH_LOCATION)
+        assert b"GPSLatitude" in original
+        body = post(client, original, name="site.img").json()
+        stored = (media_roots / "public" / MediaAsset.objects.get(uid=body["uid"]).file).read_bytes()
+        assert b"GPSLatitude" not in stored and b"GPSLongitude" not in stored
 
     def test_private_images_are_stored_untouched(self, client, media_roots):
         original = files.jpeg(gps=True)

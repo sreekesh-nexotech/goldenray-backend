@@ -1,19 +1,22 @@
 """POST auth/login/ and the login service: sessions, lockout, timing normalisation, audit."""
 
 import copy
+import threading
+import time
 from datetime import timedelta
 from unittest import mock
 
 import pytest
 from django.conf import settings
 from django.contrib.auth.hashers import Argon2PasswordHasher, PBKDF2PasswordHasher, make_password
+from django.db import connection
 from django.test import override_settings
 from django.utils import timezone
 from freezegun import freeze_time
 
 from accounts.errors import InvalidCredentials, LoginLocked, PasswordResetRequired
 from accounts.models import LoginAttempt, User, UserSession
-from accounts.services import auth
+from accounts.services import auth, passwords
 from accounts.tests.factories import DEFAULT_PASSWORD
 from audit.models import AuditLog
 
@@ -236,3 +239,60 @@ def test_login_endpoint_is_throttled_per_client_ip(api_client, user):
         response = _login(api_client, REMOTE_ADDR="198.51.100.1")
         assert response.status_code == 429 and response.json()["code"] == "throttled"
         assert _login(api_client, REMOTE_ADDR="198.51.100.2").status_code == 200
+
+
+# ── Security review: the lockout was check → verify (slow) → record, so concurrent attempts all passed the check before
+# any of them was counted; a burst from many addresses got as many guesses as the server had threads. ─────────────────
+def _concurrent(attempt, count: int, *, verify_delay: float = 0.3) -> list[str]:
+    """Run ``attempt(index)`` in ``count`` threads released together; each verification takes ``verify_delay``."""
+    barrier = threading.Barrier(count)
+    outcomes: list[str] = []
+    guard = threading.Lock()
+    original = passwords.verify_password
+
+    def slow_verify(user, raw_password):
+        time.sleep(verify_delay)  # the Argon2 window between the lockout check and the moment the attempt is counted
+        return original(user, raw_password)
+
+    def worker(index: int) -> None:
+        try:
+            barrier.wait()
+            try:
+                attempt(index)
+                outcome = "ok"
+            except Exception as exc:  # noqa: BLE001 - the outcome is what the test inspects
+                outcome = getattr(exc, "code", type(exc).__name__)
+            with guard:
+                outcomes.append(outcome)
+        finally:
+            connection.close()
+
+    # Audit rows are not rolled back by the transactional test teardown (audit_log is unmanaged): keep them out.
+    with mock.patch("accounts.services.auth.record"), mock.patch.object(passwords, "verify_password", side_effect=slow_verify):
+        threads = [threading.Thread(target=worker, args=(index,)) for index in range(count)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+    return outcomes
+
+
+@pytest.mark.django_db(transaction=True)
+def test_concurrent_guesses_from_many_addresses_cannot_outrun_the_email_lockout(make_user):
+    make_user(email="asha@example.com")
+    outcomes = _concurrent(lambda index: auth.login("asha@example.com", "wrong-password-123", ip=f"198.51.100.{index + 1}"), 8)
+    assert sorted(outcomes) == ["invalid_credentials"] * 5 + ["login_locked"] * 3
+    assert LoginAttempt.objects.filter(email="asha@example.com", succeeded=False).count() == 5
+
+
+@pytest.mark.django_db(transaction=True)
+def test_concurrent_guesses_from_one_address_cannot_outrun_the_ip_lockout(make_user):
+    outcomes = _concurrent(lambda index: auth.login(f"spray{index}@example.com", "wrong-password-123", ip="198.51.100.77"), 8)
+    assert sorted(outcomes) == ["invalid_credentials"] * 5 + ["login_locked"] * 3
+
+
+@pytest.mark.django_db(transaction=True)
+def test_concurrent_wrong_current_passwords_cannot_outrun_the_lockout(make_user):
+    user = make_user(email="asha@example.com")
+    outcomes = _concurrent(lambda index: auth.change_password(user, current_password="not-it-at-all", new_password="Brand-New-Passphrase-77", ip=f"198.51.100.{index + 1}"), 8)
+    assert sorted(outcomes) == ["invalid_current_password"] * 5 + ["login_locked"] * 3

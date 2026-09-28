@@ -32,6 +32,7 @@ from rest_framework.response import Response
 from rest_framework.views import set_rollback
 
 from core.errors import DomainError
+from flarize.logging import redact_path
 
 logger = logging.getLogger("flarize.errors")
 security_logger = logging.getLogger("flarize.security")
@@ -153,7 +154,7 @@ def _api_exception_response(exc: drf_exceptions.APIException) -> Response:
 def _suspicious_response(exc: SuspiciousOperation, context: Mapping | None) -> Response:
     """Client error, not a server fault: no SystemException, no ERROR line, and no exception text in the body."""
     request = (context or {}).get("request")
-    security_logger.warning("Rejected request: %s", exc.__class__.__name__, extra={"path": getattr(request, "path", ""), "method": getattr(request, "method", "")})
+    security_logger.warning("Rejected request: %s", exc.__class__.__name__, extra={"path": redact_path(getattr(request, "path", "")), "method": getattr(request, "method", "")})
     if isinstance(exc, RequestDataTooBig):
         return Response(error_payload("request_too_large", "The request body is too large."), status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
     return Response(error_payload("bad_request", "Bad request."), status=status.HTTP_400_BAD_REQUEST)

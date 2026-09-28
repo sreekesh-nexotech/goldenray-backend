@@ -7,7 +7,8 @@ Escalation guards (standard §3.3 — authority is scoped explicitly, there is n
 * nobody can change a user whose role holds grants they do not hold themselves;
 * only a Super Admin may change, deactivate, reset or delete a Super Admin, or assign the Super Admin role;
 * changing a user's e-mail or role needs ``users.manage`` besides ``users.edit`` (an e-mail change followed by a
-  password reset is an account takeover).
+  password reset is an account takeover); an e-mail change voids every open reset/invitation link (they went to the
+  old address) and re-sends a pending invitation to the new one.
 
 There are no passwords in this module: a new account gets an unusable password, ``must_reset_password`` and an
 invitation link (single use, ``ACCOUNTS_INVITE_TTL``); a forced reset does the same for an existing account.
@@ -137,8 +138,21 @@ def update_user(instance: User, *, user, data, expected_version=None) -> User:
         raise _email_conflict() from None
     invalidate_user(target.uid)
     changed_before, changed_after = changes(before, user_snapshot(target))
+    if "email" in values:
+        _redirect_open_links(target, actor=user, audit_after=changed_after)
     record("accounts.user_updated", obj=target, actor=user, before=changed_before, after=changed_after)
     return target
+
+
+def _redirect_open_links(target: User, *, actor, audit_after: dict) -> None:
+    """After an e-mail change: links already mailed to the *old* address must stop working (a mistyped invitation
+    would otherwise let its recipient set the corrected account's password). A pending invitation is re-sent to the
+    new address; an account that already has a password uses "Forgot password" at its new address."""
+    audit_after["open_reset_links_voided"] = passwords.void_open_resets(target, actor=actor)
+    if target.must_reset_password:
+        invite = passwords.issue_reset(target, actor=actor, ttl=settings.ACCOUNTS_INVITE_TTL)
+        emails.send_invite(target, invite.link, settings.ACCOUNTS_INVITE_TTL)
+        audit_after["invitation_resent"] = True
 
 
 def _deactivate(target: User, *, user, reason: str, note: str = "") -> None:
