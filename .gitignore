@@ -1,3 +1,6 @@
+# Agent worktrees (parallel work packages check out nested worktrees here) — never part of the tree
+.claude/
+
 # Runtime state (dev RSA keys, dev Fernet key, local media)
 var/
 
