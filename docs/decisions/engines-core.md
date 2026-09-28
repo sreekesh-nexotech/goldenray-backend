@@ -4,7 +4,7 @@ Work package engines-core ports the five customer-facing Flarize engines of PLAN
 `engines.energy`, `engines.savings`, `engines.subsidy`, `engines.finance`) from
 `/home/user/flarize-main/flarize/src/lib` to pure Python (engines spec §0–§5, protected formulas §19, reference
 outputs §20, porting notes §21). No Django, no app import (import-linter contract `engines-pure` plus
-`engines/tests/test_core_purity.py`). Decisions D-7 and D-8 (PLAN §9) are applied. Deviations: DV-19, DV-20.
+`engines/tests/test_core_purity.py`). Decisions D-7 and D-8 (PLAN §9) are applied. Deviations: DV-21, DV-22.
 
 The package owns no table, endpoint or legacy data source, so there is no `legacy_import.py`; the legacy
 *configuration* files these engines read are mapped below for the pricing package's importer (PLAN §7.4).
@@ -24,11 +24,12 @@ The package owns no table, endpoint or legacy data source, so there is no `legac
 | `engines/tests/test_core_parity.py`, `parity_runners.py`, `golden_support.py` | — | replay + field-by-field comparison |
 | `engines/tests/test_core_reference.py` | — | spec §20 reference outputs, D-7, D-8, every error code, config parsing/validation, frozen results, float refusal |
 | `engines/tests/test_core_purity.py` | — | stdlib-only imports, no clock/environment, floats only in the search replica |
+| `engines/tests/test_core_review.py` | — | the review findings R1–R5 below |
 
 Every engine takes a frozen input dataclass (the JavaScript's parameter object) plus its configuration and returns a
 frozen result dataclass with typed snake_case fields and an `as_dict()` that is the JavaScript result object **key for
 key** (camelCase, same order) — the quotation payload contract (D-3 keeps the Flarize payload).
-Coverage of the five modules: 100 % statements and branches (2,221 engines tests).
+Coverage of the five modules: 100 % statements and branches (2,248 engines tests).
 
 ## Decisions not spelled out in the PLAN
 
@@ -42,7 +43,7 @@ Coverage of the five modules: 100 % statements and branches (2,221 engines tests
    symmetric; used by the GST composition). The four customer engines predate `money.js` and use `Math.round`
    (nearest, ties toward +∞) — `money.js_round`/`round_places` — at exactly the places the JavaScript does
    (`Math.round(x × 100) / 100` for the effective rate, one decimal for kWh figures, whole rupees elsewhere).
-3. **The bill → units search is a binary64 replica (DV-20).** `billToUnits` bisects [0, 3000] bi-monthly units 50
+3. **The bill → units search is a binary64 replica (DV-22).** `billToUnits` bisects [0, 3000] bi-monthly units 50
    times over IEEE-754 midpoints and rounds the last midpoint. Where the bill total jumps exactly at a half unit
    (duty ₹1207.5 at 1312.5 units at ₹9.20, 81 bills per phase below ₹30,000), the answer depends on binary rounding
    in the last steps: an exact-decimal bisection returns one unit more or less at 34 of the 60,000 whole-rupee bills
@@ -53,7 +54,7 @@ Coverage of the five modules: 100 % statements and branches (2,221 engines tests
    equals the JavaScript for every whole unit 0–3000 in both phases (dense table test). The replica is the only
    float arithmetic in engines-core; besides it, floats appear only where `money` recognises them at the boundary
    (`test_floats_appear_only_in_the_bill_search_replica`).
-4. **Exact decimals where binary64 shows (DV-19).** Elsewhere the Python engines publish the exact decimal result.
+4. **Exact decimals where binary64 shows (DV-21).** Elsewhere the Python engines publish the exact decimal result.
    Where the JavaScript's binary floating point makes a published figure differ, the difference is intentional,
    pinned case by case in `core_divergences.json` and verified by kind:
    * `representation` — the JavaScript printed a binary64 artefact of the same expression: `totalInterest`
@@ -65,16 +66,23 @@ Coverage of the five modules: 100 % statements and branches (2,221 engines tests
      at 599 bi-monthly units single phase (₹4,899/600 units = 8.165 → JS 8.16, Python 8.17; bi-monthly bills
      ₹4,897–4,902 — the only whole-unit consumption in 0–3000 where it happens, both phases checked exhaustively);
      the generation value `monthlyKsebValueLow/High` for fractional sizes (2.5 kW: 330 kWh × ₹5.35 = ₹1765.5 → JS
-     1765, Python 1766; never for whole kW); the V1 fallback savings `generation × rate` (V1 runs only without a
-     region tariff — the live flow always has one); duty at a fractional bill of units (direct `units_to_bill` of
-     1312.5 units: 1207.5 → JS 1207, Python 1208; the engines themselves bill whole units). The test recomputes the
-     exact value (must be k + ½), the binary64 value (must be below it and round to the JavaScript's number) and
-     checks Python = JavaScript + one unit.
+     1765, Python 1766; at the 4.0 kWh/kW/day yield never for whole kW, under another yield it can be: 4.2 kWh/kW/day,
+     10 kW, ₹10,174 → ₹10,175); the savings `dailyGenerationUnits` = `round((low + high) / 2, 1)` — **the live V2
+     path** — for fractional sizes whose midpoint is an exact x.x5 (4.64 kW = 8 × 580 W: 16.7 + 20.4 → 18.55, JS
+     18.5, Python 18.6; 3 of 247 panel-count × wattage sizes, 2–20 panels of 330–600 W); the V1 fallback savings
+     `generation × rate` (V1 runs only without a region tariff — the live flow always has one); duty at a fractional
+     bill of units (direct `units_to_bill` of 1312.5 units: 1207.5 → JS 1207, Python 1208; the engines themselves
+     bill whole units). The test recomputes the exact value (must be k + ½), the binary64 value (must be below it
+     and round to the JavaScript's number) and checks Python = JavaScript + one unit.
    * `consequence` — a value that differs only because a `half` field did (KSEB value from the rate; annual savings,
      payback and post-solar bills from V1 savings).
    A characterisation run (not committed: 60,000 bills × 13 sizes, V2 savings with and without the 25-year
-   projection, V1 savings) found no other kind of difference; V2 savings — the live path — matched everywhere apart
-   from `annualOutputKwh`, the pass-through of the energy result's `annualGeneration` artefact for 3.27 kW.
+   projection, V1 savings) found no other kind of difference. The review re-ran it wider (not committed: 30,000
+   seeded random bills with paise, both cycles and phases, whole and 2-decimal sizes, six energy configurations, four
+   savings configurations, V2 and V1; 15,000 subsidy and 30,000 finance inputs; the GST composition over every
+   rupee 1–300,000 and every paisa to ₹3,000): again only these three kinds. V2 savings — the live path — differs in
+   `annualOutputKwh` (`representation`, the pass-through of the energy result's `annualGeneration`) and, for
+   fractional sizes, in `dailyGenerationUnits` (`half`, above); the golden files pin both (`size-half:*`).
 5. **D-8 — the `'3P'` tariff fix is a parameter.** `calculate_energy_profile(..., fix_three_phase_tariff=True)`
    (default, PLAN §9 D-8) maps `3P`, `3p`, `3 ph`, `3-phase`, `3PH`, `3_phase` (and anything containing `three`) to the
    three-phase tariff; `False` reproduces the JavaScript, which bills `'3P'` as single phase. Savings inherits the
@@ -106,7 +114,10 @@ Coverage of the five modules: 100 % statements and branches (2,221 engines tests
     is NO_SUBSIDY and `connection_type=None` is INELIGIBLE_CONNECTION, as in the JavaScript. Blocked `reason` texts
     print numbers the JavaScript way (`money.js_text`: `null`, `10.5`, `undefined` for a missing region).
 11. **Typed inputs.** A bill amount may be a Decimal, an int or a numeric string (trimmed); `parseFloat`'s
-    numeric-prefix reading (`"3000abc"` → 3000) is not reproduced — it would be a serializer bug upstream.
+    numeric-prefix reading (`"3000abc"` → 3000) is not reproduced — it would be a serializer bug upstream. The
+    savings amounts (investment, V1 current bill) likewise, stored as Decimals (the JavaScript compares and divides
+    them with coercion). Where the JavaScript checks `typeof … === 'number'` (subsidy size and houses, finance
+    principal/rate/tenure) a string stays a non-number and gets the JavaScript's error code.
 12. **GST composition lives in `money`** (C73): `GstConfig.from_cost_config(gst_goods_share=0.70, gst_goods_rate=0.05,
     gst_services_share=0.30, gst_services_rate=0.18)` takes the PLAN §2.3 keys (fractions, CLAUDE.md) and builds the
     percentage regime; `resolve_gst_regime` derives the effective rate (8.9, 6 places, a cross-check only) and
@@ -126,16 +137,16 @@ Coverage of the five modules: 100 % statements and branches (2,221 engines tests
 | File | Cases | Grid |
 |---|---|---|
 | `core_money.json` | 98 | `roundMoney` (halves both signs, 1.005, 2.675, strings, `''`, `null`), `isMoney`, `sumExact`, `mulExact`, `resolveGstRegime` (12 configurations incl. every error), GST applied to 12 amounts × 3 regimes |
-| `core_energy.json` | 781 | 48 unit boundaries (0 … 3000, every slab edge, 312/313, 1312/1313) × {total − 1, total, total + 1} × 2 phases (bi-monthly); 24 monthly bills × 8 phase texts (`single`, `three`, `1P`, `3P`, `Three Phase`, `3-phase`, `null`, `''`) + 7 more phase texts; 25 sizes (none, 0, −1, 1–12 kW incl. 1.5, 2.2, 2.5, 2.75, 3.24, 3.25, 3.27, 3.3, 4.4, 5.45, 6.6, 7.5, 9.9) × 2 bills; decimal and invalid bills; 5 cycles; 9 configuration shapes (old shapes with every fallback, explicit old values, partial tables, other yield, short slabs, no yield, yield as text, no tariff, no default region) × 3 bills × 2 phases; 3 region ids; all 162 half-unit tie bills; 4 half-rupee cases |
+| `core_energy.json` | 782 | 48 unit boundaries (0 … 3000, every slab edge, 312/313, 1312/1313) × {total − 1, total, total + 1} × 2 phases (bi-monthly); 24 monthly bills × 8 phase texts (`single`, `three`, `1P`, `3P`, `Three Phase`, `3-phase`, `null`, `''`) + 7 more phase texts; 25 sizes (none, 0, −1, 1–12 kW incl. 1.5, 2.2, 2.5, 2.75, 3.24, 3.25, 3.27, 3.3, 4.4, 5.45, 6.6, 7.5, 9.9) × 2 bills; decimal and invalid bills; 5 cycles; 9 configuration shapes (old shapes with every fallback, explicit old values, partial tables, other yield, short slabs, no yield, yield as text, no tariff, no default region) × 3 bills × 2 phases; 3 region ids; all 162 half-unit tie bills; 4 half-rupee cases + 1 whole-kW half-rupee case under the 4.2 yield |
 | `core_energy_tables.json` | 6,002 + 92 bills; 66,070 searches | `unitsToBill` for every whole unit 0–3000 × 2 phases, plus 92 fractional-unit and other-configuration cases; `billToUnits` for every whole bi-monthly rupee 1–30,000 and every half rupee 0.5–2,999.5 × 2 phases, plus 70 under other configuration shapes |
-| `core_savings.json` | 261 | V2: 12 bills × 3 phases (`3P` included) × 3 sizes; V1: 3 bills × 7 bill/cycle inputs × 2 investments; 9 savings configurations (off, missing, three approved projections, full degradation, escalation out of range, fractional/zero years) × 3 bills × 2 investments + V1; 8 investments; 9 sizes with projection; 5 energy configuration shapes × 2 phases; every blocked code (null/unavailable energy, zero/null tariff, zero generation, zero consumption); payloads; 3 V1 half-rupee cases |
+| `core_savings.json` | 265 | V2: 12 bills × 3 phases (`3P` included) × 3 sizes; V1: 3 bills × 7 bill/cycle inputs × 2 investments; 9 savings configurations (off, missing, three approved projections, full degradation, escalation out of range, fractional/zero years) × 3 bills × 2 investments + V1; 8 investments; 9 sizes with projection; 5 energy configuration shapes × 2 phases; every blocked code (null/unavailable energy, zero/null tariff, zero generation, zero consumption); payloads (incl. a BLOCKED energy payload); 3 V1 half-rupee cases; 3 panel-multiple sizes (4.64, 5.885, 11.21 kW) whose V2 `dailyGenerationUnits` is an exact x.x5 |
 | `core_subsidy.json` | 363 | 19 sizes (0.5 … 25, edges 1/2/2.5/3/10/10.01/11) × 5 panel texts; GHS 6 sizes × 8 house counts (0, 2.5, −1, null, text); 6 subsidy types × 2 panels; 4 connection texts × 2 types; invalid sizes; missing config; 10 configuration shapes (DCR waived, state top-up, missing sections/scheme/dcr, custom and misordered and empty tiers, defaults only) × 16 residential + 3 GHS |
 | `core_finance.json` | 419 | 13 principals (tier edges 200,000 / 200,000.004 / 200,000.01) × 6 tenures; 12 explicit rates × 3 tenures × 2 principals; zero rate; invalid principal/rate/tenure (incl. 2.5 and 1.25 years); passthrough; 9 configurations (D-7 EMI-rules tiers 5.75/8, no tiers with/without default, tight/no validation, default tenure 5, three tiers, down payment 20 %/none); `resolveFinanceResult` 8 grosses × 5 subsidy results × 4 configurations |
 
 `engines/tests/test_core_parity.py` replays every case (energy and savings twice: without and with the D-8 fix) and
-compares every field as a decimal string; 1,922 cases + the dense tables. Result: equal everywhere except the 107
-pinned field differences of 40 cases in `core_divergences.json` (29 `representation`, 35 `half`, 43 `consequence`;
-7 of those cases were added on purpose to exhibit the rule, 25 are fractional-principal finance cases). The spec §20
+compares every field as a decimal string; 1,927 cases + the dense tables. Result: equal everywhere except the 119
+pinned field differences of 44 cases in `core_divergences.json` (33 `representation`, 43 `half`, 43 `consequence`;
+11 of those cases were added on purpose to exhibit the rule, 25 are fractional-principal finance cases). The spec §20
 reference outputs are asserted literally in `test_core_reference.py`. `test_golden_capture_is_reproducible` re-runs the generator (when node and
 `FLARIZE_ROOT` are available) and requires byte-identical files; the headers record the sha256 of every JavaScript
 source.
@@ -182,9 +193,12 @@ Field mapping of the documents (JSON → dataclass field; `—` = the JavaScript
   config=…)` (pass the region: V1 is a fallback), `calculate_subsidy(SubsidyInputs(size, …), config,
   calculated_at=…)` with the panel type
   resolved from the locked BOM (mixed panels → `'NON_DCR'`, unresolvable → do not call), and
-  `resolve_finance(gross, subsidy_result, finance_config, calculated_at=…)`. Freeze `result.as_dict()` into the
-  payload (Decimals; serialise with a Decimal-aware encoder).
-* To re-derive savings from a stored payload: `EnergyProfile.from_payload(payload["energy"])`.
+  `resolve_finance(gross, subsidy_result, finance_config, calculated_at=…)` (the subsidy result object or its
+  payload `as_dict()`). Freeze `result.as_dict()` into the payload (Decimals; serialise with a Decimal-aware encoder).
+* To re-derive savings from a stored payload: `EnergyProfile.from_payload(payload["energy"])` (a BLOCKED payload
+  comes back as `EnergyBlocked`).
+* `GstConfig.from_cost_config(**values)` takes the four keys' stored JSONB values as they come out of the database
+  (JSON floats included); a missing key (`None`) is refused at `resolve_gst_regime` (`GST_SPLIT_INVALID`).
 * `emi` (website EMI rules) should build a `FinanceConfig` from its rule rows (D-7) and call
   `calculate_finance(FinanceInputs(principal, tenure_years=…), config, calculated_at=…)`.
 * The pricing/pack engines reuse `money.round_money`, `publish_parts`, `GstConfig.from_cost_config`,
@@ -192,3 +206,18 @@ Field mapping of the documents (JSON → dataclass field; `—` = the JavaScript
 * Re-capture after a change of the legacy JavaScript: run the generator, then the parity test; a new difference
   fails with the exact `(case, variant, path, javascript, python)` to review and, if it is binary64 noise of a
   documented kind, pin in `core_divergences.json`.
+
+## Review findings (adversarial review of engines-core)
+
+Each finding was reproduced by a failing test first (`engines/tests/test_core_review.py`, and for the golden gap
+the new golden cases); the tests stay in the suite.
+
+| # | Finding | Fix |
+|---|---|---|
+| R1 | `SavingsInputs` validated a numeric-string investment or V1 current bill and the engine then ignored it: payback `None` while `paybackBasis` said "GROSS — uses customerTotalIncludingGST", the V1 current bill recomputed from generation × rate (the JavaScript coerces `"229000" > 0`) | `SavingsInputs.__post_init__` stores both amounts as Decimals (`to_decimal`: strings parsed, floats `TypeError`, junk `ValueError`) |
+| R2 | `resolve_finance` read only a result *object*: a subsidy result in its payload shape (`as_dict()`, the JavaScript object that `resolveFinanceResult` receives) counted 0, so ₹78,000 of subsidy was financed (principal 206,100 instead of 128,100); the golden replay hid it behind an adapter class. A float gross returned `None` instead of raising | `_available_subsidy` reads either shape (`available ? totalSubsidy ?? 0 : 0`); floats refused; the golden replay now passes the JavaScript payload itself |
+| R3 | `GstConfig.from_cost_config` refused the PLAN §2.3 keys as stored: `pricing_cost_config.value` is JSONB, so `0.70` comes back from `JSONField` as a float → `TypeError` | the stored value is read like `json_number` (a float by its `repr`); `None` stays missing and is refused at `resolve_gst_regime` (`GST_SPLIT_INVALID`) |
+| R4 | `EnergyProfile.from_payload` of a BLOCKED energy payload built an *available* profile with empty fields: savings answered `MISSING_TARIFF` where the JavaScript answers `MISSING_ENERGY_RESULT` | a payload that is not `available` comes back as `EnergyBlocked` (unknown codes kept as text); golden case `payload:blocked` |
+| R5 | `EnergyConfig` could not be pickled or deep-copied (`mappingproxy`), so a parsed configuration could not go into Django's cache | `EnergyConfig.__reduce__` rebuilds through the constructor (regions stay read-only) |
+| R6 | The parity evidence missed a `half` divergence on the **live V2 path**: `dailyGenerationUnits` for fractional sizes (4.64 kW = 8 × 580 W: JavaScript 18.5, Python 18.6); the document said V2 matched everywhere apart from `annualOutputKwh`, and that `monthlyKsebValue` never diverges for whole kW (true only at the 4.0 yield) | golden cases `size-half:3000:{4.64,5.885,11.21}` and `half-rupee:altYield:9078:three`, 12 more pinned entries (119 in 44 cases), the half-divergence check covers `dailyGenerationUnits`; decision 4 and DV-21 corrected |
+| R7 | The deviations were numbered DV-19/DV-20, which the committed sibling `wp/engines-commercial` already uses for other deviations (offers lifecycle, Flarize RBAC matrix); `wp/engines-ops` uses DV-17/DV-18 | renumbered DV-21 (exact decimals where binary64 shows) and DV-22 (binary64 bill search); `docs/DEVIATIONS.md` still needs a manual merge when the engine branches meet |

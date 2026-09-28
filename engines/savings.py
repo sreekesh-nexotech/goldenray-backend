@@ -287,7 +287,10 @@ def _positive(value: Any) -> bool:
 @dataclass(frozen=True)
 class SavingsInputs:
     """``calculateSavings``'s inputs: the energy result, the gross investment (payback basis) and, for the V1
-    fallback only, the customer's current bill and its cycle."""
+    fallback only, the customer's current bill and its cycle.
+
+    The two amounts may be Decimals, ints or numeric strings and are stored as Decimals (the JavaScript coerces a
+    numeric string: ``"229000" > 0``); floats raise ``TypeError``, anything unparsable ``ValueError``."""
 
     energy_profile: EnergyProfile | EnergyBlocked | None
     customer_total_including_gst: Decimal | int | None = None
@@ -297,7 +300,7 @@ class SavingsInputs:
     def __post_init__(self) -> None:
         for name in ("customer_total_including_gst", "current_bill_amount"):
             if getattr(self, name) is not None:
-                to_decimal(getattr(self, name), field=name)  # floats and non-numbers raise
+                object.__setattr__(self, name, to_decimal(getattr(self, name), field=name))
 
 
 @exact

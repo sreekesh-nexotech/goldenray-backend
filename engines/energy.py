@@ -206,6 +206,10 @@ class EnergyConfig:
     def __post_init__(self) -> None:
         object.__setattr__(self, "regions", MappingProxyType(dict(self.regions)))
 
+    def __reduce__(self) -> tuple[Any, ...]:
+        """Pickle/deepcopy through the constructor (a ``mappingproxy`` itself cannot be pickled), e.g. for a cache."""
+        return (self.__class__, (self.config_version, self.default_region, dict(self.regions)))
+
     @classmethod
     def from_json(cls, data: Mapping[str, Any]) -> EnergyConfig:
         regions = data.get("regions") if isinstance(data.get("regions"), Mapping) else {}
@@ -458,8 +462,8 @@ class EnergyInputs:
 class EnergyBlocked:
     """A BLOCKED energy result (no region, no yield, no tariff, or no positive bill)."""
 
-    error: EnergyError
-    reason: str
+    error: EnergyError | str | None  # a text only when read back from a payload with a code this version does not know
+    reason: str | None
     region_id: str | None
     available: bool = False
     status: str = ENERGY_STATUS_BLOCKED
@@ -469,7 +473,7 @@ class EnergyBlocked:
             "available": False,
             "source": ENERGY_SOURCE,
             "status": ENERGY_STATUS_BLOCKED,
-            "error": str(self.error),
+            "error": str(self.error) if self.error is not None else None,
             "reason": self.reason,
             "regionId": self.region_id,
             "engineVersion": ENERGY_ENGINE_VERSION,
@@ -556,8 +560,15 @@ class EnergyProfile:
         }
 
     @classmethod
-    def from_payload(cls, data: Mapping[str, Any]) -> EnergyProfile:
-        """An available result back from its payload form (a frozen quotation payload), e.g. to recompute savings."""
+    def from_payload(cls, data: Mapping[str, Any]) -> EnergyProfile | EnergyBlocked:
+        """A result back from its payload form (a frozen quotation payload), e.g. to recompute savings.
+
+        A payload that is not ``available`` (a BLOCKED energy result) comes back as :class:`EnergyBlocked`, so savings
+        answers ``MISSING_ENERGY_RESULT`` as the JavaScript does."""
+        if not data.get("available"):
+            code = data.get("error")
+            known = {error.value for error in EnergyError}
+            return EnergyBlocked(EnergyError(code) if code in known else code, data.get("reason"), data.get("regionId"))
 
         def number(key: str, source: Mapping[str, Any] = data) -> Decimal | None:
             return json_number(source.get(key))

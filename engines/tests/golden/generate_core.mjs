@@ -326,6 +326,8 @@ const energyCases = [];
   for (const [bill, size] of [[1173, 2.5], [1862, 2.5], [4901, undefined], [4897, 5.45]]) {
     energyCases.push(energyCase(`half-rupee:${bill}:${size}`, { billAmount: bill, billingCycle: 'bimonthly', phase: 'single', systemSizeKw: size }));
   }
+  // (review) the same for a WHOLE-kW auto size under another yield (4.2 kWh/kW/day: 10 kW → high 46.2 kWh/day)
+  energyCases.push(energyCase('half-rupee:altYield:9078:three', { billAmount: 9078, billingCycle: 'monthly', phase: 'three' }, 'altYield'));
   write('core_energy.json', { engine: 'energy', version: energy.ENERGY_ENGINE_VERSION, sources: HEADER_SOURCES('energyEngine.js'), d8Phases: [...D8_PHASES] }, energyCases, { configs: ENERGY_CONFIGS });
 }
 
@@ -440,6 +442,13 @@ const energyCases = [];
   cases.push(savingsCase('payload:reference', { energyResult: plain(reference), investment: 229000 }));
   cases.push(savingsCase('payload:no-size', { energyResult: { ...plain(reference), recommendedSystemSizeKw: null }, investment: 229000 }));
   cases.push(savingsCase('payload:generation-above-consumption', { energyResult: { ...plain(reference), monthlyGeneration: 400, dailyGenerationLow: 12, dailyGenerationHigh: 14.6 }, investment: 229000, withRegion: false }));
+  // (review) a BLOCKED energy payload: savings must answer MISSING_ENERGY_RESULT, not a tariff/generation code
+  cases.push(savingsCase('payload:blocked', { energyResult: plain(energy.calculateEnergyProfile({ billAmount: 0, billingCycle: 'monthly', phase: 'single' }, ENERGY_CONFIG)), investment: 229000 }));
+  // (review) panel-multiple sizes where the V2 (live) dailyGenerationUnits = round((low + high) / 2, 1) is an exact
+  // x.x5 that binary64 evaluates just below: 8 × 580 W, 11 × 535 W, 19 × 590 W
+  for (const size of [4.64, 5.885, 11.21]) {
+    cases.push(savingsCase(`size-half:3000:${size}`, { energyInputs: { billAmount: 3000, billingCycle: 'monthly', phase: 'single', systemSizeKw: size }, investment: 229000 }));
+  }
   write('core_savings.json', { engine: 'savings', version: savings.SAVINGS_ENGINE_VERSION, sources: HEADER_SOURCES('savingsEngine.js', 'energyEngine.js'), d8Phases: [...D8_PHASES] }, cases, { energyConfigs: ENERGY_CONFIGS, configs: SAVINGS_CONFIGS });
 }
 

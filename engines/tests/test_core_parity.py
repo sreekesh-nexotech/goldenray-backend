@@ -153,6 +153,9 @@ def _exact_and_binary64(path: str, profile: energy.EnergyProfile) -> tuple[Decim
     if field in ("monthlyKsebValueLow", "monthlyKsebValueHigh"):
         daily = profile.daily_generation_low if field.endswith("Low") else profile.daily_generation_high
         return daily * 30 * rate, float(daily) * 30 * float(rate), Decimal(1)
+    if field == "dailyGenerationUnits":  # savings: Math.round(((low + high) / 2) × 10) / 10
+        low, high = profile.daily_generation_low, profile.daily_generation_high
+        return (low + high) / 2 * 10, ((float(low) + float(high)) / 2) * 10, Decimal("0.1")
     consumption = profile.monthly_consumption
     generation = {
         "monthlySavings": profile.monthly_generation,

@@ -270,14 +270,31 @@ class GstConfig:
 
     @classmethod
     def from_cost_config(cls, *, gst_goods_share: Any, gst_goods_rate: Any, gst_services_share: Any, gst_services_rate: Any) -> GstConfig:
-        """The composite regime from the four ``pricing_cost_config`` keys (fractions: ``0.70``, ``0.05``, ``0.30``, ``0.18``)."""
+        """The composite regime from the four ``pricing_cost_config`` keys (fractions: ``0.70``, ``0.05``, ``0.30``, ``0.18``).
+
+        The values are the keys' JSONB ``value`` as stored: a JSON number (a float from ``json.loads``/``JSONField``
+        is read as the decimal its text meant, like :func:`json_number`), a Decimal, an int or a numeric string. A
+        missing key (``None``) stays missing, so :func:`resolve_gst_regime` refuses the split (``GST_SPLIT_INVALID``).
+        """
+
+        def percent(value: Any, field: str) -> Decimal | None:
+            if value is None:
+                return None
+            if isinstance(value, float):
+                number = json_number(value)
+                if number is None:
+                    raise ValueError(f"{field}: {value!r} is not finite")
+            else:
+                number = to_decimal(value, field=field)
+            return number * HUNDRED
+
         with localcontext(CONTEXT):
             return cls(
                 regime=GstRegimeCode.SOLAR_70_30_COMPOSITE,
-                goods_valuation_pct=to_decimal(gst_goods_share, field="gst_goods_share") * HUNDRED,
-                goods_rate_pct=to_decimal(gst_goods_rate, field="gst_goods_rate") * HUNDRED,
-                service_valuation_pct=to_decimal(gst_services_share, field="gst_services_share") * HUNDRED,
-                service_rate_pct=to_decimal(gst_services_rate, field="gst_services_rate") * HUNDRED,
+                goods_valuation_pct=percent(gst_goods_share, "gst_goods_share"),
+                goods_rate_pct=percent(gst_goods_rate, "gst_goods_rate"),
+                service_valuation_pct=percent(gst_services_share, "gst_services_share"),
+                service_rate_pct=percent(gst_services_rate, "gst_services_rate"),
             )
 
     @classmethod

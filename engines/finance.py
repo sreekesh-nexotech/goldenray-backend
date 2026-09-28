@@ -365,17 +365,30 @@ def finance_basis(gross_quotation_amount: Decimal | int, down_payment_percentage
     )
 
 
+def _available_subsidy(subsidy: Any) -> Decimal:
+    """``subsidyResult.available ? (subsidyResult.totalSubsidy ?? 0) : 0`` for a subsidy result object or its payload
+    (``as_dict()``, the JavaScript result object)."""
+    if subsidy is None:
+        return ZERO
+    if isinstance(subsidy, Mapping):  # a payload: JSON numbers, parsed with or without parse_float=Decimal
+        total = json_number(subsidy.get("totalSubsidy")) if subsidy.get("available") else None
+    else:
+        total = getattr(subsidy, "total_subsidy", None) if getattr(subsidy, "available", False) else None
+        _refuse_floats(total_subsidy=total)
+    return ZERO if total is None else Decimal(total)
+
+
 def resolve_finance(gross_quotation_amount: Decimal | int | None, subsidy: Any, config: FinanceConfig | None, *, calculated_at: str | None = None) -> FinanceResult | FinanceBlocked | None:
     """``resolveFinanceResult``: ``None`` without a configuration or a positive gross; otherwise the EMI on
-    :func:`finance_basis`'s principal. ``subsidy`` is a subsidy result (only an *available* one counts — GIVE_IT_UP
-    and ineligible results count 0) or ``None``."""
+    :func:`finance_basis`'s principal. ``subsidy`` is a subsidy result or its payload (``as_dict()``) — only an
+    *available* one counts (GIVE_IT_UP and ineligible results count 0) — or ``None``. A float gross raises
+    ``TypeError``."""
+    _refuse_floats(gross_quotation_amount=gross_quotation_amount)
     if config is None:
         return None
     if not is_number(gross_quotation_amount) or gross_quotation_amount <= 0:
         return None
-    subsidy_amount = ZERO
-    if subsidy is not None and getattr(subsidy, "available", False):
-        subsidy_amount = getattr(subsidy, "total_subsidy", None) or ZERO
+    subsidy_amount = _available_subsidy(subsidy)
     basis = finance_basis(gross_quotation_amount, config.down_payment_percentage, subsidy_amount)
     inputs = FinanceInputs(
         principal=basis.principal,

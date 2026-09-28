@@ -96,21 +96,14 @@ def finance_config(name: str | None) -> finance.FinanceConfig | None:
     return finance.FinanceConfig.from_json(load("core_finance.json")["header"]["configs"][name])
 
 
-class SubsidyPayload:
-    """A subsidy result read back from its payload (the JavaScript result object): what ``resolve_finance`` reads."""
-
-    def __init__(self, payload: dict[str, Any]):
-        self.available = bool(payload.get("available"))
-        self.total_subsidy = payload.get("totalSubsidy")
-
-
 def run_finance(case: dict[str, Any]) -> dict[str, Any] | None:
     data = case["input"]
     config = finance_config(case["config"])
     if case["fn"] == "resolveFinanceResult":
+        # the JavaScript subsidy result object, exactly as resolveFinanceResult received it (resolve_finance reads the
+        # payload shape as well as a SubsidyResult; test_core_review checks the two agree)
         subsidy_payload = load("core_finance.json")["header"]["subsidyResults"].get(data["subsidy"])
-        subsidy_result = SubsidyPayload(subsidy_payload) if subsidy_payload is not None else None
-        resolved = finance.resolve_finance(data["gross"], subsidy_result, config, calculated_at=FIXED_NOW)
+        resolved = finance.resolve_finance(data["gross"], subsidy_payload, config, calculated_at=FIXED_NOW)
         return resolved.as_dict() if resolved is not None else None
     inputs = finance.FinanceInputs(
         data.get("principal"),
