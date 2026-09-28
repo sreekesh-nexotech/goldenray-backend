@@ -42,11 +42,11 @@ def unregister(module: str, fn: Counter) -> None:
 
 def counters_for(user) -> dict[str, dict[str, int]]:
     """``{module: {counter: value}}`` for every module the user may view. A failing counter is skipped (logged)."""
-    from accounts.services.authz import has_permission
+    from accounts.services.authz import can
 
     result: dict[str, dict[str, int]] = {}
     for module in sorted(_COUNTERS):
-        if not has_permission(user, module, "view"):
+        if not can(user, module, "view"):
             continue
         values: dict[str, int] = {}
         for fn in _COUNTERS[module]:

@@ -25,6 +25,8 @@ def _valid(**overrides):
         "JWT_PUBLIC_KEY": "public",
         "FERNET_KEYS": [Fernet.generate_key().decode()],
         "TRUSTED_PROXIES": ["172.16.0.0/12"],
+        "ACCOUNTS_PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
+        "EMAIL_BACKEND": "django.core.mail.backends.smtp.EmailBackend",
     }
     base.update(overrides)
     return base
@@ -46,6 +48,8 @@ def _valid(**overrides):
         ({"FERNET_KEYS": ["nope"]}, "invalid key"),
         ({"TRUSTED_PROXIES": []}, "TRUSTED_PROXIES is empty"),
         ({"TRUSTED_PROXIES": ["300.0.0.0/8"]}, "TRUSTED_PROXIES is invalid"),
+        ({"ACCOUNTS_PASSWORD_RESET_URL": "http://flarize.com/studio/reset-password"}, "PASSWORD_RESET_URL"),
+        ({"EMAIL_BACKEND": "django.core.mail.backends.console.EmailBackend"}, "EMAIL_BACKEND"),
     ],
 )
 def test_validation_refuses_unsafe_values(overrides, message):
@@ -58,7 +62,7 @@ def test_validation_accepts_a_safe_configuration():
 
 
 def _import_prod(env_overrides, tmp_path):
-    env = {key: value for key, value in os.environ.items() if not key.startswith(("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG"))}
+    env = {key: value for key, value in os.environ.items() if not key.startswith(("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_"))}
     env.update(env_overrides)
     return subprocess.run([sys.executable, "-c", "import flarize.settings.prod"], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=60)
 
@@ -67,7 +71,7 @@ def test_importing_prod_with_defaults_refuses_to_start(tmp_path):
     result = _import_prod({}, tmp_path)
     assert result.returncode != 0
     assert "Refusing to start with unsafe production settings" in result.stderr
-    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES"]:
+    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES", "PASSWORD_RESET_URL"]:
         assert fragment in result.stderr
 
 
@@ -83,6 +87,7 @@ def test_importing_prod_with_a_complete_environment_succeeds(tmp_path):
         "JWT_PUBLIC_KEY_PATH": str(public),
         "FERNET_KEYS": Fernet.generate_key().decode(),
         "TRUSTED_PROXIES": "172.16.0.0/12",
+        "PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
     }
     result = _import_prod(env, tmp_path)
     assert result.returncode == 0, result.stderr

@@ -1,3 +1,4 @@
+from django.contrib.auth import password_validation
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.db.models import Q
@@ -12,12 +13,15 @@ class UserManager(BaseUserManager):
         return BaseQuerySet(self.model, using=self._db).filter(deleted_at__isnull=True)
 
     def create_user(self, email: str, password: str | None = None, *, role, **extra_fields):
+        """Create a user. A raw ``password`` must pass ``AUTH_PASSWORD_VALIDATORS`` (the policy applies on every path
+        that sets a password); without one the password is unusable and the account needs a set-password link."""
         if not email:
             raise ValueError("Users must have an e-mail address.")
         if role is None:
             raise ValueError("Users must have a role.")
         user = self.model(email=self.normalize_email(email).strip(), role=role, **extra_fields)
         if password:
+            password_validation.validate_password(password, user)
             user.set_password(password)
         else:
             user.set_unusable_password()

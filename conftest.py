@@ -3,7 +3,8 @@
 * ``api_client`` — an unauthenticated DRF ``APIClient``;
 * ``make_user(grants=None, scopes=None, role=None, **fields)`` — a live, active user whose role holds ``grants``
   (``{module: [actions]}`` or ``{module: "*"}``) and ``scopes``;
-* ``auth_client(user)`` — an ``APIClient`` carrying a real RS256 access token for ``user``;
+* ``auth_client(user)`` — an ``APIClient`` carrying a real RS256 access token for ``user`` bound to a fresh session
+  (``client.tokens`` holds the issued pair: ``access``, ``refresh``, ``session``);
 * ``drain_outbox`` — runs the outbox drain synchronously and returns the outcome counts.
 
 The cache is cleared around every test (LocMem in tests, so concurrent runs never share state).
@@ -12,7 +13,6 @@ The cache is cleared around every test (LocMem in tests, so concurrent runs neve
 import pytest
 from django.core.cache import cache
 from rest_framework.test import APIClient
-from rest_framework_simplejwt.tokens import AccessToken
 
 
 @pytest.fixture(autouse=True)
@@ -44,10 +44,13 @@ def make_user(db):
 
 
 @pytest.fixture
-def auth_client():
+def auth_client(db):
+    from accounts.services.sessions import start_session
+
     def _auth_client(user):
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION=f"Bearer {AccessToken.for_user(user)}")
+        client.tokens = start_session(user, ip="127.0.0.1", user_agent="pytest")
+        client.credentials(HTTP_AUTHORIZATION=f"Bearer {client.tokens.access}")
         return client
 
     return _auth_client

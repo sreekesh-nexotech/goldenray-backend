@@ -110,7 +110,11 @@ def _domain_response(exc: DomainError) -> Response:
     codes = [exc.code]
     if exc.errors:
         codes += [code for code in harvest_codes(exc.errors, default=None) if code not in codes]
-    return Response(error_payload(exc.code, exc.message, errors, codes), status=exc.status)
+    headers = {}
+    retry_after = getattr(exc, "retry_after", None)  # e.g. accounts.errors.LoginLocked (429)
+    if retry_after is not None:
+        headers["Retry-After"] = str(max(1, math.ceil(retry_after)))
+    return Response(error_payload(exc.code, exc.message, errors, codes), status=exc.status, headers=headers)
 
 
 def _api_exception_response(exc: drf_exceptions.APIException) -> Response:
@@ -122,9 +126,16 @@ def _api_exception_response(exc: drf_exceptions.APIException) -> Response:
     for exc_class, code, default_message in _API_EXCEPTION_CODES:
         if isinstance(exc, exc_class):
             message = str(exc.detail) if isinstance(exc.detail, str) else default_message
+            codes = [code]
+            if isinstance(exc.detail, Mapping) and isinstance(exc.detail.get("detail"), str):
+                # SimpleJWT exceptions carry {"detail", "code"}: surface the reason (e.g. `session_revoked`).
+                message = str(exc.detail["detail"])
+                detail_code = exc.detail.get("code")
+                if isinstance(detail_code, str) and detail_code and detail_code != code:
+                    codes.append(detail_code)
             if isinstance(exc, drf_exceptions.Throttled):
                 message = default_message
-            return Response(error_payload(code, message), status=exc.status_code, headers=headers)
+            return Response(error_payload(code, message, error_codes=codes), status=exc.status_code, headers=headers)
     if isinstance(exc.detail, str):
         code, message = getattr(exc.detail, "code", None) or exc.default_code, str(exc.detail)
     else:

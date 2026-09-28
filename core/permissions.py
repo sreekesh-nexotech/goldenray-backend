@@ -56,12 +56,12 @@ class HasModulePermission(BasePermission):
             return False
         module, action = needed
         from accounts.registry import is_allowed
-        from accounts.services.authz import has_permission
+        from accounts.services.authz import can
 
         if not is_allowed(module, action):
             logger.error("view maps to an unknown registry permission", extra={"view": view.__class__.__name__, "registry_module": module, "registry_action": action})
             return False
-        return has_permission(user, module, action)
+        return can(user, module, action)
 
 
 class IsServicePrincipal(BasePermission):

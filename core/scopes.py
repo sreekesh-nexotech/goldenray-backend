@@ -50,9 +50,9 @@ def registered_filter(module: str, scope: str) -> ScopeFilter | None:
 def resolve_scope(user, module: str) -> str | None:
     if user is None or not getattr(user, "is_authenticated", False):
         return None
-    from accounts.services.authz import get_scope
+    from accounts.services.authz import scope_for
 
-    return get_scope(user, module)
+    return scope_for(user, module)
 
 
 def apply(queryset: QuerySet, user, module: str) -> QuerySet:

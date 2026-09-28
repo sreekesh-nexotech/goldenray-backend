@@ -1,6 +1,9 @@
 # Runtime state (dev RSA keys, dev Fernet key, local media)
 var/
 
+# Local Redis snapshots (a dev redis-server started in the repo writes dump.rdb here) — data dumps never go to git
+*.rdb
+
 # Environment files never go to git
 .env*
 !.env.example

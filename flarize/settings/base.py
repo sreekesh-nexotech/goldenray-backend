@@ -8,6 +8,7 @@ start on unsafe values.
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from decouple import Csv, config
 from kombu import Queue
 
@@ -81,6 +82,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "core.middleware.RequestIdMiddleware",
+    # Opens the audit context (request id, trusted client IP); the authentication classes attach the actor.
+    "audit.middleware.AuditMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -116,6 +119,9 @@ DATABASES = {
     }
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# The role the application connects as when it differs from the migration/owner role (prod). The audit migration and
+# `ensure_audit_partitions` revoke UPDATE/DELETE/TRUNCATE on audit_log from it (docs/ops/audit-log.md). Empty = one role.
+DB_APP_ROLE = config("DB_APP_ROLE", default="")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Auth
@@ -184,6 +190,9 @@ THROTTLE_RATES = {
     "public_write": "20/min",
     "otp": "5/10min",
     "login": "10/15min",
+    # auth/refresh/ and auth/logout/ (DV-8): every active Studio user refreshes every 15 minutes, often from one
+    # office NAT or the BFF host, so they cannot share the 10/15min login budget.
+    "token_refresh": "300/15min",
     "staff": "1200/min",
     "agent": "120/min",
     "iclock": "300/min",
@@ -241,6 +250,42 @@ SIMPLE_JWT = {
 }
 
 # --------------------------------------------------------------------------------------------------------------------
+# Accounts: lockout, sessions, password reset (accounts.services)
+# --------------------------------------------------------------------------------------------------------------------
+# DB-counted lockout (standard §3.1): failed logins per e-mail and per client IP within the window. Offices behind one
+# NAT address share the per-IP budget; raise ACCOUNTS_LOGIN_MAX_FAILURES_PER_IP there if needed.
+ACCOUNTS_LOGIN_LOCKOUT_WINDOW = timedelta(minutes=config("ACCOUNTS_LOGIN_LOCKOUT_MINUTES", default=15, cast=int))
+ACCOUNTS_LOGIN_MAX_FAILURES_PER_EMAIL = config("ACCOUNTS_LOGIN_MAX_FAILURES_PER_EMAIL", default=5, cast=int)
+ACCOUNTS_LOGIN_MAX_FAILURES_PER_IP = config("ACCOUNTS_LOGIN_MAX_FAILURES_PER_IP", default=5, cast=int)
+ACCOUNTS_LOGIN_ATTEMPT_RETENTION = timedelta(days=90)
+# A session (refresh-token family) slides with every refresh but never outlives this absolute cap.
+ACCOUNTS_SESSION_MAX_AGE = timedelta(days=config("ACCOUNTS_SESSION_MAX_AGE_DAYS", default=30, cast=int))
+# Session liveness and grants are cached briefly; revocation bumps a version key, so it takes effect immediately.
+ACCOUNTS_SESSION_LIVENESS_CACHE_SECONDS = 30
+ACCOUNTS_GRANTS_CACHE_SECONDS = 300
+# A superseded refresh token replayed within this window (a racing tab/BFF) is refused without ending the session;
+# after it, the replay is treated as theft and the whole session is revoked.
+ACCOUNTS_REFRESH_REUSE_GRACE_SECONDS = 30
+ACCOUNTS_PASSWORD_RESET_TTL = timedelta(hours=1)
+ACCOUNTS_INVITE_TTL = timedelta(hours=72)
+ACCOUNTS_BOOTSTRAP_TTL = timedelta(hours=24)
+ACCOUNTS_RESET_REQUESTS_PER_HOUR = 3
+# Studio page that completes a reset; the token travels in the URL fragment (never sent to a server or logged).
+ACCOUNTS_PASSWORD_RESET_URL = config("PASSWORD_RESET_URL", default="http://localhost:3000/studio/reset-password")
+
+# --------------------------------------------------------------------------------------------------------------------
+# E-mail (core.notifications). SMTP in staging/prod, console in dev, in-memory in tests.
+# --------------------------------------------------------------------------------------------------------------------
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = config("EMAIL_HOST", default="localhost")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="Flarize <no-reply@flarize.com>")
+
+# --------------------------------------------------------------------------------------------------------------------
 # Encryption at rest (Fernet; fail-closed — see flarize.crypto)
 # --------------------------------------------------------------------------------------------------------------------
 FERNET_KEYS = config("FERNET_KEYS", default="", cast=Csv())
@@ -294,6 +339,7 @@ CELERY_TASK_ROUTES = {
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BEAT_SCHEDULE = {
     "core.drain_outbox": {"task": "core.tasks.drain_outbox", "schedule": 5.0},
+    "accounts.purge_auth_records": {"task": "accounts.tasks.purge_auth_records", "schedule": crontab(hour=3, minute=17)},
 }
 
 # --------------------------------------------------------------------------------------------------------------------

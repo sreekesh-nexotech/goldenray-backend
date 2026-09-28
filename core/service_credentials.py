@@ -31,6 +31,13 @@ LAST_USED_RESOLUTION = timedelta(minutes=1)
 _DUMMY_HASH = hashlib.sha256(b"flarize-service-credential-dummy").hexdigest()
 
 
+def _audit(action: str, credential: ServiceCredential, user) -> None:
+    """Audit row for a credential change. Only the public prefix is recorded — never the token or its hash."""
+    from audit.services import record
+
+    record(action, obj=credential, actor=user, actor_kind=None if user is not None else "SYSTEM", after={"kind": credential.kind, "name": credential.name, "prefix": credential.token_prefix})
+
+
 def hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
@@ -71,6 +78,7 @@ def issue(kind: str, name: str, bound_object=None, *, user=None) -> tuple[Servic
                 credential.save()
         except IntegrityError:
             continue  # prefix collision (2^48 space) — draw again
+        _audit("core.service_credential_issued", credential, user)
         return credential, token
     raise Conflict("credential_prefix_exhausted", "Could not allocate a unique token prefix; try again.")
 
@@ -89,6 +97,7 @@ def rotate(credential: ServiceCredential, *, user=None, expected_version=None) -
                 credential.versioned_update(user, token_prefix=prefix, token_hash=hash_token(token), issued_at=timezone.now(), last_used_at=None)
         except IntegrityError:
             continue
+        _audit("core.service_credential_rotated", credential, user)
         return credential, token
     raise Conflict("credential_prefix_exhausted", "Could not allocate a unique token prefix; try again.")
 
@@ -100,6 +109,7 @@ def revoke(credential: ServiceCredential, *, user=None, expected_version=None) -
     if credential.is_revoked:
         return credential
     credential.versioned_update(user, revoked_at=timezone.now())
+    _audit("core.service_credential_revoked", credential, user)
     return credential
 
 
@@ -169,7 +179,11 @@ class ServiceTokenAuthentication(authentication.BaseAuthentication):
         if credential is None:
             raise exceptions.AuthenticationFailed("Invalid or revoked service token.")
         touch_last_used(credential)
-        return ServicePrincipal(credential), credential
+        principal = ServicePrincipal(credential)
+        from audit import context as audit_context
+
+        audit_context.set_actor(principal, credential.kind)
+        return principal, credential
 
     def authenticate_header(self, request):
         return f'{self.keyword} realm="api"'

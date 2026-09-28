@@ -8,3 +8,4 @@ class AccountsConfig(AppConfig):
 
     def ready(self):
         from accounts import schema  # noqa: F401 - OpenAPI auth extension
+        from accounts.services import dashboard  # noqa: F401 - registers the users dashboard counters

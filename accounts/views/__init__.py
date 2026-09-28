@@ -1,1 +1,1 @@
-"""Accounts views (auth, users, roles) are added by the accounts work package."""
+"""Accounts views (thin): ``auth/`` self-service, ``users/`` and ``roles/`` administration."""

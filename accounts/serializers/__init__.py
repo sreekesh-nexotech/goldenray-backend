@@ -1,1 +1,1 @@
-"""Accounts serializers (auth, users, roles) are added by the accounts work package."""
+"""Accounts serializers (HTTP shape only): auth, users, roles."""

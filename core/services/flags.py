@@ -69,4 +69,7 @@ def set_flag(key: str, *, enabled: bool, user, note: str | None = None, expected
     bump(FLAGS_CACHE_NAMESPACE)
     if before != enabled:
         emit("core.flag_changed", {"key": key, "enabled": enabled, "previous": before}, aggregate_type="core.feature_flag", aggregate_uid=row.uid)
+    from audit.services import record
+
+    record("core.flag_set", obj=row, actor=user, before={"enabled": before}, after={"enabled": enabled, "note": row.note}, note=note or "")
     return row

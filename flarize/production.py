@@ -9,6 +9,15 @@ from django.core.exceptions import ImproperlyConfigured
 from flarize.client_ip import parse_networks
 from flarize.keys import valid_fernet_key
 
+NON_DELIVERING_EMAIL_BACKENDS = frozenset(
+    {
+        "django.core.mail.backends.console.EmailBackend",
+        "django.core.mail.backends.locmem.EmailBackend",
+        "django.core.mail.backends.dummy.EmailBackend",
+        "django.core.mail.backends.filebased.EmailBackend",
+    }
+)
+
 
 def validate_production_settings(settings: Mapping) -> None:
     """Raise ImproperlyConfigured on any unsafe production value (PLAN §5.3)."""
@@ -35,5 +44,9 @@ def validate_production_settings(settings: Mapping) -> None:
             parse_networks(tuple(proxies))
         except ValueError as exc:
             problems.append(f"TRUSTED_PROXIES is invalid: {exc}")
+    if not str(settings.get("ACCOUNTS_PASSWORD_RESET_URL", "")).startswith("https://"):
+        problems.append("PASSWORD_RESET_URL must be an https:// URL (it carries one-time reset tokens)")
+    if settings.get("EMAIL_BACKEND", "") in NON_DELIVERING_EMAIL_BACKENDS:
+        problems.append("EMAIL_BACKEND does not deliver mail (console/locmem/dummy/filebased); password resets would be lost")
     if problems:
         raise ImproperlyConfigured("Refusing to start with unsafe production settings: " + "; ".join(problems))

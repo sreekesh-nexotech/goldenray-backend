@@ -43,6 +43,7 @@ def test_production_rates_match_the_plan():
         "public_write": "20/min",
         "otp": "5/10min",
         "login": "10/15min",
+        "token_refresh": "300/15min",  # DV-8
         "staff": "1200/min",
         "agent": "120/min",
         "iclock": "300/min",
