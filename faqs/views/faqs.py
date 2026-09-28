@@ -107,7 +107,7 @@ class FaqViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateMod
         return Response(delivery.preview(self.get_object()))
 
     @extend_schema(request=FaqReorderSerializer, responses={200: FaqListSerializer(many=True), **ERRORS}, description="Renumber one page/section atomically; unknown uids are ignored.")
-    @action(detail=False, methods=["post"])
+    @action(detail=False, methods=["post"], pagination_class=None, filter_backends=[])  # a plain array, not a filtered list
     def reorder(self, request, *args, **kwargs):
         body = FaqReorderSerializer(data=request.data)
         body.is_valid(raise_exception=True)

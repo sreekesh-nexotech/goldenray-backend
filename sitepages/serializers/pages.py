@@ -162,12 +162,12 @@ class PageActionSerializer(ExpectedVersionMixin, serializers.Serializer):
 
 
 class TextSlotUpdateSerializer(ExpectedVersionMixin, serializers.Serializer):
-    value = serializers.CharField(allow_blank=True, trim_whitespace=False, max_length=20000, help_text="Empty = the page keeps its built-in text.")
+    value = serializers.CharField(allow_blank=True, max_length=20000, help_text="Trimmed; empty = the page keeps its built-in text.")
 
 
 class ImageSlotUpdateSerializer(ExpectedVersionMixin, serializers.Serializer):
     asset = _public_asset_field("A public image from the media library (uid), or null to keep the built-in image.")
-    external_url = serializers.URLField(max_length=1000, required=False, allow_blank=True)
+    external_url = serializers.URLField(max_length=1000, required=False, allow_blank=True, help_text="An http(s) image URL, used when no asset is chosen; empty clears it.")
     alt = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
 

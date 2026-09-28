@@ -94,3 +94,25 @@ def test_bounded(api_client, monkeypatch):
     PublishedFaqFactory.create_batch(3, page=page)
     monkeypatch.setattr(delivery, "PUBLIC_LIMIT", 2)
     assert api_client.get(URL, {"route": "/many"}).json()["meta"]["count"] == 2
+
+
+@pytest.mark.parametrize(
+    "params,field",
+    [
+        ({"route": "/subsidy-test\x00"}, "route"),
+        ({"page": "/x\x00"}, "page"),
+        ({"route": "/subsidy-test", "section": "a\x00"}, "section"),
+        ({"route": "/subsidy-test", "category": "a\x00"}, "category"),
+    ],
+)
+def test_malformed_query_values_are_400_not_500(api_client, page, params, field):
+    """Anonymous input the database cannot compare (a NUL byte) is a validation error, never a server error (§17 #1)."""
+    response = api_client.get(URL, params)
+    assert response.status_code == 400 and response.json()["code"] == "validation_error" and field in response.json()["errors"]
+
+
+def test_blank_section_and_padded_values_keep_their_exact_meaning(api_client, page):
+    """The query is validated without trimming: ``section=`` is the unnamed section, a padded route is another route."""
+    assert [row["question"] for row in api_client.get(URL, {"route": "/subsidy-test", "section": ""}).json()["data"]] == ["First?", "Second?", "Blank answer?"]
+    assert api_client.get(URL, {"route": " /subsidy-test"}).status_code == 404
+    assert api_client.get(URL, {"route": "", "page": "/subsidy-test"}).json()["meta"]["page"]["route"] == "/subsidy-test"  # blank route: the alias applies

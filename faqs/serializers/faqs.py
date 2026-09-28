@@ -136,7 +136,7 @@ def _page_field(**kwargs):
 
 class _FaqWriteSerializer(serializers.Serializer):
     question = serializers.CharField(max_length=500)
-    answer = serializers.CharField(required=False, allow_blank=True, trim_whitespace=False, max_length=20000, help_text="Plain text or light HTML; may be blank in a draft.")
+    answer = serializers.CharField(required=False, allow_blank=True, max_length=20000, help_text="Plain text or light HTML (trimmed); may be blank in a draft.")
     page = _page_field(allow_null=True, required=False)
     section = serializers.CharField(max_length=80, required=False, allow_blank=True)
     category = serializers.SlugRelatedField(slug_field="uid", queryset=FaqCategory.objects.all(), allow_null=True, required=False, help_text="Category uid.")
@@ -216,3 +216,13 @@ class PublicFaqMetaSerializer(serializers.Serializer):
 class PublicFaqListSerializer(serializers.Serializer):
     data = PublicFaqSerializer(many=True)
     meta = PublicFaqMetaSerializer()
+
+
+class PublicFaqQuerySerializer(serializers.Serializer):
+    """Query of the public ``faqs/``: validated (no NUL bytes, bounded) but never trimmed — values match exactly as in the
+    legacy ``/api/faqs`` (``section=`` present and empty selects the unnamed section)."""
+
+    route = serializers.CharField(required=False, allow_blank=True, trim_whitespace=False, max_length=255)
+    page = serializers.CharField(required=False, allow_blank=True, trim_whitespace=False, max_length=255)
+    section = serializers.CharField(required=False, allow_blank=True, trim_whitespace=False, max_length=80)
+    category = serializers.CharField(required=False, allow_blank=True, trim_whitespace=False, max_length=120)

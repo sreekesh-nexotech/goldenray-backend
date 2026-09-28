@@ -2,7 +2,8 @@
 # deploy/release.sh <git-sha> — zero-downtime release of the Flarize backend (PLAN §5.5).
 #
 #   1. pull the images built by CI for <git-sha>
-#   2. migrate (expand phase only) and extend the audit_log partitions — one-off, as the owner role
+#   2. migrate (expand phase only), extend the audit_log partitions and seed the maintained-pages registry — one-off,
+#      as the owner role
 #   3. rolling restart: api-a, wait until healthy, then api-b (nginx keeps serving from the other replica)
 #   4. restart worker-default, worker-documents and beat (warm shutdown: running tasks finish first)
 #   5. smoke tests: /healthz, one public GET, one authenticated GET (login → auth/me → logout)
@@ -85,6 +86,8 @@ STEP="migrate"
 log "migrating (expand phase) as the owner role"
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py migrate --noinput
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py ensure_audit_partitions --months 3
+# Register the website's maintained pages/slots the release's code knows about (additive, idempotent; sitepages).
+"${COMPOSE[@]}" --profile ops run --rm migrate python manage.py seed_pages
 
 for service in api-a api-b; do
   STEP="rolling restart of ${service}"

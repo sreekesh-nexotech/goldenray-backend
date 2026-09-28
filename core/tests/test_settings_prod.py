@@ -31,6 +31,7 @@ def _valid(**overrides):
         "DOCUMENTS_RENDERER": "playwright",
         "PUBLIC_MEDIA_ROOT": "/srv/flarize/media/public",
         "PRIVATE_MEDIA_ROOT": "/srv/flarize/media/private",
+        "FRONTEND_BASE_URL": "https://flarize.com",
     }
     base.update(overrides)
     return base
@@ -60,6 +61,9 @@ def _valid(**overrides):
         ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public/private"}, "PRIVATE_MEDIA_ROOT"),
         ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public"}, "PRIVATE_MEDIA_ROOT"),
         ({"PRIVATE_MEDIA_ROOT": ""}, "PRIVATE_MEDIA_ROOT"),
+        ({"FRONTEND_BASE_URL": "http://localhost:3000"}, "FRONTEND_BASE_URL"),
+        ({"FRONTEND_BASE_URL": ""}, "FRONTEND_BASE_URL"),
+        ({"FRONTEND_BASE_URL": "https://localhost:3000"}, "FRONTEND_BASE_URL"),
     ],
 )
 def test_validation_refuses_unsafe_values(overrides, message):
@@ -75,7 +79,9 @@ def _import_prod(env_overrides, tmp_path):
     env = {
         key: value
         for key, value in os.environ.items()
-        if not key.startswith(("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_", "MEDIA_", "PUBLIC_MEDIA", "PRIVATE_MEDIA", "DOCUMENTS_"))
+        if not key.startswith(
+            ("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_", "MEDIA_", "PUBLIC_MEDIA", "PRIVATE_MEDIA", "DOCUMENTS_", "FRONTEND_BASE_URL")
+        )
     }
     env.update(env_overrides)
     return subprocess.run([sys.executable, "-c", "import flarize.settings.prod"], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=60)
@@ -85,7 +91,7 @@ def test_importing_prod_with_defaults_refuses_to_start(tmp_path):
     result = _import_prod({}, tmp_path)
     assert result.returncode != 0
     assert "Refusing to start with unsafe production settings" in result.stderr
-    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES", "PASSWORD_RESET_URL"]:
+    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES", "PASSWORD_RESET_URL", "FRONTEND_BASE_URL"]:
         assert fragment in result.stderr
 
 
@@ -102,6 +108,7 @@ def test_importing_prod_with_a_complete_environment_succeeds(tmp_path):
         "FERNET_KEYS": Fernet.generate_key().decode(),
         "TRUSTED_PROXIES": "172.16.0.0/12",
         "PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
+        "FRONTEND_BASE_URL": "https://flarize.com/",
     }
     result = _import_prod(env, tmp_path)
     assert result.returncode == 0, result.stderr

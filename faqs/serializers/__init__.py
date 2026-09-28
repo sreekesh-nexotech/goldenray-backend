@@ -10,6 +10,7 @@ from faqs.serializers.faqs import (
     FaqSerializer,
     FaqUpdateSerializer,
     PublicFaqListSerializer,
+    PublicFaqQuerySerializer,
 )
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "FaqSerializer",
     "FaqUpdateSerializer",
     "PublicFaqListSerializer",
+    "PublicFaqQuerySerializer",
 ]

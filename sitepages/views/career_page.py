@@ -1,8 +1,9 @@
 """``career-page/`` — the career page (page slug ``career``) maintained through the ``career_page`` grant.
 
-The HR role holds ``career_page`` and not ``pages`` (PLAN §3.2), so the same maintenance surface is mounted a second
-time, pinned to the one page: ``career_page.view`` list/detail/``seo/``/``preview/`` · ``career_page.edit`` slots and
-SEO · ``career_page.publish`` ``publish/``, ``unpublish/``. No other page is reachable here.
+``career_page`` is a registry module of its own (PLAN §3.2; the migrated CMS Career/HR role holds it without ``pages``),
+so the same maintenance surface is mounted a second time, pinned to the one page: ``career_page.view``
+list/detail/``seo/``/``preview/`` · ``career_page.edit`` slots and SEO · ``career_page.publish`` ``publish/``,
+``unpublish/``. No other page is reachable here.
 """
 
 from __future__ import annotations

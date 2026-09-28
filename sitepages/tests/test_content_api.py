@@ -3,6 +3,7 @@
 import pytest
 
 from audit.models import AuditLog
+from core.errors import DomainError
 from core.models import OutboxEvent
 from media.tests.factories import MediaAssetFactory
 from sitepages.models import PageImageSlot, PageSeo, PageTextSlot
@@ -75,6 +76,24 @@ class TestTextSlots:
         PageTextSlotFactory(page=slot.page, key="gone").soft_delete()
         assert client.patch(slot_url(slot.page, "text", "gone"), {"value": "x"}, format="json").status_code == 404
 
+    def test_value_is_trimmed_like_the_legacy_editor(self, client, api_client):
+        """Legacy CMS parity: the value is trimmed before the cap/kind checks, and a blank value clears the slot."""
+        page = PageFactory(slug="trim-test", route="/trim-test")
+        PageTextSlotFactory(page=page, key="headline", max_length=10, value="Old")
+        PageTextSlotFactory(page=page, key="phone", kind="PHONE", max_length=None)
+        padded = client.patch(slot_url(page, "text", "headline"), {"value": "  Join us!  \n"}, format="json")
+        assert padded.status_code == 200 and padded.json()["value"] == "Join us!"  # 8 characters once trimmed
+        assert client.patch(slot_url(page, "text", "phone"), {"value": " +91 62829 22988 "}, format="json").json()["value"] == "+91 62829 22988"
+        blank = client.patch(slot_url(page, "text", "headline"), {"value": "   \n"}, format="json")
+        assert blank.status_code == 200 and blank.json()["value"] == ""
+        assert api_client.get("/api/public/v1/pages/trim-test/").json()["data"]["text"] == {"phone": "+91 62829 22988"}  # shipped headline applies again
+
+    def test_the_service_trims_too(self):
+        from sitepages.services.content import update_text_slot
+
+        slot = PageTextSlotFactory(key="headline", value="Old")
+        assert update_text_slot(slot.page, "headline", user=None, data={"value": "  \t "}).value == ""
+
     def test_missing_value_is_a_validation_error(self, client):
         slot = PageTextSlotFactory(key="headline")
         response = client.patch(slot_url(slot.page, "text", "headline"), {}, format="json")
@@ -99,6 +118,14 @@ class TestImageSlots:
         body = client.patch(slot_url(slot.page, "image", "hero"), {"external_url": "https://golden-ray.b-cdn.net/x.png"}, format="json").json()
         assert body["external_url"] == "https://golden-ray.b-cdn.net/x.png"
         assert client.patch(slot_url(slot.page, "image", "hero"), {"external_url": "ftp://x"}, format="json").status_code == 400
+        # A well-formed URL in a scheme the website cannot load as an <img> is refused too (not only a malformed one).
+        refused = client.patch(slot_url(slot.page, "image", "hero"), {"external_url": "ftp://files.example.com/x.png"}, format="json")
+        assert refused.status_code == 400 and refused.json()["errors"]["external_url"]
+        from sitepages.services.content import update_image_slot
+
+        with pytest.raises(DomainError) as exc:
+            update_image_slot(slot.page, "hero", user=None, data={"external_url": "ftps://files.example.com/x.png"})
+        assert set(exc.value.errors) == {"external_url"}
 
     @pytest.mark.parametrize(
         "asset_kwargs,message",

@@ -45,9 +45,11 @@ FAQs, PUT) are denied by the default-deny permission (403) before method dispatc
 ## Decisions not spelled out in the PLAN
 
 1. **Pages are a registry, not content.** No create, no delete, no title/route/status PATCH: a page exists because the
-   Next.js route exists (`seed_pages`, run after `migrate` on every release, or the importer). Maintainers change slot
-   values, SEO, list order and the lifecycle. Seeding is a command, not a data migration, so test databases hold no
-   seeded rows (CMS_BLUEPRINT §17 #17).
+   Next.js route exists (`seed_pages`, run by `deploy/release.sh` after `migrate` on every release, or the importer).
+   Maintainers change slot values, SEO, list order and the lifecycle. Seeding is a command, not a data migration, so
+   test databases hold no seeded rows (CMS_BLUEPRINT §17 #17). A registry route whose slug another live page already
+   holds is skipped and reported (`conflicts`, a warning line) instead of aborting the release; slugs are cut to the
+   column's 80 characters.
 2. **`route` stays the key the website speaks; `slug` is the new public identifier.** Slug = the route's path
    (`/` → `home`, `/a/b` → `a-b`; `/career` → `career`, the career page per PLAN §7.2 #8). Both are unique among live
    pages. The public payload is served by slug and by route (the website's current query form).
@@ -68,10 +70,13 @@ FAQs, PUT) are denied by the default-deny permission (403) before method dispatc
    `verified_by`/`verified_at` on the current content; every content change clears the stamp; archived records cannot
    be verified. It gates nothing (publishing does not require it); the Studio lists unverified content
    (`?verified=false`, dashboard `unverified`).
-7. **Text-slot rules are enforced on every edit**: the cap (`This field holds up to N characters — you have M.`, the
-   legacy message), and by kind — URL (http(s) or a site path), EMAIL, PHONE, single-line SHORT_TEXT. An empty value
-   always passes (the page falls back to its shipped text). Image slots take only live **public IMAGE** assets with a
-   CDN URL (or an `external_url`); every asset FK is registered with `media.usage`, so a used image cannot be deleted.
+7. **Text-slot rules are enforced on every edit**: the value is trimmed first (as the legacy editor's serializer did —
+   so a whitespace-only value clears the slot instead of publishing an invisible override), then the cap (`This field
+   holds up to N characters — you have M.`, the legacy message, counted on the trimmed text), and by kind — URL
+   (http(s) or a site path), EMAIL, PHONE, single-line SHORT_TEXT. An empty value always passes (the page falls back
+   to its shipped text). FAQ question, answer and section are trimmed the same way. Image slots take only live
+   **public IMAGE** assets with a CDN URL (or an http(s) `external_url`); every asset FK is registered with
+   `media.usage`, so a used image cannot be deleted.
 8. **Public payloads are the legacy contracts, byte for byte** (parity below): `{"data": {route, name, images, text,
    seo}}` and `{"data": [{id, question, answer, section, category, order}], "meta": {page, count, schema}}`, with one
    change: the FAQ `id` is the uid (integer ids never leave the service layer; the website uses it as a list key).
@@ -104,8 +109,9 @@ FAQs, PUT) are denied by the default-deny permission (403) before method dispatc
     (legacy remediation text); names and slugs are unique among live categories (409 `category_name_taken` /
     `category_slug_taken`); a blank slug is derived from the name on create; list counts are annotated (§17 #25).
 13. **Reorder** keeps the legacy semantics (uids outside the page/section are ignored and take no position; members
-    left out follow in their previous order) and additionally refuses duplicate uids (400). Moving a FAQ to another
-    page/section without a `sort_order` puts it at the end of the new list.
+    left out follow in their previous order) and additionally refuses duplicate uids (400); it answers a plain array of
+    list rows (no pagination envelope). Moving a FAQ to another page/section without a `sort_order` puts it at the end
+    of the new list; an explicit `sort_order` sent with the move is kept.
 14. **Dashboard**: `pages` → `published`, `draft`, `unverified`; `faqs` → `published`, `draft`, `archived`.
 
 ## Legacy mapping (every legacy column has a home)
@@ -186,8 +192,9 @@ and assert equality with the `*_after_writes` golden files. Zero differences.
 
 ## Hand-over notes
 
-* **Deploy**: run `manage.py seed_pages` after `migrate` (idempotent). Set `FRONTEND_BASE_URL` (https origin of the
-  website) in every environment.
+* **Deploy**: `deploy/release.sh` runs `manage.py seed_pages` after `migrate` (idempotent; conflicts are printed).
+  Set `FRONTEND_BASE_URL` (https origin of the website) in every environment: `prod.py`/`staging.py` refuse to start
+  when it is not an https origin (the localhost default would be published in JSON-LD and previews).
 * **Legacy shim** (`/legacy/api/page-content`, `/legacy/api/faqs`): call `sitepages.services.delivery.page_content(
   delivery.published_page(route=…))` and `faqs.services.delivery.faq_list(route, section=…)`; the legacy FAQ `id`
   was an integer — map uids back through `core_legacy_map` if the old frontend needs numbers (it only keys lists on it).
@@ -195,3 +202,19 @@ and assert equality with the `*_after_writes` golden files. Zero differences.
   overview can read `PageSeo`/`Faq` through `SeoFields.seo_status()`.
 * **migrations_tools** (`import_cms`): read the CMS tables and pass rows to the importers above after the user and
   media imports; the verification step can compare the public payloads exactly as the parity tests do.
+
+## Review fixes (adversarial review of the package)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| R1 | Text-slot values and FAQ answers were stored untrimmed (`trim_whitespace=False`); the legacy editor trimmed them. A whitespace-only value was published as an invisible override (`text: {"k": "   "}`) instead of restoring the shipped copy, and a padded value within the cap was refused | Trim in the serializers and in the services (`update_text_slot`, FAQ `_normalise`); verified against the legacy serializers on a private copy | `sitepages/tests/test_content_api.py::TestTextSlots::test_value_is_trimmed_like_the_legacy_editor`, `…::test_the_service_trims_too`, `faqs/tests/test_faqs_api.py::TestCreateAndEdit::test_answer_is_trimmed_like_the_legacy_editor` |
+| R2 | `PATCH faqs/<uid>/` moving a FAQ with an explicit `sort_order` equal to its old position dropped it and appended the FAQ at the end of the new list | The explicit position from the request wins; only a move without one is appended | `faqs/tests/test_faqs_api.py::TestCreateAndEdit::test_moving_with_an_explicit_sort_order_keeps_it` |
+| R3 | Image-slot `external_url` accepted any URLField scheme (`ftp://…`, `ftps://…`) and published it as an image URL | The service refuses anything but http(s) (400 `validation_error` on `external_url`) | `sitepages/tests/test_content_api.py::TestImageSlots::test_external_url` |
+| R4 | OpenAPI documented `POST faqs/reorder/` as a paginated, filterable list (`PaginatedFaqListList`, `page`/`status`/… parameters); it answers a plain array | `pagination_class=None`, `filter_backends=[]` on the action | `faqs/tests/test_workflow_api.py::test_reorder_is_documented_as_a_plain_list` |
+| R5 | The importer validated routes and slot keys with `re.match` (`$` matches before a trailing newline): such a row passed the check, hit the table CHECK and aborted the whole import with `IntegrityError` instead of being listed | `re.fullmatch` | `sitepages/tests/test_legacy_import.py::test_values_the_database_would_refuse_are_listed_not_raised` |
+| R6 | A route longer than 80 characters derived a slug longer than the column (import aborted with `DataError`); `seed_pages` crashed with `IntegrityError` when a registry route's slug was held by another live page (e.g. an imported `/careers`, which `SLUG_OVERRIDES` maps to `career`) | Slugs are cut to 80 characters; the registry skips and reports such routes (`conflicts`) | `sitepages/tests/test_registry_sitemap.py::TestRegistry::test_a_slug_held_by_another_page_is_reported_not_fatal`, `…::test_slug_for_route`, `…::test_a_long_route_is_imported_with_a_cut_slug` |
+| R7 | `FRONTEND_BASE_URL` defaulted to `http://localhost:3000` with no production guard: a forgotten variable published localhost URLs in every WebPage/FAQPage JSON-LD | `validate_production_settings` requires an https, non-loopback origin | `core/tests/test_settings_prod.py` |
+| R8 | `seed_pages` ("run after migrate on every release") was not run by the release script, so a fresh environment served 404 for every page | `deploy/release.sh` runs it after `migrate`/`ensure_audit_partitions` | `core/tests/test_deploy.py::test_release_runs_every_step_in_order` |
+| R9 | The public `pages/?route=` and `faqs/` (`route`, `page`, `section`, `category`) passed raw query values to the database: a NUL byte made every one of them an anonymous HTTP 500 (ERROR log; CMS_BLUEPRINT §17 #1) | Query serializers (`PublicPageQuerySerializer`, `PublicFaqQuerySerializer`): 400 `validation_error`; values are bounded but never trimmed, so `section=` and exact-route matching keep the legacy meaning | `sitepages/tests/test_public_pages.py::test_malformed_query_values_are_400_not_500`, `faqs/tests/test_public_faqs.py::test_malformed_query_values_are_400_not_500`, `…::test_blank_section_and_padded_values_keep_their_exact_meaning` |

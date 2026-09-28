@@ -159,6 +159,31 @@ class TestCreateAndEdit:
         response = client.patch(detail(faq), {"answer": "  "}, format="json")
         assert response.status_code == 400 and response.json()["code"] == "faq_not_publishable" and response.json()["errors"]["publish"] == ["An answer is required."]
         assert client.patch(detail(faq), {"page": None}, format="json").json()["errors"]["publish"] == ["Choose the page this FAQ appears on."]
+        faq.refresh_from_db()
+        assert faq.answer and faq.page_id and faq.version == 1
+
+    def test_answer_is_trimmed_like_the_legacy_editor(self, client, api_client):
+        """Legacy CMS parity: the answer is trimmed on create and edit, so the public payload carries no stray padding."""
+        page = PageFactory(route="/trim-answer")
+        created = client.post(URL, {"question": "Q?", "answer": "  <p>Yes.</p>\n", "page": str(page.uid)}, format="json").json()
+        assert created["answer"] == "<p>Yes.</p>"
+        faq = Faq.objects.get(uid=created["uid"])
+        assert client.patch(detail(faq), {"answer": "\n<ul><li>SBI</li></ul>  "}, format="json").json()["answer"] == "<ul><li>SBI</li></ul>"
+        client.post(detail(faq, "publish/"))
+        assert api_client.get("/api/public/v1/faqs/", {"route": "/trim-answer"}).json()["data"][0]["answer"] == "<ul><li>SBI</li></ul>"
+
+    def test_moving_with_an_explicit_sort_order_keeps_it(self, client):
+        """An explicit position sent with a move wins, even when it equals the FAQ's position on its old page."""
+        old_page, new_page = PageFactory(), PageFactory()
+        faq = FaqFactory(page=old_page, sort_order=0)
+        FaqFactory(page=new_page, sort_order=0)
+        FaqFactory(page=new_page, sort_order=1)
+        body = client.patch(detail(faq), {"page": str(new_page.uid), "sort_order": 0}, format="json").json()
+        assert (body["page"]["uid"], body["sort_order"]) == (str(new_page.uid), 0)
+        moved = client.patch(detail(faq), {"section": "banks", "sort_order": 0}, format="json").json()
+        assert (moved["section"], moved["sort_order"]) == ("banks", 0)
+        auto = client.patch(detail(faq), {"section": ""}, format="json").json()
+        assert auto["sort_order"] == 2  # no position given: the end of the list it joins
 
     def test_draft_seo_edit_emits_nothing_and_no_change_is_a_no_op(self, client):
         faq = FaqFactory()

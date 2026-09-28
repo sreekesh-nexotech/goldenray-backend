@@ -32,4 +32,7 @@ class PublicPageContentSerializer(serializers.Serializer):
 
 
 class PublicPageQuerySerializer(serializers.Serializer):
-    route = serializers.CharField(max_length=255, help_text="Site path of the page, e.g. `/career`.")
+    """Query of ``pages/?route=``: validated (no NUL bytes, at most the column's length) but never trimmed — the
+    route matches exactly, as the legacy ``page-content?route=`` did."""
+
+    route = serializers.CharField(max_length=255, trim_whitespace=False, help_text="Site path of the page, e.g. `/career`.")

@@ -14,7 +14,7 @@ from core.errors import DomainError
 from core.serializers import ErrorSerializer
 from core.views import PublicAPIView
 from flarize.cache_utils import cache_response
-from sitepages.serializers import PublicPageContentSerializer
+from sitepages.serializers import PublicPageContentSerializer, PublicPageQuerySerializer
 from sitepages.services import delivery
 
 TAGS = ["public"]
@@ -38,7 +38,8 @@ class PublicPageByRouteView(PublicAPIView):
     )
     @cache_response(namespaces=delivery.PUBLIC_CACHE_NAMESPACES, ttl=CACHE_TTL)
     def get(self, request, *args, **kwargs):
-        route = request.query_params.get("route", "")
-        if not route:
+        if not request.query_params.get("route"):
             raise DomainError("validation_error", "A 'route' query parameter is required.", errors={"route": ["This field is required."]})
-        return Response(delivery.page_content(delivery.published_page(route=route)))
+        query = PublicPageQuerySerializer(data=request.query_params)
+        query.is_valid(raise_exception=True)  # a NUL byte or an over-long value is a 400, not a database error
+        return Response(delivery.page_content(delivery.published_page(route=query.validated_data["route"])))

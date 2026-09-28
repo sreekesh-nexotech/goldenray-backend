@@ -135,3 +135,16 @@ class TestReorder:
         assert self.reorder(client, page, [faq.uid, faq.uid]).json()["errors"]["order"]
         assert client.post(f"{URL}reorder/", {"page": str(uuid.uuid4()), "order": [str(faq.uid)]}, format="json").json()["errors"]["page"]
         assert client.post(f"{URL}reorder/", {"order": [str(faq.uid)]}, format="json").json()["errors"]["page"]
+
+
+def test_reorder_is_documented_as_a_plain_list(tmp_path):
+    """OpenAPI: ``faqs/reorder/`` answers a plain array of list rows — no pagination envelope, no list filters."""
+    import yaml
+    from django.core.management import call_command
+
+    target = tmp_path / "schema.yaml"
+    call_command("spectacular", "--api-version", "v1", "--file", str(target))
+    operation = yaml.safe_load(target.read_text())["paths"]["/api/v1/faqs/reorder/"]["post"]
+    assert [parameter["name"] for parameter in operation.get("parameters", [])] == []
+    body = operation["responses"]["200"]["content"]["application/json"]["schema"]
+    assert body["type"] == "array" and body["items"]["$ref"] == "#/components/schemas/FaqList"

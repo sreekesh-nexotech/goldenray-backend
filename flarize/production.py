@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from urllib.parse import urlsplit
 
 from django.core.exceptions import ImproperlyConfigured
 
 from flarize.client_ip import parse_networks
 from flarize.keys import valid_fernet_key
 
+LOOPBACK_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 NON_DELIVERING_EMAIL_BACKENDS = frozenset(
     {
         "django.core.mail.backends.console.EmailBackend",
@@ -50,6 +52,9 @@ def validate_production_settings(settings: Mapping) -> None:
         problems.append(f"API_DOCS_ALLOWED_NETWORKS is invalid: {exc}")
     if not str(settings.get("ACCOUNTS_PASSWORD_RESET_URL", "")).startswith("https://"):
         problems.append("PASSWORD_RESET_URL must be an https:// URL (it carries one-time reset tokens)")
+    frontend = urlsplit(str(settings.get("FRONTEND_BASE_URL", "")))
+    if frontend.scheme != "https" or not frontend.hostname or frontend.hostname in LOOPBACK_HOSTS:
+        problems.append("FRONTEND_BASE_URL must be the https:// origin of the public website (it is published in JSON-LD, previews and sitemaps)")
     if settings.get("EMAIL_BACKEND", "") in NON_DELIVERING_EMAIL_BACKENDS:
         problems.append("EMAIL_BACKEND does not deliver mail (console/locmem/dummy/filebased); password resets would be lost")
     if settings.get("MEDIA_PUBLIC_BACKEND") != "bunny":

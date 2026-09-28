@@ -8,7 +8,7 @@ is modified or deleted. Run after ``migrate`` on every release.
 
 from django.core.management.base import BaseCommand
 
-from sitepages.services.registry import sync_registry
+from sitepages.services.registry import slug_for_route, sync_registry
 
 
 class Command(BaseCommand):
@@ -17,3 +17,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         result = sync_registry(user=None)
         self.stdout.write(self.style.SUCCESS(f"{result['pages_created']} page(s) and {result['slots_created']} slot(s) created."))
+        for route in result["conflicts"]:
+            self.stdout.write(self.style.WARNING(f"  ! {route} not registered: another page already uses the slug '{slug_for_route(route)}'."))

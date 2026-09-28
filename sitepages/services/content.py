@@ -88,7 +88,9 @@ def update_text_slot(page: Page, key: str, *, user, data: dict, expected_version
     page = pages.lock(page)
     slot = _slot(PageTextSlot, page, key, "text")
     check_version(slot, expected_version)
-    value = data.get("value", slot.value)
+    # Trimmed like the legacy editor did: surrounding whitespace is never content, and a blank value clears the slot
+    # (the page falls back to its built-in text) instead of publishing an invisible override.
+    value = (data["value"] or "").strip() if "value" in data else slot.value
     problem = text_value_problem(slot, value)
     if problem:
         raise invalid("value", problem, "The text does not fit this slot.")
@@ -111,6 +113,11 @@ def update_image_slot(page: Page, key: str, *, user, data: dict, expected_versio
         problem = public_image_problem(data["asset"])
         if problem:
             raise invalid("asset", problem, "This file cannot be used on the website.")
+    if data.get("external_url"):
+        try:
+            _http_url(data["external_url"])
+        except ValidationError:
+            raise invalid("external_url", "Enter an http(s) URL the website can load.", "This image URL cannot be used on the website.") from None
     values = {name: data[name] for name in IMAGE_FIELDS if name in data and data[name] != getattr(slot, name)}
     if not values:
         return slot

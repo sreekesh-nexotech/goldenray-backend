@@ -191,7 +191,7 @@ def _import_page(run: ImportRun, row: dict) -> None:
     if status is None:
         run.violation(row["id"], "unknown_status", f"status={row.get('status')!r}; row skipped.")
         return
-    if not re.match(ROUTE_RE, route) or len(route) > 255:
+    if not re.fullmatch(ROUTE_RE, route) or len(route) > 255:
         run.violation(row["id"], "invalid_route", f"route={route!r} is not a site path; row skipped.")
         return
     target = find_target(Page, "sitepages_page", row, lambda: Page.objects.filter(route=route).first())
@@ -256,7 +256,7 @@ def _import_text_slot(run: ImportRun, row: dict) -> None:
     if kind is None:
         run.violation(row["id"], "unknown_kind", f"kind={row.get('kind')!r}; row skipped.")
         return
-    if not re.match(SLOT_KEY_RE, row.get("key") or ""):
+    if not re.fullmatch(SLOT_KEY_RE, row.get("key") or ""):
         run.violation(row["id"], "invalid_key", f"key={row.get('key')!r}; row skipped.")
         return
     values = {
@@ -281,7 +281,7 @@ def _import_image_slot(run: ImportRun, row: dict) -> None:
     page = _page_for(run, row)
     if page is None:
         return
-    if not re.match(SLOT_KEY_RE, row.get("key") or ""):
+    if not re.fullmatch(SLOT_KEY_RE, row.get("key") or ""):
         run.violation(row["id"], "invalid_key", f"key={row.get('key')!r}; row skipped.")
         return
     values = {

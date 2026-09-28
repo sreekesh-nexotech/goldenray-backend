@@ -122,11 +122,11 @@ def _validate(data: dict) -> None:
 
 
 def _normalise(data: dict) -> dict:
+    """The editable fields present in ``data``; question, answer and section trimmed (as the legacy editor did)."""
     values = {name: data[name] for name in EDITABLE_FIELDS if name in data}
-    if "question" in values:
-        values["question"] = (values["question"] or "").strip()
-    if "section" in values:
-        values["section"] = (values["section"] or "").strip()
+    for name in ("question", "answer", "section"):
+        if name in values:
+            values[name] = (values[name] or "").strip()
     return values
 
 
@@ -149,14 +149,18 @@ def create_faq(*, user, data: dict) -> Faq:
 def update_faq(instance: Faq, *, user, data: dict, expected_version=None) -> Faq:
     faq = _lock(instance)
     check_version(faq, expected_version)
-    values = _normalise(data)
-    _validate(values)
-    values = {name: value for name, value in values.items() if value != getattr(faq, name)}
+    requested = _normalise(data)
+    _validate(requested)
+    values = {name: value for name, value in requested.items() if value != getattr(faq, name)}
     if not values:
         return faq
-    if ("page" in values or "section" in values) and "sort_order" not in values:
-        # Moving to another list: land at its end rather than colliding with an existing position.
-        values["sort_order"] = next_sort_order(values.get("page", faq.page), values.get("section", faq.section))
+    if "page" in values or "section" in values:
+        if requested.get("sort_order") is not None:
+            # An explicit position wins, even one equal to the position the FAQ held in its old list.
+            values["sort_order"] = requested["sort_order"]
+        else:
+            # Moving to another list: land at its end rather than colliding with an existing position.
+            values["sort_order"] = next_sort_order(values.get("page", faq.page), values.get("section", faq.section))
     old_page = faq.page
     before = faq_snapshot(faq)
     if faq.status == Status.PUBLISHED:

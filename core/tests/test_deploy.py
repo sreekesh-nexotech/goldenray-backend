@@ -424,6 +424,7 @@ def test_release_runs_every_step_in_order(tmp_path):
         next(i for i, call in enumerate(calls) if " pull api-a api-b worker-default worker-documents beat migrate" in call),
         next(i for i, call in enumerate(calls) if "run --rm migrate python manage.py migrate --noinput" in call),
         next(i for i, call in enumerate(calls) if "ensure_audit_partitions --months 3" in call),
+        next(i for i, call in enumerate(calls) if "run --rm migrate python manage.py seed_pages" in call),  # maintained-pages registry
         next(i for i, call in enumerate(calls) if "up -d --no-deps --force-recreate api-a" in call),
         next(i for i, call in enumerate(calls) if "inspect -f {{.State.Health.Status}} cid-api-a" in call),
         next(i for i, call in enumerate(calls) if "up -d --no-deps --force-recreate api-b" in call),

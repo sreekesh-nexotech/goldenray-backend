@@ -37,13 +37,42 @@ class TestRegistry:
         career.versioned_update(None, title="Work with us", status="DRAFT")
         PageTextSlot.objects.filter(key="hero_title").update(value="Kept")
         PageTextSlot.objects.filter(key="hero_subtitle").delete()
-        assert registry.sync_registry() == {"pages_created": 0, "slots_created": 1}
+        assert registry.sync_registry() == {"pages_created": 0, "slots_created": 1, "conflicts": []}
         career.refresh_from_db()
         assert (career.title, career.status) == ("Work with us", "DRAFT") and PageTextSlot.objects.get(key="hero_title").value == "Kept"
 
-    @pytest.mark.parametrize("route,slug", [("/", "home"), ("/solar-warranty", "solar-warranty"), ("/career-page", "career"), ("/a/b_c", "a-b-c"), ("/Upper", "upper")])
+    def test_a_slug_held_by_another_page_is_reported_not_fatal(self):
+        """``seed_pages`` runs on every release: a registry route whose slug another live page holds (e.g. an imported
+        ``/careers`` took ``career``) must be skipped and reported, never abort the whole sync."""
+        PageFactory(slug="career", route="/careers")
+        out = StringIO()
+        call_command("seed_pages", stdout=out)
+        assert not Page.objects.filter(route="/career").exists() and Page.objects.count() == 27
+        assert "26 page(s) and 0 slot(s) created." in out.getvalue() and "/career" in out.getvalue()
+        assert registry.sync_registry() == {"pages_created": 0, "slots_created": 0, "conflicts": ["/career"]}
+
+    @pytest.mark.parametrize(
+        "route,slug",
+        [
+            ("/", "home"),
+            ("/solar-warranty", "solar-warranty"),
+            ("/career-page", "career"),
+            ("/a/b_c", "a-b-c"),
+            ("/Upper", "upper"),
+            ("/" + "a" * 100, "a" * 80),  # the slug column holds 80 characters; routes hold 255
+            ("/" + "a" * 79 + "/b", "a" * 79),  # never ends on a hyphen (slug CHECK)
+        ],
+    )
     def test_slug_for_route(self, route, slug):
         assert registry.slug_for_route(route) == slug
+
+    def test_a_long_route_is_imported_with_a_cut_slug(self):
+        from sitepages.services import legacy_import
+
+        route = "/guides/" + "-".join(["kerala-rooftop-solar"] * 8)
+        result = legacy_import.import_pages([{"id": 1, "name": "Long", "route": route, "status": "published", "created_at": None, "updated_at": None}])
+        assert result["created"] == 1 and not result["violations"]
+        assert len(Page.objects.get(route=route).slug) <= 80
 
 
 class TestSitemap:

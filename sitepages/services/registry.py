@@ -89,21 +89,33 @@ SLOTS: dict[str, dict[str, list]] = {
 SLUG_OVERRIDES = {"/": "home", "/career-page": "career", "/careers": "career"}
 
 
+SLUG_MAX_LENGTH = Page._meta.get_field("slug").max_length
+
+
 def slug_for_route(route: str) -> str:
-    """``/`` → ``home``, ``/solar-warranty`` → ``solar-warranty``, ``/a/b`` → ``a-b``."""
+    """``/`` → ``home``, ``/solar-warranty`` → ``solar-warranty``, ``/a/b`` → ``a-b`` (cut to the column's 80 characters)."""
     if route in SLUG_OVERRIDES:
         return SLUG_OVERRIDES[route]
-    return slugify(re.sub(r"[/_.~]+", "-", route.strip("/"))) or "home"
+    return slugify(re.sub(r"[/_.~]+", "-", route.strip("/")))[:SLUG_MAX_LENGTH].strip("-") or "home"
 
 
 @transaction.atomic
-def sync_registry(*, user=None) -> dict[str, int]:
-    """Create missing pages and slots from :data:`PAGES`/:data:`SLOTS`. Returns ``{pages_created, slots_created}``."""
+def sync_registry(*, user=None) -> dict:
+    """Create missing pages and slots from :data:`PAGES`/:data:`SLOTS`.
+
+    Returns ``{pages_created, slots_created, conflicts}``: ``conflicts`` lists the registry routes that were not created
+    because another live page already holds their slug (resolved by hand; the sync never renames or deletes a page).
+    """
     pages_created = slots_created = 0
+    conflicts: list[str] = []
     for position, (route, title, group, protected) in enumerate(PAGES):
         if Page.objects.filter(route=route).exists():
             continue
-        page = Page(slug=slug_for_route(route), route=route, title=title, group=group, is_protected=protected, status=Page.Status.PUBLISHED, sort_order=position)
+        slug = slug_for_route(route)
+        if Page.objects.filter(slug=slug).exists():
+            conflicts.append(route)
+            continue
+        page = Page(slug=slug, route=route, title=title, group=group, is_protected=protected, status=Page.Status.PUBLISHED, sort_order=position)
         stamp_create(page, user)
         page.save()
         pages_created += 1
@@ -123,7 +135,7 @@ def sync_registry(*, user=None) -> dict[str, int]:
                 stamp_create(slot, user)
                 slot.save()
                 slots_created += 1
-    result = {"pages_created": pages_created, "slots_created": slots_created}
+    result = {"pages_created": pages_created, "slots_created": slots_created, "conflicts": conflicts}
     if pages_created or slots_created:
         record("sitepages.registry_synced", object_type="sitepages.page", actor=user, after=result)
         bump(CACHE_NAMESPACE)

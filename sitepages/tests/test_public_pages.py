@@ -114,3 +114,11 @@ def test_anonymous_and_throttled_as_public_read(api_client, page, settings):
 def test_bearer_token_is_ignored(api_client, page):
     api_client.credentials(HTTP_AUTHORIZATION="Bearer not-a-token")
     assert api_client.get(f"{URL}career-test/").status_code == 200
+
+
+def test_malformed_query_values_are_400_not_500(api_client, page):
+    """Anonymous input the database cannot compare (a NUL byte) is a validation error, never a server error (§17 #1)."""
+    response = api_client.get(URL, {"route": "/career-test\x00"})
+    assert response.status_code == 400 and response.json()["code"] == "validation_error" and "route" in response.json()["errors"]
+    assert api_client.get(URL, {"route": "/" + "x" * 300}).status_code == 400
+    assert api_client.get(URL, {"route": " /career-test"}).status_code == 404  # validated without trimming: another route

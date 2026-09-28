@@ -6,7 +6,8 @@ Run after ``enrich_legacy_cms.py`` and after the phase-1 capture (``capture_lega
     python capture_legacy.py --base-url http://127.0.0.1:<private port> --db flarize_wp_content_pages_legacy_cms \
         --dataset enriched --golden-only after_writes
 
-``OPERATIONS`` (below) is mirrored literally by ``faqs/tests/test_write_parity.py``, which imports the phase-1 export,
+``OPERATIONS`` (below) is mirrored literally by ``faqs/tests/test_parity.py::test_faq_write_parity`` and
+``sitepages/tests/test_parity.py::test_write_parity_page_operations``, which import the phase-1 export,
 applies the same operations through the new staff API (legacy ids resolved through ``core_legacy_map``) and compares
 every public payload with the ``*_after_writes`` golden files. Each operation goes through the legacy service or
 serializer that the legacy Studio endpoint calls, so validation and side effects are the legacy ones.

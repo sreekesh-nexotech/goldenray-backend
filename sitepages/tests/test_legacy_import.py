@@ -109,6 +109,22 @@ def test_violations_are_listed_not_raised():
     assert [v["code"] for v in legacy_import.import_image_slots(images)["violations"]] == ["invalid_key", "unmapped_page"]
 
 
+def test_values_the_database_would_refuse_are_listed_not_raised():
+    """A trailing newline passes Python's ``$`` but not the table CHECKs: the row must be skipped, not abort the run."""
+    fx.seed_references("uat")
+    pages = fx.load("sitepages", "uat", "sitepages_page")
+    result = legacy_import.import_pages([*pages, {**pages[0], "id": 9005, "route": "/newline\n"}])
+    assert [(v["source_id"], v["code"]) for v in result["violations"]] == [("9005", "invalid_route")] and result["created"] == 27
+    slots = [
+        {"id": 1, "page_id": pages[0]["id"], "key": "k1\n", "kind": "short_text"},
+        {"id": 2, "page_id": pages[0]["id"], "key": "k2", "kind": "short_text", "value": "kept"},
+    ]
+    result = legacy_import.import_text_slots(slots)
+    assert [v["code"] for v in result["violations"]] == ["invalid_key"] and result["created"] == 1
+    images = [{"id": 1, "page_id": pages[0]["id"], "key": "hero\n"}]
+    assert [v["code"] for v in legacy_import.import_image_slots(images)["violations"]] == ["invalid_key"]
+
+
 def test_dry_run_writes_nothing_but_reports_exact_counts():
     result = legacy_import.import_pages(fx.load("sitepages", "uat", "sitepages_page"), dry_run=True)
     assert result["created"] == 27

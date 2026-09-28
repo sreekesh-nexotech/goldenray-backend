@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from core.errors import DomainError
 from core.serializers import ErrorSerializer
 from core.views import PublicAPIView
-from faqs.serializers import PublicFaqListSerializer
+from faqs.serializers import PublicFaqListSerializer, PublicFaqQuerySerializer
 from faqs.services import delivery
 from flarize.cache_utils import cache_response
 
@@ -35,9 +35,10 @@ class PublicFaqListView(PublicAPIView):
     )
     @cache_response(namespaces=delivery.PUBLIC_CACHE_NAMESPACES, ttl=CACHE_TTL)
     def get(self, request, *args, **kwargs):
-        params = request.query_params
+        query = PublicFaqQuerySerializer(data=request.query_params)
+        query.is_valid(raise_exception=True)  # a NUL byte or an over-long value is a 400, not a database error
+        params = query.validated_data
         route = params.get("route") or params.get("page") or ""
         if not route:
             raise DomainError("validation_error", "A 'route' query parameter is required.", errors={"route": ["This field is required."]})
-        section = params.get("section") if "section" in params else None
-        return Response(delivery.faq_list(route, section=section, category=params.get("category") or None))
+        return Response(delivery.faq_list(route, section=params.get("section"), category=params.get("category") or None))
