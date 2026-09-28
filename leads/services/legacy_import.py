@@ -125,11 +125,14 @@ def _import_installation(run: ImportRun, row: dict) -> None:
         return
     phone, raw = _phone(run, row, "phone_number")
     target = run.find_target(CustomerInstallation, row["id"])
+    address = _text(row.get("address"), 100_000)
+    if raw and not phone:  # the legacy form never validated phones: keep the number as recorded beside the address
+        address = "\n".join(part for part in (address, f"(phone as recorded: {raw})") if part)
     values = {
         "customer_name": _text(row.get("customer_name"), 255) or "—",
         "phone_e164": phone,
         "pincode": pincode,
-        "address": _text(row.get("address"), 100_000) or (f"(phone as recorded: {raw})" if raw and not phone else ""),
+        "address": address,
         "capacity_kw": capacity,
         "installed_on": installed_on,
         "status": status,

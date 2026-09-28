@@ -6,7 +6,8 @@ the pincode stats (``installations/stats``, the legacy ``installation-stats``).
 * Stats: counts of COMPLETED installations for the pincode, for its district and for its district in the current
   (Asia/Kolkata) year — the legacy semantics (see :mod:`leads.services.pincode_directory`), computed in one
   aggregate query.
-* Writes are versioned, audited and bump ``leads:installations`` (the public payloads' namespace). A new or moved
+* Writes are versioned, audited and bump ``leads:installations`` (the public payloads' namespace). A new installation is
+  assigned to its creator unless another assignee (or none: ``leads.manage``) is chosen. A new or moved
   installation takes its district from the pincode list when the staff user leaves it empty.
 """
 
@@ -19,6 +20,7 @@ from django.utils import timezone
 from accounts.services.authz import can
 from audit.services import changes, record, snapshot
 from core.errors import PermissionDenied
+from core.models import actor_or_none
 from core.services import check_version, stamp_create
 from flarize.cache_utils import bump
 from leads.models import CustomerInstallation
@@ -63,8 +65,11 @@ def installation_stats(pincode: str, *, today=None) -> dict:
     }
 
 
+_NOBODY = object()  # a new row has no current assignee to keep
+
+
 def _check_assignee(user, assignee, current=None) -> None:
-    """Assigning an installation to someone other than yourself needs ``leads.manage`` (as for leads)."""
+    """Assigning an installation to someone other than yourself (or to nobody) needs ``leads.manage`` (as for leads)."""
     if assignee == current or (assignee is not None and assignee.pk == getattr(user, "pk", None)):
         return
     if not can(user, "leads", "manage"):
@@ -79,9 +84,16 @@ def _with_district(values: dict) -> dict:
 
 @transaction.atomic
 def create_installation(*, user, data: dict) -> CustomerInstallation:
+    """Assigned to its creator unless ``assignee`` says otherwise (someone else, or nobody, needs ``leads.manage``).
+
+    A system caller (``user=None``: importers, scripts) assigns nobody unless ``assignee`` is given.
+    """
     values = _with_district({name: data[name] for name in FIELDS if name in data and data[name] is not None})
-    if "assignee" in data:
-        _check_assignee(user, data["assignee"])
+    creator = actor_or_none(user)
+    assignee = data.get("assignee", creator)
+    if creator is not None and (assignee is None or assignee.pk != creator.pk):
+        _check_assignee(user, assignee, current=_NOBODY)
+    values["assignee"] = assignee
     installation = CustomerInstallation(**values)
     stamp_create(installation, user)
     installation.save()

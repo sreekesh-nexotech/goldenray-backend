@@ -42,10 +42,10 @@ class TestSend:
 
     def test_anonymous_without_authentication(self):
         from leads.views.public import OtpSendView, OtpVerifyView
-        from leads.views.throttles import OtpIpThrottle, OtpPhoneThrottle
+        from leads.views.throttles import OtpIpThrottle, OtpPhoneThrottle, OtpVerifyPhoneThrottle
 
         assert OtpSendView.authentication_classes == [] and OtpSendView.throttle_classes == [OtpPhoneThrottle, OtpIpThrottle]
-        assert OtpVerifyView.throttle_classes == [OtpIpThrottle]
+        assert OtpVerifyView.authentication_classes == [] and OtpVerifyView.throttle_classes == [OtpVerifyPhoneThrottle, OtpIpThrottle]
 
     @pytest.mark.parametrize("phone", ["", "12345", "5876543210", "+15005550006", "04842000000"])
     def test_only_indian_mobile_numbers(self, api_client, phone):
@@ -164,6 +164,14 @@ class TestVerify:
         settings.REST_FRAMEWORK = {**settings.REST_FRAMEWORK, "DEFAULT_THROTTLE_RATES": {**settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"], "otp_ip": "1/10min"}}
         assert _verify(api_client).status_code == 400
         assert _verify(api_client).status_code == 429
+
+    def test_throttled_per_phone_across_addresses(self, api_client, settings):
+        """PLAN §3.3: ``otp/verify`` is throttled ``otp`` (per phone) too — guesses spread over many addresses stop."""
+        settings.REST_FRAMEWORK = {**settings.REST_FRAMEWORK, "DEFAULT_THROTTLE_RATES": {**settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"], "otp": "2/10min"}}
+        statuses = [_verify(api_client, phone, code="111111", REMOTE_ADDR=f"203.0.113.{n}").status_code for n, phone in enumerate(("9876543210", "+91 98765 43210", "09876543210"))]
+        assert statuses == [400, 400, 429]
+        assert _verify(api_client, "9876543211", REMOTE_ADDR="203.0.113.50").status_code == 400  # another number has its own budget
+        assert _send(api_client, REMOTE_ADDR="203.0.113.51").status_code == 200  # checks do not use up the budget for sending codes
 
 
 class TestToken:

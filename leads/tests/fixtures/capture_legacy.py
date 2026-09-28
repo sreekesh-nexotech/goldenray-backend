@@ -114,6 +114,9 @@ LEAD_CASES = {
     "leading_zero_phone": {"name": "Zero Lead", "phone_number": "09876500018", "source": "footer"},
     "default_source": {"name": "No Source", "phone_number": "9876500016"},
     "long_detail_value": {"name": "Long Detail", "phone_number": "9876500017", "source": "other", "details": {"Note": "x" * 2100, "Count": 3, "Flag": True, "Ratio": 1.5}},
+    # Added by the review (captured from a fresh private copy): the legacy rule drops every "+".
+    "plus_prefix_phone": {"name": "Plus", "phone_number": "+9876500051", "source": "footer"},
+    "plus_inside_phone": {"name": "Plus2", "phone_number": "98765+00058", "source": "quotation"},
 }
 AFFILIATE_VALID = {"full_name": "Partner One", "phone": "9876500021", "email": "Partner.One@Example.com ", "profession": "Real Estate Agent", "district": "Ernakulam"}
 AFFILIATE_CASES = {

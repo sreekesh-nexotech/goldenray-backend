@@ -1,7 +1,7 @@
 """Outbox handlers owned by leads (``@core.outbox.handler("<context>.<event>")``).
 
 ``quotations.issued`` (PLAN §3.5: consumers include leads — "mark CONVERTED"). Payload contract for the quotations
-package: ``{"quotation_uid": "<uuid>", "customer_uid": "<uuid>", ...}``. The customer's open leads become CONVERTED
+package: ``{"quotation_uid": "<uuid>", "customer_uid": "<uuid>", ...}``. The customer's open leads (linked, or unlinked from its phone) become CONVERTED
 (idempotent: already converted leads are left alone; an unknown or merged-away customer is ignored).
 """
 

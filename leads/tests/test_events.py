@@ -27,6 +27,20 @@ def test_quotation_issued_converts_the_customers_open_leads(drain_outbox):
     assert LeadEvent.objects.filter(lead=open_lead, event="CONVERTED").count() == 1
 
 
+def test_quotation_issued_also_converts_unlinked_leads_from_the_customers_phone(drain_outbox):
+    """A lead that came in before its customer existed (the customer was entered in Studio, not converted) belongs to
+    the same person by phone — the one identity rule of sales — and is converted and linked too."""
+    customer = CustomerFactory(phone_e164="+919876500077")
+    unlinked = LeadFactory(phone_e164="+919876500077", customer=None, status=Lead.Status.NEW)
+    stranger = LeadFactory(phone_e164="+919876500078", customer=None)
+    emit("quotations.issued", {"quotation_uid": "7f3a9c21-0000-4000-8000-000000000002", "customer_uid": str(customer.uid)}, aggregate_type="quotations.quotation")
+    assert drain_outbox()["failed"] == 0
+    unlinked.refresh_from_db(), stranger.refresh_from_db()
+    assert (unlinked.status, unlinked.customer_id) == ("CONVERTED", customer.pk)
+    assert (stranger.status, stranger.customer_id) == ("NEW", None)
+    assert LeadEvent.objects.get(lead=unlinked, event="CONVERTED").data["customer_uid"] == str(customer.uid)
+
+
 def test_quotation_issued_without_a_known_customer_is_ignored(drain_outbox):
     emit("quotations.issued", {"quotation_uid": "x"}, aggregate_type="quotations.quotation")
     emit("quotations.issued", {"customer_uid": "7f3a9c21-0000-4000-8000-000000000099"}, aggregate_type="quotations.quotation")

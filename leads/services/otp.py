@@ -19,6 +19,7 @@ Provider failures never leak Twilio's text: 503 ``otp_unavailable`` (try later),
 from __future__ import annotations
 
 import datetime as dt
+import logging
 from dataclasses import dataclass
 from datetime import timedelta
 
@@ -34,6 +35,8 @@ from leads.models import OtpRequest
 from leads.services import twilio_verify
 from leads.services.twilio_verify import ProviderRejected, ProviderUnavailable, VerificationNotFound
 
+logger = logging.getLogger("flarize.leads.otp")
+
 TOKEN_SALT = "leads.otp-verification"
 PUBLIC = "CUSTOMER"  # audit actor kind of anonymous website visitors
 
@@ -45,7 +48,9 @@ class Verification:
     verified_at: dt.datetime
 
 
-def _unavailable() -> DomainError:
+def _unavailable(exc: Exception) -> DomainError:
+    # The cause (never a secret: exception class, HTTP status, missing setting names) is for the operators only.
+    logger.warning("OTP provider unavailable: %s", exc)
     return DomainError("otp_unavailable", "We could not send or check the code right now. Please try again in a few minutes.", status=503)
 
 
@@ -59,8 +64,8 @@ def send_code(*, phone_e164: str, purpose: str = OtpRequest.Purpose.LEAD, ip: st
         raise _limit()
     try:
         result = twilio_verify.client().send(phone_e164)
-    except ProviderUnavailable:
-        raise _unavailable() from None
+    except ProviderUnavailable as exc:
+        raise _unavailable(exc) from None
     except ProviderRejected as exc:
         if exc.status == 429:
             raise _limit() from None
@@ -88,8 +93,8 @@ def verify_code(*, phone_e164: str, code: str, purpose: str = OtpRequest.Purpose
     except VerificationNotFound:
         _expire(otp)
         raise DomainError("otp_expired", "This code has expired. Request a new code.", errors={"code": ["Request a new code."]}) from None
-    except ProviderUnavailable:
-        raise _unavailable() from None
+    except ProviderUnavailable as exc:
+        raise _unavailable(exc) from None
     except ProviderRejected as exc:
         if exc.status == 429:
             _expire(otp)

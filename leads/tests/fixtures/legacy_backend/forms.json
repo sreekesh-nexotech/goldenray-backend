@@ -423,6 +423,48 @@
     "message": "Thank you! We'll be in touch shortly.",
     "status": "success"
    }
+  },
+  "plus_prefix_phone": {
+   "request": {
+    "name": "Plus",
+    "phone_number": "+9876500051",
+    "source": "footer"
+   },
+   "status": 201,
+   "body": {
+    "id": 1,
+    "name": "Plus",
+    "phone_number": "9876500051",
+    "source": "footer",
+    "source_label": "Footer — Ready to go solar",
+    "page": "",
+    "details": {},
+    "created_at": "2026-09-29T04:41:48.845865+05:30",
+    "updated_at": "2026-09-29T04:41:48.845884+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "plus_inside_phone": {
+   "request": {
+    "name": "Plus2",
+    "phone_number": "98765+00058",
+    "source": "quotation"
+   },
+   "status": 201,
+   "body": {
+    "id": 8,
+    "name": "Plus2",
+    "phone_number": "9876500058",
+    "source": "quotation",
+    "source_label": "Quotation request (calculator)",
+    "page": "",
+    "details": {},
+    "created_at": "2026-09-29T04:41:48.931713+05:30",
+    "updated_at": "2026-09-29T04:41:48.931725+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
   }
  },
  "affiliate_applications": {

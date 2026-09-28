@@ -5,7 +5,9 @@ Backends (``settings.LEADS_OTP_BACKEND``):
 * ``twilio`` (staging/prod): ``requests`` to ``https://verify.twilio.com/v2`` with HTTP Basic auth. Configuration comes
   from the enabled ``TWILIO`` integration (``company_integration``, Fernet encrypted, Admin-editable) through
   :mod:`core.integrations`, else from the ``TWILIO_*`` environment settings. Missing configuration fails closed
-  (:class:`ProviderUnavailable`); Twilio's own error text is never passed to the website.
+  (:class:`ProviderUnavailable`); so do Twilio answers that blame *our* configuration (401 credentials, 404 on the
+  Verify service) — logged at ERROR, because they block every visitor. Twilio's own error text is never passed to the
+  website.
 * ``fake`` (dev/test): no network. Every send is recorded in :data:`SENT` and a pending verification is kept in the
   cache (so it works across dev workers); the code ``000000`` approves it, anything else does not.
 
@@ -108,8 +110,15 @@ class TwilioVerifyClient:
             body = response.json()
         except ValueError:
             body = {}
+        if not isinstance(body, dict):
+            body = {}
         if response.status_code >= 500:
             raise ProviderUnavailable(f"Twilio Verify error {response.status_code}.")
+        if response.status_code == 401 or (response.status_code == 404 and resource != "VerificationCheck"):
+            # Our side is wrong (rotated/invalid credentials, unknown Verify service): an outage for every visitor,
+            # never a problem with their number or code — and the operators must hear about it.
+            logger.error("Twilio Verify rejected the configuration (%s, code %s) on %s", response.status_code, body.get("code"), resource)
+            raise ProviderUnavailable(f"Twilio Verify configuration error ({response.status_code}, code {body.get('code')}).")
         if response.status_code == 404 and resource == "VerificationCheck":
             raise VerificationNotFound("No pending verification for this number.", status=404, code=body.get("code"))
         if response.status_code >= 400:

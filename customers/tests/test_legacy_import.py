@@ -108,3 +108,17 @@ def test_dry_run_and_phone_matcher():
     assert created and customer.source == "SI_IMPORT" and customer.code.startswith("CUST-")
     assert legacy_import.match_or_create_by_phone(phone="+919876543210", name="Other name") == (customer, False)
     assert legacy_import.match_or_create_by_phone(phone="123", name="x") == (None, False)
+
+
+def test_phone_matcher_creates_customers_like_any_other_write():
+    """The PA/SI importers' matcher is a write: the new customer is audited and the customers cache is bumped."""
+    from flarize.cache_utils import get_versions
+
+    before = get_versions(["customers"])["customers"]
+    customer, created = legacy_import.match_or_create_by_phone(phone="98765 43210", name="Site owner", values={"district": "Kollam", "phone_e164": "+910000000000"})
+    assert created and (customer.district, customer.phone_e164) == ("Kollam", "+919876543210")  # the matched phone wins
+    audit = AuditLog.objects.get(action="customers.customer_created", object_uid=customer.uid)
+    assert audit.after["phone_e164"] == "+919876543210" and audit.after["source"] == "SI_IMPORT"
+    assert get_versions(["customers"])["customers"] > before
+    legacy_import.match_or_create_by_phone(phone="+919876543210", name="Again")
+    assert AuditLog.objects.filter(action="customers.customer_created").count() == 1  # a match writes nothing

@@ -50,6 +50,10 @@ class TestBoth:
         user = make_user()
         assert client.post(f"{url}{row.uid}/assign/", {"assignee_uid": str(user.uid)}, format="json").json()["assignee"]["uid"] == str(user.uid)
         assert client.post(f"{url}{row.uid}/assign/", {"assignee_uid": str(user.uid), "expected_version": 1}, format="json").json()["code"] == "stale_version"
+        stale = client.post(f"{url}{row.uid}/transition/", {"status": "REJECTED", "expected_version": 1}, format="json")
+        assert stale.status_code == 409 and stale.json()["code"] == "stale_version"
+        invalid = client.post(f"{url}{row.uid}/transition/", {"status": "BOGUS"}, format="json")
+        assert invalid.status_code == 400 and invalid.json()["code"] == "validation_error" and "status" in invalid.json()["errors"]
         assert client.delete(f"{url}{row.uid}/").status_code == 204
         assert client.get(f"{url}{row.uid}/").status_code == 404
         assert AuditLog.objects.filter(action__startswith="leads.", action__endswith="_deleted").count() == 1

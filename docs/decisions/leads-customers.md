@@ -26,7 +26,7 @@ public endpoints of §3.3 (`otp/send`, `otp/verify`, `leads`, `affiliate-applica
 | Surface | Path | Permission / throttle |
 |---|---|---|
 | public | `POST otp/send/` `{phone, name?}` → `{status: pending, phone, expires_at}` | `otp` per phone + `otp_ip` per IP (DV-19); Idempotency-Key |
-| public | `POST otp/verify/` `{phone, code, name?}` → `{status: approved, verification_token, expires_at}` | `otp_ip`; Idempotency-Key |
+| public | `POST otp/verify/` `{phone, code, name?}` → `{status: approved, verification_token, expires_at}` | `otp` per phone (a bucket of its own) + `otp_ip`; Idempotency-Key |
 | public | `POST leads/` `{kind?, form?, name, phone?, email?, pincode?, district?, message?, page?, details?, calculator?, utm?, verification_token?, website}` → receipt | `public_write`; Idempotency-Key |
 | public | `POST affiliate-applications/`, `POST warranty-requests/` | `public_write`; Idempotency-Key |
 | public | `GET installations/?pincode=&district=` (paginated showcase map) | `public_read`; cached (`leads:installations` + `media`), ETag/304, `max-age=60` |
@@ -62,7 +62,7 @@ owner path; an unknown model sees nothing.
 * Events emitted: `leads.created` `{lead_uid, number, kind, form, channel, customer_uid}`, `leads.converted`
   `{lead_uid, customer_uid, customer_created}`, `customers.merged` `{source_uid, target_uid, repointed}` (each with a
   dedup key). Consumed: `quotations.issued` `{quotation_uid, customer_uid}` → the customer's open leads become
-  CONVERTED (system actor, idempotent).
+  CONVERTED (system actor, idempotent) — linked ones, and unlinked ones from its phone number (then linked).
 * Dashboard counters: `leads` (new, open, affiliate_applications_new, warranty_requests_open), `customers` (total,
   new_30d), both scoped.
 
@@ -134,7 +134,7 @@ owner path; an unknown model sees nothing.
 
 | Legacy column | Platform | Rule |
 |---|---|---|
-| `customer_name`, `address` | same | unparsable phone noted in `address` when it is empty |
+| `customer_name`, `address` | same | an unparsable phone is kept as recorded on a last line of `address` |
 | `phone_number` | `phone_e164` | |
 | `pincode` | `pincode` (+ `district` from the pincode list) | |
 | `system_size` (float) | `capacity_kw` numeric(8,3) | must be > 0 |
@@ -222,7 +222,10 @@ for the shim); affiliate/warranty submissions are no longer copied into the lead
 * **legacy shim**: `/api/lead-collection-home/` → `intake.submit_lead(data=…, ip=…, require_verification=False)`
   (`phone_number` → `phone_e164` via `customers.services.phones.normalise_phone(…, mobile_only=True)`, `source` →
   `form`, `page` → `source_url`, `details` → `payload.details` via `intake.build_payload`); `send-otp`/`verify-otp` →
-  `leads.services.otp`; `affiliate-applications`/`warranty-service-requests` → the canonical serializers accept the
+  `leads.services.otp` — and an approved legacy `verify-otp` **also records the enquiry** (legacy `record_lead`: `name`,
+  form `QUOTE_REQUEST`, page `/advanced-calculator`), so its adapter calls `intake.submit_lead(…, verification_token=
+  <the token verify_code returned>)`; the canonical `otp/verify` stores nothing, and the rebound advanced calculator (C7)
+  must `POST leads` (kind `ADVANCED_CALC`) after verifying, or those enquiries are lost; `affiliate-applications`/`warranty-service-requests` → the canonical serializers accept the
   legacy payloads unchanged; responses in the old shapes use `customers.services.phones.national_digits` and the
   `get_*_display()` labels. `installation-stats` → `installations.installation_stats(pincode)` (same keys), 400 body
   `{"error": "Pincode parameter is required"}`.
@@ -235,3 +238,22 @@ for the shim); affiliate/warranty submissions are no longer copied into the lead
 * Settings: `LEADS_OTP_BACKEND` (`twilio` | `fake`), `TWILIO_*` env fallback (the TWILIO integration wins),
   `LEADS_OTP_TTL_SECONDS`, `LEADS_OTP_MAX_ATTEMPTS`, `LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY`,
   `LEADS_VERIFICATION_TOKEN_TTL_SECONDS`, throttle `otp_ip`.
+
+## Adversarial review (fixes; each reproduced by a failing test first, the tests stay)
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| R1 | A Twilio answer that blames *our* configuration (401 rotated/invalid credentials, 404 unknown Verify service) was mapped to the visitor: `otp/send` said "we could not send a code to this number" (400) and `otp/verify` said "the code is not correct" (400), nothing was logged — a silent outage of every phone-bearing website form | `TwilioVerifyClient` raises `ProviderUnavailable` for them and logs an ERROR (status, Twilio code, resource; never the token) → 503 `otp_unavailable`; the OTP service logs the cause of every `otp_unavailable` at WARNING | `test_twilio_verify.py::test_errors_are_mapped`, `::test_rejected_credentials_are_an_outage_not_a_wrong_code` |
+| R2 | `otp/verify/` had only the per-IP throttle; PLAN §3.3 throttles both OTP endpoints `otp` (per phone), so guesses spread over many addresses were bounded only by the per-code attempt cap | `OtpVerifyPhoneThrottle` (scope `otp`, keyed on the E.164 number, a bucket of its own so mistyped codes do not use up the sends) | `test_otp.py::TestVerify::test_throttled_per_phone_across_addresses` |
+| R3 | A new installation created by a Sales Executive (`leads` owned) had no assignee, so it vanished from its creator's list; an explicit `assignee_uid: null` skipped the "someone else or nobody needs `leads.manage`" rule on create (update enforced it) | assigned to its creator by default, like a Studio lead; nobody/someone else needs `leads.manage`; system callers (`user=None`) assign nobody | `test_installations_api.py::test_new_installation_is_assigned_to_its_creator` |
+| R4 | Legacy parity: the legacy website rule drops every `+` (`+9876500051`, `98765+00058` were stored as `9876500051`), the canonical forms refused them (captured again from a fresh private legacy copy) | `normalise_phone` reads a spelling that is no valid number the legacy way (10 digits, or 91 + 10, as an Indian number); a valid foreign number is never reinterpreted | `customers/tests/test_phones.py`, `forms.json` cases `plus_prefix_phone`, `plus_inside_phone` through `test_legacy_parity.py` |
+| R5 | `quotations.issued` converted only leads *linked* to the customer; a lead that came in before the customer was entered in Studio (same phone, no customer) stayed open | open unlinked leads from the customer's phone are converted and linked too (phone-only identity rule) | `test_events.py::test_quotation_issued_also_converts_unlinked_leads_from_the_customers_phone` |
+| R6 | `customers.services.legacy_import.match_or_create_by_phone` (the PA/SI importers' matcher) created customers without an audit row or cache bump, and `values` containing `phone_e164`/`name` raised `TypeError` | audited `customers.customer_created`, bumps `customers`; `values` limited to other editable fields | `customers/tests/test_legacy_import.py::test_phone_matcher_creates_customers_like_any_other_write` |
+| R7 | Importing a legacy installation with an unparsable phone *and* an address dropped the phone as recorded (kept only when the address was empty) | the raw number goes on a last line of `address` | `test_legacy_import.py::test_unparsable_installation_phone_is_kept_beside_an_address` |
+
+Re-verified by the review: `installation-stats` golden responses re-captured live — the 24 UAT variants from the
+shared server (read-only GETs) and the 24 enriched variants from a fresh private copy (`enrich_private.sql`, own port)
+— identical to `installation_stats.json`; the exported installation and `pincodes` fixtures equal the UAT tables;
+the Flarize customers fixture carries no real personal data; the Flarize import is idempotent on the real file (dry
+run, 34 created, then 34 skipped); migrations apply, reverse to zero and re-apply; the name search's `UPPER(name)`
+trigram index matches the `icontains` expression.

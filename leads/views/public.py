@@ -2,7 +2,7 @@
 ``warranty-requests/``, ``installations/``, ``installations/stats/``.
 
 Anonymous, no authentication classes. POSTs honour ``Idempotency-Key`` (24 h replay) and are throttled
-(``otp`` per phone + ``otp_ip`` per IP on the OTP endpoints, ``public_write`` on the forms); GETs are cached
+(``otp`` per phone + ``otp_ip`` per IP on both OTP endpoints, ``public_write`` on the forms); GETs are cached
 (version-keyed, ``ETag``/304, ``Cache-Control: public, max-age=60``) and throttled ``public_read``.
 """
 
@@ -35,7 +35,7 @@ from leads.serializers.public import (
     WarrantySubmitSerializer,
 )
 from leads.services import installations, intake, otp
-from leads.views.throttles import OtpIpThrottle, OtpPhoneThrottle
+from leads.views.throttles import OtpIpThrottle, OtpPhoneThrottle, OtpVerifyPhoneThrottle
 
 TAGS = ["public"]
 IDEMPOTENCY = OpenApiParameter("Idempotency-Key", str, OpenApiParameter.HEADER, required=False, description="8–128 characters; a retry with the same key and body replays the first response for 24 h.")
@@ -63,7 +63,7 @@ class OtpSendView(PublicAPIView):
 
 
 class OtpVerifyView(PublicAPIView):
-    throttle_classes = [OtpIpThrottle]
+    throttle_classes = [OtpVerifyPhoneThrottle, OtpIpThrottle]
 
     @extend_schema(
         operation_id="public_otp_verify",

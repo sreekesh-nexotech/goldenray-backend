@@ -13,6 +13,7 @@ creates one (needs ``customers.create``), owned by the lead's assignee (else the
 from __future__ import annotations
 
 from django.db import transaction
+from django.db.models import Q
 
 from accounts.services.authz import can
 from audit.services import changes, record, snapshot
@@ -202,11 +203,18 @@ def convert_lead(instance: Lead, *, user, customer: Customer | None = None, expe
 
 @transaction.atomic
 def mark_converted_for_customer(customer: Customer, *, reason: str) -> int:
-    """Open leads of ``customer`` become CONVERTED (``quotations.issued`` handler; system actor). Idempotent."""
+    """Open leads of ``customer`` become CONVERTED (``quotations.issued`` handler; system actor). Idempotent.
+
+    "Of the customer" = linked to it, or not linked to any customer and from its phone number (matched by phone only:
+    a lead that came in before the customer was entered in Studio); those are linked to it as well.
+    """
+    mine = Q(customer=customer)
+    if customer.phone_e164:
+        mine |= Q(customer__isnull=True, phone_e164=customer.phone_e164)
     count = 0
-    for lead in Lead.objects.select_for_update().filter(customer=customer, status__in=list(OPEN)).order_by("pk"):
+    for lead in Lead.objects.select_for_update().filter(mine, status__in=list(OPEN)).order_by("pk"):
         previous = lead.status
-        lead.versioned_update(None, status=Lead.Status.CONVERTED)
+        lead.versioned_update(None, status=Lead.Status.CONVERTED, customer=customer)
         add_event(lead, LeadEvent.Event.CONVERTED, data={"from": previous, "customer_uid": str(customer.uid), "reason": reason})
         record("leads.lead_converted", obj=lead, actor_kind="SYSTEM", before={"status": previous}, after={"status": Lead.Status.CONVERTED, "customer": str(customer.uid), "reason": reason})
         count += 1

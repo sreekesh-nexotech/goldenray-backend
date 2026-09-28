@@ -46,7 +46,11 @@ def test_check_approved_and_pending(client):
         ("Verifications", 429, {"code": 60203, "message": "Max send attempts reached"}, ProviderRejected),
         ("Verifications", 400, {"code": 60200, "message": "Invalid parameter"}, ProviderRejected),
         ("Verifications", 503, {}, ProviderUnavailable),
-        ("Verifications", 401, "not json", ProviderRejected),
+        # Our credentials or service SID are wrong (rotated token, deleted Verify service): a configuration fault,
+        # never the visitor's number or code.
+        ("Verifications", 401, "not json", ProviderUnavailable),
+        ("VerificationCheck", 401, {"code": 20003, "message": "Authenticate"}, ProviderUnavailable),
+        ("Verifications", 404, {"code": 20404, "message": "The requested resource was not found"}, ProviderUnavailable),
     ],
 )
 def test_errors_are_mapped(client, resource, status, body, error):
@@ -99,3 +103,24 @@ def test_twilio_backend_end_to_end(api_client, settings):
     response = api_client.post("/api/public/v1/otp/verify/", {"phone": "9876543210", "code": "482913"}, format="json")
     assert response.status_code == 200 and response.json()["verification_token"]
     assert twilio_verify.SENT == []  # the fake backend was not used
+
+
+@pytest.mark.django_db
+@responses.activate
+def test_rejected_credentials_are_an_outage_not_a_wrong_code(api_client, settings, caplog):
+    """A rotated auth token (Twilio 401) must not tell a visitor that their correct code is wrong, nor that their
+    number cannot receive SMS: it is 503 ``otp_unavailable`` and an ERROR in the log for the operators."""
+    settings.LEADS_OTP_BACKEND = "twilio"
+    settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN, settings.TWILIO_VERIFY_SERVICE_SID = SID, TOKEN, SERVICE
+    responses.post(f"{BASE}/Verifications", json={"sid": "VE9", "status": "pending"}, status=201)
+    responses.post(f"{BASE}/VerificationCheck", json={"code": 20003, "message": "Authenticate"}, status=401)
+    assert api_client.post("/api/public/v1/otp/send/", {"phone": "9876543210"}, format="json").status_code == 200
+    with caplog.at_level("ERROR", logger="flarize.leads.otp"):
+        response = api_client.post("/api/public/v1/otp/verify/", {"phone": "9876543210", "code": "482913"}, format="json")
+    assert response.status_code == 503 and response.json()["code"] == "otp_unavailable"
+    assert any(record.levelname == "ERROR" and "401" in record.getMessage() for record in caplog.records)
+    assert TOKEN not in caplog.text
+
+    responses.replace(responses.POST, f"{BASE}/Verifications", json={"code": 20404, "message": "not found"}, status=404)
+    sent = api_client.post("/api/public/v1/otp/send/", {"phone": "9876543211"}, format="json")
+    assert sent.status_code == 503 and sent.json()["code"] == "otp_unavailable"

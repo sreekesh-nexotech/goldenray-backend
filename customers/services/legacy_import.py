@@ -32,12 +32,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import transaction
 
+from audit.services import record
 from core.models import LegacyMap
 from core.services import stamp_create
 from customers.models import Customer
-from customers.services.customers import CACHE_NAMESPACE, find_by_phone, next_code
+from customers.services.customers import CACHE_NAMESPACE, EDITABLE_FIELDS, customer_snapshot, find_by_phone, next_code
 from customers.services.import_support import ImportRun, mapped_id, run_import, timestamp, upsert
 from customers.services.phones import try_normalise
+from flarize.cache_utils import bump
 
 FLARIZE = LegacyMap.SourceSystem.FLARIZE
 SOURCE_TABLE = "customers"
@@ -147,7 +149,8 @@ def import_flarize_customers(rows: list[dict], *, user=None, dry_run: bool = Fal
 def match_or_create_by_phone(*, phone, name: str, user=None, source: str = Customer.Source.SI_IMPORT, values: dict | None = None) -> tuple[Customer | None, bool]:
     """The live customer with this phone (``(customer, False)``), else a new one (``(customer, True)``).
 
-    Never matches by name; an unparsable phone returns ``(None, False)`` so the caller reports it.
+    Never matches by name; an unparsable phone returns ``(None, False)`` so the caller reports it. A created customer is
+    audited (``customers.customer_created``) and bumps the ``customers`` cache; ``values`` may add other editable fields.
     """
     phone_e164 = try_normalise(phone)
     if phone_e164 is None:
@@ -155,7 +158,10 @@ def match_or_create_by_phone(*, phone, name: str, user=None, source: str = Custo
     existing = find_by_phone(phone_e164, lock=True)
     if existing is not None:
         return existing, False
-    customer = Customer(code=next_code(), name=(name or "").strip()[:255] or phone_e164, phone_e164=phone_e164, source=source, **(values or {}))
+    extra = {key: value for key, value in (values or {}).items() if key in EDITABLE_FIELDS and key not in ("name", "phone_e164", "source")}
+    customer = Customer(code=next_code(), name=(name or "").strip()[:255] or phone_e164, phone_e164=phone_e164, source=source, **extra)
     stamp_create(customer, user)
     customer.save()
+    record("customers.customer_created", obj=customer, actor=user, after=customer_snapshot(customer), note=f"{source} import (matched by phone)")
+    bump(CACHE_NAMESPACE)
     return customer, True

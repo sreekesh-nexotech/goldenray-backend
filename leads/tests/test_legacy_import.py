@@ -139,6 +139,20 @@ def test_row_level_violations():
     assert (str(row.capacity_kw), row.phone_e164, row.address, row.district) == ("3.300", "", "(phone as recorded: abc)", "")
 
 
+def test_unparsable_installation_phone_is_kept_beside_an_address():
+    """The legacy installation form never validated phones: a junk number is kept (in ``address``) even when the row
+    has an address, so no legacy value is lost; a re-run changes nothing."""
+    installs = [
+        {"id": 7, "customer_name": "I", "phone_number": "98470-ABC", "pincode": "688008", "address": "Vadakkal, Alappuzha", "system_size": 3, "installation_date": "2025-01-01", "status": "completed"}
+    ]
+    result = legacy_import.import_customer_installations(installs)
+    assert result["created"] == 1 and [v["code"] for v in result["violations"]] == ["unparsable_phone"]
+    row = CustomerInstallation.objects.get()
+    assert (row.phone_e164, row.address) == ("", "Vadakkal, Alappuzha\n(phone as recorded: 98470-ABC)")
+    rerun = legacy_import.import_customer_installations(installs)
+    assert (rerun["created"], rerun["updated"], rerun["skipped"]) == (0, 0, 1)
+
+
 def test_dry_run_writes_nothing(legacy_pincodes):
     results = legacy_import.import_all(tables(), dry_run=True, today=CAPTURE_DAY)
     assert results["lead_collection_home"]["created"] == 7

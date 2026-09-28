@@ -65,6 +65,19 @@ def test_assignee_rule_and_scope(auth_client, make_user):
     assert client.patch(f"{URL}{mine.json()['uid']}/", {"assignee_uid": str(other.uid)}, format="json").json()["code"] == "assign_forbidden"
 
 
+def test_new_installation_is_assigned_to_its_creator(auth_client, make_user):
+    """As for leads: a Sales Executive (owned scope) keeps seeing what they entered; leaving it to nobody needs manage."""
+    editor = make_user(grants={"leads": ["view", "create", "edit"]}, scopes={"leads": "owned"})
+    client = auth_client(editor)
+    created = client.post(URL, NEW, format="json")
+    assert created.status_code == 201 and created.json()["assignee"]["uid"] == str(editor.uid)
+    assert [row["uid"] for row in client.get(URL).json()["results"]] == [created.json()["uid"]]
+    refused = client.post(URL, {**NEW, "assignee_uid": None}, format="json")
+    assert refused.status_code == 403 and refused.json()["code"] == "assign_forbidden"
+    manager = auth_client(make_user(grants={"leads": "*"}, scopes={"leads": "all"}))
+    assert manager.post(URL, {**NEW, "assignee_uid": None}, format="json").json()["assignee"] is None
+
+
 def test_list_filters_queries_stale_and_delete(client, django_assert_max_num_queries):
     CustomerInstallationFactory.create_batch(3, photo=MediaAssetFactory())
     row = CustomerInstallationFactory(status=CustomerInstallation.Status.PLANNED, pincode="695001", district="THIRUVANANTHAPURAM")
