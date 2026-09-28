@@ -1,0 +1,791 @@
+{
+ "attendance_rules": [
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": null,
+   "id": 1,
+   "is_active": true,
+   "name": "Company half-day deadline",
+   "notes": "Global default",
+   "office_id": null,
+   "rules": {
+    "half_day_after": "10:30"
+   },
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": "2025-01-01",
+   "id": 2,
+   "is_active": true,
+   "name": "Head office allowance",
+   "notes": null,
+   "office_id": 1,
+   "rules": {
+    "grace_bonus": 5,
+    "half_day_after_minutes": 45
+   },
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": null,
+   "id": 3,
+   "is_active": true,
+   "name": "Night shift short day",
+   "notes": null,
+   "office_id": null,
+   "rules": {
+    "half_day_under_minutes": 240
+   },
+   "shift_id": 2,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": "2026-01-01",
+   "id": 4,
+   "is_active": true,
+   "name": "Sales early shift",
+   "notes": "Office and shift both named",
+   "office_id": 4,
+   "rules": {
+    "half_day_after": "08:15:00"
+   },
+   "shift_id": 3,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": null,
+   "id": 5,
+   "is_active": true,
+   "name": "Broken deadline",
+   "notes": null,
+   "office_id": null,
+   "rules": {
+    "half_day_after": "25:99",
+    "half_day_under_minutes": -5
+   },
+   "shift_id": 1,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.846909+00:00",
+   "effective_from": "2027-04-01",
+   "id": 6,
+   "is_active": false,
+   "name": "Future policy",
+   "notes": "Not yet active",
+   "office_id": null,
+   "rules": {
+    "half_day_after_minutes": 60
+   },
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.846909+00:00"
+  }
+ ],
+ "employees": [
+  {
+   "attendance_identity_method": "FACE",
+   "created_at": "2026-09-28T22:34:27.757078+00:00",
+   "department": "Accounts",
+   "designation": "Accountant",
+   "email": "person-c2921f76@example.test",
+   "employee_code": "E001",
+   "full_name": "Person 9519DC",
+   "id": 1,
+   "is_active": true,
+   "joined_on": "2023-04-03",
+   "office_id": 1,
+   "phone": "+91 98534 52250",
+   "photo_url": null,
+   "shift_id": 1,
+   "updated_at": "2026-09-28T22:34:27.757078+00:00",
+   "user_id": 2
+  },
+  {
+   "attendance_identity_method": "UNSPECIFIED",
+   "created_at": "2026-09-28T22:34:28.038439+00:00",
+   "department": "HR",
+   "designation": "HR Executive",
+   "email": "person-047842d5@example.test",
+   "employee_code": "E002",
+   "full_name": "Person 2959AB",
+   "id": 2,
+   "is_active": true,
+   "joined_on": "2022-11-14",
+   "office_id": 1,
+   "phone": "9847752851",
+   "photo_url": null,
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:28.038439+00:00",
+   "user_id": 3
+  },
+  {
+   "attendance_identity_method": "CARD",
+   "created_at": "2026-09-28T22:34:28.345355+00:00",
+   "department": "Sales",
+   "designation": "Sales Executive",
+   "email": "person-8b4653c7@example.test",
+   "employee_code": "E003",
+   "full_name": "Person 22CC50",
+   "id": 3,
+   "is_active": true,
+   "joined_on": null,
+   "office_id": 4,
+   "phone": "0484 4234723",
+   "photo_url": null,
+   "shift_id": 2,
+   "updated_at": "2026-09-28T22:34:28.345355+00:00",
+   "user_id": 4
+  },
+  {
+   "attendance_identity_method": "UNSPECIFIED",
+   "created_at": "2026-09-28T22:34:28.645711+00:00",
+   "department": "Projects",
+   "designation": "Installer",
+   "email": null,
+   "employee_code": "E004",
+   "full_name": "Person 8C1479",
+   "id": 4,
+   "is_active": true,
+   "joined_on": null,
+   "office_id": 2,
+   "phone": "12347",
+   "photo_url": null,
+   "shift_id": 3,
+   "updated_at": "2026-09-28T22:34:28.645711+00:00",
+   "user_id": null
+  },
+  {
+   "attendance_identity_method": "UNSPECIFIED",
+   "created_at": "2026-09-28T22:34:28.661977+00:00",
+   "department": null,
+   "designation": "Director",
+   "email": null,
+   "employee_code": "E005",
+   "full_name": "Person EFE741",
+   "id": 5,
+   "is_active": true,
+   "joined_on": null,
+   "office_id": 5,
+   "phone": "+971 53 361 9015",
+   "photo_url": null,
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:28.661977+00:00",
+   "user_id": 5
+  },
+  {
+   "attendance_identity_method": "UNSPECIFIED",
+   "created_at": "2026-09-28T22:34:28.898807+00:00",
+   "department": null,
+   "designation": null,
+   "email": "person-91bc793c@example.test",
+   "employee_code": "E006",
+   "full_name": "Person AE1FF0",
+   "id": 6,
+   "is_active": false,
+   "joined_on": null,
+   "office_id": 1,
+   "phone": null,
+   "photo_url": null,
+   "shift_id": 4,
+   "updated_at": "2026-09-28T22:34:29.213341+00:00",
+   "user_id": null
+  },
+  {
+   "attendance_identity_method": "FACE_CARD",
+   "created_at": "2026-09-28T22:34:29.231535+00:00",
+   "department": null,
+   "designation": null,
+   "email": "person-234ca5bb@example.test",
+   "employee_code": "e007",
+   "full_name": "Person 044C65",
+   "id": 7,
+   "is_active": false,
+   "joined_on": "2024-01-15",
+   "office_id": 2,
+   "phone": null,
+   "photo_url": null,
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.532391+00:00",
+   "user_id": 7
+  },
+  {
+   "attendance_identity_method": "CARD",
+   "created_at": "2026-09-28T22:34:29.550799+00:00",
+   "department": null,
+   "designation": null,
+   "email": "not-an-email",
+   "employee_code": "E008",
+   "full_name": "Person CFEE12",
+   "id": 8,
+   "is_active": true,
+   "joined_on": null,
+   "office_id": null,
+   "phone": null,
+   "photo_url": null,
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.550799+00:00",
+   "user_id": null
+  },
+  {
+   "attendance_identity_method": "UNSPECIFIED",
+   "created_at": "2026-09-28T22:34:29.566621+00:00",
+   "department": null,
+   "designation": null,
+   "email": "person-85825e0f@example.test",
+   "employee_code": "E009",
+   "full_name": "Person B1256B",
+   "id": 9,
+   "is_active": true,
+   "joined_on": "2025-06-01",
+   "office_id": 4,
+   "phone": "+91 99894 94412",
+   "photo_url": null,
+   "shift_id": null,
+   "updated_at": "2026-09-28T22:34:29.566621+00:00",
+   "user_id": null
+  }
+ ],
+ "holidays": [
+  {
+   "created_at": "2026-09-28T22:34:29.586192+00:00",
+   "holiday_date": "2026-01-26",
+   "id": 1,
+   "is_active": true,
+   "name": "Republic Day",
+   "notes": null,
+   "office_id": null,
+   "updated_at": "2026-09-28T22:34:29.586192+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.605451+00:00",
+   "holiday_date": "2026-08-26",
+   "id": 2,
+   "is_active": true,
+   "name": "Thiruvonam",
+   "notes": "State holiday",
+   "office_id": null,
+   "updated_at": "2026-09-28T22:34:29.605451+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.616289+00:00",
+   "holiday_date": "2026-03-10",
+   "id": 3,
+   "is_active": true,
+   "name": "Foundation Day",
+   "notes": null,
+   "office_id": 1,
+   "updated_at": "2026-09-28T22:34:29.616289+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.628627+00:00",
+   "holiday_date": "2026-03-10",
+   "id": 4,
+   "is_active": true,
+   "name": "Sales Offsite",
+   "notes": null,
+   "office_id": 4,
+   "updated_at": "2026-09-28T22:34:29.628627+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.641213+00:00",
+   "holiday_date": "2026-05-01",
+   "id": 5,
+   "is_active": false,
+   "name": "May Day",
+   "notes": null,
+   "office_id": null,
+   "updated_at": "2026-09-28T22:34:29.651872+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.662710+00:00",
+   "holiday_date": "2026-01-26",
+   "id": 6,
+   "is_active": true,
+   "name": "Gandhi Jayanti (typo)",
+   "notes": null,
+   "office_id": null,
+   "updated_at": "2026-09-28T22:34:29.672848+00:00"
+  }
+ ],
+ "leave_records": [
+  {
+   "created_at": "2026-09-28T22:34:29.723295+00:00",
+   "date_from": "2026-02-02",
+   "date_to": "2026-02-04",
+   "employee_id": 1,
+   "id": 1,
+   "is_half_day": false,
+   "leave_type": "LEAVE",
+   "reason": "xxxxxx xxxxxxxx",
+   "status": "APPROVED",
+   "updated_at": "2026-09-28T22:34:29.723295+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.742268+00:00",
+   "date_from": "2026-03-05",
+   "date_to": "2026-03-05",
+   "employee_id": 1,
+   "id": 2,
+   "is_half_day": true,
+   "leave_type": "Sick",
+   "reason": null,
+   "status": "APPROVED",
+   "updated_at": "2026-09-28T22:34:29.742268+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.755523+00:00",
+   "date_from": "2026-04-10",
+   "date_to": "2026-04-11",
+   "employee_id": 3,
+   "id": 3,
+   "is_half_day": false,
+   "leave_type": "Casual Leave",
+   "reason": "xxxxxx",
+   "status": "PENDING",
+   "updated_at": "2026-09-28T22:34:29.755523+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.772346+00:00",
+   "date_from": "2026-04-20",
+   "date_to": "2026-04-20",
+   "employee_id": 4,
+   "id": 4,
+   "is_half_day": false,
+   "leave_type": "LEAVE",
+   "reason": null,
+   "status": "REJECTED",
+   "updated_at": "2026-09-28T22:34:29.772346+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.787964+00:00",
+   "date_from": "2026-05-04",
+   "date_to": "2026-05-05",
+   "employee_id": 2,
+   "id": 5,
+   "is_half_day": false,
+   "leave_type": "sick",
+   "reason": null,
+   "status": "CANCELLED",
+   "updated_at": "2026-09-28T22:34:29.787964+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.800573+00:00",
+   "date_from": "2026-01-12",
+   "date_to": "2026-01-13",
+   "employee_id": 7,
+   "id": 6,
+   "is_half_day": true,
+   "leave_type": "Sick",
+   "reason": null,
+   "status": "APPROVED",
+   "updated_at": "2026-09-28T22:34:29.800573+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.812447+00:00",
+   "date_from": "2026-06-15",
+   "date_to": "2026-06-19",
+   "employee_id": 5,
+   "id": 7,
+   "is_half_day": false,
+   "leave_type": "On Duty",
+   "reason": "xxxxxx xxxxx, xxxxxx",
+   "status": "APPROVED",
+   "updated_at": "2026-09-28T22:34:29.812447+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.824485+00:00",
+   "date_from": "2026-02-04",
+   "date_to": "2026-02-05",
+   "employee_id": 1,
+   "id": 8,
+   "is_half_day": false,
+   "leave_type": "LEAVE",
+   "reason": null,
+   "status": "APPROVED",
+   "updated_at": "2026-09-28T22:34:29.824485+00:00"
+  }
+ ],
+ "offices": [
+  {
+   "address": null,
+   "code": "HO",
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "default_shift_id": 1,
+   "id": 1,
+   "is_active": true,
+   "name": "Main Office",
+   "timezone": "Asia/Kolkata",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  },
+  {
+   "address": null,
+   "code": "BR1",
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "default_shift_id": 1,
+   "id": 2,
+   "is_active": true,
+   "name": "Branch 1",
+   "timezone": "Asia/Kolkata",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  },
+  {
+   "address": null,
+   "code": "BR2",
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "default_shift_id": 1,
+   "id": 3,
+   "is_active": false,
+   "name": "Branch 2",
+   "timezone": "Asia/Kolkata",
+   "updated_at": "2026-09-28T22:34:27.747216+00:00"
+  },
+  {
+   "address": "2nd Floor, MG Road, Kochi",
+   "code": "SALES",
+   "created_at": "2026-09-28T22:34:27.701670+00:00",
+   "default_shift_id": 3,
+   "id": 4,
+   "is_active": true,
+   "name": "Sales Office",
+   "timezone": "Asia/Kolkata",
+   "updated_at": "2026-09-28T22:34:27.701670+00:00"
+  },
+  {
+   "address": null,
+   "code": "DXB",
+   "created_at": "2026-09-28T22:34:27.719322+00:00",
+   "default_shift_id": null,
+   "id": 5,
+   "is_active": true,
+   "name": "Dubai Liaison",
+   "timezone": "Asia/Dubai",
+   "updated_at": "2026-09-28T22:34:27.719322+00:00"
+  },
+  {
+   "address": null,
+   "code": "LAB",
+   "created_at": "2026-09-28T22:34:27.728212+00:00",
+   "default_shift_id": null,
+   "id": 6,
+   "is_active": true,
+   "name": "Test Lab",
+   "timezone": "Asia/Calcutta",
+   "updated_at": "2026-09-28T22:34:27.728212+00:00"
+  },
+  {
+   "address": null,
+   "code": "WFH",
+   "created_at": "2026-09-28T22:34:27.736584+00:00",
+   "default_shift_id": null,
+   "id": 7,
+   "is_active": true,
+   "name": "Remote",
+   "timezone": "India Standard Time",
+   "updated_at": "2026-09-28T22:34:27.736584+00:00"
+  }
+ ],
+ "roles": [
+  {
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "description": "Full access to configuration and attendance",
+   "id": 1,
+   "name": "ADMIN",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "description": "Attendance, employees and reports",
+   "id": 2,
+   "name": "HR",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "description": "Sees their own attendance and reports",
+   "id": 3,
+   "name": "USER",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  },
+  {
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "description": "Read-only access",
+   "id": 4,
+   "name": "VIEWER",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00"
+  }
+ ],
+ "shifts": [
+  {
+   "auto_deduct_break": true,
+   "break_minutes": 60,
+   "code": "GEN",
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "early_exit_threshold_minutes": 15,
+   "end_time": "18:30:00",
+   "full_day_minutes": 480,
+   "grace_minutes": 10,
+   "half_day_minutes": 240,
+   "id": 1,
+   "is_active": true,
+   "is_overnight": false,
+   "late_threshold_minutes": 0,
+   "name": "General Shift",
+   "office_id": null,
+   "overtime_after_minutes": 480,
+   "overtime_enabled": true,
+   "start_time": "09:30:00",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00",
+   "weekly_off_days": [
+    6
+   ],
+   "working_days": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "auto_deduct_break": true,
+   "break_minutes": 60,
+   "code": "NIGHT",
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "early_exit_threshold_minutes": 15,
+   "end_time": "06:00:00",
+   "full_day_minutes": 480,
+   "grace_minutes": 10,
+   "half_day_minutes": 240,
+   "id": 2,
+   "is_active": true,
+   "is_overnight": true,
+   "late_threshold_minutes": 0,
+   "name": "Night Shift",
+   "office_id": null,
+   "overtime_after_minutes": 480,
+   "overtime_enabled": true,
+   "start_time": "22:00:00",
+   "updated_at": "2026-09-28T22:27:16.627649+00:00",
+   "weekly_off_days": [
+    6
+   ],
+   "working_days": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "auto_deduct_break": false,
+   "break_minutes": 45,
+   "code": "EARLY",
+   "created_at": "2026-09-28T22:34:27.617089+00:00",
+   "early_exit_threshold_minutes": 10,
+   "end_time": "16:00:00",
+   "full_day_minutes": 450,
+   "grace_minutes": 5,
+   "half_day_minutes": 225,
+   "id": 3,
+   "is_active": true,
+   "is_overnight": false,
+   "late_threshold_minutes": 10,
+   "name": "Early Shift",
+   "office_id": null,
+   "overtime_after_minutes": 540,
+   "overtime_enabled": false,
+   "start_time": "07:00:00",
+   "updated_at": "2026-09-28T22:34:27.617089+00:00",
+   "weekly_off_days": [
+    5,
+    6
+   ],
+   "working_days": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "auto_deduct_break": true,
+   "break_minutes": 0,
+   "code": "HALFSAT",
+   "created_at": "2026-09-28T22:34:27.638636+00:00",
+   "early_exit_threshold_minutes": 15,
+   "end_time": "13:30:00",
+   "full_day_minutes": 240,
+   "grace_minutes": 10,
+   "half_day_minutes": 120,
+   "id": 4,
+   "is_active": true,
+   "is_overnight": false,
+   "late_threshold_minutes": 0,
+   "name": "Saturday Half Day",
+   "office_id": 1,
+   "overtime_after_minutes": 480,
+   "overtime_enabled": true,
+   "start_time": "09:30:00",
+   "updated_at": "2026-09-28T22:34:27.638636+00:00",
+   "weekly_off_days": [
+    6
+   ],
+   "working_days": [
+    5
+   ]
+  },
+  {
+   "auto_deduct_break": true,
+   "break_minutes": 60,
+   "code": "LATE",
+   "created_at": "2026-09-28T22:34:27.649686+00:00",
+   "early_exit_threshold_minutes": 15,
+   "end_time": "04:00:00",
+   "full_day_minutes": 480,
+   "grace_minutes": 10,
+   "half_day_minutes": 240,
+   "id": 5,
+   "is_active": true,
+   "is_overnight": false,
+   "late_threshold_minutes": 0,
+   "name": "Late Shift",
+   "office_id": null,
+   "overtime_after_minutes": 480,
+   "overtime_enabled": true,
+   "start_time": "20:00:00",
+   "updated_at": "2026-09-28T22:34:27.649686+00:00",
+   "weekly_off_days": [
+    6
+   ],
+   "working_days": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "auto_deduct_break": true,
+   "break_minutes": 60,
+   "code": "OLD",
+   "created_at": "2026-09-28T22:34:27.662429+00:00",
+   "early_exit_threshold_minutes": 15,
+   "end_time": "19:00:00",
+   "full_day_minutes": 480,
+   "grace_minutes": 10,
+   "half_day_minutes": 240,
+   "id": 6,
+   "is_active": false,
+   "is_overnight": false,
+   "late_threshold_minutes": 0,
+   "name": "Retired Shift",
+   "office_id": null,
+   "overtime_after_minutes": 480,
+   "overtime_enabled": true,
+   "start_time": "10:00:00",
+   "updated_at": "2026-09-28T22:34:27.677142+00:00",
+   "weekly_off_days": [
+    6
+   ],
+   "working_days": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  }
+ ],
+ "users": [
+  {
+   "created_at": "2026-09-28T22:27:16.627649+00:00",
+   "email": null,
+   "full_name": "Person E7D3E7",
+   "id": 1,
+   "is_active": true,
+   "password_hash": "$2b$12$eOJudX/ReoHOUEJJq5GJyOw42Ts/.JbSSdU0c.jju/CsbSoApKiyO",
+   "role_id": 1,
+   "updated_at": "2026-09-28T22:27:16.627649+00:00",
+   "username": "admin"
+  },
+  {
+   "created_at": "2026-09-28T22:34:27.757078+00:00",
+   "email": "person-c2921f76@example.test",
+   "full_name": "Person 9519DC",
+   "id": 2,
+   "is_active": true,
+   "password_hash": "$2b$12$Dykji/YMcuxFupUOienrsu6aJGZgAGvbxlNbyQNZ3YL/RyadW1kma",
+   "role_id": 3,
+   "updated_at": "2026-09-28T22:34:27.757078+00:00",
+   "username": "asha"
+  },
+  {
+   "created_at": "2026-09-28T22:34:28.038439+00:00",
+   "email": "person-047842d5@example.test",
+   "full_name": "Person 2959AB",
+   "id": 3,
+   "is_active": true,
+   "password_hash": "$2b$12$or2N2yscx7lnrDiMZjVQterbcwZ4IYI362IC3HYYDmd0x/fMO3iLC",
+   "role_id": 2,
+   "updated_at": "2026-09-28T22:34:28.038439+00:00",
+   "username": "binu"
+  },
+  {
+   "created_at": "2026-09-28T22:34:28.345355+00:00",
+   "email": "person-8b4653c7@example.test",
+   "full_name": "Person 22CC50",
+   "id": 4,
+   "is_active": true,
+   "password_hash": "$2b$12$Obu6I8OtTA9/eeKqZWJ.Ju3RT5r78dnTSoUax6xvmjxP5AM1Jt0oS",
+   "role_id": 4,
+   "updated_at": "2026-09-28T22:34:28.345355+00:00",
+   "username": "chitra"
+  },
+  {
+   "created_at": "2026-09-28T22:34:28.661977+00:00",
+   "email": null,
+   "full_name": "Person EFE741",
+   "id": 5,
+   "is_active": true,
+   "password_hash": "$2b$12$SkCQFtCuucux/JaA7h7XRO3pBYD5ywJJ/MeNg7F.tEYmq49akurrK",
+   "role_id": 1,
+   "updated_at": "2026-09-28T22:34:28.661977+00:00",
+   "username": "elena"
+  },
+  {
+   "created_at": "2026-09-28T22:34:28.898807+00:00",
+   "email": "person-91bc793c@example.test",
+   "full_name": "Person AE1FF0",
+   "id": 6,
+   "is_active": false,
+   "password_hash": "$2b$12$UGNwMcsr0lQFWVLWpjmVKOVlMeTB4S1IXcUoaLzLrFMK.z9kYqmKy",
+   "role_id": 3,
+   "updated_at": "2026-09-28T22:34:29.193120+00:00",
+   "username": "farhan"
+  },
+  {
+   "created_at": "2026-09-28T22:34:29.231535+00:00",
+   "email": "person-234ca5bb@example.test",
+   "full_name": "Person 044C65",
+   "id": 7,
+   "is_active": true,
+   "password_hash": "$2b$12$c4B.xKM2s1a5GLegvRw0yuBK2oV.0I4zwlM3rqmho2fvTfTXM.XBC",
+   "role_id": 3,
+   "updated_at": "2026-09-28T22:34:29.231535+00:00",
+   "username": "gita"
+  }
+ ]
+}
