@@ -4,7 +4,7 @@ Work package *content-pages* builds PLAN §2.8 `sitepages_*` / `faqs_*`, the §3
 the §3.4 staff `pages/…`, `faqs/…`, `faq-categories/…` endpoints (+ `career-page/…`), the §3.5 revalidation events
 and the §7.2 rows 8–9 importers, on top of F1–F3/F-FIX and the shared `seo.models.SeoFields` / `seo/schema.py`
 (reused, not redefined). Legacy source: `goldenray-backend/backend/cms/{sitepages,faqs,seo}` and `CMS_BLUEPRINT.md`.
-Deviations: DV-16 … DV-19 in `docs/DEVIATIONS.md`.
+Deviations: DV-17 … DV-20 in `docs/DEVIATIONS.md`.
 
 ## What exists
 

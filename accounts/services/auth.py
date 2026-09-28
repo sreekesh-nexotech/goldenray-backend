@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass
+from functools import partial
 
 from django.conf import settings
 from django.db import transaction
@@ -22,6 +23,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, Token
 from accounts.errors import InvalidCredentials, LoginLocked, PasswordResetRequired, TokenRejected
 from accounts.models import PasswordReset, User, UserSession
 from accounts.services import emails, lockout, passwords, sessions
+from audit import context as audit_context
 from audit.services import record
 from core.errors import DomainError
 from flarize.cache_utils import bump
@@ -48,11 +50,13 @@ def login(email: str, password: str, *, ip: str | None = None, user_agent: str =
     The password hasher runs on every path (unknown e-mail, inactive user, locked out) so timing reveals nothing.
     """
     key = lockout.email_key(email)
-    lock = lockout.check(key, ip)
+    # Counted as a failure before the (slow) verification; concurrent guesses cannot all slip past the check.
+    reservation = lockout.reserve(key, ip)
     user = _find_user(email)
     password_ok = passwords.verify_password(user, password)
 
-    if lock.locked:
+    if reservation.locked:
+        lock = reservation.state
         with transaction.atomic():
             record("accounts.login_locked", object_type=USER_OBJECT_TYPE, object_uid=user.uid if user else None, actor_kind="USER", after={"email": key, "locked_by": lock.reason})
         raise LoginLocked(lock.retry_after)
@@ -60,18 +64,17 @@ def login(email: str, password: str, *, ip: str | None = None, user_agent: str =
     if user is None or not password_ok or not user.is_active:
         reason = "unknown_email" if user is None else ("wrong_password" if not password_ok else "inactive")
         with transaction.atomic():
-            lockout.record_attempt(key, ip, succeeded=False)
             record("accounts.login_failed", object_type=USER_OBJECT_TYPE, object_uid=user.uid if user else None, actor_kind="USER", after={"email": key, "reason": reason})
         raise InvalidCredentials()
 
     if user.must_reset_password:
         with transaction.atomic():
-            lockout.record_attempt(key, ip, succeeded=True)
+            lockout.succeed(reservation)
             record("accounts.login_blocked", obj=user, actor_kind="USER", after={"reason": "password_reset_required"})
         raise PasswordResetRequired()
 
     with transaction.atomic():
-        lockout.record_attempt(key, ip, succeeded=True)
+        lockout.succeed(reservation)
         now = timezone.now()
         # Telemetry column: no version bump, no attribution change.
         User.all_objects.filter(pk=user.pk).update(last_login_at=now)
@@ -203,17 +206,18 @@ def change_password(user: User, *, current_password: str, new_password: str, ses
     oracle).
     """
     key = lockout.email_key(user.email)
-    lock = lockout.check(key, ip)
+    reservation = lockout.reserve(key, ip)
     current_ok = passwords.verify_password(user, current_password)
-    if lock.locked:
+    if reservation.locked:
+        lock = reservation.state
         with transaction.atomic():
             record("accounts.password_change_locked", obj=user, actor=user, after={"locked_by": lock.reason})
         raise LoginLocked(lock.retry_after)
     if not current_ok:
         with transaction.atomic():
-            lockout.record_attempt(key, ip, succeeded=False)
             record("accounts.password_change_failed", obj=user, actor=user, after={"reason": "wrong_current_password"})
         raise DomainError("invalid_current_password", "The current password is incorrect.", errors={"current_password": ["The current password is incorrect."]})
+    lockout.succeed(reservation)
     if new_password == current_password:
         raise DomainError("validation_error", "Invalid input.", errors={"new_password": ["The new password must differ from the current one."]})
 
@@ -228,7 +232,30 @@ def change_password(user: User, *, current_password: str, new_password: str, ses
 
 
 def request_password_reset(email: str, *, ip: str | None = None) -> None:
-    """E-mail a reset link when ``email`` belongs to an active account. Always returns normally (no enumeration);
+    """Queue a reset link for ``email``. Returns at once and does the same work for every address — the lookup, the
+    token and the e-mail happen in ``accounts.tasks.send_password_reset`` — so neither the answer nor its timing tells
+    whether an account exists."""
+    email = (email or "").strip()
+    if not email:
+        return
+    ctx = audit_context.current()
+    transaction.on_commit(partial(_enqueue_password_reset, email, ctx.request_id, ip or ctx.ip), robust=True)
+
+
+def _enqueue_password_reset(email: str, request_id: str | None, ip: str | None) -> None:
+    from accounts.tasks import send_password_reset
+
+    try:
+        # The address is personal data: the worker logs the message's argsrepr/kwargsrepr, never the arguments.
+        send_password_reset.apply_async(args=[email], kwargs={"request_id": request_id, "ip": ip}, argsrepr="('<address>',)", kwargsrepr="{}")
+    except Exception:  # noqa: BLE001 - broker outage: handle it now rather than lose the link (the timing then differs)
+        logger.warning("could not enqueue a password reset request; handling it synchronously", exc_info=True)
+        with audit_context.bind(request_id=request_id, ip=ip):
+            process_password_reset_request(email)
+
+
+def process_password_reset_request(email: str) -> None:
+    """E-mail a reset link when ``email`` belongs to an active account (the task behind :func:`request_password_reset`);
     at most ``ACCOUNTS_RESET_REQUESTS_PER_HOUR`` links per account per hour (no mail bombing)."""
     user = _find_user(email)
     if user is None or not user.is_active:

@@ -115,9 +115,17 @@ def _sniff(fileobj: BinaryIO, kind: str, allowed) -> Sniffed:
 
 
 def strip_location(data: bytes, sniffed: Sniffed) -> bytes:
-    """Re-encode an image without its metadata (orientation applied first, colour profile kept)."""
-    image = ImageOps.exif_transpose(open_image(io.BytesIO(data)))
-    options = {"icc_profile": image.info.get("icc_profile")} if image.info.get("icc_profile") else {}
+    """Re-encode an image without its metadata (orientation applied first, colour profile kept).
+
+    The pixels are copied into an image whose ``info`` holds only the ICC profile: encoders that copy the source's
+    metadata by default (pillow-heif takes EXIF, XMP and every metadata box from ``info``) have nothing to copy, and
+    ``exif``/``xmp`` are passed empty to the encoders that accept them.
+    """
+    source = ImageOps.exif_transpose(open_image(io.BytesIO(data)))
+    icc_profile = source.info.get("icc_profile")
+    image = source.copy()
+    image.info = {"icc_profile": icc_profile} if icc_profile else {}
+    options = {"icc_profile": icc_profile} if icc_profile else {}
     output = io.BytesIO()
     fmt = sniffed.image_format
     if fmt == "JPEG":
@@ -125,7 +133,7 @@ def strip_location(data: bytes, sniffed: Sniffed) -> bytes:
     elif fmt == "PNG":
         image.save(output, "PNG", optimize=True, exif=b"", **options)
     elif fmt == "WEBP":
-        image.save(output, "WEBP", quality=92, exif=b"", **options)
+        image.save(output, "WEBP", quality=92, exif=b"", xmp=b"", **options)
     else:
         image.save(output, fmt or "HEIF", quality=92)
     return output.getvalue()

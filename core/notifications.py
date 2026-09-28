@@ -12,7 +12,9 @@ encrypted, read through :mod:`core.integrations`) its host/port/credentials/send
 test backends (console, locmem) are never overridden, so a staging snapshot restored on a laptop cannot e-mail
 real people.
 
-Logs carry the category and the recipient count, never addresses or bodies (bodies may contain one-time links).
+Logs carry the category and the recipient count, never addresses or bodies (bodies may contain one-time links). That
+includes the task message: it is published with a redacted ``argsrepr``/``kwargsrepr`` — the representation Celery
+workers log for every received, succeeded and failed task and ``celery inspect`` shows.
 """
 
 from __future__ import annotations
@@ -90,11 +92,16 @@ def send_email(*, to: str | Iterable[str], subject: str, text: str, html: str | 
     return sent
 
 
+def task_repr(payload: dict) -> str:
+    """What Celery may log about a queued e-mail: its category and recipient count (never addresses or content)."""
+    return repr({"category": payload.get("category") or "general", "recipients": len(payload.get("to") or ())})
+
+
 def _enqueue(payload: dict) -> None:
     try:
         from core.tasks import send_email as send_email_task
 
-        send_email_task.delay(**payload)
+        send_email_task.apply_async(kwargs=payload, argsrepr="()", kwargsrepr=task_repr(payload))
     except Exception:  # noqa: BLE001 - broker outage: deliver synchronously rather than lose security mail
         logger.warning("could not enqueue email; sending synchronously", extra={"category": payload.get("category") or "general"}, exc_info=True)
         try:
