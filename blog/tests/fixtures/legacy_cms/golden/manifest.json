@@ -1,0 +1,237 @@
+[
+ {
+  "name": "list_populate_all",
+  "query": "populate=*&pagination[pageSize]=100",
+  "status": 200
+ },
+ {
+  "name": "list_default",
+  "query": "",
+  "status": 200
+ },
+ {
+  "name": "fields_slug",
+  "query": "fields[0]=slug",
+  "status": 200
+ },
+ {
+  "name": "fields_slug_title_100",
+  "query": "fields[0]=slug&fields[1]=title&pagination[pageSize]=100",
+  "status": 200
+ },
+ {
+  "name": "fields_dates_and_unknown",
+  "query": "fields[0]=slug&fields[1]=publishedOn&fields[2]=updatedAt&fields[3]=nonexistent",
+  "status": 200
+ },
+ {
+  "name": "slug_pm_surya_ghar_subsidy_guide",
+  "query": "populate=*&filters[slug][$eq]=pm-surya-ghar-subsidy-guide",
+  "status": 200
+ },
+ {
+  "name": "slug_on_grid_vs_hybrid_kerala",
+  "query": "populate=*&filters[slug][$eq]=on-grid-vs-hybrid-kerala",
+  "status": 200
+ },
+ {
+  "name": "slug_how_net_metering_works",
+  "query": "populate=*&filters[slug][$eq]=how-net-metering-works",
+  "status": 200
+ },
+ {
+  "name": "slug_battery_sizing_guide",
+  "query": "populate=*&filters[slug][$eq]=battery-sizing-guide",
+  "status": 200
+ },
+ {
+  "name": "slug_solar_panel_cleaning",
+  "query": "populate=*&filters[slug][$eq]=solar-panel-cleaning",
+  "status": 200
+ },
+ {
+  "name": "slug_draft_inverter_guide",
+  "query": "populate=*&filters[slug][$eq]=draft-inverter-guide",
+  "status": 200
+ },
+ {
+  "name": "slug_archived_old_subsidy",
+  "query": "populate=*&filters[slug][$eq]=archived-old-subsidy",
+  "status": 200
+ },
+ {
+  "name": "slug_net_metering_explained",
+  "query": "populate=*&filters[slug][$eq]=net-metering-explained",
+  "status": 200
+ },
+ {
+  "name": "slug_no_such_article",
+  "query": "populate=*&filters[slug][$eq]=no-such-article",
+  "status": 200
+ },
+ {
+  "name": "alias_with_fields",
+  "query": "filters[slug][$eq]=net-metering-explained&fields[0]=slug",
+  "status": 200
+ },
+ {
+  "name": "alias_eqi",
+  "query": "filters[slug][$eqi]=NET-METERING-EXPLAINED",
+  "status": 200
+ },
+ {
+  "name": "filter_eqi",
+  "query": "filters[slug][$eqi]=HOW-NET-METERING-WORKS",
+  "status": 200
+ },
+ {
+  "name": "filter_in_repeated",
+  "query": "filters[slug][$in]=battery-sizing-guide&filters[slug][$in]=solar-panel-cleaning",
+  "status": 200
+ },
+ {
+  "name": "filter_contains",
+  "query": "filters[title][$contains]=solar",
+  "status": 200
+ },
+ {
+  "name": "filter_ne",
+  "query": "filters[slug][$ne]=battery-sizing-guide",
+  "status": 200
+ },
+ {
+  "name": "filter_null_true",
+  "query": "filters[sortOrder][$null]=true",
+  "status": 200
+ },
+ {
+  "name": "filter_null_false",
+  "query": "filters[sortOrder][$null]=false",
+  "status": 200
+ },
+ {
+  "name": "filter_gt",
+  "query": "filters[readTime][$gt]=5",
+  "status": 200
+ },
+ {
+  "name": "filter_gte",
+  "query": "filters[readTime][$gte]=6",
+  "status": 200
+ },
+ {
+  "name": "filter_lt",
+  "query": "filters[readTime][$lt]=6",
+  "status": 200
+ },
+ {
+  "name": "filter_lte",
+  "query": "filters[readTime][$lte]=5",
+  "status": 200
+ },
+ {
+  "name": "filter_published_on_gte",
+  "query": "filters[publishedOn][$gte]=2026-05-03T00:00:00Z",
+  "status": 200
+ },
+ {
+  "name": "filter_is_featured",
+  "query": "filters[isFeatured][$eq]=True",
+  "status": 200
+ },
+ {
+  "name": "filter_document_id",
+  "query": "filters[documentId][$eq]=3c41703e-65e1-4381-b354-b87b4913eb9f",
+  "status": 200
+ },
+ {
+  "name": "filter_unknown_field_ignored",
+  "query": "filters[password][$contains]=x",
+  "status": 200
+ },
+ {
+  "name": "filter_slug_and_title_no_alias",
+  "query": "filters[slug][$eq]=net-metering-explained&filters[title][$contains]=KSEB",
+  "status": 200
+ },
+ {
+  "name": "sort_title_asc",
+  "query": "sort[0]=title:asc",
+  "status": 200
+ },
+ {
+  "name": "sort_title_desc",
+  "query": "sort[0]=title:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_published_on_desc",
+  "query": "sort[0]=publishedOn:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_read_time_asc",
+  "query": "sort[0]=readTime:asc",
+  "status": 200
+ },
+ {
+  "name": "sort_sort_order_asc",
+  "query": "sort[0]=sortOrder:asc",
+  "status": 200
+ },
+ {
+  "name": "sort_sort_order_desc",
+  "query": "sort[0]=sortOrder:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_plain_published_at_desc",
+  "query": "sort=publishedAt:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_two_keys",
+  "query": "sort[0]=isFeatured:desc&sort[1]=title:asc",
+  "status": 200
+ },
+ {
+  "name": "sort_unknown_ignored",
+  "query": "sort[0]=password:desc",
+  "status": 200
+ },
+ {
+  "name": "page_2_size_2",
+  "query": "pagination[page]=2&pagination[pageSize]=2",
+  "status": 200
+ },
+ {
+  "name": "page_3_size_2",
+  "query": "pagination[page]=3&pagination[pageSize]=2",
+  "status": 200
+ },
+ {
+  "name": "page_past_end",
+  "query": "pagination[page]=9&pagination[pageSize]=2",
+  "status": 200
+ },
+ {
+  "name": "page_size_clamped",
+  "query": "pagination[pageSize]=500",
+  "status": 200
+ },
+ {
+  "name": "page_zero_floored",
+  "query": "pagination[page]=0&pagination[pageSize]=3",
+  "status": 200
+ },
+ {
+  "name": "page_size_not_a_number",
+  "query": "pagination[pageSize]=abc",
+  "status": 200
+ },
+ {
+  "name": "sort_and_page",
+  "query": "sort[0]=title:asc&pagination[page]=2&pagination[pageSize]=2&fields[0]=slug",
+  "status": 200
+ }
+]

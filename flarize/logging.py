@@ -51,7 +51,7 @@ _RESERVED = frozenset(
 
 
 # Path segments that *are* the credential (the URL is the capability): signed media URLs (reusable for 10 minutes),
-# single-use document links, per-device terminal tokens (long-lived) and customer link tokens. They are replaced by
+# single-use document links, per-device terminal tokens (long-lived), customer link tokens and blog preview links. They are replaced by
 # REDACTED wherever a path is logged or stored — access log, security log, SystemException.path and any message that
 # embeds a path (Django's "Internal Server Error: <path>"). deploy/nginx/flarize.conf applies the same rules to its
 # access log ($loggable_uri).
@@ -59,6 +59,7 @@ _CAPABILITY_SEGMENTS = (
     re.compile(r"(/api/[^/\s]+/(?:media|documents)/download/)[^/\s?#]+(?=/)"),
     re.compile(r"(/iclock/)[^/\s?#]+(?=/)"),
     re.compile(r"(/api/customer/[^/\s]+/[^/\s?#]+/)[^/\s?#]+(?=/)"),
+    re.compile(r"(/api/public/[^/\s]+/content/preview/)[^/\s?#]+(?=/)"),
 )
 
 

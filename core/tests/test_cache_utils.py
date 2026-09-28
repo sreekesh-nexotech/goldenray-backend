@@ -153,3 +153,28 @@ class TestHttpMaxAge:
         with mock.patch("flarize.cache_utils.cache.set") as cache_set:
             self._serve(300)
         assert cache_set.call_args.args[2] == 300
+
+
+@pytest.mark.django_db
+class TestKeyOrder:
+    """content-blog WP: a cached response keeps the view's key order (byte parity of the Strapi delivery contract)."""
+
+    @staticmethod
+    def _serve():
+        from rest_framework.response import Response
+        from rest_framework.test import APIRequestFactory
+
+        from flarize.cache_utils import serve_cached
+
+        request = APIRequestFactory().get("/api/public/v1/order/")
+        request.query_params = request.GET
+        return serve_cached(object(), request, ["tests:order"], 60, lambda: Response({"zeta": 1, "alpha": {"b": 2, "a": 1}}))
+
+    def test_miss_and_hit_keep_insertion_order_and_the_etag_is_canonical(self):
+        import hashlib
+
+        miss, hit = self._serve(), self._serve()
+        assert miss["X-Cache"] == "MISS" and hit["X-Cache"] == "HIT"
+        assert list(miss.data) == ["zeta", "alpha"] and list(hit.data["alpha"]) == ["b", "a"]
+        canonical = '{"alpha":{"a":1,"b":2},"zeta":1}'
+        assert miss["ETag"] == hit["ETag"] == '"' + hashlib.sha256(canonical.encode()).hexdigest()[:40] + '"'

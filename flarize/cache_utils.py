@@ -150,8 +150,10 @@ def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, produce
         response = producer()
         if response.status_code != status.HTTP_200_OK:
             return response
-        body = json.dumps(response.data, cls=JSONEncoder, sort_keys=True, separators=(",", ":"))
-        entry = {"data": json.loads(body), "etag": '"' + hashlib.sha256(body.encode()).hexdigest()[:40] + '"'}
+        # The ETag hashes a canonical (key-sorted) body; the stored payload keeps the view's key order, so a cached
+        # response is byte-identical to the uncached one (contracts such as the Strapi delivery depend on key order).
+        canonical = json.dumps(response.data, cls=JSONEncoder, sort_keys=True, separators=(",", ":"))
+        entry = {"data": json.loads(json.dumps(response.data, cls=JSONEncoder)), "etag": '"' + hashlib.sha256(canonical.encode()).hexdigest()[:40] + '"'}
         _safe_set(key, entry, ttl)
         cache_status = "MISS"
     else:
