@@ -1,0 +1,32 @@
+[
+ {
+  "id": 1,
+  "name": "Subsidy",
+  "slug": "subsidy",
+  "description": "PM Surya Ghar and state schemes",
+  "is_active": true,
+  "sort_order": 1,
+  "created_at": "2026-09-28T21:13:49.050736+00:00",
+  "updated_at": "2026-09-28T21:13:49.050747+00:00"
+ },
+ {
+  "id": 2,
+  "name": "Financing",
+  "slug": "financing",
+  "description": "",
+  "is_active": false,
+  "sort_order": 2,
+  "created_at": "2026-09-28T21:13:49.052562+00:00",
+  "updated_at": "2026-09-28T21:13:49.052574+00:00"
+ },
+ {
+  "id": 3,
+  "name": "Unused",
+  "slug": "unused",
+  "description": "",
+  "is_active": true,
+  "sort_order": 3,
+  "created_at": "2026-09-28T21:13:49.054094+00:00",
+  "updated_at": "2026-09-28T21:13:49.054103+00:00"
+ }
+]

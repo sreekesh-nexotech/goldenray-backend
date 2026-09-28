@@ -1,0 +1,47 @@
+[
+ {
+  "id": 1,
+  "file": "blog/career-hero.webp",
+  "cdn_url": "https://golden-ray.b-cdn.net/cms/general/career-hero.webp",
+  "storage_path": "",
+  "mime": "image/webp",
+  "size": 120000,
+  "width": 1920,
+  "height": 1080,
+  "alternative_text": "Flarize installers on a rooftop",
+  "caption": "",
+  "collection_id": null,
+  "created_at": "2026-09-28T21:13:48.999476+00:00",
+  "updated_at": "2026-09-28T21:13:48.999488+00:00"
+ },
+ {
+  "id": 2,
+  "file": "blog/career-og.webp",
+  "cdn_url": "https://golden-ray.b-cdn.net/cms/general/career-og.webp",
+  "storage_path": "",
+  "mime": "image/webp",
+  "size": 120000,
+  "width": 1200,
+  "height": 630,
+  "alternative_text": "Careers at Flarize",
+  "caption": "",
+  "collection_id": null,
+  "created_at": "2026-09-28T21:13:49.004284+00:00",
+  "updated_at": "2026-09-28T21:13:49.004296+00:00"
+ },
+ {
+  "id": 3,
+  "file": "blog/home-hero.webp",
+  "cdn_url": "https://golden-ray.b-cdn.net/cms/general/home-hero.webp",
+  "storage_path": "",
+  "mime": "image/webp",
+  "size": 120000,
+  "width": 1600,
+  "height": 900,
+  "alternative_text": "",
+  "caption": "",
+  "collection_id": null,
+  "created_at": "2026-09-28T21:13:49.007793+00:00",
+  "updated_at": "2026-09-28T21:13:49.007805+00:00"
+ }
+]

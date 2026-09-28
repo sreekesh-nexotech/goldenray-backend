@@ -1,0 +1,58 @@
+[
+ {
+  "id": 1,
+  "seo_title": "Careers at Flarize — solar jobs in Kerala",
+  "meta_description": "Open roles in installation, sales and engineering at Flarize, Kerala's rooftop solar company.",
+  "canonical_url": "https://flarize.com/career",
+  "schema_type": "WebPage",
+  "schema_extra": {
+   "name": "must not override",
+   "@type": "Ignored",
+   "inLanguage": "en-IN"
+  },
+  "noindex": false,
+  "updated_at": "2026-09-28T21:13:49.024320+00:00",
+  "og_image_id": 2,
+  "page_id": 22,
+  "updated_by_id": 1
+ },
+ {
+  "id": 2,
+  "seo_title": "PM Surya Ghar subsidy",
+  "meta_description": "",
+  "canonical_url": "",
+  "schema_type": "none",
+  "schema_extra": {},
+  "noindex": true,
+  "updated_at": "2026-09-28T21:13:49.039709+00:00",
+  "og_image_id": null,
+  "page_id": 4,
+  "updated_by_id": null
+ },
+ {
+  "id": 3,
+  "seo_title": "",
+  "meta_description": "About Flarize.",
+  "canonical_url": "",
+  "schema_type": "WebPage",
+  "schema_extra": {},
+  "noindex": false,
+  "updated_at": "2026-09-28T21:13:49.043023+00:00",
+  "og_image_id": 3,
+  "page_id": 15,
+  "updated_by_id": null
+ },
+ {
+  "id": 4,
+  "seo_title": "Privacy",
+  "meta_description": "",
+  "canonical_url": "",
+  "schema_type": "FAQPage",
+  "schema_extra": {},
+  "noindex": false,
+  "updated_at": "2026-09-28T21:13:49.045611+00:00",
+  "og_image_id": null,
+  "page_id": 26,
+  "updated_by_id": null
+ }
+]
