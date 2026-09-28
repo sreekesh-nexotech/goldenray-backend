@@ -47,7 +47,8 @@ Work package F1 builds the part of PLAN §4.3 (Phase 1) every other package stan
    `select_for_update`. `soft_delete`/`restore` use it too.
 9. **`updated_at` is set in `BaseModel.save()`** (not `auto_now`) and `created_at` defaults to now (not
    `auto_now_add`), so importers can preserve source timestamps via `bulk_create`.
-10. **Outbox**: rows are claimed with `SKIP LOCKED` and marked processed before dispatch (standard §7.2); each handler
+10. **Outbox** *(claiming superseded by F-FIX: a lease, completion after dispatch, retry backoff, `--requeue-parked`;
+    see `docs/decisions/f-fix.md`)*: rows are claimed with `SKIP LOCKED` and marked processed before dispatch (standard §7.2); each handler
     runs in its own transaction; succeeded handlers are recorded in `delivered` and not re-run; after 5 attempts the
     row is parked and a `SystemException` is written. `OUTBOX_STRICT` (test settings) makes invalid payloads raise
     instead of being dropped fail-soft. Handlers receive an immutable `core.outbox.Event`.
@@ -65,7 +66,8 @@ Work package F1 builds the part of PLAN §4.3 (Phase 1) every other package stan
 14. **Filtering accepts `?field=` and `?filter[field]=`** (`flarize.filters.FilterBackend`) — PLAN §3.1 names the
     bracket form, §3.4 uses plain parameters.
 15. **API docs**: schema per version at `/api/schema/<version>/`; in prod both schema and Swagger UI require a staff
-    JWT unless `API_DOCS_PUBLIC=True` (staging default). `core/tests/test_schema.py` fails on any drf-spectacular
+    JWT unless `API_DOCS_PUBLIC=True` (staging default). *(Superseded by F-FIX: a browser cannot send the JWT, so prod
+    gates both by `API_DOCS_ALLOWED_NETWORKS`, the same networks as nginx's allow-list.)* `core/tests/test_schema.py` fails on any drf-spectacular
     warning, so every later endpoint must be fully described.
 16. **Request context**: `core.middleware.RequestIdMiddleware` accepts a UUID `X-Request-ID` from nginx or mints one,
     echoes it, and writes one JSON access-log line (method, path, status, duration, user uid).

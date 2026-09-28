@@ -44,6 +44,10 @@ def validate_production_settings(settings: Mapping) -> None:
             parse_networks(tuple(proxies))
         except ValueError as exc:
             problems.append(f"TRUSTED_PROXIES is invalid: {exc}")
+    try:
+        parse_networks(tuple(cidr for cidr in settings.get("API_DOCS_ALLOWED_NETWORKS", ()) if cidr))
+    except ValueError as exc:
+        problems.append(f"API_DOCS_ALLOWED_NETWORKS is invalid: {exc}")
     if not str(settings.get("ACCOUNTS_PASSWORD_RESET_URL", "")).startswith("https://"):
         problems.append("PASSWORD_RESET_URL must be an https:// URL (it carries one-time reset tokens)")
     if settings.get("EMAIL_BACKEND", "") in NON_DELIVERING_EMAIL_BACKENDS:

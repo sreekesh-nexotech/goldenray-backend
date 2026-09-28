@@ -7,6 +7,11 @@ Every error response has the envelope ``{code, message, errors, error_codes}``:
 * ``errors`` — ``{field: [messages]}`` for validation failures (``{}`` otherwise);
 * ``error_codes`` — unique machine codes harvested from DRF ``ErrorDetail.code`` (or the domain code).
 
+Django's ``SuspiciousOperation`` family, raised while DRF parses a body (``TooManyFieldsSent``,
+``TooManyFilesSent``, ``RequestDataTooBig``), is a client error: ``413 request_too_large`` for an oversized body,
+``400 bad_request`` for the rest. It is logged once at WARNING (``flarize.security``) and never recorded as a
+``SystemException``, so anonymous callers cannot flood the error sink.
+
 Unexpected exceptions become ``500 server_error``: logged with the request id and written to
 ``core.SystemException`` by a writer that never raises. No exception text or stack reaches the client.
 """
@@ -18,6 +23,7 @@ import math
 from collections.abc import Mapping, Sequence
 
 from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
+from django.core.exceptions import RequestDataTooBig, SuspiciousOperation
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.http import Http404, JsonResponse
 from rest_framework import exceptions as drf_exceptions
@@ -28,6 +34,7 @@ from rest_framework.views import set_rollback
 from core.errors import DomainError
 
 logger = logging.getLogger("flarize.errors")
+security_logger = logging.getLogger("flarize.security")
 
 NON_FIELD_ERRORS_KEY = "non_field_errors"
 
@@ -143,6 +150,15 @@ def _api_exception_response(exc: drf_exceptions.APIException) -> Response:
     return Response(error_payload(str(code), message), status=exc.status_code, headers=headers)
 
 
+def _suspicious_response(exc: SuspiciousOperation, context: Mapping | None) -> Response:
+    """Client error, not a server fault: no SystemException, no ERROR line, and no exception text in the body."""
+    request = (context or {}).get("request")
+    security_logger.warning("Rejected request: %s", exc.__class__.__name__, extra={"path": getattr(request, "path", ""), "method": getattr(request, "method", "")})
+    if isinstance(exc, RequestDataTooBig):
+        return Response(error_payload("request_too_large", "The request body is too large."), status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
+    return Response(error_payload("bad_request", "Bad request."), status=status.HTTP_400_BAD_REQUEST)
+
+
 def _record_unexpected(exc: Exception, context: Mapping | None) -> None:
     request = (context or {}).get("request")
     logger.error("Unhandled exception: %s", exc.__class__.__name__, exc_info=(type(exc), exc, exc.__traceback__))
@@ -171,10 +187,17 @@ def exception_handler(exc: Exception, context: Mapping) -> Response:
     if isinstance(exc, drf_exceptions.APIException):
         set_rollback()
         return _api_exception_response(exc)
+    if isinstance(exc, SuspiciousOperation):
+        set_rollback()
+        return _suspicious_response(exc, context)
 
     set_rollback()
     _record_unexpected(exc, context)
-    return Response(error_payload("server_error", "Internal server error."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    response = Response(error_payload("server_error", "Internal server error."), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # Logged above (traceback + request id): Django's handler must not log it again after RequestIdMiddleware
+    # has reset the request context (a second ERROR line without the request id).
+    response._has_been_logged = True
+    return response
 
 
 # ------------------------------------------------------------------------------------------------------------------

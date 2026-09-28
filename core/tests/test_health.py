@@ -34,12 +34,23 @@ def test_all_checks_ok(client):
     body = response.json()
     assert body["status"] == "ok"
     assert set(body["checks"]) == {"database", "cache", "outbox", "render_queue", "audit_partitions"}
-    assert body["checks"]["outbox"] == {"ok": True, "pending": 0, "oldest_age_seconds": 0, "parked": 0, "critical": False, "duration_ms": body["checks"]["outbox"]["duration_ms"]}
+    assert body["checks"]["outbox"] == {
+        "ok": True,
+        "pending": 0,
+        "oldest_age_seconds": 0,
+        "stale_claims": 0,
+        "retrying": 0,
+        "parked": 0,
+        "critical": False,
+        "duration_ms": body["checks"]["outbox"]["duration_ms"],
+    }
     assert response["Cache-Control"].startswith("max-age=0")
 
 
 def test_only_safe_methods(client):
-    assert client.post("/healthz").status_code == 405
+    response = client.post("/healthz")
+    assert response.status_code == 405 and response["Content-Type"] == "application/json" and response["Allow"] == "GET, HEAD"
+    assert response.json() == {"code": "method_not_allowed", "message": "Method not allowed.", "errors": {}, "error_codes": ["method_not_allowed"]}
     assert client.head("/healthz").status_code == 200
 
 
@@ -50,6 +61,14 @@ def test_outbox_lag_degrades_without_failing(client):
     assert response.status_code == 200
     assert response.json()["status"] == "degraded"
     assert response.json()["checks"]["outbox"]["ok"] is False
+
+
+def test_an_expired_outbox_claim_degrades(client):
+    """A drainer that died mid-batch leaves an expired lease: the backlog must not look clean (F-FIX)."""
+    event = OutboxEvent.objects.create(event_type="tests.orphaned")
+    OutboxEvent.objects.filter(pk=event.pk).update(claimed_until=timezone.now() - timedelta(seconds=1), attempts=1)
+    outbox = client.get("/healthz").json()["checks"]["outbox"]
+    assert outbox["ok"] is False and outbox["stale_claims"] == 1 and outbox["pending"] == 1
 
 
 def test_failing_critical_check_is_503(client, extra_check):

@@ -10,8 +10,13 @@ invalidates what readers cached before the write; the post-commit bump orphans a
 from pre-commit data while the transaction was open. Cache failures never break a write (logged, fail-soft).
 
 Public GET endpoints use :func:`cache_response` / :class:`CachedResponseMixin`: the response body is cached under a
-key made from the API version, path, query string and namespace versions; responses carry
-``Cache-Control: public, max-age=<ttl>`` and a content ``ETag``; ``If-None-Match`` gets ``304``.
+key made from the API version, path, query string and namespace versions; responses carry a content ``ETag`` and
+``If-None-Match`` gets ``304``.
+
+Two lifetimes, deliberately separate: the **server-side TTL** (``ttl``, default ``PUBLIC_CACHE_TTL_SECONDS``) may be
+long because :func:`bump` invalidates Redis the moment Studio saves; the **HTTP** ``Cache-Control: public,
+max-age=…`` reaches browsers and CDNs, which ``bump`` cannot, so it never exceeds ``PUBLIC_CACHE_MAX_AGE_SECONDS``
+(PLAN §3.1: 60 s) nor the server TTL. A view may lower it further with ``max_age=``.
 """
 
 from __future__ import annotations
@@ -125,7 +130,13 @@ def _resolve_namespaces(namespaces: Namespaces, view, request) -> list[str]:
     return resolved
 
 
-def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, producer: Callable[[], Response]) -> Response:
+def http_max_age(ttl: int, max_age: int | None = None) -> int:
+    """``Cache-Control`` max-age: the view's ``max_age`` (if any), never above the public budget or the server TTL."""
+    budget = int(getattr(settings, "PUBLIC_CACHE_MAX_AGE_SECONDS", 60))
+    return max(0, min(ttl, budget, budget if max_age is None else int(max_age)))
+
+
+def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, producer: Callable[[], Response], *, max_age: int | None = None) -> Response:
     """Serve ``producer()`` through the version-keyed cache (GET/HEAD only; only 200 responses are stored)."""
     if request.method not in ("GET", "HEAD"):
         return producer()
@@ -151,18 +162,18 @@ def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, produce
     else:
         response = Response(entry["data"])
     response["ETag"] = entry["etag"]
-    response["Cache-Control"] = f"public, max-age={ttl}"
+    response["Cache-Control"] = f"public, max-age={http_max_age(ttl, max_age)}"
     response["X-Cache"] = cache_status
     return response
 
 
-def cache_response(*, namespaces: Namespaces, ttl: int | None = None):
-    """Decorator for a public view's ``get``/``list``/``retrieve`` method."""
+def cache_response(*, namespaces: Namespaces, ttl: int | None = None, max_age: int | None = None):
+    """Decorator for a public view's ``get``/``list``/``retrieve`` method (``ttl`` server-side, ``max_age`` HTTP)."""
 
     def decorator(method):
         @wraps(method)
         def wrapper(view, request, *args, **kwargs):
-            return serve_cached(view, request, namespaces, ttl, lambda: method(view, request, *args, **kwargs))
+            return serve_cached(view, request, namespaces, ttl, lambda: method(view, request, *args, **kwargs), max_age=max_age)
 
         return wrapper
 
@@ -174,12 +185,17 @@ class CachedResponseMixin:
 
     cache_namespaces: Sequence[str] = ()
     cache_ttl: int | None = None
+    cache_max_age: int | None = None
 
     def get_cache_namespaces(self, request) -> Sequence[str]:
         return self.cache_namespaces
 
     def list(self, request, *args, **kwargs):
-        return serve_cached(self, request, lambda view, req: view.get_cache_namespaces(req), self.cache_ttl, lambda: super(CachedResponseMixin, self).list(request, *args, **kwargs))
+        return serve_cached(
+            self, request, lambda view, req: view.get_cache_namespaces(req), self.cache_ttl, lambda: super(CachedResponseMixin, self).list(request, *args, **kwargs), max_age=self.cache_max_age
+        )
 
     def retrieve(self, request, *args, **kwargs):
-        return serve_cached(self, request, lambda view, req: view.get_cache_namespaces(req), self.cache_ttl, lambda: super(CachedResponseMixin, self).retrieve(request, *args, **kwargs))
+        return serve_cached(
+            self, request, lambda view, req: view.get_cache_namespaces(req), self.cache_ttl, lambda: super(CachedResponseMixin, self).retrieve(request, *args, **kwargs), max_age=self.cache_max_age
+        )

@@ -88,14 +88,18 @@ it, record the result in the ops log.
   render jobs by status with recent failures, audit volume and top actions, media volume; HR adds agent-offline
   hours and unknown ADMS devices when those packages land.
 * **Logs**: `docs/ops/log-queries.md` (5xx rate, slow requests, Celery failures, slow SQL, legacy hits).
-* **Errors**: `core_system_exception` rows (never raises; request id links to the logs).
+* **Errors**: `core_system_exception` rows (never raises; request id links to the logs). Rejected request bodies
+  (too many fields/files, oversized) are client errors: 400/413, a `flarize.security` warning, no row.
+* **API docs** (`/api/docs/`, `/api/schema/v1/`): prod serves them only to `API_DOCS_ALLOWED_NETWORKS` (api `.env`,
+  CIDRs), which must match `deploy/nginx/snippets/docs-allow.conf`; no JWT is needed (a browser navigation cannot
+  send one). An empty list closes the docs.
 
 ## 6. Incidents
 
 | Symptom | Check | Fix |
 |---|---|---|
 | `/healthz` `fail`, 503s | `dc ps`; `dc logs --tail 100 db redis pgbouncer` | restart the failed dependency; the api recovers by itself |
-| `degraded: outbox` | `dc logs worker-default`; parked rows: `core_outbox_event where parked_at is not null` | fix the handler, then `python manage.py drain_outbox`; re-drive parked rows after fixing (they are idempotent) |
+| `degraded: outbox` | `/healthz` `checks.outbox`: `oldest_age_seconds` (lag), `stale_claims` (a drainer died mid-batch; its rows are re-claimed once the lease expires), `retrying` (backoff), `parked`; `dc logs worker-default`; parked rows: `select id, event_type, attempts, last_error from core_outbox_event where parked_at is not null` | fix the handler and deploy, then `dc exec api-a python manage.py drain_outbox --requeue-parked` (all parked rows) or `--requeue-parked --id <id>` (repeatable); handlers that already succeeded are not re-run. Stale claims need no action unless they persist (then check the worker) |
 | `degraded: render_queue` | `dc ps worker-documents`; `dc logs worker-documents` | restart it; the sweeper re-enqueues lost QUEUED jobs within 5 min; FAILED jobs are re-requested from their record |
 | `degraded: audit_partitions` | `\d+ audit_log` | run the partition cron line now (§4) |
 | Upload returns 503 `storage_unavailable` | Bunny status; Settings → Integrations → Bunny | fix credentials/zone; nothing was written |

@@ -1,6 +1,9 @@
 """The company profile singleton (``company/profile/`` staff, ``company/`` public).
 
-* :func:`ensure_profile` creates the one row on first use (race-safe through the singleton unique index);
+* :func:`current_profile` is what every read serves: the stored row, or an unsaved one carrying the defaults
+  (``uid`` null, ``version`` 1). Reads never write;
+* :func:`ensure_profile` creates the one row (race-safe through the singleton unique index), audited as
+  ``company.profile_created``; :func:`update_profile` calls it on the first edit that changes something;
 * :func:`update_profile` edits it with optimistic locking, validates brand assets (kind, and *public* for anything
   the website shows), writes one audit row, bumps the ``company`` cache namespace and emits
   ``company.profile_updated``;
@@ -90,12 +93,17 @@ def get_profile() -> CompanyProfile | None:
     return CompanyProfile.objects.select_related(*PROFILE_RELATED).first()
 
 
-def public_profile() -> CompanyProfile:
-    """The stored profile, or an unsaved one with the defaults (the website never triggers a write)."""
+def current_profile() -> CompanyProfile:
+    """The stored profile, or an unsaved one with the defaults. Staff and website reads never trigger a write."""
     return get_profile() or CompanyProfile()
 
 
-def ensure_profile(user=None) -> CompanyProfile:
+public_profile = current_profile  # the website payload reads the same singleton
+
+
+@transaction.atomic
+def ensure_profile(user) -> CompanyProfile:
+    """The stored singleton, created on first need and audited as ``company.profile_created``. Never call it on a read."""
     profile = get_profile()
     if profile is not None:
         return profile
@@ -105,7 +113,9 @@ def ensure_profile(user=None) -> CompanyProfile:
             stamp_create(profile, user)
             profile.save()
     except IntegrityError:
-        pass  # created concurrently (singleton unique index)
+        return get_profile()  # created concurrently (singleton unique index); that request audited it
+    record("company.profile_created", obj=profile, actor=user, after=profile_snapshot(profile))
+    bump(CACHE_NAMESPACE)
     return get_profile()
 
 
@@ -143,24 +153,42 @@ def _validate(profile: CompanyProfile, values: dict) -> None:
         raise DomainError("validation_error", "The company profile is invalid.", errors=errors)
 
 
-@transaction.atomic
-def update_profile(*, user, data: dict, expected_version=None) -> CompanyProfile:
-    ensure_profile(user)
-    profile = CompanyProfile.objects.select_for_update().get(pk=get_profile().pk)
-    check_version(profile, expected_version)
-    unknown = sorted(set(data) - set(EDITABLE_FIELDS))
-    if unknown:
-        raise DomainError("validation_error", "Unknown profile fields.", errors={name: ["Not an editable field."] for name in unknown})
-    _validate(profile, data)
-    before = profile_snapshot(profile)
+def _locked_profile() -> CompanyProfile | None:
+    return CompanyProfile.objects.select_for_update().first()
+
+
+def _changed_values(profile: CompanyProfile, data: dict) -> dict:
     values = {}
     for name, value in data.items():
         if name == SECRET_FIELD:
             value = value or None
         if getattr(profile, name) != value:
             values[name] = value
+    return values
+
+
+@transaction.atomic
+def update_profile(*, user, data: dict, expected_version=None) -> CompanyProfile:
+    unknown = sorted(set(data) - set(EDITABLE_FIELDS))
+    if unknown:
+        raise DomainError("validation_error", "Unknown profile fields.", errors={name: ["Not an editable field."] for name in unknown})
+    profile = _locked_profile()
+    if profile is None:
+        # No row yet: clients saw the unsaved defaults as version 1. An edit that changes nothing writes nothing;
+        # otherwise the row is created (audited) and edited, so the result is version 2 like any later edit.
+        defaults = CompanyProfile()
+        check_version(defaults, expected_version)
+        _validate(defaults, data)
+        if not _changed_values(defaults, data):
+            return defaults
+        ensure_profile(user)
+        profile = _locked_profile()
+    check_version(profile, expected_version)  # a concurrent first edit may have moved it on
+    _validate(profile, data)
+    values = _changed_values(profile, data)
     if not values:
         return get_profile()
+    before = profile_snapshot(profile)
     profile.versioned_update(user, **values)
     after = profile_snapshot(profile)
     changed_before, changed_after = changes(before, after)

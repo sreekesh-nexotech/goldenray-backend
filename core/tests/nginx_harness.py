@@ -57,7 +57,11 @@ def _mock_upstream(name: str) -> ThreadingHTTPServer:
                     "x-request-id": self.headers.get("X-Request-ID") or "",
                 }
             ).encode()
-            self.send_response(200)
+            # ``?upstream_status=503`` makes the mock answer with that status (to prove nginx passes Django's errors through).
+            status = 200
+            if "upstream_status=" in self.path:
+                status = int(self.path.split("upstream_status=", 1)[1][:3])
+            self.send_response(status)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
@@ -182,8 +186,31 @@ class NginxHarness:
         self._stop()
         for server in self.upstreams.values():
             server.shutdown()
+            server.server_close()
+
+    def stop_upstream(self, name: str) -> None:
+        """Take one mock upstream down (nginx then answers 502 itself)."""
+        self.upstreams[name].shutdown()
+        self.upstreams[name].server_close()
 
     # -- requests ------------------------------------------------------------------------------------------------
+    def raw(self, method: str, path: str, *, headers: dict | None = None) -> tuple[int, dict[str, str], bytes]:
+        """Send headers only (e.g. a Content-Length nginx rejects before reading the body); returns status, headers, body."""
+        context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
+        connection = http.client.HTTPSConnection("127.0.0.1", self.ports["https"], context=context, timeout=10)
+        connection.putrequest(method, path, skip_host=True)
+        connection.putheader("Host", "flarize.com")
+        for key, value in (headers or {}).items():
+            connection.putheader(key, value)
+        connection.endheaders()
+        response = connection.getresponse()
+        body = response.read()
+        result = response.status, {key.lower(): value for key, value in response.getheaders()}, body
+        connection.close()
+        return result
+
     def get(self, path: str, *, port: str = "https") -> tuple[int, dict | None]:
         if port == "https":
             context = ssl.create_default_context()

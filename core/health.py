@@ -99,4 +99,5 @@ def outbox_check() -> CheckResult:
 
     stats = backlog_stats()
     limit = int(getattr(settings, "OUTBOX_LAG_ALERT_SECONDS", 300))
-    return CheckResult(ok=stats["oldest_age_seconds"] < limit and stats["parked"] == 0, details=stats)
+    # Lag, a parked poison pill, or an expired claim (a drainer died mid-batch) all need an operator's eye.
+    return CheckResult(ok=stats["oldest_age_seconds"] < limit and stats["parked"] == 0 and stats["stale_claims"] == 0, details=stats)

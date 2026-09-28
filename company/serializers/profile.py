@@ -51,6 +51,8 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
     quotation_offer_image = MediaAssetRefSerializer(read_only=True)
     trust_stats = TrustStatSerializer(many=True, read_only=True)
     social = serializers.DictField(child=serializers.URLField(), read_only=True)
+    uid = serializers.SerializerMethodField(help_text="Null until the first edit creates the profile.")
+    updated_at = serializers.SerializerMethodField(help_text="Null until the first edit creates the profile.")
     blog_revalidate_secret_set = serializers.SerializerMethodField()
     quotation_offer_active = serializers.SerializerMethodField()
     quotation_offer_image_src = serializers.SerializerMethodField()
@@ -106,6 +108,14 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
             "version",
         ]
         read_only_fields = fields
+
+    @extend_schema_field(serializers.UUIDField(allow_null=True))
+    def get_uid(self, profile) -> str | None:
+        return None if profile.pk is None else str(profile.uid)
+
+    @extend_schema_field(serializers.DateTimeField(allow_null=True))
+    def get_updated_at(self, profile) -> str | None:
+        return None if profile.pk is None else serializers.DateTimeField().to_representation(profile.updated_at)
 
     @extend_schema_field(serializers.BooleanField())
     def get_blog_revalidate_secret_set(self, profile) -> bool:

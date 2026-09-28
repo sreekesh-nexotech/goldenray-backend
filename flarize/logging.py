@@ -52,11 +52,15 @@ def current_request_id() -> str | None:
 
 
 class RequestContextFilter(logging.Filter):
-    """Attach the current request id and user uid to every record."""
+    """Attach the current request id and user uid to every record.
+
+    Django's handler logs some ``django.request`` records after ``RequestIdMiddleware`` returned (and reset the
+    context variable); those carry the request itself, whose ``request_id`` the middleware stamped.
+    """
 
     def filter(self, record: logging.LogRecord) -> bool:
-        if not hasattr(record, "request_id"):
-            record.request_id = request_id_var.get()
+        if getattr(record, "request_id", None) is None:
+            record.request_id = request_id_var.get() or getattr(getattr(record, "request", None), "request_id", None)
         if not hasattr(record, "user_uid"):
             record.user_uid = user_uid_var.get()
         return True

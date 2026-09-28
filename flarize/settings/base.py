@@ -212,7 +212,10 @@ CACHES = {
     }
 }
 CACHE_VERSION_TTL_SECONDS = 7 * 24 * 60 * 60
+# Server-side (Redis) default TTL of public GET payloads; bump() invalidates them on every write.
 PUBLIC_CACHE_TTL_SECONDS = 60
+# HTTP Cache-Control max-age budget for public GETs (PLAN §3.1): browsers and CDNs cannot be invalidated by bump().
+PUBLIC_CACHE_MAX_AGE_SECONDS = 60
 
 # --------------------------------------------------------------------------------------------------------------------
 # Client IP / proxies
@@ -332,7 +335,10 @@ FERNET_KEYS = config("FERNET_KEYS", default="", cast=Csv())
 # --------------------------------------------------------------------------------------------------------------------
 # OpenAPI (drf-spectacular). One schema per API version: /api/schema/<version>/.
 # --------------------------------------------------------------------------------------------------------------------
+# /api/docs/ and /api/schema/<version>/ (core.permissions.ApiDocsAccess): open when API_DOCS_PUBLIC, otherwise only
+# from API_DOCS_ALLOWED_NETWORKS (CIDRs; the office/VPN networks of deploy/nginx/snippets/docs-allow.conf).
 API_DOCS_PUBLIC = config("API_DOCS_PUBLIC", default=True, cast=bool)
+API_DOCS_ALLOWED_NETWORKS = config("API_DOCS_ALLOWED_NETWORKS", default="", cast=Csv())
 SPECTACULAR_SETTINGS = {
     "TITLE": "Flarize Platform API",
     "DESCRIPTION": (
@@ -343,7 +349,7 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     "SCHEMA_PATH_PREFIX": r"/api/(?:public/|agent/|customer/)?v[0-9]+",
     "COMPONENT_SPLIT_REQUEST": True,
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
+    "SERVE_PERMISSIONS": ["core.permissions.ApiDocsAccess"],
     "SERVE_AUTHENTICATION": [],
     "SWAGGER_UI_SETTINGS": {"deepLinking": True, "displayOperationId": True},
     # Choice sets that share a field name across apps get explicit, stable component names.
@@ -399,8 +405,15 @@ OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())
 # --------------------------------------------------------------------------------------------------------------------
 # Outbox
 # --------------------------------------------------------------------------------------------------------------------
+# A row is parked after this many failed or abandoned claims (DV-7); `drain_outbox --requeue-parked` re-drives it.
 OUTBOX_MAX_ATTEMPTS = 5
 OUTBOX_BATCH_SIZE = 100
+# Claim lease: longer than the Celery hard time limit, so a live drainer never loses a row it is dispatching; a
+# drainer that dies leaves a lease that expires after this long, and the row is claimed again.
+OUTBOX_CLAIM_LEASE_SECONDS = CELERY_TASK_TIME_LIMIT + 60
+# Retry backoff after a failed dispatch: base × 2^(attempt-1), capped (60 s, 2, 4, 8 min → parked after ~15 min).
+OUTBOX_RETRY_BASE_SECONDS = 60
+OUTBOX_RETRY_MAX_SECONDS = 3600
 OUTBOX_LAG_ALERT_SECONDS = 300
 # When True a non-serialisable payload raises at emit() (tests); otherwise it is logged and dropped (fail-soft).
 OUTBOX_STRICT = False
@@ -448,7 +461,8 @@ LOGGING = {
     "root": {"handlers": ["stdout"], "level": LOG_LEVEL},
     "loggers": {
         "django": {"handlers": ["stdout"], "level": LOG_LEVEL, "propagate": False},
-        # Request errors are logged once by flarize.exceptions (with the request id); avoid duplicate records.
+        # 5xx only. API errors are logged once by flarize.exceptions (traceback + request id; the response is marked
+        # as logged so Django does not repeat it); plain views (/iclock/, /healthz) are logged here, with the request id.
         "django.request": {"handlers": ["stdout"], "level": "ERROR", "propagate": False},
         "celery": {"handlers": ["stdout"], "level": LOG_LEVEL, "propagate": False},
     },

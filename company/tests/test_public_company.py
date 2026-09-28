@@ -56,7 +56,8 @@ def test_private_assets_are_never_exposed(api_client):
 def test_caching_headers_etag_and_304(api_client):
     CompanyProfileFactory()
     first = api_client.get(URL)
-    assert first["Cache-Control"] == "public, max-age=300" and first["X-Cache"] == "MISS" and first["ETag"]
+    # Redis keeps the payload 300 s (bump("company") invalidates it); browsers/CDNs only 60 s (PLAN §3.1).
+    assert first["Cache-Control"] == "public, max-age=60" and first["X-Cache"] == "MISS" and first["ETag"]
     second = api_client.get(URL)
     assert second["X-Cache"] == "HIT" and second.json() == first.json()
     not_modified = api_client.get(URL, HTTP_IF_NONE_MATCH=first["ETag"])

@@ -57,3 +57,53 @@ def test_json_formatter_renders_exceptions():
         record = logging.LogRecord("flarize.test", logging.ERROR, __file__, 1, "failed", (), sys.exc_info())
     payload = json.loads(JsonFormatter().format(record))
     assert "ValueError: boom" in payload["exc_info"]
+
+
+# ── F-FIX: one ERROR record per server error, always carrying the request id ────────────────────────────────────────
+class _Capture(logging.Handler):
+    """Mirrors the stdout handler of settings.LOGGING (RequestContextFilter attached) and keeps the records."""
+
+    def __init__(self):
+        super().__init__(level=logging.ERROR)
+        self.addFilter(RequestContextFilter())
+        self.records: list[logging.LogRecord] = []
+
+    def emit(self, record):
+        self.records.append(record)
+
+
+@pytest.fixture
+def error_records():
+    handler = _Capture()
+    loggers = [logging.getLogger(name) for name in ("django.request", "flarize.errors")]
+    for logger in loggers:
+        logger.addHandler(handler)
+    yield handler.records
+    for logger in loggers:
+        logger.removeHandler(handler)
+
+
+RID = "0b8f9c9e-6c1a-4a8c-9a55-2b1a0f4f6a11"
+
+
+@pytest.mark.urls("core.tests.urls_testing")
+def test_an_api_500_is_logged_once_with_the_request_id(api_client, error_records):
+    assert api_client.get("/api/v1/_t/raise/unexpected/", HTTP_X_REQUEST_ID=RID).status_code == 500
+    assert [(record.name, record.request_id) for record in error_records] == [("flarize.errors", RID)]
+
+
+@pytest.mark.urls("core.tests.urls_testing")
+def test_a_plain_view_500_is_logged_once_with_the_request_id(client, error_records):
+    client.raise_request_exception = False
+    response = client.get("/iclock/dev-token/_t/boom/", HTTP_X_REQUEST_ID=RID)
+    assert response.status_code == 500 and response.json()["code"] == "server_error"
+    assert [(record.name, record.request_id) for record in error_records] == [("django.request", RID)]
+    assert error_records[0].exc_info is not None
+
+
+def test_the_filter_falls_back_to_the_request_attribute():
+    """django.request logs some records after RequestIdMiddleware reset the context variable."""
+    record = logging.LogRecord("django.request", logging.ERROR, __file__, 1, "Service Unavailable: /healthz", (), None)
+    record.request = type("Request", (), {"request_id": RID})()
+    RequestContextFilter().filter(record)
+    assert record.request_id == RID

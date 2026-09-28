@@ -141,6 +141,11 @@ def plain_gated_view(request, device_token):
     return JsonResponse({"gated": True})
 
 
+def plain_boom_view(request, device_token):
+    """A plain Django view (like the /iclock/ receiver) that fails unexpectedly."""
+    raise RuntimeError("plain view failure")
+
+
 class StaffMethodView(BaseAPIView):
     module = "settings"
     action_permissions = {"GET": "view", "POST": ("audit", "view")}

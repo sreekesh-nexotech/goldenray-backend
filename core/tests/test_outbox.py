@@ -1,12 +1,18 @@
 import threading
 import uuid
+from datetime import timedelta
 from decimal import Decimal
 
 import pytest
+from django.conf import settings
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.db import connection, transaction
 from django.test import override_settings
+from django.utils import timezone
+from freezegun import freeze_time
 
+from audit.models import AuditLog
 from core import outbox
 from core.models import FeatureFlag, OutboxEvent, SystemException
 from core.outbox import Event, backlog_stats, drain, emit, handler, handlers_for, unregister
@@ -85,20 +91,13 @@ class TestDrain:
         registry("tests.drained", received.append)
         uid = uuid.uuid4()
         emit("tests.drained", {"a": 1}, aggregate_type="tests.thing", aggregate_uid=uid)
-        assert drain() == {"claimed": 1, "processed": 1, "failed": 0, "parked": 0}
+        assert drain() == {"claimed": 1, "processed": 1, "failed": 0, "parked": 0, "lost": 0}
         assert len(received) == 1
         event = received[0]
         assert (event.event_type, event.payload, event.aggregate_uid, event.attempts) == ("tests.drained", {"a": 1}, uid, 1)
         row = OutboxEvent.objects.get()
-        assert row.processed_at is not None and row.attempts == 1 and row.last_error == ""
+        assert row.processed_at is not None and row.attempts == 1 and row.last_error == "" and row.claimed_until is None
         assert drain()["claimed"] == 0
-
-    def test_row_is_marked_processed_before_dispatch(self, registry):
-        states = []
-        registry("tests.claimed", lambda event: states.append(OutboxEvent.objects.get(pk=event.id).processed_at is not None))
-        emit("tests.claimed", {})
-        drain()
-        assert states == [True]
 
     def test_event_without_handlers_is_processed(self):
         emit("tests.nobody_listens", {})
@@ -120,10 +119,11 @@ class TestDrain:
         emit("tests.retry", {})
         assert drain()["failed"] == 1
         row = OutboxEvent.objects.get()
-        assert row.processed_at is None and row.attempts == 1
+        assert row.processed_at is None and row.attempts == 1 and row.next_attempt_at is not None
         assert "RuntimeError: temporary failure" in row.last_error
         assert row.delivered == [outbox.handler_name(first)]
-        assert drain()["processed"] == 1
+        with freeze_time(row.next_attempt_at):
+            assert drain()["processed"] == 1
         assert calls == {"first": 1, "second": 2}
         row.refresh_from_db()
         assert row.processed_at is not None and row.last_error == ""
@@ -143,15 +143,20 @@ class TestDrain:
         registry("tests.poison", lambda event: 1 / 0)
         registry("tests.healthy", lambda event: None)
         emit("tests.poison", {})
-        outcomes = [drain() for _ in range(5)]
+        outcomes = []
+        for _ in range(5):
+            due = OutboxEvent.objects.get(event_type="tests.poison").next_attempt_at or timezone.now()
+            with freeze_time(due):
+                outcomes.append(drain())
         assert [outcome["failed"] for outcome in outcomes[:4]] == [1, 1, 1, 1]
         assert outcomes[4]["parked"] == 1
         row = OutboxEvent.objects.get(event_type="tests.poison")
         assert row.parked_at is not None and row.processed_at is None and row.attempts == 5
+        assert row.claimed_until is None and row.next_attempt_at is None
         assert "ZeroDivisionError" in row.last_error
         assert SystemException.objects.filter(source="outbox").count() == 1
         emit("tests.healthy", {})
-        assert drain() == {"claimed": 1, "processed": 1, "failed": 0, "parked": 0}
+        assert drain() == {"claimed": 1, "processed": 1, "failed": 0, "parked": 0, "lost": 0}
         assert backlog_stats()["parked"] == 1
 
     def test_drain_outbox_sync_and_command(self, registry, drain_outbox, capsys):
@@ -164,9 +169,11 @@ class TestDrain:
         assert "processed=1" in capsys.readouterr().out
 
     def test_backlog_stats(self):
-        assert backlog_stats() == {"pending": 0, "oldest_age_seconds": 0, "parked": 0}
+        assert backlog_stats() == {"pending": 0, "oldest_age_seconds": 0, "stale_claims": 0, "retrying": 0, "parked": 0}
         emit("tests.pending", {})
         assert backlog_stats()["pending"] == 1
+        outbox._claim(100)  # a claimed row is still pending until it is processed
+        assert backlog_stats()["pending"] == 1 and backlog_stats()["stale_claims"] == 0
 
 
 def test_handler_registration_validates_and_deduplicates():
@@ -214,3 +221,127 @@ def test_concurrent_drainers_never_double_dispatch(registry):
     assert len(counts) == 40
     assert set(counts.values()) == {1}
     assert OutboxEvent.objects.filter(processed_at__isnull=True).count() == 0
+
+
+# ── F-FIX: claim lease, retry backoff, re-drive of parked rows ──────────────────────────────────────────────────────
+@pytest.mark.django_db
+class TestClaimLease:
+    def test_a_drainer_that_dies_after_claiming_does_not_lose_the_event(self, registry):
+        seen = []
+        registry("tests.lease", lambda event: seen.append(event.id))
+        event = emit("tests.lease", {})
+        assert [row.id for row in outbox._claim(100)] == [event.id]  # the drainer dies here (SIGKILL / OOM / hard limit)
+        assert drain()["claimed"] == 0  # the lease is still held
+        assert backlog_stats()["pending"] == 1  # but the event is visibly not done
+        with freeze_time(timezone.now() + timedelta(seconds=settings.OUTBOX_CLAIM_LEASE_SECONDS + 1)):
+            assert backlog_stats()["stale_claims"] == 1
+            assert drain()["processed"] == 1
+        assert seen == [event.id]
+        row = OutboxEvent.objects.get()
+        assert row.processed_at is not None and row.claimed_until is None and row.attempts == 2
+
+    def test_a_row_is_claimed_before_dispatch_and_completed_after(self, registry):
+        states = []
+        registry("tests.claimed", lambda event: states.append(OutboxEvent.objects.values_list("claimed_until", "processed_at").get(pk=event.id)))
+        emit("tests.claimed", {})
+        drain()
+        claimed_until, processed_at = states[0]
+        assert claimed_until is not None and processed_at is None
+        row = OutboxEvent.objects.get()
+        assert row.processed_at is not None and row.claimed_until is None
+
+    def test_a_row_whose_claim_was_taken_over_is_not_dispatched(self, registry, monkeypatch):
+        seen = []
+        registry("tests.taken", lambda event: seen.append(event.id))
+        emit("tests.taken", {})
+        real_claim = outbox._claim
+
+        def claim_then_lose(batch_size):
+            rows = real_claim(batch_size)
+            OutboxEvent.objects.update(claimed_until=timezone.now() + timedelta(minutes=10))  # another drainer re-claimed it
+            return rows
+
+        monkeypatch.setattr(outbox, "_claim", claim_then_lose)
+        assert drain() == {"claimed": 1, "processed": 0, "failed": 0, "parked": 0, "lost": 1}
+        assert seen == []
+
+    def test_an_event_that_keeps_killing_its_drainer_is_parked(self, registry):
+        registry("tests.killer", lambda event: None)
+        emit("tests.killer", {})
+        lease = settings.OUTBOX_CLAIM_LEASE_SECONDS
+        start = timezone.now()
+        for round_ in range(settings.OUTBOX_MAX_ATTEMPTS):
+            with freeze_time(start + timedelta(seconds=(lease + 1) * round_)):
+                assert len(outbox._claim(100)) == 1  # claimed, then the worker dies every time
+        with freeze_time(start + timedelta(seconds=(lease + 1) * 10)):
+            assert drain() == {"claimed": 1, "processed": 0, "failed": 0, "parked": 1, "lost": 0}
+        row = OutboxEvent.objects.get()
+        assert row.parked_at is not None and row.claimed_until is None and "abandoned" in row.last_error
+        assert SystemException.objects.filter(source="outbox").count() == 1
+
+
+@pytest.mark.django_db
+class TestRetryBackoff:
+    def test_failed_rows_wait_for_an_exponential_backoff(self, registry):
+        registry("tests.flaky", lambda event: 1 / 0)
+        emit("tests.flaky", {})
+        base = settings.OUTBOX_RETRY_BASE_SECONDS
+        start = timezone.now()
+        with freeze_time(start):
+            assert drain()["failed"] == 1
+            row = OutboxEvent.objects.get()
+            assert row.next_attempt_at == start + timedelta(seconds=base) and row.claimed_until is None
+            assert drain()["claimed"] == 0  # not re-claimed on the next Beat tick
+        with freeze_time(start + timedelta(seconds=base - 1)):
+            assert drain()["claimed"] == 0
+        with freeze_time(start + timedelta(seconds=base)):
+            assert drain()["failed"] == 1
+            assert OutboxEvent.objects.get().next_attempt_at == start + timedelta(seconds=base + 2 * base)
+
+    def test_backoff_is_capped(self, settings):
+        settings.OUTBOX_RETRY_BASE_SECONDS = 60
+        settings.OUTBOX_RETRY_MAX_SECONDS = 300
+        assert [outbox.retry_delay(attempt).total_seconds() for attempt in (1, 2, 3, 4, 5, 9)] == [60, 120, 240, 300, 300, 300]
+
+    def test_backlog_stats_count_rows_waiting_for_a_retry(self, registry):
+        registry("tests.flaky", lambda event: 1 / 0)
+        emit("tests.flaky", {})
+        drain()
+        stats = backlog_stats()
+        assert stats["pending"] == 1 and stats["retrying"] == 1 and stats["stale_claims"] == 0
+
+
+@pytest.mark.django_db
+class TestRequeueParked:
+    def _park(self, event_type):
+        event = emit(event_type, {})
+        OutboxEvent.objects.filter(pk=event.pk).update(parked_at=timezone.now(), attempts=5, last_error="ZeroDivisionError: division by zero")
+        return event
+
+    def test_requeue_resets_parked_rows_and_is_audited(self, registry):
+        seen = []
+        registry("tests.parked", lambda event: seen.append(event.id))
+        first, second = self._park("tests.parked"), self._park("tests.parked")
+        assert outbox.requeue_parked(ids=[first.id]) == [first.id]
+        row = OutboxEvent.objects.get(pk=first.id)
+        assert row.parked_at is None and row.attempts == 0 and row.next_attempt_at is None
+        assert OutboxEvent.objects.get(pk=second.id).parked_at is not None
+        entry = AuditLog.objects.get(action="core.outbox_requeued")
+        assert entry.after == {"event_ids": [first.id], "count": 1}
+        assert drain()["processed"] == 1 and seen == [first.id]
+
+    def test_command_requeues_every_parked_row_then_drains(self, registry, capsys):
+        seen = []
+        registry("tests.parked", lambda event: seen.append(event.id))
+        ids = sorted(self._park("tests.parked").id for _ in range(2))
+        call_command("drain_outbox", "--requeue-parked")
+        out = capsys.readouterr().out
+        assert "requeued=2" in out and "processed=2" in out
+        assert sorted(seen) == ids and backlog_stats()["parked"] == 0
+
+    def test_command_refuses_ids_that_are_not_parked(self):
+        live = emit("tests.live", {})
+        with pytest.raises(CommandError, match=str(live.id)):
+            call_command("drain_outbox", "--requeue-parked", "--id", str(live.id))
+        with pytest.raises(CommandError, match="--requeue-parked"):
+            call_command("drain_outbox", "--id", str(live.id))

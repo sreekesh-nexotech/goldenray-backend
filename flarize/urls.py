@@ -14,8 +14,8 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path, re_path, reverse_lazy
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from core.views.docs import SchemaView, SwaggerView
 from core.views.health import healthz
 from flarize.versioning import allowed_versions, collect, mount_surfaces, version_group
 
@@ -23,10 +23,10 @@ urlpatterns = [
     *mount_surfaces(settings.LOCAL_APPS),
     path("iclock/<str:device_token>/", include((collect("iclock_urlpatterns", ["devices"]), "iclock"))),
     path("legacy/", include((collect("legacy_urlpatterns", ["legacy"]), "legacy"))),
-    re_path(rf"^api/schema/{version_group()}/$", SpectacularAPIView.as_view(), name="api-schema"),
+    re_path(rf"^api/schema/{version_group()}/$", SchemaView.as_view(), name="api-schema"),
     # The Swagger UI shell is the only unversioned DRF view: under URLPathVersioning any DRF view without a version
     # kwarg answers 404, so it opts out explicitly (legacy adapters do the same under /legacy/).
-    path("api/docs/", SpectacularSwaggerView.as_view(versioning_class=None, url=reverse_lazy("api-schema", kwargs={"version": allowed_versions()[-1]})), name="api-docs"),
+    path("api/docs/", SwaggerView.as_view(versioning_class=None, url=reverse_lazy("api-schema", kwargs={"version": allowed_versions()[-1]})), name="api-docs"),
     path("healthz", healthz, name="healthz"),
 ]
 

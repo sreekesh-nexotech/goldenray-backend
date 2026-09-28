@@ -7,9 +7,18 @@ from django.utils import timezone
 class OutboxEvent(models.Model):
     """Transactional outbox (no base). Written in the producer's transaction; drained by ``core.tasks.drain_outbox``.
 
-    ``processed_at`` is set when a drainer claims the row (before dispatch); on handler failure it is cleared again
-    for a retry, or the row is parked (``parked_at``) after ``OUTBOX_MAX_ATTEMPTS``. ``delivered`` lists the
-    handlers that already succeeded, so a retry never re-runs them. ``dedup_key`` makes emits idempotent.
+    Row states (DV-7):
+
+    * **pending** — ``processed_at`` and ``parked_at`` are NULL;
+    * **claimed** — a drainer holds a lease until ``claimed_until`` (set before dispatch). A lease that expires
+      without an outcome (the drainer died) makes the row claimable again;
+    * **retrying** — a handler failed: ``next_attempt_at`` holds the exponential backoff, ``last_error`` the reason;
+    * **processed** — ``processed_at`` is set only once every handler succeeded (``delivered`` lists them, so a
+      retry never re-runs one);
+    * **parked** — ``parked_at`` after ``OUTBOX_MAX_ATTEMPTS`` failed or abandoned claims (poison pill); ops re-drive
+      it with ``manage.py drain_outbox --requeue-parked``.
+
+    ``dedup_key`` makes emits idempotent.
     """
 
     id = models.BigAutoField(primary_key=True)
@@ -19,7 +28,9 @@ class OutboxEvent(models.Model):
     payload = models.JSONField(default=dict, encoder=DjangoJSONEncoder)
     dedup_key = models.CharField(max_length=128, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
-    processed_at = models.DateTimeField(null=True, blank=True)
+    processed_at = models.DateTimeField(null=True, blank=True)  # completion: every handler delivered
+    claimed_until = models.DateTimeField(null=True, blank=True)  # lease of the drainer dispatching the row
+    next_attempt_at = models.DateTimeField(null=True, blank=True)  # retry backoff after a failed dispatch
     parked_at = models.DateTimeField(null=True, blank=True)
     attempts = models.PositiveIntegerField(default=0)
     last_error = models.TextField(blank=True, default="")

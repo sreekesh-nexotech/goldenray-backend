@@ -4,6 +4,7 @@ CI view budget. These are the files ops runs; a regression here takes the site d
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import re
 import stat
@@ -289,6 +290,62 @@ def test_live_nginx_routing(tmp_path):
         assert harness.get("/api/v1/auth/me/")[1]["server"] == "api"  # versioned surfaces unaffected
 
 
+ERROR_CODES = {403: "permission_denied", 413: "request_too_large", 429: "throttled", 502: "bad_gateway", 503: "service_unavailable", 504: "gateway_timeout"}
+API_LOCATIONS = [
+    "location /api/public/v1/ {",
+    "location = /api/public/v1/job-applications/ {",
+    "location /api/v1/ {",
+    "location = /api/v1/media/upload/ {",
+    "location /api/agent/ {",
+    "location /api/customer/ {",
+    "location /api/docs/ {",
+    "location /api/schema/ {",
+    "location = /healthz {",
+]
+
+
+def test_nginx_errors_on_the_api_use_the_json_envelope(nginx_conf):
+    """413 (body size), 429 (limit_req), 502/503/504 (upstream) and 403 (docs allow-list) are produced by nginx itself."""
+    for header in API_LOCATIONS:
+        assert "include /etc/nginx/flarize/snippets/api-errors.conf;" in _location_block(nginx_conf, header), header
+    assert "include /etc/nginx/flarize/snippets/api-error-pages.conf;" in nginx_conf
+    assert "proxy_intercept_errors" not in nginx_conf  # Django's own error responses pass through untouched
+    errors = (NGINX / "snippets" / "api-errors.conf").read_text()
+    pages = (NGINX / "snippets" / "api-error-pages.conf").read_text()
+    for status, code in ERROR_CODES.items():
+        assert f"error_page {status} = @api_{status};" in errors
+        block = pages[pages.index(f"location @api_{status} {{") :]
+        block = block[: block.index("\n}")]
+        body = json.loads(re.search(rf"return {status} '(.+)';", block).group(1))
+        assert set(body) == {"code", "message", "errors", "error_codes"} and body["code"] == code and body["error_codes"] == [code]
+        assert "default_type application/json;" in block and "X-Request-ID $request_id" in block
+
+
+@nginx_binary
+def test_live_nginx_errors_are_json(tmp_path):
+    from core.tests.nginx_harness import NginxHarness
+
+    with NginxHarness(tmp_path) as harness:
+        status, headers, body = harness.raw("POST", "/api/v1/auth/login/", headers={"Content-Type": "application/json", "Content-Length": str(3 * 1024 * 1024)})
+        assert (status, headers["content-type"], json.loads(body)["code"]) == (413, "application/json", "request_too_large")
+        assert len(headers["x-request-id"]) == 32
+
+        # Django's own errors are never replaced (e.g. /healthz answering 503 with its checks).
+        status, headers, body = harness.raw("GET", "/api/v1/auth/me/?upstream_status=503")
+        assert status == 503 and json.loads(body)["server"] == "api"
+
+        limited = [harness.raw("GET", "/api/agent/v1/ping/") for _ in range(40)]  # agent zone: 2 r/s, burst 10
+        status, headers, body = next(result for result in limited if result[0] == 429)
+        assert headers["content-type"] == "application/json" and json.loads(body)["code"] == "throttled" and headers["retry-after"] == "1"
+
+        status, headers, body = harness.raw("GET", "/api/docs/", headers={"X-Forwarded-For": "203.0.113.9"})
+        assert status == 200  # loopback is allow-listed; X-Forwarded-For from a client is not trusted by nginx
+
+        harness.stop_upstream("api")
+        status, headers, body = harness.raw("GET", "/api/v1/auth/me/")
+        assert (status, headers["content-type"], json.loads(body)["code"]) == (502, "application/json", "bad_gateway")
+
+
 # ── release script ──────────────────────────────────────────────────────────────────────────────────────────────────
 FAKE_DOCKER = """#!/usr/bin/env bash
 echo "docker $*" >> "$FAKE_LOG"
@@ -408,10 +465,101 @@ def test_view_budget_flags_long_view_files(tmp_path, capsys):
 def test_ci_workflow_runs_every_gate():
     workflow = yaml.safe_load((ROOT / ".github" / "workflows" / "ci.yml").read_text())
     steps = " ".join(str(step.get("run", "")) + str(step.get("uses", "")) for job in workflow["jobs"].values() for step in job["steps"])
-    for gate in ("black --check", "isort --check-only", "flake8", "lint-imports", "makemigrations --check --dry-run", "pytest", "--fail-under=85", "gitleaks", "check_view_budget.py"):
+    for gate in (
+        "black --check",
+        "isort --check-only",
+        "flake8",
+        "lint-imports",
+        "makemigrations --check --dry-run",
+        "pytest",
+        "--fail-under=85",
+        "gitleaks",
+        "check_view_budget.py",
+        "check_task_enqueues.py",
+    ):
         assert gate in steps, gate
     services = workflow["jobs"]["test"]["services"]
     assert services["postgres"]["image"].startswith("postgres:16") and services["redis"]["image"].startswith("redis:7")
     hooks = (ROOT / ".pre-commit-config.yaml").read_text()
     for hook in ("black", "isort", "flake8", "gitleaks", "forbid-secret-files"):
         assert hook in hooks
+
+
+# ── CI: Celery tasks are enqueued only inside transaction.on_commit (standard §7.2, §8) ────────────────────────────
+def _enqueue_module():
+    spec = importlib.util.spec_from_file_location("check_task_enqueues", ROOT / "scripts" / "check_task_enqueues.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _write(root: Path, relative: str, source: str) -> None:
+    path = root / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(source)
+
+
+def test_enqueue_check_passes_on_this_repository():
+    assert _enqueue_module().violations(ROOT) == []
+
+
+GOOD_ENQUEUES = {
+    "shop/services/orders.py": """
+from functools import partial
+from django.db import transaction
+from shop.tasks import notify, reindex, render
+
+
+def _enqueue_render(uid):
+    render.delay(uid)
+
+
+class Orders:
+    def _enqueue_reindex(self):
+        reindex.apply_async(countdown=5)
+
+    def save(self, uid):
+        transaction.on_commit(partial(_enqueue_render, uid), robust=True)
+        transaction.on_commit(self._enqueue_reindex)
+        transaction.on_commit(lambda: notify.delay(uid))
+        transaction.on_commit(partial(notify.delay, uid))
+""",
+    "shop/tasks.py": """
+from celery import shared_task
+
+
+@shared_task
+def cleanup():
+    reindex.delay()  # tasks may chain tasks: they run in the worker, not in a request transaction
+""",
+    "shop/tests/test_orders.py": "from shop.tasks import render\n\n\ndef test_x():\n    render.delay(1)\n",
+}
+
+BAD_ENQUEUES = {
+    "shop/services/bare.py": ("from shop.tasks import render\n\n\ndef issue(uid):\n    render.delay(uid)\n", "shop/services/bare.py:5"),
+    "shop/services/module_level.py": ("from shop.tasks import render\n\nrender.apply_async()\n", "shop/services/module_level.py:3"),
+    "shop/services/leaky.py": (
+        "from django.db import transaction\nfrom shop.tasks import render\n\n\ndef _enqueue_leaky(uid):\n    render.delay(uid)\n\n\n"
+        "def issue(uid):\n    transaction.on_commit(lambda: _enqueue_leaky(uid))\n    _enqueue_leaky(uid)\n",
+        "shop/services/leaky.py:6",
+    ),
+    "shop/views/unused.py": ("from shop.tasks import render\n\n\ndef _enqueue_nobody_schedules(uid):\n    render.delay(uid)\n", "shop/views/unused.py:5"),
+    "shop/services/alias.py": ("from shop.tasks import render\n\nsend = render.delay\n", "shop/services/alias.py:3"),
+}
+
+
+def test_enqueue_check_accepts_on_commit_patterns(tmp_path):
+    module = _enqueue_module()
+    for relative, source in GOOD_ENQUEUES.items():
+        _write(tmp_path, relative, source)
+    assert module.violations(tmp_path) == []
+
+
+@pytest.mark.parametrize("relative", sorted(BAD_ENQUEUES))
+def test_enqueue_check_flags_enqueues_outside_on_commit(tmp_path, relative, capsys):
+    module = _enqueue_module()
+    source, location = BAD_ENQUEUES[relative]
+    _write(tmp_path, relative, source)
+    found = module.violations(tmp_path)
+    assert [violation.split(" ", 1)[0] for violation in found] == [location], found
+    assert module.main([str(tmp_path)]) == 1 and location in capsys.readouterr().err

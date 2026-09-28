@@ -6,6 +6,7 @@ from flarize.production import validate_production_settings
 from flarize.settings.base import *  # noqa: F401,F403
 
 DEBUG = config("DEBUG", default=False, cast=bool)
+# Docs are private in prod: only API_DOCS_ALLOWED_NETWORKS (and nginx's docs-allow.conf) reach them (PLAN §5.4).
 API_DOCS_PUBLIC = config("API_DOCS_PUBLIC", default=False, cast=bool)
 
 # HTTPS everywhere except the terminal receiver (plain-HTTP listener on :8080) and the internal health probe.
@@ -19,10 +20,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
-
-if not API_DOCS_PUBLIC:
-    SPECTACULAR_SETTINGS["SERVE_PERMISSIONS"] = ["rest_framework.permissions.IsAuthenticated"]
-    SPECTACULAR_SETTINGS["SERVE_AUTHENTICATION"] = ["accounts.authentication.SessionAwareJWTAuthentication"]
 
 
 validate_production_settings(globals())

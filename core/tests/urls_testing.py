@@ -33,6 +33,7 @@ urlpatterns = [
     re_path(r"^api/public/(?P<version>v1)/_t/", include(public)),
     re_path(r"^api/agent/(?P<version>v1)/_t/", include(agent)),
     path("iclock/<str:device_token>/_t/", support.plain_gated_view),
+    path("iclock/<str:device_token>/_t/boom/", support.plain_boom_view),
     *real_urlpatterns,
 ]
 

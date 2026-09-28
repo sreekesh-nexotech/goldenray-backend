@@ -75,3 +75,26 @@ class IsServicePrincipal(BasePermission):
         user = request.user
         kinds = getattr(view, "service_kinds", ("AGENT",))
         return isinstance(user, ServicePrincipal) and user.kind in kinds
+
+
+class ApiDocsAccess(BasePermission):
+    """``/api/docs/`` and ``/api/schema/<version>/`` (PLAN §5.4 "staff only, allow-list IPs").
+
+    Open when ``API_DOCS_PUBLIC`` (dev, staging); otherwise only for client addresses inside
+    ``API_DOCS_ALLOWED_NETWORKS`` — the same office/VPN networks as nginx's ``snippets/docs-allow.conf``, checked
+    again here so a proxy misconfiguration cannot expose the schema. No JWT: the Swagger UI is a browser
+    navigation, which cannot carry one. The client address comes from :func:`flarize.client_ip.get_client_ip`
+    (``X-Forwarded-For`` only via trusted proxies). An empty list denies everyone (fail-closed).
+    """
+
+    message = "The API documentation is only available from the allow-listed office networks."
+
+    def has_permission(self, request, view) -> bool:
+        from django.conf import settings
+
+        from flarize.client_ip import get_client_ip, is_trusted, parse_ip, parse_networks
+
+        if getattr(settings, "API_DOCS_PUBLIC", False):
+            return True
+        networks = parse_networks(tuple(getattr(settings, "API_DOCS_ALLOWED_NETWORKS", ()) or ()))
+        return bool(networks) and is_trusted(parse_ip(get_client_ip(request)), networks)

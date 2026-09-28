@@ -13,14 +13,23 @@ Consumer side — in ``<app>/events.py`` (autodiscovered at startup)::
     @handler("quotations.issued")
     def mark_lead_converted(event: Event) -> None: ...
 
-Drain semantics:
+Drain semantics (DV-7):
 
-* rows are claimed with ``SELECT … FOR UPDATE SKIP LOCKED`` and marked processed **before** dispatch, so concurrent
-  drainers and re-ticks never double-fire an event;
+* rows are claimed with ``SELECT … FOR UPDATE SKIP LOCKED`` and given a **lease** (``claimed_until``, now +
+  ``OUTBOX_CLAIM_LEASE_SECONDS``) **before** dispatch, so concurrent drainers and Beat re-ticks never double-fire an
+  event. The lease is renewed (compare-and-swap on ``claimed_until``) right before each row is dispatched: a row
+  whose lease was taken over by another drainer is skipped (``lost``);
+* ``processed_at`` is written only **after** every handler succeeded. A drainer that dies after claiming (SIGKILL,
+  OOM, the Celery hard time limit) leaves a lease that expires; the row is then claimed again. Nothing is lost, and
+  :func:`backlog_stats` reports expired leases (``stale_claims``) so ``/healthz`` degrades;
 * each handler runs in its own transaction; handlers that succeeded are recorded in ``delivered`` and are never
-  re-run on retry;
-* a failure clears ``processed_at`` for a retry and records ``last_error``; after ``OUTBOX_MAX_ATTEMPTS`` (5) the row
-  is parked (``parked_at``) so one poison pill cannot block the queue.
+  re-run on retry. Delivery is at-least-once: handlers must be idempotent;
+* a failure releases the lease, records ``last_error`` and schedules the retry after an exponential backoff
+  (``next_attempt_at``: ``OUTBOX_RETRY_BASE_SECONDS`` × 2^(attempt-1), capped at ``OUTBOX_RETRY_MAX_SECONDS``);
+* after ``OUTBOX_MAX_ATTEMPTS`` (5) failed **or abandoned** claims the row is parked (``parked_at``) and a
+  ``SystemException`` is recorded, so one poison pill (including an event that kills its worker) cannot block the
+  queue. :func:`requeue_parked` (``manage.py drain_outbox --requeue-parked [--id N]``) re-drives parked rows once
+  the handler is fixed.
 """
 
 from __future__ import annotations
@@ -32,13 +41,13 @@ import uuid
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import IntegrityError, transaction
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils import timezone
 from django.utils.module_loading import autodiscover_modules
 
@@ -155,18 +164,56 @@ def _to_event(row) -> Event:
     )
 
 
+def _setting(name: str, default: int) -> int:
+    return int(getattr(settings, name, default))
+
+
+def lease_duration() -> timedelta:
+    """How long a claim protects a row. Longer than the Celery hard time limit, so a live drainer never loses it."""
+    return timedelta(seconds=_setting("OUTBOX_CLAIM_LEASE_SECONDS", 180))
+
+
+def retry_delay(attempts: int) -> timedelta:
+    """Backoff before retry number ``attempts + 1``: base × 2^(attempts-1), capped."""
+    base = _setting("OUTBOX_RETRY_BASE_SECONDS", 60)
+    cap = _setting("OUTBOX_RETRY_MAX_SECONDS", 3600)
+    return timedelta(seconds=min(cap, base * 2 ** max(0, attempts - 1)))
+
+
+def _claimable(now: datetime) -> Q:
+    return Q(processed_at__isnull=True, parked_at__isnull=True) & (Q(claimed_until__isnull=True) | Q(claimed_until__lt=now)) & (Q(next_attempt_at__isnull=True) | Q(next_attempt_at__lte=now))
+
+
 def _claim(batch_size: int) -> list:
+    """Lease up to ``batch_size`` due rows (oldest first) and count the attempt. Returns the claimed rows."""
     from core.models import OutboxEvent
 
     now = timezone.now()
+    lease = now + lease_duration()
     with transaction.atomic():
-        rows = list(OutboxEvent.objects.select_for_update(skip_locked=True).filter(processed_at__isnull=True, parked_at__isnull=True).order_by("id")[:batch_size])
+        rows = list(OutboxEvent.objects.select_for_update(skip_locked=True).filter(_claimable(now)).order_by("id")[:batch_size])
         if rows:
-            OutboxEvent.objects.filter(id__in=[row.id for row in rows]).update(processed_at=now, attempts=F("attempts") + 1)
+            OutboxEvent.objects.filter(id__in=[row.id for row in rows]).update(claimed_until=lease, attempts=F("attempts") + 1)
             for row in rows:
-                row.processed_at = now
+                row.claimed_until = lease
                 row.attempts += 1
     return rows
+
+
+def _held(row):
+    """Queryset matching ``row`` only while this drainer still holds its claim (compare-and-swap on the lease)."""
+    from core.models import OutboxEvent
+
+    return OutboxEvent.objects.filter(id=row.id, claimed_until=row.claimed_until, processed_at__isnull=True, parked_at__isnull=True)
+
+
+def _renew(row) -> bool:
+    """Extend the lease right before dispatch. False when another drainer took the row over after our lease expired."""
+    lease = timezone.now() + lease_duration()
+    if not _held(row).update(claimed_until=lease):
+        return False
+    row.claimed_until = lease
+    return True
 
 
 def _dispatch(row) -> tuple[list[str], BaseException | None]:
@@ -187,39 +234,65 @@ def _dispatch(row) -> tuple[list[str], BaseException | None]:
     return delivered, None
 
 
+def _park(row, error: BaseException, **columns) -> str:
+    from core.services.system_exceptions import record_exception
+
+    if not _held(row).update(parked_at=timezone.now(), claimed_until=None, next_attempt_at=None, **columns):
+        return _lost(row)
+    logger.error("outbox event parked", extra={"event_type": row.event_type, "event_id": row.id, "attempts": row.attempts})
+    record_exception(error, source="outbox", context={"event_id": row.id, "event_type": row.event_type, "attempts": row.attempts})
+    return "parked"
+
+
+def _lost(row) -> str:
+    logger.warning("outbox claim lost to another drainer", extra={"event_type": row.event_type, "event_id": row.id})
+    return "lost"
+
+
 def _finish(row, delivered: list[str], error: BaseException | None) -> str:
-    from core.models import OutboxEvent
-
+    """Record the outcome — only while the claim is still ours, otherwise the current claimant owns the row."""
     if error is None:
-        OutboxEvent.objects.filter(id=row.id).update(delivered=delivered, last_error="")
-        return "processed"
+        updated = _held(row).update(processed_at=timezone.now(), claimed_until=None, next_attempt_at=None, delivered=delivered, last_error="")
+        return "processed" if updated else _lost(row)
     message = f"{type(error).__name__}: {error}"[:4000]
-    max_attempts = int(getattr(settings, "OUTBOX_MAX_ATTEMPTS", 5))
-    if row.attempts >= max_attempts:
-        OutboxEvent.objects.filter(id=row.id).update(delivered=delivered, last_error=message, processed_at=None, parked_at=timezone.now())
-        from core.services.system_exceptions import record_exception
+    if row.attempts >= _setting("OUTBOX_MAX_ATTEMPTS", 5):
+        return _park(row, error, delivered=delivered, last_error=message)
+    updated = _held(row).update(claimed_until=None, next_attempt_at=timezone.now() + retry_delay(row.attempts), delivered=delivered, last_error=message)
+    return "failed" if updated else _lost(row)
 
-        record_exception(error, source="outbox", context={"event_id": row.id, "event_type": row.event_type, "attempts": row.attempts})
-        return "parked"
-    OutboxEvent.objects.filter(id=row.id).update(delivered=delivered, last_error=message, processed_at=None)
-    return "failed"
+
+class AbandonedEvent(RuntimeError):
+    """A row claimed ``OUTBOX_MAX_ATTEMPTS`` times whose last claim expired without an outcome (the drainer died)."""
+
+
+def _abandon(row) -> str:
+    error = AbandonedEvent(f"Outbox event #{row.id} ({row.event_type}) abandoned after {row.attempts - 1} claims; the last one expired without an outcome (the drainer died dispatching it).")
+    previous = f" Last handler error: {row.last_error}" if row.last_error else ""
+    return _park(row, error, last_error=f"{error}{previous}"[:4000])
 
 
 def drain(batch_size: int | None = None) -> dict[str, int]:
-    """Claim and dispatch up to ``batch_size`` pending events. Returns counts by outcome."""
-    batch_size = batch_size or int(getattr(settings, "OUTBOX_BATCH_SIZE", 100))
-    counts = {"claimed": 0, "processed": 0, "failed": 0, "parked": 0}
+    """Claim and dispatch up to ``batch_size`` due events. Returns counts by outcome."""
+    batch_size = batch_size or _setting("OUTBOX_BATCH_SIZE", 100)
+    max_attempts = _setting("OUTBOX_MAX_ATTEMPTS", 5)
+    counts = {"claimed": 0, "processed": 0, "failed": 0, "parked": 0, "lost": 0}
     rows = _claim(batch_size)
     counts["claimed"] = len(rows)
     for row in rows:
+        if row.attempts > max_attempts:
+            counts[_abandon(row)] += 1
+            continue
+        if not _renew(row):
+            counts[_lost(row)] += 1
+            continue
         delivered, error = _dispatch(row)
         counts[_finish(row, delivered, error)] += 1
     return counts
 
 
 def drain_outbox_sync(max_rounds: int = 50) -> dict[str, int]:
-    """Drain until nothing claimable is left (tests, management command). Failed rows are retried per round."""
-    totals = {"claimed": 0, "processed": 0, "failed": 0, "parked": 0}
+    """Drain until nothing is due (tests, management command). Failed rows wait for their backoff (a later drain)."""
+    totals = {"claimed": 0, "processed": 0, "failed": 0, "parked": 0, "lost": 0}
     for _ in range(max_rounds):
         counts = drain()
         for key, value in counts.items():
@@ -229,16 +302,52 @@ def drain_outbox_sync(max_rounds: int = 50) -> dict[str, int]:
     return totals
 
 
+@transaction.atomic
+def requeue_parked(ids: list[int] | None = None) -> list[int]:
+    """Re-drive parked rows (all, or only ``ids``) after the handler was fixed: attempts restart at 0.
+
+    Handlers that already succeeded stay in ``delivered`` and are not re-run. Writes one audit row and schedules a
+    drain after commit. Returns the requeued ids.
+    """
+    from audit.services import record
+    from core.models import OutboxEvent
+
+    parked = OutboxEvent.objects.select_for_update().filter(parked_at__isnull=False)
+    if ids is not None:
+        parked = parked.filter(id__in=ids)
+    requeued = sorted(parked.values_list("id", flat=True))
+    if not requeued:
+        return []
+    OutboxEvent.objects.filter(id__in=requeued).update(parked_at=None, attempts=0, claimed_until=None, next_attempt_at=None)
+    record("core.outbox_requeued", object_type="core.outboxevent", after={"event_ids": requeued, "count": len(requeued)})
+    transaction.on_commit(_schedule_drain, robust=True)
+    logger.info("outbox parked events requeued", extra={"event_ids": requeued})
+    return requeued
+
+
 def backlog_stats() -> dict[str, Any]:
-    """Pending count, oldest pending age (seconds) and parked count — used by /healthz and ops reports."""
-    from django.db.models import Min
+    """The outbox backlog for /healthz and the ops report.
+
+    ``pending`` counts every event not yet processed or parked (including claimed and retrying rows) and
+    ``oldest_age_seconds`` is the age of the oldest of them; ``stale_claims`` counts expired leases (a drainer died
+    mid-batch); ``retrying`` counts rows waiting for their backoff; ``parked`` counts poison pills.
+    """
+    from django.db.models import Count, Min
 
     from core.models import OutboxEvent
 
-    pending = OutboxEvent.objects.filter(processed_at__isnull=True, parked_at__isnull=True)
-    oldest = pending.aggregate(oldest=Min("created_at"))["oldest"]
+    now = timezone.now()
+    pending = OutboxEvent.objects.filter(processed_at__isnull=True, parked_at__isnull=True).aggregate(
+        count=Count("id"),
+        oldest=Min("created_at"),
+        stale=Count("id", filter=Q(claimed_until__lt=now)),
+        retrying=Count("id", filter=Q(next_attempt_at__gt=now)),
+    )
+    oldest = pending["oldest"]
     return {
-        "pending": pending.count(),
-        "oldest_age_seconds": int((timezone.now() - oldest).total_seconds()) if oldest else 0,
+        "pending": pending["count"],
+        "oldest_age_seconds": int((now - oldest).total_seconds()) if oldest else 0,
+        "stale_claims": pending["stale"],
+        "retrying": pending["retrying"],
         "parked": OutboxEvent.objects.filter(parked_at__isnull=False).count(),
     }

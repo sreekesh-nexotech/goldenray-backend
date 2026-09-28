@@ -154,7 +154,7 @@ forbidden_modules =
     projects
 
 [importlinter:contract:product-master-ignores-content-and-hr]
-name = Product master and configuration import nothing from website content or HR
+name = Product master and configuration import nothing from website content (company included) or HR
 type = forbidden
 source_modules =
     catalog
@@ -170,9 +170,50 @@ forbidden_modules =
     faqs
     careers
     seo
+    company
     reference
     calculators
     emi
     hr
     attendance
     devices
+
+[importlinter:contract:nothing-imports-cutover-packages]
+name = Nothing imports legacy/ or migrations_tools/ (both are deleted after the cutover, PLAN §6.4)
+type = forbidden
+source_modules =
+    flarize
+    engines
+    core
+    accounts
+    audit
+    media
+    documents
+    company
+    catalog
+    pricing
+    procurement
+    inventory
+    bom
+    packs
+    engineering
+    customers
+    leads
+    quotations
+    agreements
+    site_inspections
+    projects
+    blog
+    sitepages
+    faqs
+    careers
+    seo
+    reference
+    calculators
+    emi
+    hr
+    attendance
+    devices
+forbidden_modules =
+    legacy
+    migrations_tools

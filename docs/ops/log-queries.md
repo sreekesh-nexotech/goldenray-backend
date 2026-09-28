@@ -32,8 +32,12 @@ dc logs --since 1h --no-log-prefix api-a api-b | jq -Rc 'fromjson? | select(.log
 # p95 latency per path (last hour; needs ≥ 20 requests)
 dc logs --since 1h --no-log-prefix api-a api-b | jq -Rs '[split("\n")[] | fromjson? | select(.logger=="flarize.request")] | group_by(.path) | map(select(length>=20) | {path: .[0].path, n: length, p95: (map(.duration_ms) | sort | .[(length*0.95|floor)])}) | sort_by(-.p95) | .[:15]'
 
-# Unhandled exceptions (then look the request id up in core_system_exception)
-dc logs --since 24h --no-log-prefix api-a api-b | jq -Rc 'fromjson? | select(.logger=="flarize.errors") | {ts, request_id, message}'
+# Unhandled exceptions, logged once each (then look the request id up in core_system_exception): API views on
+# flarize.errors, plain Django views (/iclock/, /healthz) on django.request
+dc logs --since 24h --no-log-prefix api-a api-b | jq -Rc 'fromjson? | select(.logger=="flarize.errors" or (.logger=="django.request" and .level=="ERROR")) | {ts, request_id, message}'
+
+# Rejected request bodies (too many fields/files, body too large: 400/413, not server errors), per path
+dc logs --since 24h --no-log-prefix api-a api-b | jq -Rr 'fromjson? | select(.logger=="flarize.security") | "\(.message) \(.path)"' | sort | uniq -c | sort -rn
 
 # Everything about one request (nginx + api + workers)
 RID=<request id>; dc logs --since 24h --no-log-prefix nginx api-a api-b worker-default | grep "$RID" | jq -R 'fromjson? // .'

@@ -20,7 +20,7 @@ class CompanyProfileView(BaseAPIView):
 
     @extend_schema(operation_id="company_profile_retrieve", responses={200: CompanyProfileSerializer, 401: ErrorSerializer, 403: ErrorSerializer}, tags=TAGS)
     def get(self, request, *args, **kwargs):
-        return Response(CompanyProfileSerializer(profiles.ensure_profile(request.user)).data)
+        return Response(CompanyProfileSerializer(profiles.current_profile()).data)
 
     @extend_schema(
         operation_id="company_profile_update",
@@ -42,4 +42,4 @@ class PublicCompanyView(PublicAPIView):
     @extend_schema(operation_id="public_company_retrieve", responses={200: PublicCompanySerializer}, tags=["public"], auth=[])
     @cache_response(namespaces=[profiles.CACHE_NAMESPACE, "media"], ttl=300)
     def get(self, request, *args, **kwargs):
-        return Response(PublicCompanySerializer(profiles.public_profile()).data)
+        return Response(PublicCompanySerializer(profiles.current_profile()).data)

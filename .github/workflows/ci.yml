@@ -1,5 +1,5 @@
 # CI (PLAN §5.5): lint → migrations check → import contracts → tests with the coverage gate → secret scan →
-# view budget → deploy config checks → images (pushed for the integration branch / main only, tagged with the SHA).
+# view budget → on-commit enqueue check → deploy config checks → images (pushed for the integration branch / main only, tagged with the SHA).
 name: ci
 
 on:
@@ -72,6 +72,8 @@ jobs:
         run: python manage.py makemigrations --check --dry-run
       - name: View budget (≤ 250 lines per views/ file)
         run: python scripts/check_view_budget.py
+      - name: Celery tasks are enqueued only inside transaction.on_commit
+        run: python scripts/check_task_enqueues.py
       - name: Tests
         run: pytest -q --cov=. --cov-report=term --cov-report=xml
       - name: Coverage gate (85 % on */services/ and engines/)

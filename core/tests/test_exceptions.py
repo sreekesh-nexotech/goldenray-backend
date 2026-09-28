@@ -153,3 +153,44 @@ def test_unmatched_url_returns_json_404(api_client):
     response = api_client.get("/nope/")
     assert response.status_code == 404
     assert response.json()["code"] == "not_found"
+
+
+# ── F-FIX: Django's body-parsing SuspiciousOperation subclasses are client errors, not 500s ────────────────────────
+class TestSuspiciousRequestBodies:
+    """Raised while DRF parses the body; anonymous callers can send them on any public POST (login included)."""
+
+    def test_too_many_form_fields_is_400_and_not_recorded(self, api_client, caplog):
+        from urllib.parse import urlencode
+
+        body = urlencode({f"field{i}": "x" for i in range(1200)})
+        response = api_client.post("/api/v1/auth/login/", data=body, content_type="application/x-www-form-urlencoded")
+        assert response.status_code == 400
+        assert response.json() == {"code": "bad_request", "message": "Bad request.", "errors": {}, "error_codes": ["bad_request"]}
+        assert SystemException.objects.count() == 0
+        assert not [record for record in caplog.records if record.levelname in ("ERROR", "CRITICAL")]
+
+    def test_oversized_multipart_field_is_413_and_not_recorded(self, api_client, caplog):
+        response = api_client.post("/api/v1/auth/login/", {"email": "a@example.com", "password": "p" * (3 * 1024 * 1024)}, format="multipart")
+        assert response.status_code == 413
+        assert response.json()["code"] == "request_too_large" and set(response.json()) == ENVELOPE_KEYS
+        assert SystemException.objects.count() == 0
+        assert not [record for record in caplog.records if record.levelname in ("ERROR", "CRITICAL")]
+
+    @pytest.mark.parametrize(
+        ("exc", "status", "code"),
+        [
+            ("RequestDataTooBig", 413, "request_too_large"),
+            ("TooManyFieldsSent", 400, "bad_request"),
+            ("TooManyFilesSent", 400, "bad_request"),
+            ("SuspiciousFileOperation", 400, "bad_request"),
+            ("SuspiciousOperation", 400, "bad_request"),
+        ],
+    )
+    def test_handler_maps_every_suspicious_operation(self, exc, status, code):
+        from django.core import exceptions as django_exceptions
+
+        request = APIRequestFactory().post("/")
+        response = exception_handler(getattr(django_exceptions, exc)("details the client must not see"), {"request": request})
+        assert response.status_code == status and response.data["code"] == code
+        assert "details" not in response.data["message"]
+        assert SystemException.objects.count() == 0

@@ -72,7 +72,9 @@ class TestCachedPublicResponse:
         assert first.status_code == second.status_code == 200
         assert first["X-Cache"] == "MISS" and second["X-Cache"] == "HIT"
         assert first.json() == second.json() == {"items": [1, 2, 3], "calls": 1}
-        assert first["Cache-Control"] == "public, max-age=120"
+        # The server keeps the entry for its ttl (120 s, invalidated by bump()); browsers and CDNs, which bump() cannot
+        # reach, may keep it for PUBLIC_CACHE_MAX_AGE_SECONDS at most (PLAN §3.1: 60 s).
+        assert first["Cache-Control"] == "public, max-age=60" and second["Cache-Control"] == "public, max-age=60"
         assert first["ETag"] == second["ETag"] and first["ETag"].startswith('"')
 
     def test_query_string_is_part_of_the_key(self, api_client):
@@ -119,3 +121,35 @@ class TestCachedPublicResponse:
         response = api_client.get("/api/public/v1/_t/no-namespace/")
         assert response.status_code == 500
         assert SystemException.objects.get().exception_type == "django.core.exceptions.ImproperlyConfigured"
+
+
+@pytest.mark.django_db
+class TestHttpMaxAge:
+    """The HTTP max-age is capped separately from the server-side TTL (F-FIX)."""
+
+    @staticmethod
+    def _serve(ttl, max_age=None):
+        from rest_framework.response import Response
+        from rest_framework.test import APIRequestFactory
+
+        from flarize.cache_utils import serve_cached
+
+        request = APIRequestFactory().get("/api/public/v1/x/")
+        request.query_params = request.GET
+        return serve_cached(object(), request, ["tests:max-age"], ttl, lambda: Response({"ok": True}), max_age=max_age)
+
+    @pytest.mark.parametrize(
+        ("ttl", "max_age", "expected"),
+        [(300, None, 60), (120, None, 60), (30, None, 30), (300, 20, 20), (300, 600, 60), (None, None, 60)],
+    )
+    def test_max_age_never_exceeds_the_public_budget_or_the_server_ttl(self, ttl, max_age, expected):
+        assert self._serve(ttl, max_age)["Cache-Control"] == f"public, max-age={expected}"
+
+    def test_the_budget_is_a_setting(self, settings):
+        settings.PUBLIC_CACHE_MAX_AGE_SECONDS = 45
+        assert self._serve(300)["Cache-Control"] == "public, max-age=45"
+
+    def test_the_server_side_ttl_is_unchanged(self):
+        with mock.patch("flarize.cache_utils.cache.set") as cache_set:
+            self._serve(300)
+        assert cache_set.call_args.args[2] == 300

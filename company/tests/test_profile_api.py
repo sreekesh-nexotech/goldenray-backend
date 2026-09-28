@@ -37,16 +37,38 @@ class TestPermissions:
 
 
 class TestRead:
-    def test_first_read_creates_the_singleton_with_legacy_defaults(self, client):
+    def test_reading_before_the_first_edit_writes_nothing(self, client):
+        """GETs are side-effect free: the defaults are served unsaved (no row, no audit, no creator stamp)."""
         body = client.get(URL).json()
-        assert CompanyProfile.objects.count() == 1
+        assert CompanyProfile.all_objects.count() == 0 and AuditLog.objects.count() == 0
+        assert body["uid"] is None and body["updated_at"] is None and body["version"] == 1
         assert body["quotation_offer_title"] == "Priority 10-Day Installation"
         assert body["quotation_offer_title_ml"] == "10 ദിവസത്തിനുള്ളിൽ മുൻഗണനാ ഇൻസ്റ്റലേഷൻ"
         assert body["quotation_offer_image_src"] == "https://golden-ray.b-cdn.net/icons/37.png" and body["quotation_offer_active"] is True
         assert body["country_code"] == "IN" and body["notify_on_new_lead"] is True and body["careers_accepting_general_applications"] is True
         assert body["blog_revalidate_secret_set"] is False and "blog_revalidate_secret" not in body
+        assert client.get(URL).json() == body
+        assert CompanyProfile.all_objects.count() == 0
+
+    def test_the_first_edit_creates_the_singleton_and_audits_it(self, client, admin):
+        body = client.patch(URL, {"trade_name": "Flarize", "expected_version": 1}, format="json").json()
+        profile = CompanyProfile.objects.get()
+        assert body["uid"] == str(profile.uid) and body["version"] == 2 and body["trade_name"] == "Flarize"
+        assert profile.created_by == admin and profile.updated_by == admin
+        created = AuditLog.objects.get(action="company.profile_created")
+        assert created.actor == admin and created.object_uid == profile.uid and created.after["country_code"] == "IN"
+        assert AuditLog.objects.get(action="company.profile_updated").after == {"trade_name": "Flarize"}
         assert client.get(URL).json()["uid"] == body["uid"]
-        assert CompanyProfile.objects.count() == 1
+
+    def test_a_first_edit_that_changes_nothing_writes_nothing(self, client):
+        body = client.patch(URL, {"country_code": "IN", "expected_version": 1}, format="json").json()
+        assert body["uid"] is None and body["version"] == 1
+        assert CompanyProfile.all_objects.count() == 0 and AuditLog.objects.count() == 0
+
+    def test_ensure_profile_is_audited_and_idempotent(self, admin):
+        first = profiles.ensure_profile(admin)
+        assert profiles.ensure_profile(admin).pk == first.pk and first.created_by == admin
+        assert AuditLog.objects.filter(action="company.profile_created").count() == 1
 
     def test_singleton_is_enforced_by_the_database(self):
         from django.db import IntegrityError, transaction

@@ -52,6 +52,7 @@ def _valid(**overrides):
         ({"FERNET_KEYS": ["nope"]}, "invalid key"),
         ({"TRUSTED_PROXIES": []}, "TRUSTED_PROXIES is empty"),
         ({"TRUSTED_PROXIES": ["300.0.0.0/8"]}, "TRUSTED_PROXIES is invalid"),
+        ({"API_DOCS_ALLOWED_NETWORKS": ["office"]}, "API_DOCS_ALLOWED_NETWORKS is invalid"),
         ({"ACCOUNTS_PASSWORD_RESET_URL": "http://flarize.com/studio/reset-password"}, "PASSWORD_RESET_URL"),
         ({"EMAIL_BACKEND": "django.core.mail.backends.console.EmailBackend"}, "EMAIL_BACKEND"),
         ({"MEDIA_PUBLIC_BACKEND": "local"}, "MEDIA_PUBLIC_BACKEND"),

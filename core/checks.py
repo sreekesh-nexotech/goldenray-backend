@@ -5,7 +5,10 @@
 * ``core.E003`` a ``BaseViewSet`` subclass overrides ``get_queryset()`` (record scope must stay in the base class);
 * ``core.E004`` a DRF view is routed outside the versioned surfaces;
 * ``core.E005`` a routed generic view still uses DRF's default ``perform_create/update/destroy`` (an ORM write or a
-  hard delete in the view) instead of the service-delegating ``core.views.mixins``.
+  hard delete in the view) instead of the service-delegating ``core.views.mixins``;
+* ``core.E006`` a view on the staff surface (``/api/<version>/``) does not use ``HasModulePermission`` (a plain
+  ``APIView`` with ``IsAuthenticated``, or a non-DRF view) and is not in :data:`STAFF_VIEWS_WITHOUT_MODULE_PERMISSION`.
+  Default deny is thereby structural: forgetting ``module``/``action_permissions`` fails ``manage.py check``.
 """
 
 from __future__ import annotations
@@ -13,6 +16,26 @@ from __future__ import annotations
 from django.core import checks
 
 VERSIONED_PREFIX_RE = r"^(api/(public/|agent/|customer/)?\(\?P<version>[^)]+\)/|api/schema/\(\?P<version>[^)]+\)/|api/docs/|legacy/|iclock/)"
+STAFF_PREFIX_RE = r"^api/\(\?P<version>[^)]+\)/"
+
+# Staff-surface views that authorize without HasModulePermission, each on purpose. Adding an entry is a shared-code
+# change (list it in the WP report) and needs a DEVIATIONS.md entry unless PLAN already prescribes the behaviour.
+_AUTH_SELF_SERVICE = "auth self-service (PLAN §3.1): acts only on the caller's own account or credentials"
+STAFF_VIEWS_WITHOUT_MODULE_PERMISSION: dict[str, str] = {
+    "accounts.views.auth.LoginView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.RefreshView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.LogoutView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.MeView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.PasswordChangeView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.PasswordResetRequestView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.PasswordResetView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.SessionListView": _AUTH_SELF_SERVICE,
+    "accounts.views.auth.SessionDetailView": _AUTH_SELF_SERVICE,
+    "media.views.download.MediaDownloadView": "DV-13: the short-lived signed token is the capability (browser navigation, no JWT)",
+    "documents.views.jobs.DocumentDownloadView": "DV-13: the single-use signed token is the capability (browser navigation, no JWT)",
+    "documents.views.jobs.RenderJobDetailView": "DV-14: the permission depends on the job's kind; documents.access.ensure_can_view (403, then 404)",
+    "documents.views.jobs.RenderJobDownloadUrlView": "DV-14: the permission depends on the job's kind; documents.access.ensure_can_view (403, then 404)",
+}
 
 
 def _permission_classes(view_cls) -> list:
@@ -33,13 +56,44 @@ def _iter_drf_views():
         seen.add(cls)
 
 
+def _dotted(obj) -> str:
+    return f"{obj.__module__}.{obj.__qualname__}"
+
+
+def _uses_module_permission(cls) -> bool:
+    from core.permissions import HasModulePermission
+
+    return any(isinstance(perm, type) and issubclass(perm, HasModulePermission) for perm in _permission_classes(cls))
+
+
+def staff_views_without_module_permission() -> dict[str, str]:
+    """``{dotted view: route}`` for every view routed on the staff surface that does not use HasModulePermission."""
+    import re
+
+    from rest_framework.views import APIView
+
+    from flarize.versioning import view_class, walk_patterns
+
+    staff_re = re.compile(STAFF_PREFIX_RE)
+    found: dict[str, str] = {}
+    for route, pattern in walk_patterns():
+        if not staff_re.match(route):
+            continue
+        cls = view_class(pattern)
+        if isinstance(cls, type) and issubclass(cls, APIView):
+            if not _uses_module_permission(cls):
+                found.setdefault(_dotted(cls), route)
+        else:  # a plain Django view: no authentication or RBAC at all
+            found.setdefault(_dotted(cls if isinstance(cls, type) else pattern.callback), route)
+    return found
+
+
 def check_view_permissions(app_configs=None, **kwargs):
     import re
 
     from rest_framework.generics import GenericAPIView
 
     from accounts.registry import is_allowed
-    from core.permissions import HasModulePermission
     from core.views.base import BaseViewSet
     from core.views.mixins import DRF_DEFAULT_WRITES
 
@@ -50,8 +104,7 @@ def check_view_permissions(app_configs=None, **kwargs):
             errors.append(checks.Error(f"DRF view {cls.__module__}.{cls.__qualname__} is routed outside the versioned surfaces: {route!r}", id="core.E004"))
         if already_seen:
             continue
-        uses_module_permission = any(isinstance(perm, type) and issubclass(perm, HasModulePermission) for perm in _permission_classes(cls))
-        if uses_module_permission:
+        if _uses_module_permission(cls):
             mapping = getattr(cls, "action_permissions", None) or {}
             if not mapping or (not getattr(cls, "module", None) and not all(isinstance(value, (tuple, list)) for value in mapping.values())):
                 errors.append(checks.Error(f"{cls.__module__}.{cls.__qualname__} uses HasModulePermission but declares no module/action_permissions.", id="core.E001"))
@@ -65,6 +118,15 @@ def check_view_permissions(app_configs=None, **kwargs):
             for name, default in DRF_DEFAULT_WRITES.items():
                 if getattr(cls, name, None) is default:
                     errors.append(checks.Error(f"{cls.__module__}.{cls.__qualname__}.{name} is DRF's default (ORM write/hard delete in the view); use core.views.mixins.", id="core.E005"))
+    for name, route in sorted(staff_views_without_module_permission().items()):
+        if name not in STAFF_VIEWS_WITHOUT_MODULE_PERMISSION:
+            errors.append(
+                checks.Error(
+                    f"{name} is routed on the staff surface ({route!r}) without HasModulePermission; extend core.views.BaseAPIView/BaseViewSet "
+                    "with module + action_permissions (default deny), or add a documented exemption to core.checks.STAFF_VIEWS_WITHOUT_MODULE_PERMISSION.",
+                    id="core.E006",
+                )
+            )
     return errors
 
 
