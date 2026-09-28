@@ -37,7 +37,7 @@ from careers.models import Department, JobApplication, JobApplicationEvent, JobA
 from careers.services import validation
 from careers.services.applications import store_candidate_file
 from core.errors import DomainError
-from core.models import LegacyMap
+from core.models import BaseModel, LegacyMap
 from flarize.cache_utils import bump
 from media.models import MediaAsset
 from media.services import assets as media_assets
@@ -105,10 +105,11 @@ def _user(source_id):
 def _upsert(model, *, system: str, table: str, source_id, values: dict, report: Report, created_at=None, updated_at=None):
     """Insert (tracked in ``core_legacy_map``) or update the mapped row; returns the row or ``None`` when skipped."""
     target_id = mapped_id(system, table, source_id)
-    manager = model.all_objects if hasattr(model, "all_objects") else model.objects
+    based = issubclass(model, BaseModel)  # the append-only timeline (no base) has no soft delete, version or updated_at
+    manager = model.all_objects if based else model.objects
     if target_id is not None:
         row = manager.filter(pk=target_id).first()
-        if row is None or (getattr(row, "deleted_at", None) is not None and "deleted_at" not in values):
+        if row is None or (based and row.deleted_at is not None and "deleted_at" not in values):
             report.skipped += 1
             return None
         changed = {name: value for name, value in values.items() if getattr(row, name) != value}
@@ -116,7 +117,7 @@ def _upsert(model, *, system: str, table: str, source_id, values: dict, report: 
             report.skipped += 1
             return row
         columns = dict(changed)
-        if hasattr(row, "version"):
+        if based:
             columns.update(version=F("version") + 1, updated_at=updated_at or timezone.now())
         manager.filter(pk=row.pk).update(**columns)
         report.updated += 1
@@ -124,7 +125,7 @@ def _upsert(model, *, system: str, table: str, source_id, values: dict, report: 
     row = model(**values)
     if created_at is not None:
         row.created_at = created_at
-    if hasattr(row, "updated_at"):
+    if based:
         row.updated_at = updated_at or created_at or timezone.now()
     model.objects.bulk_create([row])  # bypasses save(): source timestamps survive
     LegacyMap.objects.create(source_system=system, source_table=table, source_id=str(source_id), target_table=model._meta.db_table, target_id=row.pk)
@@ -269,7 +270,12 @@ def _store_file(read_file, path: str, *, candidate: str, field: str, current: Me
 
 
 def import_applications(rows: Iterable[dict], *, read_file: Callable[[str], bytes | None], user=None) -> dict:
-    """Main backend ``job_application`` → ``careers_job_application`` (+ private resume/portfolio media)."""
+    """Main backend ``job_application`` → ``careers_job_application`` (+ private resume/portfolio media).
+
+    The legacy ``archived_at`` is the soft delete, so a re-import applies the legacy queue's archive/restore — unless
+    a platform user archived or restored the application since: then the platform's state is kept (and an
+    application archived in the platform is skipped, as everywhere else).
+    """
 
     def handle(row: dict, report: Report) -> None:
         source_id = row.get("id")
@@ -316,6 +322,13 @@ def import_applications(rows: Iterable[dict], *, read_file: Callable[[str], byte
             values[name] = value
         existing_id = mapped_id(BACKEND, "job_application", source_id)
         existing = JobApplication.all_objects.filter(pk=existing_id).select_related("resume", "portfolio").first() if existing_id else None
+        if existing is not None and _archived_in_platform(existing) is not None:
+            # A platform user archived/restored it after the import: that decision wins over the legacy archive flag,
+            # and a row archived in the platform stays archived (skipped, like every other importer).
+            values.pop("deleted_at")
+            if existing.deleted_at is not None:
+                report.skipped += 1
+                return
         values["resume"] = _store_file(read_file, row.get("resume") or "", candidate=values["name"], field="resume", current=existing.resume if existing else None, source_id=source_id, report=report)
         values["portfolio"] = _store_file(
             read_file, row.get("portfolio_file") or "", candidate=values["name"], field="portfolio_file", current=existing.portfolio if existing else None, source_id=source_id, report=report
@@ -331,6 +344,12 @@ def import_applications(rows: Iterable[dict], *, read_file: Callable[[str], byte
                     media_assets.delete_asset(old, user=None)
 
     return _run(rows, handle, object_type="careers.jobapplication", source="BACKEND job_application", user=user)
+
+
+def _archived_in_platform(application: JobApplication) -> JobApplicationEvent | None:
+    """The latest archive/restore a platform user made (imported timeline rows carry no ``actor``), if any."""
+    kinds = (JobApplicationEvent.Kind.ARCHIVED, JobApplicationEvent.Kind.RESTORED)
+    return application.events.filter(kind__in=kinds, actor__isnull=False).order_by("-created_at", "-id").first()
 
 
 def _application(source_id, report: Report, row_id) -> JobApplication:

@@ -116,7 +116,8 @@ class JobApplicationViewSet(ListModelMixin, RetrieveModelMixin, DestroyModelMixi
         return self._detail(updated)
 
     @extend_schema(operation_id="careers_applications_notes", responses={200: JobApplicationNoteSerializer(many=True), **_READ_ERRORS}, tags=TAGS)
-    @action(detail=True, methods=["get"])
+    # filter_backends=[]: the queue's filters describe applications, not notes/events (and must not 404 the parent).
+    @action(detail=True, methods=["get"], filter_backends=[])
     def notes(self, request, *args, **kwargs):
         application = self.get_object()
         page = self.paginate_queryset(application.notes.select_related("created_by").order_by("-created_at", "-id"))
@@ -138,7 +139,7 @@ class JobApplicationViewSet(ListModelMixin, RetrieveModelMixin, DestroyModelMixi
         return Response(JobApplicationNoteSerializer(note).data, status=http.HTTP_201_CREATED)
 
     @extend_schema(operation_id="careers_applications_events", responses={200: JobApplicationEventSerializer(many=True), **_READ_ERRORS}, tags=TAGS)
-    @action(detail=True, methods=["get"], pagination_class=EventCursorPagination)
+    @action(detail=True, methods=["get"], pagination_class=EventCursorPagination, filter_backends=[])
     def events(self, request, *args, **kwargs):
         application = self.get_object()
         page = self.paginate_queryset(application.events.select_related("actor"))

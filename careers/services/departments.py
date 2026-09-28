@@ -12,10 +12,10 @@ from __future__ import annotations
 
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Q
-from django.utils.text import slugify
 
 from audit.services import changes, record, snapshot
 from careers.models import Department, JobPosition
+from careers.services.slugs import derive_slug
 from core.errors import Conflict, DomainError
 from core.services import check_version, stamp_create
 from flarize.cache_utils import bump
@@ -45,7 +45,7 @@ def _unique_violation(exc: IntegrityError) -> Conflict:
 
 
 def _slug_for(data: dict, fallback_name: str) -> str:
-    slug = (data.get("slug") or "").strip() or slugify(fallback_name)[:120].strip("-")
+    slug = (data.get("slug") or "").strip() or derive_slug(fallback_name, 120)
     if not slug:
         raise DomainError("validation_error", "A slug is required.", errors={"slug": ["Could not derive a slug from the name; enter one."]})
     return slug

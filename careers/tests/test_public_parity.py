@@ -50,7 +50,7 @@ def uid_for(legacy_id: int) -> str:
 
 
 def expected(body: dict) -> dict:
-    """The legacy payload with the integer ``id`` replaced by the mapped ``uid`` (DV-16)."""
+    """The legacy payload with the integer ``id`` replaced by the mapped ``uid`` (DV-20)."""
 
     def card(item: dict) -> dict:
         item = dict(item)

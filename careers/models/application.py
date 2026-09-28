@@ -211,6 +211,15 @@ class JobApplicationEvent(models.Model):
                 condition=Q(kind__in=["RECEIVED", "STATUS", "ASSIGNED", "ASSIGNEE", "ARCHIVED", "RESTORED", "NOTE"]),
                 name="careers_job_application_event_kind_valid",
             ),
+            # from/to_status hold JobApplication.Status values (blank on non-status lines).
+            models.CheckConstraint(
+                condition=Q(from_status__in=["", "NEW", "SCREENING", "INTERVIEW", "OFFERED", "HIRED", "REJECTED", "WITHDRAWN"]),
+                name="careers_job_application_event_from_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=Q(to_status__in=["", "NEW", "SCREENING", "INTERVIEW", "OFFERED", "HIRED", "REJECTED", "WITHDRAWN"]),
+                name="careers_job_application_event_to_status_valid",
+            ),
         ]
 
     def __str__(self) -> str:

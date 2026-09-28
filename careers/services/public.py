@@ -1,7 +1,7 @@
 """Website careers payloads: ``GET job-positions/`` and ``GET job-positions/<slug>/`` (public, cached).
 
 The payloads are the legacy CMS delivery contract (``cms/careers/public.py``) field for field, with one change: the
-posting's integer ``id`` is its ``uid`` (integer ids never leave the service layer; DV-16). Parity with the legacy
+posting's integer ``id`` is its ``uid`` (integer ids never leave the service layer; DV-20). Parity with the legacy
 CMS is asserted by ``careers/tests/test_public_parity.py`` against recorded goldens.
 
 * the list serves ``PUBLISHED`` postings only (``?department=<slug>`` narrows it), ordered like the CMS

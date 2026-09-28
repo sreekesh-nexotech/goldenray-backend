@@ -49,6 +49,14 @@ class TestCreateAndList:
         assert body["slug"] == "field-operations" and body["job_count"] == 0 and body["version"] == 1
         assert AuditLog.objects.get(action="careers.department_created").actor == hr
 
+    def test_derived_slug_always_satisfies_the_slug_rule(self, hr_client):
+        """Django's slugify keeps underscores, which the slug CHECK refuses: that surfaced as a bogus 409 slug clash."""
+        response = hr_client.post(URL, {"name": "R&D_Lab"}, format="json")
+        assert response.status_code == 201, response.json()
+        assert response.json()["slug"] == "r-d-lab"
+        cleared = hr_client.patch(f"{URL}{response.json()['uid']}/", {"name": "Field_Ops", "slug": ""}, format="json")
+        assert cleared.status_code == 200 and cleared.json()["slug"] == "field-ops"
+
     def test_validation_envelope(self, hr_client):
         response = hr_client.post(URL, {"name": "", "slug": "Bad Slug"}, format="json")
         assert response.status_code == 400

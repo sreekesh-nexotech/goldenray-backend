@@ -107,3 +107,57 @@ def test_the_filter_falls_back_to_the_request_attribute():
     record.request = type("Request", (), {"request_id": RID})()
     RequestContextFilter().filter(record)
     assert record.request_id == RID
+
+
+# ── Security review: capability tokens in URL paths never reach a log line or the error sink ───────────────────────
+# Signed media URLs (reusable for 10 minutes), single-use document links, per-device terminal tokens (long-lived) and
+# customer link tokens travel as path segments; the access log, the security log, SystemException.path and Django's
+# own "Internal Server Error: <path>" lines wrote them out in full.
+CAPABILITY_PATHS = [
+    ("/api/v1/media/download/SIGNED-MEDIA-TOKEN/", "/api/v1/media/download/[redacted]/"),
+    ("/api/v1/documents/download/SIGNED-DOC-TOKEN/", "/api/v1/documents/download/[redacted]/"),
+    ("/iclock/DEVICE-SECRET-TOKEN/cdata", "/iclock/[redacted]/cdata"),
+    ("/api/customer/v1/inspection-approvals/CUSTOMER-LINK-TOKEN/send-otp/", "/api/customer/v1/inspection-approvals/[redacted]/send-otp/"),
+]
+
+
+@pytest.mark.parametrize(("path", "logged"), CAPABILITY_PATHS)
+def test_the_access_log_never_records_capability_tokens(client, caplog, path, logged):
+    with caplog.at_level(logging.INFO, logger="flarize.request"):
+        client.get(path)
+    record = next(record for record in caplog.records if record.name == "flarize.request")
+    assert record.path == logged
+
+
+@pytest.mark.parametrize("path", ["/api/v1/users/6f1d5f8e-2f7b-4a47-9a9e-5d3f1b2c3d4e/", "/iclock/cdata", "/api/public/v1/company/", "/healthz"])
+def test_ordinary_paths_are_logged_unchanged(path):
+    from flarize.logging import redact_path
+
+    assert redact_path(path) == path
+
+
+def test_json_lines_redact_capability_tokens_in_messages_and_path_extras():
+    record = logging.LogRecord("django.request", logging.ERROR, __file__, 1, "Internal Server Error: %s", ("/iclock/DEVICE-SECRET-TOKEN/cdata",), None)
+    record.path = "/api/v1/media/download/SIGNED-MEDIA-TOKEN/"
+    line = JsonFormatter().format(record)
+    assert "DEVICE-SECRET-TOKEN" not in line and "SIGNED-MEDIA-TOKEN" not in line
+    payload = json.loads(line)
+    assert payload["message"] == "Internal Server Error: /iclock/[redacted]/cdata" and payload["path"] == "/api/v1/media/download/[redacted]/"
+
+
+def test_the_error_sink_and_the_security_log_redact_capability_tokens(caplog):
+    from django.core.exceptions import TooManyFieldsSent
+    from rest_framework.test import APIRequestFactory
+
+    from core.models import SystemException
+    from core.services.system_exceptions import record_exception
+    from flarize.exceptions import exception_handler
+
+    request = APIRequestFactory().get("/iclock/DEVICE-SECRET-TOKEN/cdata")
+    record_exception(RuntimeError("boom"), request=request, source="api")
+    assert SystemException.objects.get().path == "/iclock/[redacted]/cdata"
+
+    with caplog.at_level(logging.WARNING, logger="flarize.security"):
+        exception_handler(TooManyFieldsSent(), {"request": APIRequestFactory().post("/api/v1/documents/download/SIGNED-DOC-TOKEN/")})
+    record = next(record for record in caplog.records if record.name == "flarize.security")
+    assert record.path == "/api/v1/documents/download/[redacted]/"

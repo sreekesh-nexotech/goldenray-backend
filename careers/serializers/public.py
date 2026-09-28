@@ -78,6 +78,16 @@ def _choice(choices, **kwargs):
     return serializers.ChoiceField(choices=choices, required=False, allow_blank=True, default="", **kwargs)
 
 
+URL_MAX_LENGTH = 300  # careers_job_application.linkedin / .portfolio_website
+
+
+def _fits_column(url: str) -> str:
+    """``https://`` is added to a scheme-less URL; the result must still fit the column (else a 500, as in legacy)."""
+    if len(url) > URL_MAX_LENGTH:
+        raise serializers.ValidationError(f"Ensure this field has no more than {URL_MAX_LENGTH} characters.")
+    return url
+
+
 class PublicJobApplicationSerializer(serializers.Serializer):
     position = serializers.CharField(max_length=200, required=False, default=GENERAL_APPLICATION, help_text="Free-text position ('General application').")
     position_id = serializers.UUIDField(required=False, allow_null=True, default=None, help_text="uid of the posting applied for (job-positions `uid`).")
@@ -87,8 +97,8 @@ class PublicJobApplicationSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=254)
     phone = serializers.CharField(max_length=20, help_text="10-digit Indian mobile; +91/91, spaces and dashes are accepted.")
     location = serializers.CharField(max_length=255)
-    linkedin = serializers.CharField(max_length=300, help_text="linkedin.com URL; https:// is added when missing.")
-    portfolio_website = serializers.CharField(max_length=300, required=False, allow_blank=True, default="")
+    linkedin = serializers.CharField(max_length=URL_MAX_LENGTH, help_text="linkedin.com URL; https:// is added when missing (at most 300 characters with it).")
+    portfolio_website = serializers.CharField(max_length=URL_MAX_LENGTH, required=False, allow_blank=True, default="", help_text="https:// is added when missing (at most 300 characters with it).")
     current_company = serializers.CharField(max_length=255, required=False, allow_blank=True, default="")
     current_role = serializers.CharField(max_length=255, required=False, allow_blank=True, default="")
     total_experience = _choice(JobApplication.Experience.choices)
@@ -129,10 +139,10 @@ class PublicJobApplicationSerializer(serializers.Serializer):
         url = validation.linkedin_url(value)
         if url is None:
             raise serializers.ValidationError("Enter a valid LinkedIn URL (e.g. linkedin.com/in/username).")
-        return url
+        return _fits_column(url)
 
     def validate_portfolio_website(self, value):
-        return validation.website_url(value)
+        return _fits_column(validation.website_url(value))
 
     def _file(self, value):
         if value is None:

@@ -134,6 +134,16 @@ class TestLegacyValidation:
     def test_phone_normalisation_accepts_91_prefix(self, api_client):
         assert post(api_client, form(phone="919847012345")).status_code == 201
 
+    @pytest.mark.parametrize("field,value", [("linkedin", "linkedin.com/in/" + "a" * 280), ("portfolio_website", "example.com/" + "b" * 285)])
+    def test_url_longer_than_the_column_once_https_is_added_is_a_400_not_a_500(self, api_client, field, value):
+        """Within the 300-character input limit, but 300+ once ``https://`` is prepended (the legacy form answered 500)."""
+        response = post(api_client, form(**{field: value}))
+        assert response.status_code == 400, response.json()
+        assert response.json()["errors"][field] == ["Ensure this field has no more than 300 characters."]
+        assert not JobApplication.all_objects.exists() and not MediaAsset.all_objects.exists()
+        exactly = post(api_client, form(**{field: "https://" + value[: 300 - len("https://")]}))
+        assert exactly.status_code == 201, exactly.json()
+
     def test_file_over_10_mb_is_refused_with_the_legacy_message(self, api_client):
         big = SimpleUploadedFile("cv.pdf", files.pdf() + b"0" * (10 * 1024 * 1024))
         response = post(api_client, form(resume=big))

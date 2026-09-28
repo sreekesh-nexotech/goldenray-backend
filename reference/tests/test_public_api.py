@@ -86,6 +86,16 @@ class TestTariffs:
         assert [row["uid"] for row in rows] == [str(new.uid), str(three_phase.uid)]
         assert rows[0]["rate_per_unit"] == "6.7500" and rows[0]["phase"] is None and rows[1]["slab_to_units"] is None
 
+    def test_a_schedule_takes_over_at_midnight_despite_the_day_long_cache(self, api_client):
+        """No staff write happens on the effective date, so nothing bumps the cache: the day must be part of the key."""
+        current = factories.KsebTariffFactory(slab_from_units=0, slab_to_units=250, effective_from=dt.date(2026, 4, 1))
+        upcoming = factories.KsebTariffFactory(slab_from_units=0, slab_to_units=200, effective_from=dt.date(2026, 10, 1))
+        with freeze_time("2026-09-30 23:50:00+05:30"):
+            assert [row["uid"] for row in api_client.get(f"{BASE}tariffs/").json()["results"]] == [str(current.uid)]
+            assert api_client.get(f"{BASE}tariffs/")["X-Cache"] == "HIT"
+        with freeze_time("2026-10-01 00:10:00+05:30"):
+            assert [row["uid"] for row in api_client.get(f"{BASE}tariffs/").json()["results"]] == [str(upcoming.uid)]
+
 
 class TestPincodeLookup:
     def test_lookup_returns_offices_in_legacy_order(self, api_client, django_assert_max_num_queries):

@@ -131,6 +131,47 @@ class TestResetRequest:
         response = api_client.post(REQUEST, {"email": "nope"}, format="json")
         assert response.status_code == 400 and "email" in response.json()["errors"]
 
+    # Security review: the account lookup, the per-hour count, the token and the audit row ran inside the request only
+    # for real accounts, so the response time told registered addresses apart from the rest.
+    @pytest.mark.parametrize("state", ["active", "unknown", "inactive"])
+    def test_the_request_does_the_same_work_whatever_the_address(self, api_client, user, state):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+
+        if state == "inactive":
+            User.objects.filter(pk=user.pk).update(is_active=False)
+        email = "nobody@example.com" if state == "unknown" else "meera@example.com"
+        with CaptureQueriesContext(connection) as queries:
+            response = api_client.post(REQUEST, {"email": email}, format="json")
+        assert response.status_code == 200
+        assert len(queries.captured_queries) == 0  # the lookup and the e-mail happen in accounts.tasks.send_password_reset
+
+    def test_the_queued_task_never_logs_the_address(self, api_client, user):
+        from accounts import tasks
+
+        with mock.patch.object(tasks.send_password_reset, "apply_async") as apply_async:
+            with self.captured(execute=True):
+                api_client.post(REQUEST, {"email": "meera@example.com"}, format="json")
+        assert "meera" not in apply_async.call_args.kwargs["argsrepr"] + apply_async.call_args.kwargs["kwargsrepr"]
+
+    def test_a_broker_outage_still_sends_the_link(self, api_client, user):
+        from accounts import tasks
+
+        with mock.patch.object(tasks.send_password_reset, "apply_async", side_effect=ConnectionError("broker down")):
+            with self.captured(execute=True):
+                assert api_client.post(REQUEST, {"email": "meera@example.com"}, format="json").status_code == 200
+        assert len(mail.outbox) == 1 and PasswordReset.objects.count() == 1
+
+    def test_the_audit_row_keeps_the_request_id_and_client_ip(self, api_client, user):
+        with self.captured(execute=True):
+            response = api_client.post(REQUEST, {"email": "meera@example.com"}, format="json", REMOTE_ADDR="198.51.100.23")
+        entry = AuditLog.objects.get(action="accounts.password_reset_requested")
+        assert str(entry.ip) == "198.51.100.23" and str(entry.request_id) == response["X-Request-ID"]
+
+    @pytest.fixture(autouse=True)
+    def _capture(self, django_capture_on_commit_callbacks):
+        self.captured = django_capture_on_commit_callbacks
+
 
 class TestReset:
     @pytest.fixture

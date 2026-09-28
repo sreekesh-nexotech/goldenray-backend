@@ -6,7 +6,7 @@ import pytest
 from django.core import mail
 
 from accounts.models import PasswordReset, User, UserSession
-from accounts.services import sessions
+from accounts.services import passwords, sessions
 from accounts.tests.factories import RoleFactory, UserFactory, seeded_role, super_admin_role
 from audit.models import AuditLog
 from core.models import OutboxEvent
@@ -14,6 +14,12 @@ from core.models import OutboxEvent
 pytestmark = pytest.mark.django_db
 URL = "/api/v1/users/"
 ADMIN_GRANTS = {"users": "*", "dashboard": ["view"], "catalog": ["view", "edit"]}
+RESET_URL = "/api/v1/auth/password/reset/"
+NEW_PASSWORD = "Brand-New-Passphrase-77"
+
+
+def _link_token(body: str) -> str:
+    return body.split("#token=", 1)[1].split()[0]
 
 
 def detail(user, suffix=""):
@@ -175,6 +181,29 @@ class TestUpdate:
         other = RoleFactory(slug="other", permissions={"catalog": ["view"]})
         response = client.patch(detail(member), {"email": "anu@example.com", "role": str(other.uid)}, format="json")
         assert response.status_code == 200 and response.json()["email"] == "anu@example.com" and response.json()["role"]["slug"] == "other"
+
+    # Security review: reset/invitation links e-mailed to the old address stayed valid after the address changed, so
+    # an invitation sent to a mistyped address let its recipient set the password of the corrected account.
+    def test_email_change_voids_the_invitation_sent_to_the_old_address(self, client, api_client, member_role, django_capture_on_commit_callbacks):
+        with django_capture_on_commit_callbacks(execute=True):
+            created = client.post(URL, {"email": "typo@example.com", "role": str(member_role.uid)}, format="json").json()
+        old_token = _link_token(mail.outbox[-1].body)
+        mail.outbox.clear()
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.patch(f"{URL}{created['uid']}/", {"email": "right@example.com"}, format="json")
+        assert response.status_code == 200
+        refused = api_client.post(RESET_URL, {"token": old_token, "new_password": NEW_PASSWORD}, format="json")
+        assert refused.status_code == 400 and refused.json()["code"] == "reset_token_invalid"
+        assert len(mail.outbox) == 1 and mail.outbox[0].to == ["right@example.com"]  # the pending invitation follows the address
+        assert api_client.post(RESET_URL, {"token": _link_token(mail.outbox[0].body), "new_password": NEW_PASSWORD}, format="json").status_code == 204
+
+    def test_email_change_voids_open_reset_links_of_an_active_account(self, client, api_client, member, django_capture_on_commit_callbacks):
+        issued = passwords.issue_reset(member)
+        with django_capture_on_commit_callbacks(execute=True):
+            assert client.patch(detail(member), {"email": "anu@example.com"}, format="json").status_code == 200
+        refused = api_client.post(RESET_URL, {"token": issued.token, "new_password": NEW_PASSWORD}, format="json")
+        assert refused.status_code == 400 and refused.json()["code"] == "reset_token_invalid"
+        assert mail.outbox == []  # an account with a password gets no new link; "Forgot password" reaches the new address
 
     def test_email_taken(self, client, member, admin):
         response = client.patch(detail(member), {"email": "ADMIN@example.com"}, format="json")

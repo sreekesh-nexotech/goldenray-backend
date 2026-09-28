@@ -3,7 +3,7 @@
 Column names follow the legacy CMS (``experience_required``, ``application_deadline``, ``responsibilities``,
 ``benefits``, ``application_instructions``, ``published_at``, ``closed_at``, ``sort_order``) so the Studio contract,
 the JobPosting JSON-LD builder and the importer map field for field; PLAN's ``experience``/``closes_on`` are those
-columns (DV-16). ``opens_on`` and ``openings`` are the PLAN's additions.
+columns (DV-17). ``opens_on`` and ``openings`` are the PLAN's additions.
 
 ``status`` is what the website filters on: the public list serves ``PUBLISHED`` only; the public detail also answers
 for ``CLOSED`` (``is_open: false``) so a bookmarked posting can say it no longer accepts applications.
@@ -16,7 +16,7 @@ from django.db.models import F, Q
 
 from careers.models.department import SLUG_REGEX, Department
 from core.models import BaseModel
-from seo.models import SeoFields
+from seo.models import SchemaType, SeoFields
 
 
 class JobPosition(BaseModel, SeoFields):
@@ -71,6 +71,8 @@ class JobPosition(BaseModel, SeoFields):
                 condition=Q(employment_type__in=["full_time", "part_time", "contract", "internship", "temporary"]),
                 name="careers_job_position_employment_type_valid",
             ),
+            # SeoFields.schema_type is an enum column of this table (the abstract mixin cannot declare the CHECK).
+            models.CheckConstraint(condition=Q(schema_type__in=SchemaType.values), name="careers_job_position_schema_type_valid"),
             models.CheckConstraint(condition=Q(openings__isnull=True) | Q(openings__gte=1), name="careers_job_position_openings_positive"),
             models.CheckConstraint(
                 condition=Q(opens_on__isnull=True) | Q(application_deadline__isnull=True) | Q(application_deadline__gte=F("opens_on")),

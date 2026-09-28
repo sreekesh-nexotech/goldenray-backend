@@ -90,6 +90,16 @@ class TestEditor:
         response = hr_client.patch(detail(position), {"application_deadline": "2026-11-01"}, format="json")
         assert response.status_code == 400
 
+    @pytest.mark.parametrize("title,slug", [("Solar_Engineer (Level 2)", "solar-engineer-level-2"), ("R&D __ Lead", "r-d-lead"), ("Café Manager", "cafe-manager")])
+    def test_derived_slug_always_satisfies_the_slug_rule(self, hr_client, title, slug):
+        """Django's slugify keeps underscores, which the slug CHECK refuses: that surfaced as a bogus 409 slug clash."""
+        response = hr_client.post(URL, new_position(DepartmentFactory(), title=title), format="json")
+        assert response.status_code == 201, response.json()
+        assert response.json()["slug"] == slug
+        position = JobPosition.objects.get(slug=slug)
+        cleared = hr_client.patch(detail(position), {"title": "Store_Keeper", "slug": ""}, format="json")
+        assert cleared.status_code == 200 and cleared.json()["slug"] == "store-keeper"
+
     def test_slug_is_unique_among_live_positions(self, hr_client):
         JobPositionFactory(slug="solar-installation-engineer")
         response = hr_client.post(URL, new_position(DepartmentFactory()), format="json")
@@ -107,6 +117,15 @@ class TestEditor:
         position = JobPositionFactory(published=True)
         hr_client.patch(detail(position), {"location": "Kottayam"}, format="json")
         assert OutboxEvent.objects.filter(event_type="careers.position_updated").count() == 1
+
+    def test_renaming_the_slug_of_a_live_posting_names_the_old_page_too(self, hr_client):
+        """The website must revalidate the old URL as well (it now 404s), not only the new one."""
+        position = JobPositionFactory(published=True, slug="site-engineer")
+        hr_client.patch(detail(position), {"slug": "senior-site-engineer"}, format="json")
+        payload = OutboxEvent.objects.get(event_type="careers.position_updated").payload
+        assert payload["path"] == "/career/senior-site-engineer" and payload["previous_path"] == "/career/site-engineer"
+        hr_client.patch(detail(position), {"location": "Kottayam"}, format="json")
+        assert "previous_path" not in OutboxEvent.objects.filter(event_type="careers.position_updated").order_by("-id").first().payload
 
     def test_list_hides_archived_and_filters(self, hr_client, django_assert_max_num_queries):
         engineering = DepartmentFactory()

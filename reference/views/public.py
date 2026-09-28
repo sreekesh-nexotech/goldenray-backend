@@ -11,6 +11,7 @@ The server-side cache lives ``REFERENCE_CACHE_TTL`` seconds and is invalidated b
 
 from __future__ import annotations
 
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -46,6 +47,11 @@ class _PublicReferenceList(CachedResponseMixin, ListModelMixin, PublicViewMixin,
 
 
 class _PublicTariffList(_PublicReferenceList):
+    def get_cache_namespaces(self, request):
+        # The schedule in force changes at midnight (``effective_from``) without any write that would bump the list,
+        # so the day is part of the cache key.
+        return [self.spec.namespace, f"{self.spec.namespace}@{timezone.localdate().isoformat()}"]
+
     def get_queryset(self):
         return lookups.current_tariffs()
 
@@ -55,7 +61,7 @@ def public_list_view(spec: lists.ListSpec):
     tariffs = spec is lists.TARIFFS
     base = _PublicTariffList if tariffs else _PublicReferenceList
     description = (
-        "The KSEB slab schedule in force today (per phase group; `phase` null = every phase)."
+        "The KSEB slab schedule in force today (per phase group; `phase` null = every phase). Paginated: pass `page_size=200` to get the whole list."
         if tariffs
         else f"Active {spec.key.replace('-', ' ')} in display order. Paginated: pass `page_size=200` to get the whole list."
     )

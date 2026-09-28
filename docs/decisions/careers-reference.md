@@ -3,13 +3,13 @@
 Work package careers-reference builds the `careers` and `reference` apps of PLAN §2.8, their staff endpoints (§3.4
 "Website content": `careers/…`, `reference/*`), their public endpoints (§3.3 `job-positions`, `job-applications`,
 `reference/…`) and their legacy importers (§7.2 row 10, §7.3 `job_application`, `pincodes` … `ev_scooters`).
-Deviations: DV-16 … DV-20 in `docs/DEVIATIONS.md`.
+Deviations: DV-17 … DV-21 in `docs/DEVIATIONS.md`.
 
 ## What exists
 
 | Area | Where | Notes |
 |---|---|---|
-| Models | `careers/models/`, `reference/models/` | `careers_department`, `careers_job_position` (+ `seo.models.SeoFields`), `careers_job_application`, `careers_job_application_note`, `careers_job_application_event` *(no base)*; `reference_pincode` (+ `reference_pincode_office`, DV-17), `reference_kseb_tariff`, `reference_device_type`, `reference_wattage`, `reference_room_size`, `reference_ev_car`, `reference_ev_scooter`, `reference_appliance`. Every enum has a DB check, every lifecycle invariant a partial unique index (live rows). |
+| Models | `careers/models/`, `reference/models/` | `careers_department`, `careers_job_position` (+ `seo.models.SeoFields`), `careers_job_application`, `careers_job_application_note`, `careers_job_application_event` *(no base)*; `reference_pincode` (+ `reference_pincode_office`, DV-18), `reference_kseb_tariff`, `reference_device_type`, `reference_wattage`, `reference_room_size`, `reference_ev_car`, `reference_ev_scooter`, `reference_appliance`. Every enum has a DB check, every lifecycle invariant a partial unique index (live rows). |
 | Careers services | `careers/services/{departments,positions,applications,public,sitemap,validation,legacy_import}.py` | writes audited, versioned, cache-bumping (`careers:positions`), outbox events; public payload builders; `sitemap_entries()`. |
 | Reference services | `reference/services/{lists,pincodes,lookups,legacy_import}.py` | one `ListSpec`-driven CRUD for the seven flat lists; pincodes with nested offices; documented reads for other contexts. |
 | Outbox | `careers/events.py` | `careers.application_received` → e-mail to `company_profile.application_notification_emails` when `notify_on_new_application`. |
@@ -44,7 +44,9 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
    PUBLISHED → CLOSED (`closed_at`). archive: any other → ARCHIVED. Repeating an action is a no-op; any other move is
    409 `invalid_status_transition`. Each transition emits `careers.position_<published|unpublished|closed|archived>`
    (`{position_uid, slug, status, path}`) for website revalidation; editing a live posting emits
-   `careers.position_updated`. `DELETE` soft-deletes only a posting nobody applied to (409
+   `careers.position_updated` (with `previous_path` when the slug changed, so the old URL is revalidated too).
+   Slugs derived from a title/name take the Studio's `slugify` shape (`careers.services.slugs`; Django's `slugify`
+   keeps `_`, which the slug CHECK refuses). `DELETE` soft-deletes only a posting nobody applied to (409
    `position_has_applications`). `application_deadline` stays informational, as in the CMS (it feeds JSON-LD
    `validThrough`); `opens_on`/`openings` are stored and shown to the Studio.
 2. **Application workflow** (PLAN statuses): NEW → SCREENING/REJECTED/WITHDRAWN; SCREENING → INTERVIEW/REJECTED/
@@ -65,7 +67,7 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
 4. **Downloads** use the media signed URL (`media/download/<token>/`, 10 minutes, DV-13): the Studio asks
    `…/download/<kind>/` (needs `applications.view`) and follows the URL. No new token-only endpoint and no change to
    `media` was needed.
-5. **Public careers payloads are the CMS contract** (`cms/careers/public.py`) with `uid` for `id` (DV-19);
+5. **Public careers payloads are the CMS contract** (`cms/careers/public.py`) with `uid` for `id` (DV-20);
    `meta.intro`/`meta.accepting_general_applications` come from `company_profile.careers_*` (the CMS `SiteSettings`
    fields); the JSON-LD site URL is `company_profile.website` and the hiring organisation its trade name (the CMS used
    `FRONTEND_BASE_URL` and `SiteSettings.company_name`). The list is unpaginated like the CMS but hard-capped at 200
@@ -75,7 +77,8 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
    endpoints had no ORDER BY); staff-created rows without a `sort_order` go to the end. **The website must request
    `?page_size=200`** — every current list is shorter (device types 18, wattages 25, room sizes 7, EV cars 14,
    scooters 15, tariffs 5, appliances 11) — and read `results`. Server-side cache 24 h, invalidated by every staff
-   write; `Cache-Control: public, max-age=60` (the platform budget).
+   write (the tariff list's key also carries the local date: a schedule takes over at midnight without any write);
+   `Cache-Control: public, max-age=60` (the platform budget).
 7. **Tariff schedules.** `phase` null = every phase; `effective_from` null = "since before the platform". The
    schedule in force on a day is, per phase group, the rows with the latest `effective_from` not after it
    (`lookups.current_tariffs`); the public list serves today's schedule; `lookups.slab_for_units` reproduces the
@@ -105,7 +108,7 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
 | Legacy | Platform | Note |
 |---|---|---|
 | `id` | `core_legacy_map` (CMS, `careers_job_position`) | the public payload's `id` becomes `uid` |
-| `title`, `slug`, `location`, `experience_required`, `description`, `responsibilities`, `requirements`, `benefits`, `application_instructions`, `application_deadline`, `sort_order`, `published_at`, `closed_at` | same (DV-16) | |
+| `title`, `slug`, `location`, `experience_required`, `description`, `responsibilities`, `requirements`, `benefits`, `application_instructions`, `application_deadline`, `sort_order`, `published_at`, `closed_at` | same (DV-17) | |
 | `employment_type` | same codes | `full_time` … |
 | `status` draft/published/closed/archived | DRAFT/PUBLISHED/CLOSED/ARCHIVED | unknown → violation |
 | `department_id` | `department` | through the department map; missing → violation |
@@ -123,7 +126,7 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
 | `position` (free text) | `position_label` | |
 | `position_id` (CMS id, no FK) | `position` (FK) | through the CMS position map; unmapped → snapshot kept, reported |
 | `position_title`, `department_name` | same | snapshot |
-| `status` new/reviewing/interview/selected/rejected | NEW/SCREENING/INTERVIEW/OFFERED/REJECTED | DV-18 |
+| `status` new/reviewing/interview/selected/rejected | NEW/SCREENING/INTERVIEW/OFFERED/REJECTED | DV-19 |
 | `status_changed_at` | same | |
 | `archived_at` | `deleted_at` | archive = soft delete |
 | `full_name` | `name` | |
@@ -153,14 +156,16 @@ assert it. All actions and PATCHes take `expected_version` (409 `stale_version`)
 | every table | `is_active` true, `sort_order` = legacy id | |
 
 Every importer returns `{created, updated, skipped, violations}`, is idempotent through `core_legacy_map`, keeps
-rows deleted in the platform deleted, preserves source timestamps, and writes one `audit_log` row per batch
+rows deleted in the platform deleted (applications: the legacy `archived_at` flows on re-import — archive and restore
+— unless a platform user archived or restored the application since, then the platform's state wins), preserves
+source timestamps, and writes one `audit_log` row per batch
 (`careers.legacy_imported` / `reference.legacy_imported` with counts and the batch sha256).
 
 ## Parity evidence
 
 | What | How | Result |
 |---|---|---|
-| `GET job-positions/` and `/<slug>/` = CMS `/api/job-positions` and `/<slug>` | `careers/tests/test_public_parity.py`: goldens recorded by `careers/tests/legacy/capture_cms.py` from the shared CMS on :18009 (`cms_shared.json`, 11 responses) and from a private CMS copy with edge cases on :18161 (`cms_enriched.json`, 17 responses: SEO/`noindex`, `schema_extra` trying to override facts, blank lines and `\r\n` in lists, inactive department with a live posting, closed-only department, sort ties, company name/intro set); the same rows imported through `legacy_import`; every response replayed | identical (status and body) except `id` → `uid` (DV-19); 404s answer in the platform envelope |
+| `GET job-positions/` and `/<slug>/` = CMS `/api/job-positions` and `/<slug>` | `careers/tests/test_public_parity.py`: goldens recorded by `careers/tests/legacy/capture_cms.py` from the shared CMS on :18009 (`cms_shared.json`, 11 responses) and from a private CMS copy with edge cases on :18161 (`cms_enriched.json`, 17 responses: SEO/`noindex`, `schema_extra` trying to override facts, blank lines and `\r\n` in lists, inactive department with a live posting, closed-only department, sort ties, company name/intro set); the same rows imported through `legacy_import`; every response replayed | identical (status and body) except `id` → `uid` (DV-20); 404s answer in the platform envelope |
 | `POST job-applications/` = legacy `POST /api/job-applications/` | `careers/tests/test_application_write_parity.py`: 32 cases recorded by `capture_applications.py` against a PRIVATE restored `legacy_goldenapp` (`legacy_goldenapp_careers_reference`, private server :18162, media and logs in scratch, throttle lifted); same fields and file bytes replayed | 29 cases identical in outcome, error fields, error messages and stored values; 1 (`position_id` not a number) identical except the message text, because the field now holds a uid; 2 approved differences: content sniffing refuses a text file named `.pdf` (`unsupported_file_type`), and a CLOSED posting refuses applications (`position_not_open`) |
 | Reference payloads | `reference/tests/test_parity.py`: rows + `/api/<list>/` responses recorded by `reference/tests/legacy/capture_backend.py` from :18012 (6 lists in full, 215 post-office rows of 32 pincodes incl. every multi-district/-division pincode, Flarize appliance master) | every legacy field present with the same value (tariff columns under the PLAN names); legacy-id order |
 | Importers on the recorded data | `careers/tests/test_legacy_import.py`, `reference/tests/test_legacy_import.py` | counts, idempotent re-runs, updates, deleted-stays-deleted, violations, file checksums |
@@ -175,6 +180,7 @@ rows deleted in the platform deleted, preserves source timestamps, and writes on
   → `?page_size=200` and `results`; pincodes are only looked up one at a time.
 * **Calculators / leads / installations** read reference data only through `reference.services.lookups`.
 * **SEO** `sitemap/entries` should include `careers.services.sitemap.sitemap_entries()`.
-* **Revalidation**: subscribe to `careers.position_*` events (payload carries `path`).
+* **Revalidation**: subscribe to `careers.position_*` events (payload carries `path`, plus `previous_path` when a
+  live posting's slug changed).
 * Recapturing goldens: see the docstrings of the three capture scripts; never point the write-path capture at the
   shared `legacy_goldenapp` (the script refuses).

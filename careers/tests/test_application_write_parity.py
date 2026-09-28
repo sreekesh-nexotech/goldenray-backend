@@ -3,7 +3,7 @@
 ``legacy/applications_cases.json`` was recorded by ``capture_applications.py`` against a PRIVATE restored copy of the
 legacy main backend (32 cases: every field rule, file rules, honeypot, success variants). Each case is replayed here
 with the same form fields and the same file bytes (``legacy/sample_files.py``); the posting id is translated to the
-posting's ``uid`` through the CMS import map (DV-16). The platform must:
+posting's ``uid`` through the CMS import map (DV-20). The platform must:
 
 * accept exactly the submissions the legacy form accepted and store the same normalised values;
 * refuse exactly the ones it refused, with errors on the same fields and — where the rule is the legacy form's own

@@ -110,7 +110,8 @@ Work package F2 completes the platform identity and audit layer of PLAN §4.3 on
   the dicts with `audit.services.snapshot(instance, fields)` and `audit.services.changes(before, after)`.
 * Use `accounts.services.authz.deny_self_action(user, record, module="attendance", action="edit")` (and
   `leave.approve`) where PLAN §3.2 requires it; `record` may be the user, a uid, or anything with
-  `user`/`user_id`/`owner`/`owner_id` (followed up to three hops, e.g. attendance day → employee → user).
+  `user`/`user_id`/`owner`/`owner_id`/`employee` (followed up to three hops, e.g. attendance day → employee → user).
+  A record it cannot attribute raises `ValueError` (fail closed); an employee without a login is nobody's own record.
 * Celery tasks that act for someone wrap their work in `audit.context.bind(actor=..., actor_kind=...)`.
 * Services that write roles or users outside `accounts.services` must call `authz.invalidate_role(uid)` /
   `authz.invalidate_user(uid)` (importers: the key also embeds `version`/`updated_at`, so correctness does not

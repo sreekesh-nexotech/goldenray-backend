@@ -163,6 +163,25 @@ class TestWorkflow:
         assert listing["count"] == 1 and listing["results"][0]["author_name"] == hr.get_full_name()
         assert JobApplicationEvent.objects.filter(application=application, kind="NOTE").count() == 1
 
+    @pytest.mark.parametrize("suffix", ["notes/", "events/"])
+    def test_sub_resource_lists_ignore_the_queue_filters(self, hr_client, suffix):
+        """The queue's ?status/?search/?ordering were documented on notes/ and events/ and silently 404'd the parent."""
+        application = JobApplicationFactory(status=Status.NEW)
+        JobApplicationNoteFactory(application=application)
+        JobApplicationEvent.objects.create(application=application, kind=JobApplicationEvent.Kind.RECEIVED)
+        response = hr_client.get(detail(application, suffix), {"status": "REJECTED", "search": "nobody", "position": "00000000-0000-0000-0000-000000000000"})
+        assert response.status_code == 200, response.json()
+        assert len(response.json()["results"]) == 1
+
+    def test_sub_resource_schemas_do_not_advertise_the_queue_filters(self):
+        from drf_spectacular.generators import SchemaGenerator
+
+        schema = SchemaGenerator(api_version="v1").get_schema(request=None, public=True)
+        for suffix in ("notes/", "events/"):
+            operation = schema["paths"][f"/api/v1/careers/applications/{{uid}}/{suffix}"]["get"]
+            names = {parameter["name"] for parameter in operation.get("parameters", [])}
+            assert not names & {"status", "position", "assignee", "source", "created_from", "created_to", "search", "ordering"}, (suffix, names)
+
     def test_events_are_cursor_paginated(self, hr_client):
         application = JobApplicationFactory()
         for status in ("SCREENING", "INTERVIEW", "OFFERED"):

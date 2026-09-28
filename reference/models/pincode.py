@@ -1,4 +1,4 @@
-"""``reference_pincode`` (PLAN §2.8) and ``reference_pincode_office`` (DV-17).
+"""``reference_pincode`` (PLAN §2.8) and ``reference_pincode_office`` (DV-18).
 
 The legacy ``pincodes`` table holds one row per *post office*: 5,057 rows for 1,428 Kerala pincodes, with offices of
 one pincode spread over two districts or postal divisions in a few cases. The PLAN's ``reference_pincode`` is one

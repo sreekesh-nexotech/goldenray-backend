@@ -148,6 +148,33 @@ class TestBackend:
         assert MediaAsset.objects.count() == assets and JobApplication.all_objects.count() == 9
         assert JobApplicationNote.objects.count() == 2 and JobApplicationEvent.objects.count() == 19
 
+    def test_an_application_archived_in_the_platform_stays_archived(self, make_user):
+        """The module contract: a row deleted in the platform after the import stays deleted (the re-import un-archived it)."""
+        from careers.services.applications import archive_application, restore_application
+
+        rows = copy.deepcopy([row for row in BACKEND_ROWS["job_application"] if not row["archived_at"]][:2])
+        legacy_import.import_applications(rows, read_file=read_file)
+        hr = make_user(grants={"applications": "*"})
+        archived, restored = (JobApplication.objects.get(pk=legacy_import.mapped_id("BACKEND", "job_application", row["id"])) for row in rows)
+        archive_application(archived, user=hr)
+        archive_application(restored, user=hr)
+        restore_application(JobApplication.all_objects.get(pk=restored.pk), user=hr)
+        rows[1]["archived_at"] = "2026-09-01T10:00:00+00:00"  # archived in the legacy queue meanwhile
+        again = legacy_import.import_applications(rows, read_file=read_file)
+        assert JobApplication.all_objects.get(pk=archived.pk).deleted_at is not None and again["skipped"] >= 1
+        assert JobApplication.all_objects.get(pk=restored.pk).deleted_at is None  # the platform's own restore wins too
+
+    def test_legacy_archive_and_restore_still_flow_into_untouched_rows(self):
+        rows = copy.deepcopy([row for row in BACKEND_ROWS["job_application"] if not row["archived_at"]][:1])
+        legacy_import.import_applications(rows, read_file=read_file)
+        application = JobApplication.objects.get()
+        rows[0]["archived_at"] = "2026-09-01T10:00:00+00:00"
+        legacy_import.import_applications(rows, read_file=read_file)
+        assert JobApplication.all_objects.get(pk=application.pk).deleted_at is not None
+        rows[0]["archived_at"] = None
+        legacy_import.import_applications(rows, read_file=read_file)
+        assert JobApplication.all_objects.get(pk=application.pk).deleted_at is None
+
     def test_changed_file_replaces_the_asset(self):
         rows = copy.deepcopy(BACKEND_ROWS["job_application"][:1])
         legacy_import.import_applications(rows, read_file=read_file)

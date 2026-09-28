@@ -24,10 +24,10 @@ from __future__ import annotations
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Q
 from django.utils import timezone
-from django.utils.text import slugify
 
 from audit.services import changes, record, snapshot
 from careers.models import Department, JobApplication, JobPosition
+from careers.services.slugs import derive_slug
 from core.errors import Conflict, DomainError
 from core.outbox import emit
 from core.services import check_version, stamp_create
@@ -109,7 +109,7 @@ def _validate(values: dict) -> None:
 
 
 def _derive_slug(title: str) -> str:
-    slug = slugify(title or "")[:220].strip("-")
+    slug = derive_slug(title, 220)
     if not slug:
         raise DomainError("validation_error", "A slug is required.", errors={"slug": ["Could not derive a slug from the title; enter one."]})
     return slug
@@ -152,17 +152,16 @@ def update_position(instance: JobPosition, *, user, data, expected_version=None)
     record("careers.position_updated", obj=position, actor=user, before=changed_before, after=changed_after)
     bump(CACHE_NAMESPACE)
     if position.status in (Status.PUBLISHED, Status.CLOSED):
-        _emit(position, "careers.position_updated")
+        # A new slug moves the page: the old URL must be revalidated too (it answers 404 now).
+        _emit(position, "careers.position_updated", previous_path=f"/career/{before['slug']}" if "slug" in values else None)
     return position
 
 
-def _emit(position: JobPosition, event_type: str) -> None:
-    emit(
-        event_type,
-        {"position_uid": str(position.uid), "slug": position.slug, "status": position.status, "path": position.seo_path()},
-        aggregate_type="careers.jobposition",
-        aggregate_uid=position.uid,
-    )
+def _emit(position: JobPosition, event_type: str, *, previous_path: str | None = None) -> None:
+    payload = {"position_uid": str(position.uid), "slug": position.slug, "status": position.status, "path": position.seo_path()}
+    if previous_path:
+        payload["previous_path"] = previous_path
+    emit(event_type, payload, aggregate_type="careers.jobposition", aggregate_uid=position.uid)
 
 
 @transaction.atomic
