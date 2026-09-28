@@ -42,6 +42,18 @@ class TestStaff:
         assert AuditLog.objects.get(action="seo.page_metadata_created").actor == editor
         assert OutboxEvent.objects.get(event_type="website.revalidate_requested").payload["paths"] == ["/about"]
 
+    def test_an_edit_reaches_the_website_through_the_fake_client_only(self, client, drain_outbox):
+        """End to end outside the blog tests: the test settings pin the revalidation client to its fake backend."""
+        from blog.services import revalidation
+        from company.tests.factories import CompanyProfileFactory
+
+        CompanyProfileFactory(blog_revalidate_url="https://flarize.com/api/revalidate", blog_revalidate_secret="shared-secret")
+        revalidation.FAKE.sent.clear()
+        client.post(URL, NEW, format="json")
+        drain_outbox()
+        assert [sent["body"] for sent in revalidation.FAKE.sent] == [{"secret": "shared-secret", "path": "/about"}]
+        revalidation.FAKE.sent.clear()
+
     def test_home_and_nested_pages(self, client):
         assert client.post(URL, {**NEW, "page": "/"}, format="json").json()["path"] == "/"
         assert client.post(URL, {**NEW, "page": "projects/123"}, format="json").json()["page"] == "projects/123"

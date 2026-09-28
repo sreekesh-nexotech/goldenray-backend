@@ -351,13 +351,8 @@ def import_categories(rows, *, user=None) -> dict:
     report, rows = Report("catalog_category"), list(rows)
 
     def build(row):
-        values = {"name": _text(row.get("name"))[:120]}
-        slug = _text(row.get("slug"))
-        if slug:
-            values["slug"] = slug[:120]
-        elif mapped(report.table, row["id"], Category) is None:
-            report.violation(row["id"], "slug_generated", f"category '{values['name']}' had no slug; one was generated from the name.")
-        return values
+        # A NULL slug is preserved (PLAN §7.2 row 4 "slugs preserved"): the CMS delivered it as ``"slug": null``.
+        return {"name": _text(row.get("name"))[:120], "slug": _text(row.get("slug"))[:120] or None}
 
     _import_terms(report, rows, Category, SEQ_CATEGORY, build)
     return _finish(report, rows, user=user)

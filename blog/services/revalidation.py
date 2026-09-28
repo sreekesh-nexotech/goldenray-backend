@@ -8,7 +8,9 @@ The frontend's existing contract is kept: one ``POST`` per path with the JSON bo
 * every request also carries ``X-Flarize-Timestamp`` and ``X-Flarize-Signature: sha256=<HMAC(secret, "<ts>.<body>")>``
   so the frontend can move from the body secret to a signature check; non-2xx responses and network errors are
   logged (a wrong secret no longer fails silently);
-* duplicate paths are sent once; events are deduplicated per entry version at emit time.
+* duplicate paths are sent once; events are deduplicated per entry version at emit time;
+* one call is bounded (it runs inside the outbox drainer's Celery time limit): the first transport failure ends the
+  batch and ``BLOG_REVALIDATE_BUDGET_SECONDS`` (default 20) caps its wall-clock time; skipped paths are logged.
 
 It is **fail-soft**: nothing raises — the website falls back to its ISR window. No URL or no secret disables it.
 Backends: ``http`` (default), ``fake`` (tests: records requests in :data:`FakeBackend.sent`), ``off``
@@ -97,15 +99,35 @@ def _site_path(path) -> bool:
     return isinstance(path, str) and path.startswith("/") and not path.startswith("//") and len(path) <= 1000
 
 
+def budget_seconds() -> float:
+    """Wall-clock budget of one :func:`revalidate` call (it runs inside the outbox drainer's Celery time limit)."""
+    return float(getattr(settings, "BLOG_REVALIDATE_BUDGET_SECONDS", 20))
+
+
+def _skipped(remaining: int, why: str, reason: str) -> None:
+    if remaining:
+        logger.warning(f"blog revalidation {why}: {remaining} paths skipped (the website's ISR window catches up)", extra={"reason": reason, "skipped": remaining})
+
+
 def revalidate(paths, *, reason: str = "") -> list[Result]:
-    """Ask the website to rebuild ``paths`` (site-relative). Never raises."""
+    """Ask the website to rebuild ``paths`` (site-relative). Never raises.
+
+    The call is bounded: it runs inside the outbox drainer (a Celery task with a hard time limit), so the first
+    transport failure (connection refused, timeout — the website is down, every other path would wait just as long)
+    ends the batch, and so does exhausting :func:`budget_seconds`. Skipped paths are logged, never retried: the
+    website's ISR window refreshes them anyway.
+    """
     client = backend()
     url, secret = _target()
     wanted = [path for path in dict.fromkeys(paths or []) if _site_path(path)]
     if client is None or not url or not secret or not wanted:
         return []
     results = []
-    for path in wanted:
+    deadline = time.monotonic() + budget_seconds()
+    for index, path in enumerate(wanted):
+        if index and time.monotonic() >= deadline:
+            _skipped(len(wanted) - index, "time budget exhausted", reason)
+            break
         body = json.dumps({"secret": secret, "path": path}, separators=(",", ":")).encode()
         timestamp = int(time.time())
         headers = {"Content-Type": "application/json", "X-Flarize-Timestamp": str(timestamp), "X-Flarize-Signature": f"sha256={sign(secret, timestamp, body)}"}
@@ -114,7 +136,8 @@ def revalidate(paths, *, reason: str = "") -> list[Result]:
         except Exception as exc:  # noqa: BLE001 - fail-soft by contract
             logger.warning("blog revalidation request failed", extra={"path": path, "reason": reason, "error": type(exc).__name__})
             results.append(Result(path=path, status=None, error=type(exc).__name__))
-            continue
+            _skipped(len(wanted) - index - 1, "stopped after a transport failure", reason)
+            break
         result = Result(path=path, status=status)
         if not result.ok:
             logger.warning("blog revalidation rejected", extra={"path": path, "reason": reason, "status": status})

@@ -44,7 +44,7 @@ class _AuthorRef(serializers.ModelSerializer):
 class _TermRef(serializers.Serializer):
     uid = serializers.UUIDField()
     name = serializers.CharField()
-    slug = serializers.CharField()
+    slug = serializers.CharField(allow_null=True, help_text="null only for a legacy category imported without a slug")
 
 
 class _UserRef(serializers.Serializer):

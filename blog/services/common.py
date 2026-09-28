@@ -72,22 +72,28 @@ def in_use(code: str, what: str, count: int) -> Conflict:
 
 
 def entry_paths(entries: Iterable) -> list[str]:
-    """Revalidation paths of published entries (their page and their collection index), capped."""
+    """Revalidation paths of published entries (their collection index, their page and — when ``active_aliases`` is
+    prefetched — the old URLs the website also renders them under), capped."""
     paths: list[str] = []
     for entry in entries:
-        for path in (entry.collection.path_prefix, f"{entry.collection.path_prefix}/{entry.slug}"):
+        prefix = entry.collection.path_prefix
+        aliases = [alias.slug for alias in getattr(entry, "active_aliases", ())]
+        for path in (prefix, *(f"{prefix}/{slug}" for slug in (entry.slug, *aliases))):
             if path not in paths:
                 paths.append(path)
         if len(paths) >= MAX_REVALIDATE_PATHS:
             break
-    return paths
+    return paths[:MAX_REVALIDATE_PATHS]
 
 
 def emit_content_changed(entries_queryset, *, reason: str, extra_paths: Iterable[str] = ()) -> None:
     """``blog.content_changed``: a shared record (author, category, template …) changed what published pages show."""
-    from blog.models import Entry
+    from django.db.models import Prefetch
 
-    published = entries_queryset.filter(status=Entry.Status.PUBLISHED, deleted_at__isnull=True).select_related("collection").order_by("delivery_id")[:MAX_REVALIDATE_PATHS]
+    from blog.models import Entry, EntrySlugHistory
+
+    aliases = Prefetch("slug_history", queryset=EntrySlugHistory.objects.filter(active=True).order_by("created_at", "id"), to_attr="active_aliases")
+    published = entries_queryset.filter(status=Entry.Status.PUBLISHED, deleted_at__isnull=True).select_related("collection").prefetch_related(aliases).order_by("delivery_id")[:MAX_REVALIDATE_PATHS]
     paths = entry_paths(published)
     for path in extra_paths:
         if path not in paths:

@@ -136,13 +136,22 @@ def http_max_age(ttl: int, max_age: int | None = None) -> int:
     return max(0, min(ttl, budget, budget if max_age is None else int(max_age)))
 
 
-def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, producer: Callable[[], Response], *, max_age: int | None = None) -> Response:
-    """Serve ``producer()`` through the version-keyed cache (GET/HEAD only; only 200 responses are stored)."""
+def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, producer: Callable[[], Response], *, max_age: int | None = None, ordered_query: bool = False) -> Response:
+    """Serve ``producer()`` through the version-keyed cache (GET/HEAD only; only 200 responses are stored).
+
+    The key normalises the query string (parameters and repeated values sorted) so equivalent requests share an entry.
+    A view whose result depends on parameter order (the Strapi delivery: ``sort[n]`` keys apply in query-string order,
+    a repeated ``filters[f][$eq]`` or ``pagination[page]`` uses its last value) passes ``ordered_query=True``: the key
+    then keeps the query exactly as sent, so two differently ordered queries never share a cached body.
+    """
     if request.method not in ("GET", "HEAD"):
         return producer()
     ttl = int(ttl or getattr(settings, "PUBLIC_CACHE_TTL_SECONDS", 60))
     versions = get_versions(_resolve_namespaces(namespaces, view, request))
-    query = sorted((key, sorted(values)) for key, values in request.query_params.lists())
+    if ordered_query:
+        query = [[key, list(values)] for key, values in request.query_params.lists()]
+    else:
+        query = sorted((key, sorted(values)) for key, values in request.query_params.lists())
     key = build_key("resp", getattr(request, "version", None) or "", request.path, query, versions=versions)
 
     entry = _safe_get(key)
@@ -169,13 +178,15 @@ def serve_cached(view, request, namespaces: Namespaces, ttl: int | None, produce
     return response
 
 
-def cache_response(*, namespaces: Namespaces, ttl: int | None = None, max_age: int | None = None):
-    """Decorator for a public view's ``get``/``list``/``retrieve`` method (``ttl`` server-side, ``max_age`` HTTP)."""
+def cache_response(*, namespaces: Namespaces, ttl: int | None = None, max_age: int | None = None, ordered_query: bool = False):
+    """Decorator for a public view's ``get``/``list``/``retrieve`` method (``ttl`` server-side, ``max_age`` HTTP).
+
+    ``ordered_query=True`` keys the cache on the query string in the order sent (see :func:`serve_cached`)."""
 
     def decorator(method):
         @wraps(method)
         def wrapper(view, request, *args, **kwargs):
-            return serve_cached(view, request, namespaces, ttl, lambda: method(view, request, *args, **kwargs), max_age=max_age)
+            return serve_cached(view, request, namespaces, ttl, lambda: method(view, request, *args, **kwargs), max_age=max_age, ordered_query=ordered_query)
 
         return wrapper
 

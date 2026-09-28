@@ -228,10 +228,15 @@ def active_collection(api_uid: str) -> Collection:
     return collection
 
 
+# ``attributes`` keeps the order the values were written in (the CMS delivered its rows in insertion order, and both
+# the importer and the replace-all writer insert them in source/client order), never an alphabetical re-sort.
+ATTRIBUTE_ORDER = ("id",)
+
+
 def with_payload_relations(queryset: QuerySet, *, full: bool = True) -> QuerySet:
     """Everything the flat payload embeds, in a fixed number of queries (no N+1)."""
     if not full:
-        return queryset.prefetch_related(Prefetch("attribute_values", queryset=EntryAttributeValue.objects.order_by("slot_key", "id")))
+        return queryset.prefetch_related(Prefetch("attribute_values", queryset=EntryAttributeValue.objects.order_by(*ATTRIBUTE_ORDER)))
     return queryset.select_related("collection", "template", "author", "cover_image", "seo").prefetch_related(
         Prefetch("template__image_groups", queryset=TemplateImageGroup.objects.order_by("position", "id")),
         Prefetch("categories", queryset=Category.objects.order_by("name", "id")),
@@ -239,7 +244,7 @@ def with_payload_relations(queryset: QuerySet, *, full: bool = True) -> QuerySet
         Prefetch("badges", queryset=Badge.objects.order_by("name", "id")),
         Prefetch("content_blocks", queryset=ContentBlock.objects.order_by("position", "delivery_id")),
         Prefetch("images", queryset=EntryImage.objects.select_related("media_asset").order_by("group_key", "position", "id")),
-        Prefetch("attribute_values", queryset=EntryAttributeValue.objects.order_by("slot_key", "id")),
+        Prefetch("attribute_values", queryset=EntryAttributeValue.objects.order_by(*ATTRIBUTE_ORDER)),
     )
 
 

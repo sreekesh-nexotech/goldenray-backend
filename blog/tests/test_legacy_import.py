@@ -137,7 +137,7 @@ def test_taxonomy_and_schema_violations():
     assert codes(results["catalog_collection"]) == ["api_uid_invalid"]
     assert sorted(codes(results["catalog_template_image_group"])) == ["max_items_dropped", "template_unmapped"]
     assert sorted(codes(results["catalog_template_attribute_slot"])) == ["options_invalid", "template_unmapped", "type_unknown"]
-    assert codes(results["catalog_category"]) == ["slug_generated"] and Category.objects.get(name="No Slug").slug == "no-slug"
+    assert codes(results["catalog_category"]) == [] and Category.objects.get(name="No Slug").slug is None  # preserved, delivered as null
     assert codes(results["catalog_badge"]) == ["color_invalid"]
     assert TemplateImageGroup.objects.get(key="coverImg").max_items is None
     assert TemplateAttributeSlot.objects.get(key="bad").options == {} and Template.objects.count() == 1

@@ -12,8 +12,8 @@ Provider contract (``<app>/services/seo_overview.py``): ``SEO_OVERVIEW_KIND = "<
 
 from __future__ import annotations
 
-from django.db.models import BooleanField, Case, CharField, Count, F, IntegerField, Q, QuerySet, Value, When
-from django.db.models.functions import Coalesce, Length, Trim
+from django.db.models import BooleanField, Case, CharField, Count, F, Func, IntegerField, Q, QuerySet, Value, When
+from django.db.models.functions import Coalesce, Length
 
 from seo.models import DESCRIPTION_MAX, DESCRIPTION_MIN, TITLE_MAX, seo_issues_for
 from seo.services.providers import overview_providers
@@ -35,6 +35,19 @@ COLUMNS = (
     "o_seo_status",
     "o_updated_at",
 )
+
+
+class StripWhitespace(Func):
+    """SQL counterpart of Python's ``str.strip()`` used by :func:`seo.models.seo_issues_for`.
+
+    ``TRIM()`` removes spaces only; pasted titles and descriptions often carry newlines and tabs, which Python strips,
+    so the lengths — and the status at the 60/70/160 boundaries — would disagree. POSIX ``[[:space:]]`` covers space,
+    tab, newline, carriage return, vertical tab and form feed.
+    """
+
+    function = "REGEXP_REPLACE"
+    template = "%(function)s(%(expressions)s, '^[[:space:]]+|[[:space:]]+$', '', 'g')"
+    output_field = CharField()
 
 
 def seo_status_case() -> Case:
@@ -65,7 +78,7 @@ def overview_rows(queryset: QuerySet, *, kind: str, label, path, record_status, 
     annotated = annotated.annotate(
         o_effective_title=Case(When(~Q(o_seo_title=""), then=F("o_seo_title")), default=Coalesce(fallback_title, Value(""), output_field=CharField()), output_field=CharField()),
     )
-    annotated = annotated.annotate(o_title_length=Length(Trim("o_effective_title")), o_description_length=Length(Trim("o_meta_description")))
+    annotated = annotated.annotate(o_title_length=Length(StripWhitespace("o_effective_title")), o_description_length=Length(StripWhitespace("o_meta_description")))
     annotated = annotated.annotate(o_seo_status=seo_status_case())
     annotated = annotated.annotate(o_severity=Case(When(o_seo_status="error", then=Value(0)), When(o_seo_status="warning", then=Value(1)), default=Value(2), output_field=IntegerField()))
     return annotated.values(*COLUMNS)

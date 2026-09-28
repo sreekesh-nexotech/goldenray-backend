@@ -122,6 +122,18 @@ def test_search_and_ordering(client):
     assert [c["name"] for c in client.get(f"{BASE}categories/?ordering=-name").json()["results"]] == ["Solar Basics", "Batteries"]
 
 
+def test_a_legacy_category_without_a_slug_is_served_and_editable(client):
+    legacy = CategoryFactory(name="Uncategorised", slug=None)  # imported from the CMS as-is (delivered "slug": null)
+    entry = EntryFactory()
+    entry.categories.add(legacy)
+    url = f"{BASE}categories/{legacy.uid}/"
+    assert client.get(url).json()["slug"] is None
+    assert client.get(f"/api/v1/content/entries/{entry.uid}/").json()["categories"] == [{"uid": str(legacy.uid), "name": "Uncategorised", "slug": None}]
+    renamed = client.patch(url, {"name": "General"}, format="json").json()
+    assert renamed["name"] == "General" and renamed["slug"] is None  # a rename alone never invents a public slug
+    assert client.patch(url, {"slug": ""}, format="json").json()["slug"] == "general"  # an explicit blank generates one
+
+
 def test_term_list_has_no_n_plus_one(client, django_assert_max_num_queries):
     for category in CategoryFactory.create_batch(2):
         EntryFactory().categories.add(category)

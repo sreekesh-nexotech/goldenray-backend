@@ -9,6 +9,12 @@ Each variant is a GET (the legacy server is never written to). The raw response 
 ``legacy_cms/golden/<name>.json`` and ``legacy_cms/golden/manifest.json`` records the path, query and status.
 ``blog/tests/test_delivery_parity.py`` imports ``legacy_cms/tables.json`` through ``blog.services.legacy_import``
 and asserts the new endpoint returns identical bytes for every variant.
+
+The **enriched** set covers what the seed leaves empty (CDN media on covers and images, attribute values, a category
+without a slug, NULL author/SEO text). It is captured from a *private* restored copy of the CMS database with
+``legacy_cms_enriched/enrich.sql`` applied, served by a private legacy server (never the shared read-only one)::
+
+    python blog/tests/fixtures/capture_golden.py --set enriched --base http://127.0.0.1:18147
 """
 
 from __future__ import annotations
@@ -75,13 +81,34 @@ VARIANTS: list[tuple[str, str]] = [
     ("page_zero_floored", "pagination[page]=0&pagination[pageSize]=3"),
     ("page_size_not_a_number", "pagination[pageSize]=abc"),
     ("sort_and_page", "sort[0]=title:asc&pagination[page]=2&pagination[pageSize]=2&fields[0]=slug"),
+    # Order-significant variants: the CMS applies sort keys in query-string order and a repeated filter's last value,
+    # so these pairs differ only in parameter order and must never share a cached response.
+    ("sort_two_keys_reversed", "sort[1]=title:asc&sort[0]=isFeatured:desc"),
+    ("sort_repeated_title_then_read_time", "sort=title:asc&sort=readTime:desc"),
+    ("sort_repeated_read_time_then_title", "sort=readTime:desc&sort=title:asc"),
+    ("filter_eq_repeated_last_wins", "filters[slug][$eq]=how-net-metering-works&filters[slug][$eq]=battery-sizing-guide&fields[0]=slug"),
+    ("filter_eq_repeated_last_wins_reversed", "filters[slug][$eq]=battery-sizing-guide&filters[slug][$eq]=how-net-metering-works&fields[0]=slug"),
+    ("page_repeated_last_wins", "pagination[pageSize]=2&pagination[page]=1&pagination[page]=2&fields[0]=slug"),
+    ("page_repeated_last_wins_reversed", "pagination[pageSize]=2&pagination[page]=2&pagination[page]=1&fields[0]=slug"),
 ]
 
 
-def capture(base: str) -> list[dict]:
-    GOLDEN.mkdir(parents=True, exist_ok=True)
+# The enriched private copy: the full list and every published slug (media, attributes, NULL texts, NULL category slug).
+ENRICHED_VARIANTS: list[tuple[str, str]] = [
+    ("list_populate_all", "populate=*&pagination[pageSize]=100"),
+    ("fields_scalars", "fields[0]=slug&fields[1]=readTime&fields[2]=warning&fields[3]=insights"),
+    *[(f"slug_{slug.replace('-', '_')}", f"populate=*&filters[slug][$eq]={slug}") for slug in SLUGS[:5]],
+    ("sort_read_time", "sort[0]=readTime:asc&fields[0]=slug&fields[1]=readTime"),
+    ("filter_read_time_null", "filters[readTime][$null]=true&fields[0]=slug"),
+]
+SETS = {"seeded": (VARIANTS, GOLDEN), "enriched": (ENRICHED_VARIANTS, Path(__file__).resolve().parent / "legacy_cms_enriched" / "golden")}
+
+
+def capture(base: str, variant_set: str = "seeded") -> list[dict]:
+    variants, out = SETS[variant_set]
+    out.mkdir(parents=True, exist_ok=True)
     manifest = []
-    for name, query in VARIANTS:
+    for name, query in variants:
         url = f"{base.rstrip('/')}/api/articles" + (f"?{query}" if query else "")
         request = urllib.request.Request(url, method="GET", headers={"Accept": "application/json"})
         try:
@@ -89,17 +116,18 @@ def capture(base: str) -> list[dict]:
                 status, body = response.status, response.read()
         except urllib.error.HTTPError as exc:
             status, body = exc.code, exc.read()
-        (GOLDEN / f"{name}.json").write_bytes(body)
+        (out / f"{name}.json").write_bytes(body)
         manifest.append({"name": name, "query": query, "status": status})
-    (GOLDEN / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
     return manifest
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--base", default="http://127.0.0.1:18009")
+    parser.add_argument("--set", default="seeded", choices=sorted(SETS), dest="variant_set")
     args = parser.parse_args()
-    for item in capture(args.base):
+    for item in capture(args.base, args.variant_set):
         print(item["status"], item["name"])
 
 

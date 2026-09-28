@@ -38,7 +38,7 @@ from blog.models import (
 )
 from blog.models.taxonomy import Badge
 from blog.services.attributes import coerce_value
-from blog.services.common import NS_ENTRIES, SEQ_BLOCK, SEQ_ENTRY, invalid, next_delivery_id
+from blog.services.common import MAX_REVALIDATE_PATHS, NS_ENTRIES, SEQ_BLOCK, SEQ_ENTRY, invalid, next_delivery_id
 from blog.services.slugs import deactivate_entry_aliases, ensure_slug_usable, record_slug_change, slug_conflict
 from blog.validators import validate_component, validate_key
 from core.errors import DomainError
@@ -330,11 +330,22 @@ def create_entry(*, user, data) -> Entry:
     return entry
 
 
-def publication_event(entry: Entry, event_type: str, **extra) -> None:
-    """Emit a blog lifecycle event with the paths to revalidate (deduplicated per entry version)."""
+def active_alias_slugs(entry: Entry) -> list[str]:
+    return list(EntrySlugHistory.objects.filter(entry=entry, active=True).order_by("created_at", "id").values_list("slug", flat=True)[:MAX_REVALIDATE_PATHS])
+
+
+def publication_event(entry: Entry, event_type: str, *, old_slugs=(), aliases=None, **extra) -> None:
+    """Emit a blog lifecycle event with the paths to revalidate (deduplicated per entry version).
+
+    The entry's active alias URLs are revalidated too: the website renders the article itself under an old URL (the
+    delivery resolves the alias), so an edit — or an unpublished article — must not linger there until the ISR window
+    expires. ``aliases`` overrides the lookup (a deleted entry's aliases are retired before the event is emitted).
+    """
     prefix = entry.collection.path_prefix
-    paths = [prefix, f"{prefix}/{entry.slug}", *(f"{prefix}/{slug}" for slug in extra.pop("old_slugs", []))]
-    payload = {"entry_uid": str(entry.uid), "collection": entry.collection.api_uid, "slug": entry.slug, "status": entry.status, "paths": list(dict.fromkeys(paths)), **extra}
+    if aliases is None:
+        aliases = active_alias_slugs(entry)
+    paths = list(dict.fromkeys([prefix, *(f"{prefix}/{slug}" for slug in (entry.slug, *old_slugs, *aliases))]))[: MAX_REVALIDATE_PATHS + 1]
+    payload = {"entry_uid": str(entry.uid), "collection": entry.collection.api_uid, "slug": entry.slug, "status": entry.status, "paths": paths, **extra}
     emit(event_type, payload, aggregate_type="blog.entry", aggregate_uid=entry.uid, dedup_key=f"{event_type}:{entry.uid}:{entry.version}")
 
 
@@ -384,9 +395,10 @@ def delete_entry(instance: Entry, *, user, expected_version=None) -> None:
     check_version(entry, expected_version)
     was_public = entry.status == Entry.Status.PUBLISHED
     before = entry_snapshot(entry)
+    aliases = active_alias_slugs(entry)
     entry.soft_delete(user)
-    deactivate_entry_aliases(entry)
+    deactivate_entry_aliases(entry, user=user)
     record("blog.entry_deleted", obj=entry, actor=user, before=before)
     bump(NS_ENTRIES)
     if was_public:
-        publication_event(entry, "blog.entry_deleted")
+        publication_event(entry, "blog.entry_deleted", aliases=aliases)

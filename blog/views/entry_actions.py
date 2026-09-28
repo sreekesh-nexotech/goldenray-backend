@@ -114,9 +114,17 @@ class EntryActionsMixin:
         alias = slugs.add_alias(entry, user=request.user, **serializer.validated_data)
         return Response(SlugHistorySerializer(alias).data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(operation_id="content_entries_slug_history_deactivate", request=None, responses={200: SlugHistorySerializer, **ERRORS}, tags=TAGS)
+    @extend_schema(
+        operation_id="content_entries_slug_history_deactivate",
+        request=EntryActionSerializer,
+        responses={200: SlugHistorySerializer, **ERRORS},
+        tags=TAGS,
+        description="Retire an alias (kept for audit); `expected_version` is the alias row's version.",
+    )
     @action(detail=True, methods=["post"], url_path=r"slug-history/(?P<alias_uid>[0-9a-fA-F-]{36})/deactivate", url_name="slug-history-deactivate")
     def deactivate_alias(self, request, *args, **kwargs):
         entry = self.get_object()
         alias = get_object_or_404(EntrySlugHistory.objects.all(), entry=entry, uid=kwargs["alias_uid"])
-        return Response(SlugHistorySerializer(slugs.deactivate_alias(alias, user=request.user)).data)
+        serializer = EntryActionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(SlugHistorySerializer(slugs.deactivate_alias(alias, user=request.user, expected_version=serializer.validated_data.get("expected_version"))).data)

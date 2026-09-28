@@ -45,6 +45,17 @@ def test_collection_delivery_is_byte_identical(api_client, imported, case):
     assert cached["X-Cache"] == "HIT" and cached.content == first.content
 
 
+def test_one_warm_cache_serves_every_captured_variant(api_client, imported):
+    """All captured requests through one response cache, twice: queries that differ only in parameter order (sort keys,
+    a repeated filter or page value — order-significant in the CMS) must never be served each other's cached body."""
+    for attempt in ("MISS", "HIT"):
+        for case in MANIFEST:
+            response = api_client.get(BASE + (f"?{case['query']}" if case["query"] else ""))
+            assert response.content == golden(case["name"]), (attempt, case["name"])
+            if case["status"] == 200:
+                assert response["X-Cache"] == attempt, (attempt, case["name"])
+
+
 FOUND = [case for case in MANIFEST if case["name"].startswith("slug_") and json.loads(golden(case["name"]))["data"]]
 
 
@@ -59,3 +70,33 @@ def test_reimport_is_idempotent_and_keeps_parity(api_client, imported):
     again = legacy_import.import_all(TABLES)
     assert all(report["created"] == 0 and report["updated"] == 0 for report in again.values()), again
     assert api_client.get(f"{BASE}?populate=*&pagination[pageSize]=100").content == golden("list_populate_all")
+
+
+# ── Enriched private copy: media, attribute values, NULL texts, a category without a slug ────────────────────────────
+ENRICHED = Path(__file__).parent / "fixtures" / "legacy_cms_enriched"
+ENRICHED_TABLES = json.loads((ENRICHED / "tables.json").read_text(encoding="utf-8"))
+ENRICHED_MANIFEST = json.loads((ENRICHED / "golden" / "manifest.json").read_text(encoding="utf-8"))
+
+
+@pytest.fixture
+def enriched():
+    """The enriched tables, with the CMS media assets imported the way the media package does (``core_legacy_map``)."""
+    from core.models import LegacyMap
+    from media.tests.factories import MediaAssetFactory
+
+    for row in ENRICHED_TABLES["media_asset"]:
+        asset = MediaAssetFactory(cdn_url=row["cdn_url"], width=row["width"], height=row["height"], alternative_text=row["alternative_text"])
+        LegacyMap.objects.create(source_system="CMS", source_table="media_asset", source_id=str(row["id"]), target_table="media_asset", target_id=asset.pk)
+    return legacy_import.import_all(ENRICHED_TABLES)
+
+
+def test_the_enriched_import_reports_only_the_known_oddities(enriched):
+    violations = sorted((table, violation["code"]) for table, report in enriched.items() for violation in report["violations"])
+    assert violations == [("content_entry_attribute_value", "slot_unknown")]  # the legacy `warning` fallback key
+
+
+@pytest.mark.parametrize("case", ENRICHED_MANIFEST, ids=[case["name"] for case in ENRICHED_MANIFEST])
+def test_enriched_delivery_is_byte_identical(api_client, enriched, case):
+    response = api_client.get(BASE + f"?{case['query']}")
+    assert response.status_code == case["status"]
+    assert response.content == (ENRICHED / "golden" / f"{case['name']}.json").read_bytes()

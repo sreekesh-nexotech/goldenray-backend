@@ -43,6 +43,8 @@ PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
 PRIVATE_MEDIA_ROOT = MEDIA_ROOT / "private"
 USE_X_ACCEL = False
 DOCUMENTS_RENDERER = "stub"
+# Website revalidation (blog.services.revalidation) never makes a real HTTP call from a test, whichever app emits it.
+BLOG_REVALIDATE_BACKEND = "fake"
 
 LOGGING["root"]["level"] = "WARNING"
 LOGGING["loggers"]["django"]["level"] = "WARNING"

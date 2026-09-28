@@ -1,0 +1,1510 @@
+{
+ "catalog_collection": [
+  {
+   "id": 1,
+   "api_uid": "articles",
+   "singular_name": "Article",
+   "plural_name": "Articles",
+   "description": "Solar blog articles served to the website.",
+   "is_active": true,
+   "created_at": "2026-09-28T17:40:00.354707+00:00",
+   "updated_at": "2026-09-28T17:40:00.354727+00:00"
+  }
+ ],
+ "catalog_template": [
+  {
+   "id": 1,
+   "name": "Solar Guide",
+   "slug": "solar-guide",
+   "description": "Default blog article layout.",
+   "is_active": true,
+   "sort_order": 0,
+   "created_at": "2026-09-28T17:40:00.358751+00:00",
+   "updated_at": "2026-09-28T17:40:00.358765+00:00"
+  }
+ ],
+ "catalog_template_image_group": [
+  {
+   "id": 1,
+   "key": "coverImg",
+   "label": "Cover image",
+   "repeatable": false,
+   "max_items": null,
+   "required": false,
+   "order": 0,
+   "template_id": 1
+  },
+  {
+   "id": 2,
+   "key": "mainImg",
+   "label": "Main image",
+   "repeatable": false,
+   "max_items": null,
+   "required": false,
+   "order": 0,
+   "template_id": 1
+  },
+  {
+   "id": 3,
+   "key": "socialSharing",
+   "label": "Social sharing image",
+   "repeatable": false,
+   "max_items": null,
+   "required": false,
+   "order": 0,
+   "template_id": 1
+  },
+  {
+   "id": 4,
+   "key": "bodyImages",
+   "label": "Body gallery",
+   "repeatable": true,
+   "max_items": null,
+   "required": false,
+   "order": 0,
+   "template_id": 1
+  }
+ ],
+ "catalog_template_attribute_slot": [
+  {
+   "id": 1,
+   "key": "difficulty",
+   "label": "Difficulty",
+   "type": "enum",
+   "options": {
+    "choices": [
+     "Beginner",
+     "Intermediate",
+     "Advanced"
+    ]
+   },
+   "required": false,
+   "order": 0,
+   "template_id": 1
+  },
+  {
+   "id": 2,
+   "key": "readTime",
+   "label": "Read time",
+   "type": "number",
+   "options": {},
+   "required": false,
+   "order": 2,
+   "template_id": 1
+  },
+  {
+   "id": 3,
+   "key": "showCta",
+   "label": "Show CTA",
+   "type": "boolean",
+   "options": {},
+   "required": false,
+   "order": 3,
+   "template_id": 1
+  },
+  {
+   "id": 4,
+   "key": "audience",
+   "label": "Audience",
+   "type": "text",
+   "options": {},
+   "required": false,
+   "order": 4,
+   "template_id": 1
+  }
+ ],
+ "catalog_author": [
+  {
+   "id": 1,
+   "name": "Golden Ray Solar",
+   "bio": "Solar experts at Golden Ray.",
+   "role": "Editorial team"
+  },
+  {
+   "id": 2,
+   "name": "Anu Thomas",
+   "bio": null,
+   "role": null
+  }
+ ],
+ "catalog_category": [
+  {
+   "id": 1,
+   "name": "Subsidy & Government",
+   "slug": "subsidy-government"
+  },
+  {
+   "id": 2,
+   "name": "Solar Basics",
+   "slug": "solar-basics"
+  },
+  {
+   "id": 3,
+   "name": "Batteries & Storage",
+   "slug": "batteries-storage"
+  },
+  {
+   "id": 4,
+   "name": "Aardvark topics",
+   "slug": null
+  }
+ ],
+ "catalog_tag": [
+  {
+   "id": 1,
+   "name": "PM Surya Ghar"
+  },
+  {
+   "id": 2,
+   "name": "Kerala"
+  },
+  {
+   "id": 3,
+   "name": "On-grid"
+  },
+  {
+   "id": 4,
+   "name": "Hybrid"
+  },
+  {
+   "id": 5,
+   "name": "Net metering"
+  },
+  {
+   "id": 6,
+   "name": "Maintenance"
+  }
+ ],
+ "catalog_badge": [
+  {
+   "id": 1,
+   "label": "Reviewed by Engineering",
+   "color": "#ED8723"
+  }
+ ],
+ "media_asset": [
+  {
+   "id": 1,
+   "file": "uploads/cover-1.jpg",
+   "mime": "image/jpeg",
+   "size": 1000,
+   "width": 1200,
+   "height": 630,
+   "alternative_text": "Rooftop array",
+   "caption": "",
+   "created_at": "2026-09-28T23:24:57.830397+00:00",
+   "updated_at": "2026-09-28T23:24:57.830397+00:00",
+   "cdn_url": "https://golden-ray.b-cdn.net/blog/cover-1.jpg",
+   "collection_id": null,
+   "storage_path": "blog/cover-1.jpg"
+  },
+  {
+   "id": 2,
+   "file": "uploads/body-2.webp",
+   "mime": "image/webp",
+   "size": 1000,
+   "width": 800,
+   "height": 600,
+   "alternative_text": "",
+   "caption": "",
+   "created_at": "2026-09-28T23:24:57.830397+00:00",
+   "updated_at": "2026-09-28T23:24:57.830397+00:00",
+   "cdn_url": "https://golden-ray.b-cdn.net/blog/body-2.webp",
+   "collection_id": null,
+   "storage_path": "blog/body-2.webp"
+  },
+  {
+   "id": 3,
+   "file": "uploads/cover-3.jpg",
+   "mime": "image/jpeg",
+   "size": 1000,
+   "width": null,
+   "height": null,
+   "alternative_text": "Cover group",
+   "caption": "",
+   "created_at": "2026-09-28T23:24:57.830397+00:00",
+   "updated_at": "2026-09-28T23:24:57.830397+00:00",
+   "cdn_url": "https://golden-ray.b-cdn.net/blog/cover-3.jpg",
+   "collection_id": null,
+   "storage_path": "blog/cover-3.jpg"
+  }
+ ],
+ "content_entry": [
+  {
+   "id": 1,
+   "document_id": "e6748356-b991-4ece-8c3a-146b9c03ecf4",
+   "title": "PM Surya Ghar Subsidy: A Complete Kerala Guide",
+   "slug": "pm-surya-ghar-subsidy-guide",
+   "excerpt": "Everything Kerala homeowners need to know about the PM Surya Ghar rooftop solar subsidy.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Up to ₹78,000 central subsidy for rooftop solar.",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Applies to residential connections in Kerala via the national portal.",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Payback typically under 5 years with KSEB net-metering.",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "The PM Surya Ghar Muft Bijli Yojana makes rooftop solar dramatically more affordable for Kerala households. This guide walks through eligibility, the subsidy slabs, and how to apply.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 6,
+   "is_featured": true,
+   "sort_order": 1,
+   "published_on": "2026-09-28T17:40:00.391746+00:00",
+   "warning": "Subsidy slabs are revised periodically — always confirm current rates on the national portal before applying.",
+   "insights": "Households that pair a 3 kW system with net-metering see the fastest payback in Kerala's tariff structure.",
+   "status": "published",
+   "published_at": "2026-09-28T17:40:00.417587+00:00",
+   "created_at": "2026-09-28T17:40:00.392205+00:00",
+   "updated_at": "2026-09-28T17:40:00.419084+00:00",
+   "author_id": 1,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 2,
+   "document_id": "95ff8b72-d4bc-41da-9f94-7554fc8cf1fd",
+   "title": "On-grid vs Hybrid Solar in Kerala",
+   "slug": "on-grid-vs-hybrid-kerala",
+   "excerpt": "On-grid vs Hybrid Solar in Kerala — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about On-grid vs Hybrid Solar in Kerala",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about On-grid vs Hybrid Solar in Kerala",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about On-grid vs Hybrid Solar in Kerala",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to On-grid vs Hybrid Solar in Kerala.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": null,
+   "is_featured": true,
+   "sort_order": 2,
+   "published_on": "2026-05-01T03:30:00+00:00",
+   "warning": "Check KSEB rules before applying.",
+   "insights": "Most homes recover cost in 4-5 years.",
+   "status": "published",
+   "published_at": "2026-05-01T04:30:00+00:00",
+   "created_at": "2026-09-28T17:43:51.352031+00:00",
+   "updated_at": "2026-09-28T17:43:51.370580+00:00",
+   "author_id": 2,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 3,
+   "document_id": "3c41703e-65e1-4381-b354-b87b4913eb9f",
+   "title": "How KSEB Net Metering Works",
+   "slug": "how-net-metering-works",
+   "excerpt": "How KSEB Net Metering Works — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about How KSEB Net Metering Works",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about How KSEB Net Metering Works",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about How KSEB Net Metering Works",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to How KSEB Net Metering Works.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 5,
+   "is_featured": false,
+   "sort_order": 3,
+   "published_on": "2026-05-02T03:30:00+00:00",
+   "warning": null,
+   "insights": null,
+   "status": "published",
+   "published_at": "2026-05-02T04:30:00+00:00",
+   "created_at": "2026-09-28T17:43:51.373530+00:00",
+   "updated_at": "2026-09-28T17:43:51.388951+00:00",
+   "author_id": 1,
+   "collection_id": 1,
+   "cover_image_id": 1,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 4,
+   "document_id": "0bf58542-a8dd-4b57-bece-2770134c70c3",
+   "title": "Battery Sizing for Power Cuts",
+   "slug": "battery-sizing-guide",
+   "excerpt": "Battery Sizing for Power Cuts — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about Battery Sizing for Power Cuts",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about Battery Sizing for Power Cuts",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about Battery Sizing for Power Cuts",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to Battery Sizing for Power Cuts.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 9,
+   "is_featured": false,
+   "sort_order": null,
+   "published_on": "2026-05-03T03:30:00+00:00",
+   "warning": "Check KSEB rules before applying.",
+   "insights": null,
+   "status": "published",
+   "published_at": "2026-05-03T04:30:00+00:00",
+   "created_at": "2026-09-28T17:43:51.393026+00:00",
+   "updated_at": "2026-09-28T17:43:51.414580+00:00",
+   "author_id": 2,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 5,
+   "document_id": "0a01569f-584b-4df4-ac16-840f70ffd0b1",
+   "title": "Cleaning and Maintaining Your Panels",
+   "slug": "solar-panel-cleaning",
+   "excerpt": "Cleaning and Maintaining Your Panels — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about Cleaning and Maintaining Your Panels",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about Cleaning and Maintaining Your Panels",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about Cleaning and Maintaining Your Panels",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to Cleaning and Maintaining Your Panels.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 4,
+   "is_featured": false,
+   "sort_order": 5,
+   "published_on": "2026-05-04T03:30:00+00:00",
+   "warning": null,
+   "insights": "Most homes recover cost in 4-5 years.",
+   "status": "published",
+   "published_at": "2026-05-04T04:30:00+00:00",
+   "created_at": "2026-09-28T17:43:51.418531+00:00",
+   "updated_at": "2026-09-28T17:43:51.432954+00:00",
+   "author_id": 1,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 6,
+   "document_id": "f4c5cdd7-66f6-4d29-b6af-8ad33116f134",
+   "title": "Choosing an Inverter (draft)",
+   "slug": "draft-inverter-guide",
+   "excerpt": "Choosing an Inverter (draft) — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about Choosing an Inverter (draft)",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about Choosing an Inverter (draft)",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about Choosing an Inverter (draft)",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to Choosing an Inverter (draft).",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 6,
+   "is_featured": false,
+   "sort_order": null,
+   "published_on": "2026-05-05T03:30:00+00:00",
+   "warning": "Check KSEB rules before applying.",
+   "insights": null,
+   "status": "draft",
+   "published_at": null,
+   "created_at": "2026-09-28T17:43:51.435965+00:00",
+   "updated_at": "2026-09-28T17:43:51.435971+00:00",
+   "author_id": 1,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  },
+  {
+   "id": 7,
+   "document_id": "aa5ed7e2-ca0b-4359-bfac-2747affebf73",
+   "title": "Old Subsidy Scheme 2022",
+   "slug": "archived-old-subsidy",
+   "excerpt": "Old Subsidy Scheme 2022 — a practical guide for Kerala homeowners.",
+   "summary": [
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 1 about Old Subsidy Scheme 2022",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 2 about Old Subsidy Scheme 2022",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Point 3 about Old Subsidy Scheme 2022",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "introduction": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Introduction to Old Subsidy Scheme 2022.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "read_time": 3,
+   "is_featured": false,
+   "sort_order": null,
+   "published_on": "2026-05-06T03:30:00+00:00",
+   "warning": null,
+   "insights": null,
+   "status": "archived",
+   "published_at": null,
+   "created_at": "2026-09-28T17:43:51.456544+00:00",
+   "updated_at": "2026-09-28T17:43:51.470657+00:00",
+   "author_id": 1,
+   "collection_id": 1,
+   "cover_image_id": null,
+   "created_by_id": null,
+   "template_id": 1,
+   "updated_by_id": null,
+   "deleted_at": null
+  }
+ ],
+ "content_entry_categories": [
+  {
+   "id": 1,
+   "entry_id": 1,
+   "category_id": 1
+  },
+  {
+   "id": 2,
+   "entry_id": 2,
+   "category_id": 2
+  },
+  {
+   "id": 3,
+   "entry_id": 3,
+   "category_id": 2
+  },
+  {
+   "id": 4,
+   "entry_id": 4,
+   "category_id": 3
+  },
+  {
+   "id": 5,
+   "entry_id": 5,
+   "category_id": 2
+  },
+  {
+   "id": 6,
+   "entry_id": 6,
+   "category_id": 2
+  },
+  {
+   "id": 7,
+   "entry_id": 7,
+   "category_id": 1
+  },
+  {
+   "id": 8,
+   "entry_id": 4,
+   "category_id": 4
+  }
+ ],
+ "content_entry_tags": [
+  {
+   "id": 1,
+   "entry_id": 1,
+   "tag_id": 1
+  },
+  {
+   "id": 2,
+   "entry_id": 1,
+   "tag_id": 2
+  },
+  {
+   "id": 3,
+   "entry_id": 2,
+   "tag_id": 3
+  },
+  {
+   "id": 4,
+   "entry_id": 2,
+   "tag_id": 4
+  },
+  {
+   "id": 5,
+   "entry_id": 3,
+   "tag_id": 2
+  },
+  {
+   "id": 6,
+   "entry_id": 3,
+   "tag_id": 5
+  },
+  {
+   "id": 7,
+   "entry_id": 4,
+   "tag_id": 4
+  },
+  {
+   "id": 8,
+   "entry_id": 5,
+   "tag_id": 6
+  },
+  {
+   "id": 9,
+   "entry_id": 6,
+   "tag_id": 3
+  },
+  {
+   "id": 10,
+   "entry_id": 7,
+   "tag_id": 2
+  }
+ ],
+ "content_entry_badges": [
+  {
+   "id": 1,
+   "entry_id": 1,
+   "badge_id": 1
+  },
+  {
+   "id": 2,
+   "entry_id": 2,
+   "badge_id": 1
+  },
+  {
+   "id": 3,
+   "entry_id": 4,
+   "badge_id": 1
+  },
+  {
+   "id": 4,
+   "entry_id": 6,
+   "badge_id": 1
+  }
+ ],
+ "content_entry_slug_history": [
+  {
+   "id": 1,
+   "slug": "net-metering-explained",
+   "is_active": true,
+   "note": "old URL",
+   "created_at": "2026-09-28T17:43:51.475488+00:00",
+   "collection_id": 1,
+   "entry_id": 3
+  }
+ ],
+ "content_content_block": [
+  {
+   "id": 1,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "heading",
+     "level": 2,
+     "children": [
+      {
+       "text": "Understanding the subsidy slabs",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "The subsidy is tiered by system capacity.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "[TABLE]",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "| Capacity | Central Subsidy |",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "| 1 kW | ₹30,000 |",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "| 2 kW | ₹60,000 |",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "| 3 kW and above | ₹78,000 |",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "These amounts are credited after successful installation and inspection.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 1
+  },
+  {
+   "id": 2,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "heading",
+     "level": 2,
+     "children": [
+      {
+       "text": "Who is eligible",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Most Kerala homeowners with a valid KSEB residential connection qualify.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "list",
+     "format": "unordered",
+     "children": [
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Own the rooftop (or have owner consent).",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Have a sanctioned residential KSEB connection.",
+         "type": "text"
+        }
+       ]
+      },
+      {
+       "type": "list-item",
+       "children": [
+        {
+         "text": "Do not already have a subsidised system on the same connection.",
+         "type": "text"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 1
+  },
+  {
+   "id": 3,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of On-grid vs Hybrid Solar in Kerala.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 2
+  },
+  {
+   "id": 4,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 2
+  },
+  {
+   "id": 5,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of How KSEB Net Metering Works.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 3
+  },
+  {
+   "id": 6,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 3
+  },
+  {
+   "id": 7,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of Battery Sizing for Power Cuts.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 4
+  },
+  {
+   "id": 8,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 4
+  },
+  {
+   "id": 9,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of Cleaning and Maintaining Your Panels.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 5
+  },
+  {
+   "id": 10,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 5
+  },
+  {
+   "id": 11,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of Choosing an Inverter (draft).",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 6
+  },
+  {
+   "id": 12,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 6
+  },
+  {
+   "id": 13,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Body section one of Old Subsidy Scheme 2022.",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Second paragraph.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 0,
+   "entry_id": 7
+  },
+  {
+   "id": 14,
+   "component": "shared.rich-text",
+   "body": [
+    {
+     "type": "paragraph",
+     "children": [
+      {
+       "text": "Closing notes.",
+       "type": "text"
+      }
+     ]
+    }
+   ],
+   "order": 1,
+   "entry_id": 7
+  }
+ ],
+ "content_entry_image": [
+  {
+   "id": 1,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+   "entry_id": 1,
+   "media_asset_id": null
+  },
+  {
+   "id": 2,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+   "entry_id": 1,
+   "media_asset_id": null
+  },
+  {
+   "id": 3,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+   "entry_id": 2,
+   "media_asset_id": null
+  },
+  {
+   "id": 4,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+   "entry_id": 2,
+   "media_asset_id": null
+  },
+  {
+   "id": 5,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+   "entry_id": 3,
+   "media_asset_id": null
+  },
+  {
+   "id": 6,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+   "entry_id": 3,
+   "media_asset_id": null
+  },
+  {
+   "id": 7,
+   "group_key": "bodyImages",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+   "entry_id": 3,
+   "media_asset_id": null
+  },
+  {
+   "id": 8,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+   "entry_id": 4,
+   "media_asset_id": null
+  },
+  {
+   "id": 9,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+   "entry_id": 4,
+   "media_asset_id": null
+  },
+  {
+   "id": 10,
+   "group_key": "bodyImages",
+   "position": 0,
+   "external_url": "",
+   "entry_id": 4,
+   "media_asset_id": 2
+  },
+  {
+   "id": 11,
+   "group_key": "bodyImages",
+   "position": 1,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-1.png",
+   "entry_id": 4,
+   "media_asset_id": null
+  },
+  {
+   "id": 12,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "",
+   "entry_id": 5,
+   "media_asset_id": 3
+  },
+  {
+   "id": 13,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+   "entry_id": 5,
+   "media_asset_id": null
+  },
+  {
+   "id": 14,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+   "entry_id": 6,
+   "media_asset_id": null
+  },
+  {
+   "id": 15,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+   "entry_id": 6,
+   "media_asset_id": null
+  },
+  {
+   "id": 16,
+   "group_key": "bodyImages",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+   "entry_id": 6,
+   "media_asset_id": null
+  },
+  {
+   "id": 17,
+   "group_key": "coverImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+   "entry_id": 7,
+   "media_asset_id": null
+  },
+  {
+   "id": 18,
+   "group_key": "mainImg",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+   "entry_id": 7,
+   "media_asset_id": null
+  },
+  {
+   "id": 19,
+   "group_key": "bodyImages",
+   "position": 0,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+   "entry_id": 7,
+   "media_asset_id": null
+  },
+  {
+   "id": 20,
+   "group_key": "bodyImages",
+   "position": 1,
+   "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-1.png",
+   "entry_id": 7,
+   "media_asset_id": null
+  }
+ ],
+ "content_entry_attribute_value": [
+  {
+   "id": 1,
+   "slot_key": "difficulty",
+   "value": "Beginner",
+   "entry_id": 1
+  },
+  {
+   "id": 2,
+   "slot_key": "showCta",
+   "value": true,
+   "entry_id": 1
+  },
+  {
+   "id": 3,
+   "slot_key": "audience",
+   "value": "Homeowners",
+   "entry_id": 1
+  },
+  {
+   "id": 4,
+   "slot_key": "readTime",
+   "value": 11,
+   "entry_id": 2
+  },
+  {
+   "id": 5,
+   "slot_key": "warning",
+   "value": "From the slot",
+   "entry_id": 5
+  },
+  {
+   "id": 6,
+   "slot_key": "difficulty",
+   "value": "Advanced",
+   "entry_id": 5
+  }
+ ],
+ "content_seo": [
+  {
+   "id": 1,
+   "meta_title": "PM Surya Ghar Subsidy Guide for Kerala | Golden Ray Solar",
+   "meta_description": "Complete guide to the PM Surya Ghar rooftop solar subsidy for Kerala homeowners — slabs, eligibility, and how to apply.",
+   "canonical_url": null,
+   "keywords": "PM Surya Ghar, Kerala solar subsidy, rooftop solar",
+   "entry_id": 1
+  },
+  {
+   "id": 2,
+   "meta_title": "On-grid vs Hybrid Solar in Kerala | Flarize",
+   "meta_description": "Learn about on-grid vs hybrid solar in kerala.",
+   "canonical_url": "https://flarize.com/blog/on-grid-vs-hybrid-kerala",
+   "keywords": "solar, kerala",
+   "entry_id": 2
+  },
+  {
+   "id": 3,
+   "meta_title": "How KSEB Net Metering Works | Flarize",
+   "meta_description": "Learn about how kseb net metering works.",
+   "canonical_url": "https://flarize.com/blog/how-net-metering-works",
+   "keywords": "solar, kerala",
+   "entry_id": 3
+  },
+  {
+   "id": 4,
+   "meta_title": "Battery Sizing for Power Cuts | Flarize",
+   "meta_description": "Learn about battery sizing for power cuts.",
+   "canonical_url": "https://flarize.com/blog/battery-sizing-guide",
+   "keywords": "solar, kerala",
+   "entry_id": 4
+  },
+  {
+   "id": 5,
+   "meta_title": "Cleaning and Maintaining Your Panels | Flarize",
+   "meta_description": "Learn about cleaning and maintaining your panels.",
+   "canonical_url": null,
+   "keywords": null,
+   "entry_id": 5
+  },
+  {
+   "id": 6,
+   "meta_title": "Choosing an Inverter (draft) | Flarize",
+   "meta_description": "Learn about choosing an inverter (draft).",
+   "canonical_url": "https://flarize.com/blog/draft-inverter-guide",
+   "keywords": "solar, kerala",
+   "entry_id": 6
+  },
+  {
+   "id": 7,
+   "meta_title": "Old Subsidy Scheme 2022 | Flarize",
+   "meta_description": "Learn about old subsidy scheme 2022.",
+   "canonical_url": "https://flarize.com/blog/archived-old-subsidy",
+   "keywords": "solar, kerala",
+   "entry_id": 7
+  }
+ ]
+}

@@ -35,6 +35,11 @@ class TestOverview:
             ("Title", "D" * 161, False),
             ("Title", "", True),
             ("   ", GOOD_DESCRIPTION, False),
+            # Pasted text often carries newlines/tabs: Python's strip() removes every whitespace character, so must SQL.
+            ("Title", "D" * 160 + "\n", False),
+            ("Title", "\n\t\r\n", False),
+            ("T" * 60 + "\n", GOOD_DESCRIPTION, False),
+            ("\t\n", GOOD_DESCRIPTION, False),
         ]
         entries = []
         for index, (title, description, noindex) in enumerate(cases):

@@ -1,8 +1,10 @@
 """Public delivery (website): ``content/<collection>/``, ``content/<collection>/<slug>/`` and ``content/preview/<token>/``.
 
 Anonymous, throttled ``public_read``. Collection and slug responses are cached through the version-keyed response
-cache, keyed by path + query and depending on every namespace the payload embeds (collections, templates, entries,
-authors, categories, tags, badges, media). Preview responses are never cached (``private, no-store``, ``noindex``).
+cache, keyed by path + the query string **as sent** (``ordered_query``: sort keys apply in query-string order and a
+repeated filter or page value uses its last occurrence, so reordered queries must never share an entry) and depending
+on every namespace the payload embeds (collections, templates, entries, authors, categories, tags, badges, media).
+Preview responses are never cached (``private, no-store``, ``noindex``).
 """
 
 from __future__ import annotations
@@ -39,7 +41,7 @@ RESPONSES = {200: DeliveryResponseSerializer, 400: ErrorSerializer, 404: ErrorSe
 
 class CollectionDeliveryView(PublicAPIView):
     @extend_schema(operation_id="public_content_list", parameters=QUERY_PARAMETERS, responses=RESPONSES, tags=TAGS, auth=[], description="Published entries of a collection (Strapi-v5-flat).")
-    @cache_response(namespaces=list(DELIVERY_NAMESPACES), ttl=CACHE_TTL)
+    @cache_response(namespaces=list(DELIVERY_NAMESPACES), ttl=CACHE_TTL, ordered_query=True)
     def get(self, request, *args, **kwargs):
         collection = delivery.active_collection(kwargs["collection"])
         page = delivery.query_entries(collection, delivery.parse_query(request.query_params))
@@ -55,7 +57,7 @@ class EntryDeliveryView(PublicAPIView):
         auth=[],
         description="One published entry as a one-item list; an old slug resolves through the slug history (meta.redirect).",
     )
-    @cache_response(namespaces=list(DELIVERY_NAMESPACES), ttl=CACHE_TTL)
+    @cache_response(namespaces=list(DELIVERY_NAMESPACES), ttl=CACHE_TTL, ordered_query=True)
     def get(self, request, *args, **kwargs):
         collection = delivery.active_collection(kwargs["collection"])
         page = delivery.entry_by_slug(collection, kwargs["slug"], delivery.parse_query(request.query_params))

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.db.models import F
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -18,8 +19,9 @@ from blog.models import Collection, Entry, EntrySlugHistory
 from blog.services.common import NS_ENTRIES, django_errors
 from blog.validators import MAX_SLUG_LENGTH, slug_error, validate_entry_slug
 from core.errors import Conflict
+from core.models import actor_or_none
 from core.outbox import emit
-from core.services import stamp_create
+from core.services import check_version, stamp_create
 from flarize.cache_utils import bump
 
 
@@ -69,9 +71,8 @@ def record_slug_change(entry: Entry, old_slug: str, *, user, note: str = "") -> 
     old_slug = (old_slug or "").strip()
     if not old_slug or old_slug == entry.slug:
         return None
-    now = timezone.now()
     # 1. Reclaim: the entry has taken this slug back — the live row wins, retire the alias.
-    EntrySlugHistory.objects.filter(collection=entry.collection, slug=entry.slug, active=True).update(active=False, updated_at=now)
+    _retire(EntrySlugHistory.objects.filter(collection=entry.collection, slug=entry.slug, active=True), user)
     # 2. Never shadow another live entry that now holds the old slug.
     if Entry.objects.filter(collection=entry.collection, slug=old_slug).exclude(pk=entry.pk).exists():
         return None
@@ -115,8 +116,9 @@ def add_alias(entry: Entry, *, user, slug: str, note: str = "") -> EntrySlugHist
 
 
 @transaction.atomic
-def deactivate_alias(alias: EntrySlugHistory, *, user) -> EntrySlugHistory:
+def deactivate_alias(alias: EntrySlugHistory, *, user, expected_version=None) -> EntrySlugHistory:
     alias = EntrySlugHistory.objects.select_for_update(of=("self",)).select_related("entry", "collection").get(pk=alias.pk)
+    check_version(alias, expected_version)
     if not alias.active:
         return alias
     alias.versioned_update(user, active=False)
@@ -127,6 +129,11 @@ def deactivate_alias(alias: EntrySlugHistory, *, user) -> EntrySlugHistory:
     return alias
 
 
-def deactivate_entry_aliases(entry: Entry) -> None:
+def _retire(aliases, user) -> None:
+    """Retire alias rows in bulk, stamped like any versioned write (``updated_by``, ``updated_at``, ``version``)."""
+    aliases.update(active=False, updated_at=timezone.now(), updated_by=actor_or_none(user), version=F("version") + 1)
+
+
+def deactivate_entry_aliases(entry: Entry, *, user) -> None:
     """A deleted entry releases its old URLs (the alias rows stay for audit)."""
-    EntrySlugHistory.objects.filter(entry=entry, active=True).update(active=False, updated_at=timezone.now())
+    _retire(EntrySlugHistory.objects.filter(entry=entry, active=True), user)

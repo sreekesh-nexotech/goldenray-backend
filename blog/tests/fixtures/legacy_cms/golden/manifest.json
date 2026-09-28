@@ -233,5 +233,40 @@
   "name": "sort_and_page",
   "query": "sort[0]=title:asc&pagination[page]=2&pagination[pageSize]=2&fields[0]=slug",
   "status": 200
+ },
+ {
+  "name": "sort_two_keys_reversed",
+  "query": "sort[1]=title:asc&sort[0]=isFeatured:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_repeated_title_then_read_time",
+  "query": "sort=title:asc&sort=readTime:desc",
+  "status": 200
+ },
+ {
+  "name": "sort_repeated_read_time_then_title",
+  "query": "sort=readTime:desc&sort=title:asc",
+  "status": 200
+ },
+ {
+  "name": "filter_eq_repeated_last_wins",
+  "query": "filters[slug][$eq]=how-net-metering-works&filters[slug][$eq]=battery-sizing-guide&fields[0]=slug",
+  "status": 200
+ },
+ {
+  "name": "filter_eq_repeated_last_wins_reversed",
+  "query": "filters[slug][$eq]=battery-sizing-guide&filters[slug][$eq]=how-net-metering-works&fields[0]=slug",
+  "status": 200
+ },
+ {
+  "name": "page_repeated_last_wins",
+  "query": "pagination[pageSize]=2&pagination[page]=1&pagination[page]=2&fields[0]=slug",
+  "status": 200
+ },
+ {
+  "name": "page_repeated_last_wins_reversed",
+  "query": "pagination[pageSize]=2&pagination[page]=2&pagination[page]=1&fields[0]=slug",
+  "status": 200
  }
 ]

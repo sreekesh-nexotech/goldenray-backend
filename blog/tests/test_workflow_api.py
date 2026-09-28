@@ -232,6 +232,26 @@ class TestSlugHistory:
         assert client.post(f"{base}{alias_uid}/deactivate/").json()["active"] is False  # idempotent
         assert not EntrySlugHistory.objects.get().active
 
+    def test_deactivate_honours_expected_version(self, client):
+        alias = AliasFactory()
+        url = f"{URL}{alias.entry.uid}/slug-history/{alias.uid}/deactivate/"
+        stale = client.post(url, {"expected_version": alias.version + 1}, format="json")
+        assert stale.status_code == 409 and stale.json()["code"] == "stale_version"
+        assert EntrySlugHistory.objects.get().active
+        assert client.post(url, {"expected_version": alias.version}, format="json").json()["active"] is False
+
+    def test_bulk_retirement_is_stamped_like_any_versioned_write(self, client, editor):
+        """Deleting an entry and reclaiming an old slug retire aliases in bulk: version, updated_by and updated_at move."""
+        deleted = AliasFactory(slug="gone-name")
+        client.delete(f"{URL}{deleted.entry.uid}/")
+        deleted.refresh_from_db()
+        assert not deleted.active and deleted.version == 2 and deleted.updated_by == editor
+        reclaimed = AliasFactory(slug="first-name")
+        entry = reclaimed.entry
+        assert client.patch(f"{URL}{entry.uid}/", {"slug": "first-name"}, format="json").status_code == 200
+        reclaimed.refresh_from_db()
+        assert not reclaimed.active and reclaimed.version == 2 and reclaimed.updated_by == editor
+
     def test_alias_of_another_entry_is_404(self, client):
         alias = AliasFactory()
         other = EntryFactory()

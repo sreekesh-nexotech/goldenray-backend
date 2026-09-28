@@ -43,7 +43,9 @@ class Author(BaseModel):
 class Category(BaseModel):
     delivery_id = models.BigIntegerField(editable=False)
     name = models.CharField(max_length=120)
-    slug = models.CharField(max_length=120)
+    # NULL only for a legacy CMS category imported without a slug (the CMS column is nullable and its delivery shows
+    # ``"slug": null``; PLAN §7.2 row 4 "slugs preserved"). The staff API always sets one (generated when blank).
+    slug = models.CharField(max_length=120, null=True, blank=True)
 
     class Meta:
         db_table = "blog_category"

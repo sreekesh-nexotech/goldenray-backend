@@ -62,7 +62,11 @@ weaknesses listed in `cms/CMS_BLUEPRINT.md` §17. Deviations: DV-17 … DV-22 in
    key order; timestamps are `datetime.isoformat()` of the stored values (the importer preserves `created_at`,
    `updated_at`, `published_at`, `published_on`); JSONB bodies round-trip through Postgres in the same normalised key
    order as in the CMS. The response cache used to re-serialise payloads with sorted keys — it now keeps the view's key
-   order (the ETag still hashes the canonical sorted body; shared change in `flarize/cache_utils.py`).
+   order (the ETag still hashes the canonical sorted body; shared change in `flarize/cache_utils.py`). The delivery
+   views key the cache on the query string **as sent** (`ordered_query=True`): the CMS applies `sort[n]` keys in
+   query-string order and a repeated `filters[f][$eq]` / `pagination[page]` uses its last value, so reordered queries
+   must never share a cached body. `attributes` is delivered in insertion order (`id`), as the CMS did — never
+   alphabetically.
 3. **Query language kept, weaknesses fixed.** Same field map, operators, pagination defaults/clamp, `fields`
    selection and single-slug alias fallback (`$eq`/`$eqi` only, exact alias match, never on an empty `$ne` query).
    Fixed: an unparseable value on a typed column is 400 `invalid_filter` (was 500 — §17 #1); booleans accept
@@ -97,13 +101,20 @@ weaknesses listed in `cms/CMS_BLUEPRINT.md` §17. Deviations: DV-17 … DV-22 in
    It runs after commit (outbox), never raises (fail-soft; non-2xx and network errors are logged), sends nothing
    without URL or secret, and fails closed on an undecryptable secret. `website.revalidate_requested`
    (`{"paths": [...]}`) lets pages/FAQs/careers use the same hook without importing blog; seo metadata edits use it.
-   Backends: `http` (default), `fake` (tests), `off` (`BLOG_REVALIDATE_BACKEND`).
+   Backends: `http` (default), `fake` (tests — pinned in `flarize/settings/test.py`), `off` (`BLOG_REVALIDATE_BACKEND`).
+   One call is bounded because it runs inside the outbox drainer's Celery time limit (120 s hard): the first transport
+   failure ends the batch and `BLOG_REVALIDATE_BUDGET_SECONDS` (20) caps it; skipped paths are logged (ISR catches up).
+   Every entry event and `blog.content_changed` also revalidate the entries' **active alias URLs**: the website renders
+   the article itself under an old URL (it reads `data[0]` and ignores `meta.redirect`), so an edit, a shared-record
+   change or a take-down must not linger there until the ISR window expires.
 10. **Preview links.** `TimestampSigner` over the entry uid (own salt), 1 h (`BLOG_PREVIEW_TTL_SECONDS`), reusable until
     expiry, shows the current state of any status, dies with the entry. The token is a path segment, so it is
     redacted in Django and nginx access logs like the other capability tokens (shared change).
 11. **SEO overview in SQL (§17 #15).** Providers (`<app>/services/seo_overview.py`: `SEO_OVERVIEW_KIND`,
     `seo_overview_rows()` built with `seo.services.overview.overview_rows`) annotate `seo_status` with a `CASE` that
-    mirrors `seo_issues_for` (tested row by row against the Python rules); rows are `UNION ALL`-ed, filtered, ordered
+    mirrors `seo_issues_for` (tested row by row against the Python rules; lengths are taken after stripping every
+    whitespace character with `REGEXP_REPLACE(…[[:space:]]…)`, like Python's `strip()` — `TRIM` removes spaces only,
+    so pasted newlines flipped the status at the 60/70/160 boundaries); rows are `UNION ALL`-ed, filtered, ordered
     worst first and paginated in the database; `issues` messages are computed only for the returned page; `counts` are
     `GROUP BY`. Blog contributes every live, non-archived entry (no SEO block → title fallback, missing description).
 12. **Sitemap by convention.** `seo.services.providers` imports `<app>.services.sitemap` for every installed app once
@@ -114,10 +125,12 @@ weaknesses listed in `cms/CMS_BLUEPRINT.md` §17. Deviations: DV-17 … DV-22 in
     `seo/metadata/<path:page>/`. Typed columns replace the PLAN's `og jsonb` (DV-20). Edits ask the website to
     revalidate that page. Redirects refuse self-redirects and loops (a chain is followed up to 20 hops); `hits` is kept
     for a future counter (redirects run inside the Next.js build).
-14. **Shared changes (all backward compatible):** `flarize/cache_utils.py` (cached payload keeps key order),
-    `flarize/logging.py` + `deploy/nginx/flarize.conf` (redact `content/preview/<token>/`), `flarize/settings/base.py`
+14. **Shared changes (all backward compatible):** `flarize/cache_utils.py` (cached payload keeps key order; opt-in
+    `ordered_query` cache key — the default key still normalises parameter order), `flarize/logging.py` +
+    `deploy/nginx/flarize.conf` (redact `content/preview/<token>/`), `flarize/settings/base.py`
     (Beat entry `blog.publish_due_entries`; `ENUM_NAME_OVERRIDES` for `BlogEntryStatusEnum`, `BlogContentBlockKindEnum`),
-    tests in `core/tests/test_cache_utils.py`, `core/tests/test_middleware_logging.py`, `core/tests/test_deploy.py`.
+    `flarize/settings/test.py` (`BLOG_REVALIDATE_BACKEND = "fake"`), tests in `core/tests/test_cache_utils.py`,
+    `core/tests/test_middleware_logging.py`, `core/tests/test_deploy.py`.
 
 ## Legacy mapping
 
@@ -130,7 +143,7 @@ weaknesses listed in `cms/CMS_BLUEPRINT.md` §17. Deviations: DV-17 … DV-22 in
 | `catalog_template_image_group` | `key`, `label`, `repeatable`, `max_items`, `required`, `order` | `blog_template_image_group` (`order` → `position`) | `max_items` on a non-repeatable group dropped (reported; DB check) |
 | `catalog_template_attribute_slot` | `key`, `label`, `type`, `options`, `required`, `order` | `blog_template_attribute_slot` | `text/richtext_blocks/number/boolean/date/enum/url` → `TEXT/RICHTEXT_BLOCKS/NUMBER/BOOL/DATE/ENUM/URL`; invalid options kept verbatim and reported |
 | `catalog_author` | `id`, `name`, `bio`, `role` | `blog_author` (`id` → `delivery_id`) | `slug` generated from the name (unique) |
-| `catalog_category` | `id`, `name`, `slug` | `blog_category` | a NULL slug is generated (reported) |
+| `catalog_category` | `id`, `name`, `slug` | `blog_category` | a NULL slug stays NULL (delivered as `null`, as the CMS did); the staff API sets one on the next edit that sends `slug` |
 | `catalog_tag` | `id`, `name` | `blog_tag` | `slug` generated |
 | `catalog_badge` | `id`, `label`, `color` | `blog_badge` (`label` → `name`) | invalid colour → default `#123532` (reported); `slug` generated |
 | `content_entry` | `document_id` | `uid` | unchanged (frontend `documentId`) |
@@ -175,6 +188,16 @@ weaknesses listed in `cms/CMS_BLUEPRINT.md` §17. Deviations: DV-17 … DV-22 in
 * `blog/tests/test_delivery_parity.py` imports the fixture through `legacy_import.import_all` and asserts
   **byte-identical** bodies for all 47 captured requests — first from the database, then from the response cache —
   plus the same bytes on `content/articles/<slug>/` for the five published slugs and after a no-op re-import.
+* Review additions: seven order-significant variants (reversed `sort[n]` keys, repeated plain `sort`, a repeated
+  `filters[slug][$eq]` and `pagination[page]` in both orders; 54 seeded goldens in total) and
+  `test_one_warm_cache_serves_every_captured_variant` (every captured request through **one** response cache, twice).
+* `blog/tests/fixtures/legacy_cms_enriched/` — write-path parity for what the seed leaves empty: `enrich.sql` applied
+  to a **private** restored copy of the CMS database (`legacy_blog_cms_rv_content_blog`, never the shared one) served
+  by a private legacy server; 9 captured requests (`capture_golden.py --set enriched`) and the exported tables. Covers
+  CDN media on a cover FK, on a `coverImg` group row (NULL width/height) and on a body image, attribute values written
+  in slot order plus a legacy `warning` fallback key, a published entry without `read_time` (attribute fallback), a
+  category without a slug and NULL author bio/role and SEO text. Media resolve through the media import's
+  `core_legacy_map` rows. All 9 are byte-identical.
 * `seo/tests/fixtures/legacy_backend/` — `goldenray_metadata` export and the legacy `GET /api/metadata/` response;
   `seo/tests/test_legacy_import.py` asserts that `seo/metadata/<page>/` returns every legacy item minus its `id`.
 
@@ -182,6 +205,26 @@ Approved differences from the legacy contract (DV-21): 400 instead of 500 for un
 `$in` / `fields` forms; empty SEO/author text delivered as `null` where the CMS might have stored `""` (every row in
 the captured data stores `NULL`); `Cache-Control` is `public, max-age=60` (was `…, stale-while-revalidate=600`) with an
 `ETag`.
+
+Known residual difference (not in the captured data): a CMS image row holding **both** a media asset and an external URL
+in the `coverImg` group of an entry without a cover FK — the CMS built `coverImage` from the asset but `imgUrls` from
+the URL; the platform keeps exactly one source per image row (the URL, reported `two_sources` by the importer), so that
+`coverImage` becomes the URL with null dimensions.
+
+## Adversarial review (content-blog reviewer)
+
+Each defect was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Defect | Fix | Tests |
+|---|---|---|---|
+| R1 | The public response cache key sorted query parameters **and** repeated values, so order-significant delivery queries shared an entry: `sort[1]=title&sort[0]=isFeatured` was served the cached body of `sort[0]=isFeatured&sort[1]=title` (and `sort=a&sort=b` vs `sort=b&sort=a`, a repeated `filters[slug][$eq]` or `pagination[page]`) — confirmed against the live CMS | opt-in `ordered_query=True` on `cache_response`/`serve_cached` (key = the query as sent); the delivery views use it; the default key is unchanged | `blog/tests/test_delivery_parity.py::test_one_warm_cache_serves_every_captured_variant` (+7 captured goldens), `core/tests/test_cache_utils.py::TestOrderedQueryKey` |
+| R2 | `attributes` was delivered alphabetically; the CMS delivers its rows in insertion order (slot order as the Studio sent them) — byte difference for any entry with two or more values | delivery prefetch orders attribute values by `id` (importer and replace-all writer insert in source/client order) | enriched parity set |
+| R3 | A CMS category without a slug was delivered with a generated slug (CMS: `"slug": null`), contrary to PLAN §7.2 row 4 "slugs preserved" and §7.6 #3 | `blog_category.slug` nullable (migration `0002`); the importer keeps NULL; the staff API sets one on an edit that sends `slug` (blank → generated) | enriched parity set, `test_legacy_import.py::test_taxonomy_and_schema_violations`, `test_taxonomy_api.py::test_a_legacy_category_without_a_slug_is_served_and_editable` |
+| R4 | The revalidation handler was unbounded: 100+ paths × a 3 s timeout against a hanging website exceeds the drainer's 120 s Celery hard limit (worker killed, event re-claimed until parked, the rest of the batch delayed) | first transport failure ends the batch; `BLOG_REVALIDATE_BUDGET_SECONDS` (20) caps the call; skipped paths logged | `test_revalidation.py::test_a_website_that_is_down_costs_one_request_per_event`, `::test_a_slow_website_is_bounded_by_the_time_budget`, `::test_the_default_budget_fits_the_celery_soft_time_limit` |
+| R5 | Revalidation listed only the index and the current slug; the website renders the article itself under an active alias URL (`fetchArticleBySlug` reads `data[0]`, ignoring `meta.redirect`), so an unpublished/archived/deleted article, an edit or a renamed author/category stayed live under the old URL until the ISR window expired | entry events and `blog.content_changed` also list the entries' active alias paths (captured before a delete retires them) | `test_revalidation.py::test_changes_also_revalidate_the_entrys_old_urls` (unpublish, archive, delete, publish, edit, author rename) |
+| R6 | The SEO overview's SQL status used `TRIM` (spaces only) while the record's own rule strips all whitespace: a 160-character description with a trailing newline was `ok` on the entry and `warning` in the overview (likewise titles at 60, empty-but-newline descriptions) | `StripWhitespace` (`REGEXP_REPLACE` on `[[:space:]]`) for both lengths | `seo/tests/test_overview_and_sitemap.py::TestOverview::test_sql_status_matches_the_python_rules` (4 new cases) |
+| R7 | Alias retirement (entry delete, slug reclaim) was a bulk `UPDATE` without `version`/`updated_by`; `slug-history/<uid>/deactivate/` ignored `expected_version` | bulk retirement stamps `updated_by`, `updated_at`, `version + 1`; deactivate takes `expected_version` (409 `stale_version`) | `test_workflow_api.py::TestSlugHistory::test_deactivate_honours_expected_version`, `::test_bulk_retirement_is_stamped_like_any_versioned_write` |
+| R8 | The fake revalidation backend was only wired by `blog/tests/conftest.py`; any other app's test emitting `website.revalidate_requested` with a configured profile would make a real HTTP call | `BLOG_REVALIDATE_BACKEND = "fake"` in `flarize/settings/test.py` | `seo/tests/test_metadata_api.py::TestStaff::test_an_edit_reaches_the_website_through_the_fake_client_only` |
 
 ## Hand-over notes
 
