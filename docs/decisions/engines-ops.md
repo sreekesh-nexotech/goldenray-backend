@@ -3,7 +3,7 @@
 Work package engines-ops ports the three operations engines of PLAN §1.5 (`engines.attendance`,
 `engines.inspection_checks`, `engines.inspection_readiness`) as pure Python over plain dataclasses, with the v4
 attendance changes A1–A12 (PLAN §2.9) and the Site Inspection V2 fixes (Plan 2 §3.2, spec §C/§J). No Django, no app
-import (import-linter contract `engines-pure`, plus an AST test). Deviations: DV-16, DV-17.
+import (import-linter contract `engines-pure`, plus an AST test). Deviations: DV-17, DV-18.
 
 ## What exists
 
@@ -103,12 +103,12 @@ Coverage of `engines/`: 100 % statements and branches (593 tests).
 | 13 | `CUSTOMER_APPROVAL_REQUIRED` / `CUSTOMER_APPROVAL_OUTDATED` | Customer-approved installation location is required · Customer approval is outdated because the proposed installation location changed |
 | 14 | `ENGINEERING_REVIEW_PENDING` | Engineering review is required for this site |
 | 15 | `ADDITIONAL_WORK_REJECTED`, `ADDITIONAL_WORK_UNAPPROVED` | Additional work/cost has been rejected · Customer-impacting additional work is awaiting the customer's approval |
-| 16 | `EQUIPMENT_SYSTEM_TYPE_UNDECIDED` (DV-16), `EQUIPMENT_<TYPE>_INCOMPLETE`, `EQUIPMENT_<TYPE>_NEEDS_RESOLUTION` | System type must be decided before the equipment can be assessed · `<TYPE WITH SPACES>` assessment is incomplete · … requires engineering resolution |
+| 16 | `EQUIPMENT_SYSTEM_TYPE_UNDECIDED` (DV-17), `EQUIPMENT_<TYPE>_INCOMPLETE`, `EQUIPMENT_<TYPE>_NEEDS_RESOLUTION` | System type must be decided before the equipment can be assessed · `<TYPE WITH SPACES>` assessment is incomplete · … requires engineering resolution |
 | 17 | `WHEELING_CONSUMER_NUMBER_REQUIRED`, `WHEELING_PHONE_REQUIRED` | Consumer Number is required for wheeling · Registered Phone is required for wheeling |
 | 18 | `NEUTRAL_OR_TERMINATION_DECISION_REQUIRED` (`details.fields`) | Neutral Link / Termination Point requires an additional-work decision |
 | 19 | `LATEST_APPROVAL_NOT_APPROVED` | Latest installation location approval is not approved |
 
-`field_completion` (enforced at submit, DV-17): `CUSTOMER_REQUIRED`, `ENGINEER_REQUIRED`, `VISIT_DATE_REQUIRED`,
+`field_completion` (enforced at submit, DV-18): `CUSTOMER_REQUIRED`, `ENGINEER_REQUIRED`, `VISIT_DATE_REQUIRED`,
 `SITE_ADDRESS_REQUIRED`, photos, the four measurements, `LOCATIONS_NOT_DOCUMENTED` (missing only), `SUITABILITY_UNCONFIRMED`
 (any recorded verdict passes), `COMPLEXITY_NOT_ASSESSED`, `ENGINEERING_REVIEW_PENDING`, `EQUIPMENT_<TYPE>_INCOMPLETE`;
 warning `LEGACY_ANNOTATION_GEOMETRY` (Plan 2 D2-13: re-draw before release).
@@ -120,7 +120,7 @@ warning `LEGACY_ANNOTATION_GEOMETRY` (Plan 2 D2-13: re-draw before release).
 | 3 | `installation_readiness` forgeable | derived by `evaluate`; `InspectionState` has no such field | `test_readiness_is_judged_on_the_row_after_the_change` |
 | 7 | approval snapshot never stored / invalidation dead | `build_location_snapshot` + `location_snapshot_matches` | scenarios `location_moved_*`, `approval_imported_without_snapshot`, `rectangle_resaved_unchanged`; snapshot tests |
 | 10 | no enum/value validation | enum-validated state, `validate_results` | `test_state_is_validated`, `test_parts_are_validated`, `test_validate_results` |
-| 13 | fresh PA inspection UNDECIDED hides the checklist | UNDECIDED blocks release (DV-16); the PA linking itself is the site_inspections package's | scenario `undecided_system_type` |
+| 13 | fresh PA inspection UNDECIDED hides the checklist | UNDECIDED blocks release (DV-17); the PA linking itself is the site_inspections package's | scenario `undecided_system_type` |
 | 16 | status over submitted keys; no waiver | `compute_status` over the full definition; RESOLVED/WAIVED resolve | scenarios `one_pass_tap`, `failed_check*`, `review_resolved`; `test_full_definition_status_differs_only_on_partial_answers` |
 | 17 | equipment route read the snapshot, readiness the column | `required_equipment_types(system_type column)` only; `normalise_results` gives the full-replace PUT shape | scenario `system_type_only_in_snapshot` |
 | 18 | neutral link/termination collapsed, spelling never matched | two enum fields, one decision each | scenarios `neutral_*`, `termination_needs_modification_only`; `test_neutral_link_and_termination_each_need_their_own_decision` |

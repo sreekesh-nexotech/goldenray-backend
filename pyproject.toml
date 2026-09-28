@@ -12,13 +12,14 @@ extend-exclude = '''
   /migrations/
   | /\.venv/
   | /var/
+  | /\.claude/
 )
 '''
 
 [tool.isort]
 profile = "black"
 line_length = 200
-skip_glob = ["*/migrations/*", ".venv/*", "var/*"]
+skip_glob = ["*/migrations/*", ".venv/*", "var/*", ".claude/*"]
 known_first_party = [
   "flarize", "engines", "core", "accounts", "audit", "media", "documents", "company", "catalog", "pricing", "procurement",
   "inventory", "bom", "packs", "engineering", "customers", "leads", "quotations", "agreements", "site_inspections", "projects",
@@ -29,6 +30,7 @@ known_first_party = [
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "flarize.settings.test"
 python_files = ["test_*.py"]
+norecursedirs = [".claude", ".git", ".venv", "var", "node_modules", "staticfiles", "htmlcov", "__pycache__"]
 addopts = "-q --strict-markers"
 markers = [
   "playwright: needs a Chromium install (documents rendering); deselect with -m 'not playwright'",

@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 DEFAULT_MAX_LINES = 250
-SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "var", "__pycache__", "migrations", "htmlcov", "staticfiles"}
+SKIP_DIRS = {".claude", ".git", ".venv", "venv", "node_modules", "var", "__pycache__", "migrations", "htmlcov", "staticfiles"}
 
 
 def view_files(root: Path):

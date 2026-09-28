@@ -13,6 +13,9 @@ with `alias dc='docker compose -f deploy/docker-compose.yml'`. `jq` is installed
 * **nginx** — `flarize_json` access log: `{"ts", "request_id", "remote", "xff", "method", "uri", "status", "bytes",
   "request_time", "upstream", "upstream_time", "legacy_group", "ua"}`. The same `request_id` is passed to Django as
   `X-Request-ID`, so one id follows a request through nginx, Django, audit rows and error records.
+* **Never in a log line:** capability tokens in paths (signed media/document downloads, `/iclock/<device token>/`,
+  customer links) appear as `[redacted]` in `path`/`uri`/messages and in `core_system_exception.path`; Celery task
+  arguments appear as `[redacted]` (e-mail tasks publish only their category and recipient count).
 * **Postgres** — plain text; statements slower than 500 ms are logged (`log_min_duration_statement=500`).
 
 `--no-log-prefix` strips the `service |` prefix so `jq` gets pure JSON; `2>/dev/null` hides non-JSON startup lines.

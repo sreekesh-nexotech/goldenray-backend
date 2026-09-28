@@ -54,12 +54,19 @@ class TestMasking:
             "api_key",
             "apiKey",
             "Authorization",
+            # Security review: the platform's own secret names (Bunny's `access_key`, key material) were not masked.
+            "access_key",
+            "accessKey",
+            "BUNNY_STORAGE_ACCESS_KEY",
+            "private_key",
+            "jwtPrivateKey",
+            "passphrase",
         ],
     )
     def test_sensitive_keys(self, key):
         assert is_sensitive_key(key)
 
-    @pytest.mark.parametrize("key", ["footprint", "tokenizer", "email", "name", "account", "number", "api", "prefix", "passport"])
+    @pytest.mark.parametrize("key", ["footprint", "tokenizer", "email", "name", "account", "number", "api", "prefix", "passport", "key", "access", "private", "storage_zone"])
     def test_ordinary_keys(self, key):
         assert not is_sensitive_key(key)
 

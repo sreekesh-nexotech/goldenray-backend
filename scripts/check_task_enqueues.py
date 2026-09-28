@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 ENQUEUE_ATTRS = frozenset({"delay", "apply_async"})
-SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "var", "__pycache__", "migrations", "htmlcov", "staticfiles", "tests"}
+SKIP_DIRS = {".claude", ".git", ".venv", "venv", "node_modules", "var", "__pycache__", "migrations", "htmlcov", "staticfiles", "tests"}
 FUNCTIONS = (ast.FunctionDef, ast.AsyncFunctionDef)
 
 

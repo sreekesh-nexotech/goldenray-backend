@@ -3,7 +3,12 @@ from django.utils import timezone
 
 
 class LoginAttempt(models.Model):
-    """Every login attempt (no base, append-only). Drives the 5-per-15-minutes lockout."""
+    """Every login attempt (no base). Drives the 5-per-15-minutes lockout.
+
+    Rows are inserted as failures *before* the password is verified (``accounts.services.lockout.reserve``); the only
+    update ever made is flipping ``succeeded`` once the password proved right. Rows are never deleted except by the
+    retention job.
+    """
 
     id = models.BigAutoField(primary_key=True)
     email = models.CharField(max_length=254)
