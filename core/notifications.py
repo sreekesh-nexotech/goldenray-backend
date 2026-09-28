@@ -6,6 +6,12 @@
   synchronously as a fallback so security mail (password resets) is not lost.
 * :func:`send_email` — synchronous delivery used by the task and by management commands.
 
+SMTP settings: when an Admin has stored and enabled the ``SMTP`` integration (``company_integration``, Fernet
+encrypted, read through :mod:`core.integrations`) its host/port/credentials/sender are used; otherwise the
+``EMAIL_*`` environment settings. The stored integration only ever replaces a *delivering* SMTP backend — dev and
+test backends (console, locmem) are never overridden, so a staging snapshot restored on a laptop cannot e-mail
+real people.
+
 Logs carry the category and the recipient count, never addresses or bodies (bodies may contain one-time links).
 """
 
@@ -16,9 +22,11 @@ from collections.abc import Iterable
 from functools import partial
 
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.core.validators import validate_email
 from django.db import transaction
+
+from core import integrations
 
 logger = logging.getLogger("flarize.notifications")
 
@@ -46,10 +54,35 @@ def _subject(subject: str) -> str:
     return subject
 
 
+SMTP_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
+def smtp_override() -> tuple[object | None, str]:
+    """``(connection, from_email)`` from the stored SMTP integration, or ``(None, DEFAULT_FROM_EMAIL)``."""
+    default_from = settings.DEFAULT_FROM_EMAIL
+    if settings.EMAIL_BACKEND != SMTP_BACKEND:
+        return None, default_from
+    config = integrations.get_config(integrations.SMTP)
+    if not config:
+        return None, default_from
+    connection = get_connection(
+        SMTP_BACKEND,
+        host=config["host"],
+        port=int(config["port"]),
+        username=config.get("username") or "",
+        password=config.get("password") or "",
+        use_tls=bool(config.get("use_tls")),
+        use_ssl=bool(config.get("use_ssl")),
+        timeout=getattr(settings, "EMAIL_TIMEOUT", 10),
+    )
+    return connection, (config.get("from_email") or default_from)
+
+
 def send_email(*, to: str | Iterable[str], subject: str, text: str, html: str | None = None, category: str = "") -> int:
     """Send now. Returns the number of messages the backend accepted (0 or 1). Raises on SMTP failure."""
     recipients = _recipients(to)
-    message = EmailMultiAlternatives(subject=_subject(subject), body=text, from_email=settings.DEFAULT_FROM_EMAIL, to=recipients)
+    connection, from_email = smtp_override()
+    message = EmailMultiAlternatives(subject=_subject(subject), body=text, from_email=from_email, to=recipients, connection=connection)
     if html:
         message.attach_alternative(html, "text/html")
     sent = message.send(fail_silently=False)

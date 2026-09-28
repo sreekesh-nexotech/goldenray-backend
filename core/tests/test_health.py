@@ -11,6 +11,8 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture
 def extra_check():
+    """Register a check for one test; a real check it shadows (e.g. documents' render_queue) is restored after."""
+    saved = health.registered_checks()
     names = []
 
     def _add(name, fn, critical=True):
@@ -19,7 +21,11 @@ def extra_check():
 
     yield _add
     for name in names:
-        health.unregister(name)
+        if name in saved:
+            original, original_critical = saved[name]
+            health.register(name, critical=original_critical)(original)
+        else:
+            health.unregister(name)
 
 
 def test_all_checks_ok(client):
@@ -27,7 +33,7 @@ def test_all_checks_ok(client):
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "ok"
-    assert set(body["checks"]) == {"database", "cache", "outbox"}
+    assert set(body["checks"]) == {"database", "cache", "outbox", "render_queue", "audit_partitions"}
     assert body["checks"]["outbox"] == {"ok": True, "pending": 0, "oldest_age_seconds": 0, "parked": 0, "critical": False, "duration_ms": body["checks"]["outbox"]["duration_ms"]}
     assert response["Cache-Control"].startswith("max-age=0")
 

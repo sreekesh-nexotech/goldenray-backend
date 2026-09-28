@@ -1,0 +1,46 @@
+# pre-commit install   (runs on every commit; CI runs the same checks plus tests, lint-imports and gitleaks)
+repos:
+  - repo: local
+    hooks:
+      - id: forbid-secret-files
+        name: never commit .env files, keys or certificates
+        language: fail
+        entry: "Secrets never go to git (docs/ops/secrets.md). Unstage:"
+        files: '(^|/)\.env(\..+)?$|\.(pem|key|p12|pfx|jks|keystore|crt|der)$|(^|/)id_(rsa|ed25519|ecdsa)(\.pub)?$|(^|/)(userlist\.txt|jwt_private.*)$'
+        exclude: '(^|/)\.env\.example$'
+      - id: forbid-data-dumps
+        name: never commit data dumps
+        language: fail
+        entry: "Data dumps never go to git:"
+        files: '\.(rdb|dump|sql\.gz|sqlite3?|bak)$'
+      - id: view-budget
+        name: views/ files stay ≤ 250 lines
+        language: system
+        entry: python scripts/check_view_budget.py
+        pass_filenames: false
+        files: '/views/.*\.py$'
+  - repo: https://github.com/psf/black
+    rev: 26.5.1
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 9.0.1
+    hooks:
+      - id: isort
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.4.1
+    hooks:
+      - id: flake8
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+        args: ["--unsafe"]
+      - id: end-of-file-fixer
+        exclude: '\.(svg|pdf)$'
+      - id: detect-private-key

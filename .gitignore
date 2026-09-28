@@ -15,9 +15,8 @@ __pycache__/
 .pytest_cache/
 .venv/
 
-# Build / collected output
+# Build / collected output (uploaded media lives under var/, which is ignored above; the `media` app is source)
 staticfiles/
-media/
 
 # Coverage
 htmlcov/

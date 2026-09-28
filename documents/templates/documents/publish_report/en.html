@@ -1,0 +1,4 @@
+{% extends "documents/base.html" %}
+{% block title %}Publish report — {{ payload.title }}{% endblock %}
+{% block styles %}.status { width: 22mm; font-weight: 700; } .status-ok { color: var(--ok); } .status-warning { color: var(--warn); } .status-error { color: var(--error); } h3 { font-size: 11pt; margin: 4mm 0 1mm; }{% endblock %}
+{% block content %}{% include "documents/publish_report/_body.html" with l_report="Publish report" l_reference="Reference" l_generated="Generated" l_summary="Summary" l_checks="Checks" l_ok="OK" l_warning="Warning" l_error="Error" l_no_issues="No issues." %}{% endblock %}

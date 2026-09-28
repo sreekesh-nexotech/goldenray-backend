@@ -7,9 +7,12 @@
 * ``/iclock/<device_token>/``    terminals (plain Django views, flag ADMS_RECEIVER) ← ``devices.urls.iclock_urlpatterns``
 * ``/legacy/``                   old contracts (flag LEGACY_API_SHIM) ← ``legacy.urls.legacy_urlpatterns``
 * ``/api/schema/<version>/``, ``/api/docs/``, ``/healthz``
+* dev only (``DEBUG`` with the local public media backend): ``PUBLIC_MEDIA_URL`` serves public uploads. Staging and
+  prod serve public files from Bunny and private files through nginx after a signed-URL check — never from here.
 """
 
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path, re_path, reverse_lazy
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -26,6 +29,16 @@ urlpatterns = [
     path("api/docs/", SpectacularSwaggerView.as_view(versioning_class=None, url=reverse_lazy("api-schema", kwargs={"version": allowed_versions()[-1]})), name="api-docs"),
     path("healthz", healthz, name="healthz"),
 ]
+
+
+def public_media_debug_patterns() -> list:
+    """Serve the local *public* media backend while developing (private files are never served statically)."""
+    if not settings.DEBUG or settings.MEDIA_PUBLIC_BACKEND != "local":
+        return []
+    return static(settings.PUBLIC_MEDIA_URL, document_root=settings.PUBLIC_MEDIA_ROOT)
+
+
+urlpatterns += public_media_debug_patterns()
 
 handler400 = "flarize.exceptions.bad_request_view"
 handler403 = "flarize.exceptions.permission_denied_view"

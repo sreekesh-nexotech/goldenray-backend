@@ -1,0 +1,21 @@
+# gitleaks (CI + pre-commit): the default rules, plus the platform's own token formats.
+title = "flarize-platform"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "flarize-service-token"
+description = "Flarize service credential (office agent token): fl_<prefix>_<secret>"
+regex = '''\bfl_[A-Za-z0-9]{8,16}_[A-Za-z0-9_-]{32,}\b'''
+tags = ["token", "flarize"]
+
+[[rules]]
+id = "fernet-key-assignment"
+description = "A Fernet key assigned in configuration"
+regex = '''(?i)FERNET_KEYS\s*[=:]\s*["']?[A-Za-z0-9_-]{43}='''
+tags = ["key", "flarize"]
+
+[allowlist]
+description = "Generated local state and third-party caches are never committed; test fixtures build keys at runtime."
+paths = ['''^var/''', '''^htmlcov/''']

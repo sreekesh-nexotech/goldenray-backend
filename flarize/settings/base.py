@@ -160,6 +160,45 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(config("MEDIA_ROOT", default=str(VAR_DIR / "media")))
 
 # --------------------------------------------------------------------------------------------------------------------
+# Media (media.services.storage). Public files go to Bunny (CDN) in staging/prod; the "local" public backend writes
+# under PUBLIC_MEDIA_ROOT and is served by Django only when DEBUG. Private files never leave PRIVATE_MEDIA_ROOT: they
+# are served after a signed-URL check, by nginx (X-Accel-Redirect to the internal /media/private/ location) when
+# USE_X_ACCEL, else streamed by Django.
+# --------------------------------------------------------------------------------------------------------------------
+MEDIA_PUBLIC_BACKEND = config("MEDIA_PUBLIC_BACKEND", default="bunny")
+PUBLIC_MEDIA_ROOT = Path(config("PUBLIC_MEDIA_ROOT", default=str(MEDIA_ROOT / "public")))
+PUBLIC_MEDIA_URL = config("PUBLIC_MEDIA_URL", default="/media/public/")
+PRIVATE_MEDIA_ROOT = Path(config("PRIVATE_MEDIA_ROOT", default=str(MEDIA_ROOT / "private")))
+USE_X_ACCEL = config("USE_X_ACCEL", default=False, cast=bool)
+X_ACCEL_PRIVATE_PREFIX = "/media/private/"
+MEDIA_SIGNED_URL_TTL_SECONDS = 600
+MEDIA_THUMBNAIL_MAX_PX = 480
+# Pillow refuses images above this many pixels (decompression bombs); 50 MP covers every phone camera.
+MEDIA_MAX_IMAGE_PIXELS = 50_000_000
+# Bunny storage (env fallback; an enabled BUNNY row in company_integration takes precedence).
+BUNNY_STORAGE_ZONE = config("BUNNY_STORAGE_ZONE", default="")
+BUNNY_STORAGE_ENDPOINT = config("BUNNY_STORAGE_ENDPOINT", default="storage.bunnycdn.com")
+BUNNY_STORAGE_ACCESS_KEY = config("BUNNY_STORAGE_ACCESS_KEY", default="")
+BUNNY_CDN_BASE_URL = config("BUNNY_CDN_BASE_URL", default="")
+BUNNY_TIMEOUT_SECONDS = 30
+
+# --------------------------------------------------------------------------------------------------------------------
+# Documents (documents.services): one HTML → PDF pipeline. "playwright" renders with headless Chromium in the
+# documents worker; "stub" produces deterministic minimal PDFs (tests, laptops without Chromium).
+# --------------------------------------------------------------------------------------------------------------------
+DOCUMENTS_RENDERER = config("DOCUMENTS_RENDERER", default="playwright")
+# Chromium binary for Playwright; empty = the browser Playwright installed for its own version.
+DOCUMENTS_CHROMIUM_EXECUTABLE = config("DOCUMENTS_CHROMIUM_EXECUTABLE", default="")
+DOCUMENTS_RENDER_TIMEOUT_SECONDS = 60
+DOCUMENTS_DOWNLOAD_TTL_SECONDS = 600
+# Hosts a document template may load images/fonts from (https only); everything else is blocked while rendering.
+DOCUMENTS_ALLOWED_ASSET_HOSTS = config("DOCUMENTS_ALLOWED_ASSET_HOSTS", default="", cast=Csv())
+# /healthz reports "degraded" when the oldest QUEUED render job is older than this.
+DOCUMENTS_QUEUE_ALERT_SECONDS = 600
+# RUNNING jobs older than this are treated as lost (worker crash) and failed by the sweeper.
+DOCUMENTS_STALE_RUNNING_SECONDS = 900
+
+# --------------------------------------------------------------------------------------------------------------------
 # Cache (Redis; version-keyed invalidation lives in flarize.cache_utils)
 # --------------------------------------------------------------------------------------------------------------------
 REDIS_URL = config("REDIS_URL", default="redis://localhost:6379/1")
@@ -307,6 +346,14 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.AllowAny"],
     "SERVE_AUTHENTICATION": [],
     "SWAGGER_UI_SETTINGS": {"deepLinking": True, "displayOperationId": True},
+    # Choice sets that share a field name across apps get explicit, stable component names.
+    "ENUM_NAME_OVERRIDES": {
+        "MediaKindEnum": "media.models.asset.MediaAsset.Kind",
+        "MediaVisibilityEnum": "media.models.asset.MediaAsset.Visibility",
+        "RenderJobKindEnum": "documents.models.render_job.RenderJob.Kind",
+        "RenderJobStatusEnum": "documents.models.render_job.RenderJob.Status",
+        "IntegrationKeyEnum": "company.models.integration.Integration.Key",
+    },
 }
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -337,10 +384,17 @@ CELERY_TASK_ROUTES = {
     "attendance.tasks.*": {"queue": "ingest"},
 }
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+# Beat (DatabaseScheduler): these entries are synced into django_celery_beat on start; one beat replica only.
 CELERY_BEAT_SCHEDULE = {
     "core.drain_outbox": {"task": "core.tasks.drain_outbox", "schedule": 5.0},
     "accounts.purge_auth_records": {"task": "accounts.tasks.purge_auth_records", "schedule": crontab(hour=3, minute=17)},
+    # Monthly (and on every deploy from deploy/release.sh, as the owner role): next months' audit_log partitions.
+    "audit.ensure_partitions": {"task": "audit.tasks.ensure_partitions", "schedule": crontab(day_of_month=1, hour=2, minute=7)},
+    "documents.sweep_render_jobs": {"task": "documents.tasks.sweep_render_jobs", "schedule": crontab(minute="*/5")},
+    "core.send_ops_report": {"task": "core.tasks.send_ops_report", "schedule": crontab(day_of_week="mon", hour=8, minute=5)},
 }
+# Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
+OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())
 
 # --------------------------------------------------------------------------------------------------------------------
 # Outbox

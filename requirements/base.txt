@@ -18,3 +18,6 @@ openpyxl==3.1.5
 phonenumbers==9.0.40
 requests==2.34.2
 playwright==1.63.0
+# F3: HEIC/HEIF decoding for photo uploads (media.services.sniffing) and the WSGI server of the api image.
+pillow-heif==1.8.0
+gunicorn==26.2.0

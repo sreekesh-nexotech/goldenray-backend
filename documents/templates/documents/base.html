@@ -1,0 +1,35 @@
+<!doctype html>
+{# Base of every rendered document: A4 page, Noto fonts for English, Malayalam and Hindi, print-safe colours.   #}
+{# Fonts are system fonts of the documents worker image (fonts-noto-core); nothing is fetched from the network. #}
+<html lang="{{ language }}">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Flarize document{% endblock %}</title>
+  <style>
+    @font-face { font-family: "Noto Sans"; src: local("Noto Sans"), local("NotoSans-Regular"); font-weight: 400; }
+    @font-face { font-family: "Noto Sans"; src: local("Noto Sans Bold"), local("NotoSans-Bold"); font-weight: 700; }
+    @font-face { font-family: "Noto Sans Malayalam"; src: local("Noto Sans Malayalam"), local("NotoSansMalayalam-Regular"); font-weight: 400; }
+    @font-face { font-family: "Noto Sans Malayalam"; src: local("Noto Sans Malayalam Bold"), local("NotoSansMalayalam-Bold"); font-weight: 700; }
+    @font-face { font-family: "Noto Sans Devanagari"; src: local("Noto Sans Devanagari"), local("NotoSansDevanagari-Regular"); font-weight: 400; }
+    @font-face { font-family: "Noto Sans Devanagari"; src: local("Noto Sans Devanagari Bold"), local("NotoSansDevanagari-Bold"); font-weight: 700; }
+    @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+    :root { --ink: #1b2430; --muted: #5b6573; --rule: #d8dde4; --accent: #c8781a; --ok: #2f7d4f; --warn: #a86b00; --error: #b3261e; }
+    html { font-family: "Noto Sans", "Noto Sans Malayalam", "Noto Sans Devanagari", sans-serif; font-size: 10.5pt; line-height: 1.45; color: var(--ink); }
+    html:lang(ml) { font-family: "Noto Sans Malayalam", "Noto Sans", sans-serif; }
+    html:lang(hi) { font-family: "Noto Sans Devanagari", "Noto Sans", sans-serif; }
+    body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h1 { font-size: 18pt; margin: 0 0 2mm; }
+    h2 { font-size: 12.5pt; margin: 7mm 0 2mm; border-bottom: 0.4mm solid var(--rule); padding-bottom: 1mm; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; vertical-align: top; padding: 1.4mm 2mm; border-bottom: 0.2mm solid var(--rule); }
+    th { color: var(--muted); font-weight: 400; width: 38%; }
+    .muted { color: var(--muted); }
+    .page-break { break-before: page; }
+    .avoid-break { break-inside: avoid; }
+    {% block styles %}{% endblock %}
+  </style>
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>

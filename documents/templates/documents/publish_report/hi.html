@@ -1,0 +1,4 @@
+{% extends "documents/base.html" %}
+{% block title %}प्रकाशन रिपोर्ट — {{ payload.title }}{% endblock %}
+{% block styles %}.status { width: 24mm; font-weight: 700; } .status-ok { color: var(--ok); } .status-warning { color: var(--warn); } .status-error { color: var(--error); } h3 { font-size: 11pt; margin: 4mm 0 1mm; }{% endblock %}
+{% block content %}{% include "documents/publish_report/_body.html" with l_report="प्रकाशन रिपोर्ट" l_reference="संदर्भ" l_generated="तैयार किया गया" l_summary="सारांश" l_checks="जाँच" l_ok="ठीक" l_warning="चेतावनी" l_error="त्रुटि" l_no_issues="कोई समस्या नहीं।" %}{% endblock %}

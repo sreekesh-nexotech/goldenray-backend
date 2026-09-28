@@ -21,3 +21,6 @@ if not FERNET_KEYS:
     FERNET_KEYS = [ensure_dev_fernet_key(KEY_DIR)]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Public media on the local filesystem (served by Django under PUBLIC_MEDIA_URL while DEBUG) unless a Bunny zone is set.
+MEDIA_PUBLIC_BACKEND = config("MEDIA_PUBLIC_BACKEND", default="local")

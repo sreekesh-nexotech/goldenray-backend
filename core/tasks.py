@@ -26,3 +26,11 @@ def send_email(to: list[str], subject: str, text: str, html: str | None = None, 
     from core.notifications import send_email as deliver
 
     return deliver(to=to, subject=subject, text=text, html=html, category=category)
+
+
+@shared_task(name="core.tasks.send_ops_report", ignore_result=True)
+def send_ops_report(days: int = 7) -> int:
+    """Beat, Monday 08:05 IST: e-mail the ops report to ``OPS_EMAILS`` (no-op when none are configured)."""
+    from core import ops_report
+
+    return ops_report.send(ops_report.build(days=days))

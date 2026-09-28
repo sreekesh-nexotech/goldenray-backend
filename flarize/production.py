@@ -48,5 +48,13 @@ def validate_production_settings(settings: Mapping) -> None:
         problems.append("PASSWORD_RESET_URL must be an https:// URL (it carries one-time reset tokens)")
     if settings.get("EMAIL_BACKEND", "") in NON_DELIVERING_EMAIL_BACKENDS:
         problems.append("EMAIL_BACKEND does not deliver mail (console/locmem/dummy/filebased); password resets would be lost")
+    if settings.get("MEDIA_PUBLIC_BACKEND") != "bunny":
+        problems.append("MEDIA_PUBLIC_BACKEND must be 'bunny' (the local public backend is served only while DEBUG)")
+    if settings.get("DOCUMENTS_RENDERER") != "playwright":
+        problems.append("DOCUMENTS_RENDERER must be 'playwright' (the stub renderer produces placeholder PDFs)")
+    private_root = str(settings.get("PRIVATE_MEDIA_ROOT", ""))
+    public_root = str(settings.get("PUBLIC_MEDIA_ROOT", ""))
+    if not private_root or (public_root and (private_root == public_root or private_root.startswith(public_root.rstrip("/") + "/"))):
+        problems.append("PRIVATE_MEDIA_ROOT must be set and must not live inside PUBLIC_MEDIA_ROOT")
     if problems:
         raise ImproperlyConfigured("Refusing to start with unsafe production settings: " + "; ".join(problems))

@@ -187,3 +187,17 @@ def privileges_of(role: str) -> dict[str, bool]:
             cursor.execute("SELECT has_table_privilege(%s, %s, %s)", [role, PARENT_TABLE, privilege])
             result[privilege] = cursor.fetchone()[0]
         return result
+
+
+def connected_as_owner() -> bool:
+    """True when the current connection may create partitions (the owner, a member of it, or a superuser)."""
+    owner = table_owner()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT pg_has_role(current_user, %s, 'MEMBER')", [owner])
+        return bool(cursor.fetchone()[0])
+
+
+def missing_upcoming(months: int = 2, *, today: date | None = None) -> list[str]:
+    """Names of the partitions for the current and next ``months - 1`` months that do not exist yet."""
+    existing = existing_partitions()
+    return [month.name for month in month_ranges(today or timezone.now().date(), months) if month.name not in existing]

@@ -37,6 +37,12 @@ CELERY_RESULT_BACKEND = "cache+memory://"
 OUTBOX_STRICT = True
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 MEDIA_ROOT = VAR_DIR / "test-media"
+# Media/document tests point these at a per-test tmp_path (media/tests/conftest.py, documents/tests/conftest.py).
+MEDIA_PUBLIC_BACKEND = "local"
+PUBLIC_MEDIA_ROOT = MEDIA_ROOT / "public"
+PRIVATE_MEDIA_ROOT = MEDIA_ROOT / "private"
+USE_X_ACCEL = False
+DOCUMENTS_RENDERER = "stub"
 
 LOGGING["root"]["level"] = "WARNING"
 LOGGING["loggers"]["django"]["level"] = "WARNING"

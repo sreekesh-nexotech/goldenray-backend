@@ -1,0 +1,17 @@
+# Keep images small and free of secrets/state (deploy/Dockerfile copies the repository root).
+.git
+.github
+.env*
+!.env.example
+var/
+**/__pycache__
+**/*.pyc
+.pytest_cache
+htmlcov
+.coverage*
+coverage.xml
+*.rdb
+*.pem
+*.key
+docs/
+deploy/nginx/

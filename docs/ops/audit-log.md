@@ -49,10 +49,17 @@ and partition maintenance with `DB_USER=flarize_owner` (same settings module). *
 
 ## 3. Schedule
 
-* **Every deploy** (after `migrate`, as `flarize_owner`): `python manage.py ensure_audit_partitions --months 3`.
-* **Monthly cron** on the VM, as `flarize_owner`, e.g. on the 20th:
-  `docker compose run --rm -e DB_USER=flarize_owner -e DB_PASSWORD=… api python manage.py ensure_audit_partitions --months 3`.
-  If the job is missed, rows go to `audit_log_default` (nothing is lost) and are moved on the next run.
+* **Every deploy**: `deploy/release.sh` runs `python manage.py ensure_audit_partitions --months 3` right after
+  `migrate`, through the one-off compose service `migrate` (profile `ops`), which connects straight to Postgres as
+  `flarize_owner` (credentials from `/srv/flarize/owner.env`).
+* **Monthly cron** on the VM (root crontab), e.g. on the 20th:
+  `cd /srv/flarize/app && IMAGE_TAG=$(cat /srv/flarize/releases/current) docker compose -f deploy/docker-compose.yml --profile ops run --rm migrate python manage.py ensure_audit_partitions --months 3`.
+* **Beat** also runs `audit.tasks.ensure_partitions` on the 1st of every month. It only acts when the worker is
+  connected as the owner (single-role setups); with a separate `DB_APP_ROLE` it logs that it skipped and the cron
+  above does the work.
+* **`/healthz`** reports `degraded` (check `audit_partitions`, non-critical) when this month's or next month's
+  partition is missing, so the healthz cron e-mails ops long before rows would pile up in the default partition.
+  If everything is missed, rows go to `audit_log_default` (nothing is lost) and are moved on the next run.
 
 ## 4. Checks
 

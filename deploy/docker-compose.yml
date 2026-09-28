@@ -1,0 +1,256 @@
+# Flarize Platform — one compose file for staging and prod (PLAN §5.1, §5.2). Sizes are prod.
+#
+#   IMAGE_TAG=<git sha> docker compose -f deploy/docker-compose.yml up -d        (deploy/release.sh does this)
+#   docker compose -f deploy/docker-compose.yml --profile legacy up -d            (+ the old containers, until W26)
+#
+# Configuration: /srv/flarize/.env (root-only, 0600) is the env_file of every app container; the migration/owner
+# role's credentials live in /srv/flarize/owner.env and are used only by the one-off `migrate` service. Nothing
+# secret is written here (docs/ops/secrets.md). Every Celery queue has a consumer: worker-default takes
+# `default,ingest`, worker-documents takes `documents` (core/tests/test_deploy.py enforces it).
+
+name: flarize
+
+x-app: &app
+  image: ${IMAGE_REPO:-ghcr.io/flarize/platform-backend}:${IMAGE_TAG:?set IMAGE_TAG to the git SHA being deployed}
+  env_file: ${ENV_FILE:-/srv/flarize/.env}
+  environment: &app-environment
+    DJANGO_SETTINGS_MODULE: flarize.settings.${DJANGO_ENV:-prod}
+    DB_HOST: pgbouncer
+    DB_PORT: "5432"
+    REDIS_URL: redis://redis:6379/1
+    CELERY_BROKER_URL: redis://redis-broker:6379/0
+    CELERY_RESULT_BACKEND: redis://redis-broker:6379/1
+    PRIVATE_MEDIA_ROOT: /srv/flarize/media/private
+    USE_X_ACCEL: "True"
+    PLAYWRIGHT_BROWSERS_PATH: /opt/pw-browsers
+  volumes:
+    - private_media:/srv/flarize/media/private
+    - ${KEYS_DIR:-/srv/flarize/keys}:/run/flarize-keys:ro
+  restart: unless-stopped
+  init: true
+  logging: &json-logs
+    driver: json-file
+    options: { max-size: "50m", max-file: "10" }
+  depends_on:
+    pgbouncer: { condition: service_started }
+    redis: { condition: service_healthy }
+    redis-broker: { condition: service_healthy }
+
+x-api: &api
+  <<: *app
+  command: ["gunicorn", "--config", "deploy/gunicorn.conf.py", "flarize.wsgi:application"]
+  expose: ["8000"]
+  stop_grace_period: 35s
+  healthcheck:
+    test: ["CMD", "python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4).status == 200 else 1)"]
+    interval: 10s
+    timeout: 5s
+    start_period: 30s
+    retries: 3
+  deploy:
+    resources:
+      limits: { memory: 2g }
+
+services:
+  nginx:
+    image: nginx:1.28-alpine
+    ports: ["80:80", "443:443", "8080:8080"]
+    volumes:
+      - ./nginx/flarize.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx:/etc/nginx/flarize:ro
+      # The cutover switch is ops-managed on the VM (docs/ops/runbook.md "Legacy cutover").
+      - ${LEGACY_SWITCH_FILE:-./nginx/legacy/switch.conf}:/etc/nginx/flarize/legacy/switch.conf:ro
+      - private_media:/srv/flarize/media/private:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot:ro
+    depends_on:
+      api-a: { condition: service_started }
+      api-b: { condition: service_started }
+      frontend: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "nginx", "-t", "-q"]
+      interval: 60s
+      timeout: 5s
+    restart: unless-stopped
+    logging: *json-logs
+
+  certbot:
+    image: certbot/certbot:v3.1.0
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+    entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done"]
+    restart: unless-stopped
+    logging: *json-logs
+
+  frontend:
+    # The existing Next.js image (unchanged build; its env is repointed at cutover, PLAN §6.5).
+    image: ${FRONTEND_IMAGE:-ghcr.io/flarize/frontend:current}
+    env_file: ${FRONTEND_ENV_FILE:-/srv/flarize/frontend.env}
+    expose: ["3000"]
+    restart: unless-stopped
+    logging: *json-logs
+
+  # Two api replicas behind the nginx upstream: deploy/release.sh restarts them one at a time (zero downtime).
+  api-a:
+    <<: *api
+  api-b:
+    <<: *api
+
+  worker-default:
+    <<: *app
+    # Outbox drain, e-mail, thumbnails, imports (default) and attendance/device ingestion (ingest).
+    command: ["celery", "-A", "flarize", "worker", "-Q", "default,ingest", "-c", "8", "-n", "default@%h", "--loglevel", "INFO"]
+    stop_grace_period: 130s
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A flarize inspect ping -d default@$$HOSTNAME --timeout 10 | grep -q pong"]
+      interval: 60s
+      timeout: 20s
+      start_period: 30s
+      retries: 3
+
+  worker-documents:
+    <<: *app
+    image: ${IMAGE_REPO:-ghcr.io/flarize/platform-backend}-documents:${IMAGE_TAG:?set IMAGE_TAG to the git SHA being deployed}
+    # Playwright/Chromium PDF rendering; its own queue so PDF bursts never block ingestion (PLAN §5.2).
+    command: ["celery", "-A", "flarize", "worker", "-Q", "documents", "-c", "2", "-n", "documents@%h", "--loglevel", "INFO"]
+    stop_grace_period: 130s
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A flarize inspect ping -d documents@$$HOSTNAME --timeout 10 | grep -q pong"]
+      interval: 60s
+      timeout: 20s
+      start_period: 30s
+      retries: 3
+
+  beat:
+    <<: *app
+    # Exactly one replica (django-celery-beat DatabaseScheduler).
+    command: ["celery", "-A", "flarize", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler", "--loglevel", "INFO", "--pidfile="]
+    deploy:
+      replicas: 1
+
+  # One-off: `docker compose run --rm migrate` (deploy/release.sh). Connects straight to Postgres (not PgBouncer:
+  # DDL and advisory locks need a session) as the owner role.
+  migrate:
+    <<: *app
+    profiles: ["ops"]
+    env_file:
+      - ${ENV_FILE:-/srv/flarize/.env}
+      - ${OWNER_ENV_FILE:-/srv/flarize/owner.env}
+    environment:
+      <<: *app-environment
+      DB_HOST: db
+    command: ["python", "manage.py", "migrate", "--noinput"]
+    restart: "no"
+    depends_on:
+      db: { condition: service_healthy }
+
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.24.1-p1
+    volumes:
+      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ${PGBOUNCER_USERLIST:-/srv/flarize/pgbouncer/userlist.txt}:/etc/pgbouncer/userlist.txt:ro
+    expose: ["5432"]
+    depends_on:
+      db: { condition: service_healthy }
+    restart: unless-stopped
+    logging: *json-logs
+
+  db:
+    image: postgres:16-alpine
+    env_file: ${DB_ENV_FILE:-/srv/flarize/db.env}
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=6GB
+      - -c
+      - max_connections=150
+      - -c
+      - wal_level=replica
+      - -c
+      - archive_mode=on
+      - -c
+      - archive_command=test ! -f /wal-archive/%f && cp %p /wal-archive/%f
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - wal_archive:/wal-archive
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    shm_size: 512m
+    restart: unless-stopped
+    logging: *json-logs
+
+  # Cache (DV-12): evicts least-recently-used keys under memory pressure; nothing here is durable.
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--maxmemory", "768mb", "--maxmemory-policy", "allkeys-lru", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    logging: *json-logs
+
+  # Celery broker (DV-12): never evicts (a lost message is a lost render or e-mail) and persists with AOF.
+  redis-broker:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--maxmemory-policy", "noeviction", "--appendonly", "yes", "--appendfsync", "everysec"]
+    volumes:
+      - redis_broker:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    logging: *json-logs
+
+  # The current website backends, kept until W26 (PLAN §6.4). nginx routes old URLs to them or to the new API's
+  # /legacy/ shim per group (deploy/nginx/legacy/switch.conf).
+  legacy-backend:
+    profiles: ["legacy"]
+    image: ${LEGACY_BACKEND_IMAGE:-goldenray-backend:current}
+    env_file: ${LEGACY_BACKEND_ENV_FILE:-/srv/flarize/legacy/backend.env}
+    command: ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+    expose: ["8000"]
+    volumes:
+      - legacy_backend_media:/app/media
+    restart: unless-stopped
+    logging: *json-logs
+
+  legacy-cms:
+    profiles: ["legacy"]
+    image: ${LEGACY_CMS_IMAGE:-goldenray-cms:current}
+    env_file: ${LEGACY_CMS_ENV_FILE:-/srv/flarize/legacy/cms.env}
+    command: ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+    expose: ["8000"]
+    volumes:
+      - legacy_cms_uploads:/app/uploads
+    restart: unless-stopped
+    logging: *json-logs
+
+networks:
+  default:
+    # Fixed range so TRUSTED_PROXIES (nginx) and the /healthz allow-list are stable: TRUSTED_PROXIES=172.28.0.0/16.
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  pgdata:
+  wal_archive:
+  redis_broker:
+  private_media:
+  letsencrypt:
+  certbot_webroot:
+  legacy_backend_media:
+  legacy_cms_uploads:

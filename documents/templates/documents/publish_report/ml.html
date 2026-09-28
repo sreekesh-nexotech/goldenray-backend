@@ -1,0 +1,4 @@
+{% extends "documents/base.html" %}
+{% block title %}പ്രസിദ്ധീകരണ റിപ്പോർട്ട് — {{ payload.title }}{% endblock %}
+{% block styles %}.status { width: 26mm; font-weight: 700; } .status-ok { color: var(--ok); } .status-warning { color: var(--warn); } .status-error { color: var(--error); } h3 { font-size: 11pt; margin: 4mm 0 1mm; }{% endblock %}
+{% block content %}{% include "documents/publish_report/_body.html" with l_report="പ്രസിദ്ധീകരണ റിപ്പോർട്ട്" l_reference="റഫറൻസ്" l_generated="തയ്യാറാക്കിയത്" l_summary="സംഗ്രഹം" l_checks="പരിശോധനകൾ" l_ok="ശരി" l_warning="മുന്നറിയിപ്പ്" l_error="പിശക്" l_no_issues="പ്രശ്നങ്ങളൊന്നുമില്ല." %}{% endblock %}

@@ -27,6 +27,10 @@ def _valid(**overrides):
         "TRUSTED_PROXIES": ["172.16.0.0/12"],
         "ACCOUNTS_PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
         "EMAIL_BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "MEDIA_PUBLIC_BACKEND": "bunny",
+        "DOCUMENTS_RENDERER": "playwright",
+        "PUBLIC_MEDIA_ROOT": "/srv/flarize/media/public",
+        "PRIVATE_MEDIA_ROOT": "/srv/flarize/media/private",
     }
     base.update(overrides)
     return base
@@ -50,6 +54,11 @@ def _valid(**overrides):
         ({"TRUSTED_PROXIES": ["300.0.0.0/8"]}, "TRUSTED_PROXIES is invalid"),
         ({"ACCOUNTS_PASSWORD_RESET_URL": "http://flarize.com/studio/reset-password"}, "PASSWORD_RESET_URL"),
         ({"EMAIL_BACKEND": "django.core.mail.backends.console.EmailBackend"}, "EMAIL_BACKEND"),
+        ({"MEDIA_PUBLIC_BACKEND": "local"}, "MEDIA_PUBLIC_BACKEND"),
+        ({"DOCUMENTS_RENDERER": "stub"}, "DOCUMENTS_RENDERER"),
+        ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public/private"}, "PRIVATE_MEDIA_ROOT"),
+        ({"PRIVATE_MEDIA_ROOT": "/srv/flarize/media/public"}, "PRIVATE_MEDIA_ROOT"),
+        ({"PRIVATE_MEDIA_ROOT": ""}, "PRIVATE_MEDIA_ROOT"),
     ],
 )
 def test_validation_refuses_unsafe_values(overrides, message):
@@ -62,7 +71,11 @@ def test_validation_accepts_a_safe_configuration():
 
 
 def _import_prod(env_overrides, tmp_path):
-    env = {key: value for key, value in os.environ.items() if not key.startswith(("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_"))}
+    env = {
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith(("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_", "MEDIA_", "PUBLIC_MEDIA", "PRIVATE_MEDIA", "DOCUMENTS_"))
+    }
     env.update(env_overrides)
     return subprocess.run([sys.executable, "-c", "import flarize.settings.prod"], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=60)
 

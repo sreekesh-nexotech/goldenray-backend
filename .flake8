@@ -8,7 +8,6 @@ exclude =
     .venv,
     var,
     staticfiles,
-    media,
     htmlcov
 per-file-ignores =
     flarize/settings/*.py: F401, F403, F405

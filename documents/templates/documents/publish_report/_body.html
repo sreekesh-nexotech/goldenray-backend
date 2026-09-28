@@ -1,0 +1,41 @@
+{# Publish report body (PriceRelease / PackRelease publish reports). Payload:                                     #}
+{#   title, reference, generated_at, summary: [{label, value}], sections: [{title, items: [{status, message}]}], notes #}
+<header class="avoid-break">
+  <p class="muted">{{ l_report }}</p>
+  <h1>{{ payload.title }}</h1>
+  <table>
+    {% if payload.reference %}<tr><th>{{ l_reference }}</th><td>{{ payload.reference }}</td></tr>{% endif %}
+    {% if payload.generated_at %}<tr><th>{{ l_generated }}</th><td>{{ payload.generated_at }}</td></tr>{% endif %}
+  </table>
+</header>
+{% if payload.summary %}
+<section class="avoid-break">
+  <h2>{{ l_summary }}</h2>
+  <table>
+    {% for row in payload.summary %}<tr><th>{{ row.label }}</th><td>{{ row.value }}</td></tr>{% endfor %}
+  </table>
+</section>
+{% endif %}
+<section>
+  <h2>{{ l_checks }}</h2>
+  {% for section in payload.sections %}
+  <div class="avoid-break">
+    <h3>{{ section.title }}</h3>
+    {% if section.items %}
+    <table>
+      {% for item in section.items %}
+      <tr>
+        <td class="status status-{{ item.status|default:'ok' }}">{% if item.status == "error" %}{{ l_error }}{% elif item.status == "warning" %}{{ l_warning }}{% else %}{{ l_ok }}{% endif %}</td>
+        <td>{{ item.message }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p class="muted">{{ l_no_issues }}</p>
+    {% endif %}
+  </div>
+  {% empty %}
+  <p class="muted">{{ l_no_issues }}</p>
+  {% endfor %}
+</section>
+{% if payload.notes %}<section class="avoid-break"><p>{{ payload.notes|linebreaksbr }}</p></section>{% endif %}
