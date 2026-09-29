@@ -210,12 +210,15 @@ def _to_int(value):
     return int(value)
 
 
-def _to_uid(value) -> str | None:
-    """``size_uid``: absent/empty/falsy → ``None``; anything but a UUID text is an invalid value."""
+def _to_uid(value, config: EmiConfig) -> str | None:
+    """``size_uid``: absent/empty/falsy → ``None``; the uid of a tile of the configuration exactly as the config served
+    it (a ``PACK_RELEASE`` tile's id is any text); else a UUID text (any spelling); anything else is an invalid value."""
     if not value:
         return None
     if not isinstance(value, str):
         raise ValueError("size_uid must be a uid")
+    if any(size.uid == value for size in config.sizes):
+        return value
     return str(uuid.UUID(value))
 
 
@@ -332,7 +335,7 @@ def _calculate_view(request_data, config: EmiConfig) -> dict:
     data = request_data or {}
     try:
         capacity_kw = _to_float(data.get("capacity_kw") or data.get("power_capacity"))
-        size_uid = _to_uid(data.get("size_uid"))
+        size_uid = _to_uid(data.get("size_uid"), config)
         tenure_years = _to_int(data.get("tenure_years"))
         interest_override = _to_float(data.get("interest_rate"))
         price_override = _to_float(data.get("system_cost") or data.get("price"))

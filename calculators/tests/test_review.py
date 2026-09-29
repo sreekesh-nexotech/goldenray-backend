@@ -86,3 +86,68 @@ def test_a_lone_surrogate_the_legacy_crashed_on_is_invalid_input(api_client, leg
 )
 def test_a_lone_surrogate_the_legacy_never_used_is_harmless(api_client, legacy_tables, path, text):
     assert api_client.post(path, data=text.encode(), content_type="application/json").status_code == 200
+
+
+# ── second review round ───────────────────────────────────────────────────────────────────────────────────────────
+BASIC = "/api/public/v1/calculators/basic/"
+BASIC_V2 = "/api/public/v1/calculators/basic-v2/"
+
+
+@pytest.mark.parametrize("depth", [1000, 3000, 9000])
+def test_basic_echoes_a_deeply_nested_property_type_like_the_legacy(api_client, legacy_tables, depth):
+    """``calculate-solar`` echoes ``property_type`` unchecked. Recorded from the legacy UAT server: 200 with the value
+    echoed up to 9,959 levels deep. The port's render check recursed in Python: from ~950 levels, HTTP 500 and a
+    ``SystemException`` per anonymous request."""
+    nested = "[" * depth + '"Residential"' + "]" * depth
+    response = api_client.post(BASIC, data=('{"monthly_bill": 3000, "pincode": "682001", "property_type": ' + nested + "}").encode(), content_type="application/json")
+    assert response.status_code == 200
+    assert response.content.decode().endswith('"pincode":"682001","property_type":' + nested + "}")
+    assert not SystemException.objects.exists()
+
+
+@pytest.mark.parametrize("property_type", ["[null]", "[null, null]", "[[null], [null, null]]"])
+def test_an_all_null_list_property_type_is_no_sizing_row(api_client, legacy_tables, property_type):
+    """Recorded from the legacy UAT server: psycopg2 sent such a list as the text ``'{NULL,…}'``, so
+    ``type__iexact`` found no row — 404; the port crashed on it (400 ``invalid_input``)."""
+    text = '{"monthly_bill": 9000, "pincode": "682001", "property_type": ' + property_type + "}"
+    response = api_client.post(BASIC_V2, data=text.encode(), content_type="application/json")
+    assert response.status_code == 404
+    assert response.json()["code"] == "no_sizing_row" and response.json()["message"] == "No data found for the given bill range and property type"
+
+
+@pytest.mark.parametrize("property_type", ["[[]]", "[[null], []]", "[{}]", '[null, "a"]'])
+def test_a_list_psycopg2_sent_as_an_array_is_invalid_input(api_client, legacy_tables, property_type):
+    """Recorded from the legacy UAT server: HTTP 500 (``ARRAY[…]`` has no ``upper()``, or cannot be typed)."""
+    text = '{"monthly_bill": 9000, "pincode": "682001", "property_type": ' + property_type + "}"
+    response = api_client.post(BASIC_V2, data=text.encode(), content_type="application/json")
+    assert response.status_code == 400 and response.json()["code"] == "invalid_input"
+
+
+def test_an_empty_list_device_type_is_no_device(api_client, legacy_tables):
+    """Recorded from the legacy UAT server (``calculate-solar-advanced``): ``device_type: []`` is falsy, so it is looked
+    up (``name__iexact=[]`` → ``UPPER('{}')``) and found nowhere — a 0 W device; the port answered 400."""
+    body = {
+        "Specifications": {"grid_type": "On Grid", "home_type": "New Home", "estimated_base_load": 100},
+        "usageDetails": {"usage_electronic_devices": [{"device_type": [], "daily_usage": 2, "no_of_units": 4}, {"device_type": "TV", "daily_usage": 3}]},
+    }
+    response = api_client.post(ADVANCED, body, format="json")
+    assert response.status_code == 200
+    assert response.json() == {
+        "bill_range": 6000,
+        "power_capacity": 3.0,
+        "time_to_complete": "3-7",
+        "overall_setup_cost": 230000.0,
+        "total_subsidy": 78000.0,
+        "emi_details": {"emi_per_month": 1725.93, "total_payment": 207111.51},
+        "area_required": 240,
+        "loan_available": "2,00,000",
+        "per_kw_rate": 76667.0,
+        "final_cost": 152000.0,
+        "interest_rate": 6.5,
+        "type": "Residential",
+        "graph_without_solar": [0, 26407, 60110, 103124, 158022, 228088],
+        "graph_with_solar": [152000.0, 261283, 373131, 388252, 407551, 432182],
+        "savings": -204094,
+    }
+    body["usageDetails"]["usage_electronic_devices"][0]["device_type"] = [None]  # truthy: `.lower()` of a list (legacy 500)
+    assert api_client.post(ADVANCED, body, format="json").json()["code"] == "invalid_input"

@@ -35,7 +35,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from decimal import Decimal
 
-from engines.legacy_lookups import LegacyCrash, check_renderable, crash_detail, decimal_param, exact_text, float_exact, iexact_text, int_gte, int_lte, text_param
+from engines.legacy_lookups import LegacyCrash, check_renderable, crash_detail, decimal_param, float_exact, iexact_param, iexact_text, int_gte, int_lte, pg_upper, text_param
 
 INVALID_INPUT_MESSAGE = "The calculator cannot process these inputs."
 LIGHT_WATTS = 15.0  # the advanced calculator's built-in "Light" device
@@ -151,6 +151,16 @@ def _run(compute: Callable[[], dict]) -> dict:
         raise
     except (LegacyCrash, ArithmeticError, AttributeError, LookupError, TypeError, ValueError) as exc:
         raise CalculatorError("invalid_input", INVALID_INPUT_MESSAGE, 400, detail=crash_detail(exc)) from exc
+
+
+def _first_by(rows, key: Callable) -> dict:
+    """``{key(row): row}`` keeping, for each key, the first row in the legacy primary-key order (``position``)."""
+    index: dict = {}
+    for row in sorted(rows, key=lambda row: row.position):
+        name = key(row)
+        if name is not None:
+            index.setdefault(name, row)
+    return index
 
 
 def _pincode_exists(data: CalculatorData, value) -> bool:
@@ -374,10 +384,12 @@ class _Advanced:
 
     def __init__(self, data: CalculatorData):
         self.data = data
-        # the legacy primary-key order of each table, for its `.first()` lookups (sorted once, not per device)
-        self.devices = sorted(data.device_types, key=lambda device: device.position)
-        self.cars = sorted(data.ev_cars, key=lambda vehicle: vehicle.position)
-        self.scooters = sorted(data.ev_scooters, key=lambda vehicle: vehicle.position)
+        # Name indexes built once per calculation, each keeping the first row in the legacy primary-key order (the
+        # ORM's `.first()`): a request may list tens of thousands of devices, and matching each one against every
+        # row (UPPER() of every name, per device) cost ~1 s of CPU for a 2 MB anonymous body.
+        self.devices_by_upper_name = _first_by(data.device_types, lambda device: None if device.name is None else pg_upper(device.name))
+        self.cars_by_model = _first_by(data.ev_cars, lambda vehicle: vehicle.model)
+        self.scooters_by_model = _first_by(data.ev_scooters, lambda vehicle: vehicle.model)
 
     def slab_at_most(self, units) -> TariffSlab | None:
         """``KSEBTariff.objects.filter(min_units__lte=units).order_by("-min_units").first()``."""
@@ -400,14 +412,15 @@ class _Advanced:
 
     def device_type(self, name) -> DeviceType | None:
         """``DeviceType.objects.filter(name__iexact=name).first()``."""
-        matches = iexact_text(name)
-        return next((device for device in self.devices if matches(device.name)), None)
+        param = iexact_param(name)
+        return None if param is None else self.devices_by_upper_name.get(param)
 
     def vehicle(self, model) -> Vehicle | None:
         """``EVCar.objects.filter(model=model).first() or EVScooter.objects.filter(model=model).first()``."""
-        matches = exact_text(model)
-        car = next((vehicle for vehicle in self.cars if matches(vehicle.model)), None)
-        return car or next((vehicle for vehicle in self.scooters if matches(vehicle.model)), None)
+        param = text_param(model)
+        if param is None:
+            return None
+        return self.cars_by_model.get(param) or self.scooters_by_model.get(param)
 
     def device_watts(self, device_type_name):
         dt = self.device_type(device_type_name)

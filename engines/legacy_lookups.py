@@ -9,8 +9,10 @@ or the same request would select a different row or fail differently:
   stored text); anything else is compared as ``str(v)`` — ``682001`` matches ``"682001"``, ``682001.0`` does not;
 * ``CharField`` ``iexact`` (``filter(name__iexact=v)``): ``None`` → ``IS NULL``; the value is sent to PostgreSQL
   as it is (the PostgreSQL backend neither converts nor escapes it) and compared as ``UPPER(column) = UPPER(v)`` —
-  a text compares case-insensitively (PostgreSQL's one-for-one case mapping, :func:`pg_upper`), any other JSON value (number, boolean, list, object) made PostgreSQL fail
-  (``function upper(integer) does not exist``: HTTP 500);
+  a text compares case-insensitively (PostgreSQL's one-for-one case mapping, :func:`pg_upper`); a list psycopg2 sent
+  as a text literal (``[]`` → ``'{}'``, all-``None`` leaves → ``'{NULL,…}'``) compares as that text; any other JSON
+  value (number, boolean, object, any other list) made PostgreSQL fail (``function upper(integer) does not exist``:
+  HTTP 500) — :func:`iexact_param`;
 * a text parameter containing NUL, or a lone UTF-16 surrogate (``"\\ud800"`` is valid JSON but no UTF-8), cannot be
   sent to PostgreSQL: the legacy endpoint crashed (HTTP 500) — and so did its JSON renderer on a response carrying
   such a text (:func:`check_renderable`);
@@ -95,13 +97,49 @@ def pg_upper(text: str) -> str:
     return text.upper() if text.isascii() else "".join(_pg_upper_char(char) for char in text)
 
 
-def iexact_text(value) -> Callable[[str | None], bool]:
-    """``filter(column__iexact=value)`` on PostgreSQL: ``UPPER(column) = UPPER(value)`` for a text value."""
+def _psycopg2_list_literal(value: list) -> str | None:
+    """The text psycopg2 (the legacy driver) sent for a list, when it sent a text literal: ``'{}'`` for an empty list
+    and ``'{NULL,…}'`` (nested ``{…}``) for a list whose leaves are all ``None``; ``None`` when it sent an
+    ``ARRAY[…]`` construct instead (any other element, or an empty inner list, which becomes ``ARRAY[]``)."""
+    if not value:
+        return "{}"
+    parts = []
+    for item in value:
+        if item is None:
+            parts.append("NULL")
+        elif isinstance(item, list) and item:
+            inner = _psycopg2_list_literal(item)
+            if inner is None:
+                return None
+            parts.append(inner)
+        else:
+            return None
+    return "{" + ",".join(parts) + "}"
+
+
+def iexact_param(value) -> str | None:
+    """``UPPER(value)`` of ``filter(column__iexact=value)`` as PostgreSQL received it (``None`` = ``IS NULL``, matching
+    no stored text). The value reached psycopg2 unconverted: a text is compared case-insensitively; a list psycopg2
+    sent as a text literal (``[]`` → ``'{}'``, ``[None]`` → ``'{NULL}'``) is compared as that text; any other value
+    (number, boolean, object, a list sent as ``ARRAY[…]``) made PostgreSQL fail — ``function upper(integer) does not
+    exist``, ``can't adapt type 'dict'``, ``cannot determine type of empty array``: HTTP 500."""
     if value is None:
-        return lambda column: False
+        return None
+    if isinstance(value, list):
+        literal = _psycopg2_list_literal(value)
+        if literal is None:
+            raise LegacyCrash("function upper(array) does not exist")
+        return pg_upper(literal)
     if not isinstance(value, str):
         raise LegacyCrash(f"function upper({type(value).__name__}) does not exist")
-    param = pg_upper(_text(value))
+    return pg_upper(_text(value))
+
+
+def iexact_text(value) -> Callable[[str | None], bool]:
+    """``filter(column__iexact=value)`` on PostgreSQL: ``UPPER(column) = UPPER(value)`` (see :func:`iexact_param`)."""
+    param = iexact_param(value)
+    if param is None:
+        return lambda column: False
     return lambda column: column is not None and pg_upper(column) == param
 
 
@@ -146,17 +184,23 @@ def decimal_param(value, max_digits: int) -> Decimal | None:
 
 def check_renderable(payload) -> None:
     """The legacy JSON renderer refused ``inf``/``nan`` (DRF ``STRICT_JSON``) and any text that is not UTF-8 (a lone
-    surrogate echoed from the request, as a value or a key): such a response was a 500."""
-    if isinstance(payload, float):
-        if not math.isfinite(payload):
-            raise LegacyCrash("Out of range float values are not JSON compliant")
-    elif isinstance(payload, str):
-        if not _encodable(payload):
-            raise LegacyCrash("the response text is not valid UTF-8 (a lone surrogate)")
-    elif isinstance(payload, dict):
-        for key, item in payload.items():
-            check_renderable(key)
-            check_renderable(item)
-    elif isinstance(payload, (list, tuple)):
-        for item in payload:
-            check_renderable(item)
+    surrogate echoed from the request, as a value or a key): such a response was a 500.
+
+    Walks the payload with an explicit stack, not recursion: ``calculate-solar`` echoes the visitor's
+    ``property_type`` unchecked, and the legacy (C JSON parser and renderer) answered 200 for a value nested
+    thousands of levels deep, far beyond Python's recursion limit."""
+    pending = [payload]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, float):
+            if not math.isfinite(item):
+                raise LegacyCrash("Out of range float values are not JSON compliant")
+        elif isinstance(item, str):
+            if not _encodable(item):
+                raise LegacyCrash("the response text is not valid UTF-8 (a lone surrogate)")
+        elif isinstance(item, dict):
+            for key, value in item.items():
+                pending.append(key)
+                pending.append(value)
+        elif isinstance(item, (list, tuple)):
+            pending.extend(item)
