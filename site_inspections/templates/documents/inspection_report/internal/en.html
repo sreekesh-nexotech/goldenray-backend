@@ -1,0 +1,4 @@
+{% extends "documents/base.html" %}
+{% block title %}{{ payload.filename }} (internal){% endblock %}
+{% block styles %}{% include "documents/inspection_report/_styles.html" %}{% endblock %}
+{% block content %}{% include "documents/inspection_report/_body.html" %}{% endblock %}

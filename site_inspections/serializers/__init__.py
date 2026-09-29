@@ -1,1 +1,1 @@
-"""Site inspections serializers (HTTP shape only)."""
+"""Site-inspection serializers (HTTP shape only)."""

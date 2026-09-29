@@ -440,6 +440,17 @@ SPECTACULAR_SETTINGS = {
         "EngineeringSubjectTypeEnum": "engineering.models.choices.SubjectType",
         "EngineeringRunResultEnum": "engineering.models.choices.RunResult",
         "EngineeringSeverityEnum": "engineering.models.choices.Severity",
+        # site_inspections: its shared choice sets (status / held_from_status, the four electrical availability columns, …)
+        "SiteInspectionStatusEnum": "site_inspections.models.choices.Status",
+        "SiteInspectionSystemTypeEnum": "site_inspections.models.choices.SystemType",
+        "SiteInspectionShadingEnum": "site_inspections.models.choices.Shading",
+        "SiteInspectionAvailabilityEnum": "site_inspections.models.choices.Availability",
+        "SiteInspectionPhaseEnum": "site_inspections.models.choices.Phase",
+        "SiteInspectionObservationCategoryEnum": "site_inspections.models.choices.ObservationCategory",
+        "SiteInspectionWorkUnitEnum": "site_inspections.models.choices.WorkUnit",
+        "SiteInspectionWorkStatusEnum": "site_inspections.models.choices.WorkStatus",
+        "SiteInspectionEquipmentStatusEnum": "site_inspections.models.choices.AssessmentStatus",
+        "SiteInspectionApprovalStatusEnum": "site_inspections.models.choices.ApprovalStatus",
     },
 }
 
