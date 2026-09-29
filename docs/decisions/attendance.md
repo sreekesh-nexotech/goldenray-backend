@@ -36,7 +36,7 @@ punches + the v3/v4 status diff for HR sign-off). Legacy: eSSL `services/process
 | `GET attendance/employees/<uid>/timeline/?work_date=` | view |
 | `GET attendance/calendar/?employee=&year=&month=` · `…/calendar/all/?year=&month=&office=&employee=&search=&include_inactive=` (≤ 300 employees, else 400 `too_many_employees`) | view |
 | `GET attendance/day/?day=&office=&employee=&search=&include_inactive=` · `GET attendance/date-ranges/?office=` | view |
-| `POST attendance/process/` (≤ 93 days), `POST attendance/process-all/` (202, queued), `POST attendance/recalculate/` | manage |
+| `POST attendance/process/` (≤ 93 days), `POST attendance/process-all/` (202, queued), `POST attendance/recalculate/` | manage; `process/` and `recalculate/` recompute only the caller's attendance record scope (B-8, wave-4a integration: a named employee outside it → 404 `not_found`, nothing recomputed; without `employee_uids` only the people in scope) |
 | `attendance/corrections/` list / `…/<uid>/` | view |
 | `POST attendance/corrections/` (`day_uid`, `field`, `new`, `reason`, `expected_version` = the day's) · `POST …/<uid>/revoke/` (`reason`, `expected_version`) | edit (never on your own day: 403 `self_action_denied`) |
 | `GET attendance/reports/{daily,weekly,monthly,monthly-detail,monthly-individual,individual,office}/?format=json\|csv\|xlsx\|pdf` | export |

@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                         choices=[("DRAFT", "Draft"), ("ISSUED", "Issued"), ("ACCEPTED", "Accepted"), ("SUPERSEDED", "Superseded"), ("CANCELLED", "Cancelled")], default="DRAFT", max_length=12
                     ),
                 ),
-                ("revision", models.PositiveSmallIntegerField(default=1, help_text="PLAN `version` (DV-118): 1, then +1 for every superseding agreement of the chain.")),
+                ("revision", models.PositiveSmallIntegerField(default=1, help_text="PLAN `version` (DV-123): 1, then +1 for every superseding agreement of the chain.")),
                 ("language", models.CharField(choices=[("en", "English"), ("ml", "Malayalam"), ("hi", "Hindi")], default="en", max_length=2)),
                 ("system_type", models.CharField(choices=[("ON_GRID", "On-grid"), ("HYBRID", "Hybrid")], default="ON_GRID", max_length=8)),
                 ("capacity_kw", models.DecimalField(blank=True, decimal_places=2, max_digits=6, null=True)),

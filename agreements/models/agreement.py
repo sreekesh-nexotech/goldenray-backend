@@ -28,14 +28,14 @@ class Agreement(BaseModel):
     kind = models.CharField(max_length=20, choices=AgreementKind.choices)
     # PROTECT: a customer with agreements is merged, never deleted (customers.services.merge re-points this column).
     customer = models.ForeignKey("customers.Customer", on_delete=models.PROTECT, related_name="agreements")
-    # SET_NULL: record-scope anchor (agreements `owned`, DV-117); deleting a user never deletes agreements.
+    # SET_NULL: record-scope anchor (agreements `owned`, DV-122); deleting a user never deletes agreements.
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     # PROTECT: the issued quotation version whose values this agreement pins (DV-2: the link lives on this side).
     quotation_version = models.ForeignKey("quotations.Version", null=True, blank=True, on_delete=models.PROTECT, related_name="agreements")
     source_type = models.CharField(max_length=20, choices=SourceType.choices, blank=True, default="", help_text="DV-3: what a blank agreement was raised from.")
     source_uid = models.UUIDField(null=True, blank=True, help_text="DV-3: the uid of that record (e.g. the site inspection); no foreign key.")
     status = models.CharField(max_length=12, choices=AgreementStatus.choices, default=AgreementStatus.DRAFT)
-    revision = models.PositiveSmallIntegerField(default=1, help_text="PLAN `version` (DV-118): 1, then +1 for every superseding agreement of the chain.")
+    revision = models.PositiveSmallIntegerField(default=1, help_text="PLAN `version` (DV-123): 1, then +1 for every superseding agreement of the chain.")
     # SET_NULL: the agreement this revision replaces (the chain survives a soft delete of either row).
     supersedes = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="superseded_by")
     language = models.CharField(max_length=2, choices=Language.choices, default=Language.EN)

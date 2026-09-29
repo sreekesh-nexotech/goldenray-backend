@@ -5,7 +5,7 @@ Work package *agreements* builds the `agreements` app of PLAN §2.6 (`agreements
 import), D-1 (flag `AGREEMENTS_PRICE_OVERRIDE`), D-11 (`AGR-<FY>-nnnn`) and DV-3, following the design of Plan 2 §3.1.
 The legacy source is the Purchase Agreement page (`agreement-goldenray-main/index.html`: `FORMS` 1/2/3, `buildDoc`
 EN/ML/HI, hybrid detection, payee and letterhead; `api/products.js`: the Upstash catalog). The package builds on
-`wp/quotations` (merged into this branch, see "Merges"). Deviations: DV-117 … DV-123.
+`wp/quotations` (merged into this branch, see "Merges"). Deviations: DV-122 … DV-128.
 
 ## What exists
 
@@ -83,8 +83,8 @@ EN/ML/HI, hybrid detection, payee and letterhead; `api/products.js`: the Upstash
 9. **Price override** (D-1 / D2-1): flag on (else 404), `agreements.manage`, a reason, a DRAFT; send `discount` or
    `final_price` and the other follows (`final = original + extra − discount`, both ≥ 0); audited with before/after
    and the reason, kept in `price_override_reason`.
-10. **Cancel** needs a reason; a DRAFT with `edit`, an issued or accepted agreement also with `manage` (DV-122).
-11. **Owned scope** (DV-117): Sales Executives see the agreements they own; the quotation's owner owns a derived
+10. **Cancel** needs a reason; a DRAFT with `edit`, an issued or accepted agreement also with `manage` (DV-127).
+11. **Owned scope** (DV-122): Sales Executives see the agreements they own; the quotation's owner owns a derived
     agreement, the creator a blank one; the handler-drafted PA belongs to the quotation's owner.
 12. **`quotations.accepted` handler**: a DRAFT Purchase Agreement for the accepted version unless a live, not
     cancelled PA exists for it (idempotent, at-least-once safe; the draft partial unique closes the race); unknown or
@@ -121,7 +121,7 @@ For `agreements.superseded`, `agreement_uid` is the new agreement in force and `
 | `kw` | `size_label` (as printed), `capacity_kw` (first `<n> KW`) | `unparsed_value` when no capacity |
 | `kw` /hybrid/i or `invtype = Hybrid Inverter` | `system_type = HYBRID` (else ON_GRID) | the page's hybrid detection |
 | `phase` Single Phase / 3 Phase | `phase` 1P / 3P | |
-| `panel` | `panel_label`; `panel_dcr` from the `- DCR` / `- NDCR` suffix | no catalog FK (DV-119) |
+| `panel` | `panel_label`; `panel_dcr` from the `- DCR` / `- NDCR` suffix | no catalog FK (DV-124) |
 | `panelcap` | `panel_capacity_label`; `panel_capacity_w` = first wattage | |
 | `inverter`, `invtype` | `inverter_brand`, `inverter_type` STRING/MICRO/HYBRID | |
 | `battery` (`None` = none) | `battery_label` | |
@@ -166,8 +166,10 @@ Not migrated: `flarize_trash` (soft-deleted in the page), `flarize_user` / `flar
 
 ## Merges
 
-`wp/quotations` (tip `e16b464`, reviewed, not yet on the integration branch) was merged right after the integration
-branch, as instructed; the integrator merges quotations first. DV numbers continue after quotations' DV-116.
+`wp/quotations` (tip `e16b464`, reviewed) was merged right after the integration branch, as instructed. The
+integration branch then moved (wave 4a, `9e3f7d1`: quotations and migration-website integrated) and was merged
+again; its DV-117 … DV-121 (migration-website) kept their numbers and this package's rows were renumbered to
+DV-122 … DV-128 (DEVIATIONS, this file, the `revision` help text in the model and its unreleased initial migration).
 
 ## Shared changes
 

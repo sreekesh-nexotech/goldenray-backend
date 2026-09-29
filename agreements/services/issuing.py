@@ -136,7 +136,6 @@ def document_job(agreement: Agreement, language: str):
     """The newest usable rendering of the agreement's current document in ``language`` (409 while there is none): the
     frozen payload of an issued agreement, the DRAFT's document as it stands now (an edit needs a new render)."""
     from documents.models import RenderJob
-
     from documents.services.jobs import canonical_payload
 
     jobs = RenderJob.objects.filter(object_type=OBJECT_TYPE, object_uid=agreement.uid, language=language).exclude(status=RenderJob.Status.FAILED)

@@ -16,10 +16,11 @@ from django.db import transaction
 from django.db.models import Max, Min
 
 from attendance.models import RawPunch
-from attendance.services import recompute
+from attendance.services import recompute, scopes
 from attendance.services.common import now, today_for, validate_range
 from audit.services import record
-from core.errors import DomainError
+from core.errors import DomainError, NotFound
+from core.scopes import ALL
 from devices.models import Device
 from devices.services import health
 from hr.models import Employee
@@ -27,20 +28,29 @@ from hr.models import Employee
 MAX_PROCESS_DAYS = 93
 
 
-def _employee_ids(employee_uids) -> list[int] | None:
+def _employee_ids(user, employee_uids) -> list[int] | None:
+    """The employees to recompute, within ``user``'s attendance record scope (B-8, fail closed).
+
+    Named uids must all exist (400 ``validation_error`` otherwise) and all be in scope (404 ``not_found`` for any
+    that is not, as the scoped timeline answers; nothing is recomputed). Without uids: everybody (``None``) under the
+    ``all`` scope, else exactly the people in scope (an empty list recomputes nobody)."""
+    in_scope = scopes.employees_in_scope(user, Employee.objects.all())
     if not employee_uids:
-        return None
+        return None if scopes.scope_of(user) == ALL else sorted(in_scope.values_list("pk", flat=True))
     uids = sorted({str(uid) for uid in employee_uids})
     found = dict(Employee.objects.filter(uid__in=uids).values_list("uid", "pk"))
     missing = [uid for uid in uids if uid not in {str(key) for key in found}]
     if missing:
         raise DomainError("validation_error", "Unknown employees.", errors={"employee_uids": [f"Not found: {', '.join(missing)}."]})
+    allowed = set(in_scope.filter(pk__in=found.values()).values_list("pk", flat=True))
+    if set(found.values()) - allowed:
+        raise NotFound("not_found", "Employee not found.")
     return sorted(found.values())
 
 
 def process(*, user, date_from: date, date_to: date, employee_uids=None) -> dict:
     validate_range(date_from, date_to, max_days=MAX_PROCESS_DAYS)
-    return recompute.recompute(date_from=date_from, date_to=date_to, employee_ids=_employee_ids(employee_uids), reason="process", user=user)
+    return recompute.recompute(date_from=date_from, date_to=date_to, employee_ids=_employee_ids(user, employee_uids), reason="process", user=user)
 
 
 @transaction.atomic
@@ -63,7 +73,7 @@ def recalculate(*, user, date_from: date | None = None, date_to: date | None = N
     date_from = date_from or yesterday
     date_to = date_to or max(date_from, yesterday)
     validate_range(date_from, date_to, max_days=MAX_PROCESS_DAYS)
-    result = recompute.recompute(date_from=date_from, date_to=date_to, employee_ids=_employee_ids(employee_uids), reason="recalculate", user=user)
+    result = recompute.recompute(date_from=date_from, date_to=date_to, employee_ids=_employee_ids(user, employee_uids), reason="recalculate", user=user)
     at = now()
     devices = []
     for device in Device.objects.filter(is_active=True).select_related("office", "agent").order_by("name"):
