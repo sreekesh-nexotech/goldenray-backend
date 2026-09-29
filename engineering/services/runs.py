@@ -4,8 +4,10 @@
 pack for a pack config version, a single ``("", result)`` for a project BOM — and becomes one ``engineering_run`` (the
 worst verdict: FAIL > WARN > PASS) with one ``engineering_finding`` per finding (``Finding.as_row()``, the scope in
 ``context.pack``). Each finding carries an ``identity`` (``<scope>|<rule>|<component ids>``): an acknowledgement given
-on any run of a subject counts for the same finding in later runs of that subject (:func:`acknowledged_identities`),
-so re-running the checker never loses what engineering already accepted.
+on any run of a subject counts for the same finding in later runs of that subject (:func:`acknowledged_keys`), so
+re-running the checker never loses what engineering already accepted. The carry-over key is the identity **and** the
+message (:func:`finding_key`): the identity alone is too coarse for a gate, because component-less findings share it
+(``|PBC-K-001|`` is every missing role), so a waiver of one missing role would otherwise cover every other one.
 
 :func:`acknowledge` (``engineering.approve``) accepts a WARN/INFO finding or waives a BLOCK one (PLAN §7.6 #8 "the
 BLOCK list is reviewed and either empty or explicitly accepted"); a reason is always required.
@@ -42,9 +44,15 @@ def findings_queryset():
     return Finding.objects.select_related("run").prefetch_related("acknowledgements__acknowledged_by")
 
 
-def acknowledged_identities(subject_type: str, subject_uid) -> set[str]:
+def finding_key(identity: str, message: str) -> tuple[str, str]:
+    """What an earlier acknowledgement must match to carry over to a finding: its identity **and** its message."""
+    return identity, message
+
+
+def acknowledged_keys(subject_type: str, subject_uid) -> set[tuple[str, str]]:
+    """The :func:`finding_key` of every acknowledged (live) finding of the subject's runs."""
     rows = Acknowledgement.objects.filter(finding__run__subject_type=subject_type, finding__run__subject_uid=subject_uid, finding__deleted_at__isnull=True)
-    return set(rows.values_list("finding__identity", flat=True))
+    return {finding_key(identity, message) for identity, message in rows.values_list("finding__identity", "finding__message")}
 
 
 @transaction.atomic

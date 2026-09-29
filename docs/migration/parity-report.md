@@ -200,7 +200,7 @@ The adversarial review merged the integration branch (quotations and migration-w
 groups except `forms`, whose write path needs a fresh private legacy restore) was replayed against the shared legacy
 servers and a `tools/parity/serve.py` server on the same imported database, with the three legacy
 `bom_quotationtestimonial` rows imported by `quotations.services.legacy_import.import_backend_testimonials`
-(`import_backend` does not call it yet — migration-website DV-120):
+(`import_backend` did not call it yet at the time of this run; it does since integration 9e3f7d1 — migration-website DV-120):
 
 | Group | Requests | Identical | Approved differences | Unapproved |
 |---|---|---|---|---|

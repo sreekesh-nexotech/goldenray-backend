@@ -155,10 +155,26 @@ class TestPublish:
         assert blockers.exists()
         for finding in blockers:
             runs.acknowledge(finding, user=None, reason="accepted by engineering")
-        assert runs.acknowledged_identities(SubjectType.PACK_CONFIG_VERSION, world["version"].uid)
+        assert {runs.finding_key(f.identity, f.message) for f in blockers} <= runs.acknowledged_keys(SubjectType.PACK_CONFIG_VERSION, world["version"].uid)
         body = admin.post(f"{BASE}preview/", {}, format="json").json()
         assert "PACK_ENGINEERING_WAIVED" in {item["code"] for item in body["items"]}
         assert {row["key"]: row["status"] for row in body["matrix"]}["ongrid-value-3"] == "READY"
+
+    def test_a_waiver_covers_only_the_component_less_finding_it_reviewed(self, admin, world):
+        """Component-less findings share one identity (``ongrid-value-3|PBC-K-001|``, every missing role): a waiver
+        given for one missing role must not let a pack missing another role through (identity + message)."""
+        world["is1"].status = ComponentStatus.RETIRED
+        world["is1"].save()
+        run = admin.post(f"/api/v1/packs/config-versions/{world['version'].uid}/run-checker/", {}, format="json").json()
+        blocker = Finding.objects.get(run__uid=run["uid"], severity="BLOCK", context__pack="ongrid-value-3")
+        assert blocker.identity == "ongrid-value-3|PBC-K-001|" and "AC_ISOLATOR" in blocker.message
+        # an earlier review waived a different missing role of the same pack
+        Finding.objects.filter(pk=blocker.pk).update(message="Required role MAIN_INVERTER is missing from the project BOM.")
+        runs.acknowledge(Finding.objects.get(pk=blocker.pk), user=None, reason="inverter supplied by the customer")
+        body = admin.post(f"{BASE}preview/", {}, format="json").json()
+        assert {row["key"]: row["status"] for row in body["matrix"]}["ongrid-value-3"] == "EXCLUDED"
+        blocked = [item for item in body["items"] if item["code"] == "PACK_ENGINEERING_BLOCKED" and "ongrid-value-3:" in item["message"]]
+        assert blocked and "PACK_ENGINEERING_WAIVED" not in {item["code"] for item in body["items"]}
 
 
 class TestRead:

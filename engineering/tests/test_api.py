@@ -97,9 +97,20 @@ class TestRuns:
         again = admin.post(f"{BASE}findings/{block.uid}/acknowledge/", {"reason": "x"}, format="json")
         assert again.status_code == 409 and again.json()["code"] == "finding_already_acknowledged"
         assert Acknowledgement.objects.count() == 1
-        assert block.identity in runs.acknowledged_identities("PROJECT_BOM", run.subject_uid)
+        assert runs.finding_key(block.identity, block.message) in runs.acknowledged_keys("PROJECT_BOM", run.subject_uid)
         assert admin.post(f"{BASE}findings/00000000-0000-0000-0000-000000000000/acknowledge/", {"reason": "x"}, format="json").status_code == 404
         assert OutboxEvent.objects.filter(event_type="engineering.finding_acknowledged").exists()
+
+    def test_carried_acknowledgements_are_keyed_by_identity_and_message(self, run):
+        """A component-less finding's identity (``|<rule>|``) is shared by every finding of that rule: an
+        acknowledgement carries over only to a finding with the same identity **and** message."""
+        block = Finding.objects.filter(run=run, severity="BLOCK").first()
+        runs.acknowledge(block, user=None, reason="waived for the pilot")
+        keys = runs.acknowledged_keys("PROJECT_BOM", run.subject_uid)
+        assert runs.finding_key(block.identity, block.message) in keys
+        assert runs.finding_key(block.identity, block.message + " (another role)") not in keys
+        assert runs.finding_key("|PBC-K-001|", "Required role MAIN_INVERTER is missing from the project BOM.") not in keys
+        assert runs.acknowledged_keys("PROJECT_BOM", "11111111-1111-1111-1111-000000000000") == set()
 
     def test_access(self, api_client, auth_client, make_user, run):
         finding = Finding.objects.filter(run=run).first()

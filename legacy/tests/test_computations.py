@@ -117,6 +117,32 @@ def test_bom_quote_answers_as_the_legacy_endpoint_without_internal_costs(api_cli
                 assert body == case["response"]  # {"errors": [...]} — the legacy messages in the legacy order
 
 
+def _keys(value) -> set[str]:
+    if isinstance(value, dict):
+        return set(value) | {key for item in value.values() for key in _keys(item)}
+    if isinstance(value, list):
+        return {key for item in value for key in _keys(item)}
+    return set()
+
+
+def test_business_default_b1_public_and_legacy_quotes_omit_cost_breakdown_and_totals(api_client, bom_tables):
+    """B-1 (DV-133): neither the canonical public quote nor the legacy shim hands the website the internal cost
+    breakdown or the totals block (subtotal/margin/grand total), at the top level or nested; the engine still has them."""
+    golden = golden_cases()["cases"]
+    requests = [case["request"] for case in golden if case["status"] == 200][::40]
+    internal_only = {"cost_breakdown", "totals", "cost_total", "subtotal", "margin", "grand_total", "material_with_gst"}
+    with freeze_time(f"{GOLDEN_DAY} 12:00:00"):
+        for request in requests:
+            full = next(case["response"] for case in golden if case["request"] == request)
+            assert set(INTERNAL_KEYS) <= set(full)  # the legacy engine answer carried them
+            for path in ("/api/public/v1/bom/quote/", "/legacy/bom/api/calculate/"):
+                response = api_client.post(path, request, format="json")
+                assert response.status_code == 200, (path, request, response.content[:300])
+                body = response.json()
+                assert list(body) == ["bom_lines", "pricing", "meta", "available_offers"], path
+                assert not internal_only & _keys(body), (path, internal_only & _keys(body))
+
+
 def test_bom_quote_legacy_500_is_a_400_with_the_legacy_errors_shape(api_client, bom_tables):
     request = {"sys_type": "ongrid", "size": "3", "tier": "base", "bat_config": "0", "subsidy_type": "residential", "custom_discount": 7500}
     with freeze_time(f"{GOLDEN_DAY} 12:00:00"):

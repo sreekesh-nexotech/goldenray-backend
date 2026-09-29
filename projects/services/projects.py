@@ -218,7 +218,9 @@ def cancel(instance: Project, *, user, reason: str, expected_version=None) -> Pr
 
 
 @transaction.atomic
-def create_from_inspection(*, customer, inspection_uid, lead_uid=None, agreement_uid=None, system_type: str = "", size_kw=None, phase: str = "", released_at=None) -> tuple[Project, bool]:
+def create_from_inspection(
+    *, customer, inspection_uid, lead_uid=None, agreement_uid=None, quotation_version_uid=None, system_type: str = "", size_kw=None, phase: str = "", released_at=None
+) -> tuple[Project, bool]:
     """The project of a released site inspection, created once (``(project, created)``); the actor is the system."""
     existing = Project.objects.filter(site_inspection_uid=inspection_uid).exclude(status=ProjectStatus.CANCELLED).first()
     if existing is not None:
@@ -229,6 +231,7 @@ def create_from_inspection(*, customer, inspection_uid, lead_uid=None, agreement
         site_inspection_uid=inspection_uid,
         lead_uid=lead_uid,
         agreement_uid=agreement_uid,
+        quotation_version_uid=quotation_version_uid,
         system_type=system_type,
         size_kw=size_kw,
         phase=phase,

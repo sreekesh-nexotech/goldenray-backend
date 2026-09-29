@@ -70,6 +70,25 @@ class TestRelease:
         event = OutboxEvent.objects.get(event_type="site_inspections.released")
         assert event.payload["inspection_uid"] == str(inspection.uid) and event.payload["customer_uid"] == str(inspection.customer.uid)
 
+    @pytest.mark.parametrize("phase,expected_phase", [("3P", "3P"), ("NC", "")])
+    def test_release_creates_the_project_with_the_documented_payload(self, auth_client, head, engineer, working, settings, drain_outbox, phase, expected_phase):
+        """End to end with projects (D-8, auto-create switched on): the released payload carries what projects
+        consumes — customer, agreement, quotation version, system type, size and phase (NC is not a project phase)."""
+        from projects.models import Project
+
+        settings.PROJECTS_AUTO_CREATE_ON_RELEASE = True
+        inspection = approved(working, engineer)
+        agreement_uid, quotation_version_uid = uuid.uuid4(), uuid.uuid4()
+        Inspection.objects.filter(pk=inspection.pk).update(agreement_uid=agreement_uid, quotation_version_uid=quotation_version_uid, quoted_size_kw="5.500", phase=phase)
+        response = auth_client(head).post(f"{BASE}{inspection.uid}/release/", {}, format="json")
+        assert response.status_code == 200, response.json()
+        payload = OutboxEvent.objects.get(event_type="site_inspections.released").payload
+        assert payload["size_kw"] == "5.500" and payload["phase"] == (expected_phase or None) and payload["lead_uid"] is None
+        drain_outbox()
+        project = Project.objects.get(site_inspection_uid=inspection.uid)
+        assert project.customer_id == inspection.customer_id and project.agreement_uid == agreement_uid and project.quotation_version_uid == quotation_version_uid
+        assert (project.system_type, str(project.size_kw), project.phase) == ("ON_GRID", "5.50", expected_phase)
+
     def test_release_is_judged_on_the_current_row(self, auth_client, head, engineer, working):
         inspection = approved(working, engineer)
         AdditionalWorkItem.objects.create(inspection=inspection, work_type="WALKWAY", customer_impacting=True)

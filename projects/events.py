@@ -4,7 +4,7 @@
 ``settings.PROJECTS_AUTO_CREATE_ON_RELEASE`` is true. Payload contract (docs/decisions/projects.md "Event contracts")::
 
     {"inspection_uid": uuid, "customer_uid": uuid, "lead_uid": uuid | null, "agreement_uid": uuid | null,
-     "system_type": "ON_GRID" | "HYBRID" | "UNDECIDED" | …, "size_kw": number | null, "phase": "1P" | "3P" | null,
+     "quotation_version_uid": uuid | null, "system_type": "ON_GRID" | "HYBRID" | "UNDECIDED" | …, "size_kw": number | null, "phase": "1P" | "3P" | null,
      "released_at": ISO date-time}
 
 Idempotent: one live (non-cancelled) project per inspection. A payload that breaks the contract or names an unknown
@@ -61,6 +61,7 @@ def create_project_on_release(event: Event) -> None:
         customer_uid = _uuid(payload.get("customer_uid"))
         lead_uid = _uuid(payload.get("lead_uid"))
         agreement_uid = _uuid(payload.get("agreement_uid"))
+        quotation_version_uid = _uuid(payload.get("quotation_version_uid"))
         size_kw = _size(payload.get("size_kw"))
     except (ValueError, TypeError, InvalidOperation):
         logger.warning("site_inspections.released payload breaks the contract; no project created", extra={"event_id": event.id})
@@ -79,6 +80,7 @@ def create_project_on_release(event: Event) -> None:
         inspection_uid=inspection_uid,
         lead_uid=lead_uid,
         agreement_uid=agreement_uid,
+        quotation_version_uid=quotation_version_uid,
         system_type=system_type if system_type in SystemType.values else "",
         size_kw=size_kw,
         phase=phase if phase in Phase.values else "",

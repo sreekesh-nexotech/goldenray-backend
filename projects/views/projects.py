@@ -12,11 +12,11 @@ from core.views import BaseViewSet, CreateModelMixin, DestroyModelMixin, ListMod
 from pricing.services.common import can_see_internal
 from projects.filters import ProjectFilter
 from projects.serializers.projects import (
-    CancelSerializer,
     CloseSerializer,
     CommissionSerializer,
     CostInputsSerializer,
     LockBomSerializer,
+    ProjectCancelSerializer,
     ProjectCreateSerializer,
     ProjectDetailSerializer,
     ProjectSerializer,
@@ -145,9 +145,9 @@ class ProjectViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, Updat
         data, expected = self._validated(CloseSerializer)
         return self._detail(projects.close(project, user=request.user, note=data["note"], expected_version=expected))
 
-    @_action_schema("cancel", CancelSerializer, "PLANNED/IN_PROGRESS → CANCELLED with a reason (409 `invalid_transition` otherwise).")
+    @_action_schema("cancel", ProjectCancelSerializer, "PLANNED/IN_PROGRESS → CANCELLED with a reason (409 `invalid_transition` otherwise).")
     @action(detail=True, methods=["post"], url_path="cancel")
     def cancel(self, request, *args, **kwargs):
         project = self.get_object()
-        data, expected = self._validated(CancelSerializer)
+        data, expected = self._validated(ProjectCancelSerializer)
         return self._detail(projects.cancel(project, user=request.user, reason=data["reason"], expected_version=expected))

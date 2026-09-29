@@ -130,12 +130,12 @@ python tools/parity/harness.py --legacy-backend-writes http://127.0.0.1:18151 --
 * **`/bom/api/quotation-testimonials/` wired** once quotations was integrated (`legacy/tests/test_testimonials.py`,
   nginx `bom_public`; live parity: the legacy list byte for byte).
 
-## To wire at integration
+## Wired at integration (wave 4b)
 
-| Old URL | Target service | Why not now |
+| Old URL | Target service | Status |
 |---|---|---|
-| `POST /api/verify-otp/` — the legacy `SentQuote` row (`quote_id`, "We already have your details!") | quotations sent-quote record | quotations has no write service for a legacy website quote request (`quotations_email_log` LEGACY_LINK rows are only imported); the shim answers the legacy success body with `quote_id = QUOTE_<8 hex of the lead uid>` and always the "recorded" message (the website reads only `status`/`message`) |
-| `bom_quotationtestimonial` rows | `migrations_tools import_backend` → `quotations.services.legacy_import.import_backend_testimonials` | the shim serves the testimonials, but `import_backend` still lists the table as not migrated (migration-website DV-120); the review's parity run imported the rows with the quotations importer directly |
+| `POST /api/verify-otp/` — the legacy `SentQuote` row (`quote_id`, "We already have your details!") | quotations sent-quote record | **Repeat message wired**: a number with an imported `sent_quotes` row (`quotations_email_log` LEGACY_LINK, `to` = `+91…` or 10 digits) or an earlier `/advanced-calculator` quote enquiry answers `{status: approved, message: "We already have your details! Our team will contact you soon."}` without `quote_id`; the enquiry is still recorded as a lead (legacy `record_lead` ran first). **Still open**: quotations has no write service for a website quote request, so a first request answers `quote_id = QUOTE_<8 hex of the lead uid>` and no `quotations_email_log` row is written (the website reads only `status`/`message`) (`legacy/tests/test_forms.py`) |
+| `bom_quotationtestimonial` rows | `migrations_tools import_backend` → `quotations.services.legacy_import.import_backend_testimonials` | **Done** at integration 9e3f7d1: `import_backend` step `backend.quotations` imports them (migration-website DV-120) |
 
 ## Hand-over notes
 

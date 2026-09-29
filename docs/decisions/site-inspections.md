@@ -137,7 +137,9 @@ Handling (`linking.apply_agreement`, idempotent on `agreement_uid`):
 ### Emitted: `site_inspections.released`
 
 Payload: `{inspection_uid, number, customer_uid, agreement_uid|null, quotation_version_uid|null, system_type,
-released_at, released_by_uid}`. Dedup key: `site_inspections.released:<uid>:<version>`. Consumer: projects (D-8).
+size_kw|null (the quoted size, a decimal string), phase|null (1P/3P; NC is sent as null), lead_uid (always null: an
+inspection is not linked to a lead), released_at, released_by_uid}` — the size/phase/lead keys were added at the
+wave 4b integration to meet the projects contract (docs/decisions/projects.md "Event contracts"). Dedup key: `site_inspections.released:<uid>:<version>`. Consumer: projects (D-8).
 
 ## Decisions not spelled out in the PLAN
 

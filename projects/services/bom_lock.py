@@ -8,7 +8,7 @@
 3. the lock is refused (409 ``bom_lock_refused``) while a BLOCK finding has no waiver, or a WARN finding whose rule
    requires an acknowledgement (PBC-D-001, PBC-D-003, PBC-F-002, PBC-G-002, PBC-N-001, PBC-R-002 in ``phase1e.1``) has
    neither an acknowledgement in the request (``{rule_code, reason}``) nor one carried from an earlier run (same
-   identity **and** message — see :func:`_key`);
+   identity **and** message — engineering's ``runs.acknowledged_keys``/``finding_key``);
 4. otherwise the request's acknowledgements are recorded as ``engineering_acknowledgement`` rows (they then carry over
    to later runs), the snapshot is frozen into ``bom_lock`` — lines with the PriceRelease list price and landed cost,
    the engineering verdict and every acknowledgement — and the project moves PLANNED → IN_PROGRESS.
@@ -94,12 +94,10 @@ def _prices(context, sku: str) -> tuple[str | None, str | None]:
 
 
 def _key(finding: Finding) -> tuple[str, str]:
-    """What an earlier acknowledgement must match to carry over: the identity (rule + components) **and** the message.
-
-    The identity alone is too coarse for a lock gate: component-less findings share it (``|PBC-K-001|`` is every missing
-    role), so a waiver for one missing role would otherwise let a BOM missing a different role lock.
-    """
-    return finding.identity, finding.message
+    """What an earlier acknowledgement must match to carry over: engineering's shared carry-over key, the identity
+    (rule + components) **and** the message (:func:`engineering.services.runs.finding_key`) — component-less findings
+    share an identity (``|PBC-K-001|`` is every missing role), so a waiver covers only the finding it reviewed."""
+    return runs.finding_key(finding.identity, finding.message)
 
 
 def _acknowledged(project_uid):
@@ -141,7 +139,7 @@ def _apply(project: Project, run: Run, lines: list[Line], *, engine_rules, conte
     check_version(locked, expected_version)
     if locked.bom_lock is not None or locked.status != ProjectStatus.PLANNED:
         raise Conflict("bom_already_locked", "The BOM of this project is already locked.")
-    carried = set(_acknowledged(locked.uid).values_list("identity", "message"))
+    carried = runs.acknowledged_keys(SubjectType.PROJECT_BOM, locked.uid)
     given = {}
     for item in acknowledgements:
         given.setdefault(item["rule_code"], item["reason"].strip())

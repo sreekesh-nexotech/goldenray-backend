@@ -17,6 +17,8 @@ from leads.tests.conftest import load_fixture
 from legacy.services import forms as form_service
 from legacy.services.ids import SHIM_ID_OFFSET
 from legacy.tests.conftest import ordered, throttled
+from quotations.models import EmailLog
+from quotations.models.choices import EmailChannel
 
 pytestmark = pytest.mark.django_db
 FORMS = load_fixture("forms.json")
@@ -92,6 +94,41 @@ def test_otp_send_and_verify_record_the_quote_enquiry(api_client):
         "quote_id": f"QUOTE_{lead.uid.hex[:8].upper()}",
     }
     assert (lead.name, lead.form, lead.source_url, lead.phone_e164) == ("Otp Lead", "QUOTE_REQUEST", "/advanced-calculator", "+919876500041") and lead.otp_verified_at
+
+
+REPEAT_BODY = {"status": "approved", "message": "We already have your details! Our team will contact you soon."}
+
+
+def _verify(api_client, phone, **extra):
+    assert api_client.post("/legacy/api/send-otp/", {"phone_number": phone}, format="json").status_code == 200
+    return api_client.post("/legacy/api/verify-otp/", {"phone_number": phone, "code": twilio_verify.FAKE_APPROVED_CODE, **extra}, format="json")
+
+
+@pytest.mark.parametrize("stored_phone", ["+919876500051", "9876500051"])
+def test_verify_otp_answers_the_legacy_repeat_message_for_an_imported_sent_quote(api_client, stored_phone):
+    """Legacy ``SentQuote.objects.filter(phone=…).exists()``: an imported ``sent_quotes`` row (quotations e-mail log,
+    LEGACY_LINK) for the number → the repeat-number body without ``quote_id``; the enquiry is still recorded."""
+    EmailLog.objects.create(channel=EmailChannel.LEGACY_LINK, to=stored_phone, legacy_ref="QUOTE_ABCDEF12")
+    response = _verify(api_client, "9876500051", name="Repeat")
+    assert response.status_code == 200 and response.json() == REPEAT_BODY
+    assert Lead.objects.filter(phone_e164="+919876500051", form="QUOTE_REQUEST").count() == 1
+
+
+def test_verify_otp_answers_the_repeat_message_after_an_earlier_shim_quote_request(api_client):
+    first = _verify(api_client, "9876500052", name="Twice").json()
+    assert first["message"] == "OTP verified successfully. Your quote request has been recorded." and first["quote_id"].startswith("QUOTE_")
+    assert _verify(api_client, "9876500052", name="Twice").json() == REPEAT_BODY
+    # another number, and a non-quote enquiry for the same number, are not repeats
+    other = _verify(api_client, "9876500053", name="Other").json()
+    assert "quote_id" in other
+    assert Lead.objects.filter(phone_e164="+919876500052").count() == 2
+
+
+def test_verify_otp_is_not_a_repeat_after_a_contact_form_or_an_e_mail_log(api_client):
+    api_client.post(PATHS["lead_collection_home"], {**FORMS["lead_collection_home"]["contact_page"]["request"], "phone_number": "9876500054"}, format="json")
+    EmailLog.objects.create(channel=EmailChannel.LEGACY_LINK, to="+919876500099", legacy_ref="QUOTE_0000FFFF")
+    response = _verify(api_client, "9876500054")
+    assert response.status_code == 200 and "quote_id" in response.json()
 
 
 def test_otp_refuses_foreign_numbers_before_the_provider(api_client):

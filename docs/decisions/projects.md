@@ -93,6 +93,7 @@ payload):
   "customer_uid": "<uuid>",          // required; a merged customer is followed to the survivor
   "lead_uid": "<uuid>" | null,
   "agreement_uid": "<uuid>" | null,
+  "quotation_version_uid": "<uuid>" | null,   // stored on the project (wired at the wave 4b integration)
   "system_type": "ON_GRID" | "HYBRID" | "UNDECIDED" | "OFF_GRID",   // anything else is stored empty
   "size_kw": 5 | "5.00" | null,      // > 0, stored numeric(6,2)
   "phase": "1P" | "3P" | null,
@@ -100,7 +101,9 @@ payload):
 }
 ```
 
-Handled only when `PROJECTS_AUTO_CREATE_ON_RELEASE` is true (env, default false). Tests emit the event directly.
+Handled only when `PROJECTS_AUTO_CREATE_ON_RELEASE` is true (env, default false). Tests emit the event directly; the
+producer side is covered end to end by `site_inspections/tests/test_lifecycle.py::TestRelease::test_release_creates_the_project_with_the_documented_payload`
+(site_inspections sends `size_kw` from `quoted_size_kw`, `phase` 1P/3P or null, `lead_uid` null).
 
 ## Legacy mapping
 
@@ -165,7 +168,9 @@ BOM. `report_flarize_bom_state` reports it as `ui_state_not_migrated`; nothing i
 
 * **Waiver scope (fixed).** Carried acknowledgements matched on the engineering identity alone; component-less findings
   share it, so one waiver of PBC-K-001 "STRUCTURE missing" let a BOM with no INVERTER lock. Carry-over now needs the same
-  identity and message (`projects/services/bom_lock.py::_key`); `TestWaiverScope`.
+  identity and message (`projects/services/bom_lock.py::_key`); `TestWaiverScope`. At the wave 4b integration the key
+  moved to engineering (`engineering.services.runs.finding_key` / `acknowledged_keys`), which the pack release gate now
+  uses too; projects calls the shared implementation.
 * **Lock gate parity.** All 186 Flarize lock records re-checked with the platform's checker call shape (architecture,
   phase, sysType, lines) over the Flarize catalog and battery master: 186/186 give the recorded `engineeringStatus` and
   exactly the recorded acknowledged rule set.

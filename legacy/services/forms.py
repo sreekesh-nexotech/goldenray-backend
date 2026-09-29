@@ -9,9 +9,11 @@ success shapes, phone numbers as 10 national digits, labels for choice values, l
 
 * ``lead-collection-home``: no OTP (DV-61: the legacy form had none).
 * ``verify-otp``: an approved code also records the enquiry, as the legacy ``record_lead`` did (form QUOTE_REQUEST,
-  page ``/advanced-calculator``). The legacy ``SentQuote`` row (``quote_id``) belongs to the quotations package: the
-  shim answers the legacy success body with ``quote_id`` = ``QUOTE_<8 hex of the lead uid>`` until quotations is
-  integrated (listed in docs/decisions/legacy-shim.md).
+  page ``/advanced-calculator``). A repeat number answers the legacy "We already have your details!" body (no
+  ``quote_id``), as the legacy ``SentQuote.objects.filter(phone=…).exists()`` did: the number has an imported
+  ``sent_quotes`` row (``quotations_email_log``, LEGACY_LINK) or an earlier quote enquiry recorded by this shim. The
+  quotations package has no write service for a website quote request, so a first request answers
+  ``quote_id`` = ``QUOTE_<8 hex of the lead uid>`` (docs/decisions/legacy-shim.md).
 """
 
 from __future__ import annotations
@@ -28,6 +30,8 @@ from leads.models import Lead, OtpRequest
 from leads.serializers.public import AffiliateSubmitSerializer, LeadSubmitSerializer, WarrantySubmitSerializer
 from leads.services import intake, otp
 from legacy.services.ids import BACKEND, CMS, legacy_id, resolve_pk
+from quotations.models import EmailLog
+from quotations.models.choices import EmailChannel
 
 _DATETIME = serializers.DateTimeField()
 LEAD_FIELDS = {"phone_number": "phone", "source": "form"}
@@ -35,6 +39,8 @@ LEAD_MESSAGE = "Thank you! We'll be in touch shortly."
 AFFILIATE_MESSAGE = "Message sent!"
 WARRANTY_MESSAGE = "Service request received. Our team will contact you shortly."
 APPLICATION_MESSAGE = "Application received. Our team will get in touch if there's a fit."
+QUOTE_REQUEST_PAGE = "/advanced-calculator"
+REPEAT_QUOTE_MESSAGE = "We already have your details! Our team will contact you soon."
 
 
 class LegacyValidationFailed(DomainError):
@@ -148,9 +154,19 @@ def send_otp(body, *, ip: str | None) -> dict:
 def verify_otp(body, *, ip: str | None) -> dict:
     data, phone = _otp_phone(_VerifyOtp, body)
     verification = otp.verify_code(phone_e164=phone, code=data["code"], ip=ip)
-    lead_data = {"name": data.get("name", ""), "phone_e164": phone, "form": Lead.Form.QUOTE_REQUEST, "source_url": "/advanced-calculator", "payload": {}}
+    lead_data = {"name": data.get("name", ""), "phone_e164": phone, "form": Lead.Form.QUOTE_REQUEST, "source_url": QUOTE_REQUEST_PAGE, "payload": {}}
     lead = intake.submit_lead(data=lead_data, ip=ip, verification_token=verification.token)
+    if _is_repeat_quote_request(phone, lead):
+        return {"status": "approved", "message": REPEAT_QUOTE_MESSAGE}
     return {"status": "approved", "message": "OTP verified successfully. Your quote request has been recorded.", "quote_id": f"QUOTE_{lead.uid.hex[:8].upper()}"}
+
+
+def _is_repeat_quote_request(phone: str, lead: Lead) -> bool:
+    """The legacy ``SentQuote`` check: an imported ``sent_quotes`` row for the number (stored as the legacy wrote it:
+    ``+91…``, or 10 national digits for older rows) or an earlier quote enquiry through this form."""
+    if EmailLog.objects.filter(channel=EmailChannel.LEGACY_LINK, to__in=(phone, national_digits(phone))).exists():
+        return True
+    return Lead.objects.filter(phone_e164=phone, form=Lead.Form.QUOTE_REQUEST, source_url=QUOTE_REQUEST_PAGE).exclude(pk=lead.pk).exists()
 
 
 # ── affiliate / warranty ─────────────────────────────────────────────────────────────────────────────────────────

@@ -72,7 +72,10 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
    ACTIVE rule set parsed from `engineering_rule_set.rules`. One `engineering_run` per checker pass over a version
    (`summary.scopes.<pack>` holds each pack's status, counts and deterministic key; findings carry `context.pack`).
 6. **Acknowledgements carry over** (DV-101): a finding's `identity` is `pack|rule|component ids`; an acknowledgement on
-   any run of a subject counts in later runs of it. Acknowledging a BLOCK finding is a waiver (`engineering.finding_waived`
+   any run of a subject counts in later runs of it for the finding with the same identity **and** message
+   (`engineering.services.runs.finding_key` / `acknowledged_keys`, wave 4b integration): component-less findings share
+   one identity (`<pack>|PBC-K-001|` is every missing role), so a waiver covers only the finding it reviewed — the
+   pack release gate and the project BOM lock use this one implementation. Acknowledging a BLOCK finding is a waiver (`engineering.finding_waived`
    audit action) and lets the pack into the next release (`PACK_ENGINEERING_WAIVED` INFO).
 7. **Release pricing** (DV-100): component prices and market rates from the current PriceRelease, the pack formula
    from the approved configuration; the released price is `price_pack` for the FLAT roof at 0 km (swaps, roof add-ons

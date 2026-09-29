@@ -105,6 +105,11 @@ def release(instance: Inspection, *, user, expected_version=None) -> Inspection:
             "agreement_uid": str(inspection.agreement_uid) if inspection.agreement_uid else None,
             "quotation_version_uid": str(inspection.quotation_version_uid) if inspection.quotation_version_uid else None,
             "system_type": inspection.system_type,
+            # projects' contract (docs/decisions/projects.md "Event contracts"): the quoted size and a project phase
+            # (NC — not confirmed — is none); an inspection is not linked to a lead.
+            "size_kw": str(inspection.quoted_size_kw) if inspection.quoted_size_kw is not None else None,
+            "phase": inspection.phase if inspection.phase in ("1P", "3P") else None,
+            "lead_uid": None,
             "released_at": now.isoformat(),
             "released_by_uid": str(user.uid) if getattr(user, "uid", None) else None,
         },

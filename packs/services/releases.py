@@ -213,7 +213,7 @@ def build(*, at: str | None = None) -> Build:
     rates = price_release.payload.get("market_rates_by_key") or {}
     priced_config = engine.pricing_config(config, rates)
     parsed_rules = rule_sets.engine_rule_set(rule_set)
-    acknowledged = runs.acknowledged_identities(SubjectType.PACK_CONFIG_VERSION, version.uid)
+    acknowledged = runs.acknowledged_keys(SubjectType.PACK_CONFIG_VERSION, version.uid)
     env = {"catalog": engine.checker_catalog(ctx.catalog, config), "batteryMaster": ctx.battery_master, "catalogVersion": price_release.number}
     released_components = price_release.payload.get("components") or {}
     pins = version_pins(version)
@@ -268,7 +268,7 @@ def build(*, at: str | None = None) -> Build:
             continue
         result.checks.append((spec.key, check))
         blockers = [f for f in check.findings if f.severity == Severity.BLOCK]
-        open_blockers = [f for f in blockers if runs.identity(spec.key, f.rule_id, f.component_ids) not in acknowledged]
+        open_blockers = [f for f in blockers if runs.finding_key(runs.identity(spec.key, f.rule_id, f.component_ids), f.message) not in acknowledged]
         if open_blockers:
             reasons.append("PACK_ENGINEERING_BLOCKED")
             report.add(
