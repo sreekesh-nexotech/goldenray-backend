@@ -121,7 +121,17 @@ de-duplication hold in either order), but running it after them is what produces
     (`attendance.services.legacy_import.diff_report`, split out of `status_diff_report`). The report is written with
     its SHA-256 (`--attendance-report`); the check is `skipped` (a failure unless `--allow-skipped`) until run with
     `--attendance-signoff <that sha256>` — the HR sign-off PLAN asks for is bound to the exact report HR saw.
-15. **Idempotency fixes found by the rehearsals.** `import_flarize_pack_config` counted the registry pins as
+15. **Reset links reach the Site Inspection engineers; re-runs never reactivate.** PLAN §7.5 "engineers → users
+    (Field Engineer, reset)": `accounts.services.legacy_import.USER_MAPS` names every (source, map table) whose rows
+    became staff accounts — CMS, BACKEND, FLARIZE and SI `engineers` — so `issue_reset_links` (`--send-reset-links`)
+    and check #6 cover the engineers. An imported placeholder address (any `*.invalid`: `migrated.invalid`,
+    `site-engineers.invalid`) is never mailed and is not a #6 failure; once staff replaced it, the next
+    `import_si --send-reset-links` sends the link. A re-run (resume, a second rehearsal pass) never reactivates an
+    account deactivated on the platform (`kept_inactive`, listed) — in `_import_user` (every website/Flarize account)
+    and in the SI engineer import — otherwise a departed person would be reactivated and mailed a link.
+16. **Check #1 and aged ADMS evidence.** `adms_requests` expected by #1 are the rows inside the retention window **or
+    already mapped**: evidence imported at the cutover is not an "orphan" when #1 runs after it aged out.
+17. **Idempotency fixes found by the rehearsals.** `import_flarize_pack_config` counted the registry pins as
     "updated" on every run although nothing changed; it now counts only pins written (created, changed, removed).
 
 ## Legacy mapping
@@ -207,6 +217,11 @@ All committed fixtures are read-only exports of the legacy sources, masked; migr
   (`issue_reset_links` covers Flarize accounts). Tests in `accounts/tests/test_legacy_import.py`.
 * `company/services/legacy_import.py`: new `import_flarize_company_profile`. Tests in `company/tests/…`.
 * `media/services/legacy_import.py`: new `import_flarize_cms_assets`. Tests in `media/tests/…`.
+* `accounts/services/legacy_import.py` (review): `USER_MAPS` (+ SI `engineers`) for `migrated_users`/
+  `issue_reset_links`, `placeholder_address()`, and `_import_user` never reactivates a platform-deactivated account
+  (`kept_inactive`). `site_inspections/services/legacy_import.py` (review): the engineer re-import keeps a
+  platform deactivation (`kept_inactive`). Tests in `accounts/tests/`, `site_inspections/tests/test_legacy_import.py`,
+  `migrations_tools/tests/test_import_ops.py`.
 * `agreements/services/legacy_import.py`: `import_pa_agreements(…, uid_for=None)` (optional; default unchanged).
 * `attendance/services/legacy_import.py`: `status_diff_report` split into `_v3_days` / `_compare` (unchanged result)
   and a read-only `diff_report`.

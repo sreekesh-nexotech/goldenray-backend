@@ -39,7 +39,7 @@ from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
@@ -60,6 +60,10 @@ CMS_USER_TABLE = "accounts_admin_user"
 BACKEND_USER_TABLE = "auth_user"
 FLARIZE_USER_TABLE = "users.json"
 USER_TABLES = (CMS_USER_TABLE, BACKEND_USER_TABLE, FLARIZE_USER_TABLE)
+# every (source system, legacy map table) whose rows became staff accounts that must set a password at the cutover —
+# the Site Inspection engineers too (PLAN §7.5 "engineers → users (Field Engineer, reset)",
+# ``site_inspections.services.legacy_import.import_engineers``)
+USER_MAPS = ((CMS, CMS_USER_TABLE), (BACKEND, BACKEND_USER_TABLE), (FLARIZE, FLARIZE_USER_TABLE), (LegacyMap.SourceSystem.SI, "engineers"))
 # Flarize ``users.json`` role → (platform role slug, ``title``) — PLAN §7.4 row 1; the sales roles keep their Flarize
 # flavour in ``title`` (``ENGINEER`` is the spelling users.json actually holds for ENGINEERING).
 FLARIZE_ROLES = {
@@ -312,6 +316,10 @@ def _import_user(row: dict, report: Report, *, system: str, table: str, role: Ro
         _link(system, table, source_id, account)
         report.created += 1
         return
+    if values["is_active"] and not existing.is_active:
+        # deactivated on the platform: a re-run never reactivates it (the source may still deactivate)
+        report.violation(source_id, "kept_inactive", f"{existing.email} was deactivated on the platform; the re-run keeps it inactive.")
+        values["is_active"] = False
     if role is not None and existing.role_id != role.pk and existing.must_reset_password:
         values["role_id"] = role.pk  # the source still decides until the person has taken the account over
     changed = {name: value for name, value in values.items() if getattr(existing, name) != value}
@@ -390,8 +398,16 @@ def import_flarize_users(rows: Iterable[dict], *, user=None, dry_run: bool = Fal
 # ── Reset links (cutover) ────────────────────────────────────────────────────────────────────────────────────────
 def migrated_users():
     """Live accounts mapped from a legacy user table."""
-    targets = LegacyMap.objects.filter(source_table__in=USER_TABLES, target_table=User._meta.db_table).values("target_id")
+    pairs = Q()
+    for system, table in USER_MAPS:
+        pairs |= Q(source_system=system, source_table=table)
+    targets = LegacyMap.objects.filter(pairs, target_table=User._meta.db_table).values("target_id")
     return User.objects.filter(pk__in=targets)
+
+
+def placeholder_address(email: str) -> bool:
+    """An address an importer made up (``*.invalid``: ``migrated.invalid``, ``site-engineers.invalid``) — never mailed."""
+    return str(email or "").lower().endswith(".invalid")
 
 
 @transaction.atomic
@@ -407,7 +423,7 @@ def issue_reset_links(*, user=None, send: bool = True) -> dict:
         if not account.must_reset_password:
             report.skipped += 1
             continue
-        if not account.is_active or account.email.endswith(f"@{MIGRATED_DOMAIN}"):
+        if not account.is_active or placeholder_address(account.email):
             report.violation(account.uid, "not_sent", "inactive account or no real e-mail address; no link sent.")
             report.skipped += 1
             continue

@@ -134,3 +134,40 @@ class TestEssl:
         out = run("import_essl", "--source-fixture", str(ESSL_CAPTURED), "--dry-run")
         assert "DRY RUN" in out and not list(tmp_path.glob("essl-agent-credentials-*.json")) and not Agent.objects.exists()
         assert list(tmp_path.glob("essl-attendance-diff-*.json"))  # the diff of a dry run is still handed over
+
+
+def test_si_engineers_get_reset_links_once_their_placeholder_address_is_replaced():
+    """PLAN §7.5: SI engineers → Field Engineer users with a forced reset. A placeholder (``.invalid``) address is never
+    mailed; once staff replaced it, ``import_si --send-reset-links`` issues the link and #6 covers SI accounts."""
+    from accounts.models import PasswordReset, User
+
+    seed_roles()
+    out = run("import_si", "--source-file", str(SI_DB), "--send-reset-links")
+    engineers = User.objects.filter(pk__in=LegacyMap.objects.filter(source_system="SI", source_table="engineers").values("target_id"))
+    assert engineers.exists() and all(account.email.endswith(".invalid") for account in engineers)
+    assert "reset links: 0 sent" in out and not PasswordReset.objects.filter(user__in=engineers).exists()
+    with pytest.raises(CommandError, match="#6"):
+        User.objects.filter(pk=engineers[0].pk).update(email="engineer.one@example.com")
+        run("verify_migration", "--source", "si", "--si-file", str(SI_DB), "--check", "6")
+    out = run("import_si", "--source-file", str(SI_DB), "--send-reset-links")
+    assert "reset links: 1 sent" in out and PasswordReset.objects.filter(user=engineers[0]).count() == 1
+    assert "#6  PASS" in run("verify_migration", "--source", "si", "--si-file", str(SI_DB), "--check", "6")
+
+
+def test_essl_row_keys_keep_adms_evidence_imported_before_it_aged_out():
+    """#1 must not call ADMS evidence imported inside the retention window an orphan once it is older than the window
+    (verify runs days after the cutover import)."""
+    from datetime import timedelta
+
+    from django.utils import timezone
+
+    from migrations_tools.services import essl
+
+    now = timezone.now()
+    rows = [
+        {"id": 1, "received_at": (now - timedelta(days=40)).isoformat()},
+        {"id": 2, "received_at": (now - timedelta(days=1)).isoformat()},
+        {"id": 3, "received_at": (now - timedelta(days=90)).isoformat()},
+    ]
+    LegacyMap.objects.create(source_system="ESSL", source_table="adms_requests", source_id="1", target_table="devices_adms_request", target_id=1)
+    assert sorted(essl.PLAN.keys_of("adms_requests", rows)) == [("adms_requests", "1"), ("adms_requests", "2")]

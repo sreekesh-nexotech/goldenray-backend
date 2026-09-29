@@ -2,20 +2,21 @@
 
 Release artefact of PLAN §7.1 ("rehearsed at least twice per source; the rehearsal report is a release artefact") for
 `import_flarize`, `import_pa`, `import_si`, `import_essl` and `verify_migration` #8, #9, #11. Two full rehearsals
-(`rh1`, `rh2`) on 2026-09-29, each on a **fresh** private target database, each running every import **twice**; plus
-one rehearsal of the seeded eSSL database. The staging rehearsal repeats the same commands against production copies
+(`rh1`, `rh2`) on 2026-09-29, each on a **fresh** private target database, each running every import **twice**; plus,
+in each, a rehearsal of the seeded eSSL database on another fresh target. Re-run by the package review on the final
+code (after its fixes, see *Findings* 6–8): every count below is what those runs printed. The staging rehearsal repeats the same commands against production copies
 at the freeze windows (C5 Flarize, C6 eSSL, C8 PA/SI).
 
 ## Environment
 
 | What | Value |
 |---|---|
-| Target | fresh `flarize_wp_migration_ops_rh1` / `_rh2`: `migrate`, `ensure_audit_partitions --months 3`, `seed_roles`; settings `flarize.settings.dev`, media under a scratch folder, Redis db 13; dropped afterwards |
-| Website sources (first, so the Flarize import produces the B-2 list) | private restores of `/home/user/platform-reference/uat/legacy_{blog_cms,goldenapp}.dump` (`migration_ops_blog_cms`, `migration_ops_goldenapp`), read-only sessions; the shared `legacy_*` databases were never touched |
+| Target | fresh `flarize_rv_mops_rh1` / `_rh2`: `migrate`, `ensure_audit_partitions --months 3`, `seed_roles`; settings `flarize.settings.dev`, media under a scratch folder, Redis db 13; dropped afterwards |
+| Website sources (first, so the Flarize import produces the B-2 list) | private restores of `/home/user/platform-reference/uat/legacy_{blog_cms,goldenapp}.dump` (`mops_rv_blog_cms`, `mops_rv_goldenapp`), read-only sessions; the shared `legacy_*` databases were never touched |
 | Flarize | the real folder `/home/user/flarize-main/flarize/data` (read-only; 31 files, 675 page-designer asset files) |
 | Purchase Agreement | `crs` = `agreements/tests/fixtures/pa/flarize_agr.json` (the page's own records, recorded by the agreements package), `admin` = `migrations_tools/tests/fixtures/ops/pa/admin-localstorage.json`, Upstash catalog = `agreements/tests/fixtures/pa/catalog.json` |
 | Site Inspection | `migrations_tools/tests/fixtures/ops/si/flarize-site-inspection.db` — built by the SI app's own `lib/db.ts` + `scripts/seed.ts` (`build_si_sqlite.mjs`), opened `mode=ro` |
-| eSSL | `essl_wp_migration_ops` (eSSL alembic head + `scripts/seed.py`) and `essl_wp_migration_ops_full` (alembic head + the attendance package's capture of a running eSSL: a month of punches, v3 days, leave, holidays, an ADMS/agent duplicate), both private, read-only sessions; dropped afterwards |
+| eSSL | `essl_rv_mops` (eSSL alembic head + `scripts/seed.py`) and `essl_rv_mops_full` (alembic head + the attendance package's capture of a running eSSL: a month of punches, v3 days, leave, holidays, an ADMS/agent duplicate), both private, read-only sessions; dropped afterwards |
 | Branch | `wp/migration-ops` |
 
 ## Commands, in order (per rehearsal)
@@ -27,15 +28,15 @@ import_flarize --source-dir $FLARIZE --json flarize-1.json
 import_pa --export crs=… --export admin=… --catalog … --json pa-1.json
 import_si --source-file flarize-site-inspection.db --json si-1.json
 import_essl --source-url $ESSL_FULL --diff-report essl-diff-1.json --credentials-file essl-credentials.json
-import_flarize … --send-reset-links ; import_pa … ; import_si … ; import_essl …       # second runs
+import_flarize … --send-reset-links ; import_flarize … ; import_pa … ; import_si … --send-reset-links ; import_essl …   # second (and third) runs
 verify_migration --source flarize --flarize-dir $FLARIZE --offline
 verify_migration --source pa --pa-export … --source si --si-file … --offline
 verify_migration --source essl --essl-url $ESSL_FULL --offline --attendance-report hr-report.json
 verify_migration --source essl --essl-url $ESSL_FULL --offline --attendance-signoff <sha256 of hr-report.json>
 ```
 
-Timings (rh1 / rh2): Flarize dry run 60 / 62 s, first run 64 / 66 s, second run 40 / 39 s; PA 3 s, SI 3–4 s, eSSL
-3–4 s; each verification ≤ 6 s.
+Timings (rh1): Flarize dry run 62 s, first run 63 s, second/third run 37 s; PA 3 s, SI 2–3 s, eSSL 3 s; each
+verification ≤ 6 s (rh2 within a few seconds of rh1).
 
 ## 1. Dry run
 
@@ -95,9 +96,9 @@ LATE 3 → 1, PRESENT 13 → 10, WEEKLY_OFF 24 → 25.
 
 | Import | Created | Updated | Note |
 |---|---|---|---|
-| `import_flarize` | 2 | 0 | PriceRelease #2 / PackRelease #2: `import_pa` had added the KSEB statutory fees to the pricing masters between the two runs, so the release content changed (the only payload difference is `statutory_fees`); a **third** run: 0 created, 0 updated, releases reused. The pricing importer lists `market_rate_set_locked` (the imported set is the ACTIVE one since PriceRelease #1 — never rewritten). `--send-reset-links`: 5 links issued. |
+| `import_flarize` | 2 | 0 | PriceRelease #2 / PackRelease #2: `import_pa` had added the KSEB statutory fees to the pricing masters between the two runs, so the release content changed (the only payload difference is `statutory_fees`); a **third** run: 0 created, 0 updated, releases reused. The pricing importer lists `market_rate_set_locked` (the imported set is the ACTIVE one since PriceRelease #1 — never rewritten). `--send-reset-links`: 5 links issued (the Flarize accounts); the 2 SI engineers are listed (placeholder `.invalid` addresses, never mailed). |
 | `import_pa` | 0 | 0 | |
-| `import_si` | 0 | 0 | |
+| `import_si` | 0 | 0 | `--send-reset-links`: 0 sent (the engineers still hold placeholder addresses; listed) |
 | `import_essl` | 0 | 0 | no new credential |
 
 ## 4. Verification (rh1 and rh2)
@@ -105,7 +106,7 @@ LATE 3 → 1, PRESENT 13 → 10, WEEKLY_OFF 24 → 25.
 | Source | #1 | #2 | #4 | #6 | #8 | #9 | #11 | #12 |
 |---|---|---|---|---|---|---|---|---|
 | Flarize | pass (27 files) | pass (33 tables) | pass (341 private copies checksummed) | pass (5 accounts, links issued) | **pass** | **pass** | n/a | pass (13 steps) |
-| PA + SI | pass (50 rows) | pass | pass | pass | n/a | n/a | n/a | pass (7 steps) |
+| PA + SI | pass (50 rows) | pass | pass | pass (2 SI engineers, placeholder addresses) | n/a | n/a | n/a | pass (7 steps) |
 | eSSL | pass (194 rows) | pass | pass | pass | n/a | n/a | **skipped → pass** | pass (4 steps) |
 
 * **#8** — PackRelease #1 (configuration v16, PriceRelease #1): the 11 packs Flarize can sell are released at exactly
@@ -120,7 +121,7 @@ LATE 3 → 1, PRESENT 13 → 10, WEEKLY_OFF 24 → 25.
 
 ## 5. Seeded eSSL database
 
-`essl_wp_migration_ops` (alembic head + `scripts/seed.py`) into a fresh target: 7 created (admin login, 2 shifts,
+`essl_rv_mops` (alembic head + `scripts/seed.py`) into a fresh target: 7 created (admin login, 2 shifts,
 3 offices, device MARS-01); listed: the admin's missing e-mail, the seeded default password (not carried over: the
 account sets a new one through a reset link), the NIGHT shift half-day rule. Second run 0 / 0. #1, #2, #4, #6, #12
 pass; #11 skipped until signed off (0 punches, 0 days).
@@ -140,3 +141,12 @@ pass; #11 skipped until signed off (0 punches, 0 days).
    pack order than the reference; the check matches packs by their inputs.
 5. Every scratch database (targets, website restores, eSSL fixtures) and scratch media folder was dropped after the
    rehearsals.
+6. **(review) SI engineers never got a reset link** — `issue_reset_links` and #6 only covered the CMS/backend/Flarize
+   map tables, so PLAN §7.5 "engineers → users (…, reset)" was unmet. Fixed: `USER_MAPS` includes SI `engineers`;
+   placeholder `*.invalid` addresses are never mailed (listed), a replaced address gets its link on the next
+   `import_si --send-reset-links`.
+7. **(review) Re-runs reactivated deactivated accounts** — a second pass rewrote `is_active` from the source, so an
+   account staff had deactivated came back (and would then be mailed a reset link). Fixed for every imported account
+   and the SI engineers (`kept_inactive`, listed).
+8. **(review) #1 and aged ADMS evidence** — `adms_requests` imported inside the 30-day window became "orphans" for #1
+   once older than the window; mapped rows now stay expected.

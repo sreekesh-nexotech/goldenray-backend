@@ -91,11 +91,13 @@ def _recent_requests(rows):
     from devices.services import adms_evidence
 
     cutoff = timezone.now() - timedelta(days=adms_evidence.retention_days())
+    # evidence imported while it was inside the window stays expected (verify may run after it aged out)
+    mapped = set(LegacyMap.objects.filter(source_system=ESSL, source_table="adms_requests").values_list("source_id", flat=True))
     keys = []
     for row in rows:
         received = row.get("received_at")
         received = parse_datetime(received) if isinstance(received, str) else received
-        if received is not None and received >= cutoff:
+        if str(row["id"]) in mapped or (received is not None and received >= cutoff):
             keys.append(("adms_requests", str(row["id"])))
     return keys
 

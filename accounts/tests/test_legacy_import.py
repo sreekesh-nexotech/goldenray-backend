@@ -238,3 +238,16 @@ class TestFlarizeUsers:
         result = legacy_import.import_flarize_users(self.ROWS[:1])
         assert [violation["code"] for violation in result["violations"]] == ["email_adopted"]
         assert User.objects.get(email="ada@example.com").role.slug == "sales-head"
+
+
+@pytest.mark.django_db
+def test_rerun_never_reactivates_an_account_deactivated_on_the_platform():
+    """Re-running an import (resume, rehearsal) must not undo a deactivation made on the platform; the source may still
+    deactivate."""
+    seed_roles()
+    row = {"userId": "sales-001", "name": "Sal Es", "email": "sales1@example.com", "role": "SALES", "status": "ACTIVE"}
+    legacy_import.import_flarize_users([row])
+    User.objects.filter(email="sales1@example.com").update(is_active=False)
+    result = legacy_import.import_flarize_users([row])
+    assert not User.all_objects.get(email="sales1@example.com").is_active and result["updated"] == 0
+    assert [violation["code"] for violation in result["violations"]] == ["kept_inactive"]

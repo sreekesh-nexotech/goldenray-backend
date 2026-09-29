@@ -246,11 +246,14 @@ class Verifier:
     # 6 ───────────────────────────────────────────────────────────────────────────────────────────────────────────
     def users(self) -> CheckResult:
         from accounts.models import PasswordReset, User
-        from accounts.services.legacy_import import BACKEND_USER_TABLE, CMS_USER_TABLE, FLARIZE_USER_TABLE, MIGRATED_DOMAIN
+        from accounts.services.legacy_import import USER_MAPS, placeholder_address
 
         result = CheckResult(6, "users: role, reset link, old passwords refused")
-        tables = [table for system, table in (("CMS", CMS_USER_TABLE), ("BACKEND", BACKEND_USER_TABLE), ("FLARIZE", FLARIZE_USER_TABLE)) if system in self.sources]
-        targets = LegacyMap.objects.filter(source_system__in=list(self.sources), source_table__in=tables).values("target_id")
+        pairs = models.Q(pk__in=[])
+        for system, table in USER_MAPS:
+            if system in self.sources:
+                pairs |= models.Q(source_system=system, source_table=table)
+        targets = LegacyMap.objects.filter(pairs).values("target_id")
         users = list(User.all_objects.filter(pk__in=targets).select_related("role"))
         for account in users:
             if account.deleted_at is not None:
@@ -259,7 +262,7 @@ class Verifier:
                 result.fail(f"{account.email}: no live role")
             if account.has_usable_password() and account.password_changed_at is None:
                 result.fail(f"{account.email}: carries a usable password it never set on the platform")
-            real_address = not account.email.endswith(f"@{MIGRATED_DOMAIN}")
+            real_address = not placeholder_address(account.email)
             if account.is_active and account.must_reset_password and real_address and not PasswordReset.all_objects.filter(user=account).exists():
                 result.fail(f"{account.email}: no reset link issued (run the import with --send-reset-links at the cutover)")
         result.summary = f"{len(users)} migrated accounts"
