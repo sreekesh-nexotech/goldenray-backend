@@ -7,6 +7,10 @@ Published postings only (a closed posting still renders, but it no longer belong
 from __future__ import annotations
 
 from careers.models import JobPosition
+from careers.services.positions import CACHE_NAMESPACE
+
+#: The cached ``sitemap/entries/`` depends on the positions (every position write bumps this namespace).
+SITEMAP_CACHE_NAMESPACES = (CACHE_NAMESPACE,)
 
 
 def sitemap_entries() -> list[dict]:

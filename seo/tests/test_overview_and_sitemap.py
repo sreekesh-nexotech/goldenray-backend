@@ -14,6 +14,8 @@ pytestmark = pytest.mark.django_db
 OVERVIEW = "/api/v1/seo/overview/"
 SITEMAP = "/api/public/v1/sitemap/entries/"
 GOOD_DESCRIPTION = "A description that is long enough to read well in search results for this entry, ok."
+#: Every integrated provider: blog, maintained pages, FAQs, job positions (wave-1 integration).
+ALL_KINDS = ["blog", "faq", "job", "page"]
 
 
 @pytest.fixture
@@ -61,11 +63,11 @@ class TestOverview:
         EntryFactory.create_batch(3)  # errors
         EntryFactory(status=Entry.Status.ARCHIVED, archived_at=timezone.now())  # never listed
         body = client.get(f"{OVERVIEW}?page_size=2").json()
-        assert body["count"] == 4 and len(body["results"]) == 2 and body["next"] and body["kinds"] == ["blog"]
+        assert body["count"] == 4 and len(body["results"]) == 2 and body["next"] and body["kinds"] == ALL_KINDS
         assert body["counts"] == {"error": 3, "warning": 0, "ok": 1}
         assert [row["seo_status"] for row in client.get(OVERVIEW).json()["results"]] == ["error", "error", "error", "ok"]
         assert [row["uid"] for row in client.get(f"{OVERVIEW}?seo_status=ok").json()["results"]] == [str(ok.uid)]
-        assert client.get(f"{OVERVIEW}?kind=page").json() == {"results": [], "count": 0, "next": None, "previous": None, "counts": {"error": 0, "warning": 0, "ok": 0}, "kinds": ["blog"]}
+        assert client.get(f"{OVERVIEW}?kind=page").json() == {"results": [], "count": 0, "next": None, "previous": None, "counts": {"error": 0, "warning": 0, "ok": 0}, "kinds": ALL_KINDS}
         assert client.get(f"{OVERVIEW}?seo_status=bad").status_code == 400
 
     def test_soft_deleted_seo_block_counts_as_missing(self, client):
@@ -83,6 +85,42 @@ class TestOverview:
         body = client.get(OVERVIEW).json()
         assert body["count"] == 3 and body["counts"]["error"] == 3 and sorted(body["kinds"]) == ["blog", "page"]
         assert client.get(f"{OVERVIEW}?kind=page").json()["count"] == 1
+
+    def test_pages_faqs_and_positions_are_listed(self, client):
+        """The other website apps' SEO-bearing records join the overview (their providers, wave-1 integration); the SQL
+        status agrees with each record's own ``seo_status()``, archived records are left out."""
+        from careers.models import JobPosition
+        from careers.tests.factories import JobPositionFactory
+        from faqs.models import Faq
+        from faqs.tests.factories import FaqFactory
+        from sitepages.models import Page
+        from sitepages.services.pages import default_seo
+        from sitepages.tests.factories import PageFactory, PageSeoFactory
+
+        good = PageSeoFactory(page=PageFactory(route="/about", title="About"), seo_title="About Flarize", meta_description=GOOD_DESCRIPTION).page
+        bare = PageFactory(route="/subsidy", title="Subsidy")
+        gone = PageSeoFactory(page=PageFactory(route="/emi", title="EMI"), meta_description=GOOD_DESCRIPTION)
+        gone.soft_delete()
+        PageFactory(status=Page.Status.ARCHIVED)
+        faq = FaqFactory(page=good, question="Is net metering available?", meta_description=GOOD_DESCRIPTION)
+        FaqFactory(page=None, question="Unplaced?")
+        FaqFactory(status=Faq.Status.ARCHIVED, page=good)
+        position = JobPositionFactory(slug="solar-engineer", title="Solar Engineer", seo_title="T" * 61, meta_description=GOOD_DESCRIPTION)
+        JobPositionFactory(status=JobPosition.Status.ARCHIVED)
+        rows = {row["uid"]: row for row in client.get(f"{OVERVIEW}?page_size=50").json()["results"]}
+        assert len(rows) == 6
+        expected = {
+            good.uid: ("page", "/about", good.seo.seo_status()),
+            bare.uid: ("page", "/subsidy", default_seo(bare).seo_status()),
+            gone.page.uid: ("page", "/emi", default_seo(gone.page).seo_status()),
+            faq.uid: ("faq", "/about", faq.seo_status()),
+            position.uid: ("job", "/career/solar-engineer", position.seo_status()),
+        }
+        for uid, (kind, path, status) in expected.items():
+            assert (rows[str(uid)]["kind"], rows[str(uid)]["path"], rows[str(uid)]["seo_status"]) == (kind, path, status)
+        assert (good.seo.seo_status(), default_seo(bare).seo_status(), position.seo_status()) == ("ok", "error", "warning")
+        assert [row["path"] for row in rows.values() if row["label"] == "Unplaced?"] == [""]
+        assert client.get(f"{OVERVIEW}?kind=job").json()["count"] == 1 and client.get(f"{OVERVIEW}?kind=faq").json()["count"] == 2
 
     def test_query_count_is_bounded(self, client, django_assert_max_num_queries):
         EntryFactory.create_batch(3)
@@ -131,7 +169,39 @@ class TestSitemap:
     def test_discovery_finds_providers_only_where_the_module_exists(self):
         # every integrated website app that ships ``services/sitemap.py`` — and nothing else
         assert [module.__name__ for module in providers.sitemap_providers()] == ["blog.services.sitemap", "sitepages.services.sitemap", "careers.services.sitemap"]
-        assert [module.__name__ for module in providers.overview_providers()] == ["blog.services.seo_overview"]
+        assert [module.__name__ for module in providers.overview_providers()] == [
+            "blog.services.seo_overview",
+            "sitepages.services.seo_overview",
+            "faqs.services.seo_overview",
+            "careers.services.seo_overview",
+        ]
+
+    def test_page_faq_and_position_writes_invalidate_the_cached_sitemap(self, api_client, make_user):
+        """Every provider declares what its entries depend on, so the cached feed follows their writes (wave-1 wiring)."""
+        from careers.services import positions
+        from careers.tests.factories import JobPositionFactory
+        from faqs.services import faqs
+        from faqs.services.categories import CACHE_NAMESPACE as FAQS_NAMESPACE
+        from faqs.tests.factories import FaqFactory
+        from sitepages.models import Page
+        from sitepages.services import pages
+        from sitepages.tests.factories import PageFactory
+
+        assert FAQS_NAMESPACE in sitemap_feed.cache_namespaces()
+        user = make_user()
+        page = PageFactory(route="/about", slug="about", status=Page.Status.DRAFT)
+        assert api_client.get(SITEMAP).json()["count"] == 0 and api_client.get(SITEMAP)["X-Cache"] == "HIT"
+        pages.publish(page, user=user)
+        assert [row["path"] for row in api_client.get(SITEMAP).json()["results"]] == ["/about"]
+        faq = FaqFactory(page=page)
+        assert api_client.get(SITEMAP)["X-Cache"] == "HIT"
+        faqs.publish(faq, user=user)
+        assert api_client.get(SITEMAP)["X-Cache"] == "MISS"
+        position = JobPositionFactory(slug="solar-engineer")
+        assert api_client.get(SITEMAP)["X-Cache"] == "HIT"
+        positions.transition(position, "publish", user=user)
+        after = api_client.get(SITEMAP)
+        assert after["X-Cache"] == "MISS" and [row["path"] for row in after.json()["results"]] == ["/about", "/career/solar-engineer"]
 
     def test_query_count_is_bounded(self, api_client, django_assert_max_num_queries):
         collection = CollectionFactory()

@@ -5,6 +5,7 @@ from __future__ import annotations
 import zoneinfo
 from datetime import date, datetime
 from functools import lru_cache
+from types import SimpleNamespace
 
 from django.conf import settings
 from django.db import IntegrityError
@@ -12,6 +13,7 @@ from django.utils import timezone
 
 from core.errors import Conflict, DomainError, NotFound
 from core.services import check_version
+from engines import attendance as attendance_engine
 from flarize.cache_utils import bump
 
 # Version-keyed namespaces (standard §7.1) for readers that cache HR data (attendance, dashboards).
@@ -51,17 +53,19 @@ def now() -> datetime:
 
 
 def is_working_day(day: date, shift) -> bool:
-    """Whether ``day`` is a working day under ``shift`` (eSSL C3, unchanged by v4; a non-working day is WEEKLY_OFF).
+    """Whether ``day`` is a working day under the ``hr_shift`` row ``shift`` (eSSL C3, unchanged by v4; a non-working
+    day is WEEKLY_OFF).
 
     No shift: every day but Sunday. Otherwise a weekday in ``weekly_off_days`` is off (it wins); an empty
-    ``working_days`` means every other day works; else the weekday must be in ``working_days``.
+    ``working_days`` means every other day works; else the weekday must be in ``working_days``. The rule is the
+    attendance engine's (``engines.attendance.is_working_day``, wired at the wave-1 integration), so the office summary
+    and the computed attendance can never disagree about a day.
     """
-    weekday = day.weekday()
     if shift is None:
-        return weekday != 6
-    if weekday in (shift.weekly_off_days or []):
-        return False
-    return not shift.working_days or weekday in shift.working_days
+        return attendance_engine.is_working_day(day, None)
+    # the rule reads only the two day lists of the shift (never its times)
+    days = SimpleNamespace(working_days=tuple(shift.working_days or ()), weekly_off_days=tuple(shift.weekly_off_days or ()))
+    return attendance_engine.is_working_day(day, days)
 
 
 def lock(model, instance, expected_version=None, *, manager: str = "objects", related: tuple[str, ...] = ()):

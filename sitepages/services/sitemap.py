@@ -12,6 +12,11 @@ from __future__ import annotations
 from django.db.models import Max, Q
 
 from sitepages.models import Page
+from sitepages.services.pages import CACHE_NAMESPACE
+
+#: The cached ``sitemap/entries/`` depends on pages and on the FAQs whose changes move a page's ``lastmod`` (``faqs`` is
+#: the faqs app's namespace; sitepages sits below faqs and never imports it).
+SITEMAP_CACHE_NAMESPACES = (CACHE_NAMESPACE, "faqs")
 
 
 def sitemap_entries() -> list[dict]:
