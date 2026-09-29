@@ -30,6 +30,7 @@ from quotations.models import (
 from quotations.services.common import can_see_internal
 
 BATTERY_CONFIG_CHOICES = [("", "none"), ("0", "0"), ("1", "1"), ("2", "2")]
+INTERNAL_PRICING_KEYS = frozenset({"marginType", "targetGrossMargin", "grossProfit"})
 
 
 def _internal(serializer) -> bool:
@@ -162,9 +163,13 @@ class CommercialSnapshotSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if not _internal(self):
-            cost_lines = dict(data.get("cost_lines") or {})
-            cost_lines.pop("cost", None)
-            data["cost_lines"] = cost_lines
+            # Sales sees the customer pricing and the offer only: the cost domain, the pack domain (structure costing at
+            # the tube ₹/kg rates) and the gross-margin fields of imported snapshots are internal (PLAN §3.2).
+            cost_lines = data.get("cost_lines") or {}
+            pricing = cost_lines.get("pricing")
+            if isinstance(pricing, dict):
+                pricing = {key: value for key, value in pricing.items() if key not in INTERNAL_PRICING_KEYS}
+            data["cost_lines"] = {"pricing": pricing, "offer": cost_lines.get("offer")}
             data["margin_check"] = None
             data["pins"] = {key: value for key, value in (data.get("pins") or {}).items() if key not in ("landedCostVersion", "marginVersion", "procurementPriceVersion")}
         return data
@@ -175,7 +180,7 @@ class EmailLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmailLog
-        fields = ["id", "channel", "to", "language", "status", "error", "created_at", "sent_at", "sent_by"]
+        fields = ["channel", "to", "language", "status", "error", "created_at", "sent_at", "sent_by"]
         read_only_fields = fields
 
 

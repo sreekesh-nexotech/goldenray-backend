@@ -145,3 +145,16 @@ only to readers holding `pricing_internal.view`.
   not committed — personal data): 65 quotations imported, 64 documents byte-identical, 64/64 re-render hashes equal,
   129 BOM + 129 commercial snapshots, 20 orphan snapshots reported, re-run 0 created / 0 updated / 65 skipped; the
   counter continues at GR-9730.
+
+## Review fixes (quotations review)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite (`quotations/tests/test_review_fixes.py`).
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| 1 | An imported Flarize DRAFT (legacy, no PackRelease): `preview/`, `PATCH versions/<n>/` and `issue/` crashed with a 500 (`None.price_release` / `None.number`) | 409 `release_required` until the draft is refreshed (`PATCH refresh_release`), which pins the current releases and clears `legacy` | `test_a_legacy_draft_is_refused_cleanly_until_refreshed` |
+| 2 | Revising an imported quotation (and refreshing an imported draft) failed validation on the import's own `selections.legacy_quotation_id` (`Unknown keys`) | the base of an edit/revision carries only the selection inputs (`tier_selections`, `offer_code`, `appliance_rows`, `validity_override_days`) | `test_revising_an_imported_quotation` |
+| 3 | Once a Sales Head set `validity_override_days` on a draft, every later PATCH or revise by a Sales Executive was a 403 `validity_override_denied` (the kept override was re-validated as a new one) | an override already on the draft is kept by any editor; setting or changing it still needs `quotations.approve` | `test_editing_a_draft_keeps_an_approved_validity_override` |
+| 4 | A cancelled quotation's DRAFT stayed editable and open to discount requests and decisions (approval raised its `discount_total`) | 409 `quotation_closed` for PATCH, discount request and decision on an ACCEPTED/CANCELLED quotation | `test_a_cancelled_quotation_is_closed_for_edits_and_discounts` |
+| 5 | Readers without `pricing_internal.view` received commercial snapshots with the gross profit / target margin of imported gross-margin snapshots and the `pack` domain (structure costing at the tube ₹/kg cost rates) | without `pricing_internal.view` a snapshot's `cost_lines` is `{pricing (without marginType, targetGrossMargin, grossProfit), offer}` | `test_commercial_snapshots_withhold_margin_and_cost_without_pricing_internal` |
+| 6 | The e-mail log rows exposed their integer `id` (CLAUDE.md: integer ids never leave the service layer) | `id` dropped from `EmailLogSerializer` | `test_email_log_rows_carry_no_integer_id`, `test_quotations_api.py::test_document_render_and_send` |

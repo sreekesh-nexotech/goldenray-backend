@@ -72,11 +72,14 @@ def _appliance_rows(rows) -> list | None:
     return clean
 
 
-def _selections(raw, *, user) -> dict:
+SELECTION_KEYS = ("tier_selections", "offer_code", "appliance_rows", "validity_override_days")
+
+
+def _selections(raw, *, user, previous: dict | None = None) -> dict:
     raw = raw or {}
     if not isinstance(raw, dict):
         raise _error("selections", "An object.")
-    unknown = set(raw) - {"tier_selections", "offer_code", "appliance_rows", "validity_override_days"}
+    unknown = set(raw) - set(SELECTION_KEYS)
     if unknown:
         raise _error("selections", f"Unknown keys: {', '.join(sorted(unknown))}.")
     out: dict = {}
@@ -95,7 +98,8 @@ def _selections(raw, *, user) -> dict:
         out["appliance_rows"] = rows
     override = raw.get("validity_override_days")
     if override not in (None, ""):
-        if not can(user, MODULE, "approve"):
+        # an override already on the draft (set by an approver) is kept by any editor; setting or changing one needs approve
+        if override != (previous or {}).get("validity_override_days") and not can(user, MODULE, "approve"):
             raise PermissionDenied("validity_override_denied", "Overriding the validity needs quotations.approve.")
         if not isinstance(override, int) or isinstance(override, bool) or not (1 <= override <= 365):
             raise _error("selections.validity_override_days", "Whole days, 1–365.")
@@ -173,12 +177,16 @@ def resolve_fields(data: dict, *, release, user, base: dict | None = None) -> di
         "subsidy_type": subsidy,
         "ghs_houses": houses if subsidy == SubsidyType.GHS else None,
         "language": language,
-        "selections": _selections(values.get("selections"), user=user),
+        "selections": _selections(values.get("selections"), user=user, previous=(base or {}).get("selections")),
     }
 
 
 def version_inputs(version) -> dict:
-    return {name: getattr(version, name) for name in VERSION_FIELDS}
+    """The inputs of ``version`` as a base for an edit or a revision (bookkeeping keys of imported selections, such as
+    ``legacy_quotation_id``, and empty values are not inputs)."""
+    values = {name: getattr(version, name) for name in VERSION_FIELDS}
+    values["selections"] = {key: value for key, value in (version.selections or {}).items() if key in SELECTION_KEYS and value not in (None, "", [], {})}
+    return values
 
 
 # ── context documents in the Flarize shapes ────────────────────────────────────────────────────────────────────────

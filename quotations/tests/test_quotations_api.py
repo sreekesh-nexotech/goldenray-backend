@@ -246,7 +246,8 @@ def test_document_render_and_send(world, executive, customer, document_storage, 
         sent = executive.post(f"{base}send/", {"to": "Customer@Example.com", "language": "ml"}, format="json")
     assert sent.status_code == 202 and sent.json()["status"] == "QUEUED"
     assert [callback.func.__name__ for callback in callbacks if getattr(callback, "func", None)].count("_enqueue") == 1
-    log = EmailLog.objects.get(pk=sent.json()["id"])
+    assert "id" not in sent.json()  # integer ids never leave the service layer
+    log = EmailLog.objects.get(version=version, to="customer@example.com")
     assert log.to == "customer@example.com" and log.version_id == version.pk
     assert sending.deliver(log.pk) == "sent"
     log.refresh_from_db()

@@ -105,8 +105,14 @@ def draft_version(quotation: Quotation) -> Version:
     return version
 
 
+def _require_open(quotation: Quotation) -> None:
+    if quotation.status in (QuotationStatus.ACCEPTED, QuotationStatus.CANCELLED):
+        raise Conflict("quotation_closed", f"The quotation is {quotation.status}.")
+
+
 @transaction.atomic
 def request_discount(quotation: Quotation, *, user, amount, reason: str) -> DiscountRequest:
+    _require_open(_lock_quotation(quotation))
     version = Version.objects.select_for_update().get(pk=draft_version(quotation).pk)
     amount = money(amount)
     if amount is None or amount <= 0:
@@ -148,6 +154,7 @@ def decide_discount(request: DiscountRequest, *, user, approve: bool, note: str 
         raise Conflict("discount_decided", f"The request is already {request.status}.")
     if request.requested_by is not None:
         deny_self_action(user, request.requested_by, message="You cannot decide your own discount request.")
+    _require_open(Quotation.objects.select_for_update().get(pk=request.quotation_version.quotation_id))
     version = Version.objects.select_for_update().get(pk=request.quotation_version_id)
     if version.status != VersionStatus.DRAFT:
         raise Conflict("version_not_draft", "The version was issued or superseded; the request can no longer be decided.")

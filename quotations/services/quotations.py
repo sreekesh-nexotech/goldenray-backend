@@ -118,15 +118,29 @@ def _require_draft(version: Version) -> None:
         raise Conflict("version_not_draft", "Only the DRAFT version can be changed or issued.", errors={"status": [version.status]})
 
 
+def _require_release(version: Version) -> None:
+    """An imported (legacy) draft predates releases: it is priced only after ``refresh_release`` pins it."""
+    if version.pack_release_id is None or version.price_release_id is None:
+        raise Conflict("release_required", "This draft is not pinned to a PackRelease (imported draft); refresh it first (PATCH refresh_release).")
+
+
+def _require_open(quotation: Quotation) -> None:
+    if quotation.status in (QuotationStatus.ACCEPTED, QuotationStatus.CANCELLED):
+        raise Conflict("quotation_closed", f"The quotation is {quotation.status}.")
+
+
 @transaction.atomic
 def update_draft(version: Version, *, user, data: dict, expected_version=None) -> Version:
     version = lock_version(version, expected_version)
     _require_draft(version)
+    _require_open(Quotation.objects.get(pk=version.quotation_id))
     release = version.pack_release
     repinned = {}
     if data.pop("refresh_release", False):
         release = inputs.current_pack_release()
-        repinned = {"pack_release": release, "price_release": release.price_release, "content_release": inputs.current_content_release(), "notices": []}
+        repinned = {"pack_release": release, "price_release": release.price_release, "content_release": inputs.current_content_release(), "notices": [], "legacy": False}
+    else:
+        _require_release(version)
     fields = inputs.resolve_fields(data, release=release, user=user, base=inputs.version_inputs(version))
     changed = {name: value for name, value in fields.items() if getattr(version, name) != value}
     changed.update({name: value for name, value in repinned.items() if getattr(version, name) != value})
@@ -228,6 +242,7 @@ def pricing_summary(outcome, *, internal: bool) -> dict:
 def preview(version: Version, *, user) -> dict:
     """``buildPayload`` of the DRAFT: the payload (projected for the reader) and the gate report; nothing is written."""
     _require_draft(version)
+    _require_release(version)
     at = iso()
     number = version.quotation.number or _peek_number()
     outcome = _run(version, user=user, freeze=False, number=number, at=at, content_release=inputs.current_content_release())
@@ -322,8 +337,8 @@ def issue(version: Version, *, user, expected_version=None) -> Version:
         raise NotFound("not_found", "Quotation not found.")
     version = lock_version(version, expected_version)
     _require_draft(version)
-    if quotation.status in (QuotationStatus.ACCEPTED, QuotationStatus.CANCELLED):
-        raise Conflict("quotation_closed", f"The quotation is {quotation.status}.")
+    _require_open(quotation)
+    _require_release(version)
     current = inputs.current_pack_release()
     if version.pack_release_id != current.pk:
         raise Conflict("release_superseded", f"PackRelease #{version.pack_release.number} was superseded by #{current.number}; refresh the draft (PATCH refresh_release).")
