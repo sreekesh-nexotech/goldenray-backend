@@ -226,7 +226,7 @@ class TestDependenciesAndDelete:
             body = hr_client.get(detail(employee, "dependencies/")).json()
         finally:
             registries.employee_dependencies.unregister("attendance")
-        assert body["counts"] == {"leave_records": 1, "attendance_days": 12, "raw_punches": 30}
+        assert body["counts"] == {"leave_records": 1, "attendance_days": 12, "raw_punches": 30, "device_mappings": 0}  # device_mappings: the installed devices package
         assert body["has_login"] is True and body["can_delete"] is False and body["employee"]["code"] == employee.code
 
     def test_delete_is_refused_with_history(self, hr_client):
@@ -251,7 +251,8 @@ class TestDependenciesAndDelete:
 
 
 class TestDeviceRegistries:
-    def test_device_mappings_are_empty_until_the_devices_package_provides_them(self, hr_client):
+    def test_device_mappings_are_empty_until_the_devices_package_provides_them(self, hr_client, monkeypatch):
+        monkeypatch.setattr(registries.device_mappings, "_fn", None)  # as before the devices package installs its provider
         employee = EmployeeFactory()
         body = hr_client.get(detail(employee, "device-mappings/")).json()
         assert body == {"employee": body["employee"], "available": False, "mappings": [], "details": {}}
@@ -262,7 +263,8 @@ class TestDeviceRegistries:
             registries.device_mappings.set(None)
         assert body["available"] is True and body["mappings"] == [{"device": "MARS-01", "pin": "7"}] and body["details"] == {"active_on_devices": 1}
 
-    def test_reconcile_devices(self, hr_client, hr_user):
+    def test_reconcile_devices(self, hr_client, hr_user, monkeypatch):
+        monkeypatch.setattr(registries.device_reconciler, "_fn", None)  # as before the devices package installs its provider
         url = f"{URL}reconcile-devices/"
         response = hr_client.post(url, {}, format="json")
         assert response.status_code == 503 and response.json()["code"] == "devices_unavailable"

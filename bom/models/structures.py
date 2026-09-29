@@ -5,7 +5,7 @@ A structure template is the mounting kit of one roof type (``flat_roof``, ``elev
 weight (kg × the GP/GI rate per kg of the tier) and fixed items priced per unit, each with a quantity rule over the
 system kW (``kw_interpolated``: the legacy ``getStructureQty`` interpolation).
 
-Columns beyond the PLAN list (DV-74): item ``name``, ``item_type``, ``weight_kg`` (weight of one tube length, the legacy
+Columns beyond the PLAN list (DV-87): item ``name``, ``item_type``, ``weight_kg`` (weight of one tube length, the legacy
 ``weight_kg``), ``unit_price``, ``unit``, ``sort_order``; the tube weight is ``weight_kg`` per tube length (PLAN
 ``kg_per_m``: the legacy values — 15.3 kg for a 2.5×1.5 16G tube — are per 6 m length, not per metre).
 """

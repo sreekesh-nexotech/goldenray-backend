@@ -266,7 +266,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": THROTTLE_RATES,
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": [
-        "rest_framework.parsers.JSONParser",
+        "flarize.parsers.JSONParser",  # DRF's, with a too-deeply nested body as a 400 parse_error (not a 500)
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ],
@@ -412,6 +412,9 @@ SPECTACULAR_SETTINGS = {
         "ProcurementChargeKindEnum": "procurement.models.batch.ChargeKind",
         "InventoryMovementDirectionEnum": "inventory.models.movement.Direction",
         "InventoryMovementReasonEnum": "inventory.models.movement.Reason",
+        "DeviceHealthStatusEnum": "devices.services.health.DEVICE_STATUSES",
+        "DeviceAgentStatusEnum": "devices.services.health.AGENT_STATUSES",
+        "DeviceSyncLogStatusEnum": "devices.models.logs.SyncLog.Status",
         # catalog's names, pinned now that bom declares other "inverter_type" / "structure_type" choice sets.
         "InverterTypeEnum": "catalog.models.specs.InverterType",
         "StructureTypeEnum": "catalog.models.specs.StructureType",
@@ -465,6 +468,8 @@ CELERY_BEAT_SCHEDULE = {
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
     # Offers whose ends_on has passed become EXPIRED (pricing.services.offers.expire_due_offers).
     "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
+    # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
+    "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())
@@ -532,6 +537,14 @@ LEADS_OTP_TTL_SECONDS = 600  # matches Twilio Verify's default code lifetime
 LEADS_OTP_MAX_ATTEMPTS = 5  # verification checks per sent code
 LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY = 10  # database backstop behind the (fail-open) otp throttle
 LEADS_VERIFICATION_TOKEN_TTL_SECONDS = 1800
+
+# --------------------------------------------------------------------------------------------------------------------
+# EMI calculator: where the system sizes and their prices come from (DV-83)
+# --------------------------------------------------------------------------------------------------------------------
+# "MANUAL": the emi_system_size rows maintained in Studio (the legacy tiles; transitional, the default).
+# "PACK_RELEASE": the provider the packs package registers (emi.services.price_sources.register), i.e. the packs of
+# the current PackRelease. The system check emi.E001/W001 refuses an unknown value or a missing provider.
+EMI_PRICE_SOURCE = config("EMI_PRICE_SOURCE", default="MANUAL")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Logging: JSON lines to stdout with the request id on every record

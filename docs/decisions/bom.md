@@ -3,13 +3,13 @@
 Work package *bom* builds the `bom` app of PLAN §2.5 (`bom_*`), §3.4 (BOM & packs: `bom/*`), the importers of §7.3
 (`bom_bomtemplate`, `bom_bomslot`, `bom_bomfixeditem`, `bom_structuretemplate(+item)`, `bom_tubeweight`) and §7.4
 (Flarize `bomTemplates`, `structureTemplates`, `tubeWeights`, `packageProfiles`), and the website quote engine that
-replaces the legacy `POST /bom/api/calculate/` (DV-4) on the platform tables. Deviations: DV-74 … DV-77.
+replaces the legacy `POST /bom/api/calculate/` (DV-4) on the platform tables. Deviations: DV-87 … DV-90.
 
 ## What exists
 
 | Area | Where | Notes |
 |---|---|---|
-| Tables | `bom/models/` | `bom_template`, `bom_slot`, `bom_fixed_item`, `bom_structure_template`, `bom_structure_template_item`, `bom_tube_weight`, `bom_package_profile` (DV-74). Every enum has a `CHECK`; live-row partial unique indexes: template `system_type`, slot `(template, key)`, structure template `slug`, tube weight `tube_size`, profile `key`. Checks: fractions in `[0, 1]`, non-negative prices/weights/quantities, a fixed item has a quantity (`qty` or `qty_rule`) and a price source (`unit_price` or a component). |
+| Tables | `bom/models/` | `bom_template`, `bom_slot`, `bom_fixed_item`, `bom_structure_template`, `bom_structure_template_item`, `bom_tube_weight`, `bom_package_profile` (DV-87). Every enum has a `CHECK`; live-row partial unique indexes: template `system_type`, slot `(template, key)`, structure template `slug`, tube weight `tube_size`, profile `key`. Checks: fractions in `[0, 1]`, non-negative prices/weights/quantities, a fixed item has a quantity (`qty` or `qty_rule`) and a price source (`unit_price` or a component). |
 | Documents | `bom/schemas.py` | JSON Schema 2020-12: `qty_rule` (8 rule types), fixed-item `condition`, template `sizes` / `three_phase_sizes` / `tiers` / `battery_configs`. Validated in the services (400 `validation_error` on the field, one message per violation). |
 | Services | `bom/services/` | `masters` (all CRUD writes), `qty_rules` (pure evaluation), `website_quote` (the quote engine), `build` (`bom/build/` through `engines.bom_builder`), `legacy_import`, `registrations` (catalog usage providers), `common`. |
 | Staff API | `bom/views/masters.py`, `bom/views/quote.py` | table below. |
@@ -66,11 +66,11 @@ List filters: slots `template` (uid), `category` (slug); fixed items `template`,
    | `Offer.objects.filter(active=True, dates)` | ACTIVE `pricing_offer` rows by `created_at, id`, date window on `today`; `applies_to_system`/`_tier` ALL or blank = all; a Flarize `applies_to_size_key` restricts the size |
 
    `today` is an explicit argument (the view passes `timezone.localdate()`); arithmetic stays in binary floating
-   point in the legacy order (DV-77). The response is the legacy body — `bom_lines`, `cost_breakdown`, `totals`,
+   point in the legacy order (DV-90). The response is the legacy body — `bom_lines`, `cost_breakdown`, `totals`,
    `pricing`, `meta`, `available_offers` — keys, order and number types included.
 6. **Validation.** `parse_request` keeps the legacy `_validate` messages and order (400 `validation_error`; the
    messages joined in `message`, per field in `errors`; `QuoteInvalid.legacy_errors` is the old `{"errors": [...]}`
-   list for the `/legacy/` shim). Everything the legacy view crashed on is a 400 too (DV-77). Missing cost
+   list for the `/legacy/` shim). Everything the legacy view crashed on is a 400 too (DV-90). Missing cost
    configuration is 503 `quote_not_configured`; no active template for the system type is 400 `bom_template_missing`
    (legacy: a 400 `{"error": …}`).
 7. **`bom/build/`** builds a Flarize-shaped catalog from the tables (slot rules as `qty`/`premiumQty`/`batQty`/
@@ -81,7 +81,7 @@ List filters: slots `template` (uid), `category` (slug); fixed items `template`,
    under `warnings` (`slot_unfilled`). The optional structure template adds its lines and tube kg.
 8. **Writes** (`bom.services.masters`): one transaction, compare-and-swap on `version`, audit
    `bom.<noun>_created|updated|deleted`, cache namespace `bom` bumped, `bom.configuration_changed`
-   `{object_type, object_uid, action}` emitted (DV-76). Deleting a template or structure template soft-deletes its
+   `{object_type, object_uid, action}` emitted (DV-89). Deleting a template or structure template soft-deletes its
    children. Components put into a fixed item or a profile must be selectable (`catalog.assert_selectable`:
    `component_retired`, `component_deleted`); slots need a live, active category.
 9. **Catalog usage.** `bom.fixed_items` and `bom.package_profiles` are registered with `catalog.services.usage`: a
@@ -164,7 +164,7 @@ A sample (every 40th 200 case and every 400 case) is replayed through `POST /api
 `freeze_time(2026-09-28)`: the JSON bodies are identical, the 400s are `validation_error` envelopes carrying the legacy
 messages.
 
-### Approved differences from the legacy endpoint (DV-77)
+### Approved differences from the legacy endpoint (DV-90)
 
 | Legacy | Platform |
 |---|---|

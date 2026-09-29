@@ -1,0 +1,8583 @@
+{
+ "endpoint": "POST /api/calculate-solar-new/",
+ "source": "http://127.0.0.1:18012",
+ "cases": [
+  {
+   "name": "residential bill 1",
+   "request": "{\"monthly_bill\": 1, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       33,
+       75,
+       129,
+       198,
+       286
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": -431896
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 100",
+   "request": "{\"monthly_bill\": 100, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       3315,
+       7547,
+       12947,
+       19840,
+       28636
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": -403546
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 2500",
+   "request": "{\"monthly_bill\": 2500, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       82884,
+       188668,
+       323678,
+       495989,
+       715906
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 283724
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 12000",
+   "request": "{\"monthly_bill\": 12000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       397845,
+       905608,
+       1553657,
+       2380749,
+       3436351
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2709169
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 17777",
+   "request": "{\"monthly_bill\": 17777, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       589375,
+       1341583,
+       2301613,
+       3526881,
+       5090668
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4318486
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 22000",
+   "request": "{\"monthly_bill\": 22000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       729383,
+       1660282,
+       2848370,
+       4364706,
+       6299977
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5377795
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 27500",
+   "request": "{\"monthly_bill\": 27500, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       911729,
+       2075352,
+       3560463,
+       5455882,
+       7874971
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 6772789
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 35000",
+   "request": "{\"monthly_bill\": 35000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1160383,
+       2641357,
+       4531498,
+       6943850,
+       10022691
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8620509
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 5999",
+   "request": "{\"monthly_bill\": 5999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       198890,
+       452729,
+       776699,
+       1190176,
+       1717889
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 1285707
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 6000",
+   "request": "{\"monthly_bill\": 6000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       198923,
+       452804,
+       776828,
+       1190374,
+       1718176
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 1285994
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 6001",
+   "request": "{\"monthly_bill\": 6001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       198956,
+       452880,
+       776958,
+       1190573,
+       1718462
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1239280
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 7999",
+   "request": "{\"monthly_bill\": 7999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       265197,
+       603663,
+       1035642,
+       1586967,
+       2290614
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1811432
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 8000",
+   "request": "{\"monthly_bill\": 8000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       265230,
+       603739,
+       1035771,
+       1587166,
+       2290901
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1811719
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 8001",
+   "request": "{\"monthly_bill\": 8001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       265263,
+       603814,
+       1035901,
+       1587364,
+       2291187
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 1759005
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 9999",
+   "request": "{\"monthly_bill\": 9999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       331505,
+       754598,
+       1294584,
+       1983759,
+       2863340
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2331158
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 10000",
+   "request": "{\"monthly_bill\": 10000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       331538,
+       754674,
+       1294714,
+       1983957,
+       2863626
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2331444
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 10001",
+   "request": "{\"monthly_bill\": 10001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       331571,
+       754749,
+       1294843,
+       1984156,
+       2863912
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2136730
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 15499",
+   "request": "{\"monthly_bill\": 15499, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       513851,
+       1169669,
+       2006677,
+       3074935,
+       4438334
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3711152
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 15500",
+   "request": "{\"monthly_bill\": 15500, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       513884,
+       1169744,
+       2006806,
+       3075134,
+       4438620
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3711438
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 15501",
+   "request": "{\"monthly_bill\": 15501, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       513917,
+       1169819,
+       2006936,
+       3075332,
+       4438907
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 3666725
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 19999",
+   "request": "{\"monthly_bill\": 19999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       663043,
+       1509272,
+       2589298,
+       3967716,
+       5726965
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4954783
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 20000",
+   "request": "{\"monthly_bill\": 20000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       663076,
+       1509347,
+       2589428,
+       3967914,
+       5727252
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4955070
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 20001",
+   "request": "{\"monthly_bill\": 20001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       663109,
+       1509423,
+       2589557,
+       3968113,
+       5727538
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 4805356
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 23999",
+   "request": "{\"monthly_bill\": 23999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       795658,
+       1811141,
+       3107184,
+       4761299,
+       6872416
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5950234
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 24000",
+   "request": "{\"monthly_bill\": 24000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       795691,
+       1811217,
+       3107313,
+       4761497,
+       6872702
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5950520
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 24001",
+   "request": "{\"monthly_bill\": 24001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       795724,
+       1811292,
+       3107443,
+       4761696,
+       6872989
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 5770807
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 29999",
+   "request": "{\"monthly_bill\": 29999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       994580,
+       2263945,
+       3884012,
+       5951673,
+       8590591
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 7488409
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 30000",
+   "request": "{\"monthly_bill\": 30000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       994614,
+       2264021,
+       3884141,
+       5951872,
+       8590878
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 7488696
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 30001",
+   "request": "{\"monthly_bill\": 30001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       994647,
+       2264096,
+       3884271,
+       5952070,
+       8591164
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 7188982
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 39999",
+   "request": "{\"monthly_bill\": 39999, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1326118,
+       3018619,
+       5178726,
+       7935631,
+       11454217
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 10052035
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 40000",
+   "request": "{\"monthly_bill\": 40000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1326152,
+       3018694,
+       5178855,
+       7935829,
+       11454504
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 10052322
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 40001",
+   "request": "{\"monthly_bill\": 40001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 45000",
+   "request": "{\"monthly_bill\": 45000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 100000",
+   "request": "{\"monthly_bill\": 100000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 6000.9",
+   "request": "{\"monthly_bill\": 6000.9, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       198923,
+       452804,
+       776828,
+       1190374,
+       1718176
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 1285994
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 8000.4",
+   "request": "{\"monthly_bill\": 8000.4, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       265230,
+       603739,
+       1035771,
+       1587166,
+       2290901
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1811719
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 40000.99",
+   "request": "{\"monthly_bill\": 40000.99, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1326152,
+       3018694,
+       5178855,
+       7935829,
+       11454504
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 10052322
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 40001.5",
+   "request": "{\"monthly_bill\": 40001.5, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"5000\"",
+   "request": "{\"monthly_bill\": \"5000\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       165769,
+       377337,
+       647357,
+       991979,
+       1431813
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 999631
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \" 7000 \"",
+   "request": "{\"monthly_bill\": \" 7000 \", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       232077,
+       528271,
+       906300,
+       1388770,
+       2004538
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1525356
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"5_000\"",
+   "request": "{\"monthly_bill\": \"5_000\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       165769,
+       377337,
+       647357,
+       991979,
+       1431813
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 999631
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"5000.5\"",
+   "request": "{\"monthly_bill\": \"5000.5\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"+9000\"",
+   "request": "{\"monthly_bill\": \"+9000\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"٣٠٠٠\"",
+   "request": "{\"monthly_bill\": \"٣٠٠٠\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       99461,
+       226402,
+       388414,
+       595187,
+       859088
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 426906
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"abc\"",
+   "request": "{\"monthly_bill\": \"abc\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill \"\"",
+   "request": "{\"monthly_bill\": \"\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill true",
+   "request": "{\"monthly_bill\": true, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       33,
+       75,
+       129,
+       198,
+       286
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": -431896
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill false",
+   "request": "{\"monthly_bill\": false, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 0",
+   "request": "{\"monthly_bill\": 0, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill -1",
+   "request": "{\"monthly_bill\": -1, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill -6000",
+   "request": "{\"monthly_bill\": -6000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill null",
+   "request": "{\"monthly_bill\": null, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill [5000]",
+   "request": "{\"monthly_bill\": [5000], \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill {\"amount\": 5000}",
+   "request": "{\"monthly_bill\": {\"amount\": 5000}, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly_bill value"
+   },
+   "error_class": null
+  },
+  {
+   "name": "residential bill 1e400",
+   "request": "{\"monthly_bill\": 1e400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 500,
+   "response": null,
+   "error_class": "OverflowError"
+  },
+  {
+   "name": "residential bill 1e30",
+   "request": "{\"monthly_bill\": 1e30, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 5000",
+   "request": "{\"monthly_bill\": 5000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       331538,
+       754674,
+       1294714,
+       1983957,
+       2863626
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 2473263
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 6001",
+   "request": "{\"monthly_bill\": 6001, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 0.0,
+    "final_cost": 277000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       397912,
+       905759,
+       1553916,
+       2381145,
+       3436924
+      ]
+     },
+     {
+      "data": [
+       277000.0,
+       295566,
+       319262,
+       349504,
+       388102,
+       437363
+      ]
+     }
+    ],
+    "savings": 2999561
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 9000",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 0.0,
+    "final_cost": 330000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       596768,
+       1358412,
+       2330485,
+       3571123,
+       5154527
+      ]
+     },
+     {
+      "data": [
+       330000.0,
+       348566,
+       372262,
+       402504,
+       441102,
+       490363
+      ]
+     }
+    ],
+    "savings": 4664164
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 12000",
+   "request": "{\"monthly_bill\": 12000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       795691,
+       1811217,
+       3107313,
+       4761497,
+       6872702
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 6187339
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 16000",
+   "request": "{\"monthly_bill\": 16000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1060921,
+       2414955,
+       4143084,
+       6348663,
+       9163603
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 8403240
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 21000",
+   "request": "{\"monthly_bill\": 21000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1392459,
+       3169629,
+       5437798,
+       8332620,
+       12027229
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 11146866
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 25000",
+   "request": "{\"monthly_bill\": 25000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1657689,
+       3773368,
+       6473569,
+       9919786,
+       14318130
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 13257767
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 31000",
+   "request": "{\"monthly_bill\": 31000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2055535,
+       4678976,
+       8027226,
+       12300535,
+       17754481
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 16394118
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 40000",
+   "request": "{\"monthly_bill\": 40000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2652303,
+       6037388,
+       10357711,
+       15871658,
+       22909007
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 21548644
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 41000",
+   "request": "{\"monthly_bill\": 41000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 333",
+   "request": "{\"monthly_bill\": 333, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       11040,
+       25131,
+       43114,
+       66066,
+       95359
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": -336823
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 333",
+   "request": "{\"monthly_bill\": 333, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       22080,
+       50261,
+       86228,
+       132132,
+       190717
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": -199646
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 1110",
+   "request": "{\"monthly_bill\": 1110, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       36801,
+       83769,
+       143713,
+       220219,
+       317862
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": -114320
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 1110",
+   "request": "{\"monthly_bill\": 1110, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       73601,
+       167538,
+       287426,
+       440439,
+       635725
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 245362
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 1887",
+   "request": "{\"monthly_bill\": 1887, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       62561,
+       142407,
+       244312,
+       374373,
+       540366
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 108184
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 1887",
+   "request": "{\"monthly_bill\": 1887, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       125122,
+       284814,
+       488625,
+       748745,
+       1080732
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 690369
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 2664",
+   "request": "{\"monthly_bill\": 2664, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       88322,
+       201045,
+       344912,
+       528526,
+       762870
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 330688
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 2664",
+   "request": "{\"monthly_bill\": 2664, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       176643,
+       402090,
+       689824,
+       1057052,
+       1525740
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 1135377
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 3441",
+   "request": "{\"monthly_bill\": 3441, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       114082,
+       259683,
+       445511,
+       682680,
+       985374
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 553192
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 3441",
+   "request": "{\"monthly_bill\": 3441, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       228164,
+       519366,
+       891022,
+       1365359,
+       1970747
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 1580384
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 4218",
+   "request": "{\"monthly_bill\": 4218, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       139843,
+       318321,
+       546110,
+       836833,
+       1207877
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 775695
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 4218",
+   "request": "{\"monthly_bill\": 4218, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       279685,
+       636643,
+       1092221,
+       1673666,
+       2415755
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 2025392
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 4995",
+   "request": "{\"monthly_bill\": 4995, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       165603,
+       376959,
+       646710,
+       990987,
+       1430381
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 998199
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 4995",
+   "request": "{\"monthly_bill\": 4995, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       331206,
+       753919,
+       1293419,
+       1981973,
+       2860762
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 2470399
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 5772",
+   "request": "{\"monthly_bill\": 5772, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 78000.0,
+    "final_cost": 152000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000",
+    "emi_details": {
+     "emi_per_month": 1725.93,
+     "total_payment": 207111.51,
+     "total_interest": 55111.51
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       191364,
+       435598,
+       747309,
+       1145140,
+       1652885
+      ]
+     },
+     {
+      "data": [
+       152000.0,
+       261283,
+       373131,
+       388252,
+       407551,
+       432182
+      ]
+     }
+    ],
+    "savings": 1220703
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 5772",
+   "request": "{\"monthly_bill\": 5772, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 3.0,
+    "area_required": 240,
+    "installation_time_days": "3-7",
+    "total_cost": 230000.0,
+    "subsidy": 0.0,
+    "final_cost": 230000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       382727,
+       871195,
+       1494618,
+       2290280,
+       3305770
+      ]
+     },
+     {
+      "data": [
+       230000.0,
+       248566,
+       272262,
+       302504,
+       341102,
+       390363
+      ]
+     }
+    ],
+    "savings": 2915407
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 6549",
+   "request": "{\"monthly_bill\": 6549, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       217124,
+       494236,
+       847908,
+       1299294,
+       1875389
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1396207
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 6549",
+   "request": "{\"monthly_bill\": 6549, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 0.0,
+    "final_cost": 277000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       434248,
+       988471,
+       1695816,
+       2598587,
+       3750777
+      ]
+     },
+     {
+      "data": [
+       277000.0,
+       295566,
+       319262,
+       349504,
+       388102,
+       437363
+      ]
+     }
+    ],
+    "savings": 3313414
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 7326",
+   "request": "{\"monthly_bill\": 7326, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 78000.0,
+    "final_cost": 199000.0,
+    "interest_rate": 6.5,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 2259.6,
+     "total_payment": 271152.57,
+     "total_interest": 72152.57
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       242885,
+       552874,
+       948507,
+       1453447,
+       2097892
+      ]
+     },
+     {
+      "data": [
+       199000.0,
+       308283,
+       420131,
+       435252,
+       454551,
+       479182
+      ]
+     }
+    ],
+    "savings": 1618710
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 7326",
+   "request": "{\"monthly_bill\": 7326, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 4.0,
+    "area_required": 320,
+    "installation_time_days": "3-7",
+    "total_cost": 277000.0,
+    "subsidy": 0.0,
+    "final_cost": 277000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       485769,
+       1105748,
+       1897015,
+       2906894,
+       4195785
+      ]
+     },
+     {
+      "data": [
+       277000.0,
+       295566,
+       319262,
+       349504,
+       388102,
+       437363
+      ]
+     }
+    ],
+    "savings": 3758422
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 8103",
+   "request": "{\"monthly_bill\": 8103, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       268645,
+       611512,
+       1049107,
+       1607601,
+       2320396
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 1788214
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 8103",
+   "request": "{\"monthly_bill\": 8103, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 0.0,
+    "final_cost": 330000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       537290,
+       1223024,
+       2098213,
+       3215201,
+       4640792
+      ]
+     },
+     {
+      "data": [
+       330000.0,
+       348566,
+       372262,
+       402504,
+       441102,
+       490363
+      ]
+     }
+    ],
+    "savings": 4150429
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 8880",
+   "request": "{\"monthly_bill\": 8880, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       294406,
+       670150,
+       1149706,
+       1761754,
+       2542900
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2010718
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 8880",
+   "request": "{\"monthly_bill\": 8880, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 0.0,
+    "final_cost": 330000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       588811,
+       1340300,
+       2299412,
+       3523508,
+       5085800
+      ]
+     },
+     {
+      "data": [
+       330000.0,
+       348566,
+       372262,
+       402504,
+       441102,
+       490363
+      ]
+     }
+    ],
+    "savings": 4595437
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 9657",
+   "request": "{\"monthly_bill\": 9657, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       320166,
+       728788,
+       1250305,
+       1915908,
+       2765404
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2233222
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 9657",
+   "request": "{\"monthly_bill\": 9657, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 0.0,
+    "final_cost": 330000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       640332,
+       1457576,
+       2500610,
+       3831815,
+       5530807
+      ]
+     },
+     {
+      "data": [
+       330000.0,
+       348566,
+       372262,
+       402504,
+       441102,
+       490363
+      ]
+     }
+    ],
+    "savings": 5040444
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 10434",
+   "request": "{\"monthly_bill\": 10434, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       345927,
+       787426,
+       1350904,
+       2070061,
+       2987907
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2260725
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 10434",
+   "request": "{\"monthly_bill\": 10434, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       691853,
+       1574853,
+       2701809,
+       4140122,
+       5975815
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 5290452
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 11211",
+   "request": "{\"monthly_bill\": 11211, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       371687,
+       846065,
+       1451504,
+       2224214,
+       3210411
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2483229
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 11211",
+   "request": "{\"monthly_bill\": 11211, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       743374,
+       1692129,
+       2903007,
+       4448429,
+       6420822
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 5735459
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 11988",
+   "request": "{\"monthly_bill\": 11988, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       397448,
+       904703,
+       1552103,
+       2378368,
+       3432915
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2705733
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 11988",
+   "request": "{\"monthly_bill\": 11988, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       794895,
+       1809405,
+       3104206,
+       4756736,
+       6865830
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 6180467
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 12765",
+   "request": "{\"monthly_bill\": 12765, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       423208,
+       963341,
+       1652702,
+       2532521,
+       3655418
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 2928236
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 12765",
+   "request": "{\"monthly_bill\": 12765, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       846416,
+       1926682,
+       3305404,
+       5065043,
+       7310837
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 6625474
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 13542",
+   "request": "{\"monthly_bill\": 13542, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       448969,
+       1021979,
+       1753301,
+       2686675,
+       3877922
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3150740
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 13542",
+   "request": "{\"monthly_bill\": 13542, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       897937,
+       2043958,
+       3506603,
+       5373350,
+       7755844
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7070481
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 14319",
+   "request": "{\"monthly_bill\": 14319, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       474729,
+       1080617,
+       1853901,
+       2840828,
+       4100426
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3373244
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 14319",
+   "request": "{\"monthly_bill\": 14319, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       949458,
+       2161234,
+       3707801,
+       5681657,
+       8200852
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7515489
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 15096",
+   "request": "{\"monthly_bill\": 15096, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       500490,
+       1139255,
+       1954500,
+       2994982,
+       4322930
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3595748
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 15096",
+   "request": "{\"monthly_bill\": 15096, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1000979,
+       2278510,
+       3909000,
+       5989964,
+       8645859
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7960496
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 15873",
+   "request": "{\"monthly_bill\": 15873, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       526250,
+       1197893,
+       2055099,
+       3149135,
+       4545433
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 3773251
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 15873",
+   "request": "{\"monthly_bill\": 15873, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1052500,
+       2395787,
+       4110198,
+       6298271,
+       9090867
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 8330504
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 16650",
+   "request": "{\"monthly_bill\": 16650, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       552011,
+       1256531,
+       2155699,
+       3303289,
+       4767937
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 3995755
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 16650",
+   "request": "{\"monthly_bill\": 16650, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1104021,
+       2513063,
+       4311397,
+       6606578,
+       9535874
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 8775511
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 17427",
+   "request": "{\"monthly_bill\": 17427, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       577771,
+       1315170,
+       2256298,
+       3457442,
+       4990441
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4218259
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 17427",
+   "request": "{\"monthly_bill\": 17427, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1155542,
+       2630339,
+       4512596,
+       6914885,
+       9980882
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 9220519
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 18204",
+   "request": "{\"monthly_bill\": 18204, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       603532,
+       1373808,
+       2356897,
+       3611596,
+       5212945
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4440763
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 18204",
+   "request": "{\"monthly_bill\": 18204, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1207063,
+       2747615,
+       4713794,
+       7223192,
+       10425889
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 9665526
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 18981",
+   "request": "{\"monthly_bill\": 18981, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       629292,
+       1432446,
+       2457496,
+       3765749,
+       5435448
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4663266
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 18981",
+   "request": "{\"monthly_bill\": 18981, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1258584,
+       2864892,
+       4914993,
+       7531498,
+       10870897
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 10110534
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 19758",
+   "request": "{\"monthly_bill\": 19758, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 570000.0,
+    "subsidy": 78000.0,
+    "final_cost": 492000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 6205.85,
+     "total_payment": 744702.29,
+     "total_interest": 252702.29
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       655053,
+       1491084,
+       2558096,
+       3919903,
+       5657952
+      ]
+     },
+     {
+      "data": [
+       492000.0,
+       601283,
+       713131,
+       728252,
+       747551,
+       772182
+      ]
+     }
+    ],
+    "savings": 4885770
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 19758",
+   "request": "{\"monthly_bill\": 19758, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 10.0,
+    "area_required": 800,
+    "installation_time_days": "3-13",
+    "total_cost": 600000.0,
+    "subsidy": 0.0,
+    "final_cost": 600000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1310105,
+       2982168,
+       5116191,
+       7839805,
+       11315904
+      ]
+     },
+     {
+      "data": [
+       600000.0,
+       618566,
+       642262,
+       672504,
+       711102,
+       760363
+      ]
+     }
+    ],
+    "savings": 10555541
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 20535",
+   "request": "{\"monthly_bill\": 20535, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       680813,
+       1549722,
+       2658695,
+       4074056,
+       5880456
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 4958274
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 20535",
+   "request": "{\"monthly_bill\": 20535, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1361626,
+       3099444,
+       5317390,
+       8148112,
+       11760912
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 10880549
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 21312",
+   "request": "{\"monthly_bill\": 21312, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       706574,
+       1608360,
+       2759294,
+       4228210,
+       6102960
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5180778
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 21312",
+   "request": "{\"monthly_bill\": 21312, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1413147,
+       3216721,
+       5518588,
+       8456419,
+       12205919
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 11325556
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 22089",
+   "request": "{\"monthly_bill\": 22089, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       732334,
+       1666998,
+       2859893,
+       4382363,
+       6325463
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5403281
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 22089",
+   "request": "{\"monthly_bill\": 22089, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1464668,
+       3333997,
+       5719787,
+       8764726,
+       12650927
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 11770564
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 22866",
+   "request": "{\"monthly_bill\": 22866, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       758095,
+       1725637,
+       2960493,
+       4536517,
+       6547967
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5625785
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 22866",
+   "request": "{\"monthly_bill\": 22866, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1516189,
+       3451273,
+       5920985,
+       9073033,
+       13095934
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 12215571
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 23643",
+   "request": "{\"monthly_bill\": 23643, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 78000.0,
+    "final_cost": 642000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 8097.88,
+     "total_payment": 971745.67,
+     "total_interest": 329745.67
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       783855,
+       1784275,
+       3061092,
+       4690670,
+       6770471
+      ]
+     },
+     {
+      "data": [
+       642000.0,
+       751283,
+       863131,
+       878252,
+       897551,
+       922182
+      ]
+     }
+    ],
+    "savings": 5848289
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 23643",
+   "request": "{\"monthly_bill\": 23643, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 12.0,
+    "area_required": 960,
+    "installation_time_days": "3-18",
+    "total_cost": 720000.0,
+    "subsidy": 0.0,
+    "final_cost": 720000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1567710,
+       3568549,
+       6122184,
+       9381340,
+       13540942
+      ]
+     },
+     {
+      "data": [
+       720000.0,
+       738566,
+       762262,
+       792504,
+       831102,
+       880363
+      ]
+     }
+    ],
+    "savings": 12660579
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 24420",
+   "request": "{\"monthly_bill\": 24420, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       809615,
+       1842913,
+       3161691,
+       4844824,
+       6992975
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 5890793
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 24420",
+   "request": "{\"monthly_bill\": 24420, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1619231,
+       3685826,
+       6323382,
+       9689647,
+       13985949
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 12925586
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 25197",
+   "request": "{\"monthly_bill\": 25197, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       835376,
+       1901551,
+       3262290,
+       4998977,
+       7215478
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 6113296
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 25197",
+   "request": "{\"monthly_bill\": 25197, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1670752,
+       3803102,
+       6524581,
+       9997954,
+       14430957
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 13370594
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 25974",
+   "request": "{\"monthly_bill\": 25974, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       861136,
+       1960189,
+       3362890,
+       5153131,
+       7437982
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 6335800
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 25974",
+   "request": "{\"monthly_bill\": 25974, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1722273,
+       3920378,
+       6725779,
+       10306261,
+       14875964
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 13815601
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 26751",
+   "request": "{\"monthly_bill\": 26751, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       886897,
+       2018827,
+       3463489,
+       5307284,
+       7660486
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 6558304
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 26751",
+   "request": "{\"monthly_bill\": 26751, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1773794,
+       4037654,
+       6926978,
+       10614568,
+       15320971
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 14260608
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 27528",
+   "request": "{\"monthly_bill\": 27528, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       912657,
+       2077465,
+       3564088,
+       5461438,
+       7882989
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 6780807
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 27528",
+   "request": "{\"monthly_bill\": 27528, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1825315,
+       4154931,
+       7128176,
+       10922875,
+       15765979
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 14705616
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 28305",
+   "request": "{\"monthly_bill\": 28305, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       938418,
+       2136103,
+       3664687,
+       5615591,
+       8105493
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 7003311
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 28305",
+   "request": "{\"monthly_bill\": 28305, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1876836,
+       4272207,
+       7329375,
+       11231182,
+       16210986
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 15150623
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 29082",
+   "request": "{\"monthly_bill\": 29082, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       964178,
+       2194742,
+       3765287,
+       5769744,
+       8327997
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 7225815
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 29082",
+   "request": "{\"monthly_bill\": 29082, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1928357,
+       4389483,
+       7530573,
+       11539489,
+       16655994
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 15595631
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 29859",
+   "request": "{\"monthly_bill\": 29859, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 78000.0,
+    "final_cost": 822000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 10368.31,
+     "total_payment": 1244197.72,
+     "total_interest": 422197.72
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       989939,
+       2253380,
+       3865886,
+       5923898,
+       8550501
+      ]
+     },
+     {
+      "data": [
+       822000.0,
+       931283,
+       1043131,
+       1058252,
+       1077551,
+       1102182
+      ]
+     }
+    ],
+    "savings": 7448319
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 29859",
+   "request": "{\"monthly_bill\": 29859, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 15.0,
+    "area_required": 1200,
+    "installation_time_days": "3-18",
+    "total_cost": 900000.0,
+    "subsidy": 0.0,
+    "final_cost": 900000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1979878,
+       4506760,
+       7731772,
+       11847796,
+       17101001
+      ]
+     },
+     {
+      "data": [
+       900000.0,
+       918566,
+       942262,
+       972504,
+       1011102,
+       1060363
+      ]
+     }
+    ],
+    "savings": 16040638
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 30636",
+   "request": "{\"monthly_bill\": 30636, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1015699,
+       2312018,
+       3966485,
+       6078051,
+       8773004
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 7370822
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 30636",
+   "request": "{\"monthly_bill\": 30636, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2031399,
+       4624036,
+       7932970,
+       12156103,
+       17546009
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 16185646
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 31413",
+   "request": "{\"monthly_bill\": 31413, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1041460,
+       2370656,
+       4067085,
+       6232205,
+       8995508
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 7593326
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 31413",
+   "request": "{\"monthly_bill\": 31413, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2082920,
+       4741312,
+       8134169,
+       12464410,
+       17991016
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 16630653
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 32190",
+   "request": "{\"monthly_bill\": 32190, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1067220,
+       2429294,
+       4167684,
+       6386358,
+       9218012
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 7815830
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 32190",
+   "request": "{\"monthly_bill\": 32190, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2134441,
+       4858588,
+       8335368,
+       12772717,
+       18436024
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 17075661
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 32967",
+   "request": "{\"monthly_bill\": 32967, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1092981,
+       2487932,
+       4268283,
+       6540512,
+       9440516
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8038334
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 32967",
+   "request": "{\"monthly_bill\": 32967, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2185962,
+       4975865,
+       8536566,
+       13081024,
+       18881031
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 17520668
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 33744",
+   "request": "{\"monthly_bill\": 33744, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1118741,
+       2546570,
+       4368882,
+       6694665,
+       9663019
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8260837
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 33744",
+   "request": "{\"monthly_bill\": 33744, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2237483,
+       5093141,
+       8737765,
+       13389331,
+       19326039
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 17965676
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 34521",
+   "request": "{\"monthly_bill\": 34521, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1144502,
+       2605209,
+       4469482,
+       6848819,
+       9885523
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8483341
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 34521",
+   "request": "{\"monthly_bill\": 34521, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2289004,
+       5210417,
+       8938963,
+       13697638,
+       19771046
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 18410683
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 35298",
+   "request": "{\"monthly_bill\": 35298, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1170262,
+       2663847,
+       4570081,
+       7002972,
+       10108027
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8705845
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 35298",
+   "request": "{\"monthly_bill\": 35298, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2340525,
+       5327693,
+       9140162,
+       14005945,
+       20216054
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 18855691
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 36075",
+   "request": "{\"monthly_bill\": 36075, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1196023,
+       2722485,
+       4670680,
+       7157126,
+       10330531
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 8928349
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 36075",
+   "request": "{\"monthly_bill\": 36075, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2392046,
+       5444970,
+       9341360,
+       14314252,
+       20661061
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 19300698
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 36852",
+   "request": "{\"monthly_bill\": 36852, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1221783,
+       2781123,
+       4771279,
+       7311279,
+       10553034
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 9150852
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 36852",
+   "request": "{\"monthly_bill\": 36852, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2443567,
+       5562246,
+       9542559,
+       14622558,
+       21106069
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 19745706
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 37629",
+   "request": "{\"monthly_bill\": 37629, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1247544,
+       2839761,
+       4871879,
+       7465433,
+       10775538
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 9373356
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 37629",
+   "request": "{\"monthly_bill\": 37629, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2495088,
+       5679522,
+       9743757,
+       14930865,
+       21551076
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 20190713
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 38406",
+   "request": "{\"monthly_bill\": 38406, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1273304,
+       2898399,
+       4972478,
+       7619586,
+       10998042
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 9595860
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 38406",
+   "request": "{\"monthly_bill\": 38406, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2546609,
+       5796798,
+       9944956,
+       15239172,
+       21996083
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 20635720
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 39183",
+   "request": "{\"monthly_bill\": 39183, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1299065,
+       2957037,
+       5073077,
+       7773740,
+       11220545
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 9818363
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 39183",
+   "request": "{\"monthly_bill\": 39183, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2598130,
+       5914075,
+       10146154,
+       15547479,
+       22441091
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 21080728
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep residential 39960",
+   "request": "{\"monthly_bill\": 39960, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 78000.0,
+    "final_cost": 1122000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-6,00,000",
+    "emi_details": {
+     "emi_per_month": 14152.37,
+     "total_payment": 1698284.49,
+     "total_interest": 576284.49
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       1324825,
+       3015676,
+       5173676,
+       7927893,
+       11443049
+      ]
+     },
+     {
+      "data": [
+       1122000.0,
+       1231283,
+       1343131,
+       1358252,
+       1377551,
+       1402182
+      ]
+     }
+    ],
+    "savings": 10040867
+   },
+   "error_class": null
+  },
+  {
+   "name": "sweep commercial 39960",
+   "request": "{\"monthly_bill\": 39960, \"pincode\": \"673001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 20.0,
+    "area_required": 1600,
+    "installation_time_days": "3-18",
+    "total_cost": 1200000.0,
+    "subsidy": 0.0,
+    "final_cost": 1200000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "673001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       2649651,
+       6031351,
+       10347353,
+       15855786,
+       22886098
+      ]
+     },
+     {
+      "data": [
+       1200000.0,
+       1218566,
+       1242262,
+       1272504,
+       1311102,
+       1360363
+      ]
+     }
+    ],
+    "savings": 21525735
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 682001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 695001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"695001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "695001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 673001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"673001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "673001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 680001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"680001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "680001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 688001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"688001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "688001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 686001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"686001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "686001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 685501",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"685501\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "685501",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 670001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"670001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "670001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 678001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"678001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "678001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 691001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"691001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "691001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 679101",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"679101\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "679101",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 689101",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"689101\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "689101",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 671121",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"671121\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "671121",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 673592",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"673592\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": "673592",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 999999",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"999999\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 110001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"110001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 600001",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"600001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 682999",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"682999\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 000000",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"000000\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode int",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": 682001, \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 5.0,
+    "area_required": 400,
+    "installation_time_days": "3-7",
+    "total_cost": 330000.0,
+    "subsidy": 78000.0,
+    "final_cost": 252000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 3178.61,
+     "total_payment": 381432.88,
+     "total_interest": 129432.88
+    },
+    "pincode": 682001,
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       298384,
+       679206,
+       1165242,
+       1785562,
+       2577263
+      ]
+     },
+     {
+      "data": [
+       252000.0,
+       361283,
+       473131,
+       488252,
+       507551,
+       532182
+      ]
+     }
+    ],
+    "savings": 2045081
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode int unknown",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": 999999, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode float",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": 682001.0, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode leading space",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \" 682001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode trailing space",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"682001 \", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode five digits",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"68200\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode seven digits",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"6820011\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode letters",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"abcdef\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode true",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": true, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode false",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": false, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode zero",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": 0, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode empty",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode null",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": null, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode list",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": [\"682001\"], \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode object",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": {\"code\": \"682001\"}, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode nul char",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"6820\\u000001\", \"property_type\": \"Residential\"}",
+   "status": 500,
+   "response": null,
+   "error_class": "ValueError"
+  },
+  {
+   "name": "pincode unicode digits",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"６８２００１\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       464153,
+       1056543,
+       1812599,
+       2777540,
+       4009076
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3281894
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'residential'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"residential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "residential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       464153,
+       1056543,
+       1812599,
+       2777540,
+       4009076
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3281894
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'RESIDENTIAL'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"RESIDENTIAL\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "RESIDENTIAL",
+    "datasets": [
+     {
+      "data": [
+       0,
+       464153,
+       1056543,
+       1812599,
+       2777540,
+       4009076
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3281894
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Commercial'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "Commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       928306,
+       2113086,
+       3625199,
+       5555080,
+       8018153
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7332790
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'commercial'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "commercial",
+    "datasets": [
+     {
+      "data": [
+       0,
+       928306,
+       2113086,
+       3625199,
+       5555080,
+       8018153
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7332790
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'COMMERCIAL'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"COMMERCIAL\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 0.0,
+    "final_cost": 525000.0,
+    "interest_rate": 0,
+    "loan_available": "N/A",
+    "emi_details": {
+     "emi_per_month": 0,
+     "total_payment": 0,
+     "total_interest": 0
+    },
+    "pincode": "682001",
+    "property_type": "COMMERCIAL",
+    "datasets": [
+     {
+      "data": [
+       0,
+       928306,
+       2113086,
+       3625199,
+       5555080,
+       8018153
+      ]
+     },
+     {
+      "data": [
+       525000.0,
+       543566,
+       567262,
+       597504,
+       636102,
+       685363
+      ]
+     }
+    ],
+    "savings": 7332790
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Industrial'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Industrial\"}",
+   "status": 404,
+   "response": {
+    "error": "No data found for the given bill range and property type"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Resi_dential'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Resi_dential\"}",
+   "status": 404,
+   "response": {
+    "error": "No data found for the given bill range and property type"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential%'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Residential%\"}",
+   "status": 404,
+   "response": {
+    "error": "No data found for the given bill range and property type"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Reſidential'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Reſidential\"}",
+   "status": 200,
+   "response": {
+    "solar_capacity_kW": 8.0,
+    "area_required": 640,
+    "installation_time_days": "3-10",
+    "total_cost": 525000.0,
+    "subsidy": 78000.0,
+    "final_cost": 447000.0,
+    "interest_rate": 8.9,
+    "loan_available": "2,00,000-600000",
+    "emi_details": {
+     "emi_per_month": 5638.24,
+     "total_payment": 676589.27,
+     "total_interest": 229589.27
+    },
+    "pincode": "682001",
+    "property_type": "Reſidential",
+    "datasets": [
+     {
+      "data": [
+       0,
+       464153,
+       1056543,
+       1812599,
+       2777540,
+       4009076
+      ]
+     },
+     {
+      "data": [
+       447000.0,
+       556283,
+       668131,
+       683252,
+       702551,
+       727182
+      ]
+     }
+    ],
+    "savings": 3281894
+   },
+   "error_class": null
+  },
+  {
+   "name": "type ' Residential'",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \" Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "No data found for the given bill range and property type"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential '",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Residential \"}",
+   "status": 404,
+   "response": {
+    "error": "No data found for the given bill range and property type"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type empty",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type null",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": null}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type number",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": 5}",
+   "status": 500,
+   "response": null,
+   "error_class": "ProgrammingError"
+  },
+  {
+   "name": "type true",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": true}",
+   "status": 500,
+   "response": null,
+   "error_class": "ProgrammingError"
+  },
+  {
+   "name": "type list",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": [\"Residential\"]}",
+   "status": 500,
+   "response": null,
+   "error_class": "ProgrammingError"
+  },
+  {
+   "name": "type object",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": {\"type\": \"Residential\"}}",
+   "status": 500,
+   "response": null,
+   "error_class": "ProgrammingError"
+  },
+  {
+   "name": "type nul",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Resi\\u0000dential\"}",
+   "status": 500,
+   "response": null,
+   "error_class": "ValueError"
+  },
+  {
+   "name": "type 'Residential' bill 45000",
+   "request": "{\"monthly_bill\": 45000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'residential' bill 45000",
+   "request": "{\"monthly_bill\": 45000, \"pincode\": \"682001\", \"property_type\": \"residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'RESIDENTIAL' bill 45000",
+   "request": "{\"monthly_bill\": 45000, \"pincode\": \"682001\", \"property_type\": \"RESIDENTIAL\"}",
+   "status": 400,
+   "response": {
+    "error": "Monthly bill out of supported range"
+   },
+   "error_class": null
+  },
+  {
+   "name": "empty object",
+   "request": "{}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "list body",
+   "request": "[1, 2]",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "string body",
+   "request": "\"monthly_bill=3000\"",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "number body",
+   "request": "3000",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "null body",
+   "request": "null",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "missing bill",
+   "request": "{\"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "missing pincode",
+   "request": "{\"monthly_bill\": 3000, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "missing type",
+   "request": "{\"monthly_bill\": 3000, \"pincode\": \"682001\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  }
+ ]
+}

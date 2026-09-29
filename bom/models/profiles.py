@@ -1,4 +1,4 @@
-"""``bom_package_profile`` — Flarize ``catalog.json`` ``packageProfiles`` (PLAN §7.4; no PLAN table, DV-74).
+"""``bom_package_profile`` — Flarize ``catalog.json`` ``packageProfiles`` (PLAN §7.4; no PLAN table, DV-87).
 
 One profile per package key (``ongrid_base``, ``hybrid_value`` …): the structure material, inverter family and the
 default battery of the package. ``engines.bom_builder`` reads it (``getProfileKey``) for the default battery quantity.

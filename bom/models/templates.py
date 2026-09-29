@@ -6,7 +6,7 @@ the market rates and packs speak), which of them are three-phase, the tiers and 
 (consumables with their own reference price, or a catalog component).
 
 Columns beyond the PLAN list (every legacy ``bom_bomtemplate``/``bom_bomslot``/``bom_bomfixeditem`` and Flarize
-``bomTemplates`` field has a home; mapping in docs/decisions/bom.md, DV-74): template ``description``, ``sizes``,
+``bomTemplates`` field has a home; mapping in docs/decisions/bom.md, DV-87): template ``description``, ``sizes``,
 ``three_phase_sizes``, ``tiers``, ``battery_configs``; slot ``label``, ``gst_rate``, ``is_variable``, ``filter_type``,
 ``filter_phase``; fixed item ``code``, ``name``, ``unit_price``, ``gst_rate``, ``qty_rule``, ``section``, ``unit``,
 ``is_tube``, ``sort_order``. ``qty_rule`` / ``condition`` are validated documents (``bom.schemas``).
