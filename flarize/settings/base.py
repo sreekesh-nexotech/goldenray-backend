@@ -412,6 +412,9 @@ SPECTACULAR_SETTINGS = {
         "ProcurementChargeKindEnum": "procurement.models.batch.ChargeKind",
         "InventoryMovementDirectionEnum": "inventory.models.movement.Direction",
         "InventoryMovementReasonEnum": "inventory.models.movement.Reason",
+        "DeviceHealthStatusEnum": "devices.services.health.DEVICE_STATUSES",
+        "DeviceAgentStatusEnum": "devices.services.health.AGENT_STATUSES",
+        "DeviceSyncLogStatusEnum": "devices.models.logs.SyncLog.Status",
     },
 }
 
@@ -455,6 +458,8 @@ CELERY_BEAT_SCHEDULE = {
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
     # Offers whose ends_on has passed become EXPIRED (pricing.services.offers.expire_due_offers).
     "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
+    # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
+    "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())

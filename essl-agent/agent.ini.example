@@ -1,0 +1,37 @@
+# Flarize office agent configuration.
+# Normally downloaded from Studio (Devices -> Agents -> config download): that file already carries the server, the
+# token and the intervals. Never commit a real token; rotating it in Studio invalidates this file.
+
+[agent]
+server_url  = https://api.flarize.example
+api_version = v1
+token       = fl_<prefix>_<secret shown once by Studio>
+agent_code  = OFFICE-001-AGENT
+queue_path  = agent_queue.sqlite3
+
+heartbeat_interval = 60
+sync_interval      = 300
+upload_batch_size  = 200
+verify_tls         = true
+
+# Optional (defaults shown): announce each terminal at most hourly, upload an unchanged user table at least daily,
+# keep delivered punches 7 days, take punches by time with a 24 h overlap when a terminal's numbering restarts.
+# announce_interval    = 3600
+# users_refresh_hours  = 24
+# sent_retention_days  = 7
+# cursor_overlap_hours = 24
+
+# Terminals normally come from the central configuration. A local section pins a terminal from the office itself and
+# wins where the two disagree. expected_serial is the identity: the agent reads only hardware answering with it
+# (anything else is an IDENTITY_MISMATCH: nothing read, queue held, reported). expected_mac is an optional second
+# objection. The address is not identity -- 192.168.1.209 exists in every office.
+#
+# [device:1]
+# name            = MARS-01
+# ip              = 192.168.1.209
+# port            = 4370
+# password        = 0
+# timeout         = 15
+# force_udp       = false
+# expected_serial = NCD8253601138
+# expected_mac    = 00:17:61:12:9c:49

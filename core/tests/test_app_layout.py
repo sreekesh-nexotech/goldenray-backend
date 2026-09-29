@@ -28,7 +28,7 @@ def test_app_layout(label):
 
 
 def test_surface_specific_lists():
-    assert importlib.import_module("devices.urls").iclock_urlpatterns == []
+    assert isinstance(importlib.import_module("devices.urls").iclock_urlpatterns, list)  # the ADMS receiver (devices WP)
     assert importlib.import_module("legacy.urls").legacy_urlpatterns == []
 
 
