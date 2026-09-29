@@ -1,0 +1,899 @@
+{
+ "checklists": [
+  {
+   "checks": [
+    {
+     "description": "Inverter is not exposed to direct sunlight for long periods.",
+     "id": "direct_sunlight",
+     "label": "Direct Sunlight",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Rainwater cannot directly fall on the inverter.",
+     "id": "rain_exposure",
+     "label": "Rain Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "No leakage from roof, wall, pipe, AC drain, etc. above or near inverter.",
+     "id": "water_leakage",
+     "label": "Water Leakage",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Open and ventilated area is available for heat dissipation.",
+     "id": "ventilation",
+     "label": "Ventilation",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Sufficient space is available around the inverter as required by the manufacturer.",
+     "id": "clearance",
+     "label": "Clearance",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is away from exhaust, boiler, kitchen, generator, AC outdoor unit, etc.",
+     "id": "heat_source",
+     "label": "Heat Source",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is not exposed to excessive dust, cement, corrosive chemicals, fertilizer, salt, etc.",
+     "id": "dust_chemical_exposure",
+     "label": "Dust / Chemical Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is protected from vehicle movement, impact, children, machinery, etc.",
+     "id": "physical_protection",
+     "label": "Physical Protection",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Technician can easily access the inverter for service and inspection.",
+     "id": "maintenance_access",
+     "label": "Maintenance Access",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Wall or structure is strong enough to support the inverter.",
+     "id": "mounting_surface",
+     "label": "Mounting Surface",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Safe and practical route is available for required cables.",
+     "id": "cable_route",
+     "label": "Cable Route",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Suitable entry point is available without unnecessary cable extension.",
+     "id": "cable_entry",
+     "label": "Cable Entry",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Installation height is practical for operation and maintenance.",
+     "id": "height",
+     "label": "Installation Height",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is not vulnerable to water accumulation or flooding.",
+     "id": "flooding_water_risk",
+     "label": "Flooding / Water Risk",
+     "requiresEvidenceOnFailure": true
+    }
+   ],
+   "description": "Assess the proposed on-grid inverter installation location.",
+   "title": "On-Grid Inverter",
+   "type": "ON_GRID_INVERTER"
+  },
+  {
+   "checks": [
+    {
+     "description": "Inverter is not exposed to direct sunlight for long periods.",
+     "id": "direct_sunlight",
+     "label": "Direct Sunlight",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Rainwater cannot directly fall on the inverter.",
+     "id": "rain_exposure",
+     "label": "Rain Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "No leakage from roof, wall, pipe, AC drain, etc. above or near inverter.",
+     "id": "water_leakage",
+     "label": "Water Leakage",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Open and ventilated area is available for heat dissipation.",
+     "id": "ventilation",
+     "label": "Ventilation",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Sufficient space is available around the inverter as required by the manufacturer.",
+     "id": "clearance",
+     "label": "Clearance",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is away from exhaust, boiler, kitchen, generator, AC outdoor unit, etc.",
+     "id": "heat_source",
+     "label": "Heat Source",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is not exposed to excessive dust, cement, corrosive chemicals, fertilizer, salt, etc.",
+     "id": "dust_chemical_exposure",
+     "label": "Dust / Chemical Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is protected from vehicle movement, impact, children, machinery, etc.",
+     "id": "physical_protection",
+     "label": "Physical Protection",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Technician can easily access the inverter for service and inspection.",
+     "id": "maintenance_access",
+     "label": "Maintenance Access",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Wall or structure is strong enough to support the inverter.",
+     "id": "mounting_surface",
+     "label": "Mounting Surface",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Suitable entry point is available without unnecessary cable extension.",
+     "id": "cable_entry",
+     "label": "Cable Entry",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Installation height is practical for operation and maintenance.",
+     "id": "height",
+     "label": "Installation Height",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is not vulnerable to water accumulation or flooding.",
+     "id": "flooding_water_risk",
+     "label": "Flooding / Water Risk",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Safe route is available for PV, AC, battery and communication cables.",
+     "id": "cable_route",
+     "label": "Cable Route",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Suitable distance is available between the inverter and battery.",
+     "id": "battery_distance",
+     "label": "Battery Distance",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery cable length can be kept within manufacturer limits.",
+     "id": "battery_cable_length",
+     "label": "Battery Cable Length",
+     "requiresEvidenceOnFailure": true
+    }
+   ],
+   "description": "Assess the proposed hybrid inverter installation location.",
+   "title": "Hybrid Inverter",
+   "type": "HYBRID_INVERTER"
+  },
+  {
+   "checks": [
+    {
+     "description": "Battery can be installed in a secure and controlled area.",
+     "id": "safe_location",
+     "label": "Safe Location",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Adequate ventilation and air circulation is available as required by the battery manufacturer.",
+     "id": "ventilation",
+     "label": "Ventilation",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery is protected from prolonged direct sunlight.",
+     "id": "direct_sunlight",
+     "label": "Direct Sunlight",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "No direct rain exposure unless specifically rated for it.",
+     "id": "rain_exposure",
+     "label": "Rain Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "No leakage from roof, pipes, walls or AC drains.",
+     "id": "water_leakage",
+     "label": "Water Leakage",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Area remains dry during normal weather conditions.",
+     "id": "dry_location",
+     "label": "Dry Location",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Ambient temperature is suitable for battery operation.",
+     "id": "temperature",
+     "label": "Ambient Temperature",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery is away from generators, boilers, kitchen equipment, etc.",
+     "id": "heat_source",
+     "label": "Heat Source",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "No easily combustible materials are stored around the battery.",
+     "id": "combustible_materials",
+     "label": "Combustible Materials",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery is away from chemicals, corrosive materials and fuel storage.",
+     "id": "chemical_exposure",
+     "label": "Chemical Exposure",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Location is not low-lying or flood-prone.",
+     "id": "flooding",
+     "label": "Flooding",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Required front, side and top clearance is available.",
+     "id": "clearance",
+     "label": "Clearance",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery is protected from vehicles, machinery, impact and unauthorized access.",
+     "id": "physical_damage",
+     "label": "Physical Damage",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Technician can safely access the battery.",
+     "id": "maintenance_access",
+     "label": "Maintenance Access",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Floor, wall or stand can safely support battery weight.",
+     "id": "battery_support",
+     "label": "Battery Support",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Floor is level, stable and suitable.",
+     "id": "floor_condition",
+     "label": "Floor Condition",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery cables can be routed safely and protected.",
+     "id": "cable_routing",
+     "label": "Cable Routing",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery-to-inverter distance is within the manufacturer's permitted range.",
+     "id": "cable_length",
+     "label": "Battery Cable Length",
+     "requiresEvidenceOnFailure": true
+    },
+    {
+     "description": "Battery can be safely accessed in case of emergency or service.",
+     "id": "emergency_access",
+     "label": "Emergency Access",
+     "requiresEvidenceOnFailure": true
+    }
+   ],
+   "description": "Assess the proposed battery installation location.",
+   "title": "Hybrid Battery",
+   "type": "HYBRID_BATTERY"
+  }
+ ],
+ "completion": {
+  "all_not_applicable": {
+   "blockers": [],
+   "ready": true
+  },
+  "approval_imported_without_snapshot": {
+   "blockers": [],
+   "ready": true
+  },
+  "base_ready": {
+   "blockers": [],
+   "ready": true
+  },
+  "complex_site": {
+   "blockers": [],
+   "ready": true
+  },
+  "complexity_not_assessed": {
+   "blockers": [
+    "Site complexity has not been assessed"
+   ],
+   "ready": false
+  },
+  "conditional_flag": {
+   "blockers": [
+    "Conditional site suitability requires resolution before completion"
+   ],
+   "ready": false
+  },
+  "conditional_recommendation_stored_as_zero": {
+   "blockers": [
+    "Site is not suitable for solar installation"
+   ],
+   "ready": false
+  },
+  "customer_impacting_work_approved": {
+   "blockers": [],
+   "ready": true
+  },
+  "customer_impacting_work_unapproved": {
+   "blockers": [],
+   "ready": true
+  },
+  "equipment_height_text": {
+   "blockers": [
+    "Equipment area dimensions are required"
+   ],
+   "ready": false
+  },
+  "equipment_missing": {
+   "blockers": [],
+   "ready": true
+  },
+  "equipment_width_negative": {
+   "blockers": [],
+   "ready": true
+  },
+  "explicit_not_checked": {
+   "blockers": [],
+   "ready": true
+  },
+  "failed_check": {
+   "blockers": [],
+   "ready": true
+  },
+  "failed_check_waived": {
+   "blockers": [],
+   "ready": true
+  },
+  "hybrid_battery_missing": {
+   "blockers": [],
+   "ready": true
+  },
+  "hybrid_complete": {
+   "blockers": [],
+   "ready": true
+  },
+  "internal_work_identified": {
+   "blockers": [],
+   "ready": true
+  },
+  "latest_approval_pending": {
+   "blockers": [],
+   "ready": true
+  },
+  "legacy_container_rectangles": {
+   "blockers": [],
+   "ready": true
+  },
+  "location_moved_after_approval": {
+   "blockers": [],
+   "ready": true
+  },
+  "location_moved_legacy_snapshot": {
+   "blockers": [],
+   "ready": true
+  },
+  "many_blockers_in_order": {
+   "blockers": [
+    "Customer is required",
+    "Site suitability has not been confirmed"
+   ],
+   "ready": false
+  },
+  "neutral_fixed_by_new_termination": {
+   "blockers": [],
+   "ready": true
+  },
+  "neutral_not_available_legacy_spelling": {
+   "blockers": [],
+   "ready": true
+  },
+  "neutral_not_available_ui_spelling": {
+   "blockers": [],
+   "ready": true
+  },
+  "neutral_with_new_neutral_link": {
+   "blockers": [],
+   "ready": true
+  },
+  "no_address": {
+   "blockers": [
+    "Site address is required"
+   ],
+   "ready": false
+  },
+  "no_approval": {
+   "blockers": [],
+   "ready": true
+  },
+  "no_customer": {
+   "blockers": [
+    "Customer is required"
+   ],
+   "ready": false
+  },
+  "no_engineer": {
+   "blockers": [
+    "Assigned engineer is required"
+   ],
+   "ready": false
+  },
+  "no_equipment_photo": {
+   "blockers": [
+    "Proposed equipment-area reference photo is required"
+   ],
+   "ready": false
+  },
+  "no_panel_photo": {
+   "blockers": [
+    "Proposed panel-area reference photo is required"
+   ],
+   "ready": false
+  },
+  "no_visit_date": {
+   "blockers": [
+    "Site visit date is required"
+   ],
+   "ready": false
+  },
+  "not_suitable": {
+   "blockers": [
+    "Site is not suitable for solar installation"
+   ],
+   "ready": false
+  },
+  "one_location_documented": {
+   "blockers": [
+    "Both proposed installation locations must be documented"
+   ],
+   "ready": false
+  },
+  "one_pass_tap": {
+   "blockers": [],
+   "ready": true
+  },
+  "panel_height_missing": {
+   "blockers": [
+    "Panel area dimensions are required"
+   ],
+   "ready": false
+  },
+  "panel_width_zero": {
+   "blockers": [
+    "Panel area dimensions are required"
+   ],
+   "ready": false
+  },
+  "partial_fail_waived": {
+   "blockers": [],
+   "ready": true
+  },
+  "rectangle_resaved_unchanged": {
+   "blockers": [],
+   "ready": true
+  },
+  "restrictions_blank_remarks": {
+   "blockers": [],
+   "ready": true
+  },
+  "restrictions_with_remarks": {
+   "blockers": [],
+   "ready": true
+  },
+  "restrictions_without_remarks": {
+   "blockers": [],
+   "ready": true
+  },
+  "review_resolved": {
+   "blockers": [],
+   "ready": true
+  },
+  "structure_type_differs_rejected": {
+   "blockers": [],
+   "ready": true
+  },
+  "suitability_missing": {
+   "blockers": [
+    "Site suitability has not been confirmed"
+   ],
+   "ready": false
+  },
+  "system_type_only_in_snapshot": {
+   "blockers": [],
+   "ready": true
+  },
+  "termination_needs_modification_only": {
+   "blockers": [],
+   "ready": true
+  },
+  "undecided_system_type": {
+   "blockers": [],
+   "ready": true
+  },
+  "unknown_suitability": {
+   "blockers": [],
+   "ready": true
+  },
+  "walkway_rejected": {
+   "blockers": [],
+   "ready": true
+  },
+  "wheeling_consumer_number_zero": {
+   "blockers": [],
+   "ready": true
+  },
+  "wheeling_without_consumer_number": {
+   "blockers": [],
+   "ready": true
+  },
+  "wheeling_without_phone": {
+   "blockers": [],
+   "ready": true
+  }
+ },
+ "readiness": {
+  "all_not_applicable": {
+   "blockers": [],
+   "ready": true
+  },
+  "approval_imported_without_snapshot": {
+   "blockers": [],
+   "ready": true
+  },
+  "base_ready": {
+   "blockers": [],
+   "ready": true
+  },
+  "complex_site": {
+   "blockers": [
+    "Engineering review is required for this site"
+   ],
+   "ready": false
+  },
+  "complexity_not_assessed": {
+   "blockers": [],
+   "ready": true
+  },
+  "conditional_flag": {
+   "blockers": [
+    "Conditional site suitability requires resolution before installation"
+   ],
+   "ready": false
+  },
+  "conditional_recommendation_stored_as_zero": {
+   "blockers": [
+    "Site is not suitable for solar installation"
+   ],
+   "ready": false
+  },
+  "customer_impacting_work_approved": {
+   "blockers": [],
+   "ready": true
+  },
+  "customer_impacting_work_unapproved": {
+   "blockers": [],
+   "ready": true
+  },
+  "equipment_height_text": {
+   "blockers": [
+    "Equipment area measured height is required"
+   ],
+   "ready": false
+  },
+  "equipment_missing": {
+   "blockers": [
+    "ON GRID INVERTER assessment is incomplete"
+   ],
+   "ready": false
+  },
+  "equipment_width_negative": {
+   "blockers": [
+    "Equipment area measured width is required"
+   ],
+   "ready": false
+  },
+  "explicit_not_checked": {
+   "blockers": [
+    "ON GRID INVERTER assessment is incomplete"
+   ],
+   "ready": false
+  },
+  "failed_check": {
+   "blockers": [
+    "ON GRID INVERTER requires engineering resolution",
+    "ON GRID INVERTER assessment must pass before installation"
+   ],
+   "ready": false
+  },
+  "failed_check_waived": {
+   "blockers": [
+    "ON GRID INVERTER requires engineering resolution",
+    "ON GRID INVERTER assessment must pass before installation"
+   ],
+   "ready": false
+  },
+  "hybrid_battery_missing": {
+   "blockers": [
+    "HYBRID BATTERY assessment is incomplete"
+   ],
+   "ready": false
+  },
+  "hybrid_complete": {
+   "blockers": [],
+   "ready": true
+  },
+  "internal_work_identified": {
+   "blockers": [],
+   "ready": true
+  },
+  "latest_approval_pending": {
+   "blockers": [
+    "Latest installation location approval is not approved"
+   ],
+   "ready": false
+  },
+  "legacy_container_rectangles": {
+   "blockers": [],
+   "ready": true
+  },
+  "location_moved_after_approval": {
+   "blockers": [],
+   "ready": true
+  },
+  "location_moved_legacy_snapshot": {
+   "blockers": [
+    "Customer approval is outdated because the proposed installation location changed"
+   ],
+   "ready": false
+  },
+  "many_blockers_in_order": {
+   "blockers": [
+    "Customer is required",
+    "Site suitability has not been confirmed",
+    "Customer-approved installation location is required",
+    "ON GRID INVERTER assessment is incomplete",
+    "Consumer Number is required for wheeling",
+    "Latest installation location approval is not approved"
+   ],
+   "ready": false
+  },
+  "neutral_fixed_by_new_termination": {
+   "blockers": [],
+   "ready": true
+  },
+  "neutral_not_available_legacy_spelling": {
+   "blockers": [
+    "Neutral Link / Termination Point requires an additional-work decision"
+   ],
+   "ready": false
+  },
+  "neutral_not_available_ui_spelling": {
+   "blockers": [],
+   "ready": true
+  },
+  "neutral_with_new_neutral_link": {
+   "blockers": [],
+   "ready": true
+  },
+  "no_address": {
+   "blockers": [],
+   "ready": true
+  },
+  "no_approval": {
+   "blockers": [
+    "Customer-approved installation location is required"
+   ],
+   "ready": false
+  },
+  "no_customer": {
+   "blockers": [
+    "Customer is required"
+   ],
+   "ready": false
+  },
+  "no_engineer": {
+   "blockers": [
+    "Assigned engineer is required"
+   ],
+   "ready": false
+  },
+  "no_equipment_photo": {
+   "blockers": [
+    "Proposed inverter + ACDB + DCDB reference photo is required"
+   ],
+   "ready": false
+  },
+  "no_panel_photo": {
+   "blockers": [
+    "Proposed panel-area reference photo is required"
+   ],
+   "ready": false
+  },
+  "no_visit_date": {
+   "blockers": [
+    "Site visit date is required"
+   ],
+   "ready": false
+  },
+  "not_suitable": {
+   "blockers": [
+    "Site is not suitable for solar installation"
+   ],
+   "ready": false
+  },
+  "one_location_documented": {
+   "blockers": [
+    "Both proposed installation locations must be documented"
+   ],
+   "ready": false
+  },
+  "one_pass_tap": {
+   "blockers": [],
+   "ready": true
+  },
+  "panel_height_missing": {
+   "blockers": [
+    "Panel area measured height is required"
+   ],
+   "ready": false
+  },
+  "panel_width_zero": {
+   "blockers": [
+    "Panel area measured width is required"
+   ],
+   "ready": false
+  },
+  "partial_fail_waived": {
+   "blockers": [
+    "ON GRID INVERTER requires engineering resolution",
+    "ON GRID INVERTER assessment must pass before installation"
+   ],
+   "ready": false
+  },
+  "rectangle_resaved_unchanged": {
+   "blockers": [
+    "Customer approval is outdated because the proposed installation location changed"
+   ],
+   "ready": false
+  },
+  "restrictions_blank_remarks": {
+   "blockers": [
+    "Location restrictions require customer remarks"
+   ],
+   "ready": false
+  },
+  "restrictions_with_remarks": {
+   "blockers": [],
+   "ready": true
+  },
+  "restrictions_without_remarks": {
+   "blockers": [
+    "Location restrictions require customer remarks"
+   ],
+   "ready": false
+  },
+  "review_resolved": {
+   "blockers": [
+    "ON GRID INVERTER requires engineering resolution",
+    "ON GRID INVERTER assessment must pass before installation"
+   ],
+   "ready": false
+  },
+  "structure_type_differs_rejected": {
+   "blockers": [
+    "Additional work/cost has been rejected"
+   ],
+   "ready": false
+  },
+  "suitability_missing": {
+   "blockers": [
+    "Site suitability has not been confirmed"
+   ],
+   "ready": false
+  },
+  "system_type_only_in_snapshot": {
+   "blockers": [
+    "HYBRID INVERTER assessment is incomplete",
+    "HYBRID BATTERY assessment is incomplete"
+   ],
+   "ready": false
+  },
+  "termination_needs_modification_only": {
+   "blockers": [],
+   "ready": true
+  },
+  "undecided_system_type": {
+   "blockers": [],
+   "ready": true
+  },
+  "unknown_suitability": {
+   "blockers": [],
+   "ready": true
+  },
+  "walkway_rejected": {
+   "blockers": [
+    "Additional work/cost has been rejected"
+   ],
+   "ready": false
+  },
+  "wheeling_consumer_number_zero": {
+   "blockers": [
+    "Consumer Number is required for wheeling"
+   ],
+   "ready": false
+  },
+  "wheeling_without_consumer_number": {
+   "blockers": [
+    "Consumer Number is required for wheeling"
+   ],
+   "ready": false
+  },
+  "wheeling_without_phone": {
+   "blockers": [
+    "Registered Phone is required for wheeling"
+   ],
+   "ready": false
+  }
+ },
+ "source": {
+  "lib/equipment-assessment.ts": "f638ff395c34ee7878b3d897e987cff5b0582f3ffc56ee67aa928d851af6e09d",
+  "lib/site-inspection.ts": "1943dfe6a53520ef4db38772b90147f124068e93b7ac6176f2e30e276fc33939"
+ },
+ "statuses": {
+  "all_na": "PASS",
+  "all_not_checked": "NOT_STARTED",
+  "all_pass": "PASS",
+  "all_pass_one_fail": "FAIL",
+  "all_pass_one_na": "PASS",
+  "all_pass_one_not_checked": "IN_PROGRESS",
+  "all_pass_one_review": "REQUIRES_REVIEW",
+  "empty": "NOT_STARTED",
+  "fail_and_review": "FAIL",
+  "one_na": "PASS",
+  "one_pass": "PASS",
+  "partial_fail": "FAIL",
+  "pass_and_not_checked": "IN_PROGRESS",
+  "review_and_not_checked": "REQUIRES_REVIEW",
+  "unknown_value": "CONDITIONAL"
+ }
+}
