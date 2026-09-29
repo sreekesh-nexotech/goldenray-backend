@@ -21,3 +21,5 @@ playwright==1.63.0
 # F3: HEIC/HEIF decoding for photo uploads (media.services.sniffing) and the WSGI server of the api image.
 pillow-heif==1.8.0
 gunicorn==26.2.0
+# catalog: category attribute schemas are JSON Schema (draft 2020-12), validated directly (already a drf-spectacular dependency).
+jsonschema==4.26.0

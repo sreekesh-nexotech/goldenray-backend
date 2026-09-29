@@ -359,6 +359,9 @@ SPECTACULAR_SETTINGS = {
         "RenderJobKindEnum": "documents.models.render_job.RenderJob.Kind",
         "RenderJobStatusEnum": "documents.models.render_job.RenderJob.Status",
         "IntegrationKeyEnum": "company.models.integration.Integration.Key",
+        "CatalogComponentStatusEnum": "catalog.models.component.ComponentStatus",
+        "CatalogProfileStatusEnum": "catalog.models.profile.ProfileStatus",
+        "CatalogUnitEnum": "catalog.models.category.Unit",
     },
 }
 

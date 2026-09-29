@@ -1,0 +1,5118 @@
+{
+ "categories": {
+  "panel": {
+   "label": "Solar Panel",
+   "gstDefault": 5,
+   "items": [
+    {
+     "id": "p1",
+     "name": "Waaree Mono perc Bifacial 540W DCR",
+     "brand": "Waaree",
+     "tiers": [
+      "base"
+     ],
+     "watt": 540,
+     "perWatt": 24.3,
+     "price": 13122,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p2",
+     "name": "Adani Mono perc Bifacial 550W DCR",
+     "brand": "Adani",
+     "tiers": [
+      "value"
+     ],
+     "watt": 550,
+     "perWatt": 24.7,
+     "price": 13585,
+     "dcr": true,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p3",
+     "name": "Adani Bifacial Topcon G2S 620W DCR",
+     "brand": "Adani",
+     "tiers": [
+      "premium",
+      "value"
+     ],
+     "watt": 620,
+     "perWatt": 25.7,
+     "price": 15934,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.4,
+     "isc": 15.91,
+     "imp": 14.98,
+     "tempCoeffVoc": -0.23,
+     "tempCoeffPmax": -0.28,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p4",
+     "name": "Premier Energies Mono perc 540W DCR",
+     "brand": "Premier Energies",
+     "tiers": [
+      "value"
+     ],
+     "watt": 540,
+     "perWatt": 25.25,
+     "price": 13635,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p5",
+     "name": "Premier Energies TopCon 600W DCR",
+     "brand": "Premier Energies",
+     "tiers": [
+      "premium"
+     ],
+     "watt": 600,
+     "perWatt": 26.25,
+     "price": 15750,
+     "dcr": true,
+     "voc": 51.5,
+     "vmp": 43.2,
+     "isc": 14.8,
+     "imp": 13.89,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p6",
+     "name": "Vikram Solar Mono perc 540W DCR",
+     "brand": "Vikram Solar",
+     "tiers": [
+      "base"
+     ],
+     "watt": 540,
+     "perWatt": 23.5,
+     "price": 12690,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p7",
+     "name": "Renewsys Mono perc 545W DCR",
+     "brand": "Renewsys",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "watt": 545,
+     "perWatt": 24.4,
+     "price": 13298,
+     "dcr": true,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p8",
+     "name": "Rayzon Mono perc 545W DCR",
+     "brand": "Rayzon",
+     "tiers": [
+      "base"
+     ],
+     "watt": 545,
+     "perWatt": 23.5,
+     "price": 12808,
+     "dcr": true,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p9",
+     "name": "Panasonic Mono perc 540W DCR",
+     "brand": "Panasonic",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "watt": 540,
+     "perWatt": 25,
+     "price": 13500,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p10",
+     "name": "Axitec Mono perc 550W DCR",
+     "brand": "Axitec",
+     "tiers": [
+      "base"
+     ],
+     "watt": 550,
+     "perWatt": 23.5,
+     "price": 12925,
+     "dcr": true,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p11",
+     "name": "Saatvik Solar Mono perc 540W DCR",
+     "brand": "Saatvik Solar",
+     "tiers": [
+      "base"
+     ],
+     "watt": 540,
+     "perWatt": 23,
+     "price": 12420,
+     "dcr": true,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p12",
+     "name": "Saatvik Solar Topcon G2G 565W DCR",
+     "brand": "Saatvik Solar",
+     "tiers": [
+      "value"
+     ],
+     "watt": 565,
+     "perWatt": 26.5,
+     "price": 14973,
+     "dcr": true,
+     "voc": 50.5,
+     "vmp": 42.3,
+     "isc": 14.2,
+     "imp": 13.36,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p13",
+     "name": "Jakson 570W DCR",
+     "brand": "Jakson",
+     "tiers": [
+      "base"
+     ],
+     "watt": 570,
+     "perWatt": 19,
+     "price": 10830,
+     "dcr": true,
+     "voc": 50.6,
+     "vmp": 42.4,
+     "isc": 14.3,
+     "imp": 13.44,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p14",
+     "name": "Renew Mono perc 550W",
+     "brand": "Renew",
+     "tiers": [
+      "base"
+     ],
+     "watt": 550,
+     "perWatt": 23.7,
+     "price": 13035,
+     "dcr": false,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p15",
+     "name": "Emvee Topcon G2G 565W DCR",
+     "brand": "Emvee",
+     "tiers": [
+      "value"
+     ],
+     "watt": 565,
+     "perWatt": 26,
+     "price": 14690,
+     "dcr": true,
+     "voc": 50.5,
+     "vmp": 42.3,
+     "isc": 14.2,
+     "imp": 13.36,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p16",
+     "name": "Waaree Mono perc 545W NDCR",
+     "brand": "Waaree",
+     "tiers": [
+      "base"
+     ],
+     "watt": 545,
+     "perWatt": 15,
+     "price": 8175,
+     "dcr": false,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p17",
+     "name": "Waaree Bifacial Topcon 575W NDCR",
+     "brand": "Waaree",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "watt": 575,
+     "perWatt": 16,
+     "price": 9200,
+     "dcr": false,
+     "voc": 50.8,
+     "vmp": 42.6,
+     "isc": 14.4,
+     "imp": 13.5,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p18",
+     "name": "Vikram Solar Mono perc 550W NDCR",
+     "brand": "Vikram Solar",
+     "tiers": [
+      "base"
+     ],
+     "watt": 550,
+     "perWatt": 16,
+     "price": 8800,
+     "dcr": false,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p19",
+     "name": "Renewsys Mono perc 545W NDCR",
+     "brand": "Renewsys",
+     "tiers": [
+      "base"
+     ],
+     "watt": 545,
+     "perWatt": 15,
+     "price": 8175,
+     "dcr": false,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p20",
+     "name": "Renewsys TopCon G2G 600W NDCR",
+     "brand": "Renewsys",
+     "tiers": [
+      "value"
+     ],
+     "watt": 600,
+     "perWatt": 15.8,
+     "price": 9480,
+     "dcr": false,
+     "voc": 51.5,
+     "vmp": 43.2,
+     "isc": 14.8,
+     "imp": 13.89,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p21",
+     "name": "Rayzon Mono perc 545W NDCR",
+     "brand": "Rayzon",
+     "tiers": [
+      "base"
+     ],
+     "watt": 545,
+     "perWatt": 15.9,
+     "price": 8666,
+     "dcr": false,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p22",
+     "name": "Panasonic Mono perc 550W NDCR",
+     "brand": "Panasonic",
+     "tiers": [
+      "value"
+     ],
+     "watt": 550,
+     "perWatt": 17.25,
+     "price": 9488,
+     "dcr": false,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p23",
+     "name": "Axitec Bifacial Topcon 600W NDCR",
+     "brand": "Axitec",
+     "tiers": [
+      "value"
+     ],
+     "watt": 600,
+     "perWatt": 16.7,
+     "price": 10020,
+     "dcr": false,
+     "voc": 51.5,
+     "vmp": 43.2,
+     "isc": 14.8,
+     "imp": 13.89,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p24",
+     "name": "Premier Energies Mono perc 545W NDCR",
+     "brand": "Premier Energies",
+     "tiers": [
+      "base"
+     ],
+     "watt": 545,
+     "perWatt": 15.2,
+     "price": 8284,
+     "dcr": false,
+     "voc": 49.8,
+     "vmp": 41.7,
+     "isc": 13.9,
+     "imp": 13.07,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p25",
+     "name": "Premier Energies Bifacial Topcon 590W NDCR",
+     "brand": "Premier Energies",
+     "tiers": [
+      "value"
+     ],
+     "watt": 590,
+     "perWatt": 15.5,
+     "price": 9145,
+     "dcr": false,
+     "voc": 51.3,
+     "vmp": 43.1,
+     "isc": 14.6,
+     "imp": 13.7,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p26",
+     "name": "Saatvik Solar Mono perc 540W NDCR",
+     "brand": "Saatvik Solar",
+     "tiers": [
+      "base"
+     ],
+     "watt": 540,
+     "perWatt": 14.8,
+     "price": 7992,
+     "dcr": false,
+     "voc": 49.6,
+     "vmp": 41.5,
+     "isc": 13.83,
+     "imp": 13.01,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p27",
+     "name": "Saatvik Solar Topcon G2G 580W NDCR",
+     "brand": "Saatvik Solar",
+     "tiers": [
+      "value"
+     ],
+     "watt": 580,
+     "perWatt": 14.5,
+     "price": 8410,
+     "dcr": false,
+     "voc": 51,
+     "vmp": 42.8,
+     "isc": 14.45,
+     "imp": 13.55,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p28",
+     "name": "Adani Topcon 620W NDCR",
+     "brand": "Adani",
+     "tiers": [
+      "value"
+     ],
+     "watt": 620,
+     "perWatt": 17,
+     "price": 10540,
+     "dcr": false,
+     "voc": 49.6,
+     "vmp": 41.4,
+     "isc": 15.91,
+     "imp": 14.98,
+     "tempCoeffVoc": -0.23,
+     "tempCoeffPmax": -0.28,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p29",
+     "name": "Pahal Bifacial Topcon G2G 600W NDCR",
+     "brand": "Pahal",
+     "tiers": [
+      "base"
+     ],
+     "watt": 600,
+     "perWatt": 16,
+     "price": 9600,
+     "dcr": false,
+     "voc": 51.5,
+     "vmp": 43.2,
+     "isc": 14.8,
+     "imp": 13.89,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p30",
+     "name": "Goldi Bifacial Topcon G2G 580W NDCR",
+     "brand": "Goldi",
+     "tiers": [
+      "base"
+     ],
+     "watt": 580,
+     "perWatt": 16,
+     "price": 9280,
+     "dcr": false,
+     "voc": 51,
+     "vmp": 42.8,
+     "isc": 14.45,
+     "imp": 13.55,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p31",
+     "name": "Emvee Topcon 580W NDCR",
+     "brand": "Emvee",
+     "tiers": [
+      "base"
+     ],
+     "watt": 580,
+     "perWatt": 16,
+     "price": 9280,
+     "dcr": false,
+     "voc": 51,
+     "vmp": 42.8,
+     "isc": 14.45,
+     "imp": 13.55,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p32",
+     "name": "Renew Topcon G2G 640W NDCR",
+     "brand": "Renew",
+     "tiers": [
+      "base"
+     ],
+     "watt": 640,
+     "perWatt": 16,
+     "price": 10240,
+     "dcr": false,
+     "voc": 51.8,
+     "vmp": 43.5,
+     "isc": 15.6,
+     "imp": 14.71,
+     "tempCoeffVoc": -0.24,
+     "tempCoeffPmax": -0.29,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "p33",
+     "name": "Adani Bifacial G2G 555W NDCR",
+     "brand": "Adani",
+     "tiers": [
+      "base"
+     ],
+     "watt": 555,
+     "perWatt": 15,
+     "price": 8325,
+     "dcr": false,
+     "voc": 50.3,
+     "vmp": 42.1,
+     "isc": 14,
+     "imp": 13.18,
+     "tempCoeffVoc": -0.26,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "NON_DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pa_0006870e2e7d",
+     "name": "hari 550",
+     "brand": "hari",
+     "tiers": [
+      "value",
+      "base"
+     ],
+     "price": 9900,
+     "watt": 550,
+     "perWatt": 18,
+     "dcr": true,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pa_a2ea75b89b4d",
+     "name": "New Solar Panel",
+     "brand": "",
+     "tiers": [
+      "value",
+      "base"
+     ],
+     "price": 0,
+     "watt": 550,
+     "perWatt": 0,
+     "dcr": true,
+     "voc": 50,
+     "vmp": 41.9,
+     "isc": 14,
+     "imp": 13.13,
+     "tempCoeffVoc": -0.28,
+     "tempCoeffPmax": -0.35,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pa_9e35d4adf2a3",
+     "name": "adani 600",
+     "brand": "adani",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "price": 15420,
+     "watt": 600,
+     "perWatt": 25.7,
+     "dcr": true,
+     "voc": 51.5,
+     "vmp": 43.2,
+     "isc": 14.8,
+     "imp": 13.89,
+     "tempCoeffVoc": -0.25,
+     "tempCoeffPmax": -0.3,
+     "cells": 144,
+     "maxSysVoltage": 1500,
+     "panelType": "DCR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pa_6a2a92fe02b0",
+     "name": "E2E Test Panel 560W",
+     "brand": "E2E",
+     "price": 12000,
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "warranty": "25 Years",
+     "watt": 560,
+     "dcr": true,
+     "panelType": "DCR",
+     "status": "ACTIVE",
+     "approvalStatus": "APPROVED",
+     "createdBy": "admin-001",
+     "createdAt": "2026-09-09T06:30:38.189Z",
+     "updatedBy": "admin-001",
+     "updatedAt": "2026-09-09T06:30:38.189Z",
+     "changeLog": [
+      {
+       "at": "2026-09-09T06:30:38.189Z",
+       "by": "admin-001",
+       "role": "ADMIN",
+       "action": "CREATED"
+      }
+     ],
+     "perWatt": 21.43
+    }
+   ]
+  },
+  "inverter": {
+   "label": "Inverter",
+   "gstDefault": 5,
+   "items": [
+    {
+     "id": "i1",
+     "name": "Growatt MIC 3000TL-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "MIC 3000TL-X",
+     "type": "ongrid",
+     "price": 16600,
+     "mpptCount": 1,
+     "mpptVoltageMin": 50,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 80,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.25,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i2",
+     "name": "Growatt MIC 3300TL-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3.3,
+     "model": "MIC 3300TL-X",
+     "type": "ongrid",
+     "price": 16700,
+     "mpptCount": 1,
+     "mpptVoltageMin": 50,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 80,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.25,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i3",
+     "name": "Growatt MIN 4200 TL-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 4.2,
+     "model": "MIN 4200 TL-X",
+     "type": "ongrid",
+     "price": 30850,
+     "mpptCount": 2,
+     "mpptVoltageMin": 50,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 80,
+     "maxInputCurrent": 13.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.9,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i4",
+     "name": "Growatt MIN 5000 TL-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "MIN 5000 TL-X",
+     "type": "ongrid",
+     "price": 29200,
+     "mpptCount": 2,
+     "mpptVoltageMin": 50,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 80,
+     "maxInputCurrent": 13.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.9,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i5",
+     "name": "Growatt 5000 TL3-S",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "5000 TL3-S",
+     "type": "ongrid",
+     "price": 47600,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i6",
+     "name": "Growatt 6000 TL3-S",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "6000 TL3-S",
+     "type": "ongrid",
+     "price": 50400,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i7",
+     "name": "Growatt MOD 8000 TL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "MOD 8000 TL3-X",
+     "type": "ongrid",
+     "price": 53200,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i8",
+     "name": "Growatt MOD 10000 TL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "MOD 10000 TL3-X",
+     "type": "ongrid",
+     "price": 54500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i9",
+     "name": "Growatt MOD 12000 TL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 12,
+     "model": "MOD 12000 TL3-X",
+     "type": "ongrid",
+     "price": 64800,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i10",
+     "name": "Growatt MOD 15000 TL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "MOD 15000 TL3-X",
+     "type": "ongrid",
+     "price": 66650,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i11",
+     "name": "Growatt MID 20 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "MID 20 KTL3-X",
+     "type": "ongrid",
+     "price": 86700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i12",
+     "name": "Growatt MID 25 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 25,
+     "model": "MID 25 KTL3-X",
+     "type": "ongrid",
+     "price": 91650,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i13",
+     "name": "Growatt MID 30 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 30,
+     "model": "MID 30 KTL3-X",
+     "type": "ongrid",
+     "price": 121350,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i14",
+     "name": "Growatt MID 33 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 33,
+     "model": "MID 33 KTL3-X",
+     "type": "ongrid",
+     "price": 126500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i15",
+     "name": "Growatt MID 40 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 40,
+     "model": "MID 40 KTL3-X",
+     "type": "ongrid",
+     "price": 143950,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i16",
+     "name": "Growatt MAC 50 KTL3-X",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 50,
+     "model": "MAC 50 KTL3-X",
+     "type": "ongrid",
+     "price": 161850,
+     "mpptCount": 4,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i17",
+     "name": "Growatt MAX 80KTL3-LV",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 80,
+     "model": "MAX 80KTL3-LV",
+     "type": "ongrid",
+     "price": 236033,
+     "mpptCount": 6,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i18",
+     "name": "Growatt MAX 100KTL3-X-LV",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 100,
+     "model": "MAX 100KTL3-X-LV",
+     "type": "ongrid",
+     "price": 292000,
+     "mpptCount": 8,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i19",
+     "name": "Growatt MAX 125KTL3-X-LV",
+     "brand": "Growatt",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 125,
+     "model": "MAX 125KTL3-X-LV",
+     "type": "ongrid",
+     "price": 312000,
+     "mpptCount": 10,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i20",
+     "name": "Sungrow SG 3.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "SG 3.0RT",
+     "type": "ongrid",
+     "price": 18250,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 12.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i21",
+     "name": "Sungrow SG 3.3RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3.3,
+     "model": "SG 3.3RT",
+     "type": "ongrid",
+     "price": 22000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 12.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i22",
+     "name": "Sungrow SG 4.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 4,
+     "model": "SG 4.0RT",
+     "type": "ongrid",
+     "price": 28500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 12.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i23",
+     "name": "Sungrow SG5K-D",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "SG5K-D",
+     "type": "ongrid",
+     "price": 30600,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 12.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i24",
+     "name": "Sungrow SG5.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 5,
+     "model": "SG5.0RT",
+     "type": "ongrid",
+     "price": 54500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18.8,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i25",
+     "name": "Sungrow SG6.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "SG6.0RT",
+     "type": "ongrid",
+     "price": 56000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18.8,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i26",
+     "name": "Sungrow SG8.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "SG8.0RT",
+     "type": "ongrid",
+     "price": 58500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18.8,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i27",
+     "name": "Sungrow SG10.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "SG10.0RT",
+     "type": "ongrid",
+     "price": 64500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18.8,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i28",
+     "name": "Sungrow SG12.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 12,
+     "model": "SG12.0RT",
+     "type": "ongrid",
+     "price": 66500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18.8,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i29",
+     "name": "Sungrow SG15.0RT",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "SG15.0RT",
+     "type": "ongrid",
+     "price": 87000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i30",
+     "name": "Sungrow SG20KTL-M",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "SG20KTL-M",
+     "type": "ongrid",
+     "price": 93000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i31",
+     "name": "Sungrow SG33CX",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 33,
+     "model": "SG33CX",
+     "type": "ongrid",
+     "price": 133000,
+     "mpptCount": 3,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i32",
+     "name": "Sungrow SG50CX",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 50,
+     "model": "SG50CX",
+     "type": "ongrid",
+     "price": 168000,
+     "mpptCount": 4,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i33",
+     "name": "Sungrow SG110CX",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 110,
+     "model": "SG110CX",
+     "type": "ongrid",
+     "price": 317000,
+     "mpptCount": 9,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i34",
+     "name": "Sungrow SG125HX",
+     "brand": "Sungrow",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 125,
+     "model": "SG125HX",
+     "type": "ongrid",
+     "price": 347000,
+     "mpptCount": 9,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i35",
+     "name": "SolarEdge SE3000H",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "SE3000H",
+     "type": "ongrid",
+     "price": 39000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 480,
+     "maxInputVoltage": 480,
+     "startVoltage": 380,
+     "maxInputCurrent": 10,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 12,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i36",
+     "name": "SolarEdge SE5K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 5,
+     "model": "SE5K",
+     "type": "ongrid",
+     "price": 75000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i37",
+     "name": "SolarEdge SE8K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "SE8K",
+     "type": "ongrid",
+     "price": 60000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i38",
+     "name": "SolarEdge SE15K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "SE15K",
+     "type": "ongrid",
+     "price": 88000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i39",
+     "name": "SolarEdge SE17K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 17,
+     "model": "SE17K",
+     "type": "ongrid",
+     "price": 89000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i40",
+     "name": "SolarEdge SE27.6K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 27.6,
+     "model": "SE27.6K",
+     "type": "ongrid",
+     "price": 112000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 32,
+     "maxStringsPerMppt": 4,
+     "maxIsc": 40,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i41",
+     "name": "SolarEdge SE-33.3KW",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 33.3,
+     "model": "SE-33.3KW",
+     "type": "ongrid",
+     "price": 118000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 380,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 850,
+     "startVoltage": 380,
+     "maxInputCurrent": 32,
+     "maxStringsPerMppt": 4,
+     "maxIsc": 40,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i42",
+     "name": "SolarEdge SE66K",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 66,
+     "model": "SE66K",
+     "type": "ongrid",
+     "price": 228000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 560,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1100,
+     "startVoltage": 560,
+     "maxInputCurrent": 60,
+     "maxStringsPerMppt": 8,
+     "maxIsc": 75,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i43",
+     "name": "SolarEdge SE 100kw",
+     "brand": "SolarEdge",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "kw": 100,
+     "model": "SE 100kw",
+     "type": "ongrid",
+     "price": 315000,
+     "mpptCount": 1,
+     "mpptVoltageMin": 560,
+     "mpptVoltageMax": 960,
+     "maxInputVoltage": 1100,
+     "startVoltage": 560,
+     "maxInputCurrent": 60,
+     "maxStringsPerMppt": 8,
+     "maxIsc": 75,
+     "optimizerBased": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i44",
+     "name": "DEYE On-Grid 1P 3kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "On-Grid 1P",
+     "type": "ongrid",
+     "price": 15700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i45",
+     "name": "DEYE On-Grid 1P 3.3kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3.3,
+     "model": "On-Grid 1P",
+     "type": "ongrid",
+     "price": 18672,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i46",
+     "name": "DEYE On-Grid 1P 4kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 4,
+     "model": "On-Grid 1P",
+     "type": "ongrid",
+     "price": 19975,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i47",
+     "name": "DEYE On-Grid 1P 5kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "On-Grid 1P",
+     "type": "ongrid",
+     "price": 26500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i48",
+     "name": "DEYE On-Grid 3P 5kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 5,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 45696,
+     "mpptCount": 2,
+     "mpptVoltageMin": 180,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i49",
+     "name": "DEYE On-Grid 3P 6kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 46502,
+     "mpptCount": 2,
+     "mpptVoltageMin": 180,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i50",
+     "name": "DEYE On-Grid 3P 8kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 48115,
+     "mpptCount": 2,
+     "mpptVoltageMin": 180,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i51",
+     "name": "DEYE On-Grid 3P 10kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 49728,
+     "mpptCount": 2,
+     "mpptVoltageMin": 180,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i52",
+     "name": "DEYE On-Grid 3P 15kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 60000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 180,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 15,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i53",
+     "name": "DEYE On-Grid 3P 20kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 69750,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i54",
+     "name": "DEYE On-Grid 3P 33kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 33,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 110611,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i55",
+     "name": "DEYE On-Grid 3P 40kW",
+     "brand": "DEYE",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 40,
+     "model": "On-Grid 3P",
+     "type": "ongrid",
+     "price": 140238,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i56",
+     "name": "Deye Hybrid 1P 3-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "Hybrid 3-48v",
+     "type": "hybrid",
+     "price": 67100,
+     "mpptCount": 2,
+     "mpptVoltageMin": 90,
+     "mpptVoltageMax": 450,
+     "maxInputVoltage": 500,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i57",
+     "name": "Deye Hybrid 1P 3.6-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3.6,
+     "model": "Hybrid 3.6-48v",
+     "type": "hybrid",
+     "price": 74786,
+     "mpptCount": 2,
+     "mpptVoltageMin": 90,
+     "mpptVoltageMax": 450,
+     "maxInputVoltage": 500,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i58",
+     "name": "Deye Hybrid 1P 5-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "Hybrid 5-48v",
+     "type": "hybrid",
+     "price": 81730,
+     "mpptCount": 2,
+     "mpptVoltageMin": 90,
+     "mpptVoltageMax": 450,
+     "maxInputVoltage": 500,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i59",
+     "name": "Deye Hybrid 1P 6-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 6,
+     "model": "Hybrid 6-48v",
+     "type": "hybrid",
+     "price": 86076,
+     "mpptCount": 2,
+     "mpptVoltageMin": 90,
+     "mpptVoltageMax": 450,
+     "maxInputVoltage": 500,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i60",
+     "name": "Deye Hybrid 3P 8-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "Hybrid 8-48v",
+     "type": "hybrid",
+     "price": 152719,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i61",
+     "name": "Deye Hybrid 3P 10-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "Hybrid 10-48v",
+     "type": "hybrid",
+     "price": 162136,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i62",
+     "name": "Deye Hybrid 3P 12-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 12,
+     "model": "Hybrid 12-48v",
+     "type": "hybrid",
+     "price": 168438,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 800,
+     "maxInputVoltage": 1000,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i63",
+     "name": "Deye Hybrid 3P 30-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 30,
+     "model": "Hybrid 30-48v",
+     "type": "hybrid",
+     "price": 353925,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 28,
+     "maxStringsPerMppt": 3,
+     "maxIsc": 35,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i64",
+     "name": "Deye Hybrid 3P 40-48v",
+     "brand": "Deye",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 40,
+     "model": "Hybrid 40-48v",
+     "type": "hybrid",
+     "price": 423833,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 28,
+     "maxStringsPerMppt": 3,
+     "maxIsc": 35,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i65",
+     "name": "DEYE Hybrid 3P 80-48v",
+     "brand": "DEYE",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 80,
+     "model": "Hybrid 80-48v",
+     "type": "hybrid",
+     "price": 686205,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 28,
+     "maxStringsPerMppt": 3,
+     "maxIsc": 35,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i66",
+     "name": "Solaire ZIP-3.3kw",
+     "brand": "Solaire",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3.3,
+     "model": "ZIP-3.3kw",
+     "type": "ongrid",
+     "price": 19800,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i67",
+     "name": "Solaire ZIP-5kw",
+     "brand": "Solaire",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "ZIP-5kw",
+     "type": "ongrid",
+     "price": 32700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i68",
+     "name": "PV BLINK 1P 3kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "PV BLINK 3kW",
+     "type": "ongrid",
+     "price": 17500,
+     "mpptCount": 1,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i69",
+     "name": "PV BLINK 1P 5kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "PV BLINK 5kW",
+     "type": "ongrid",
+     "price": 31200,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i70",
+     "name": "PV BLINK 3P 5kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 5,
+     "model": "PV BLINK 5kW",
+     "type": "ongrid",
+     "price": 50700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i71",
+     "name": "PV BLINK 3P 6kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "PV BLINK 6kW",
+     "type": "ongrid",
+     "price": 53350,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i72",
+     "name": "PV BLINK 3P 8kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "PV BLINK 8kW",
+     "type": "ongrid",
+     "price": 60200,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i73",
+     "name": "PV BLINK 3P 10kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "PV BLINK 10kW",
+     "type": "ongrid",
+     "price": 61250,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i74",
+     "name": "PV BLINK 3P 12kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 12,
+     "model": "PV BLINK 12kW",
+     "type": "ongrid",
+     "price": 68700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i75",
+     "name": "PV BLINK 3P 15kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "PV BLINK 15kW",
+     "type": "ongrid",
+     "price": 71800,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 950,
+     "maxInputVoltage": 1100,
+     "startVoltage": 200,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i76",
+     "name": "PV BLINK 3P 20kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "PV BLINK 20kW",
+     "type": "ongrid",
+     "price": 87700,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i77",
+     "name": "PV BLINK 3P 25kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 25,
+     "model": "PV BLINK 25kW",
+     "type": "ongrid",
+     "price": 102000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i78",
+     "name": "PV BLINK 3P 30kW",
+     "brand": "PV BLINK",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "kw": 30,
+     "model": "PV BLINK 30kW",
+     "type": "ongrid",
+     "price": 110000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 22,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 27,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i79",
+     "name": "Solis 1P 3kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "Solis 3kW",
+     "type": "ongrid",
+     "price": 17900,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i80",
+     "name": "Solis 1P 5kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "Solis 5kW",
+     "type": "ongrid",
+     "price": 30000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 560,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i81",
+     "name": "Solis 3P 5kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 5,
+     "model": "Solis 5kW",
+     "type": "ongrid",
+     "price": 54000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i82",
+     "name": "Solis 3P 8kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "Solis 8kW",
+     "type": "ongrid",
+     "price": 58000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i83",
+     "name": "Solis 3P 10kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "Solis 10kW",
+     "type": "ongrid",
+     "price": 59000,
+     "mpptCount": 2,
+     "mpptVoltageMin": 160,
+     "mpptVoltageMax": 850,
+     "maxInputVoltage": 1000,
+     "startVoltage": 200,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i84",
+     "name": "Solis 3P 20kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "Solis 20kW",
+     "type": "ongrid",
+     "price": 85129,
+     "mpptCount": 4,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i85",
+     "name": "Solis 3P 40kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 40,
+     "model": "Solis 40kW",
+     "type": "ongrid",
+     "price": 142000,
+     "mpptCount": 4,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i86",
+     "name": "Solis 3P 50kW",
+     "brand": "Solis",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 50,
+     "model": "Solis 50kW",
+     "type": "ongrid",
+     "price": 152000,
+     "mpptCount": 4,
+     "mpptVoltageMin": 200,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 250,
+     "maxInputCurrent": 16,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 20,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i87",
+     "name": "Foxess 1P 3.3kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 3.3,
+     "model": "Foxess 3.3kW",
+     "type": "ongrid",
+     "price": 16300,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 550,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i88",
+     "name": "Foxess 1P 5kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "Foxess 5kW",
+     "type": "ongrid",
+     "price": 31500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 550,
+     "maxInputVoltage": 600,
+     "startVoltage": 100,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 17.5,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i89",
+     "name": "Foxess 3P 6kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 6,
+     "model": "Foxess 6kW",
+     "type": "ongrid",
+     "price": 55900,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i90",
+     "name": "Foxess 3P 8kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 8,
+     "model": "Foxess 8kW",
+     "type": "ongrid",
+     "price": 58500,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i91",
+     "name": "Foxess 3P 10kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 10,
+     "model": "Foxess 10kW",
+     "type": "ongrid",
+     "price": 59900,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i92",
+     "name": "Foxess 3P 15kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 15,
+     "model": "Foxess 15kW",
+     "type": "ongrid",
+     "price": 67800,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 14,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 18,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i93",
+     "name": "Foxess 3P 20kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 20,
+     "model": "Foxess 20kW",
+     "type": "ongrid",
+     "price": 77900,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 28,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 35,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i94",
+     "name": "Foxess 3P 25kW",
+     "brand": "Foxess",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "kw": 25,
+     "model": "Foxess 25kW",
+     "type": "ongrid",
+     "price": 83900,
+     "mpptCount": 2,
+     "mpptVoltageMin": 140,
+     "mpptVoltageMax": 1000,
+     "maxInputVoltage": 1100,
+     "startVoltage": 140,
+     "maxInputCurrent": 28,
+     "maxStringsPerMppt": 2,
+     "maxIsc": 35,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i95",
+     "name": "Eastman 1P 3kW",
+     "brand": "Eastman",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 3,
+     "model": "Eastman 3kW",
+     "type": "ongrid",
+     "price": 14800,
+     "mpptCount": 1,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i96",
+     "name": "Eastman 1P 5kW",
+     "brand": "Eastman",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "kw": 5,
+     "model": "Eastman 5kW",
+     "type": "ongrid",
+     "price": 24900,
+     "mpptCount": 1,
+     "mpptVoltageMin": 80,
+     "mpptVoltageMax": 500,
+     "maxInputVoltage": 550,
+     "startVoltage": 100,
+     "maxInputCurrent": 13,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 16,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i97",
+     "name": "ENPHASE IQ8P Micro",
+     "brand": "ENPHASE",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "1P",
+     "kw": 0.48,
+     "model": "IQ8P Micro",
+     "type": "micro",
+     "price": 8200,
+     "mpptCount": 1,
+     "mpptVoltageMin": 16,
+     "mpptVoltageMax": 58,
+     "maxInputVoltage": 60,
+     "startVoltage": 22,
+     "maxInputCurrent": 12,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "isMicro": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "i98",
+     "name": "Hoymiles Micro Inverter",
+     "brand": "Hoymiles",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "kw": 0.5,
+     "model": "Micro Inverter",
+     "type": "micro",
+     "price": 7500,
+     "mpptCount": 1,
+     "mpptVoltageMin": 16,
+     "mpptVoltageMax": 60,
+     "maxInputVoltage": 65,
+     "startVoltage": 22,
+     "maxInputCurrent": 12.5,
+     "maxStringsPerMppt": 1,
+     "maxIsc": 15,
+     "isMicro": true,
+     "deviceType": "string_inverter",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "dcdb": {
+   "label": "DCDB",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "d1",
+     "name": "1/1 DCDB Havells MCB 500v 32A + Havells SPD",
+     "brand": "Havells",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "price": 1525,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d2",
+     "name": "1/1 DCDB ETN MCB 500v 32A + Mersen 600v SPD",
+     "brand": "ETN+Mersen",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "price": 2800,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d3",
+     "name": "1/1 DCDB ABB MCB 500v 32A + Citel 500v SPD",
+     "brand": "ABB+Citel",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "price": 3226,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d4",
+     "name": "1/1 DCDB ABB MCB 500v + Mersen SPD",
+     "brand": "ABB+Mersen",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "phase": "1P",
+     "price": 2030,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d5",
+     "name": "1/1 DCDB ABB MCB 500v + Phoenix SPD",
+     "brand": "ABB+Phoenix",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "1P",
+     "price": 2473,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d6",
+     "name": "2/2 DCDB Havells MCB 500v + Havells SPD",
+     "brand": "Havells",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "price": 1525,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d7",
+     "name": "2/2 DCDB ETN MCB 500v + Mersen 600v SPD",
+     "brand": "ETN+Mersen",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "price": 3700,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d8",
+     "name": "2/2 DCDB ABB MCB 500v + Mersen SPD",
+     "brand": "ABB+Mersen",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "phase": "3P",
+     "price": 1858,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d9",
+     "name": "1/1 DCDB ABB MCB 500v 32A + Citel 500v SPD + Fuses (Hybrid)",
+     "brand": "ABB+Citel",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P-HYB",
+     "price": 3226,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "d10",
+     "name": "2/2 DCDB ABB MCB 500v + Mersen 500v SPD + Fuses (Hybrid 3P)",
+     "brand": "ABB+Mersen",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P-HYB",
+     "price": 5594,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "acdb": {
+   "label": "ACDB",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "a1",
+     "name": "ETN 32A + Mersen ACDB",
+     "brand": "ETN+Mersen",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P",
+     "price": 1600,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a2",
+     "name": "ABB + Citel SPD ACDB",
+     "brand": "ABB+Citel",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "price": 2282,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a3",
+     "name": "ABB + Mersen SPD ACDB",
+     "brand": "ABB+Mersen",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "price": 1858,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a4",
+     "name": "ETN 32A Mersen 3P ACDB",
+     "brand": "ETN+Mersen",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "price": 3700,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a5",
+     "name": "Enphase ACDB + AJ Box ABB MCB 16A 2P",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "1P",
+     "price": 6080,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a6",
+     "name": "Enphase ACDB + AJ Box 3P",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P",
+     "price": 9585,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a7",
+     "name": "ACDB WITH CHANGE OVER SWITCH 1PH Hybrid",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "1P-HYB",
+     "price": 8100,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "a8",
+     "name": "ACDB Hybrid 3PH",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P-HYB",
+     "price": 12100,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ac_hyb_en1p",
+     "name": "ACDB Hybrid Enphase 1Ph (ABB MCB+Citel SPD)",
+     "brand": "ABB/Citel",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "1P-HYB",
+     "type": "hybrid",
+     "price": 3500,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ac_hyb_en3p",
+     "name": "ACDB Hybrid Enphase 3Ph (ABB MCB+Citel SPD)",
+     "brand": "ABB/Citel",
+     "tiers": [
+      "premium"
+     ],
+     "phase": "3P-HYB",
+     "type": "hybrid",
+     "price": 10612,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "meter": {
+   "label": "Meter",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "m1",
+     "name": "Visiontek Single Phase Meter",
+     "brand": "Visiontek",
+     "tiers": [
+      "base"
+     ],
+     "phase": "1P",
+     "price": 1400,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m2",
+     "name": "Genius Single Phase Energy Meter",
+     "brand": "Genius",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "phase": "1P",
+     "price": 1610,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m3",
+     "name": "Visiontek Three Phase Meter",
+     "brand": "Visiontek",
+     "tiers": [
+      "base"
+     ],
+     "phase": "3P",
+     "price": 3950,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m4",
+     "name": "Genius Three Phase Energy Meter",
+     "brand": "Genius",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "phase": "3P",
+     "price": 4650,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m5",
+     "name": "L&T 1P Meter",
+     "brand": "L&T",
+     "tiers": [
+      "value"
+     ],
+     "phase": "1P",
+     "price": 1680,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m6",
+     "name": "L&T 3P Meter",
+     "brand": "L&T",
+     "tiers": [
+      "value"
+     ],
+     "phase": "3P",
+     "price": 5000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "m7",
+     "name": "Three Phase Genus Meter",
+     "brand": "Genus",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "phase": "3P",
+     "price": 4000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "dc_cable": {
+   "label": "DC Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "dc1",
+     "name": "DC-WACAB-Basic 4sqmm",
+     "brand": "WACAB",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 4,
+     "price": 43,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "dc2",
+     "name": "DC-WACAB-Basic 6sqmm",
+     "brand": "WACAB",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 6,
+     "price": 53,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "dc3",
+     "name": "DC-APAR 6sqmm",
+     "brand": "APAR",
+     "tiers": [
+      "value"
+     ],
+     "sqmm": 6,
+     "price": 55,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "dc4",
+     "name": "DC-POLY 4sqmm",
+     "brand": "POLY",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "sqmm": 4,
+     "price": 60,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "dc5",
+     "name": "DC-LUMICON 4sqmm",
+     "brand": "LUMICON",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 4,
+     "price": 37,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "dc6",
+     "name": "DC-LUMICON 6sqmm",
+     "brand": "LUMICON",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 6,
+     "price": 54,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "ac_cable": {
+   "label": "AC Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ac1",
+     "name": "AC-RR 4sqmm",
+     "brand": "RR",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 4,
+     "price": 58,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ac2",
+     "name": "AC-RR 6sqmm",
+     "brand": "RR",
+     "tiers": [
+      "value"
+     ],
+     "sqmm": 6,
+     "price": 65.25,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ac3",
+     "name": "AC-POLY 4sqmm",
+     "brand": "POLY",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 4,
+     "price": 56,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ac4",
+     "name": "AC-POLY 6sqmm",
+     "brand": "POLY",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "sqmm": 6,
+     "price": 61,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "isolator": {
+   "label": "Isolator",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "is1",
+     "name": "Honey Well Isolator 2P 40A",
+     "brand": "Honey Well",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "phase": "1P",
+     "price": 212,
+     "engineeringStatus": "APPROVED_V1_1P_AC_ISOLATOR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "is2",
+     "name": "L&T Isolator 40A 4P",
+     "brand": "L&T",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "phase": "3P",
+     "price": 623,
+     "engineeringStatus": "APPROVED_V1_3P_AC_ISOLATOR",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "is_9b53be37fab1",
+     "name": "New Isolator",
+     "brand": "",
+     "tiers": [
+      "value"
+     ],
+     "price": 0,
+     "status": "TEST",
+     "engineeringStatus": "TEST_PLACEHOLDER_DO_NOT_USE",
+     "note": "Placeholder/test record. Retained for historical reference (D11-D). Must not appear in production selection or BOM resolution.",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "cb_rod": {
+   "label": "CB Rod",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "cb1",
+     "name": "CB Rod 14mm 100u 1.2m",
+     "brand": "Generic",
+     "tiers": [
+      "base"
+     ],
+     "price": 260,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cb2",
+     "name": "CB Rod 17.2mm 100u 1.2m",
+     "brand": "Generic",
+     "tiers": [
+      "base"
+     ],
+     "price": 360,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cb3",
+     "name": "CB Rod 17.2mm 100u 2m",
+     "brand": "Generic",
+     "tiers": [
+      "base"
+     ],
+     "price": 595,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cb4",
+     "name": "CB Rod 14mm 250u 1.2m",
+     "brand": "Generic",
+     "tiers": [
+      "value"
+     ],
+     "price": 900,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cb5",
+     "name": "CB Rod 17.2mm 250u 1.2m",
+     "brand": "Generic",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "price": 900,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cb6",
+     "name": "CB Rod 17.2mm 250u 2m",
+     "brand": "Generic",
+     "tiers": [
+      "premium"
+     ],
+     "price": 1000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "earth_cable": {
+   "label": "Earthing Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ec1",
+     "name": "16sqmm Green Cable FLEXGUARD",
+     "brand": "FLEXGUARD",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 16,
+     "price": 21.6,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ec2",
+     "name": "16sqmm Green Poluguards",
+     "brand": "Poluguards",
+     "tiers": [
+      "value"
+     ],
+     "sqmm": 16,
+     "price": 24,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ec3",
+     "name": "16sqmm Green Cable APAR",
+     "brand": "APAR",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "sqmm": 16,
+     "price": 29,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "la_cable": {
+   "label": "LA Conductor",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "la1",
+     "name": "Excel FLX Al Down conductor 8mm",
+     "brand": "Excel",
+     "tiers": [
+      "value",
+      "premium"
+     ],
+     "sqmm": 8,
+     "price": 72,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "la2",
+     "name": "Kanberry FLX Al Down conductor 8mm",
+     "brand": "Kanberry",
+     "tiers": [
+      "base"
+     ],
+     "sqmm": 8,
+     "price": 58,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "battery": {
+   "label": "Battery",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "bt1",
+     "name": "SEG.5 PRO 100AH LV Battery",
+     "brand": "SEG",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "price": 86717,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "bt2",
+     "name": "Enphase Flex Battery",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 95000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "bt3",
+     "name": "Okaya 100AH",
+     "brand": "Okaya",
+     "tiers": [
+      "base"
+     ],
+     "price": 78000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "bt4",
+     "name": "Livguard 100AH",
+     "brand": "Livguard",
+     "tiers": [
+      "base"
+     ],
+     "price": 75000,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ba_3b51aef23f0b",
+     "name": "New Battery",
+     "brand": "",
+     "tiers": [
+      "value"
+     ],
+     "price": 0,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "enphase": {
+   "label": "Enphase Accessories",
+   "gstDefault": 5,
+   "items": [
+    {
+     "id": "en1",
+     "name": "Enphase IQ8P Micro Inverter",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 8200,
+     "deviceType": "microinverter",
+     "panelsPerDevice": 1,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "microinverter"
+    },
+    {
+     "id": "en2",
+     "name": "Enphase Q Cable Portrait 2m",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 750,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "cable_per_panel"
+    },
+    {
+     "id": "en3",
+     "name": "Enphase Envoy S Metered",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 12610,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "gateway"
+    },
+    {
+     "id": "en4",
+     "name": "Enphase Q Relay",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 5150,
+     "gstOverride": 18,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "relay"
+    },
+    {
+     "id": "en5",
+     "name": "Enphase Q Terminal",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 700,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "terminal"
+    },
+    {
+     "id": "en6",
+     "name": "Enphase CT 200",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 1500,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "ct"
+    },
+    {
+     "id": "en7",
+     "name": "Enphase System Controller",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "gstOverride": 18,
+     "price": 110000,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "system_controller"
+    },
+    {
+     "id": "en_sysctrl",
+     "name": "Enphase System Controller with Cable",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 25000,
+     "gstOverride": 5,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "system_controller_with_cable"
+    },
+    {
+     "id": "en_flexbat",
+     "name": "Enphase Flex Battery 5kWh",
+     "brand": "Enphase",
+     "tiers": [
+      "premium"
+     ],
+     "price": 135000,
+     "gstOverride": 5,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "flex_battery"
+    }
+   ]
+  },
+  "hoymiles": {
+   "label": "Hoymiles Accessories",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "hm1",
+     "name": "Hoymiles HMS 2000 (4 Module / 4 MPPT)",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "modules": 4,
+     "price": 22000,
+     "deviceType": "microinverter",
+     "panelsPerDevice": 4,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "microinverter"
+    },
+    {
+     "id": "hm2",
+     "name": "Hoymiles HMS 1000 (2 Module / 2 MPPT)",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "modules": 2,
+     "price": 14000,
+     "deviceType": "microinverter",
+     "panelsPerDevice": 2,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "microinverter"
+    },
+    {
+     "id": "hm3",
+     "name": "Hoymiles DTU Pro (Zero Export / Monitoring)",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "price": 15500,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "monitoring_zero_export"
+    },
+    {
+     "id": "hm4",
+     "name": "Hoymiles DTU Lite (Basic Monitoring)",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "price": 8500,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "monitoring_basic"
+    },
+    {
+     "id": "hm5",
+     "name": "Hoymiles End Cap (Pack of 5)",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "price": 1000,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "end_cap"
+    },
+    {
+     "id": "hm6",
+     "name": "Hoymiles AC Trunk Cable",
+     "brand": "Hoymiles",
+     "tiers": [
+      "premium"
+     ],
+     "price": 2000,
+     "deviceType": "micro_accessory",
+     "panelsPerDevice": null,
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "ac_trunk"
+    }
+   ]
+  },
+  "armoured_cable": {
+   "label": "Armoured Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ar1",
+     "name": "4Core 4sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 4,
+     "core": 4,
+     "price": 80,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar2",
+     "name": "4Core 6sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 6,
+     "core": 4,
+     "price": 94,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar3",
+     "name": "4Core 10sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 10,
+     "core": 4,
+     "price": 112,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar4",
+     "name": "4Core 16sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 16,
+     "core": 4,
+     "price": 131,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar5",
+     "name": "4Core 25sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 25,
+     "core": 4,
+     "price": 179,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar6",
+     "name": "4Core 35sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 35,
+     "core": 4,
+     "price": 235,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar7",
+     "name": "4Core 50sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 50,
+     "core": 4,
+     "price": 390,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar8",
+     "name": "3.5Core 70sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 70,
+     "core": 3.5,
+     "price": 379,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar9",
+     "name": "3.5Core 95sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 95,
+     "core": 3.5,
+     "price": 468,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar10",
+     "name": "3.5Core 120sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 120,
+     "core": 3.5,
+     "price": 585,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar11",
+     "name": "3.5Core 150sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 150,
+     "core": 3.5,
+     "price": 690,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar12",
+     "name": "3.5Core 185sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 185,
+     "core": 3.5,
+     "price": 884,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar13",
+     "name": "3.5Core 240sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 240,
+     "core": 3.5,
+     "price": 1096,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar14",
+     "name": "3.5Core 300sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 300,
+     "core": 3.5,
+     "price": 1331,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ar15",
+     "name": "3.5Core 400sqmm Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "sqmm": 400,
+     "core": 3.5,
+     "price": 1734,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "mccb_box": {
+   "label": "Battery MCCB Box",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "mb1",
+     "name": "Battery MCCB Box 160A",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value"
+     ],
+     "price": 8500,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "ug_cable": {
+   "label": "UG Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ug_2core",
+     "name": "UG Cable 2 Core Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "price": 150,
+     "unit": "m",
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "cable_2core"
+    },
+    {
+     "id": "ug_4core",
+     "name": "UG Cable 4 Core Armoured",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "price": 250,
+     "unit": "m",
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "microAccessoryRole": "cable_4core"
+    }
+   ]
+  },
+  "change_over": {
+   "label": "Change Over Switch",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "co_1",
+     "name": "Change Over Switch",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "price": 1200,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "battery_cable": {
+   "label": "Battery Cable",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "bc_25",
+     "name": "25mm Battery Cable",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "price": 120,
+     "unit": "m",
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "meter_box": {
+   "label": "Meter Box",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "mbox_1",
+     "name": "Meter Box",
+     "brand": "Generic",
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "price": 500,
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "mc4_connector": {
+   "label": "MC4 Connector",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "mc4_1",
+     "name": "MC4 Connector Pair",
+     "price": 50,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "cable_tie": {
+   "label": "Cable Tie",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ct_1",
+     "name": "Cable Tie 300mm Weather Resistant (Pkt)",
+     "price": 120,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "flexible_pipe": {
+   "label": "Flexible Pipe",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "fp_1",
+     "name": "Flexible Pipe (per meter)",
+     "price": 80,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "ss_screw": {
+   "label": "SS Screws & Bolts",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "ss_15",
+     "name": "SS Star Screw 1½ inch",
+     "price": 8,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ss_1",
+     "name": "SS Star Screw 1 inch",
+     "price": 6,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ss_self34",
+     "name": "¾ inch Self Screw",
+     "price": 5,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "ss_selfbolt",
+     "name": "Self Bolt Corroshield",
+     "price": 12,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "copper_lug": {
+   "label": "Copper Lug",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "cl_1",
+     "name": "Ring Type 4-6mm Copper Lug",
+     "price": 15,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cl_25",
+     "name": "25mm Lug",
+     "price": 35,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "insulation_tape": {
+   "label": "Insulation Tape",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "it_1",
+     "name": "Insulation Tape",
+     "price": 40,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "conduit_pipe": {
+   "label": "Conduit Pipe & Fittings",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "cp_pipe",
+     "name": "20mm Conduit Pipe",
+     "price": 35,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cp_bend",
+     "name": "20mm Bend",
+     "price": 12,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cp_elbow",
+     "name": "20mm Elbow",
+     "price": 10,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cp_t",
+     "name": "20mm T Connector",
+     "price": 12,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cp_saddle",
+     "name": "SS Saddle 20mm",
+     "price": 8,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "cp_gland",
+     "name": "20mm Gland",
+     "price": 15,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "solar_clamp": {
+   "label": "Solar Clamps & Bolts",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "sc_mid",
+     "name": "Mid Clamp",
+     "price": 35,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "sc_end",
+     "name": "End Clamp",
+     "price": 35,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "sc_jbolt",
+     "name": "J Bolt",
+     "price": 25,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "structure_material": {
+   "label": "Structure Material",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "sm_15x15",
+     "name": "1.5×1.5 Square Tube 16 Gauge GP",
+     "price": 450,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "tubeSize": "1.5x1.5",
+     "structureRole": "PRIMARY_TUBE",
+     "note": "tubeSize attribute added 2026-09-08 so the roof structure pack maps its primary tube to this catalog item (structured mapping, not name matching).",
+     "specification": "Square tube 1.5×1.5 in, 16 gauge"
+    },
+    {
+     "id": "sm_25x15",
+     "name": "2.5×1.5 Square Tube 16 Gauge GP",
+     "price": 600,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED",
+     "tubeSize": "2.5x1.5",
+     "structureRole": "PRIMARY_TUBE",
+     "note": "tubeSize attribute added 2026-09-08 so the roof structure pack maps its primary tube to this catalog item (structured mapping, not name matching).",
+     "specification": "Square tube 2.5×1.5 in, 16 gauge"
+    },
+    {
+     "id": "sm_plate",
+     "name": "MS Square Plate 5×5",
+     "price": 80,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "sm_anchor",
+     "name": "Anchor Bolt 8mm",
+     "price": 12,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "sm_endcap_25",
+     "name": "2.5×1.5 End Cap",
+     "price": 15,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "sm_endcap_15",
+     "name": "1.5×1.5 End Cap",
+     "price": 12,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "painting_material": {
+   "label": "Painting & Finishing",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "pm_epoxy",
+     "name": "Epoxy Primer ESS Dee Black (per litre)",
+     "price": 350,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pm_thinner",
+     "name": "Thinner D13 (per litre)",
+     "price": 180,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pm_roller",
+     "name": "Roller 4 inch",
+     "price": 60,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "pm_cotton",
+     "name": "Cotton Waste (50gm)",
+     "price": 30,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  },
+  "welding_material": {
+   "label": "Welding & Cutting",
+   "gstDefault": 18,
+   "items": [
+    {
+     "id": "wm_wheel",
+     "name": "4\" Cutting Wheel Bullet",
+     "price": 45,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    },
+    {
+     "id": "wm_electrode",
+     "name": "Welding Electrodes 2.50 Sunbond (12 pack)",
+     "price": 280,
+     "tiers": [
+      "base",
+      "value",
+      "premium"
+     ],
+     "isPremium": false,
+     "approvalStatus": "APPROVED"
+    }
+   ]
+  }
+ }
+}
