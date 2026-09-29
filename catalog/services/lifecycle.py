@@ -57,17 +57,26 @@ def assert_selectable(component: Component, *, field: str = "component") -> Comp
     if component.deleted_at is not None:
         raise ComponentNotSelectable("component_deleted", f"Component {component.sku} has been deleted.", errors={field: ["The component has been deleted."]})
     if component.status == ComponentStatus.RETIRED:
-        hint = f" Use {component.replacement.sku} instead." if component.replacement_id and component.replacement and component.replacement.deleted_at is None else ""
+        replacement = _usable_replacement(component)
+        hint = f" Use {replacement.sku} instead." if replacement is not None else ""
         raise ComponentNotSelectable("component_retired", f"Component {component.sku} is retired and cannot be selected.{hint}", errors={field: [f"{component.sku} is retired."]})
     return component
+
+
+def _usable_replacement(component: Component) -> Component | None:
+    """The suggested replacement, unless it was deleted or retired since (it would not be selectable either)."""
+    replacement = component.replacement if component.replacement_id else None
+    if replacement is None or replacement.deleted_at is not None or replacement.status == ComponentStatus.RETIRED:
+        return None
+    return replacement
 
 
 def selection_warning(component: Component) -> str | None:
     """A human warning for DEPRECATED components (with the suggested replacement), else ``None``."""
     if component.status != ComponentStatus.DEPRECATED:
         return None
-    replacement = component.replacement if component.replacement_id else None
-    suffix = f" Suggested replacement: {replacement.sku}." if replacement is not None and replacement.deleted_at is None else ""
+    replacement = _usable_replacement(component)
+    suffix = f" Suggested replacement: {replacement.sku}." if replacement is not None else ""
     return f"{component.sku} is deprecated ({component.deprecated_reason}).{suffix}"
 
 

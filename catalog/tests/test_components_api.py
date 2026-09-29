@@ -186,6 +186,20 @@ class TestUpdate:
         other_panels = panel_category(slug="panel-2", sku_prefix="PNLB")
         assert client.patch(detail(component), {"category": str(other_panels.uid)}, format="json").status_code == 200
 
+    @pytest.mark.parametrize("status", [ComponentStatus.ACTIVE, ComponentStatus.DEPRECATED])
+    def test_moving_a_live_component_into_a_panel_category_needs_the_spec(self, client, status):
+        """activate/ refuses a panel without its spec; moving an ACTIVE accessory into the panel category must not bypass it."""
+        component = ComponentFactory(status=status, deprecated_reason="x" if status == ComponentStatus.DEPRECATED else "")
+        panels = panel_category()
+        response = client.patch(detail(component), {"category": str(panels.uid)}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "spec_required" and "panel_spec" in response.json()["errors"]
+        component.refresh_from_db()
+        assert component.category_id != panels.pk
+        moved = client.patch(detail(component), {"category": str(panels.uid), "panel_spec": {"wattage_w": 540}}, format="json")
+        assert moved.status_code == 200 and moved.json()["panel_spec"]["wattage_w"] == 540
+        draft = ComponentFactory(status=ComponentStatus.DRAFT)
+        assert client.patch(detail(draft), {"category": str(panels.uid)}, format="json").status_code == 200  # drafts may lack it
+
     def test_spec_required_field_cannot_be_nulled(self, client):
         component = inverter()
         response = client.patch(detail(component), {"inverter_spec": {"kw": None}}, format="json")
@@ -211,6 +225,9 @@ class TestDeleteHistoryAndList:
         assert component.deleted_at and profile.deleted_at
         assert client.get(detail(component)).status_code == 404
         assert AuditLog.objects.filter(action="catalog.component_deleted").count() == 1
+        # The published profile went with it: the website is told, as when the profile itself is deleted.
+        event = OutboxEvent.objects.get(event_type="catalog.profile_unpublished")
+        assert event.payload["slug"] == profile.slug and event.payload["component_uid"] == str(component.uid)
 
     def test_history_is_cursor_paginated_newest_first(self, client):
         component = panel()
@@ -219,6 +236,13 @@ class TestDeleteHistoryAndList:
         body = client.get(detail(component, "history/"), {"page_size": 2}).json()
         assert [row["new"] for row in body["results"]] == ["Name 2", "Name 1"] and body["next"] and body["results"][0]["by"]["uid"]
         assert client.get(body["next"]).json()["results"][0]["new"] == "Name 0"
+
+    def test_history_ignores_the_component_list_filters(self, client):
+        """history/ is a change log, not a component list: the list filters neither 404 it nor appear in its contract."""
+        component = panel(status=ComponentStatus.ACTIVE)
+        client.patch(detail(component), {"name": "Renamed"}, format="json")
+        response = client.get(detail(component, "history/"), {"status": "RETIRED", "search": "nothing-matches"})
+        assert response.status_code == 200 and response.json()["results"][0]["new"] == "Renamed"
 
     def test_history_query_budget(self, client, django_assert_max_num_queries):
         component = panel()

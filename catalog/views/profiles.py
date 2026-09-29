@@ -65,7 +65,7 @@ class PublicProfileViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin,
         request=VersionOnlySerializer,
         responses={200: PublicProfileSerializer, **_WRITE_ERRORS},
         tags=TAGS,
-        description="Shows the product on the website. 409 `component_not_publishable` unless the component is live, `is_public` and ACTIVE or DEPRECATED.",
+        description="Shows the product on the website. 409 `component_not_publishable` unless the component is live, `is_public` and ACTIVE or DEPRECATED in an active category.",
     )
     @action(detail=True, methods=["post"])
     def publish(self, request, *args, **kwargs):

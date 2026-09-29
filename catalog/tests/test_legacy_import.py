@@ -34,6 +34,31 @@ def _state() -> dict:
     return state
 
 
+_VOLATILE = {"id", "uid", "created_by", "updated_by", "version", "search", "status_changed_at", "updated_at", "component"}
+
+
+def _full_state() -> dict:
+    """Every stored column (ids, versions and write times excluded) keyed by SKU / website name, plus the legacy map."""
+    from catalog.services.specs import get_spec, spec_fields, spec_kind
+
+    components = {}
+    for component in Component.all_objects.select_related("category", "brand").order_by("sku"):
+        imported_sku = component.sku[0].islower()
+        row = {f.name: str(getattr(component, f.attname)) for f in component._meta.concrete_fields if f.name not in _VOLATILE and (imported_sku or f.name != "sku")}
+        row.update(category=component.category.slug, brand=component.brand.name.casefold() if component.brand else None, tiers=sorted(component.tiers.values_list("tier", flat=True)))
+        kind = spec_kind(component.category)
+        spec = get_spec(component, kind) if kind else None
+        if spec is not None:
+            row["spec"] = {name: str(getattr(spec, "family_id" if name == "family" else name)) for name in spec_fields(kind)}
+        profile = ComponentPublicProfile.all_objects.filter(component=component).first()
+        if profile is not None:
+            row["profile"] = {f.name: str(getattr(profile, f.attname)) for f in profile._meta.concrete_fields if f.name not in _VOLATILE}
+        components[component.sku if imported_sku else component.name] = row
+    categories = {c.slug: (c.name, str(c.gst_rate), c.sort_order, c.bom_role, c.unit, c.sku_prefix, c.attribute_schema) for c in Category.objects.all()}
+    maps = sorted(LegacyMap.objects.values_list("source_system", "source_table", "source_id", "target_table"))
+    return {"components": components, "categories": categories, "maps": maps}
+
+
 class TestFullImport:
     def test_counts_mapping_and_idempotency(self):
         results = import_all(order=("flarize", "bom", "website"))
@@ -59,17 +84,20 @@ class TestFullImport:
         assert Component.objects.count() == 282 and Brand.objects.filter(name__iexact="waaree").count() == 1
 
     def test_import_order_does_not_change_the_result(self):
+        """Every column of every component, spec, profile and category, and the legacy map, whatever runs first
+        (only timestamps no source provides — the import time — may differ)."""
         import_all(order=("flarize", "bom", "website"))
-        first = _state()
-        Component.all_objects.all().delete()
-        from catalog.models import Brand as BrandModel
-
-        ComponentTier.all_objects.all().delete()
-        BrandModel.all_objects.all().delete()
-        Category.all_objects.all().delete()
-        LegacyMap.objects.all().delete()
-        import_all(order=("bom", "website", "flarize"))
+        first, first_full = _state(), _full_state()
+        _wipe()
+        import_all(order=("website", "bom", "flarize"))
         assert _state() == first
+        second_full = _full_state()
+        stamped_now = {sku for sku, row in first_full["components"].items() if row["created_at"] != second_full["components"].get(sku, {}).get("created_at")}
+        assert stamped_now <= {"ba_3b51aef23f0b", "m4"}  # Flarize-only items without createdAt: created at import time
+        for rows in (first_full["components"], second_full["components"]):
+            for sku in stamped_now:
+                rows[sku].pop("created_at")
+        assert second_full == first_full
 
     def test_website_products_become_public_published_components(self):
         import_all(order=("website",))
@@ -139,6 +167,27 @@ class TestFlarizeMapping:
         # ug_cable is measured in metres already; the battery cable category counts pieces, its item is sold per metre.
         assert Component.objects.get(sku="ug_2core").unit_override == "" and Component.objects.get(sku="bc_25").unit_override == "M"
         assert result["violations"] == []
+
+    def test_battery_master_record_timestamps_are_kept(self):
+        """battery-master.json records carry createdAt/updatedAt/updatedBy (Flarize BATTERY_FIELDS); none may be dropped."""
+        catalog = {"categories": {"battery": {"label": "Battery", "gstDefault": 18, "items": [{"id": "bt9", "name": "SEG 100Ah", "brand": "SEG", "tiers": ["base"], "price": 1}]}}}
+        master = {"batteries": {"bt9": {"componentId": "bt9", "capacityKwh": 5.12, "createdAt": "2026-08-01T10:00:00Z", "updatedAt": "2026-08-15T10:00:00Z", "updatedBy": "admin-001"}}}
+        result = legacy_import.import_flarize_catalog(catalog, master)
+        assert result["violations"] == []
+        attributes = Component.objects.get(sku="bt9").attributes
+        assert attributes["master_created_at"] == "2026-08-01T10:00:00Z" and attributes["master_updated_at"] == "2026-08-15T10:00:00Z" and attributes["master_updated_by"] == "admin-001"
+
+    def test_battery_master_selling_price_never_duplicates_the_list_price(self):
+        """§7.6 #7: the LIST price is catalog.json's; a differing battery-master sellingPrice is reported, not returned as a
+        second LIST row for the same SKU (merge_prices would silently keep whichever came last)."""
+        items = [{"id": "bt9", "name": "SEG 100Ah", "brand": "SEG", "tiers": ["base"], "price": 86717}, {"id": "bt8", "name": "Okaya", "brand": "Okaya", "tiers": ["base"]}]
+        catalog = {"categories": {"battery": {"label": "Battery", "gstDefault": 18, "items": items}}}
+        master = {"batteries": {"bt9": {"componentId": "bt9", "purchasePrice": 70000, "sellingPrice": 90000}, "bt8": {"componentId": "bt8", "sellingPrice": 75000}}}
+        result = legacy_import.import_flarize_catalog(catalog, master)
+        prices = sorted((price["sku"], price["kind"], price["amount"]) for price in result["prices"])
+        assert prices == [("bt8", "LIST", "75000.00"), ("bt9", "LIST", "86717.00"), ("bt9", "PURCHASE", "70000.00")]
+        differs = [v for v in result["violations"] if v["code"] == "selling_price_differs"]
+        assert len(differs) == 1 and differs[0]["source_id"] == "bt9" and differs[0]["severity"] == "warning"
 
     def test_battery_master_for_an_unknown_item_is_a_violation(self):
         master = {"batteries": {"bt99": {"componentId": "bt99", "engineeringStatus": "APPROVED"}}}
@@ -227,6 +276,24 @@ class TestBomMapping:
         codes = sorted(v["code"] for v in result["violations"])
         assert codes == ["invalid_value", "unknown_category", "unknown_item"]
 
+    def test_hybrid_phase_codes_on_inverter_rows_are_kept(self):
+        """bom_catalogitem.phase allows 1P-HYB / 3P-HYB for any item (the BOM calculator's HYB slots match on them);
+        an inverter row carrying one must be imported without losing the code, not rejected."""
+        result = legacy_import.import_bom_catalog(
+            [{"id": 1, "slug": "inverter", "label": "Inverter", "gst_default": 5}],
+            [{"id": 10, "item_id": "ih1", "category_id": 1, "name": "Deye 5kW hybrid", "brand": "Deye", "price": "1.00", "phase": "3P-HYB", "kw": "5.00", "inverter_type": "hybrid"}],
+            [],
+        )
+        assert result["violations"] == [] and result["counts"]["bom_catalogitem"]["created"] == 1
+        component = Component.objects.select_related("inverter_spec").get(sku="ih1")
+        assert (component.inverter_spec.phase, component.inverter_spec.inverter_type) == ("3P", "HYBRID") and component.attributes == {"phase": "3P-HYB"}
+        again = legacy_import.import_bom_catalog(
+            [{"id": 1, "slug": "inverter", "label": "Inverter", "gst_default": 5}],
+            [{"id": 10, "item_id": "ih1", "category_id": 1, "name": "Deye 5kW hybrid", "brand": "Deye", "price": "1.00", "phase": "3P-HYB", "kw": "5.00", "inverter_type": "hybrid"}],
+            [],
+        )
+        assert again["counts"]["bom_catalogitem"]["unchanged"] == 1
+
     def test_deleted_targets_are_not_recreated(self):
         items = goldenapp("bom_catalogitem")[:5]
         tiers = [row for row in goldenapp("bom_itemtier") if row["item_id"] in {item["id"] for item in items}]
@@ -294,3 +361,140 @@ class TestWebsiteMatching:
         result = legacy_import.import_goldenray_products([self._panel_row()], [], [])
         assert any(v["code"] == "profile_not_published" for v in result["violations"])
         assert ComponentPublicProfile.objects.get(component=existing).status == "DRAFT"
+
+
+def _wipe() -> None:
+    ComponentPublicProfile.all_objects.all().delete()
+    ComponentChange.objects.all().delete()
+    ComponentTier.all_objects.all().delete()
+    Component.all_objects.all().delete()
+    Brand.all_objects.all().delete()
+    Category.all_objects.all().delete()
+    LegacyMap.objects.all().delete()
+
+
+def _run(order, *, website=(), flarize=None, bom=None) -> dict:
+    results = {}
+    for name in order:
+        if name == "website":
+            results[name] = legacy_import.import_goldenray_products([], list(website), [])
+        elif name == "flarize":
+            results[name] = legacy_import.import_flarize_catalog(flarize, None)
+        else:
+            results[name] = legacy_import.import_bom_catalog(*bom)
+    return results
+
+
+class TestImportOrder:
+    """PLAN §7.1: importers are re-runnable in any order; the result must not depend on which source ran first."""
+
+    BOM = (
+        [{"id": 1, "slug": "dcdb", "label": "DCDB", "gst_default": 18}],
+        [
+            {
+                "id": 10,
+                "item_id": "d1",
+                "category_id": 1,
+                "name": "DCDB 1P",
+                "brand": "Havells",
+                "price": "1500.00",
+                "phase": "1P",
+                "created_at": "2025-01-01T00:00:00+00:00",
+                "updated_at": "2025-02-01T00:00:00+00:00",
+            }
+        ],
+        [],
+    )
+
+    @staticmethod
+    def flarize_dcdb(**extra) -> dict:
+        item = {"id": "d1", "name": "DCDB 1P", "brand": "Havells", "tiers": ["base"], "price": 1500, "phase": "1P", "approvalStatus": "APPROVED", **extra}
+        return {"categories": {"dcdb": {"label": "DCDB", "gstDefault": 18, "items": [item]}}}
+
+    @pytest.mark.parametrize("flarize_created", [None, "2024-06-01T00:00:00Z", "2025-06-01T00:00:00Z"])
+    def test_created_at_is_the_earliest_source_timestamp_in_either_order(self, flarize_created):
+        extra = {"createdAt": flarize_created} if flarize_created else {}
+        created = []
+        for order in (("bom", "flarize"), ("flarize", "bom")):
+            _run(order, flarize=self.flarize_dcdb(**extra), bom=self.BOM)
+            created.append(Component.objects.get(sku="d1").created_at.isoformat())
+            _wipe()
+        expected = "2024-06-01T00:00:00+00:00" if flarize_created == "2024-06-01T00:00:00Z" else "2025-01-01T00:00:00+00:00"
+        assert created == [expected, expected]
+
+    def test_every_bom_tier_row_is_mapped_or_reported_the_same_way_in_either_order(self):
+        """§7.6: every source row is mapped or listed as skipped. Where Flarize offers other tiers (D-2), the bom_itemtier
+        row has no live target: it must be unmapped and reported whichever import runs first."""
+        source_ids = {str(row["id"]) for row in goldenapp("bom_itemtier")}
+        outcomes = []
+        for order in (("flarize", "bom"), ("bom", "flarize")):
+            results = import_all(order=order)
+            mapped = set(LegacyMap.objects.filter(source_system="BACKEND", source_table="bom_itemtier").values_list("source_id", flat=True))
+            tier_violations = [v for result in results.values() for v in result["violations"] if v["source_table"] == "bom_itemtier"]
+            assert {v["code"] for v in tier_violations} == {"d2_tier_not_kept"}
+            reported = {v["source_id"] for v in tier_violations}
+            dead_targets = LegacyMap.objects.filter(source_system="BACKEND", source_table="bom_itemtier", target_id__in=ComponentTier.all_objects.filter(deleted_at__isnull=False).values("pk"))
+            assert not dead_targets.exists() and mapped | reported == source_ids and not mapped & reported, order
+            outcomes.append((mapped, reported))
+            _wipe()
+        assert outcomes[0] == outcomes[1] and len(outcomes[0][1]) == 9
+
+    @staticmethod
+    def sungrow_row() -> dict:
+        return dict(next(row for row in goldenapp("solar_inverters") if row["name"] == "SG5.0RS"))
+
+    @staticmethod
+    def flarize_inverters(*ids) -> dict:
+        items = [
+            {
+                "id": sku,
+                "name": "Sungrow SG5.0RS 5kW",
+                "brand": "SUNGROW",
+                "model": "SG5.0RS",
+                "kw": 5,
+                "type": "ongrid",
+                "phase": "1P",
+                "mpptCount": 3,
+                "tiers": ["base"],
+                "price": 60000,
+                "approvalStatus": "APPROVED",
+            }
+            for sku in ids
+        ]
+        return {"categories": {"inverter": {"label": "Inverter", "gstDefault": 5, "items": items}}}
+
+    @staticmethod
+    def snapshot() -> dict:
+        component = Component.objects.select_related("inverter_spec", "public_profile", "brand").get(category__slug="inverter")
+        spec, profile = component.inverter_spec, component.public_profile
+        return {
+            "live": list(Component.objects.filter(category__slug="inverter").values_list("sku", flat=True)),
+            "component": (component.sku, component.name, component.model, component.brand.name.casefold(), component.brand_label, component.is_public, component.status),
+            "warranty": (component.warranty_product_years, component.warranty_extendable_years),
+            "spec": (spec.kw, spec.mppt_count, spec.max_pv_voltage_v, spec.brand_trust, spec.corrosion_protection, spec.efficiency_pct),
+            "profile": (profile.slug, profile.headline, profile.status, profile.published_at, profile.created_at, profile.updated_at, profile.kerala_climate_score),
+            "map": LegacyMap.objects.get(source_system="BACKEND", source_table="solar_inverters", source_id="1").target_id == component.pk,
+        }
+
+    def test_website_products_merge_with_a_catalog_twin_in_either_order(self):
+        """brand + model + kW identify one product; importing the website first must not leave a duplicate component."""
+        states, codes = [], []
+        for order in (("flarize", "website"), ("website", "flarize")):
+            results = _run(order, website=[self.sungrow_row()], flarize=self.flarize_inverters("i77"))
+            states.append(self.snapshot())
+            codes.append({v["code"] for result in results.values() for v in result["violations"]})
+            again = _run(order, website=[self.sungrow_row()], flarize=self.flarize_inverters("i77"))
+            assert all(result["created"] == 0 and result["updated"] == 0 for result in again.values()), again
+            assert self.snapshot() == states[-1]
+            _wipe()
+        assert states[0] == states[1]
+        state = states[0]
+        assert state["live"] == ["i77"] and state["component"][0] == "i77" and state["component"][5] is True and state["map"]
+        assert state["spec"][1] == 3 and state["spec"][3] == "Excellent" and state["profile"][2] == "PUBLISHED"  # catalog kept, blanks filled
+        assert {"value_conflict", "brand_label_differs"} <= codes[0] and {"value_conflict", "brand_label_differs"} <= codes[1]
+
+    def test_ambiguous_catalog_twins_are_reported_not_merged(self):
+        results = _run(("website", "flarize"), website=[self.sungrow_row()], flarize=self.flarize_inverters("i77", "i78"))
+        ambiguous = [v for v in results["flarize"]["violations"] if v["code"] == "ambiguous_match"]
+        assert ambiguous and ambiguous[0]["candidates"] == ["i77", "i78"]
+        assert Component.objects.filter(category__slug="inverter").count() == 3  # nothing guessed

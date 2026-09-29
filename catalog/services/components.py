@@ -20,12 +20,13 @@ from django.db import IntegrityError, transaction
 from django.db.models import Prefetch
 
 from audit.services import changes, record, snapshot
-from catalog.models import Category, Component, ComponentStatus, ComponentTier, Tier
+from catalog.models import Category, Component, ComponentStatus, ComponentTier, ProfileStatus, Tier
+from catalog.services import profiles as profile_services
 from catalog.services import usage
 from catalog.services.categories import validate_attributes
 from catalog.services.common import CACHE_NAMESPACE, DOCUMENT_RULE, IMAGE_RULE, check_assets, validation_error
 from catalog.services.history import record_change, record_changes
-from catalog.services.specs import SPEC_RELATED, apply_spec, get_spec, spec_kind
+from catalog.services.specs import REQUIRED_FOR_ACTIVE, SPEC_RELATED, apply_spec, get_spec, spec_kind
 from core.errors import Conflict
 from core.outbox import emit
 from core.services import check_version, stamp_create
@@ -59,6 +60,8 @@ SNAPSHOT_FIELDS = (*COMPONENT_FIELDS, "status", "deprecated_reason", "retired_re
 ASSET_RULES = {"datasheet": DOCUMENT_RULE, "primary_image": IMAGE_RULE}
 SPEC_KEYS = tuple(SPEC_RELATED.values())
 TIER_ORDER = {Tier.BASE: 0, Tier.VALUE: 1, Tier.PREMIUM: 2}
+# Statuses in which a panel/inverter must carry its spec (activate/ enforces it; so does a category move).
+LIVE_STATUSES = (ComponentStatus.ACTIVE, ComponentStatus.DEPRECATED)
 SKU_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,31}$")
 
 
@@ -196,6 +199,9 @@ def update_component(instance: Component, *, user, data, expected_version=None, 
         if old_kind != new_kind and get_spec(component, old_kind) is not None:
             raise Conflict("spec_kind_change", f"The component carries a {old_kind} spec; move it to a category with the same spec table.", errors={"category": ["Spec table would change."]})
     kind, spec_values = _check_spec_keys(category, data)
+    if "category" in values and component.status in LIVE_STATUSES and kind in REQUIRED_FOR_ACTIVE and spec_values is None and get_spec(component, kind) is None:
+        # activate/ refuses a panel/inverter without its spec; a category move must not bypass that rule.
+        raise Conflict("spec_required", f"A {component.status} component needs the {kind} spec in this category; send it with the move.", errors={f"{kind}_spec": ["Required."]})
     if "sku" in values:
         if component.status != ComponentStatus.DRAFT:
             raise Conflict("sku_locked", "The SKU is fixed once the component has left DRAFT.", errors={"sku": ["Cannot be changed."]})
@@ -246,7 +252,10 @@ def delete_component(instance: Component, *, user, expected_version=None) -> Non
     usage.ensure_not_in_use(component)
     profile = getattr(component, "public_profile", None)  # reverse one-to-one: None when there is no profile
     if profile is not None and profile.deleted_at is None:
+        was_published = profile.status == ProfileStatus.PUBLISHED
         profile.soft_delete(user)
+        if was_published:  # the website is told, exactly as when the profile itself is deleted
+            profile_services.emit_profile_event("catalog.profile_unpublished", profile)
     before = component_snapshot(component)
     component.soft_delete(user)
     record_change(component, user=user, field="deleted", old={"sku": component.sku, "status": component.status})

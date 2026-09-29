@@ -148,8 +148,51 @@ class TestFiltersAndBudget:
         assert [row["sku"] for row in api_client.get(PANELS, {"overall_rating": "GOOD"}).json()["results"]] == ["p2"]
         assert [row["sku"] for row in api_client.get(PANELS, {"min_kerala_score": 90}).json()["results"]] == ["p1"]
         assert [row["sku"] for row in api_client.get(PANELS, {"search": "ahnay"}).json()["results"]] == ["p1"]
-        assert [row["sku"] for row in api_client.get(PANELS, {"ordering": "kerala_climate_score"}).json()["results"]][:2] == ["p2", "p1"] or other
+        assert [row["sku"] for row in api_client.get(PANELS, {"ordering": "kerala_climate_score"}).json()["results"]] == [other.component.sku, "p1", unscored.component.sku]
+        # Explicit "top rated first" keeps unscored products last (Postgres puts NULLs first in DESC by default).
+        assert [row["sku"] for row in api_client.get(PANELS, {"ordering": "-kerala_climate_score"}).json()["results"]] == ["p1", "p2", unscored.component.sku]
         assert api_client.get(PANELS, {"panel_type": "NOPE"}).status_code == 400
+
+    def test_website_comparison_filters_and_sorts(self, api_client, waaree_panel):
+        """The comparison pages filter by an efficiency range, compare selected products and sort by efficiency/warranty
+        (legacy ?minEfficiency/maxEfficiency/ids/sort=efficiency|warranty); the canonical endpoints must offer the same."""
+        PanelSpec = type(waaree_panel.component.panel_spec)
+        PanelSpec.objects.filter(component=waaree_panel.component).update(efficiency_pct=Decimal("21.36"))
+        high = published(panel(sku="p2", spec={"wattage_w": 580, "efficiency_pct": Decimal("22.60")}, warranty_product_years=25), slug="high", kerala_climate_score=96)
+        low = published(panel(sku="p3", spec={"wattage_w": 540, "efficiency_pct": Decimal("20.10")}, warranty_product_years=10), slug="low", kerala_climate_score=96)
+        unknown = published(panel(sku="p4", spec={"wattage_w": 540, "efficiency_pct": None}), slug="unknown", kerala_climate_score=None)
+
+        def skus(params):
+            response = api_client.get(PANELS, params)
+            assert response.status_code == 200, response.json()
+            return [row["sku"] for row in response.json()["results"]]
+
+        assert skus({"min_efficiency": "21", "max_efficiency": "22"}) == ["p1"]
+        assert skus({"max_efficiency": "21"}) == ["p3"]
+        assert sorted(skus({"slug": f"{high.slug},{low.slug}"})) == ["p2", "p3"]
+        assert skus({"ordering": "-efficiency"}) == ["p2", "p1", "p3", "p4"]
+        assert skus({"ordering": "efficiency"}) == ["p3", "p1", "p2", "p4"]
+        assert skus({"ordering": "-product_warranty"})[:3] == ["p2", "p1", "p3"]
+        # Ties keep a stable order (slug) so pages never repeat or skip a product.
+        assert skus({"ordering": "-kerala_climate_score"}) == ["p2", "p3", "p1", "p4"] and unknown
+        inverters = "/api/public/v1/products/inverters/"
+        published(inverter(sku="i1", spec={"efficiency_pct": Decimal("97.60")}, warranty_extendable_years=20), kerala_climate_score=90)
+        published(inverter(sku="i2", spec={"efficiency_pct": Decimal("98.40")}, warranty_extendable_years=None), kerala_climate_score=80)
+        assert [row["sku"] for row in api_client.get(inverters, {"ordering": "-efficiency"}).json()["results"]] == ["i2", "i1"]
+        assert [row["sku"] for row in api_client.get(inverters, {"ordering": "-extendable_warranty"}).json()["results"]] == ["i1", "i2"]
+        batteries = "/api/public/v1/products/batteries/"
+        published(battery(sku="b1", spec={"capacity_kwh": Decimal("10.00")}))
+        published(battery(sku="b2", spec={"capacity_kwh": Decimal("5.12")}))
+        assert [row["sku"] for row in api_client.get(batteries, {"ordering": "capacity_kwh"}).json()["results"]] == ["b2", "b1"]
+        assert api_client.get(PANELS, {"ordering": "component__brand__name"}).status_code == 200  # unknown fields are ignored, never an ORM path
+
+    def test_detail_caching_headers(self, api_client, waaree_panel):
+        url = "/api/public/v1/products/panels/waaree-ahnay-bi-55-550/"
+        first = api_client.get(url)
+        assert first.status_code == 200 and first["Cache-Control"] == "public, max-age=60" and first["X-Cache"] == "MISS" and first["ETag"]
+        assert api_client.get(url)["X-Cache"] == "HIT" and api_client.get(url, HTTP_IF_NONE_MATCH=first["ETag"]).status_code == 304
+        bump("pricing")
+        assert api_client.get(url)["X-Cache"] == "MISS"
 
     def test_query_budget(self, api_client, django_assert_max_num_queries):
         for index in range(20):

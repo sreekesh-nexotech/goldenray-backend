@@ -86,6 +86,15 @@ class TestCrud:
         assert response.status_code == 409 and response.json()["code"] == "stale_version"
         assert client.patch(detail(brand), {"name": ""}, format="json").status_code == 400
 
+    def test_blank_slug_on_update_is_derived_not_stored(self, client):
+        """A blank slug means "derive it" (as on create); storing "" would make every later blank-slug brand collide."""
+        brand = BrandFactory(name="Waaree", slug="waaree")
+        response = client.patch(detail(brand), {"slug": "", "name": "Waaree Energies"}, format="json")
+        assert response.status_code == 200 and response.json()["slug"] == "waaree-energies"
+        other = BrandFactory(name="Adani", slug="adani")
+        assert client.patch(detail(other), {"slug": ""}, format="json").json()["slug"] == "adani"
+        assert not Brand.objects.filter(slug="").exists()
+
     def test_rename_to_taken_name_conflicts(self, client):
         BrandFactory(name="Adani")
         brand = BrandFactory(name="Adani Solar")

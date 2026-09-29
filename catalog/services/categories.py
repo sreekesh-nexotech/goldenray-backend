@@ -3,7 +3,8 @@
 * ``attribute_schema`` must be a valid JSON Schema (draft 2020-12) whose root is ``{"type": "object", …}``; changing
   it re-validates every live component of the category (409 ``attribute_schema_conflict`` listing the SKUs);
 * changing ``bom_role`` to a role with another spec table is refused while components carry specs
-  (409 ``spec_kind_change``);
+  (409 ``spec_kind_change``), and to the panel/inverter role while ACTIVE/DEPRECATED components lack that spec
+  (409 ``spec_required``, as ``activate/``);
 * a category with live components cannot be deleted (409 ``category_in_use``).
 """
 
@@ -16,9 +17,9 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 
 from audit.services import changes, record, snapshot
-from catalog.models import Category, Component
+from catalog.models import Category, Component, ComponentStatus
 from catalog.services.common import CACHE_NAMESPACE, validation_error
-from catalog.services.specs import SPEC_RELATED, spec_kind
+from catalog.services.specs import REQUIRED_FOR_ACTIVE, SPEC_RELATED, spec_kind
 from core.errors import Conflict
 from core.services import check_version, stamp_create
 from flarize.cache_utils import bump
@@ -114,11 +115,21 @@ def _check_schema_against_components(category: Category, schema: dict) -> None:
 def _check_role_change(category: Category, new_role: str) -> None:
     old_kind = spec_kind(category)
     new_kind = spec_kind(Category(bom_role=new_role))
-    if old_kind == new_kind or old_kind is None:
+    if old_kind == new_kind:
         return
-    with_spec = Component.objects.filter(category=category, **{f"{SPEC_RELATED[old_kind]}__isnull": False}).count()
-    if with_spec:
-        raise Conflict("spec_kind_change", f"{with_spec} components carry a {old_kind} spec; the new role uses another spec table.", errors={"bom_role": ["Spec table would change."]})
+    if old_kind is not None:
+        with_spec = Component.objects.filter(category=category, **{f"{SPEC_RELATED[old_kind]}__isnull": False}).count()
+        if with_spec:
+            raise Conflict("spec_kind_change", f"{with_spec} components carry a {old_kind} spec; the new role uses another spec table.", errors={"bom_role": ["Spec table would change."]})
+    if new_kind in REQUIRED_FOR_ACTIVE:
+        # activate/ refuses a panel/inverter without its spec: live components must not become such items spec-less.
+        missing = list(
+            Component.objects.filter(category=category, status__in=(ComponentStatus.ACTIVE, ComponentStatus.DEPRECATED), **{f"{SPEC_RELATED[new_kind]}__isnull": True})
+            .order_by("sku")
+            .values_list("sku", flat=True)[:MAX_REPORTED]
+        )
+        if missing:
+            raise Conflict("spec_required", f"Active components of this category have no {new_kind} spec; add it or move them first.", errors={sku: [f"No {new_kind} spec."] for sku in missing})
 
 
 @transaction.atomic

@@ -7,6 +7,8 @@ import re
 
 import django_filters
 from django.contrib.postgres.search import SearchQuery
+from django.db.models import F
+from rest_framework.filters import OrderingFilter
 
 from catalog.models import (
     BomRole,
@@ -27,6 +29,7 @@ from catalog.models import (
 
 _WORD = re.compile(r"[0-9A-Za-z]+")
 MAX_TERMS = 8
+MAX_COMPARED = 50
 
 
 def search_query(value: str) -> SearchQuery | None:
@@ -99,10 +102,40 @@ class PublicProfileFilter(django_filters.FilterSet):
         fields: list[str] = []
 
 
+class PublicOrderingFilter(OrderingFilter):
+    """``?ordering=`` for the website lists.
+
+    * the view's ``ordering_fields`` are public names; ``ordering_aliases`` maps them to ORM paths (``efficiency`` →
+      ``component__panel_spec__efficiency_pct``), so no internal path is accepted from the query string;
+    * products without a value sort last in both directions (Postgres puts NULLs first in a DESC sort);
+    * ``slug``, ``id`` break ties, so pages never repeat or skip a product.
+
+    Without ``?ordering=`` the service order applies (Kerala score descending, unscored last).
+    """
+
+    def get_schema_operation_parameters(self, view):
+        fields = list(getattr(view, "ordering_fields", None) or [])
+        description = f"Sort by one or more of {', '.join(fields)} (comma-separated; prefix - for descending). Products without the value come last."
+        return [{"name": self.ordering_param, "required": False, "in": "query", "description": description, "schema": {"type": "string"}}]
+
+    def filter_queryset(self, request, queryset, view):
+        ordering = self.get_ordering(request, queryset, view)
+        if not ordering:
+            return queryset
+        aliases = getattr(view, "ordering_aliases", {})
+        expressions = []
+        for term in ordering:
+            path = aliases.get(term.lstrip("-"), term.lstrip("-"))
+            expressions.append(F(path).desc(nulls_last=True) if term.startswith("-") else F(path).asc(nulls_last=True))
+        return queryset.order_by(*expressions, "slug", "id")
+
+
 class PublicProductFilter(django_filters.FilterSet):
-    """Website filters shared by every product list (the legacy comparison pages filtered by rating, brand, score and warranty)."""
+    """Website filters shared by every product list (the legacy comparison pages filtered by rating, brand, score and
+    warranty, and compared a selection of products — ``?ids=`` there, ``?slug=a,b`` here)."""
 
     search = django_filters.CharFilter(method="filter_search", help_text="Full-text over sku, name, model, brand.")
+    slug = django_filters.CharFilter(method="filter_slug", help_text="Product slug(s), comma-separated (comparison of a selection).")
     brand = django_filters.CharFilter(method="filter_brand", help_text="Brand slug(s), comma-separated.")
     overall_rating = django_filters.MultipleChoiceFilter(choices=OverallRating.choices)
     min_kerala_score = django_filters.NumberFilter(field_name="kerala_climate_score", lookup_expr="gte")
@@ -119,6 +152,9 @@ class PublicProductFilter(django_filters.FilterSet):
     def filter_brand(self, queryset, name, value):
         return queryset.filter(component__brand__slug__in=_csv(value))
 
+    def filter_slug(self, queryset, name, value):
+        return queryset.filter(slug__in=_csv(value)[:MAX_COMPARED])
+
 
 class PublicPanelFilter(PublicProductFilter):
     panel_type = django_filters.MultipleChoiceFilter(field_name="component__panel_spec__panel_type", choices=PanelType.choices)
@@ -126,6 +162,7 @@ class PublicPanelFilter(PublicProductFilter):
     subsidy_eligible = django_filters.BooleanFilter()
     min_performance_warranty = django_filters.NumberFilter(field_name="component__warranty_performance_years", lookup_expr="gte")
     min_efficiency = django_filters.NumberFilter(field_name="component__panel_spec__efficiency_pct", lookup_expr="gte")
+    max_efficiency = django_filters.NumberFilter(field_name="component__panel_spec__efficiency_pct", lookup_expr="lte")
 
 
 class PublicInverterFilter(PublicProductFilter):

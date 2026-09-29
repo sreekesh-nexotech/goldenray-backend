@@ -80,6 +80,18 @@ class TestCrud:
         empty = CategoryFactory()
         assert client.patch(detail(empty), {"bom_role": "MAIN_INVERTER"}, format="json").status_code == 200
 
+    def test_role_change_to_panel_or_inverter_needs_specs_on_live_components(self, client):
+        """activate/ refuses a panel without its spec; turning a category into the panel category must not bypass it."""
+        category = CategoryFactory()
+        ComponentFactory(category=category, status="ACTIVE", sku="a1")
+        response = client.patch(detail(category), {"bom_role": "MAIN_PANEL"}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "spec_required" and "a1" in response.json()["errors"]
+        assert Category.objects.get(pk=category.pk).bom_role == "MISC"
+        drafts = CategoryFactory()
+        ComponentFactory(category=drafts, status="DRAFT")
+        assert client.patch(detail(drafts), {"bom_role": "MAIN_INVERTER"}, format="json").json()["bom_role"] == "MAIN_INVERTER"
+        assert client.patch(detail(category), {"bom_role": "BATTERY"}, format="json").status_code == 200  # battery specs are optional
+
     def test_stale_version_and_noop(self, client):
         category = CategoryFactory(version=2, gst_rate=Decimal("0.18"))
         assert client.patch(detail(category), {"gst_rate": "0.18"}, format="json").json()["version"] == 2

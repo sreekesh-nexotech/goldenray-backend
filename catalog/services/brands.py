@@ -96,6 +96,8 @@ def update_brand(instance: Brand, *, user, data, expected_version=None) -> Brand
         if not values["name"]:
             raise validation_error({"name": ["This field may not be blank."]})
     check_assets(values, {"logo": IMAGE_RULE})
+    if "slug" in values and not values["slug"]:  # blank = derive it (as on create), never store ""
+        values["slug"] = unique_slug(values.get("name", brand.name), lambda slug: _slug_taken(slug, exclude_pk=brand.pk), max_length=120, fallback="brand")
     values = {name: value for name, value in values.items() if getattr(brand, name) != value}
     if not values:
         return brand

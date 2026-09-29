@@ -117,6 +117,16 @@ class TestPublish:
         response = editor.post(detail(profile, "publish/"), format="json")
         assert response.status_code == 409 and response.json()["code"] == "component_not_publishable"
 
+    @pytest.mark.parametrize("change", [{"is_active": False}, {"deleted_at": "2026-01-01T00:00:00Z"}])
+    def test_category_must_be_live_and_active(self, editor, api_client, change):
+        """A profile whose category is hidden from the website must not report PUBLISHED (the public lists drop it)."""
+        profile = PublicProfileFactory()
+        type(profile.component.category).all_objects.filter(pk=profile.component.category_id).update(**change)
+        response = editor.post(detail(profile, "publish/"), format="json")
+        assert response.status_code == 409 and response.json()["code"] == "component_not_publishable" and "category" in " ".join(response.json()["errors"]["component"])
+        profile.refresh_from_db()
+        assert profile.status == "DRAFT" and not OutboxEvent.objects.filter(event_type="catalog.profile_published").exists()
+
     def test_stale_version_on_publish(self, editor):
         profile = PublicProfileFactory(version=2)
         assert editor.post(detail(profile, "publish/"), {"expected_version": 1}, format="json").json()["code"] == "stale_version"

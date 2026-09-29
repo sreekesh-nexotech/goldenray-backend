@@ -53,12 +53,15 @@ from catalog.models import (
     PanelTechnology,
     PanelType,
     ProcurementStatus,
+    ProfileStatus,
     RatingTier,
     Tier,
 )
+from catalog.services import components as component_services
 from catalog.services import profiles as profile_services
 from catalog.services.brands import find_by_name
 from catalog.services.components import get_by_sku, live_tiers, sorted_tiers
+from catalog.services.history import record_change
 from catalog.services.legacy_support import (
     BACKEND,
     FLARIZE,
@@ -69,6 +72,7 @@ from catalog.services.legacy_support import (
     boolean,
     checksum,
     dec,
+    earlier,
     ensure_brand,
     extend_attribute_schema,
     fraction_from_percent,
@@ -88,7 +92,7 @@ from catalog.services.legacy_support import (
     text,
     upsert_component,
 )
-from catalog.services.specs import REQUIRED_FOR_ACTIVE, SPEC_RELATED, get_spec, spec_kind
+from catalog.services.specs import REQUIRED_FOR_ACTIVE, SPEC_RELATED, get_spec, spec_fields, spec_kind
 from core.errors import DomainError
 from core.models import LegacyMap
 
@@ -109,6 +113,7 @@ WEBSITE_INVERTER_TYPES = {
 }
 SOURCE_INVERTER_TYPES = {"ongrid": (InverterType.ONGRID, None), "hybrid": (InverterType.HYBRID, None), "micro": (InverterType.ONGRID, InverterTopology.MICRO)}
 PHASES = {"1P": "1P", "3P": "3P"}
+HYBRID_PHASES = {"1P-HYB": "1P", "3P-HYB": "3P"}  # bom_catalogitem.PHASE_CHOICES
 RETIRED_ENGINEERING = {EngineeringStatus.REJECTED, EngineeringStatus.WITHDRAWN}
 RETIRED_PROCUREMENT = {ProcurementStatus.INACTIVE, ProcurementStatus.DISCONTINUED}
 
@@ -336,6 +341,7 @@ def _import_bom(categories, items, tiers, *, user, result: ImportResult) -> None
         extend_attribute_schema(category, [plan["attributes"] for _, cat, plan in plans if cat.pk == category.pk], user=user)
     for row, category, plan in plans:
         _guarded(result, BOM_ITEM, row["id"], lambda row=row, category=category, plan=plan: _bom_item(row, Category.objects.get(pk=category.pk), plan, flarize_owned, user=user, result=result))
+    _merge_website_twins(user=user, result=result)
 
 
 def _bom_category(row, index, flarize_categories, *, user, result, by_id) -> str:
@@ -395,6 +401,11 @@ def _bom_plan(row: dict, category: Category, tier_rows: list[dict]) -> dict:
         if row.get("inverter_type") and inverter_type is None:
             raise BadValue("inverter_type", row.get("inverter_type"), "unknown inverter type")
         phase = row.get("phase")
+        if phase in HYBRID_PHASES:
+            # bom_catalogitem allows 1P-HYB / 3P-HYB on any item (the calculator's HYB slots match on the code): the
+            # spec keeps the phase, the exact code stays in attributes.phase (as for DCDB/ACDB rows).
+            plan["attributes"]["phase"] = phase
+            phase = HYBRID_PHASES[phase]
         if phase and phase not in PHASES:
             raise BadValue("phase", phase, "unknown phase")
         plan["spec"] = {"kw": dec(row.get("kw"), "kw", places=3, digits=7), "phase": phase or None, "inverter_type": inverter_type}
@@ -426,8 +437,9 @@ def _bom_item(row: dict, category: Category, plan: dict, flarize_owned: set[int]
         if diffs:
             differences = [{"field": d["field"], "flarize": d["current"], "bom": d["incoming"]} for d in diffs]
             result.violation(BOM_ITEM, row["id"], "d2_flarize_wins", f"{sku}: catalog.json wins over bom_catalogitem.", severity="warning", sku=sku, differences=differences)
+        set_timestamps(existing, created_at=earlier(existing.created_at, plan["created_at"]))
         remember(BACKEND, BOM_ITEM, row["id"], existing)
-        _map_tiers(existing, plan)
+        _map_tiers(existing, plan, result=result)
         return "unchanged"
     brand = ensure_brand(plan["brand_name"], user=user, result=result, table=BOM_ITEM, source_id=row["id"])
     data = _component_data(plan, category, brand, existing)
@@ -435,19 +447,40 @@ def _bom_item(row: dict, category: Category, plan: dict, flarize_owned: set[int]
     status = existing.status if existing is not None else ComponentStatus.ACTIVE
     status = _status_with_spec(status, category, data, existing, result=result, table=BOM_ITEM, source_id=row["id"])
     component, outcome = upsert_component(existing, data, user=user, status=status, reason="legacy import: bom_catalogitem")
-    set_timestamps(component, created_at=plan["created_at"], updated_at=plan["updated_at"])
+    set_timestamps(component, created_at=earlier(component.created_at, plan["created_at"]), updated_at=plan["updated_at"])
     remember(BACKEND, BOM_ITEM, row["id"], component)
-    _map_tiers(component, plan)
+    _map_tiers(component, plan, result=result)
     return outcome
 
 
-def _map_tiers(component: Component, plan: dict) -> None:
-    """Map each ``bom_itemtier`` row to the live tier row it became (none when Flarize holds other tiers)."""
+def _map_tiers(component: Component, plan: dict, *, result: ImportResult) -> None:
+    """Map each ``bom_itemtier`` row to the live tier row it became; a tier Flarize does not offer (D-2) has none: the
+    row is reported and counted as skipped (the same outcome as when Flarize runs second, see ``_drop_dead_tier_maps``)."""
     rows = {tier.tier: tier for tier in ComponentTier.objects.filter(component=component)}
     for tier_row in plan["tier_rows"]:
-        target = rows.get(str(tier_row["tier"]).upper())
+        tier = str(tier_row["tier"]).upper()
+        target = rows.get(tier)
         if target is not None:
             remember(BACKEND, BOM_TIER, tier_row["id"], target)
+            continue
+        LegacyMap.objects.filter(source_system=BACKEND, source_table=BOM_TIER, source_id=str(tier_row["id"])).delete()
+        result.violation(
+            BOM_TIER, tier_row["id"], "d2_tier_not_kept", f"{component.sku}: catalog.json does not offer tier {tier}; the bom_itemtier row is not kept.", severity="warning", sku=component.sku
+        )
+        result.count(BOM_TIER, "skipped")
+
+
+def _drop_dead_tier_maps(component: Component, *, result: ImportResult) -> None:
+    """After Flarize replaced a BOM component's tiers (D-2), the ``bom_itemtier`` rows of the tiers it removed map to
+    nothing live any more: unmap and report them (the same outcome as when Flarize runs first, see ``_map_tiers``)."""
+    dead = ComponentTier.all_objects.filter(component=component, deleted_at__isnull=False)
+    stale = LegacyMap.objects.filter(source_system=BACKEND, source_table=BOM_TIER, target_table=ComponentTier._meta.db_table, target_id__in=dead.values("pk"))
+    for entry in stale:
+        tier = dead.get(pk=entry.target_id).tier
+        result.violation(
+            BOM_TIER, entry.source_id, "d2_tier_not_kept", f"{component.sku}: catalog.json does not offer tier {tier}; the bom_itemtier row is not kept.", severity="warning", sku=component.sku
+        )
+    stale.delete()
 
 
 # ── Flarize catalog.json + battery-master.json ────────────────────────────────────────────────────────────────
@@ -531,10 +564,7 @@ MASTER_KEYS = {
     "statusHistory",
     "architecture",
     "changeLog",
-    "updatedBy",
-    "updatedAt",
-    "createdAt",
-}
+}  # every other key of a master record (createdAt, updatedAt, updatedBy, …) is kept in attributes.master_<key>
 
 
 def _import_flarize(catalog_json: dict, battery_master_json: dict, *, user, result: ImportResult) -> None:
@@ -565,6 +595,7 @@ def _import_flarize(catalog_json: dict, battery_master_json: dict, *, user, resu
         category = extend_attribute_schema(category, [plan["attributes"] for _, plan in plans], user=user)
         for item, plan in plans:
             _guarded(result, FL_ITEM, item.get("id"), lambda item=item, plan=plan, category=category: _flarize_item(item, plan, category, bom_owned, user=user, result=result))
+    _merge_website_twins(user=user, result=result)
 
 
 def _flarize_category(slug: str, payload: dict, index: int, *, user, result: ImportResult) -> Category | None:
@@ -799,10 +830,15 @@ def _battery_master_spec(master: dict, plan: dict) -> tuple[dict, list[dict]]:
     }
     # A null list means "not recorded" for the compatibility checks: keep it even though other nulls are dropped.
     spec["_keep_null"] = ("compatible_inverters", "compatible_system_types", "compatible_phases")
-    prices = [
-        {"kind": "PURCHASE", "amount": dec(master.get("purchasePrice"), "purchasePrice", places=2, digits=14), "per_watt": None},
-        {"kind": "LIST", "amount": dec(master.get("sellingPrice"), "sellingPrice", places=2, digits=14), "per_watt": None},
-    ]
+    prices = [{"kind": "PURCHASE", "amount": dec(master.get("purchasePrice"), "purchasePrice", places=2, digits=14), "per_watt": None}]
+    selling = dec(master.get("sellingPrice"), "sellingPrice", places=2, digits=14)
+    listed = next((price for price in plan["prices"] if price["kind"] == "LIST"), None)
+    if selling is not None:
+        # One LIST price per SKU: catalog.json's (PLAN §7.6 #7); the master's sellingPrice only fills a missing one.
+        if listed is None or listed["amount"] is None:
+            prices.append({"kind": "LIST", "amount": selling, "per_watt": None})
+        elif listed["amount"] != selling:
+            plan["warnings"].append(("selling_price_differs", f"battery-master sellingPrice {selling} differs from the catalog.json price {listed['amount']}; the catalog price is the LIST price."))
     return spec, prices
 
 
@@ -834,13 +870,15 @@ def _flarize_item(item: dict, plan: dict, category: Category, bom_owned: set[int
     component, outcome = upsert_component(existing, data, user=user, status=status, reason="legacy import: Flarize catalog.json", status_reason=plan["status_reason"])
     set_timestamps(
         component,
-        created_at=plan["created_at"],
+        created_at=earlier(component.created_at, plan["created_at"]),
         updated_at=plan["updated_at"],
         created_by=legacy_user(FLARIZE, "users.json", plan["created_by"]),
         updated_by=legacy_user(FLARIZE, "users.json", plan["updated_by"]),
     )
     if import_change_log(component, plan["change_log"], source_system=FLARIZE, reason="Flarize changeLog") and outcome == "unchanged":
         outcome = "updated"
+    if existing is not None and existing.pk in bom_owned:
+        _drop_dead_tier_maps(component, result=result)
     remember(FLARIZE, FL_ITEM, sku, component)
     return outcome
 
@@ -1126,3 +1164,82 @@ def _upsert_profile(component: Component, row: dict, plan: dict, *, created_at, 
             ComponentPublicProfile.all_objects.filter(pk=profile.pk).update(published_at=created_at or profile.published_at)
     set_timestamps(profile, created_at=created_at, updated_at=updated_at)
     return outcome
+
+
+# ── website products imported before their BOM / Flarize twin ────────────────────────────────────────────────
+
+WEBSITE_TABLES = {"panel": PANELS, "inverter": INVERTERS, "battery": BATTERIES}
+SIZE_FIELDS = {"panel": "wattage_w", "inverter": "kw", "battery": "capacity_kwh"}
+# The component columns a website row fills (everything else it carries is spec or public profile).
+WEBSITE_COMPONENT_FIELDS = {"panel": ("warranty_product_years", "warranty_performance_years"), "inverter": ("warranty_product_years", "warranty_extendable_years"), "battery": ()}
+
+
+def _merge_website_twins(*, user, result: ImportResult) -> None:
+    """Merge website products that were imported *before* their BOM/Flarize record into it (import order must not matter).
+
+    A website row imported after the catalog is matched at once (``_website_row``: same category, brand, size and model
+    on letters and digits). Imported first, it became a public-only component; once a component of another source
+    matches it, this pass (run at the end of the BOM and Flarize imports) does what the later website import would have
+    done: the catalog record keeps its values, its blanks are filled from the website product (differences reported),
+    the public profile and the legacy map move to it, and the website-only component is deleted. Several matches →
+    ``ambiguous_match``; nothing is guessed.
+    """
+    for kind, table in WEBSITE_TABLES.items():
+        own = mapped_ids(BACKEND, table, COMPONENT_TABLE)
+        for entry in LegacyMap.objects.filter(source_system=BACKEND, source_table=table, target_table=COMPONENT_TABLE).order_by("id"):
+            website = Component.objects.select_related("category", "brand").filter(pk=entry.target_id).first()
+            if website is None or _shared(website, table):
+                continue
+            spec = get_spec(website, kind)
+            exact, _ = _candidates(kind, website.category, website.brand, website.model, getattr(spec, SIZE_FIELDS[kind], None), own)
+            if len(exact) > 1:
+                message = f"{website.brand_label} {website.model} matches several catalog components; the website product is kept separate."
+                result.violation(table, entry.source_id, "ambiguous_match", message, severity="warning", sku=website.sku, candidates=[component.sku for component in exact])
+            elif exact:
+                _guarded(
+                    result,
+                    table,
+                    entry.source_id,
+                    lambda website=website, twin=exact[0], kind=kind, table=table, source_id=entry.source_id: _absorb_website_twin(
+                        website, twin, kind, table=table, source_id=source_id, user=user, result=result
+                    ),
+                )
+
+
+def _absorb_website_twin(website: Component, twin: Component, kind: str, *, table: str, source_id, user, result: ImportResult) -> None:
+    twin = Component.objects.select_related("category", "brand").get(pk=twin.pk)
+    spec = get_spec(website, kind)
+    plan = {
+        "component": {name: getattr(website, name) for name in WEBSITE_COMPONENT_FIELDS[kind]},
+        "spec": {name: getattr(spec, name) for name in spec_fields(kind) if name != "family"} if spec is not None else {},
+    }
+    if website.brand_label and twin.brand_label != website.brand_label:
+        result.violation(table, source_id, "brand_label_differs", f"{twin.sku}: printed as {twin.brand_label!r} in the catalog, {website.brand_label!r} on the website.", severity="warning")
+    merged = _merge_into(twin, plan, table=table, source_id=source_id, result=result)
+    profile = ComponentPublicProfile.all_objects.filter(component=website).first()
+    if profile is not None:  # the one-to-one moves first: deleting the website component would delete a profile it still holds
+        ComponentPublicProfile.all_objects.filter(pk=profile.pk).update(component=twin)
+    component_services.delete_component(website, user=user)
+    LegacyMap.objects.filter(target_table=COMPONENT_TABLE, target_id=website.pk).update(target_id=twin.pk)
+    data = {**merged["component"], "is_public": True}
+    if merged["spec"]:
+        data[SPEC_RELATED[kind]] = merged["spec"]
+    reason = f"legacy import: {table} (website product {website.sku} merged)"
+    twin, _ = upsert_component(twin, data, user=user, status=twin.status, reason=reason)
+    record_change(twin, user=user, field="merged", old=website.sku, new=twin.sku, reason=reason)
+    result.violation(table, source_id, "website_twin_merged", f"{website.sku} (imported from the website first) merged into {twin.sku}.", severity="warning", sku=twin.sku)
+    if profile is None:
+        return
+    profile = ComponentPublicProfile.objects.get(pk=profile.pk)
+    created_at, updated_at, published_at = profile.created_at, profile.updated_at, profile.published_at
+    problems = profile_services.publish_problems(twin)
+    if problems:
+        result.violation(table, source_id, "profile_not_published", f"{twin.sku}: {' '.join(problems)}", severity="warning")
+        if profile.status == ProfileStatus.PUBLISHED:
+            profile_services.unpublish(profile, user=user)
+        published_at = None
+    elif profile.status != ProfileStatus.PUBLISHED:
+        profile_services.publish(profile, user=user)
+        published_at = created_at
+    # The website row's timestamps stay (as when the website import publishes after the catalog): plain UPDATE.
+    ComponentPublicProfile.all_objects.filter(pk=profile.pk).update(published_at=published_at, created_at=created_at, updated_at=updated_at)

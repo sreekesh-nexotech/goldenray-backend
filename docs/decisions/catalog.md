@@ -13,7 +13,7 @@ foundation (F1–F3, F-FIX), and its legacy importers for PLAN §7.3 (`solar_pan
 | Public API | `catalog/views/public.py` | `products/panels/`, `products/inverters/`, `products/batteries/`, `products/<category>/<slug>/`. |
 | Services | `catalog/services/` | `brands`, `categories`, `components`, `specs`, `lifecycle` (+ `assert_selectable`), `families`, `profiles`, `public`, `usage` (registry), `pricing_hooks` (registry), `history`, `csv_io`, `dashboard`, `legacy_import` + `legacy_support`. |
 | Registries | `catalog.services.usage`, `catalog.services.pricing_hooks`, `core.dashboard`, `media.usage` | see "For later packages". |
-| Tests | `catalog/tests/` | 165 tests; fixtures exported read-only from the UAT legacy sources in `catalog/tests/fixtures/legacy/`. |
+| Tests | `catalog/tests/` | 186 tests; fixtures exported read-only from the UAT legacy sources in `catalog/tests/fixtures/legacy/`. |
 
 ### Endpoints
 
@@ -30,11 +30,15 @@ foundation (F1–F3, F-FIX), and its legacy importers for PLAN §7.3 (`solar_pan
 | staff | `GET dashboard/` | counters for `catalog` and `products_public` |
 | public | `GET products/panels/`, `products/inverters/`, `products/batteries/` (paginated; filters below), `GET products/<category>/<slug>/` | anonymous, throttle `public_read`, cached 300 s (Cache-Control ≤ 60 s) under `catalog` + `pricing` + `media` |
 
-Public list filters: all lists `search`, `brand` (slugs, comma-separated), `overall_rating`, `min_kerala_score`,
-`min_product_warranty`, `ordering` (`kerala_climate_score`, `published_at`, `slug`, warranties); panels add
-`panel_type`, `technology`, `subsidy_eligible`, `min_performance_warranty`, `min_efficiency`; inverters add
-`inverter_type`, `topology`, `rating_tier`, `min_extendable_warranty`; batteries add `min_capacity_kwh`. Without
-`ordering` the list is Kerala score descending, unscored products last, then slug.
+Public list filters (every filter and sort of the legacy comparison pages has an equivalent): all lists `search`,
+`slug` (comma-separated, ≤ 50: the compared selection, legacy `?ids=`), `brand` (slugs, comma-separated),
+`overall_rating`, `min_kerala_score`, `min_product_warranty`; panels add `panel_type`, `technology`,
+`subsidy_eligible`, `min_performance_warranty`, `min_efficiency`, `max_efficiency`; inverters add `inverter_type`,
+`topology`, `rating_tier`, `min_extendable_warranty`; batteries add `min_capacity_kwh`. `ordering` takes public names
+only (`kerala_climate_score`, `published_at`, `slug`, `product_warranty`, `performance_warranty`; panels `efficiency`,
+`wattage`; inverters `efficiency`, `kw`, `extendable_warranty`; batteries `capacity_kwh`), sorts products without the
+value last in both directions and breaks ties by slug (stable pages). Without `ordering` the list is Kerala score
+descending, unscored products last, then slug.
 
 ## Decisions not spelled out in the PLAN
 
@@ -50,7 +54,10 @@ Public list filters: all lists `search`, `brand` (slugs, comma-separated), `over
    `deprecate` (ACTIVE → DEPRECATED) needs a reason; the replacement must be live, not retired, in the same category,
    not the component itself and must not lead back to it. `retire` (DRAFT/ACTIVE/DEPRECATED → RETIRED) is terminal.
    Every transition is versioned, audited (`catalog.component_activated|deprecated|retired`), logged in the change
-   table and emits `catalog.component_status_changed` `{component_uid, sku, from, to, replacement_uid?}`.
+   table and emits `catalog.component_status_changed` `{component_uid, sku, from, to, replacement_uid?}`. The spec rule
+   cannot be bypassed: moving an ACTIVE/DEPRECATED component into a panel/inverter category without sending the spec,
+   or giving a category the MAIN_PANEL/MAIN_INVERTER role while such components lack it, is 409 `spec_required`. A
+   replacement retired or deleted since is no longer suggested (`assert_selectable` hint, `selection_warning`).
 3. **Selection rule.** `catalog.services.assert_selectable(component, field="component")` raises
    `ComponentNotSelectable` (400): `component_retired` (message names the replacement), `component_deleted`,
    `component_not_found`. DRAFT/ACTIVE/DEPRECATED pass; `selection_warning()` returns the deprecation warning.
@@ -70,7 +77,8 @@ Public list filters: all lists `search`, `brand` (slugs, comma-separated), `over
    references each). Delete is refused (409 `component_in_use`) while any provider reports a reference **or fails**
    (fail closed). The catalog registers `catalog.replacements` (components naming this one as replacement).
 8. **Public products.** A product is shown while its profile is PUBLISHED, the component live, `is_public` and
-   ACTIVE/DEPRECATED, and the category live and active. `publish/` checks the same (409 `component_not_publishable`).
+   ACTIVE/DEPRECATED, and the category live and active. `publish/` checks the same, category included
+   (409 `component_not_publishable`).
    The payload is profile + spec (internal battery/inverter engineering fields omitted) + `price` + `price_range_label`.
    `products/<category>/<slug>/` accepts a category slug or the aliases `panels`/`inverters`/`batteries`.
 9. **Prices.** `catalog.services.pricing_hooks.register(fn)` installs the provider; `fn(components)` is called once per
@@ -89,7 +97,10 @@ Public list filters: all lists `search`, `brand` (slugs, comma-separated), `over
     `catalog.components_imported` per commit. Existing SKUs update (needs `catalog.edit`); new rows create DRAFTs;
     unknown brands are created; `status` is informational.
 12. **Events.** `catalog.component_created|updated|deleted`, `catalog.component_status_changed`,
-    `catalog.brand_renamed`, `catalog.profile_published|unpublished|updated` (website revalidation) — no handlers yet.
+    `catalog.brand_renamed`, `catalog.profile_published|unpublished|updated` (website revalidation; deleting a
+    component whose profile was PUBLISHED emits `catalog.profile_unpublished` too, as deleting the profile does) — no
+    handlers yet. A product also leaves the website when its component is retired, made non-public or its category
+    deactivated: a revalidation handler listens to `catalog.component_status_changed`/`component_updated` as well.
 
 ## Legacy import (`catalog/services/legacy_import.py`)
 
@@ -112,13 +123,23 @@ records the counts and the SHA-256 of the input. Each source row runs in its own
   compared on letters and digits only. One candidate → one record (website fills empty fields, differing values are
   kept and reported as `value_conflict`, `brand_label_differs`); several → `ambiguous_match` (not imported); none →
   a new public component (`possible_match` warnings list same brand+size candidates with another model). Rows of one
-  source table never merge into each other. In the UAT data no website product matches a BOM/Flarize component (the
-  Flarize panels carry no model designation; the inverter models differ), so all 22 become public components.
+  source table never merge into each other. When the website import ran **first**, the BOM and Flarize imports end
+  with the same match from the other side (`_merge_website_twins`): a website-only component with exactly one twin is
+  merged into it exactly as the later website import would have done (catalog values kept, blanks filled, conflicts
+  reported, profile + legacy map moved, the website-only component deleted, `website_twin_merged` warning); several
+  twins → `ambiguous_match` (warning, nothing merged). In the UAT data no website product matches a BOM/Flarize
+  component (the Flarize panels carry no model designation; the inverter models differ), so all 22 become public
+  components.
 * **D-2.** Where `catalog.json` and `bom_*` describe the same SKU, Flarize wins in either import order; every field on
   which they disagree (of the fields BOM carries: name, brand, model, GST override, wattage, DCR, kW, phase, type,
   tiers, category) is reported as `d2_flarize_wins` with both values. UAT: 10 SKUs (`p1`, `pa_9e35d4adf2a3`, `m2`,
-  `dc3`, `is1`, `cb4`, `cb5`, `cb6`, `ec1`, `la1`). Prices: `merge_prices(flarize, bom)` applies D-2 to the returned
-  price lists and lists the differing amounts (UAT: `p2`, `p3`, `p8`, … — pricing imports the merged list).
+  `dc3`, `is1`, `cb4`, `cb5`, `cb6`, `ec1`, `la1`). A `bom_itemtier` row whose tier Flarize does not offer maps to
+  nothing live: it is unmapped and reported `d2_tier_not_kept` (UAT: 9 rows) in either order. Prices:
+  `merge_prices(flarize, bom)` applies D-2 to the returned price lists and lists the differing amounts (UAT: `p2`,
+  `p3`, `p8`, … — pricing imports the merged list).
+* **Order independence.** Any order of the three importers yields the same components, specs, profiles, categories
+  and legacy map (checked column by column in `test_import_order_does_not_change_the_result`); `created_at` is the
+  earliest source timestamp (BOM `created_at`, Flarize `createdAt`), so it does not depend on which source ran first.
 * **Status.** BOM rows and approved Flarize items → ACTIVE; Flarize `status` TEST / `engineeringStatus`
   TEST_PLACEHOLDER*, `status` INACTIVE, `approvalStatus` REJECTED, battery-master engineering REJECTED/WITHDRAWN or
   procurement INACTIVE/DISCONTINUED → RETIRED (reason kept in `retired_reason`); other approval states → DRAFT; an
@@ -195,7 +216,8 @@ timestamps · (`__str__`) → `component.name` = `"Battery <capacity>kWh - <back
 category map) · `name` · `brand` → `brand` + `brand_label` · `price`, `per_watt` → returned LIST price ·
 `gst_override` (%) → `gst_rate_override` (fraction) · `watt`, `dcr` → `panel_spec.wattage_w`, `.is_dcr` (panel
 categories only) · `kw`, `phase`, `inverter_type` (ongrid/hybrid/micro) → `inverter_spec.kw`, `.phase`,
-`.inverter_type` (+ `topology` MICRO) for inverters; `phase` (1P, 3P, 1P-HYB, 3P-HYB) and `inverter_type` of other
+`.inverter_type` (+ `topology` MICRO) for inverters (an inverter's `1P-HYB`/`3P-HYB` → `inverter_spec.phase` 1P/3P
+and the exact code in `attributes.phase`); `phase` (1P, 3P, 1P-HYB, 3P-HYB) and `inverter_type` of other
 categories (DCDB/ACDB variants) → `attributes.phase`, `attributes.type` · `model` → `component.model` ·
 `created_at`/`updated_at` → component timestamps.
 
@@ -227,9 +249,11 @@ Flarize `battery-master.json` `batteries.<componentId>` (overlay on the battery 
 `protectionType`, `protectionRating`, `externalProtectionRequired`, `communicationProtocol`, `communicationRequired`,
 `compatibleInverters`, `compatibleSystemTypes`, `compatiblePhases` (null kept: "not recorded"), `architecture`,
 `engineeringStatus`, `procurementStatus`, `engineeringNotes`, `openItems`, `statusHistory`, `supplier`,
-`supplierReference` → the `battery_spec` columns of the same meaning · `purchasePrice`/`sellingPrice` → returned
-PURCHASE/LIST prices · `changeLog` → change rows · any other key → `attributes.master_<key>`. The file names no
-battery families, so `battery_spec.family` stays empty (DV-18).
+`supplierReference` → the `battery_spec` columns of the same meaning · `purchasePrice` → returned PURCHASE price ·
+`sellingPrice` → returned LIST price only when the catalog item has none (one LIST per SKU: the catalog.json price,
+§7.6 #7; a differing one is reported `selling_price_differs`) · `changeLog` → change rows · any other key
+(`createdAt`, `updatedAt`, `updatedBy`, …) → `attributes.master_<key>`. The file names no battery families, so
+`battery_spec.family` stays empty (DV-18).
 
 ## Parity evidence
 
@@ -244,6 +268,24 @@ equal scores, which the legacy server leaves to the heap (it returned ids 1, 7, 
 the rebuild orders ties by legacy id. `battery_price` comes from the importer's returned price rows (pricing imports
 them). `test_every_legacy_column_has_a_home` asserts that every legacy column appears in the rebuilt rows.
 
+## Review fixes (catalog review)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| 1 | The public lists could not replace the legacy comparison pages: no `max_efficiency`, no way to fetch a compared selection (legacy `?ids=`), no efficiency sort; `?ordering=-kerala_climate_score` put unscored products first and ties had no stable order (pages could repeat/skip rows) | `slug` (comma-separated) and `max_efficiency` filters; `PublicOrderingFilter` with public aliases (`efficiency`, `product_warranty`, `extendable_warranty`, `capacity_kwh`, …), NULLs last both ways, `slug`/`id` tie-breakers; the ordering names are listed in OpenAPI | `test_public_products.py::test_website_comparison_filters_and_sorts`, `test_filters_and_ordering` (its tautological `… or other` assertion replaced), `test_openapi.py` |
+| 2 | `publish/` accepted a profile whose category is inactive or deleted: PUBLISHED but never shown | `publish_problems` checks the category like the public query | `test_profiles_api.py::test_category_must_be_live_and_active` |
+| 3 | An ACTIVE/DEPRECATED accessory could become a spec-less panel/inverter by moving it to the panel category, or by giving its category the MAIN_PANEL/MAIN_INVERTER role (activate/ refuses exactly that) | 409 `spec_required` in `update_component` (unless the spec comes with the move) and in `update_category` | `test_components_api.py::test_moving_a_live_component_into_a_panel_category_needs_the_spec`, `test_categories_api.py::test_role_change_to_panel_or_inverter_needs_specs_on_live_components` |
+| 4 | `PATCH catalog/brands/<uid>/` with a blank slug stored `""` | blank = derive from the name (as on create) | `test_brands_api.py::test_blank_slug_on_update_is_derived_not_stored` |
+| 5 | `assert_selectable` / `selection_warning` suggested a replacement that was retired since | only a live, non-retired replacement is suggested | `test_lifecycle.py::TestAssertSelectable` |
+| 6 | Deleting a component with a PUBLISHED profile deleted the profile without `catalog.profile_unpublished` (deleting the profile itself emits it) | emitted | `test_components_api.py::test_delete_soft_deletes_component_and_profile` |
+| 7 | `history/` applied the component list filters (`?status=RETIRED` → 404) and declared them in OpenAPI; `export/` declared only 6 of its 11 filters | `filter_backends=[]` on `history/`; every filter declared on `export/` | `test_components_api.py::test_history_ignores_the_component_list_filters`, `test_openapi.py` |
+| 8 | Website products imported **before** BOM/Flarize were never de-duplicated (a twin was created) | `_merge_website_twins` at the end of the BOM and Flarize imports (see Legacy import) | `test_legacy_import.py::TestImportOrder` |
+| 9 | Import order changed the data: Flarize-first lost the BOM `created_at`; 9 `bom_itemtier` rows were mapped to soft-deleted tiers in one order and silently unmapped in the other (§7.6 #1) | `created_at` = earliest source timestamp; such tier rows are unmapped and reported `d2_tier_not_kept` in both orders | `test_import_order_does_not_change_the_result` (now column by column + legacy map), `TestImportOrder` |
+| 10 | A BOM inverter row with the legal `phase` `1P-HYB`/`3P-HYB` was rejected (row lost) | phase 1P/3P in the spec, exact code in `attributes.phase` | `TestBomMapping::test_hybrid_phase_codes_on_inverter_rows_are_kept` |
+| 11 | battery-master `createdAt`/`updatedAt`/`updatedBy` were consumed and dropped; a `sellingPrice` became a second LIST price for the SKU | kept in `attributes.master_*`; one LIST per SKU (`selling_price_differs` when they disagree) | `TestFlarizeMapping::test_battery_master_record_timestamps_are_kept`, `…selling_price_never_duplicates_the_list_price` |
+
 ## For later packages
 
 * **Selecting components** (packs, BOM, quotations, projects): `from catalog.services import assert_selectable`; call
@@ -257,5 +299,5 @@ them). `test_every_legacy_column_has_a_home` asserts that every legacy column ap
   (`catalog/tests/legacy_rebuild.py`); legacy filters map to typed columns (`panel_type`, `overall_rating`,
   `efficiency_pct`, warranty years, `kerala_climate_score`, `rating_tier`, `topology`).
 * **migrations_tools**: call the three importers with the source rows (psycopg rows or `json.load` output) and print
-  `counts` + `violations`; `dry_run=True` for `--dry-run`. Run order does not matter (D-2 holds either way); the
+  `counts` + `violations`; `dry_run=True` for `--dry-run`. Run order does not matter (D-2 and the website de-duplication hold either way); the
   accounts import should run first so Flarize `createdBy` resolves (`FLARIZE users.json` map).

@@ -366,6 +366,17 @@ def set_timestamps(instance, *, created_at=None, updated_at=None, created_by=Non
             setattr(instance, name, value)
 
 
+def earlier(current: datetime | None, incoming: datetime | None) -> datetime | None:
+    """``incoming`` when it predates ``current`` (the value to write), else ``None`` (keep ``current``).
+
+    A component fed by several sources (BOM and Flarize share SKUs) was created when the earliest source created it:
+    taking the minimum makes ``created_at`` independent of the import order.
+    """
+    if incoming is None or (current is not None and current <= incoming):
+        return None
+    return incoming
+
+
 def set_status(component: Component, status: str, *, user, reason: str = "") -> bool:
     """Mirror the source's lifecycle (importers only; staff use the lifecycle endpoints)."""
     if component.status == status:

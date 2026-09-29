@@ -17,6 +17,7 @@ from rest_framework.renderers import BaseRenderer, JSONRenderer
 from rest_framework.response import Response
 
 from catalog.filters import ComponentFilter
+from catalog.models import BomRole, ComponentStatus, Tier
 from catalog.serializers.io import ImportReportSerializer, ImportRequestSerializer
 from catalog.services import components, csv_io
 from core.errors import DomainError
@@ -76,10 +77,15 @@ class ComponentExportView(BaseAPIView):
         operation_id="catalog_components_export",
         parameters=[
             OpenApiParameter("category", str, description="Category slug(s), comma-separated."),
+            OpenApiParameter("category_uid", OpenApiTypes.UUID),
+            OpenApiParameter("bom_role", str, enum=BomRole.values),
             OpenApiParameter("brand", str, description="Brand slug(s), comma-separated."),
-            OpenApiParameter("status", str, many=True, enum=["DRAFT", "ACTIVE", "DEPRECATED", "RETIRED"]),
-            OpenApiParameter("tier", str, enum=["BASE", "VALUE", "PREMIUM"]),
+            OpenApiParameter("brand_uid", OpenApiTypes.UUID),
+            OpenApiParameter("status", str, many=True, enum=ComponentStatus.values),
+            OpenApiParameter("tier", str, enum=Tier.values),
             OpenApiParameter("is_public", bool),
+            OpenApiParameter("is_premium", bool),
+            OpenApiParameter("sku", str, description="Exact SKU (case-insensitive)."),
             OpenApiParameter("search", str, description="Full-text over sku, name, model, brand, description."),
         ],
         responses={(200, "text/csv"): OpenApiResponse(response=OpenApiTypes.STR, description="CSV in the import format."), 400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer},

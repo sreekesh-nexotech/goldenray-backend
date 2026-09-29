@@ -123,7 +123,8 @@ class ComponentViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, Upd
         return self._respond(component)
 
     @extend_schema(operation_id="catalog_components_history", responses={200: ComponentChangeSerializer(many=True), 404: ErrorSerializer}, tags=TAGS)
-    @action(detail=True, methods=["get"], pagination_class=ChangeCursorPagination)
+    # filter_backends=[]: the component list filters do not apply to a change log (nor may they 404 the component).
+    @action(detail=True, methods=["get"], pagination_class=ChangeCursorPagination, filter_backends=[])
     def history(self, request, *args, **kwargs):
         paginator = ChangeCursorPagination()
         # view=None: the cursor orders by (-at, -id), not by the component list's ordering filter.

@@ -2,6 +2,7 @@
 
 import pytest
 
+from audit.models import AuditLog
 from catalog.models import BatteryFamily
 from catalog.tests.factories import BatteryFamilyFactory, battery, inverter
 
@@ -32,6 +33,9 @@ def test_crud(client):
     assert client.post(URL, {"slug": "seg-lv", "name": "dup", "voltage_class": "HV"}, format="json").json()["code"] == "battery_family_slug_taken"
     assert client.post(URL, {"slug": "x", "name": "x", "voltage_class": "12V"}, format="json").json()["errors"]["voltage_class"]
     assert client.delete(detail(family)).status_code == 204 and not BatteryFamily.objects.exists()
+    actions = list(AuditLog.objects.filter(object_uid=family.uid).order_by("id").values_list("action", flat=True))
+    assert actions == ["catalog.battery_family_created", "catalog.battery_family_updated", "catalog.battery_family_deleted"]
+    assert BatteryFamily.all_objects.get(pk=family.pk).deleted_at is not None  # soft delete
 
 
 def test_in_use_guards(client):

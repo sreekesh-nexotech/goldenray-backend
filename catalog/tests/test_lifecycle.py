@@ -114,6 +114,14 @@ class TestAssertSelectable:
             component = panel(status=status)
             assert lifecycle.assert_selectable(component) is component
         assert lifecycle.selection_warning(replacement) is None
+        # A replacement retired since must not be suggested (it is not selectable either).
+        type(replacement).objects.filter(pk=replacement.pk).update(status=ComponentStatus.RETIRED)
+        retired.refresh_from_db()
+        with pytest.raises(lifecycle.ComponentNotSelectable) as stale_hint:
+            lifecycle.assert_selectable(retired)
+        assert "Use p2" not in stale_hint.value.message
+        deprecated = panel(sku="p5", status=ComponentStatus.DEPRECATED, deprecated_reason="old", replacement=type(replacement).objects.get(pk=replacement.pk))
+        assert lifecycle.selection_warning(deprecated) == "p5 is deprecated (old)."
         from catalog.services import assert_selectable  # the public entry point later packages call
 
         assert assert_selectable is lifecycle.assert_selectable

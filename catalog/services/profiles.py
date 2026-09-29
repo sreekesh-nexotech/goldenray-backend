@@ -4,8 +4,9 @@
   profiles and derived from the brand + model/name when not given;
 * ``ratings`` holds 0–100 integers under the known keys; ``pros``/``cons`` are lists of strings, ``faq`` a list of
   ``{question, answer}``, ``gallery`` a list of public image uids;
-* ``publish/`` needs a live, public (``is_public``) component that is ACTIVE or DEPRECATED
-  (409 ``component_not_publishable``); ``unpublish/`` takes it off the website. Both are idempotent, audited, bump
+* ``publish/`` needs a live, public (``is_public``) component that is ACTIVE or DEPRECATED, in a live and active
+  category — exactly what the website lists show (409 ``component_not_publishable``); ``unpublish/`` takes it off the
+  website. Both are idempotent, audited, bump
   the ``catalog`` cache namespace and emit ``catalog.profile_published`` / ``catalog.profile_unpublished`` (website
   revalidation).
 """
@@ -165,7 +166,7 @@ def update_profile(instance: ComponentPublicProfile, *, user, data, expected_ver
     record("catalog.public_profile_updated", obj=profile, actor=user, before=changed_before, after=changed_after)
     bump(CACHE_NAMESPACE)
     if profile.status == ProfileStatus.PUBLISHED:
-        _emit("catalog.profile_updated", profile)
+        emit_profile_event("catalog.profile_updated", profile)
     return profile
 
 
@@ -178,10 +179,10 @@ def delete_profile(instance: ComponentPublicProfile, *, user, expected_version=N
     record("catalog.public_profile_deleted", obj=profile, actor=user, before=profile_snapshot(profile))
     bump(CACHE_NAMESPACE)
     if was_published:
-        _emit("catalog.profile_unpublished", profile)
+        emit_profile_event("catalog.profile_unpublished", profile)
 
 
-def _emit(event: str, profile: ComponentPublicProfile) -> None:
+def emit_profile_event(event: str, profile: ComponentPublicProfile) -> None:
     component = profile.component
     emit(
         event,
@@ -199,6 +200,9 @@ def publish_problems(component: Component) -> list[str]:
         problems.append("The component is not marked public (is_public).")
     if component.status not in PUBLISHABLE_STATUSES:
         problems.append(f"The component is {component.status}; only ACTIVE or DEPRECATED components are shown.")
+    category = component.category
+    if category.deleted_at is not None or not category.is_active:
+        problems.append(f"The component's category {category.slug!r} is not active (its products are not shown).")
     return problems
 
 
@@ -214,7 +218,7 @@ def publish(instance: ComponentPublicProfile, *, user, expected_version=None) ->
     profile.versioned_update(user, status=ProfileStatus.PUBLISHED, published_at=timezone.now())
     record("catalog.profile_published", obj=profile, actor=user, before={"status": ProfileStatus.DRAFT}, after={"status": ProfileStatus.PUBLISHED})
     bump(CACHE_NAMESPACE)
-    _emit("catalog.profile_published", profile)
+    emit_profile_event("catalog.profile_published", profile)
     return profile
 
 
@@ -227,5 +231,5 @@ def unpublish(instance: ComponentPublicProfile, *, user, expected_version=None) 
     profile.versioned_update(user, status=ProfileStatus.DRAFT)
     record("catalog.profile_unpublished", obj=profile, actor=user, before={"status": ProfileStatus.PUBLISHED}, after={"status": ProfileStatus.DRAFT})
     bump(CACHE_NAMESPACE)
-    _emit("catalog.profile_unpublished", profile)
+    emit_profile_event("catalog.profile_unpublished", profile)
     return profile
