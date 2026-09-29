@@ -11,10 +11,14 @@ Master records keep JavaScript's null/undefined distinction where the JS relied 
 
 from __future__ import annotations
 
+import math
 import re
+from collections.abc import Mapping
+from decimal import Decimal
 from typing import Any
 
-from engines._jscompat import UNDEFINED, clean, is_array, is_nullish, js_join, js_number, js_or, js_str, jsget, nullish, strict_equal, truthy
+from engines import engineering_checker, jscompat
+from engines._jscompat import UNDEFINED, clean, decimal_to_number, is_array, js_join, js_number, js_or, js_str, jsget, nullish, strict_equal, truthy
 
 # batteryMaster.js
 ENGINEERING_STATUS = {
@@ -79,7 +83,6 @@ COMPAT_CHECKS = (
     {"id": "BC-I", "name": "Battery quantity", "needs": []},
     {"id": "BC-J", "name": "Manufacturer / architecture compatibility", "needs": []},
 )
-_CHECK_NAMES = {c["id"]: c["name"] for c in COMPAT_CHECKS}
 
 # resolveBattery.js
 SELECTION_METHOD = {
@@ -115,27 +118,9 @@ BATTERY_IDENTITY_ALIASES = (
 
 
 def to_battery_master(item: Any, overlay: Any = None) -> dict | None:
-    """A catalog battery row + master-data overlay projected onto the master shape; absent values are ``None``."""
-    if not truthy(item):
-        return None
-    source = {**item, **(overlay if isinstance(overlay, dict) else {})}
-    out: dict = {field: source.get(field) for field in BATTERY_FIELDS}
-    out["componentId"] = js_or(item.get("id"), source.get("componentId"), None)
-    out["brand"] = js_or(source.get("brand"), None)
-    out["displayName"] = js_or(source.get("displayName"), source.get("name"), None)
-    out["model"] = js_or(source.get("model"), None)
-    purchase = source.get("purchasePrice")
-    out["purchasePrice"] = purchase if purchase is not None else nullish(jsget(source, "price"), None)
-    out["engineeringStatus"] = js_or(source.get("engineeringStatus"), ENGINEERING_STATUS["PENDING_ENGINEERING_APPROVAL"])
-    out["procurementStatus"] = js_or(source.get("procurementStatus"), PROCUREMENT_STATUS["ACTIVE"])
-    for key in ("compatibleInverters", "compatibleSystemTypes", "compatiblePhases"):
-        if out[key] is not None and not is_array(out[key]):
-            out[key] = None
-    out["tiers"] = item["tiers"] if is_array(item.get("tiers")) else []
-    out["missingFields"] = [f for f in BATTERY_FIELDS if out[f] is None]
-    out["missingForValidation"] = [f for f in REQUIRED_FOR_VALIDATION if out[f] is None]
-    out["missingForSafeIssue"] = [f for f in REQUIRED_FOR_SAFE_ISSUE if out[f] is None]
-    return out
+    """A catalog battery row + master-data overlay projected onto the master shape; absent values are ``None``
+    (``engineering_checker.to_battery_master``, on JavaScript numbers)."""
+    return _from_rules(engineering_checker.to_battery_master(_to_rules(item), _to_rules(overlay)))
 
 
 def all_batteries(catalog: Any, master_overlay: Any = None) -> list[dict]:
@@ -195,178 +180,55 @@ def _includes(values: Any, item: Any) -> bool:
 
 
 def check_battery_compatibility(battery: Any, ctx: Any = None) -> dict:
-    """Checks BC-A … BC-J → ``{status: VALID|WARNING|BLOCKED, checks, reasons, counts}``."""
-    ctx = ctx if isinstance(ctx, dict) else {}
-    inverter = ctx.get("inverter", None)
-    sys_type = ctx.get("sysType", "hybrid")
-    phase = ctx.get("phase", None)
-    quantity = ctx.get("quantity", 0)
-    architecture = ctx.get("architecture", None)
-    checks: list[dict] = []
-
-    def add(check_id: str, result: str, message: str, detail: Any = UNDEFINED) -> None:
-        checks.append(clean({"id": check_id, "name": _CHECK_NAMES.get(check_id, UNDEFINED), "result": result, "message": message, "detail": detail}))
-
-    if not truthy(battery):
-        add("BC-A", RESULT["FAIL"], "No battery component supplied.")
-        return _summarise(checks, battery)
-
-    def field(name: str) -> Any:
-        return jsget(battery, name)
-
-    bat_brand = js_str(js_or(field("brand"), "")).lower()
-    if architecture == "ENPHASE" and bat_brand != "enphase":
-        add(
-            "BC-J",
-            RESULT["FAIL"],
-            f'Enphase premium architecture accepts only an Enphase battery. "{js_str(field("displayName"))}" is {js_str(js_or(field("brand"), "unbranded"))}.',
-        )
-    elif truthy(architecture) and architecture != "ENPHASE" and bat_brand == "enphase":
-        add("BC-J", RESULT["FAIL"], f'Enphase battery "{js_str(field("displayName"))}" cannot be used on a {js_str(architecture)} architecture.')
-    else:
-        add("BC-J", RESULT["PASS"], "Architecture/manufacturer combination is permitted.")
-
-    system_types = field("compatibleSystemTypes")
-    if system_types is None:
-        add("BC-A", RESULT["INDETERMINATE"], "compatibleSystemTypes not recorded.", {"missing": "compatibleSystemTypes"})
-    elif not _includes(system_types, sys_type):
-        add("BC-A", RESULT["FAIL"], f'Battery is not listed as compatible with system type "{js_str(sys_type)}".')
-    else:
-        add("BC-A", RESULT["PASS"], f'Compatible with "{js_str(sys_type)}".')
-
-    inverters = field("compatibleInverters")
-    inverter_label = js_str(js_or(jsget(inverter, "name"), jsget(inverter, "id")))
-    if inverters is None:
-        add("BC-B", RESULT["INDETERMINATE"], "compatibleInverters not recorded — inverter compatibility cannot be verified.", {"missing": "compatibleInverters"})
-    elif not truthy(inverter):
-        add("BC-B", RESULT["INDETERMINATE"], "No inverter in context to check against.")
-    elif not _includes(inverters, jsget(inverter, "id")):
-        add("BC-B", RESULT["FAIL"], f'Battery is not approved for inverter "{inverter_label}".', clean({"inverterId": jsget(inverter, "id"), "approved": inverters}))
-    else:
-        add("BC-B", RESULT["PASS"], f'Approved for inverter "{inverter_label}".')
-
-    voltage = field("nominalVoltage")
-    v_min, v_max = jsget(inverter, "batteryVoltageMin"), jsget(inverter, "batteryVoltageMax")
-    if voltage is None:
-        add("BC-C", RESULT["INDETERMINATE"], "nominalVoltage not recorded.", {"missing": "nominalVoltage"})
-    elif not is_nullish(v_min) and not is_nullish(v_max):
-        ok = js_number(voltage) >= js_number(v_min) and js_number(voltage) <= js_number(v_max)
-        message = "Battery voltage is within the inverter window." if ok else f"Battery {js_str(voltage)} V is outside the inverter window {js_str(v_min)}–{js_str(v_max)} V."
-        add("BC-C", RESULT["PASS"] if ok else RESULT["FAIL"], message)
-    else:
-        add("BC-C", RESULT["INDETERMINATE"], "Inverter battery-voltage window not recorded.", {"missing": "inverter.batteryVoltageMin/Max"})
-
-    current = field("maximumDischargeCurrent")
-    required_current = jsget(inverter, "maxBatteryCurrent")
-    if current is None:
-        add("BC-D", RESULT["INDETERMINATE"], "maximumDischargeCurrent not recorded.", {"missing": "maximumDischargeCurrent"})
-    elif not is_nullish(required_current):
-        ok = js_number(current) >= js_number(required_current)
-        message = "Battery current capability meets the inverter requirement." if ok else f"Battery {js_str(current)} A is below the inverter requirement {js_str(required_current)} A."
-        add("BC-D", RESULT["PASS"] if ok else RESULT["FAIL"], message)
-    else:
-        add("BC-D", RESULT["INDETERMINATE"], "Inverter max battery current not recorded.", {"missing": "inverter.maxBatteryCurrent"})
-
-    protocol = field("communicationProtocol")
-    protocols = jsget(inverter, "communicationProtocols")
-    if field("communicationRequired") is False:
-        add("BC-E", RESULT["PASS"], "No communication link required.")
-    elif protocol is None:
-        add("BC-E", RESULT["INDETERMINATE"], "communicationProtocol not recorded.", {"missing": "communicationProtocol"})
-    elif is_nullish(protocols):
-        add("BC-E", RESULT["INDETERMINATE"], "Inverter communication protocols not recorded.", {"missing": "inverter.communicationProtocols"})
-    else:
-        ok = _includes(protocols, protocol)
-        add("BC-E", RESULT["PASS"] if ok else RESULT["FAIL"], f"Protocol {js_str(protocol)} is supported." if ok else f"Inverter does not support {js_str(protocol)}.")
-
-    phases = field("compatiblePhases")
-    if phases is None:
-        add("BC-F", RESULT["INDETERMINATE"], "compatiblePhases not recorded.", {"missing": "compatiblePhases"})
-    elif truthy(phase) and not _includes(phases, phase):
-        add("BC-F", RESULT["FAIL"], f'Battery is not listed for phase "{js_str(phase)}".')
-    else:
-        add("BC-F", RESULT["PASS"], f"Compatible with {js_str(phase)}." if truthy(phase) else "No phase constraint.")
-
-    integrated = field("integratedProtection")
-    if integrated is None:
-        add(
-            "BC-G",
-            RESULT["INDETERMINATE"],
-            "integratedProtection not recorded — the external-protection requirement cannot be determined.",
-            {"missing": "integratedProtection", "safetyCritical": True},
-        )
-    elif integrated is True:
-        add("BC-G", RESULT["PASS"], "Battery carries integrated protection; no external device required.")
-    elif field("externalProtectionRequired") is True:
-        rating = field("protectionRating")
-        if is_nullish(rating):
-            add(
-                "BC-G",
-                RESULT["INDETERMINATE"],
-                "External protection is required but protectionRating is not recorded. The rating must not be assumed or derived from Ah.",
-                {"missing": "protectionRating", "safetyCritical": True},
-            )
-        else:
-            add("BC-G", RESULT["PASS"], f"External protection required at {js_str(rating)}.")
-    else:
-        add("BC-G", RESULT["INDETERMINATE"], "externalProtectionRequired not recorded.", {"missing": "externalProtectionRequired"})
-
-    capacity = field("capacityKwh")
-    if capacity is None:
-        add("BC-H", RESULT["INDETERMINATE"], "capacityKwh not recorded — backup sizing cannot be assessed.", {"missing": "capacityKwh"})
-    else:
-        add("BC-H", RESULT["PASS"], f"Capacity {js_str(capacity)} kWh recorded.")
-
-    if js_number(quantity) <= 0:
-        add("BC-I", RESULT["FAIL"], "Battery quantity must be at least 1 when a battery is selected.")
-    else:
-        add("BC-I", RESULT["PASS"], f"Quantity {js_str(quantity)}.")
-    return _summarise(checks, battery)
-
-
-def _summarise(checks: list, battery: Any) -> dict:
-    failed = [c for c in checks if c["result"] == RESULT["FAIL"]]
-    indeterminate = [c for c in checks if c["result"] == RESULT["INDETERMINATE"]]
-    safety_critical = [c for c in indeterminate if truthy(jsget(c.get("detail"), "safetyCritical"))]
-    missing_safe = js_or(jsget(battery, "missingForSafeIssue"), [])
-    status = "VALID"
-    reasons = []
-    if failed:
-        status = "BLOCKED"
-        reasons += [f"{c['id']}: {c['message']}" for c in failed]
-    elif safety_critical or missing_safe:
-        status = "BLOCKED"
-        missing = list(dict.fromkeys([c["detail"]["missing"] for c in safety_critical] + list(missing_safe)))
-        reasons.append("Cannot safely validate this battery configuration — " + js_join(missing, ", ") + " missing.")
-    elif indeterminate:
-        status = "WARNING"
-        missing = list(dict.fromkeys(m for m in (jsget(c.get("detail"), "missing") for c in indeterminate) if truthy(m)))
-        reasons.append("Engineering data incomplete — review required: " + js_join(missing, ", "))
-    return {
-        "status": status,
-        "checks": checks,
-        "reasons": reasons,
-        "counts": {"fail": len(failed), "indeterminate": len(indeterminate), "pass": len(checks) - len(failed) - len(indeterminate)},
-    }
+    """Checks BC-A … BC-J → ``{status: VALID|WARNING|BLOCKED, checks, reasons, counts}``
+    (``engineering_checker.check_battery_compatibility``, on JavaScript numbers). ``battery`` is a master record
+    (:func:`to_battery_master`); an object without its members fails as the JavaScript does, with a ``TypeError``."""
+    try:
+        return _from_rules(engineering_checker.check_battery_compatibility(_to_rules(battery), _to_rules(ctx if isinstance(ctx, dict) else {})))
+    except KeyError as missing:
+        raise TypeError(f"battery master record has no {missing}") from None
 
 
 def resolve_protection_requirement(battery: Any) -> dict:
-    """Protection topology from master data; a rating is never assumed."""
-    if not truthy(battery):
-        return {"mode": "UNKNOWN", "externalDeviceRequired": False, "rating": None, "reason": "no battery"}
-    if jsget(battery, "integratedProtection") is True:
-        return {"mode": "INTEGRATED", "externalDeviceRequired": False, "rating": None, "reason": "battery carries integrated protection"}
-    if jsget(battery, "externalProtectionRequired") is True:
-        rating = nullish(jsget(battery, "protectionRating"), None)
-        return {
-            "mode": "EXTERNAL_REQUIRED",
-            "externalDeviceRequired": True,
-            "rating": rating,
-            "reason": ("external protection required; rating NOT recorded and must not be assumed" if rating is None else f"external protection required at {js_str(rating)}"),
-        }
-    if jsget(battery, "externalProtectionRequired") is False:
-        return {"mode": "EXTERNAL_OPTIONAL", "externalDeviceRequired": False, "rating": None, "reason": "external protection explicitly not required"}
-    return {"mode": "UNKNOWN", "externalDeviceRequired": False, "rating": None, "reason": "protection data not recorded"}
+    """Protection topology from master data; a rating is never assumed (``engineering_checker.resolve_protection_requirement``)."""
+    return _from_rules(engineering_checker.resolve_protection_requirement(_to_rules(battery)))
+
+
+# One port of batteryMaster.js / batteryCompatibility.js: engines-rules' ``engineering_checker`` (Decimal numbers, frozen
+# results, the PBC battery rules use it) is the canonical one; this module keeps the commercial engines' calling
+# convention (JavaScript numbers as int/float, mutable dicts, ``engines._jscompat.UNDEFINED``) and converts at the
+# boundary. Both golden sets (commercial_battery.json and rules_checker.json) replay through the same code.
+
+
+def _to_rules(value: Any) -> Any:
+    """A commercial engine value as the rules engines take it: floats as the Decimal their shortest text means (NaN and
+    the infinities kept), ``UNDEFINED`` as theirs; strings, booleans and ``None`` unchanged."""
+    if value is UNDEFINED:
+        return jscompat.UNDEFINED
+    if isinstance(value, float):
+        if math.isnan(value):
+            return Decimal("NaN")
+        return Decimal(repr(value)) if math.isfinite(value) else Decimal("Infinity").copy_sign(Decimal(value))
+    if isinstance(value, dict):
+        return {key: _to_rules(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_to_rules(item) for item in value]
+    return value
+
+
+def _from_rules(value: Any) -> Any:
+    """A rules engine result as the commercial engines hold it: plain dicts/lists, JavaScript numbers, their ``UNDEFINED``."""
+    if value is jscompat.UNDEFINED:
+        return UNDEFINED
+    if isinstance(value, Decimal):
+        if value.is_nan():
+            return math.nan
+        return decimal_to_number(value) if value.is_finite() else math.copysign(math.inf, value)
+    if isinstance(value, Mapping):
+        return {key: _from_rules(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_from_rules(item) for item in value]
+    return value
 
 
 # ---------------------------------------------------------------------------------------------------------------

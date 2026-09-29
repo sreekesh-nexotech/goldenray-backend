@@ -15,7 +15,9 @@ from __future__ import annotations
 from typing import Any
 
 from engines._jscompat import JsError, clean, is_nullish, js_number, js_or, js_round, js_str, js_str_key, js_to_fixed, jsget, nullish, truthy
-from engines._money_compat import is_money, round_money, sum_exact
+from engines.money import is_money_binary64 as is_money
+from engines.money import round_money_binary64 as round_money
+from engines.money import sum_exact_binary64 as sum_exact
 
 PRICING_ENGINE_VERSION = "pricingEngine.3"
 MARGIN_TYPE = {"GROSS_MARGIN": "GROSS_MARGIN"}

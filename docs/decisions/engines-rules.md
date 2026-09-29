@@ -178,6 +178,13 @@ data file used.
   (`engines.battery_compat`) and has its own `_jscompat.py`; engines-core has `money.js_round`/`js_text`. The golden
   files of all three pin the same JavaScript, so the integration can make one delegate to the other without losing
   parity evidence.
+  *Done at the wave-1 integration:* `engines.battery_compat`'s master/compatibility/protection functions delegate to
+  this package's `engineering_checker` (the commercial goldens replay through it), and `engines._jscompat` takes its
+  white space, ASCII number literals and array-index rule from `jscompat` (`JS_WHITESPACE`, `DECIMAL_LITERAL`,
+  `RADIX_LITERAL`, `is_array_index`). `money.js_round`/`js_text` stay in engines-core: they are the core engines' own
+  contract (normalised `-0`, plain digits without exponent form), pinned by the core goldens.
+  `engines.package_registry.run_package_checker` with `check_project_bom_js` injected reproduces the JavaScript
+  `runPackageChecker` verdict of all 54 approved packs (`engines/tests/test_integration_package_checker.py`).
 
 ## Adversarial review (engines-rules RV)
 

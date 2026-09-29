@@ -6,6 +6,12 @@ from Python's: truthiness (``[]`` and ``{}`` are truthy), ``||`` / ``??``, ``Num
 ``Object.keys`` (integer-like keys first) and ``JSON.stringify`` equality. Missing object properties are
 ``UNDEFINED`` (distinct from ``None`` = JSON ``null``) wherever the JS code distinguishes them.
 
+This is the JavaScript-number (binary64) side of the ports; :mod:`engines.jscompat` is the Decimal side used by the
+rules and document engines. The rules that do not depend on the number type — white space (``js_trim``), the ASCII-only
+number literals ``Number()`` accepts and what counts as an array index — are defined once, in :mod:`engines.jscompat`,
+and used here (consolidated at the wave-1 integration). ``UNDEFINED`` stays per side: results cross between the two
+only as JSON-like data (``clean``/``deep_freeze`` drop it).
+
 Nothing here imports Django or any app (import-linter contract ``engines-pure``).
 """
 
@@ -17,6 +23,8 @@ import re
 import unicodedata
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Iterable
+
+from engines.jscompat import DECIMAL_LITERAL, RADIX_LITERAL, is_array_index, js_trim
 
 
 class _Undefined:
@@ -123,13 +131,8 @@ def nullish(*values: Any) -> Any:
     return values[-1]
 
 
-_JS_WHITESPACE = "\t\n\x0b\x0c\r \xa0                　﻿"
-_DECIMAL_LITERAL = re.compile(r"^[+-]?(?:Infinity|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)$")
-_NON_DECIMAL_LITERAL = re.compile(r"^0(?:[xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+)$")
-
-
-def js_trim(text: str) -> str:
-    return text.strip(_JS_WHITESPACE)
+# White space, number literals and array indexes follow the value rules of :mod:`engines.jscompat` (one definition for
+# every port): JavaScript digits are ASCII, so ``Number('൩')`` is NaN and ``'1\n'`` is not an array index.
 
 
 def js_number(value: Any) -> int | float:
@@ -149,12 +152,12 @@ def js_number(value: Any) -> int | float:
         text = js_trim(value)
         if text == "":
             return 0
-        if _DECIMAL_LITERAL.match(text):
-            if text.endswith("Infinity"):
-                return -math.inf if text.startswith("-") else math.inf
+        if text in ("Infinity", "+Infinity", "-Infinity"):
+            return -math.inf if text.startswith("-") else math.inf
+        if DECIMAL_LITERAL.fullmatch(text):
             number = float(text)
             return int(number) if number.is_integer() and abs(number) < 2**53 and not ("." in text or "e" in text.lower()) else number
-        if _NON_DECIMAL_LITERAL.match(text):
+        if RADIX_LITERAL.fullmatch(text):
             return int(text, 0)
         return math.nan
     if is_array(value):
@@ -196,7 +199,7 @@ def json_numbers(value: Any) -> Any:
 def parse_float(value: Any) -> float:
     """``parseFloat(value)``: the longest decimal prefix of the trimmed string ('5sp' → 5)."""
     text = js_trim(js_str(value))
-    match = re.match(r"^[+-]?(?:Infinity|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)", text)
+    match = re.match(r"^[+-]?(?:Infinity|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)", text, re.ASCII)
     if not match:
         return math.nan
     literal = match.group(0)
@@ -398,19 +401,13 @@ def locale_compare(a: str, b: str) -> int:
 # Objects
 # ---------------------------------------------------------------------------------------------------------------
 
-_ARRAY_INDEX = re.compile(r"^(?:0|[1-9]\d*)$")
-
-
-def _is_array_index(key: Any) -> bool:
-    return isinstance(key, str) and bool(_ARRAY_INDEX.match(key)) and int(key) < 2**32 - 1
-
 
 def js_keys(obj: Any) -> list:
     """``Object.keys``: integer-like keys ascending first, then the others in insertion order."""
     if isinstance(obj, dict):
         keys = list(obj.keys())
-        integers = sorted((k for k in keys if _is_array_index(k)), key=int)
-        return integers + [k for k in keys if not _is_array_index(k)]
+        integers = sorted((k for k in keys if is_array_index(k)), key=int)
+        return integers + [k for k in keys if not is_array_index(k)]
     if is_array(obj):
         return [str(i) for i in range(len(obj))]
     if isinstance(obj, str):
@@ -443,14 +440,14 @@ def jsget(obj: Any, key: Any) -> Any:
         return obj.get(prop_key(key), UNDEFINED)
     if is_array(obj):
         k = prop_key(key)
-        if _is_array_index(k) and int(k) < len(obj):
+        if is_array_index(k) and int(k) < len(obj):
             return obj[int(k)]
         if k == "length":
             return len(obj)
         return UNDEFINED
     if isinstance(obj, str):
         k = prop_key(key)
-        if _is_array_index(k) and int(k) < len(obj):
+        if is_array_index(k) and int(k) < len(obj):
             return obj[int(k)]
         if k == "length":
             return len(obj)

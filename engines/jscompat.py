@@ -41,6 +41,11 @@ __all__ = [
     "format_en_in",
     "prop",
     "js_keys",
+    "is_array_index",
+    "ARRAY_INDEX",
+    "JS_WHITESPACE",
+    "DECIMAL_LITERAL",
+    "RADIX_LITERAL",
     "js_array",
 ]
 
@@ -94,7 +99,14 @@ def prop(obj: Any, key: str) -> Any:
 
 #: JavaScript digits are ASCII: every pattern that reads digits is ``re.ASCII`` (Python's ``\d`` would also accept
 #: Malayalam, Devanagari, Arabic-Indic or full-width digits, which ``Number()`` and ``Date`` reject).
-_ARRAY_INDEX = re.compile(r"0|[1-9]\d*", re.ASCII)
+#: These value rules are shared by every JavaScript port in ``engines`` (the commercial engines' ``engines._jscompat``
+#: reads its whitespace, number literals and array indexes from here).
+ARRAY_INDEX = re.compile(r"0|[1-9]\d*", re.ASCII)
+
+
+def is_array_index(key: Any) -> bool:
+    """A property key that is an array index: a canonical ASCII integer string below 2^32 − 1."""
+    return isinstance(key, str) and ARRAY_INDEX.fullmatch(key) is not None and int(key) < 4294967295
 
 
 def js_keys(obj: Any) -> list[str]:
@@ -102,7 +114,7 @@ def js_keys(obj: Any) -> list[str]:
     if not isinstance(obj, Mapping):
         return []
     keys = list(obj.keys())
-    indexes = sorted((key for key in keys if isinstance(key, str) and _ARRAY_INDEX.fullmatch(key) and int(key) < 4294967295), key=int)
+    indexes = sorted((key for key in keys if is_array_index(key)), key=int)
     index_set = set(indexes)
     return indexes + [key for key in keys if key not in index_set]
 
@@ -138,9 +150,9 @@ def js_truthy(value: Any) -> bool:
     return True
 
 
-_WHITESPACE = "\t\n\v\f\r                  　﻿"
-_DECIMAL_LITERAL = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?", re.ASCII)
-_RADIX_LITERAL = re.compile(r"0([xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+)", re.ASCII)
+JS_WHITESPACE = "\t\n\v\f\r                  　﻿"
+DECIMAL_LITERAL = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?", re.ASCII)
+RADIX_LITERAL = re.compile(r"0([xX][0-9a-fA-F]+|[oO][0-7]+|[bB][01]+)", re.ASCII)
 _NAN = Decimal("NaN")
 _INFINITY = Decimal("Infinity")
 #: Round-to-nearest-even binary64 limits, exact: a magnitude from 2^1024 − 2^970 up rounds to Infinity, one of at most
@@ -151,7 +163,7 @@ _BINARY64_UNDERFLOW = Decimal((0, tuple(int(digit) for digit in str(5**1075)), -
 
 def js_trim(text: str) -> str:
     """``String.prototype.trim``: strips JavaScript white space and line terminators (not Python's ``isspace`` set)."""
-    return text.strip(_WHITESPACE)
+    return text.strip(JS_WHITESPACE)
 
 
 def _binary64_range(number: Decimal) -> Decimal:
@@ -186,9 +198,9 @@ def js_number(value: Any) -> Decimal:
             return _INFINITY
         if text == "-Infinity":
             return -_INFINITY
-        if _DECIMAL_LITERAL.fullmatch(text):
+        if DECIMAL_LITERAL.fullmatch(text):
             return _binary64_range(Decimal(text))
-        radix = _RADIX_LITERAL.fullmatch(text)
+        radix = RADIX_LITERAL.fullmatch(text)
         if radix:
             base = {"x": 16, "o": 8, "b": 2}[radix.group(1)[0].lower()]
             return _binary64_range(Decimal(int(radix.group(1)[1:], base)))

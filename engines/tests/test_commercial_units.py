@@ -12,8 +12,11 @@ from pathlib import Path
 import pytest
 
 from engines import _jscompat as js
-from engines import cost, flarize_rbac, offers, pack_config, package_registry, pricing
-from engines._money_compat import is_money, mul_exact, round_money, sum_exact
+from engines import cost, flarize_rbac, money, offers, pack_config, package_registry, pricing
+from engines.money import is_money_binary64 as is_money
+from engines.money import mul_exact_binary64 as mul_exact
+from engines.money import round_money_binary64 as round_money
+from engines.money import sum_exact_binary64 as sum_exact
 
 
 class TestJsNumbers:
@@ -71,12 +74,25 @@ class TestJsNumbers:
     def test_add_concatenates_strings(self):
         assert js.js_add("4", 3) == "43" and js.js_add(4, 3) == 7 and js.js_add([1], {}) == "1[object Object]"
 
+    @pytest.mark.parametrize(("value", "prefix"), [("൩", math.nan), ("٣", math.nan), ("３", math.nan), ("1٣", 1), ("0x１", 0)])
+    def test_digits_are_ascii(self, value, prefix):
+        """``Number()`` and ``parseFloat()`` read ASCII digits only (the value rules shared with ``engines.jscompat``):
+        a quantity typed in Malayalam, Arabic-Indic or full-width digits is NaN, as in JavaScript (Python's ``float``
+        would read it as a number); ``parseFloat`` keeps the ASCII prefix."""
+        assert math.isnan(js.js_number(value))
+        parsed = js.parse_float(value)
+        assert math.isnan(parsed) if math.isnan(prefix) else parsed == prefix
+
 
 class TestJsObjects:
     def test_keys_order(self):
         assert js.js_keys({"b": 1, "10": 2, "2": 3, "01": 4}) == ["2", "10", "b", "01"]
         assert js.js_keys(["x", "y"]) == ["0", "1"] and js.js_keys("ab") == ["0", "1"] and js.js_keys(5) == []
         assert js.js_entries("ab") == [("0", "a"), ("1", "b")] and js.js_entries(None) == []
+
+    def test_array_indexes_are_canonical_ascii_integers(self):
+        assert js.js_keys({"b": 1, "1٣": 2, "1": 3}) == ["1", "b", "1٣"]
+        assert js.jsget(["a", "b"], "1\n") is js.UNDEFINED and js.jsget(["a", "b"], "1") == "b"
 
     def test_property_access(self):
         assert js.jsget({"3": "x"}, 3) == "x"
@@ -128,6 +144,52 @@ class TestMoney:
         assert [round_money(v) for v in (1.5, -1.5, 2.5, -0.4, "12.5", None, "x", math.inf)] == [2, -2, 3, 0, 13, None, None, None]
         assert sum_exact([1, "2", None, "x"]) == 3 and sum_exact(None) == 0 and mul_exact("3", None) == 0
         assert [is_money(v) for v in ("", " ", "1", None, math.nan, [])] == [False, True, True, False, False, True]
+
+    def test_one_money_module_two_number_types(self):
+        """The binary64 rule lives in ``engines.money`` beside the Decimal one (consolidated at the wave-1 integration):
+        both give the same rupee for amounts a double holds exactly, only the binary64 one takes floats, and only it needs
+        the ``Number.EPSILON`` nudge (1.005 × 100 is 100.49999999999999 as a double; roundMoney publishes 101)."""
+        for value in (0.5, 1.5, -2.5, 12.25, -0.75, 1234567.5):
+            assert round_money(value) == int(money.round_money(Decimal(repr(value))))
+        assert round_money(1.005 * 100) == 101 and money.round_money(Decimal(repr(1.005 * 100))) == 100
+        with pytest.raises(TypeError):
+            money.round_money(1.5)
+
+
+class TestOneBatteryPort:
+    """``battery_compat``'s master/compatibility/protection functions run engines-rules' port (consolidated at the wave-1
+    integration); the commercial goldens replay through it, and the commercial calling convention is kept."""
+
+    ITEM = {"id": "b", "brand": "Deye", "name": "B", "tiers": ["base"]}
+    MASTER = {"compatibleSystemTypes": ["hybrid"], "integratedProtection": True, "capacityKwh": 5.12, "maximumDischargeCurrent": 100}
+    CONTEXT = {"inverter": {"id": "i", "batteryVoltageMin": 40, "batteryVoltageMax": 60}, "quantity": 2.5}
+
+    def test_runs_the_rules_port_with_javascript_numbers(self, monkeypatch):
+        from engines import battery_compat, engineering_checker
+
+        calls = []
+        real = engineering_checker.check_battery_compatibility
+        monkeypatch.setattr(engineering_checker, "check_battery_compatibility", lambda *args: calls.append(args) or real(*args))
+        master = battery_compat.to_battery_master(self.ITEM, {**self.MASTER, "nominalVoltage": 51.2})
+        result = battery_compat.check_battery_compatibility(master, self.CONTEXT)
+        assert calls and type(master) is dict and master["capacityKwh"] == 5.12 and isinstance(master["capacityKwh"], float)
+        assert type(result) is dict and all(type(check) is dict for check in result["checks"])
+        assert {check["id"]: check["result"] for check in result["checks"]}["BC-C"] == "PASS"
+        assert [check["message"] for check in result["checks"] if check["id"] == "BC-I"] == ["Quantity 2.5."]
+
+    def test_unicode_digits_are_not_numbers(self):
+        """``Number('൫൧')`` is NaN: a voltage typed in Malayalam digits fails BC-C (the commercial copy read it as 51 V)."""
+        from engines import battery_compat
+
+        master = battery_compat.to_battery_master(self.ITEM, {**self.MASTER, "nominalVoltage": "൫൧"})
+        checks = {check["id"]: check for check in battery_compat.check_battery_compatibility(master, self.CONTEXT)["checks"]}
+        assert checks["BC-C"]["result"] == "FAIL" and checks["BC-C"]["message"] == "Battery ൫൧ V is outside the inverter window 40–60 V."
+
+    def test_a_record_that_is_not_a_master_record_is_a_type_error(self):
+        from engines import battery_compat
+
+        with pytest.raises(TypeError):
+            battery_compat.check_battery_compatibility({"brand": "Deye"}, {})
 
 
 class TestLandedAllocation:

@@ -1,6 +1,6 @@
 """Money: the one rounding rule and the GST composition rule (Flarize ``src/lib/money.js``, ``money.1``).
 
-Every amount in ``engines/`` is a :class:`~decimal.Decimal`. Floats are refused at the boundary (:func:`to_decimal`
+Every amount of the Decimal API is a :class:`~decimal.Decimal`. Floats are refused at the boundary (:func:`to_decimal`
 raises ``TypeError``): a caller parses JSON with ``parse_float=Decimal`` or passes strings/ints. The only binary
 floating point anywhere in the core engines is the private replica of the JavaScript bill→units search in
 :mod:`engines.energy` (its output is a whole number of units; see ``docs/decisions/engines-core.md``).
@@ -21,15 +21,23 @@ GST composition (C73, PLAN §2.3 ``gst_goods_share``/``gst_services_share``/``gs
 is ported from ``pricingEngine.resolveGstRegime``/``applyGst``: the effective rate (8.9 % for 70 % goods at 5 % + 30 %
 services at 18 %) is derived and only cross-checked; the tax is computed per component and the published total is the
 sum of the published components.
+
+The commercial engines compute in JavaScript numbers (doubles) for golden parity (DV-17); the same ``money.js`` rule on
+those numbers is at the end of this module (``round_money_binary64``, ``sum_exact_binary64``, ``mul_exact_binary64``,
+``is_money_binary64``) — one money module, two explicit number types.
 """
 
 from __future__ import annotations
 
 import functools
+import math
+import sys
 from dataclasses import dataclass
 from decimal import ROUND_FLOOR, ROUND_HALF_EVEN, ROUND_HALF_UP, Context, Decimal, DivisionByZero, InvalidOperation, Overflow, localcontext
 from enum import StrEnum
 from typing import Any, Callable, Iterable, Mapping, TypeVar
+
+from engines import _jscompat as jsnum
 
 CURRENCY = "INR"
 ROUNDING_MODE = "HALF_UP"
@@ -408,3 +416,48 @@ def apply_gst(regime: GstRegime, base: Any) -> GstApplication:
         total_published=sum((component.tax_amount for component in applied), ZERO),
         total_exact=sum((component.tax_exact for component in applied), ZERO),
     )
+
+
+# ---- The same rule on JavaScript numbers (the commercial engines, DV-17) ------------------------------------------
+#
+# The commercial engines (``cost``, ``pricing`` …) compute in IEEE-754 doubles, in the JavaScript's operation order, for
+# byte parity with the Flarize goldens (DV-17), so they call the money rule with floats on every path. These are the
+# ``money.js`` functions on those numbers — the one money module, two number types (formerly the separate
+# ``engines/_money_compat.py``, consolidated here at the wave-1 integration). They keep the JavaScript exactly:
+# ``roundMoney`` adds ``Number.EPSILON × |v|`` before ``Math.round`` (1.005 × 100 → 101), which the Decimal
+# :func:`round_money` does not need. The Decimal API above still refuses floats; neither accepts the other's type
+# silently, so a caller always states which arithmetic it is in.
+
+_BINARY64_EPSILON = sys.float_info.epsilon  # Number.EPSILON = 2**-52
+
+
+def round_money_binary64(value: Any) -> int | float | None:
+    """``roundMoney`` on a JavaScript number: whole rupees, half away from zero; ``None`` for null or non-finite input."""
+    if jsnum.is_nullish(value):
+        return None
+    number = jsnum.js_number(value)
+    if not math.isfinite(number):
+        return None
+    sign = -1 if number < 0 else 1
+    magnitude = abs(number)
+    return sign * jsnum.js_round(magnitude + _BINARY64_EPSILON * magnitude)
+
+
+def sum_exact_binary64(values: Iterable[Any] | None) -> int | float:
+    """``sumExact`` on JavaScript numbers: the full-precision (double) sum; non-numbers count as 0."""
+    total: int | float = 0
+    for value in values or []:
+        total = total + jsnum.number_or_zero(value)
+    return total
+
+
+def mul_exact_binary64(a: Any, b: Any) -> int | float:
+    """``mulExact`` on JavaScript numbers: the full-precision (double) product; non-numbers count as 0."""
+    return jsnum.number_or_zero(a) * jsnum.number_or_zero(b)
+
+
+def is_money_binary64(value: Any) -> bool:
+    """``isMoney`` with JavaScript coercion: not null/undefined, not the empty string, and a finite ``Number(value)``."""
+    if jsnum.is_nullish(value) or value == "" and isinstance(value, str):
+        return False
+    return math.isfinite(jsnum.js_number(value))

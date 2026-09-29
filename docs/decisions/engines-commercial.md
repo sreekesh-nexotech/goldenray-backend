@@ -18,12 +18,12 @@ permission** — the PLAN tables they feed belong to those packages. Deviations:
 | `engines/rate_card.py` | `src/lib/commercialHistory.js`, `src/lib/projectRateCard.js` | `append_version`, `archive_version`, `get_history`, `get_current_version`, `get_version`, `get_version_effective_at`, `compare_versions`, `history_view`, `create_rate_card`, `set_rate`, `resolve_rate`, `installation_key`, `engineering_key`, `list_rates`, `seed_rate_card_from_config` |
 | `engines/pricing.py` | `src/lib/pricingEngine.js` (`pricingEngine.3`) | `calculate_pricing(*, cost_result, margin, gst, extras, market_rate, priced_at, tier, discount, customer_side_expenses)`, `resolve_tier_margin`, `resolve_gst_regime`, `validate_gross_margin`, `explain_pricing`, **`gross_margin_list_price(cost, margin, *, margin_type)`**, `PricingError` |
 | `engines/offers.py` | `src/lib/offerLifecycle.js` | `validate_offer`, `margin_safety_check`, `is_valid_transition`, `transition_offer(…, now=)`, `create_draft_offer`, `update_offer`, `auto_expire_offers`, `find_applicable_offer(*, system_type, tier, size, date)`, `calculate_offer_amount`, `offer_payload_shape`, `OfferError` |
-| `engines/battery_compat.py` | `src/lib/batteryMaster.js`, `batteryCompatibility.js`, `resolveBattery.js` | `to_battery_master`, `all_batteries`, `is_selectable`, `is_permanently_unselectable`, `selectability_reason`, `check_battery_compatibility`, `resolve_protection_requirement`, `resolve_battery`, `approved_battery_shortlist`, `is_battery_alias`, `canonical_battery_id_for` |
+| `engines/battery_compat.py` | `src/lib/batteryMaster.js`, `batteryCompatibility.js`, `resolveBattery.js` | `to_battery_master`, `all_batteries`, `is_selectable`, `is_permanently_unselectable`, `selectability_reason`, `check_battery_compatibility`, `resolve_protection_requirement`, `resolve_battery`, `approved_battery_shortlist`, `is_battery_alias`, `canonical_battery_id_for` — since the wave-1 integration `to_battery_master`, `check_battery_compatibility` and `resolve_protection_requirement` run engines-rules' port (`engines.engineering_checker`) through a number-type adapter; both golden sets replay through it |
 | `engines/pack_config.py` | `src/lib/packConfig.js` (`flarize.pack-config/1`) | `validate_section`, **`validate_config`** (the `packs_config_version.config` schema), `seed_from_catalog`, `approved_config`, `draft_config`, `update_draft_section`, `update_draft_template`, `submit_draft`, `approve_draft`, `approve_draft_direct`, `reject_draft`, `reset_draft`, `describe_store`, `market_rate_key`, `approved_sizes`, `future_pairs_for`; re-exports the package-registry API below |
 | `engines/package_registry.py` | `src/lib/packageApproval.js` (V4), `packageAuthority.js`, `packageProjection.js` | `approve_package`, `reject_package`, `reset_package`, `bulk_approve_packages`, `list_packages_for_role`, `approval_summary`, `assert_package_selectable_by_actor`, `create_package`, `duplicate_package`, `create_revision`, `edit_package`, `submit_package`, `archive_package`, `run_package_checker(…, check_project_bom=)`, `resolve_package_architecture`, `combo_key_for`, `PackageIdFactory`, `derive_package_components`, `is_approved_selection`, `is_sales_editable`, `hydrate_registry`, `visible_for_runtime` |
 | `engines/flarize_rbac.py` | `src/lib/rbac.js` (`rbac.1`) | `assert_can` (the default `authorize` of the lifecycles), `allow_all`, `can`, `CAPABILITY_MATRIX`, `RbacError` |
-| `engines/_money_compat.py` | `src/lib/money.js` (`money.1`) | `round_money`, `sum_exact`, `mul_exact`, `is_money` on doubles — the float twin of engines-core's Decimal-only `engines.money`; it stays after the merge (see "Merge notes") |
-| `engines/_jscompat.py` | — | the JavaScript value rules the ports need (below); private to `engines` |
+| `engines/money.py` (binary64 section) | `src/lib/money.js` (`money.1`) | `round_money_binary64`, `sum_exact_binary64`, `mul_exact_binary64`, `is_money_binary64` on doubles, beside engines-core's Decimal API in the same module (the former `engines/_money_compat.py`, consolidated at the wave-1 integration; see "Merge notes") |
+| `engines/_jscompat.py` | — | the JavaScript value rules the ports need (below), on JavaScript numbers; private to `engines`. White space, the ASCII number literals and array indexes come from `engines.jscompat` (one definition, wave-1 integration) |
 | `engines/tests/golden/generate_commercial.mjs` | — | runs the REAL JS against the real data + synthetic edge cases; writes the golden files |
 | `engines/tests/golden/commercial_*.json`, `fixtures/flarize_commercial.json` | — | 1 907 golden cases; the Flarize data the Python side replays them with |
 | `engines/tests/golden_harness.py`, `test_commercial_golden.py`, `test_commercial_reference.py`, `test_commercial_units.py`, `test_commercial_review.py` | — | exact-equality replay of every case (documented deviations applied by `EXPECTED_DEVIATIONS`); §20 references asserted literally; Python-only rules; the review findings |
@@ -114,7 +114,7 @@ permission** — the PLAN tables they feed belong to those packages. Deviations:
 | `toBatteryMaster` … `selectabilityReason`; `checkBatteryCompatibility`, `resolveProtectionRequirement`; `resolveBattery`, `approvedBatteryShortlist`, `isBatteryAlias`, `canonicalBatteryIdFor` | `battery_compat.*` (same names, snake case) |
 | `seedFromCatalog` … `describeStore`, `marketRateKey`, `approvedSizes`, `futurePairsFor`, `validateSection` | `pack_config.*` (same names, snake case) + `validate_config` |
 | `approvePackage` … `runPackageChecker`, `comboKeyFor`, `resolvePackageArchitecture`; `derivePackageComponents`, `isApprovedSelection`, `isSalesEditable`; `hydrateRegistry`, `visibleForRuntime` | `package_registry.*` (same names, snake case) |
-| `roundMoney`, `sumExact`, `mulExact`, `isMoney` | `_money_compat.round_money`, `sum_exact`, `mul_exact`, `is_money` |
+| `roundMoney`, `sumExact`, `mulExact`, `isMoney` | `money.round_money_binary64`, `sum_exact_binary64`, `mul_exact_binary64`, `is_money_binary64` |
 
 ### Flarize data → fixture → the platform context that will own it
 
@@ -227,7 +227,11 @@ pseudonymous ids (`admin-001`). The legacy-import contract does not apply: this 
 
 ## Merge notes
 
-* **Keep `engines/_money_compat.py` when engines-core lands — do NOT switch these engines to `engines.money`.**
+* **Done at the wave-1 integration:** the float rule moved into `engines/money.py` as its binary64 section
+  (`round_money_binary64` …); `cost.py`, `pricing.py`, `tests/golden_harness.py` and `tests/test_commercial_units.py`
+  import it under the old names and `engines/_money_compat.py` is gone. The commercial engines still never call the
+  Decimal API (the note below explains why); all 1 907 goldens replay unchanged.
+* (Branch note, superseded by the consolidation above.) **Keep `engines/_money_compat.py` when engines-core lands — do NOT switch these engines to `engines.money`.**
   engines-core's `engines.money` (branch `wp/engines-core`) is Decimal-only: `round_money`, `is_money`, `sum_exact`
   and `mul_exact` raise `TypeError` for a `float` and return `Decimal`. The commercial engines compute in doubles for
   golden parity (DV-17) and call the money rule with floats on every path, so switching the four import sites
@@ -235,6 +239,14 @@ pseudonymous ids (`admin-001`). The legacy-import contract does not apply: this 
   1 907 golden cases fail at once). The two modules do not collide (different names) and implement the same
   `money.js` rule on different number types; they coexist after the merge. (The original note said to switch the
   imports and delete this module; the engines-core review showed its API refuses floats.)
+* **Done at the wave-1 integration:** one port of `batteryMaster.js`/`batteryCompatibility.js` — `battery_compat`'s
+  `to_battery_master`, `check_battery_compatibility` and `resolve_protection_requirement` delegate to
+  `engines.engineering_checker` (engines-rules) through `_to_rules`/`_from_rules` (JavaScript numbers ↔ Decimal, the two
+  `UNDEFINED`s); the 132 commercial battery goldens and the rules goldens replay through the same code. `_jscompat` takes
+  `js_trim`, the number-literal patterns and `is_array_index` from `engines.jscompat`: the RV-1 class of defect found in
+  engines-rules (Unicode digits read as numbers — `Number('൩')` gave 3, a Malayalam-digit battery voltage passed BC-C;
+  `'1\n'` read as array index 1) is gone from the commercial copy too (`test_commercial_units.py::test_digits_are_ascii`,
+  `::test_array_indexes_are_canonical_ascii_integers`, `TestOneBatteryPort`).
 * `engines/_jscompat.py` is private to `engines`; engines-core ships its own Decimal helpers (`money.js_number`,
   `money.js_round`, `money.js_text`) with the Decimal contract — they are not interchangeable with these float ones.
 * DEVIATIONS numbering: the sibling branches already use DV-17 … DV-24 (`wp/engines-ops` DV-17/18, `wp/engines-core`

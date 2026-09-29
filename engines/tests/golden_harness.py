@@ -28,7 +28,10 @@ from engines import package_registry as pr
 from engines import pricing as pe
 from engines import rate_card as rc
 from engines._jscompat import UNDEFINED, JsError, truthy
-from engines._money_compat import is_money, mul_exact, round_money, sum_exact
+from engines.money import is_money_binary64 as is_money
+from engines.money import mul_exact_binary64 as mul_exact
+from engines.money import round_money_binary64 as round_money
+from engines.money import sum_exact_binary64 as sum_exact
 
 GOLDEN_DIR = Path(__file__).parent / "golden"
 MODULES = ("money", "device_allocation", "bom", "pack_pricing", "pack_config", "package_registry", "cost", "landed", "pricing", "offers", "battery", "rate_card")

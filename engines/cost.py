@@ -31,7 +31,10 @@ from engines._jscompat import (
     prop_key,
     truthy,
 )
-from engines._money_compat import is_money, mul_exact, round_money, sum_exact
+from engines.money import is_money_binary64 as is_money
+from engines.money import mul_exact_binary64 as mul_exact
+from engines.money import round_money_binary64 as round_money
+from engines.money import sum_exact_binary64 as sum_exact
 
 # PLAN §2.3: "LIST is never derived by markup in code … gross-margin check lives in engines.cost". The one list-price
 # formula (cost / (1 − m); MARKUP raises) is defined next to the pricing engine and exposed here under that name.
