@@ -28,7 +28,7 @@ from django.utils.dateparse import parse_datetime
 from core.outbox import emit
 from devices.models import Device, DeviceUser, SyncLog
 from devices.services import punch_sink
-from devices.services.common import INT_RANGE, SMALLINT_RANGE, fits, now
+from devices.services.common import INT_RANGE, SMALLINT_RANGE, fits, now, scrub_deep
 
 EVENT = "attendance.punches_ingested"
 AGENT_PUSH = "AGENT_PUSH"
@@ -129,7 +129,7 @@ def build_punches(device: Device, records, *, source: str, agent=None, adms_requ
                 device_record_uid=record_uid,
                 agent_id=agent.pk if agent is not None else None,
                 adms_request_id=adms_request_id,
-                raw_payload=dict(record.get("raw_payload") or {}),
+                raw_payload=scrub_deep(dict(record.get("raw_payload") or {})),  # the store's jsonb holds no NUL
                 received_at=received_at,
             )
         )

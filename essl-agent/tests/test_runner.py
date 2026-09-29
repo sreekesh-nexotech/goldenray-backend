@@ -207,6 +207,43 @@ class TestFewerRequests:
         agent.deliver()
         assert agent.store.pending_count(SERIAL) == 0
 
+    def test_an_upload_refusal_holds_that_terminal_until_the_next_announce(self, make_agent, lan, platform, clock):
+        """A refused upload (``device_inactive``: deactivated centrally) used to be re-sent on every 2-second delivery loop."""
+        terminal_at(lan)
+        agent = make_agent(mars())
+        platform.refuse_uploads[SERIAL] = Refused(409, "device_inactive", "deactivated on the platform")
+        agent.run_once()
+        assert agent.store.pending_count(SERIAL) == 3
+        platform.calls.clear()
+        agent.deliver()
+        agent.deliver()
+        assert platform.calls == []  # held, not re-sent every loop
+        del platform.refuse_uploads[SERIAL]
+        clock.advance(3601)
+        agent.deliver()
+        assert platform.names()[0] == "announce" and agent.store.pending_count(SERIAL) == 0
+
+    def test_a_device_the_platform_lost_is_not_asked_for_every_loop_while_its_terminal_is_down(self, make_agent, lan, platform, clock, tmp_path):
+        """``device_not_found`` (rehomed or deleted centrally) re-announces; with the terminal down there is nothing to
+        announce, and the backlog of an earlier run must not be re-sent every 2 seconds meanwhile."""
+        terminal = terminal_at(lan)
+        first = make_agent(mars())
+        first.read_device(first.cfg.devices[0])
+        first.store.close()
+        terminal.online = False
+        restarted = make_agent(mars(), store=Store(tmp_path / "queue.sqlite3"))
+        platform.refuse_uploads[SERIAL] = Refused(404, "device_not_found", "No device is bound to this agent with that identity.")
+        restarted.run_once()
+        platform.calls.clear()
+        restarted.run_once()
+        restarted.run_once()
+        assert platform.calls == [] and restarted.store.pending_count(SERIAL) == 3
+        del platform.refuse_uploads[SERIAL]
+        terminal.online = True
+        clock.advance(3601)
+        restarted.run_once()
+        assert "announce" in platform.names() and restarted.store.pending_count(SERIAL) == 0
+
 
 class TestHeartbeat:
     def test_reachability_is_the_truth(self, make_agent, lan, platform, clock):

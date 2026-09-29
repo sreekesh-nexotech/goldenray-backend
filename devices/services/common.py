@@ -43,6 +43,27 @@ def fits(value: int | None, bounds: tuple[int, int]) -> bool:
     return value is None or bounds[0] <= value <= bounds[1]
 
 
+def clamp(value: int, bounds: tuple[int, int]) -> int:
+    """``value`` held inside a database integer column of ``bounds``."""
+    return max(bounds[0], min(bounds[1], value))
+
+
+def scrub(value):
+    """Postgres text/jsonb cannot hold NUL (a terminal's padded strings carry them); the exact bytes stay where kept."""
+    return value.replace("\x00", "") if isinstance(value, str) else value
+
+
+def scrub_deep(value):
+    """:func:`scrub` through nested dicts (keys too) and lists: machine-sent JSON never fails a jsonb write."""
+    if isinstance(value, str):
+        return scrub(value)
+    if isinstance(value, list):
+        return [scrub_deep(item) for item in value]
+    if isinstance(value, dict):
+        return {scrub(str(key)): scrub_deep(item) for key, item in value.items()}
+    return value
+
+
 def bump_devices(*extra: str) -> None:
     bump(NS_DEVICES, *extra)
 

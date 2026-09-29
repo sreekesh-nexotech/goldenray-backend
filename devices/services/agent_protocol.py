@@ -34,6 +34,7 @@ from devices.services.common import (
     NS_AGENTS,
     SMALLINT_RANGE,
     bump_devices,
+    clamp,
     fits,
     macs_match,
     mask_secret_values,
@@ -41,6 +42,7 @@ from devices.services.common import (
     normalize_mac,
     normalize_serial,
     now,
+    scrub_deep,
     setting,
 )
 
@@ -57,11 +59,20 @@ def _touch(model_cls, instance, /, **values) -> None:
 
 
 def _clock_offset(device: Device, device_time, observed_at: datetime | None) -> int | None:
-    """Terminal clock minus real time, in seconds (A10: measured and shown, never corrected)."""
+    """Terminal clock minus real time, in seconds (A10: measured and shown, never corrected).
+
+    The column is an int: a clock more than ~68 years off (a dead RTC battery) is shown at the column's limit — the
+    report stays accepted (a 500 here failed every heartbeat and announce of the agent).
+    """
     parsed = ingest.parse_device_time(device_time)
     if parsed is None:
         return None
-    return int((ingest.localise(device, parsed) - (observed_at or now())).total_seconds())
+    reference = observed_at or now()
+    try:
+        seconds = int((ingest.localise(device, parsed) - reference).total_seconds())
+    except OverflowError:  # a clock at the very edge of the calendar
+        seconds = INT_RANGE[0] if parsed.year < reference.year else INT_RANGE[1]
+    return clamp(seconds, INT_RANGE)
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -293,7 +304,7 @@ def _bind(agent: Agent, device: Device | None, *, serial: str, ip, port: int, ma
     if not device.expected_mac and mac:
         values["expected_mac"] = mac
     if isinstance(data.get("device_info"), dict) and data["device_info"]:
-        values["device_info"] = data["device_info"]
+        values["device_info"] = scrub_deep(data["device_info"])  # jsonb holds no NUL (padded terminal strings carry it)
     offset = _clock_offset(device, data.get("device_time"), data.get("observed_at"))
     if offset is not None:
         values["clock_offset_seconds"] = offset
@@ -436,8 +447,9 @@ USER_FIELDS = ("device_uid", "name", "privilege", "card", "group_id", "has_passw
 def _user_values(entry: dict, *, partial: bool = False) -> dict:
     """Column values of one terminal user. ``partial`` (an ADMS push): only the fields the entry states.
 
-    The raw payload never keeps a terminal user's password or template (eSSL's reader stored pyzk's whole user object).
-    A number its column cannot hold is kept only in the raw payload: one odd field never fails a whole-table read.
+    The raw payload never keeps a terminal user's password or template (eSSL's reader stored pyzk's whole user object)
+    nor a NUL character (jsonb cannot hold one). A number its column cannot hold is kept only in the raw payload: one
+    odd field never fails a whole-table read.
     """
     device_uid, privilege = entry.get("device_uid"), entry.get("privilege")
     values = {
@@ -447,7 +459,7 @@ def _user_values(entry: dict, *, partial: bool = False) -> dict:
         "card": str(entry.get("card") or "").strip()[:40],
         "group_id": str(entry.get("group_id") or "").strip()[:40],
         "has_password": bool(entry.get("has_password")),
-        "raw_payload": mask_secret_values(entry.get("raw_payload")) if isinstance(entry.get("raw_payload"), dict) else {},
+        "raw_payload": scrub_deep(mask_secret_values(entry.get("raw_payload"))) if isinstance(entry.get("raw_payload"), dict) else {},
     }
     if partial:
         values = {name: value for name, value in values.items() if name == "raw_payload" or name in entry}
@@ -457,7 +469,9 @@ def _user_values(entry: dict, *, partial: bool = False) -> dict:
 def upsert_users(device: Device, users, *, at: datetime, partial: bool = False) -> tuple[int, int, int, list[str]]:
     """Upsert terminal users (never deletes). Returns ``(created, updated, invalid, pins_present)``.
 
-    ``partial``: the entries are pushes (ADMS USERINFO / OPERLOG lines) that change only the fields they state.
+    ``at`` is when the terminal listed them (``first_seen_at`` / ``last_seen_at``). ``partial``: the entries are pushes
+    (ADMS USERINFO / OPERLOG lines) that change only the fields they state. A blank name never erases the name the
+    terminal gave before (eSSL's ``ingest_users`` kept it too): it feeds the reconciliation's suggestions.
     """
     existing = {row.pin: row for row in DeviceUser.objects.select_for_update(of=("self",)).filter(device=device)}
     created, changed, present, invalid = [], [], [], 0
@@ -478,9 +492,11 @@ def upsert_users(device: Device, users, *, at: datetime, partial: bool = False) 
             stamp_create(row, None)
             created.append(row)
         else:
+            if not values.get("name", row.name):
+                values.pop("name", None)
             for name, value in values.items():
                 setattr(row, name, value)
-            row.last_seen_at, row.updated_at = at, at
+            row.last_seen_at, row.updated_at = at, now()
             changed.append(row)
     if created:
         DeviceUser.objects.bulk_create(created)
@@ -489,11 +505,24 @@ def upsert_users(device: Device, users, *, at: datetime, partial: bool = False) 
     return len(created), len(changed), invalid, present
 
 
+def _ensure_active(device: Device) -> None:
+    """A deactivated device receives nothing (announce refuses it too, and so does the ADMS receiver); the agent holds
+    its queue, so nothing is lost if the device is reactivated."""
+    if not device.is_active:
+        raise Conflict("device_inactive", f"{device.name} is deactivated on the platform; nothing is delivered for it until it is reactivated.")
+
+
 @transaction.atomic
 def sync_users(agent: Agent, device: Device, users: list, *, read_at: datetime | None = None) -> dict:
-    """A whole-table read of one terminal: upsert, then the USERS log that is the presence watermark."""
+    """A whole-table read of one terminal: upsert, then the USERS log that is the presence watermark.
+
+    The watermark is when the terminal was read (``read_at``, never later than now), not when the upload arrived: an
+    agent delivering a table it read before an outage must not make presence look freshly confirmed.
+    """
+    _ensure_active(device)
     started = now()
-    created, updated, invalid, present = upsert_users(device, users, at=started)
+    seen_at = min(read_at, started) if read_at is not None else started
+    created, updated, invalid, present = upsert_users(device, users, at=seen_at)
     finished = now()
     _touch(Device, device, user_count=len(present), last_sync_at=finished)
     _touch(Agent, agent, last_sync_at=finished)
@@ -512,7 +541,7 @@ def sync_users(agent: Agent, device: Device, users: list, *, read_at: datetime |
         details={
             "agent": agent.code,
             "transport": ingest.AGENT_PUSH,
-            "users_seen_at": started.isoformat(),
+            "users_seen_at": seen_at.isoformat(),
             "users_present": sorted(present),
             "invalid": invalid,
             "read_at": read_at.isoformat() if read_at else None,
@@ -524,6 +553,7 @@ def sync_users(agent: Agent, device: Device, users: list, *, read_at: datetime |
 
 @transaction.atomic
 def sync_attendance(agent: Agent, device: Device, records: list, *, batch_id: str = "") -> dict:
+    _ensure_active(device)
     result = ingest.ingest(device, records, source=ingest.AGENT_PUSH, agent=agent, batch_id=batch_id)
     _touch(Agent, agent, last_sync_at=now())
     return result

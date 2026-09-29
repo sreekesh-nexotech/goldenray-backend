@@ -169,6 +169,7 @@ class Platform:
         self.calls: list[tuple[str, dict]] = []
         self.devices: dict[str, str] = {}  # serial -> device uid
         self.refuse: dict[str, Refused] = {}  # serial -> refusal of announce
+        self.refuse_uploads: dict[str, Refused] = {}  # serial -> refusal of the user and attendance uploads
         self.failure: Exception | None = None  # raised by every call while set
         self.stored: dict[tuple, dict] = {}
         self.replayed: dict[str, dict] = {}
@@ -210,10 +211,14 @@ class Platform:
 
     def upload_users(self, device, serial, users, *, read_at, idempotency_key):
         self._enter("users", {"device": device, "serial_number": serial, "users": users, "read_at": read_at, "key": idempotency_key})
+        if serial in self.refuse_uploads:
+            raise self.refuse_uploads[serial]
         return {"device": device, "received": len(users), "created": len(users), "updated": 0, "invalid": 0}
 
     def upload_attendance(self, device, serial, records, *, batch_id, idempotency_key):
         self._enter("attendance", {"device": device, "serial_number": serial, "records": records, "batch_id": batch_id, "key": idempotency_key})
+        if serial in self.refuse_uploads:
+            raise self.refuse_uploads[serial]
         if idempotency_key in self.replayed:
             return self.replayed[idempotency_key]
         new = duplicate = 0

@@ -445,9 +445,14 @@ class Agent:
                     summary["batches"] += 1
                 self.store.set_sync_state(serial, last_upload_at=utcnow().isoformat())
             except Refused as exc:
-                if exc.code == "device_not_found":
+                lost = exc.code == "device_not_found"
+                if lost:
                     self._announced_at.pop(serial, None)  # rehomed or deleted centrally: announce again next time
                     dev.uid = None
+                if not (lost and reached):
+                    # retrying the same upload cannot help: the queue is held until the next announce decides (at most one
+                    # announce interval), never re-sent on every 2-second delivery loop
+                    self._refused[serial] = (self.clock(), f"{exc.code}: {exc.message}")
                 self.log("ERROR", f"{dev.name} [{serial}]: the platform refused an upload ({exc.code}): {exc.message} - queue held")
                 continue
             except AuthRejected as exc:

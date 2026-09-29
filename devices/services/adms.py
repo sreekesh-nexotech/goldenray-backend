@@ -36,7 +36,7 @@ from django.db.models import F
 from devices.models import AdmsRequest, AdmsUnknownDevice, Device
 from devices.models.adms import BODY_EXCERPT_CHARS, MAX_STORED_BODY_BYTES
 from devices.services import agent_protocol, ingest
-from devices.services.common import NS_DEVICE_USERS, SECRET_KEYS, SMALLINT_RANGE, bump_devices, fits, ip_allowed, normalize_serial, now, setting
+from devices.services.common import NS_DEVICE_USERS, SECRET_KEYS, SMALLINT_RANGE, bump_devices, fits, ip_allowed, normalize_serial, now, scrub, scrub_deep, setting
 from devices.services.devices import device_for_token
 
 logger = logging.getLogger("flarize.devices.adms")
@@ -82,21 +82,6 @@ class Outcome:
 # --------------------------------------------------------------------------------------------------------------------
 # Reading the request
 # --------------------------------------------------------------------------------------------------------------------
-def scrub(value: str) -> str:
-    """Postgres text/jsonb cannot hold NUL; the exact bytes stay in ``body``."""
-    return value.replace("\x00", "") if isinstance(value, str) else value
-
-
-def scrub_deep(value):
-    if isinstance(value, str):
-        return scrub(value)
-    if isinstance(value, list):
-        return [scrub_deep(item) for item in value]
-    if isinstance(value, dict):
-        return {scrub(str(key)): scrub_deep(item) for key, item in value.items()}
-    return value
-
-
 def decode_best_effort(raw: bytes) -> tuple[str, str]:
     for encoding in DECODE_CANDIDATES:
         try:

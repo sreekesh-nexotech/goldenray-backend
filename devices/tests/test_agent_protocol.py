@@ -92,6 +92,16 @@ class TestHeartbeat:
         agent.refresh_from_db()
         assert agent.last_heartbeat_at is None
 
+    @pytest.mark.parametrize("device_time, offset", [("1900-01-01T00:00:00", -(2**31)), ("2099-12-31T23:59:59", 2**31 - 1), ("0001-01-01T00:00:00", -(2**31))])
+    def test_an_absurd_terminal_clock_is_shown_at_the_limit_not_a_poison_heartbeat(self, agent_client, agent, device_time, offset):
+        """clock_offset_seconds is an int column: a terminal clock more than ~68 years off (a dead RTC battery) answered 500
+        on every heartbeat, so the agent looked OFFLINE for good; the offset is shown at the column's limit instead."""
+        device = DeviceFactory(agent=agent, last_seen_at=None, clock_offset_seconds=5)
+        response = agent_client.post(f"{API}heartbeat/", {"devices": [{"device": str(device.uid), "reachable": True, "device_time": device_time}]}, format="json")
+        assert response.status_code == 200, response.content
+        device.refresh_from_db()
+        assert device.last_seen_at is not None and device.clock_offset_seconds == offset
+
     def test_a_dead_agent_ages_its_devices(self, agent):
         device = DeviceFactory(agent=agent, last_seen_at=timezone.now() - timedelta(minutes=20))
         assert health.connection_state(device) == health.OFFLINE  # eSSL kept is_online=True forever
@@ -169,6 +179,16 @@ class TestAnnounce:
         response = agent_client.post(f"{API}devices/announce/", MARS, format="json")
         assert response.status_code == 409 and response.json()["code"] == "device_inactive"
 
+    def test_an_absurd_clock_or_a_nul_in_device_info_is_not_a_poison_announce(self, agent_client, agent):
+        """A 500 on announce stops the agent delivering for EVERY terminal of the office (it backs off and announces the same
+        terminal first again): a clock beyond the int column and a NUL character (jsonb cannot hold one) used to do it."""
+        device = DeviceFactory(serial_number=MARS["serial_number"], expected_serial=MARS["serial_number"], agent=agent, office=agent.office)
+        body = {**MARS, "device_time": "2099-12-31T23:59:59", "device_info": {"device_name": "x 2008\u0000\u0000", "extra": ["a\u0000b", {"k\u0000": 1}]}}
+        response = agent_client.post(f"{API}devices/announce/", body, format="json")
+        assert response.status_code == 200, response.content
+        device.refresh_from_db()
+        assert device.clock_offset_seconds == 2**31 - 1 and device.device_info == {"device_name": "x 2008", "extra": ["ab", {"k": 1}]}
+
     def test_validation(self, agent_client):
         response = agent_client.post(f"{API}devices/announce/", {"ip_address": "999.9.9.9"}, format="json")
         assert response.status_code == 400 and {"serial_number", "ip_address"} <= set(response.json()["errors"])
@@ -242,6 +262,40 @@ class TestUsers:
         assert (rows["1"].device_uid, rows["1"].privilege, rows["1"].raw_payload) == (None, None, {"uid": 2**40}) and (rows["2"].device_uid, rows["2"].privilege) == (7, 14)
         assert SyncLog.objects.get(device=device, sync_type="USERS").status == "SUCCESS"  # still the presence watermark
 
+    def test_a_read_without_a_name_keeps_the_name_the_terminal_gave_before(self, agent_client, agent):
+        """eSSL's ingest_users kept the stored name when a read returned none (``u.name or row.name``); the name feeds the
+        reconciliation's suggestions and CREATE_EMPLOYEE, so one blank read must not erase it."""
+        device = DeviceFactory(agent=agent)
+        target = {"device": str(device.uid)}
+        agent_client.post(f"{API}sync/users/", {**target, "users": [{"pin": "1", "name": "Asha", "card": "77"}]}, format="json")
+        assert agent_client.post(f"{API}sync/users/", {**target, "users": [{"pin": "1", "name": "  ", "card": ""}]}, format="json").status_code == 200
+        row = DeviceUser.objects.get(device=device, pin="1")
+        assert (row.name, row.card) == ("Asha", "")  # the card is what the terminal says, as eSSL did
+        agent_client.post(f"{API}sync/users/", {**target, "users": [{"pin": "1", "name": "Asha K"}]}, format="json")
+        assert DeviceUser.objects.get(device=device, pin="1").name == "Asha K"
+
+    def test_a_nul_character_in_a_raw_payload_is_not_a_poison_read(self, agent_client, agent):
+        """jsonb cannot hold NUL: one user's raw payload with it answered 500 and the whole table was never delivered."""
+        device = DeviceFactory(agent=agent)
+        users = [{"pin": "1", "name": "Asha", "raw_payload": {"name": "Asha\u0000\u0000", "nested": {"k": ["x\u0000"]}}}]
+        response = agent_client.post(f"{API}sync/users/", {"device": str(device.uid), "users": users}, format="json")
+        assert response.status_code == 200, response.content
+        assert DeviceUser.objects.get(device=device, pin="1").raw_payload == {"name": "Asha", "nested": {"k": ["x"]}}
+
+    def test_the_watermark_is_when_the_table_was_read_not_when_it_arrived(self, agent_client, agent):
+        """An agent delivers a table it read before an outage: presence must not be claimed as confirmed at upload time."""
+        from devices.services import roster
+
+        device = DeviceFactory(agent=agent)
+        read_at = timezone.now() - timedelta(hours=6)
+        body = {"device": str(device.uid), "users": [{"pin": "1", "name": "Asha"}], "read_at": read_at.isoformat()}
+        assert agent_client.post(f"{API}sync/users/", body, format="json").status_code == 200
+        assert roster.reconcile(device)["users_last_confirmed_at"] == read_at
+        assert DeviceUser.objects.get(device=device, pin="1").last_seen_at == read_at
+        future = timezone.now() + timedelta(days=3)  # an agent clock running ahead never dates a read in the future
+        agent_client.post(f"{API}sync/users/", {**body, "read_at": future.isoformat()}, format="json")
+        assert roster.reconcile(device)["users_last_confirmed_at"] <= timezone.now()
+
     def test_only_this_agents_devices(self, agent_client):
         other = DeviceFactory(agent=AgentFactory())
         response = agent_client.post(f"{API}sync/users/", {"device": str(other.uid), "users": []}, format="json")
@@ -287,6 +341,24 @@ class TestAttendance:
         response = agent_client.post(f"{API}sync/attendance/", {"device": str(device.uid), "records": records}, format="json")
         assert response.status_code == 200 and (response.json()["new"], response.json()["invalid"]) == (1, 1)
         assert [stored.pin for stored in sink.punches.values()] == ["2"]
+
+    def test_a_deactivated_device_receives_nothing(self, agent_client, agent, sink):
+        """Announce refuses a deactivated device ("nothing is delivered for it until it is reactivated") and ADMS does
+        too; the uploads accepted its users and punches all the same. 409 ``device_inactive`` (the agent holds its queue)."""
+        device = DeviceFactory(agent=agent, is_active=False)
+        target = {"device": str(device.uid)}
+        users = agent_client.post(f"{API}sync/users/", {**target, "users": [{"pin": "1", "name": "Asha"}]}, format="json")
+        punches = agent_client.post(f"{API}sync/attendance/", {**target, "records": [punch("1", "2026-09-21T09:28:11")]}, format="json")
+        assert (users.status_code, users.json()["code"]) == (409, "device_inactive")
+        assert (punches.status_code, punches.json()["code"]) == (409, "device_inactive")
+        assert not DeviceUser.objects.filter(device=device).exists() and sink.punches == {} and not SyncLog.objects.filter(device=device).exists()
+        assert agent_client.get(f"{API}sync-status/", target).status_code == 200  # what is held stays readable
+
+    def test_a_nul_character_in_a_punch_payload_never_reaches_the_store(self, agent_client, agent, sink):
+        device = DeviceFactory(agent=agent)
+        record = {**punch("1", "2026-09-21T09:28:11", 1), "raw_payload": {"user_id": "1\u0000"}}
+        assert agent_client.post(f"{API}sync/attendance/", {"device": str(device.uid), "records": [record]}, format="json").json()["new"] == 1
+        assert [stored.raw_payload for stored in sink.punches.values()] == [{"user_id": "1"}]
 
     def test_idempotency_key_replays_the_first_answer(self, agent_client, agent, sink):
         device = DeviceFactory(agent=agent)

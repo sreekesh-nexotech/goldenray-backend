@@ -88,6 +88,15 @@ class TestCreateAndCredential:
         assert ServiceCredential.objects.filter(bound_object_id=agent.pk).count() == 2
         assert agent_client_for(type("A", (), {"token": rotated["token"]})).get(AGENT_CONFIG).status_code == 200
 
+    @pytest.mark.parametrize("method, suffix, body", [("patch", "", {"name": "x"}), ("post", "revoke/", {}), ("delete", "", None)])
+    def test_every_write_checks_the_version(self, admin_client, method, suffix, body):
+        agent = AgentFactory(version=3, name="Head office PC")
+        path = detail(agent, suffix)
+        response = admin_client.delete(f"{path}?expected_version=2") if body is None else getattr(admin_client, method)(path, {**body, "expected_version": 2}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "stale_version"
+        agent.refresh_from_db()
+        assert (agent.name, agent.is_active, agent.deleted_at, agent.credential.revoked_at, agent.version) == ("Head office PC", True, None, None, 3)
+
     def test_a_disabled_agent_is_refused_even_with_a_valid_token(self):
         agent = AgentFactory()
         Agent.objects.filter(pk=agent.pk).update(is_active=False)

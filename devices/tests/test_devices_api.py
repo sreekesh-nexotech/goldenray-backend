@@ -222,6 +222,13 @@ class TestAdms:
         label_only = DeviceFactory(serial_number=None, expected_serial="NCD8252101212", ip_address=None)
         assert admin_client.post(detail(label_only, "adms/enable/"), {}, format="json").status_code == 200  # the pin is enough
 
+    def test_enable_checks_the_version(self, admin_client):
+        device = DeviceFactory(version=3)
+        response = admin_client.post(detail(device, "adms/enable/"), {"expected_version": 2}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "stale_version"
+        device.refresh_from_db()
+        assert device.adms_token_hash is None and device.adms_enabled is False
+
     def test_invalid_allow_list(self, admin_client):
         response = admin_client.post(detail(DeviceFactory(), "adms/enable/"), {"allowed_ips": ["not-an-ip"]}, format="json")
         assert response.status_code == 400 and "allowed_ips" in response.json()["errors"]

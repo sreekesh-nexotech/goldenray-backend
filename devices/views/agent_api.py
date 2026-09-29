@@ -8,7 +8,7 @@ Uploads honour ``Idempotency-Key`` (a retried request replays the first answer);
 
 from __future__ import annotations
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.response import Response
 
 from core.idempotency import idempotent
@@ -36,6 +36,13 @@ from devices.services import agent_protocol
 TAGS = ["agent"]
 ERRORS = {400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer}
 DEVICE_ERRORS = {**ERRORS, 404: ErrorSerializer}
+IDEMPOTENCY = OpenApiParameter(
+    "Idempotency-Key",
+    str,
+    OpenApiParameter.HEADER,
+    required=False,
+    description="8–128 characters; a retry with the same key and body replays the first answer for 24 h (a different body: 422 `idempotency_key_reused`).",
+)
 
 
 class AgentProtocolView(AgentAPIView):
@@ -117,10 +124,11 @@ class DiscoveryView(AgentProtocolView):
 class SyncUsersView(AgentProtocolView):
     @extend_schema(
         operation_id="agent_sync_users",
+        parameters=[IDEMPOTENCY],
         request=SyncUsersSerializer,
         responses={200: UsersResultSerializer, **DEVICE_ERRORS, 409: ErrorSerializer, 422: ErrorSerializer},
         tags=TAGS,
-        description="The terminal's whole user table (upsert; the read is the presence watermark).",
+        description="The terminal's whole user table (upsert; the read, dated `read_at`, is the presence watermark). 409 `device_inactive`.",
     )
     @idempotent("devices.agent_sync_users")
     def post(self, request, *args, **kwargs):
@@ -133,10 +141,11 @@ class SyncUsersView(AgentProtocolView):
 class SyncAttendanceView(AgentProtocolView):
     @extend_schema(
         operation_id="agent_sync_attendance",
+        parameters=[IDEMPOTENCY],
         request=SyncAttendanceSerializer,
         responses={200: AttendanceResultSerializer, **DEVICE_ERRORS, 409: ErrorSerializer, 422: ErrorSerializer},
         tags=TAGS,
-        description="A batch of at most 200 punches; idempotent (content dedup key + Idempotency-Key). A resend reports duplicates and stores nothing twice.",
+        description="A batch of at most 200 punches; idempotent (content dedup key + Idempotency-Key). A resend reports duplicates and stores nothing twice. 409 `device_inactive`.",
     )
     @idempotent("devices.agent_sync_attendance")
     def post(self, request, *args, **kwargs):
