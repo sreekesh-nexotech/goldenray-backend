@@ -1,6 +1,7 @@
 """prod.py refuses to start on unsafe configuration (PLAN §5.3); dev/test key generation is race-free."""
 
 import os
+import secrets
 import subprocess
 import sys
 
@@ -33,6 +34,7 @@ def _valid(**overrides):
         "PUBLIC_MEDIA_ROOT": "/srv/flarize/media/public",
         "PRIVATE_MEDIA_ROOT": "/srv/flarize/media/private",
         "FRONTEND_BASE_URL": "https://flarize.com",
+        "DB_APP_ROLE": "flarize_app",
     }
     base.update(overrides)
     return base
@@ -66,6 +68,8 @@ def _valid(**overrides):
         ({"FRONTEND_BASE_URL": "http://localhost:3000"}, "FRONTEND_BASE_URL"),
         ({"FRONTEND_BASE_URL": ""}, "FRONTEND_BASE_URL"),
         ({"FRONTEND_BASE_URL": "https://localhost:3000"}, "FRONTEND_BASE_URL"),
+        ({"DB_APP_ROLE": ""}, "DB_APP_ROLE"),
+        ({"DB_APP_ROLE": "  "}, "DB_APP_ROLE"),
     ],
 )
 def test_validation_refuses_unsafe_values(overrides, message):
@@ -77,15 +81,36 @@ def test_validation_accepts_a_safe_configuration():
     validate_production_settings(_valid())
 
 
-def _import_prod(env_overrides, tmp_path):
+def _import_env(env_overrides) -> dict:
     env = {
         key: value
         for key, value in os.environ.items()
         if not key.startswith(
-            ("DJANGO_", "SECRET_KEY", "JWT_", "FERNET", "TRUSTED", "ALLOWED", "DEBUG", "PASSWORD_RESET", "EMAIL_", "MEDIA_", "PUBLIC_MEDIA", "PRIVATE_MEDIA", "DOCUMENTS_", "FRONTEND_BASE_URL")
+            (
+                "DJANGO_",
+                "SECRET_KEY",
+                "JWT_",
+                "FERNET",
+                "TRUSTED",
+                "ALLOWED",
+                "DEBUG",
+                "PASSWORD_RESET",
+                "EMAIL_",
+                "MEDIA_",
+                "PUBLIC_MEDIA",
+                "PRIVATE_MEDIA",
+                "DOCUMENTS_",
+                "FRONTEND_BASE_URL",
+                "DB_APP_ROLE",
+            )
         )
     }
     env.update(env_overrides)
+    return env
+
+
+def _import_prod(env_overrides, tmp_path):
+    env = _import_env(env_overrides)
     return subprocess.run([sys.executable, "-c", "import flarize.settings.prod"], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=60)
 
 
@@ -93,16 +118,16 @@ def test_importing_prod_with_defaults_refuses_to_start(tmp_path):
     result = _import_prod({}, tmp_path)
     assert result.returncode != 0
     assert "Refusing to start with unsafe production settings" in result.stderr
-    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES", "PASSWORD_RESET_URL", "FRONTEND_BASE_URL"]:
+    for fragment in ["SECRET_KEY", "ALLOWED_HOSTS", "RS256", "FERNET_KEYS", "TRUSTED_PROXIES", "PASSWORD_RESET_URL", "FRONTEND_BASE_URL", "DB_APP_ROLE"]:
         assert fragment in result.stderr
 
 
-def test_importing_prod_with_a_complete_environment_succeeds(tmp_path):
+def _complete_env(tmp_path) -> dict:
     private = tmp_path / "jwt_private.pem"
     private.write_bytes(generate_rsa_private_pem())
     public = tmp_path / "jwt_public.pem"
     public.write_text(public_pem_from_private(private.read_bytes()))
-    env = {
+    return {
         "SECRET_KEY": GOOD_SECRET,
         "ALLOWED_HOSTS": "flarize.com,www.flarize.com",
         "JWT_PRIVATE_KEY_PATH": str(private),
@@ -111,9 +136,23 @@ def test_importing_prod_with_a_complete_environment_succeeds(tmp_path):
         "TRUSTED_PROXIES": "172.16.0.0/12",
         "PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
         "FRONTEND_BASE_URL": "https://flarize.com/",
+        "DB_APP_ROLE": "flarize_app",
     }
-    result = _import_prod(env, tmp_path)
+
+
+def test_importing_prod_with_a_complete_environment_succeeds(tmp_path):
+    result = _import_prod(_complete_env(tmp_path), tmp_path)
     assert result.returncode == 0, result.stderr
+
+
+def test_check_deploy_passes_under_production_settings(tmp_path):
+    """``manage.py check --deploy --fail-level WARNING`` is clean under prod settings (final review): the two checks
+    that do not apply are silenced with their reason in prod.py (no cookie/session authentication, so no CSRF
+    middleware; HSTS preload is an owner decision)."""
+    env = _import_env(_complete_env(tmp_path))
+    env.update({"DJANGO_SETTINGS_MODULE": "flarize.settings.prod", "SECRET_KEY": secrets.token_urlsafe(64)})
+    result = subprocess.run([sys.executable, "manage.py", "check", "--deploy", "--fail-level", "WARNING"], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=120)
+    assert result.returncode == 0, result.stdout + result.stderr
 
 
 def test_dev_keys_are_generated_once_and_consistent(tmp_path):

@@ -109,6 +109,7 @@ def test_prod_docs_are_usable_from_the_allow_listed_network(tmp_path):
             "PRIVATE_MEDIA_ROOT": str(tmp_path / "private"),
             "PUBLIC_MEDIA_ROOT": str(tmp_path / "public"),
             "API_DOCS_ALLOWED_NETWORKS": "198.51.100.0/24",
+            "DB_APP_ROLE": "flarize_app",
         }
     )
     result = subprocess.run([sys.executable, "-c", PROD_PROBE], cwd=settings.BASE_DIR, env=env, capture_output=True, text=True, timeout=120)
