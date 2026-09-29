@@ -410,6 +410,8 @@ SPECTACULAR_SETTINGS = {
         "ValidityWindowStatusEnum": "pricing.models.choices.ValidityWindowStatus",
         "ProcurementBatchStatusEnum": "procurement.models.batch.BatchStatus",
         "ProcurementChargeKindEnum": "procurement.models.batch.ChargeKind",
+        "InventoryMovementDirectionEnum": "inventory.models.movement.Direction",
+        "InventoryMovementReasonEnum": "inventory.models.movement.Reason",
     },
 }
 
@@ -482,6 +484,9 @@ FEATURE_FLAG_DEFAULTS = {
     "LEGACY_API_SHIM": False,
     "INVENTORY_STOCK": False,
 }
+# Inventory (behind INVENTORY_STOCK): code of the location that receives committed procurement batches as PURCHASE
+# movements (outbox procurement.batch_committed). Blank = off (the default).
+INVENTORY_RECEIVING_LOCATION = config("INVENTORY_RECEIVING_LOCATION", default="")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Idempotency-Key replay store

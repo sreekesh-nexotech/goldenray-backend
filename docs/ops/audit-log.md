@@ -46,6 +46,9 @@ and partition maintenance with `DB_USER=flarize_owner` (same settings module). *
   with the default partition locked), closes new partitions to the app role and re-applies the revoke. Idempotent.
   With `DB_APP_ROLE` equal to the owner (single-role dev setups) it leaves privileges alone.
 * `audit_log.actor_id` has no foreign-key constraint (DV-9): an `ON DELETE` action would rewrite ledger rows.
+* The stock ledger `inventory_movement` is append-only the same way: `inventory/migrations/0001_initial.py` and
+  `manage.py ensure_inventory_append_only` (every deploy, after `migrate`) grant the app role `SELECT, INSERT` and
+  revoke `UPDATE, DELETE, TRUNCATE` (docs/decisions/inventory.md).
 
 ## 3. Schedule
 
