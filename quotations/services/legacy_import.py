@@ -459,6 +459,21 @@ def _snapshot(run: ImportRun, model, version: Version, tier: str, primary: bool,
     upsert(sub, model, snapshot_id, target=target, values={"quotation_version_id": version.pk, **values}, created_at=timestamp(record_.get("lockedAt") or record_.get("issuedAt")))
 
 
+def _modified_on_platform(run: ImportRun, qid: str, quotation: Quotation) -> bool:
+    """True when the platform wrote the quotation after its last import (accepted, cancelled, expired, revised, …) or
+    gave it a version the import did not create. The import stamps ``updated_at`` from the source and links the legacy
+    map afterwards, so an imported row's ``updated_at`` never passes its map's ``imported_at``; every platform write
+    (``versioned_update``) stamps now. A re-run must never take such a quotation back to the Flarize state."""
+    imported_at = LegacyMap.objects.filter(source_system=run.source_system, source_table=run.source_table, source_id=str(qid), target_id=quotation.pk).values_list("imported_at", flat=True).first()
+    if imported_at is None:
+        return quotation.status not in (QuotationStatus.DRAFT, QuotationStatus.ISSUED)
+    if quotation.updated_at > imported_at:
+        return True
+    versions = set(Version.all_objects.filter(quotation=quotation).values_list("pk", flat=True))
+    imported = set(LegacyMap.objects.filter(source_system=FLARIZE, source_table="quotation-state.json:documents", target_id__in=versions).values_list("target_id", flat=True))
+    return bool(versions - imported)
+
+
 def import_flarize_quotations(state: dict, *, user=None, dry_run: bool = False) -> dict:
     """``quotation-state.json`` → quotations, versions (frozen documents byte for byte), BOM and commercial snapshots.
 
@@ -505,6 +520,10 @@ def import_flarize_quotations(state: dict, *, user=None, dry_run: bool = False) 
             "legacy_ref": qid,
         }
         target = run.find_target(Quotation, qid, lambda: Quotation.all_objects.filter(legacy_ref=qid).first())
+        if target is not None and _modified_on_platform(run, qid, target):
+            run.skipped += 1
+            run.violation(qid, "modified_on_platform", f"Quotation {target.number or qid} changed on the platform after it was imported ({target.status}); left as it is.")
+            return
         quotation = upsert(
             run, Quotation, qid, target=target, values=values, created_at=timestamp(row.get("createdAt")), updated_at=timestamp(row.get("updatedAt")), created_by_id=_user(row.get("createdBy"))
         )
@@ -546,7 +565,8 @@ def import_flarize_quotations(state: dict, *, user=None, dry_run: bool = False) 
 
 def import_sent_quotes(rows: list[dict], *, user=None, dry_run: bool = False) -> dict:
     """Main backend ``sent_quotes`` → ``quotations_email_log`` legacy rows (no version: the website quote had none);
-    ``send_quote_junk`` is not migrated. ``quote_id`` is the idempotency key (``legacy_ref``)."""
+    ``send_quote_junk`` is not migrated. ``quote_id`` is the idempotency key (``legacy_ref``); every imported row is
+    also linked in ``core_legacy_map`` (``BACKEND sent_quotes <id>``) so the migration's row-count check sees it."""
     run = ImportRun(BACKEND, "sent_quotes")
     with transaction.atomic():
         for row in sorted(rows, key=lambda item: item.get("id") or 0):
@@ -565,13 +585,15 @@ def import_sent_quotes(rows: list[dict], *, user=None, dry_run: bool = False) ->
             }
             existing = EmailLog.objects.filter(legacy_ref=quote_id).first()
             if existing is None:
-                EmailLog.objects.create(legacy_ref=quote_id, **values)
+                existing = EmailLog.objects.create(legacy_ref=quote_id, **values)
                 run.created += 1
             elif any(getattr(existing, name) != value for name, value in values.items()):
                 EmailLog.objects.filter(pk=existing.pk).update(**values)
                 run.updated += 1
             else:
                 run.skipped += 1
+            if row.get("id") is not None:
+                run.link(row["id"], existing)  # core_legacy_map: verify_migration #1 accounts for every source row
         record(
             ACTION,
             object_type="quotations.emaillog",

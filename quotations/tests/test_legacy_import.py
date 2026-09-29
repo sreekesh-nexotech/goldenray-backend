@@ -208,3 +208,77 @@ def test_imported_owner_and_customer_through_the_legacy_map(state, make_user):
     legacy_import.import_flarize_quotations(state)
     quotation = Quotation.objects.get(legacy_ref=qid)
     assert quotation.owner_id == owner.pk and quotation.customer_id == customer.pk
+
+
+# ── integration (wave 4a): a re-run never overwrites a quotation changed on the platform after the import ─────────
+
+
+def _issued_qid(state) -> str:
+    return next(qid for qid, docs in state["documents"].items() if docs and state["quotations"][qid].get("status") == "ISSUED")
+
+
+def _still_valid(qid: str) -> Quotation:
+    import datetime as dt
+
+    from django.utils import timezone
+
+    # a queryset update: not a platform edit (updated_at is left as imported)
+    Quotation.objects.filter(legacy_ref=qid).update(valid_until=timezone.localdate() + dt.timedelta(days=30))
+    return Quotation.objects.get(legacy_ref=qid)
+
+
+def _modified(result) -> list[str]:
+    return sorted(violation["source_id"] for violation in result["violations"] if violation["code"] == "modified_on_platform")
+
+
+def test_reimport_keeps_a_quotation_accepted_on_the_platform(state, head_user):
+    """Re-running the import after an imported quotation was accepted reset it to ISSUED and kept ``accepted_at``,
+    which violated the quotation's CHECK (IntegrityError); the accepted quotation is now left alone and reported."""
+    legacy_import.import_flarize_quotations(state)
+    qid = _issued_qid(state)
+    lifecycle.accept(_still_valid(qid), user=head_user)
+    changed = copy.deepcopy(state)
+    changed["quotations"][qid]["district"] = "Changed in Flarize"
+    result = legacy_import.import_flarize_quotations(changed)
+    assert _modified(result) == [qid]
+    quotation = Quotation.objects.get(legacy_ref=qid)
+    assert quotation.status == QuotationStatus.ACCEPTED and quotation.accepted_at is not None and quotation.district != "Changed in Flarize"
+    assert result["created"] == 0 and result["skipped"] == 7
+
+
+def test_reimport_keeps_a_quotation_cancelled_on_the_platform(state, head_user):
+    legacy_import.import_flarize_quotations(state)
+    qid = _issued_qid(state)
+    lifecycle.cancel(Quotation.objects.get(legacy_ref=qid), user=head_user, reason="Customer went elsewhere")
+    result = legacy_import.import_flarize_quotations(state)
+    assert _modified(result) == [qid]
+    quotation = Quotation.objects.get(legacy_ref=qid)
+    assert quotation.status == QuotationStatus.CANCELLED and quotation.cancelled_at is not None
+
+
+def test_reimport_keeps_a_quotation_revised_on_the_platform(state):
+    """A platform version (a revision's draft) marks the quotation as modified even when the quotation row itself was
+    not written after the import; the superseded legacy version is not re-issued."""
+    from quotations.tests.factories import VersionFactory
+
+    legacy_import.import_flarize_quotations(state)
+    qid = _issued_qid(state)
+    quotation = Quotation.objects.get(legacy_ref=qid)
+    Version.objects.filter(pk=quotation.current_version_id).update(status=VersionStatus.SUPERSEDED)
+    imported = quotation.current_version
+    VersionFactory(quotation=quotation, number=imported.number + 1)  # not a version the import created
+    result = legacy_import.import_flarize_quotations(state)
+    assert _modified(result) == [qid]
+    assert Version.objects.get(pk=imported.pk).status == VersionStatus.SUPERSEDED
+
+
+def test_reimport_still_updates_quotations_untouched_on_the_platform(state, head_user):
+    legacy_import.import_flarize_quotations(state)
+    qid = _issued_qid(state)
+    other = next(key for key in state["quotations"] if key != qid)
+    lifecycle.cancel(Quotation.objects.get(legacy_ref=qid), user=head_user, reason="Lost")
+    changed = copy.deepcopy(state)
+    changed["quotations"][other]["district"] = "Thrissur"
+    result = legacy_import.import_flarize_quotations(changed)
+    assert _modified(result) == [qid] and result["updated"] == 1
+    assert Quotation.objects.get(legacy_ref=other).district == "Thrissur"

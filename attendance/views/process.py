@@ -39,7 +39,10 @@ class ProcessView(BaseAPIView):
         request=ProcessRequestSerializer,
         responses={200: RecomputeResultSerializer, **READ_ERRORS},
         tags=TAGS,
-        description=f"Recompute a window (at most {processing.MAX_PROCESS_DAYS} days; 400 `range_too_long`). Raw punches are untouched, corrected days kept, nothing stored for today or later.",
+        description=(
+            f"Recompute a window (at most {processing.MAX_PROCESS_DAYS} days; 400 `range_too_long`). Raw punches are untouched, corrected days kept, nothing stored for today or later. "
+            "Only employees within the caller's attendance record scope: a named employee outside it answers 404 `not_found` (B-8)."
+        ),
     )
     def post(self, request, *args, **kwargs):
         body = ProcessRequestSerializer(data=request.data)
@@ -71,7 +74,10 @@ class RecalculateView(BaseAPIView):
         request=RecalculateRequestSerializer,
         responses={200: RecalculateResultSerializer, **READ_ERRORS},
         tags=TAGS,
-        description="Recompute a window (default: yesterday) and report, per terminal, how its punches arrive. The server never dials a terminal.",
+        description=(
+            "Recompute a window (default: yesterday) and report, per terminal, how its punches arrive. The server never dials a terminal. "
+            "Only employees within the caller's attendance record scope: a named employee outside it answers 404 `not_found` (B-8)."
+        ),
     )
     def post(self, request, *args, **kwargs):
         body = RecalculateRequestSerializer(data=request.data or {})

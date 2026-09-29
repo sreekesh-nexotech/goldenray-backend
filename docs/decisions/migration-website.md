@@ -130,7 +130,8 @@ HEAD check may be skipped with `--offline`).
 | `backend.seo` | `goldenray_metadata` | `seo…import_page_metadata` | `seo_page_metadata` |
 | `backend.leads` | `affiliate_application`, `warranty_service_request`, `customer_installations`, `lead_collection_home` | `leads…import_all` | `leads_*` |
 | `backend.careers` | `job_application`, `job_application_note`, `job_application_event` | `careers…import_applications` (files from `--media-root`), `…_notes`, `…_events` | `careers_job_application(+note, event)` |
-| not migrated | `bom_quotationtestimonial`, `sent_quotes` (DV-120), `send_quote_junk` (§7.3 dropped), `django_*`, `auth_*` except `auth_user` | — | — |
+| `backend.quotations` | `bom_quotationtestimonial`, `sent_quotes` | `quotations…import_backend_testimonials`, `…import_sent_quotes` (added at the wave-4a integration, DV-120) | `quotations_testimonial`, `quotations_email_log` |
+| not migrated | `send_quote_junk` (§7.3 dropped), `django_*`, `auth_*` except `auth_user` | — | — |
 
 ## Parity evidence
 
@@ -153,8 +154,8 @@ HEAD check may be skipped with `--offline`).
 ## Open issues
 
 * PriceRelease #1 must be published before the calculators cutover (rehearsal finding 1).
-* `bom_quotationtestimonial` / `sent_quotes` wait for the quotations package (DV-120): add a `backend.quotations`
-  step calling its importer when it is integrated.
+* ~~`bom_quotationtestimonial` / `sent_quotes` wait for the quotations package (DV-120)~~ — resolved at the wave-4a
+  integration: the `backend.quotations` step imports both (see `docs/decisions/integration-wave4a.md`).
 * The UAT sources hold no admin users, media, leads or applications; rehearsal 2 on the production snapshot is the
   first run with real volumes (pass `--media-root`).
 * `verify_migration` #3 covers the CMS delivery endpoints named in §7.6 #3; the main backend's public endpoints are

@@ -111,6 +111,14 @@ only to readers holding `pricing_internal.view`.
 | `bomSnapshots[id]` / `commercialSnapshots[id]` of the primary and of `alternativeOptions[]` | `quotations_bom_snapshot` / `quotations_commercial_snapshot` per tier (`is_primary`, `record` = the snapshot, `legacy_ref` = its id) | unreferenced snapshots: `orphan_snapshot` (not imported) |
 | `quotation-counter.json` `lastNumber` | `core_sequence_counter` QUO `next_value = lastNumber + 1` (never moved back) | |
 
+**Re-running the import** (wave-4a integration): a quotation changed on the platform after its last import is never
+written again — it is counted as skipped and reported `modified_on_platform`. "Changed" means its row was written after
+the legacy map's `imported_at` (accept, cancel, expire, revise all go through `versioned_update`, which stamps
+`updated_at`; the import itself stamps the source's `updatedAt` and links the map afterwards), or it has a version the
+import did not create (a revision's draft). Before this, a re-run reset an accepted quotation to ISSUED and kept
+`accepted_at` (CHECK `quotations_quotation_accepted_at_only_accepted` → IntegrityError, the whole import rolled back).
+Tests: `quotations/tests/test_legacy_import.py::test_reimport_*`.
+
 ### Content and masters
 
 | Legacy | Platform | Notes |

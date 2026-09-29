@@ -128,5 +128,6 @@ import happened in the window) to a `0600` file — the same command lists the w
 4. The UAT sources hold no admin users, media assets, leads or job applications. Those importers are covered by the
    tests with synthetic, masked rows; rehearsal 2 (production snapshot) is the first run with real volumes and must
    pass `--media-root` (CMS uploads, backend resumes) and, at the cutover, `--send-reset-links`.
-5. `bom_quotationtestimonial` (3 rows) and `sent_quotes` (0 rows) are listed as not migrated until the quotations
-   package is integrated (DV-120).
+5. `bom_quotationtestimonial` (3 rows) and `sent_quotes` (0 rows) were listed as not migrated until the quotations
+   package was integrated (DV-120). Since the wave-4a integration the `backend.quotations` step imports them; the
+   next rehearsal must show 3 testimonials created and `verify_migration` #1 accounting for both tables.

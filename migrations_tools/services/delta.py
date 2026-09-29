@@ -99,6 +99,8 @@ BACKEND_TARGETS = (
     "careers_job_application",
     "careers_job_application_note",
     "careers_job_application_event",
+    "quotations_testimonial",
+    "quotations_email_log",
 )
 TARGETS = {"CMS": CMS_TARGETS, "BACKEND": BACKEND_TARGETS}
 MASKED = "***"

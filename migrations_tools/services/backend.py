@@ -14,6 +14,7 @@ from emi.services import legacy_import as emi_import
 from leads.services import legacy_import as leads_import
 from migrations_tools.services.runner import Context, Plan, Step
 from pricing.services import legacy_import as pricing_import
+from quotations.services import legacy_import as quotations_import
 from reference.services import legacy_import as reference_import
 from seo.services import legacy_import as seo_import
 
@@ -32,6 +33,7 @@ BOM_TABLES = ("bom_bomtemplate", "bom_bomslot", "bom_bomfixeditem", "bom_structu
 EMI_TABLES = ("emi_bank", "emi_interest_rate_rule", "emi_subsidy_rule", "emi_calculator_settings", "emi_system_size")
 LEADS_TABLES = ("affiliate_application", "warranty_service_request", "customer_installations", "lead_collection_home")
 CAREERS_TABLES = ("job_application", "job_application_note", "job_application_event")
+QUOTATIONS_TABLES = ("bom_quotationtestimonial", "sent_quotes")
 
 
 def _users(rows, ctx: Context) -> dict:
@@ -99,6 +101,15 @@ def _careers(rows, ctx: Context) -> dict:
     }
 
 
+def _quotations(rows, ctx: Context) -> dict:
+    """Homeowner testimonials (``show_on_website``) and the website's sent-quote links → the quotations package's
+    tables (DV-120); an uploaded testimonial photo is listed (``photo_file_not_migrated``), not copied."""
+    return {
+        "bom_quotationtestimonial": quotations_import.import_backend_testimonials(rows["bom_quotationtestimonial"], user=ctx.user),
+        "sent_quotes": quotations_import.import_sent_quotes(rows["sent_quotes"], user=ctx.user),
+    }
+
+
 PLAN = Plan(
     source_system=BACKEND,
     steps=(
@@ -112,10 +123,9 @@ PLAN = Plan(
         Step("backend.seo", "content", ("goldenray_metadata",), _seo, "page metadata"),
         Step("backend.leads", "transactional", LEADS_TABLES, _leads, "affiliate applications, warranty requests, installations, leads"),
         Step("backend.careers", "transactional", CAREERS_TABLES, _careers, "job applications (+ private files), notes, events"),
+        Step("backend.quotations", "transactional", QUOTATIONS_TABLES, _quotations, "homeowner testimonials, sent-quote links → e-mail log (DV-120)"),
     ),
     not_migrated={
-        "bom_quotationtestimonial": "target quotations_testimonial belongs to the quotations package, which is not integrated yet (open issue)",
-        "sent_quotes": "target quotations_email_log belongs to the quotations package, which is not integrated yet (open issue)",
         "send_quote_junk": "PLAN §7.3: dropped",
         "django_admin_log": "Django admin history is not imported",
         "django_session": "sessions are not migrated",
