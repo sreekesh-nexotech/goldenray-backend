@@ -562,8 +562,8 @@ LEADS_VERIFICATION_TOKEN_TTL_SECONDS = 1800
 # EMI calculator: where the system sizes and their prices come from (DV-83)
 # --------------------------------------------------------------------------------------------------------------------
 # "MANUAL": the emi_system_size rows maintained in Studio (the legacy tiles; transitional, the default).
-# "PACK_RELEASE": the provider the packs package registers (emi.services.price_sources.register), i.e. the packs of
-# the current PackRelease. The system check emi.E001/W001 refuses an unknown value or a missing provider.
+# "PACK_RELEASE": the packs of the current PackRelease (emi.services.pack_release, installed by EmiConfig.ready()).
+# The system check emi.E001/W001 refuses an unknown value or a missing provider.
 EMI_PRICE_SOURCE = config("EMI_PRICE_SOURCE", default="MANUAL")
 
 # --------------------------------------------------------------------------------------------------------------------

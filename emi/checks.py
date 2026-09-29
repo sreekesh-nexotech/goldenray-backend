@@ -19,6 +19,10 @@ def check_price_source(app_configs=None, **kwargs):
         return [Error(f"EMI_PRICE_SOURCE is {value!r}; expected one of {', '.join(price_sources.SOURCES)}.", id="emi.E001")]
     if value == price_sources.PACK_RELEASE and not price_sources.has_provider():
         return [
-            Warning("EMI_PRICE_SOURCE is PACK_RELEASE but no pack-release price provider is registered.", hint="Register one with emi.services.price_sources.register in the packs app.", id="emi.W001")
+            Warning(
+                "EMI_PRICE_SOURCE is PACK_RELEASE but no pack-release price provider is registered.",
+                hint="EmiConfig.ready() installs emi.services.pack_release; something removed it (price_sources.reset).",
+                id="emi.W001",
+            )
         ]
     return []

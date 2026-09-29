@@ -22,6 +22,16 @@ def public_queryset():
     return ReleasePack.objects.filter(release=release).select_related("release").order_by("sort_order")
 
 
+def emi_size_packs():
+    """The documented read behind the EMI calculator's ``PACK_RELEASE`` price source (PLAN §1.2 "calculators read
+    releases"; ``emi.services.pack_release``): the standard (not future-ready) on-grid packs of the current
+    PackRelease, smallest first. EMI imports this read; packs never imports EMI (import-linter)."""
+    release = current_release()
+    if release is None:
+        return ReleasePack.objects.none()
+    return ReleasePack.objects.filter(release=release, system_type=SystemType.ONGRID, future_size_key="").select_related("release").order_by("size_kw", "phase", "sort_order")
+
+
 def bom_summary(bom: list) -> list[dict]:
     return [{"category": line.get("category"), "name": line.get("name"), "qty": line.get("qty")} for line in bom or [] if line.get("source") != "STRUCTURE"]
 

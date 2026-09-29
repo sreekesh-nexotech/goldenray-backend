@@ -55,6 +55,8 @@ field. Record scope: both modules allow only `all` (PLAN §3.2).
 * `calculators.services`: `sizing` (staff writes), `data` (the cached snapshot), `batteries` (DV-85), `calculate`
   (engine → `DomainError`), `import_support` + `legacy_import`.
 * `emi.services`: `rows` (staff writes of the four lists), `settings` (singleton), `price_sources` (DV-83),
+  `pack_release` (the `PACK_RELEASE` provider reading `packs.services.public.emi_size_packs`, installed by
+  `EmiConfig.ready()`, DV-103),
   `calculator` (snapshot, public config, calculate, quotation), `legacy_import`; `emi/checks.py` (`emi.E001`,
   `emi.W001`).
 

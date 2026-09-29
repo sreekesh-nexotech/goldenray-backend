@@ -2,22 +2,19 @@
 
 from __future__ import annotations
 
-import importlib
 from decimal import Decimal
 
 import pytest
-from django.test import override_settings
 
 from catalog.services import usage
 from core.errors import Conflict
 from core.models import LegacyMap
 from packs.events import component_deleted, component_status_changed, mark_drafts_stale
 from packs.models import ConfigPack, ConfigPin, ConfigStatus, ConfigVersion, PackRelease
-from packs.services import legacy_import, maintenance, registrations, releases, versions
+from packs.services import legacy_import, maintenance, public, registrations, releases, versions
 from packs.tests import factories
 
 pytestmark = pytest.mark.django_db
-price_sources = importlib.import_module("emi.services.price_sources")  # packs may not import website content (import-linter)
 
 
 class FakeEvent:
@@ -148,14 +145,12 @@ class TestRegistrations:
         with pytest.raises(Conflict):
             usage.ensure_not_in_use(world["pnl1"])
 
-    @override_settings(EMI_PRICE_SOURCE="PACK_RELEASE")
-    def test_emi_provider(self, world):
-        registrations.register()
-        assert price_sources.active_sizes() == []
+    def test_emi_size_packs(self, world):
+        """The documented read behind EMI's PACK_RELEASE price source (asserted end to end in emi/tests/test_pack_release.py)."""
+        assert list(public.emi_size_packs()) == []
         releases.publish(user=None)
-        (option,) = price_sources.active_sizes()
-        assert option.uid == "ongrid-value-3" and option.system_cost == Decimal("229000.00") and option.capacity_kw == Decimal("3.00")
-        assert option.price_per_kw == Decimal("76333.33") and price_sources.cache_namespaces() == ("packs",)
+        (pack,) = public.emi_size_packs()
+        assert pack.key == "ongrid-value-3" and pack.customer_price_incl_gst == Decimal("229000.00") and pack.size_kw == Decimal("3.00")
 
     def test_dashboard_counts(self, world, admin_user):
         assert registrations.pack_counts(admin_user) == {"current_release": 0, "open_drafts": 0, "submitted": 0}

@@ -16,7 +16,7 @@ Flarize `pack-config.json` with the first releases. Legacy sources: Flarize `pac
 | | `engineering/services/` | `rule_sets` (active, activate, parse), `runs` (record a run, acknowledge, carried acknowledgements). |
 | Staff API | `packs/views/versions.py`, `releases.py`; `engineering/views/engineering.py` | table below. |
 | Public API | `packs/views/public.py` | `GET packs/`, `GET packs/<system_type>/<tier>/<size_kw>/`. |
-| Registrations | `packs/services/registrations.py` | catalog usage providers `packs.config_versions`, `packs.current_release`; the EMI `PACK_RELEASE` price provider; dashboard counters `packs`. |
+| Registrations | `packs/services/registrations.py` | catalog usage providers `packs.config_versions`, `packs.current_release`; dashboard counters `packs`. (The EMI `PACK_RELEASE` price source is EMI's own reader of `packs.services.public.emi_size_packs` since the wave-3c integration, DV-103.) |
 | Events | `packs/events.py` | consumes `pricing.release_published`, `catalog.component_status_changed`, `catalog.component_deleted`. |
 | Golden | `packs/tests/golden/generate_packs.mjs` → `flarize_packs.json` | the real Flarize JavaScript over the real data: BOM, FLAT price and checker verdict of all 90 packs. |
 | Tests | `packs/tests/`, `engineering/tests/` | API (401/403/scope/validation/stale/happy/N+1), public (shape/no cost fields/cache/throttle), services, events, providers, legacy import, parity. |
@@ -98,7 +98,9 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
     a size key (`5sp`).
 11. **EMI provider** (DV-103): one size tile per standard on-grid pack of the current PackRelease (`uid` = pack key,
     `system_cost` = customer price, `price_per_kw` derived), cache namespace `packs`; active with
-    `EMI_PRICE_SOURCE=PACK_RELEASE`.
+    `EMI_PRICE_SOURCE=PACK_RELEASE`. Wave-3c integration: packs exposes the read `packs.services.public.emi_size_packs()`
+    and EMI turns it into tiles (`emi.services.pack_release`, installed by `EmiConfig.ready()`) — a static
+    content → configuration import that import-linter checks, replacing the `importlib` registration from packs.
 12. **Events**: `pricing.release_published` marks the open draft stale (a `change_log` entry, once per release number)
     and re-mirrors it; component status changes and deletions re-mirror the open draft. Writes emit
     `packs.config_draft_created|draft_updated|pins_updated|submitted|approved|rejected`, `packs.release_published`,
@@ -177,7 +179,7 @@ replace the registry (packages are not published into a registry any more; the P
   `engines.pack_pricing.price_pack(config=engine.pricing_config(version.config, price_release.payload["market_rates_by_key"]), …)`
   on the release's config version; listen to `packs.release_published` to warn open drafts; set
   `packs_release.content_release_uid` once `quotations_content_version` exists.
-* **calculators**: `packs.services.public.public_queryset()` is the published pack set; the EMI provider is registered.
+* **calculators**: `packs.services.public.public_queryset()` is the published pack set; EMI reads `packs.services.public.emi_size_packs()` (`emi.services.pack_release`).
 * **migrations_tools**: after the catalog, pricing (`import_prices`, `import_flarize_pricing`,
   `import_flarize_documents`) and bom (`import_flarize_bom`) imports, and the users import (so `admin-001` resolves),
   call `import_flarize_pack_config(pack_config_json, packages_proposed_json)` then `publish_initial_releases()`; print

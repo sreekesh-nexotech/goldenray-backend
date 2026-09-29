@@ -2,19 +2,13 @@
 
 * ``MANUAL`` (default) — the active ``emi_system_size`` rows: the legacy tiles and per-kW prices, edited in Studio
   under ``emi/system-sizes/``. This is the transitional source until the first pack release is published.
-* ``PACK_RELEASE`` — the provider the packs package registers from its ``AppConfig.ready()``::
+* ``PACK_RELEASE`` — the registered provider: ``emi.services.pack_release.release_sizes``, installed by
+  ``EmiConfig.ready()``, reads the current PackRelease through the documented packs read
+  ``packs.services.public.emi_size_packs`` (PLAN §1.2 "calculators read releases"; a static import that import-linter
+  checks — packs never imports EMI). It is called once per (cached) configuration snapshot; ``cache_namespaces`` are
+  the namespaces the packs package bumps when a release is published, so the calculator follows the new prices at once.
 
-      from emi.services import price_sources
-
-      @price_sources.register(cache_namespaces=("packs",))
-      def current_release_sizes() -> list[price_sources.SizeOption]:
-          return [SizeOption(uid=…, label="3kW", capacity_kw=Decimal("3.00"), system_cost=…, …), …]
-
-  called once per (cached) configuration snapshot; ``cache_namespaces`` are the namespaces the packs package bumps
-  when a release is published, so the calculator follows the new prices at once.
-
-EMI never imports packs (website content sits beside configuration, not above it); the registry is the seam.
-A missing provider under ``PACK_RELEASE`` is refused at startup (system check ``emi.W001``) and answered with 503
+The registry stays the seam (tests install fake providers, ``reset()`` removes it). A missing provider under ``PACK_RELEASE`` is refused at startup (system check ``emi.W001``) and answered with 503
 ``emi_prices_unavailable`` rather than silently falling back to the manual prices.
 """
 
