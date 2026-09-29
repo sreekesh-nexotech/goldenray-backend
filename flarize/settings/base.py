@@ -397,6 +397,8 @@ SPECTACULAR_SETTINGS = {
         "WarrantyIssueTypeEnum": "leads.models.forms.IssueType",
         "InstallationStatusEnum": "leads.models.installation.CustomerInstallation.Status",
         "InstallationSystemTypeEnum": "leads.models.installation.CustomerInstallation.SystemType",
+        "InventoryMovementDirectionEnum": "inventory.models.movement.Direction",
+        "InventoryMovementReasonEnum": "inventory.models.movement.Reason",
     },
 }
 
@@ -467,6 +469,9 @@ FEATURE_FLAG_DEFAULTS = {
     "LEGACY_API_SHIM": False,
     "INVENTORY_STOCK": False,
 }
+# Inventory (behind INVENTORY_STOCK): code of the location that receives committed procurement batches as PURCHASE
+# movements (outbox procurement.batch_committed). Blank = off (the default).
+INVENTORY_RECEIVING_LOCATION = config("INVENTORY_RECEIVING_LOCATION", default="")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Idempotency-Key replay store
