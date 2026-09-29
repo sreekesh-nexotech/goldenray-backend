@@ -27,7 +27,7 @@ from legacy.views.backend import (
     SolarPanelsView,
 )
 from legacy.views.base import AppendSlashView
-from legacy.views.bom import BomCalculateView, QuotationSettingsView
+from legacy.views.bom import BomCalculateView, QuotationSettingsView, QuotationTestimonialsView
 from legacy.views.cms import CollectionView, FaqsView, JobPositionsView, JobPositionView, PageContentView
 from legacy.views.forms import AffiliateApplicationView, JobApplicationView, LeadCollectionHomeView, SendOtpView, VerifyOtpView, WarrantyServiceRequestView
 
@@ -55,7 +55,7 @@ BACKEND_VIEWS = {
     "warranty-service-requests": WarrantyServiceRequestView,
     "job-applications": JobApplicationView,
 }
-BOM_VIEWS = {"calculate": BomCalculateView, "quotation-settings": QuotationSettingsView}
+BOM_VIEWS = {"calculate": BomCalculateView, "quotation-settings": QuotationSettingsView, "quotation-testimonials": QuotationTestimonialsView}
 
 
 def _slashed(prefix: str, views: dict) -> list:

@@ -1,5 +1,6 @@
 """Old BOM app endpoints under ``/legacy/bom/api/…``: ``calculate/`` (the website quotation page, DV-4) and
-``quotation-settings/`` (GET only; the legacy PUT was Studio's and is not shimmed).
+``quotation-settings/`` and ``quotation-testimonials/`` (GET only; the legacy PUT / ``manage/`` URLs were Studio's and are
+not shimmed).
 
 ``calculate/`` answers the legacy body without ``cost_breakdown`` / ``totals`` (business default B-1), legacy 400s as
 ``{"errors": [...]}`` (``QuoteInvalid.legacy_errors``) and other refusals as ``{"error": message}``; ``public_write``,
@@ -16,6 +17,7 @@ from core.errors import DomainError
 from flarize.cache_utils import cache_response
 from legacy.services import website
 from legacy.views.base import LegacyView
+from quotations.services.common import PUBLIC_TESTIMONIALS_NAMESPACE
 
 
 class BomCalculateView(LegacyView):
@@ -32,3 +34,9 @@ class QuotationSettingsView(LegacyView):
     @cache_response(namespaces=[COMPANY_NAMESPACE, "media"], ttl=300)
     def get(self, request, *args, **kwargs):
         return Response(website.quotation_settings())
+
+
+class QuotationTestimonialsView(LegacyView):
+    @cache_response(namespaces=[PUBLIC_TESTIMONIALS_NAMESPACE, "media"], ttl=300)
+    def get(self, request, *args, **kwargs):
+        return Response(website.testimonials())

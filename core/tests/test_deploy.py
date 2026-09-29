@@ -223,7 +223,8 @@ OLD_URLS = [
     ("/api/affiliate-applications/", "forms"),
     ("/api/warranty-service-requests/", "forms"),
     ("/api/metadata/", "seo"),
-    ("/bom/api/quotation-testimonials/", "bom_other"),  # joins bom_public when the quotations shim is wired
+    ("/bom/api/quotation-testimonials/", "bom_public"),
+    ("/bom/api/quotation-testimonials/manage/", "bom_other"),
     ("/bom/api/quotation-settings/", "bom_public"),
     ("/bom/api/calculate/", "bom_calculate"),
     ("/bom/login/", "bom_other"),

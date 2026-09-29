@@ -74,7 +74,7 @@ def test_cms_routes_are_routed_by_nginx_to_a_shim_group(route):
         "/api/customer-installations/",
         "/api/solar-installations/",
         "/api/emi-admin/banks/",
-        "/bom/api/quotation-testimonials/",
+        "/bom/api/quotation-testimonials/manage/",
         "/bom/api/offers/",
         "/studio-api/api/faqs/",
         "/studio-api/admin-api/auth/login/",

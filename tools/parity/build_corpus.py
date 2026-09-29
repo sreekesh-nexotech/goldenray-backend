@@ -159,6 +159,10 @@ add("bom/calculate/get", "bom", "GET", "/bom/api/calculate/")
 add("bom/quotation-settings", "bom", "GET", "/bom/api/quotation-settings/", normalise=["timestamps"])
 add("bom/quotation-settings/no-slash", "bom", "GET", "/bom/api/quotation-settings")
 add("bom/quotation-settings/write-put", "bom", "PUT", "/bom/api/quotation-settings/", body={"offer_title": "x"})
+add("bom/quotation-testimonials", "bom", "GET", "/bom/api/quotation-testimonials/")
+add("bom/quotation-testimonials/ignored-query", "bom", "GET", "/bom/api/quotation-testimonials/", query="page=2&is_active=false")
+add("bom/quotation-testimonials/no-slash", "bom", "GET", "/bom/api/quotation-testimonials")
+add("bom/quotation-testimonials/write-post", "bom", "POST", "/bom/api/quotation-testimonials/", body={"name": "x"})
 
 # ── forms (write path: the PRIVATE legacy server) ─────────────────────────────────────────────────────────────────
 forms = json.loads((ROOT / "leads/tests/fixtures/legacy_backend/forms.json").read_text())

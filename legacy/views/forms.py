@@ -51,14 +51,26 @@ class JobApplicationView(_FormView):
         return Response(forms.submit_application(request.data, ip=get_client_ip(request)), status=201)
 
 
+class _RenamedPhone:
+    """The request as the canonical throttle reads it: ``phone`` = the legacy ``phone_number``; everything else (the
+    client address the fallback bucket uses) is the real request's."""
+
+    def __init__(self, request):
+        self._request = request
+        data = request.data if hasattr(request.data, "get") else {}
+        self.data = {"phone": data.get("phone_number") or ""}
+
+    def __getattr__(self, name):
+        return getattr(self._request, name)
+
+
 def _legacy_phone(throttle_class):
-    """The canonical OTP throttle keyed on the legacy ``phone_number`` field."""
+    """The canonical OTP throttle keyed on the legacy ``phone_number`` field (a number it cannot normalise falls back to
+    the client-IP bucket, as on the canonical endpoints)."""
 
     class LegacyPhoneThrottle(throttle_class):
         def ident(self, request) -> str:
-            data = request.data if hasattr(request.data, "get") else {}
-            proxy = type("Body", (), {"data": {"phone": data.get("phone_number") or ""}})()
-            return super().ident(proxy) if data.get("phone_number") else f"ip:{self.get_ident(request)}"
+            return super().ident(_RenamedPhone(request))
 
     return LegacyPhoneThrottle
 

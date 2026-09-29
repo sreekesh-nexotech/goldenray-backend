@@ -101,11 +101,34 @@ def test_otp_refuses_foreign_numbers_before_the_provider(api_client):
     assert len(twilio_verify.SENT) == sent_before
 
 
+@pytest.mark.parametrize("phone", ["+14155550100", "+447911123456", "+971501234567"])
+def test_otp_never_texts_a_valid_foreign_mobile(api_client, phone):
+    """Toll-fraud guard (leads-customers decision 2): a VALID foreign mobile is refused before the provider, exactly
+    like the canonical ``otp/send`` (``regions={"IN"}``) — not only numbers the numbering plan rejects."""
+    sent_before = len(twilio_verify.SENT)
+    response = api_client.post("/legacy/api/send-otp/", {"phone_number": phone}, format="json")
+    assert response.status_code == 400 and response.json() == {"error": "Enter a valid 10-digit Indian mobile number."}
+    assert len(twilio_verify.SENT) == sent_before
+    response = api_client.post("/legacy/api/verify-otp/", {"phone_number": phone, "code": "123456"}, format="json")
+    assert response.status_code == 400 and not Lead.all_objects.filter(phone_e164=phone).exists()
+
+
 def test_otp_throttles_per_legacy_phone_field(api_client, settings):
     throttled(settings, "otp", "2/10min")
     statuses = [api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500042"}, format="json").status_code for _ in range(3)]
     assert statuses == [200, 200, 429]
     assert api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500043"}, format="json").status_code == 200
+
+
+@pytest.mark.parametrize("path", ["/legacy/api/send-otp/", "/legacy/api/verify-otp/"])
+@pytest.mark.parametrize("phone", ["12345", "+14155550100"])
+def test_otp_phone_throttle_falls_back_to_the_client_ip_instead_of_failing_open(api_client, settings, caplog, path, phone):
+    """A phone the canonical throttle cannot normalise (junk, a foreign number) is budgeted per client IP in the
+    ``otp`` scope, like the canonical endpoints — the throttle must neither crash nor fail open."""
+    throttled(settings, "otp", "2/10min")
+    statuses = [api_client.post(path, {"phone_number": phone, "code": "123456"}, format="json").status_code for _ in range(3)]
+    assert statuses == [400, 400, 429]
+    assert "throttle cache unavailable" not in caplog.text
 
 
 # ── job applications ──────────────────────────────────────────────────────────────────────────────────────────────

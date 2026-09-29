@@ -23,7 +23,7 @@ from careers.models import JobPosition
 from careers.serializers.public import PublicJobApplicationSerializer
 from careers.services import applications
 from core.errors import DomainError
-from customers.services.phones import InvalidPhone, national_digits, normalise_phone
+from customers.services.phones import INDIA, InvalidPhone, national_digits, normalise_phone
 from leads.models import Lead, OtpRequest
 from leads.serializers.public import AffiliateSubmitSerializer, LeadSubmitSerializer, WarrantySubmitSerializer
 from leads.services import intake, otp
@@ -132,7 +132,8 @@ def _otp_phone(serializer_class, body):
     if not serializer.is_valid():
         raise LegacyPlainErrors(_renamed_errors(serializer.errors, {}))
     try:
-        phone = normalise_phone(serializer.validated_data["phone_number"], mobile_only=True)
+        # Indian mobiles only, as the canonical OTP form (``regions={"IN"}``): never text a foreign number (toll fraud).
+        phone = normalise_phone(serializer.validated_data["phone_number"], mobile_only=True, regions=INDIA)
     except InvalidPhone:
         raise DomainError("otp_send_failed", "Enter a valid 10-digit Indian mobile number.") from None
     return serializer.validated_data, phone

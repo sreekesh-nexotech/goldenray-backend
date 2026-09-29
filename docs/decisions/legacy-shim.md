@@ -15,7 +15,7 @@ exactly those paths; and the parity harness with its corpus and report. Deviatio
 | Calculators | `legacy/views/backend.py`, `legacy/services/calculators.py` | calculate-solar, calculate-solar-new, calculate-solar-advanced, emi-calculator, emi-calculator/config, emi-calculator/quotation |
 | Forms | `legacy/views/forms.py`, `legacy/services/forms.py` | lead-collection-home, send-otp, verify-otp, affiliate-applications, warranty-service-requests, job-applications |
 | CMS delivery | `legacy/views/cms.py`, `legacy/services/cms.py` | `<collection>` (articles, and any active collection), faqs, job-positions, job-positions/`<slug>`, page-content |
-| BOM app | `legacy/views/bom.py`, `legacy/services/website.py` | calculate (B-1), quotation-settings (GET) |
+| BOM app | `legacy/views/bom.py`, `legacy/services/website.py` | calculate (B-1), quotation-settings and quotation-testimonials (GET; testimonials wired by the review after quotations was integrated) |
 | Ids | `legacy/services/ids.py` | legacy integer ids ↔ platform rows through `core_legacy_map` (DV-122) |
 | B-1 (shared, bom) | `bom/services/website_quote.py` (`INTERNAL_KEYS`, `public_body`), `bom/views/quote.py`, `bom/serializers/quote.py` (`BomQuotePublicSerializer`) | the public quote and the shim omit `cost_breakdown` and `totals` |
 | nginx | `deploy/nginx/legacy/groups.conf` | the shim groups list exactly the shimmed paths (with the slash-less spelling) |
@@ -38,7 +38,7 @@ nginx (`shim` mode) sends `/<old path>` to `/legacy/<old path>`. Throttle scopes
 | `/api/emi-calculator/`, `…/quotation/` | POST | `emi.services.calculator.calculate` / `quotation` | `public_read`, `no-store` |
 | `/api/emi-calculator/config/` | GET | `emi.services.calculator.public_config` | `public_read`, cached (price-source namespaces) |
 | `/api/lead-collection-home/` | POST | `leads.services.intake.submit_lead(require_verification=False)` (DV-61) | `public_write` |
-| `/api/send-otp/`, `/api/verify-otp/` | POST | `leads.services.otp.send_code` / `verify_code`; an approved code records the enquiry (`submit_lead`, QUOTE_REQUEST, `/advanced-calculator`) | `otp` per phone (`phone_number`) + `otp_ip` |
+| `/api/send-otp/`, `/api/verify-otp/` | POST | `leads.services.otp.send_code` / `verify_code`; Indian mobiles only (`normalise_phone(…, mobile_only=True, regions=INDIA)`, as the canonical OTP form: a valid foreign mobile is refused before the provider); an approved code records the enquiry (`submit_lead`, QUOTE_REQUEST, `/advanced-calculator`) | `otp` per phone (`phone_number`; a number that does not normalise → the client-IP bucket) + `otp_ip` |
 | `/api/affiliate-applications/`, `/api/warranty-service-requests/` | POST | `leads.services.intake.submit_affiliate_application` / `submit_warranty_request` | `public_write` |
 | `/api/job-applications/` | POST (multipart) | `careers.services.applications.submit_application` | `public_write` |
 | `/studio-api/api/<collection>` and `…/<collection>/` | GET | `blog.services.delivery` (`active_collection`, `parse_query`, `query_entries`, `page_body`) | `public_read`, cached (query order kept) |
@@ -47,6 +47,7 @@ nginx (`shim` mode) sends `/<old path>` to `/legacy/<old path>`. Throttle scopes
 | `/studio-api/api/page-content?route=` | GET | `sitepages.services.delivery.page_content(published_page(route=…))` | `public_read`, cached |
 | `/bom/api/calculate/` | POST | `bom.services.website_quote.quote` → `public_body` (B-1) | `public_write`, `no-store` |
 | `/bom/api/quotation-settings/` | GET | `company.services.profile.current_profile` + `quotation_offer` | `public_read`, cached (company, media) |
+| `/bom/api/quotation-testimonials/` | GET | `quotations.services.content.public_testimonials` (active, `show_on_website`, display order) in the legacy `fields = "__all__"` shape: legacy ids, `photo_src` = uploaded photo → `photo_url` → the legacy stock photo, whole-rupee bills (legacy defaults 3200/200 when unknown) | `public_read`, cached (`quotations_testimonials`, media) |
 
 Not shimmed (on purpose): every write method on those read URLs (405; PLAN §6.2 "write endpoints on reference tables
 are not shimmed"), the Studio reads of the form URLs (the legacy GET lists needed a login; Studio uses `/api/v1/`),
@@ -117,12 +118,24 @@ python tools/parity/harness.py --legacy-backend-writes http://127.0.0.1:18151 --
     --report docs/migration/parity-report.md
 ```
 
+## Review fixes (adversarial review)
+
+* **Toll fraud**: the shim's OTP views normalised with `mobile_only=True` but without `regions`, so a valid foreign
+  mobile (`+14155550100`, `+447911123456`) was texted — the canonical form restricts to `{"IN"}`. Fixed; test
+  `test_otp_never_texts_a_valid_foreign_mobile`.
+* **OTP phone throttle failed open**: the legacy `phone_number` wrapper handed the canonical throttle a bare object; for
+  a number it could not normalise the throttle's client-IP fallback raised `AttributeError`, which the throttle's
+  cache-outage guard swallowed (allowed, logged "throttle cache unavailable"). The wrapper now delegates to the request;
+  test `test_otp_phone_throttle_falls_back_to_the_client_ip_instead_of_failing_open`.
+* **`/bom/api/quotation-testimonials/` wired** once quotations was integrated (`legacy/tests/test_testimonials.py`,
+  nginx `bom_public`; live parity: the legacy list byte for byte).
+
 ## To wire at integration
 
 | Old URL | Target service | Why not now |
 |---|---|---|
-| `GET /bom/api/quotation-testimonials/` | quotations testimonials (`quotations` package, `show_on_website`) | quotations is built in parallel; the nginx map keeps the URL in `bom_other` (old container) until the shim exists — then move it to `bom_public` |
-| `POST /api/verify-otp/` — the legacy `SentQuote` row (`quote_id`, "We already have your details!") | quotations sent-quote record | the shim answers the legacy success body with `quote_id = QUOTE_<8 hex of the lead uid>` and always the "recorded" message |
+| `POST /api/verify-otp/` — the legacy `SentQuote` row (`quote_id`, "We already have your details!") | quotations sent-quote record | quotations has no write service for a legacy website quote request (`quotations_email_log` LEGACY_LINK rows are only imported); the shim answers the legacy success body with `quote_id = QUOTE_<8 hex of the lead uid>` and always the "recorded" message (the website reads only `status`/`message`) |
+| `bom_quotationtestimonial` rows | `migrations_tools import_backend` → `quotations.services.legacy_import.import_backend_testimonials` | the shim serves the testimonials, but `import_backend` still lists the table as not migrated (migration-website DV-120); the review's parity run imported the rows with the quotations importer directly |
 
 ## Hand-over notes
 
