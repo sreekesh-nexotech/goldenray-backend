@@ -397,6 +397,19 @@ SPECTACULAR_SETTINGS = {
         "WarrantyIssueTypeEnum": "leads.models.forms.IssueType",
         "InstallationStatusEnum": "leads.models.installation.CustomerInstallation.Status",
         "InstallationSystemTypeEnum": "leads.models.installation.CustomerInstallation.SystemType",
+        # The blog attribute-slot type keeps its name now that pricing_offer.type is a second "type" enum.
+        "TypeEnum": "blog.models.schema.TemplateAttributeSlot.Type",
+        # BASE / VALUE / PREMIUM — shared by catalog component tiers and pricing market rates / swap deltas.
+        "TierEnum": "catalog.models.component.Tier",
+        "PriceKindEnum": "pricing.models.choices.PriceKind",
+        "PriceSourceEnum": "pricing.models.choices.PriceSource",
+        "PricingSystemTypeEnum": "pricing.models.choices.SystemType",
+        "StatutoryFeeKindEnum": "pricing.models.choices.StatutoryFeeKind",
+        "OfferTypeEnum": "pricing.models.choices.OfferType",
+        "PriceReleaseStatusEnum": "pricing.models.choices.ReleaseStatus",
+        "ValidityWindowStatusEnum": "pricing.models.choices.ValidityWindowStatus",
+        "ProcurementBatchStatusEnum": "procurement.models.batch.BatchStatus",
+        "ProcurementChargeKindEnum": "procurement.models.batch.ChargeKind",
     },
 }
 
@@ -438,6 +451,8 @@ CELERY_BEAT_SCHEDULE = {
     "core.send_ops_report": {"task": "core.tasks.send_ops_report", "schedule": crontab(day_of_week="mon", hour=8, minute=5)},
     # Scheduled blog publications (blog.services.workflow.publish_due_entries).
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
+    # Offers whose ends_on has passed become EXPIRED (pricing.services.offers.expire_due_offers).
+    "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())

@@ -1,0 +1,59 @@
+{
+ "configVersion": "finance-config.2",
+ "engineVersion": "1.1.0",
+ "defaults": {
+  "tenureYears": 10
+ },
+ "downPayment": {
+  "percentage": 10,
+  "note": "Down payment is calculated on the ORIGINAL gross quotation value, BEFORE subsidy deduction."
+ },
+ "rateTiers": [
+  {
+   "maxFinanceAmount": 200000,
+   "annualInterestRate": 5.75,
+   "label": "Indicative PM Surya Ghar rate"
+  },
+  {
+   "minFinanceAmount": 200000.01,
+   "annualInterestRate": 7.9,
+   "label": "Indicative PM Surya Ghar rate"
+  }
+ ],
+ "validation": {
+  "minAnnualInterestRate": 0,
+  "maxAnnualInterestRate": 18,
+  "minTenureYears": 1,
+  "maxTenureYears": 10,
+  "minPrincipal": 0
+ },
+ "rounding": {
+  "emiMethod": "MATH_ROUND",
+  "note": "EMI rounded to nearest whole rupee. totalRepayment = roundedEMI × months. totalInterest = totalRepayment − principal."
+ },
+ "source": {
+  "reference": "Flarize EMI Calculator — standard reducing-balance PMT with indicative PM Surya Ghar rates",
+  "verifiedDate": "2026-08-29",
+  "rateQualification": "Indicative reference rates. Actual bank approval and rate may vary based on bank, customer profile, credit score, loan amount, bank policy, applicable benchmark/rate structure, and other eligibility conditions.",
+  "banks": [
+   {
+    "name": "SBI",
+    "rateExclusive": 5.65,
+    "rateStandard": 7,
+    "note": "Flarize exclusive / standard"
+   },
+   {
+    "name": "Union Bank of India",
+    "rate": 7.9
+   },
+   {
+    "name": "Kerala Gramin Bank",
+    "rate": 8.8
+   },
+   {
+    "name": "Canara Bank",
+    "rate": 8.25
+   }
+  ]
+ }
+}

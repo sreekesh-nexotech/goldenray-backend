@@ -1,0 +1,250 @@
+{
+ "costs": {
+  "installRate": 3000,
+  "serviceRateYear": 2000,
+  "serviceYears": 5,
+  "transportRate": 40,
+  "defaultDistKm": 100,
+  "miscellaneous": 1000,
+  "office": 5500,
+  "elevatedStructureRate": 5000,
+  "sheetStructureRate": 3000,
+  "gpRatePerKg": 85,
+  "giRatePerKg": 98.3,
+  "structureLabor": 3000,
+  "structureRepairPct": 10
+ },
+ "installationMatrix": {
+  "3": {
+   "flat": 15000,
+   "sheet": 18000,
+   "elevated": 22000
+  },
+  "6": {
+   "flat": 28000,
+   "sheet": 33000,
+   "elevated": 40000
+  },
+  "8": {
+   "flat": 35000,
+   "sheet": 42000,
+   "elevated": 50000
+  },
+  "10": {
+   "flat": 42000,
+   "sheet": 50000,
+   "elevated": 60000
+  },
+  "5sp": {
+   "flat": 22000,
+   "sheet": 26000,
+   "elevated": 32000
+  },
+  "5tp": {
+   "flat": 22000,
+   "sheet": 26000,
+   "elevated": 32000
+  }
+ },
+ "transportConfig": {
+  "baseDistanceKm": 100,
+  "costPerKm": 35
+ },
+ "officeExpense": {
+  "monthlyExpense": 150000,
+  "expectedProjectsPerMonth": 10
+ },
+ "marketRates": {
+  "ongrid_base": {
+   "3": 0,
+   "6": 0,
+   "8": 0,
+   "10": 0,
+   "5sp": 0,
+   "5tp": 0
+  },
+  "ongrid_value": {
+   "3": 228000,
+   "6": 0,
+   "8": 0,
+   "10": 0,
+   "5sp": 0,
+   "5tp": 0
+  },
+  "ongrid_premium": {
+   "3": 0,
+   "6": 0,
+   "8": 0,
+   "10": 0,
+   "5sp": 250000,
+   "5tp": 0
+  },
+  "hybrid_base_0": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_base_1": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_base_2": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_value_0": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_value_1": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_value_2": {
+   "3": 549901.8,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_premium_0": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_premium_1": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "hybrid_premium_2": {
+   "3": 0,
+   "5": 0,
+   "8": 0,
+   "10": 0
+  },
+  "upgrade_3_5": {
+   "rate": 0
+  },
+  "upgrade_5_8": {
+   "rate": 0
+  },
+  "upgrade_5_10": {
+   "rate": 0
+  },
+  "upgrade_8_10": {
+   "rate": 0
+  },
+  "hybrid_value_2_diffBase": {
+   "3": 0
+  }
+ },
+ "offers": [
+  {
+   "id": "offer_1788107665827",
+   "name": "Monsoon 2026 Discount",
+   "type": "flat",
+   "value": 5000,
+   "appliesTo": "all",
+   "appliesToTier": "all",
+   "appliesToSize": "all",
+   "startDate": "2026-01-01",
+   "endDate": "2026-12-31",
+   "description": "",
+   "status": "ACTIVE",
+   "active": true,
+   "offerVersion": 1,
+   "createdAt": "2026-08-30T16:34:25.827Z",
+   "createdBy": "admin-001",
+   "changedAt": "2026-08-30T16:34:25.951Z",
+   "changedBy": "admin-001",
+   "transitions": [
+    {
+     "from": null,
+     "to": "DRAFT",
+     "changedBy": "admin-001",
+     "changedAt": "2026-08-30T16:34:25.827Z",
+     "reason": "Offer created"
+    },
+    {
+     "from": "DRAFT",
+     "to": "APPROVED",
+     "changedBy": "admin-001",
+     "changedAt": "2026-08-30T16:34:25.914Z",
+     "reason": "Approved by admin"
+    },
+    {
+     "from": "APPROVED",
+     "to": "ACTIVE",
+     "changedBy": "admin-001",
+     "changedAt": "2026-08-30T16:34:25.951Z",
+     "reason": "Activated by admin"
+    }
+   ]
+  }
+ ],
+ "_legacyMarkers": {
+  "costs.transportRate": {
+   "value": 40,
+   "status": "LEGACY_NOT_APPLIED",
+   "supersededBy": "cost-config.transportation.vehicles",
+   "supersededOn": "2026-08-16",
+   "decision": "P2-M / C76",
+   "note": "Retained for historical reference and regression tests. Do NOT read as authoritative."
+  },
+  "costs.defaultDistKm": {
+   "value": 100,
+   "status": "LEGACY_NOT_APPLIED",
+   "supersededBy": "project.distanceKm (per-quotation)",
+   "note": "No default distance; each quotation carries its actual one-way distance."
+  },
+  "transportConfig.baseDistanceKm": {
+   "value": 100,
+   "status": "LEGACY_NOT_APPLIED",
+   "supersededBy": "NONE — no free-km allowance in approved model",
+   "note": "Legacy free-100-km allowance is NOT part of approved transportation model (locked 2.1)."
+  },
+  "transportConfig.costPerKm": {
+   "value": 35,
+   "status": "LEGACY_NOT_APPLIED",
+   "supersededBy": "cost-config.transportation.vehicles[].ratePerKm",
+   "note": "Per-vehicle rate is authoritative. No universal per-km rate."
+  },
+  "costs.installRate": {
+   "value": 3000,
+   "status": "LEGACY_REMOVED",
+   "supersededBy": "cost-config.installation.rates[]",
+   "decision": "C75",
+   "note": "Per-kW fallback removed. Installation is exact-match sizeKw × installationType."
+  },
+  "costs.office": {
+   "value": 5500,
+   "status": "LEGACY_NOT_APPLIED",
+   "supersededBy": "cost-config.officeExpenseAllocation",
+   "note": "Fixed 5500 rejected; computed allocation is authoritative."
+  },
+  "costs.miscellaneous": {
+   "value": 1000,
+   "status": "LEGACY_SUPERSEDED",
+   "supersededBy": "cost-config.miscellaneous.percentage",
+   "note": "Fixed 1000 superseded by 1% of DIRECT_PROJECT_COST_BEFORE_MISCELLANEOUS."
+  },
+  "costs.serviceRateYear": {
+   "value": 2000,
+   "status": "LEGACY_REJECTED",
+   "supersededBy": "cost-config.serviceAmc",
+   "decision": "C9",
+   "note": "Annual-rate formula rejected in favor of visit-based model."
+  }
+ }
+}

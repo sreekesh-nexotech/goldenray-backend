@@ -1,0 +1,782 @@
+{
+ "cardVersion": null,
+ "store": {
+  "records": {
+   "TRANSPORT_VEHICLE_RATE::STANDARD": [
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:39:55.470Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:39:55.470Z",
+     "effectiveTo": "2026-09-10T04:39:55.491Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:39:55.470Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": null,
+     "supersededBy": "STANDARD@2026-09-10T04:39:55.491Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:39:55.491Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:39:55.491Z",
+     "effectiveTo": "2026-09-10T04:41:59.354Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:39:55.491Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T04:39:55.470Z",
+     "supersededBy": "STANDARD@2026-09-10T04:41:59.354Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:41:59.354Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:41:59.354Z",
+     "effectiveTo": "2026-09-10T04:41:59.377Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:41:59.354Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T04:39:55.491Z",
+     "supersededBy": "STANDARD@2026-09-10T04:41:59.377Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:41:59.377Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:41:59.377Z",
+     "effectiveTo": "2026-09-10T04:42:05.937Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:41:59.377Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T04:41:59.354Z",
+     "supersededBy": "STANDARD@2026-09-10T04:42:05.937Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:42:05.937Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:05.937Z",
+     "effectiveTo": "2026-09-10T04:42:05.958Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:05.937Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T04:41:59.377Z",
+     "supersededBy": "STANDARD@2026-09-10T04:42:05.958Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:42:05.958Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:05.958Z",
+     "effectiveTo": "2026-09-10T04:42:20.389Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:05.958Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T04:42:05.937Z",
+     "supersededBy": "STANDARD@2026-09-10T04:42:20.389Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:42:20.389Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:20.389Z",
+     "effectiveTo": "2026-09-10T04:42:20.410Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:20.389Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T04:42:05.958Z",
+     "supersededBy": "STANDARD@2026-09-10T04:42:20.410Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T04:42:20.410Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:20.410Z",
+     "effectiveTo": "2026-09-10T11:29:53.904Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:20.410Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T04:42:20.389Z",
+     "supersededBy": "STANDARD@2026-09-10T11:29:53.904Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:29:53.904Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:29:53.904Z",
+     "effectiveTo": "2026-09-10T11:29:53.925Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:29:53.904Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T04:42:20.410Z",
+     "supersededBy": "STANDARD@2026-09-10T11:29:53.925Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:29:53.925Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:29:53.925Z",
+     "effectiveTo": "2026-09-10T11:30:01.331Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:29:53.925Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T11:29:53.904Z",
+     "supersededBy": "STANDARD@2026-09-10T11:30:01.331Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:30:01.331Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:30:01.331Z",
+     "effectiveTo": "2026-09-10T11:30:01.356Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:30:01.331Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T11:29:53.925Z",
+     "supersededBy": "STANDARD@2026-09-10T11:30:01.356Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:30:01.356Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:30:01.356Z",
+     "effectiveTo": "2026-09-10T11:31:06.221Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:30:01.356Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T11:30:01.331Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:06.221Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:06.221Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:06.221Z",
+     "effectiveTo": "2026-09-10T11:31:06.246Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:06.221Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T11:30:01.356Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:06.246Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:06.246Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:06.246Z",
+     "effectiveTo": "2026-09-10T11:31:07.557Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:06.246Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:06.221Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:07.557Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:07.557Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 45,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:07.557Z",
+     "effectiveTo": "2026-09-10T11:31:44.863Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:07.557Z",
+     "changeReason": "E2E: post-issue change",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:06.246Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:44.863Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:44.863Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:44.863Z",
+     "effectiveTo": "2026-09-10T11:31:44.884Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:44.863Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:07.557Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:44.884Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:44.884Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:44.884Z",
+     "effectiveTo": "2026-09-10T11:31:46.171Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:44.884Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:44.863Z",
+     "supersededBy": "STANDARD@2026-09-10T11:31:46.171Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-10T11:31:46.171Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 45,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:46.171Z",
+     "effectiveTo": "2026-09-12T05:31:43.952Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:46.171Z",
+     "changeReason": "E2E: post-issue change",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:44.884Z",
+     "supersededBy": "STANDARD@2026-09-12T05:31:43.952Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:31:43.952Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:31:43.952Z",
+     "effectiveTo": "2026-09-12T05:31:43.985Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:31:43.952Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-10T11:31:46.171Z",
+     "supersededBy": "STANDARD@2026-09-12T05:31:43.985Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:31:43.985Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:31:43.985Z",
+     "effectiveTo": "2026-09-12T05:31:45.732Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:31:43.985Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-12T05:31:43.952Z",
+     "supersededBy": "STANDARD@2026-09-12T05:31:45.732Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:31:45.732Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 45,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:31:45.732Z",
+     "effectiveTo": "2026-09-12T05:52:28.569Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:31:45.732Z",
+     "changeReason": "E2E: post-issue change",
+     "previousVersionId": "STANDARD@2026-09-12T05:31:43.985Z",
+     "supersededBy": "STANDARD@2026-09-12T05:52:28.569Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:52:28.569Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:52:28.569Z",
+     "effectiveTo": "2026-09-12T05:52:28.616Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:52:28.569Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-12T05:31:45.732Z",
+     "supersededBy": "STANDARD@2026-09-12T05:52:28.616Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:52:28.616Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:52:28.616Z",
+     "effectiveTo": "2026-09-12T05:52:30.476Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:52:28.616Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-12T05:52:28.569Z",
+     "supersededBy": "STANDARD@2026-09-12T05:52:30.476Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:52:30.476Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 45,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:52:30.476Z",
+     "effectiveTo": "2026-09-12T05:58:05.800Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:52:30.476Z",
+     "changeReason": "E2E: post-issue change",
+     "previousVersionId": "STANDARD@2026-09-12T05:52:28.616Z",
+     "supersededBy": "STANDARD@2026-09-12T05:58:05.800Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:58:05.800Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 38,
+      "unit": "PER_KM",
+      "vehicleName": "Standard pickup"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:58:05.800Z",
+     "effectiveTo": "2026-09-12T05:58:05.834Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:58:05.800Z",
+     "changeReason": "E2E: PH publishes production STANDARD rate",
+     "previousVersionId": "STANDARD@2026-09-12T05:52:30.476Z",
+     "supersededBy": "STANDARD@2026-09-12T05:58:05.834Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:58:05.834Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 39,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:58:05.834Z",
+     "effectiveTo": "2026-09-12T05:58:07.778Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:58:05.834Z",
+     "changeReason": "E2E: rate revision",
+     "previousVersionId": "STANDARD@2026-09-12T05:58:05.800Z",
+     "supersededBy": "STANDARD@2026-09-12T05:58:07.778Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "STANDARD",
+     "owner": "PROJECT_HEAD",
+     "versionId": "STANDARD@2026-09-12T05:58:07.778Z",
+     "value": {
+      "rateId": "STANDARD",
+      "vehicleType": "STANDARD",
+      "ratePerKm": 45,
+      "unit": "PER_KM"
+     },
+     "status": "ACTIVE",
+     "effectiveFrom": "2026-09-12T05:58:07.778Z",
+     "effectiveTo": null,
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:58:07.778Z",
+     "changeReason": "E2E: post-issue change",
+     "previousVersionId": "STANDARD@2026-09-12T05:58:05.834Z",
+     "supersededBy": null
+    }
+   ],
+   "TRANSPORT_VEHICLE_RATE::LORRY": [
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T04:39:55.470Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:39:55.470Z",
+     "effectiveTo": "2026-09-10T04:41:59.354Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:39:55.470Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": null,
+     "supersededBy": "LORRY@2026-09-10T04:41:59.354Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T04:41:59.354Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:41:59.354Z",
+     "effectiveTo": "2026-09-10T04:42:05.937Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:41:59.354Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T04:39:55.470Z",
+     "supersededBy": "LORRY@2026-09-10T04:42:05.937Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T04:42:05.937Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:05.937Z",
+     "effectiveTo": "2026-09-10T04:42:20.389Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:05.937Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T04:41:59.354Z",
+     "supersededBy": "LORRY@2026-09-10T04:42:20.389Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T04:42:20.389Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T04:42:20.389Z",
+     "effectiveTo": "2026-09-10T11:29:53.904Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T04:42:20.389Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T04:42:05.937Z",
+     "supersededBy": "LORRY@2026-09-10T11:29:53.904Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T11:29:53.904Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:29:53.904Z",
+     "effectiveTo": "2026-09-10T11:30:01.331Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:29:53.904Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T04:42:20.389Z",
+     "supersededBy": "LORRY@2026-09-10T11:30:01.331Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T11:30:01.331Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:30:01.331Z",
+     "effectiveTo": "2026-09-10T11:31:06.221Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:30:01.331Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T11:29:53.904Z",
+     "supersededBy": "LORRY@2026-09-10T11:31:06.221Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T11:31:06.221Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:06.221Z",
+     "effectiveTo": "2026-09-10T11:31:44.863Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:06.221Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T11:30:01.331Z",
+     "supersededBy": "LORRY@2026-09-10T11:31:44.863Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-10T11:31:44.863Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-10T11:31:44.863Z",
+     "effectiveTo": "2026-09-12T05:31:43.952Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-10T11:31:44.863Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T11:31:06.221Z",
+     "supersededBy": "LORRY@2026-09-12T05:31:43.952Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-12T05:31:43.952Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:31:43.952Z",
+     "effectiveTo": "2026-09-12T05:52:28.569Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:31:43.952Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-10T11:31:44.863Z",
+     "supersededBy": "LORRY@2026-09-12T05:52:28.569Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-12T05:52:28.569Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "SUPERSEDED",
+     "effectiveFrom": "2026-09-12T05:52:28.569Z",
+     "effectiveTo": "2026-09-12T05:58:05.800Z",
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:52:28.569Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-12T05:31:43.952Z",
+     "supersededBy": "LORRY@2026-09-12T05:58:05.800Z"
+    },
+    {
+     "configType": "TRANSPORT_VEHICLE_RATE",
+     "recordId": "LORRY",
+     "owner": "PROJECT_HEAD",
+     "versionId": "LORRY@2026-09-12T05:58:05.800Z",
+     "value": {
+      "rateId": "LORRY",
+      "vehicleType": "LORRY",
+      "ratePerKm": 55,
+      "unit": "PER_KM"
+     },
+     "status": "ACTIVE",
+     "effectiveFrom": "2026-09-12T05:58:05.800Z",
+     "effectiveTo": null,
+     "changedBy": "user-1788862142273-2af8aa7d",
+     "changedAt": "2026-09-12T05:58:05.800Z",
+     "changeReason": "E2E: PH publishes LORRY rate",
+     "previousVersionId": "LORRY@2026-09-12T05:52:28.569Z",
+     "supersededBy": null
+    }
+   ]
+  }
+ }
+}
