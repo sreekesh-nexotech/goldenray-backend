@@ -102,7 +102,7 @@ only to readers holding `pricing_internal.view`.
 | `quotationNumber` | `number` (as printed, ≤ 48 chars, DV-104) | blank for a DRAFT (never issued) |
 | `status` ISSUED with documents / anything else | `ISSUED` / `DRAFT` | |
 | `customer.customerId` | `customer_id` via `FLARIZE customers`, else phone match (`match_or_create_by_phone`, `customer_created`) | `no_customer` when neither |
-| `salespersonId`, `createdBy`, `document.issuedBy` | `owner_id`, `created_by_id`, `issued_by_id` via `FLARIZE users` | `unmapped_owner` |
+| `salespersonId`, `createdBy`, `document.issuedBy` | `owner_id`, `created_by_id`, `issued_by_id` via `FLARIZE users.json` | `unmapped_owner` |
 | `validUntil` (ISO timestamp), `issuedAt`, `createdAt`, `updatedAt` | `valid_until` (local date), `issued_at`, `created_at`, `updated_at` | |
 | `quotationSource`, `district`, `affiliateId` | `source`, `district`, `affiliate_ref` | |
 | `documents[qid][i]` | `quotations_version` #`version` (`legacy = true`, no releases), `document_payload` = the document, `document_payload_sha256` = its canonical SHA-256, `gate_report` = `payload.generationGate` | `versionStatus["qid#n"]` ISSUED/SUPERSEDED |

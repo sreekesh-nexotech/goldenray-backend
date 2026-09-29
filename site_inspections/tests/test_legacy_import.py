@@ -98,3 +98,19 @@ def test_rows_without_their_parents_are_reported():
     assert report["skipped"] == 1 and report["violations"][0]["code"] == "customer_unmapped"
     assert legacy_import.import_photos(TABLES["site_inspection_photos"][:1])["violations"][0]["code"] == "inspection_unmapped"
     assert legacy_import.import_engineers(TABLES["engineers"][:1])["violations"][0]["code"] == "role_missing"
+
+
+def test_rerun_never_reactivates_an_engineer_deactivated_on_the_platform():
+    """A re-run (resume, rehearsal) must not undo staff deactivating a departed engineer — ``--send-reset-links`` would
+    then mail the reactivated account a set-password link."""
+    from accounts.models import User
+    from core.models import LegacyMap
+
+    seed_roles()
+    rows = [row for row in TABLES["engineers"] if row.get("status") == "active"][:1]
+    legacy_import.import_engineers(rows, logins=TABLES.get("engineer_users", []))
+    pk = LegacyMap.objects.get(source_system="SI", source_table="engineers", source_id=str(rows[0]["id"])).target_id
+    User.all_objects.filter(pk=pk).update(is_active=False)
+    report = legacy_import.import_engineers(rows, logins=TABLES.get("engineer_users", []))
+    assert not User.all_objects.get(pk=pk).is_active and report["updated"] == 0
+    assert "kept_inactive" in [violation["code"] for violation in report["violations"]]

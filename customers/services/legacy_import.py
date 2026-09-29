@@ -12,7 +12,7 @@ Rules:
   is kept in ``alt_phone`` (``unparsable_phone``) so staff can fix it — the customer is not dropped, because Flarize
   quotations refer to it;
 * ``createdBy`` → ``owner`` and ``created_by``, ``updatedBy`` → ``updated_by`` through the imported Flarize users
-  (``FLARIZE`` / ``users``); an id without an imported user leaves the owner empty (``unmapped_owner``);
+  (``FLARIZE`` / ``users.json``); an id without an imported user leaves the owner empty (``unmapped_owner``);
 * ``email`` is lower-cased; one that is not an address is dropped (``invalid_email``); ``pincode`` must be six
   digits (``invalid_pincode``, dropped); ``currentBill`` → ``current_bill``; ``billCycle`` → ``bill_cycle``
   (MONTHLY/BIMONTHLY, anything else dropped with ``unknown_bill_cycle``); ``source`` must be a known source
@@ -43,7 +43,7 @@ from flarize.cache_utils import bump
 
 FLARIZE = LegacyMap.SourceSystem.FLARIZE
 SOURCE_TABLE = "customers"
-USERS_TABLE = "users"
+USERS_TABLE = "users.json"  # the Flarize users import (accounts.services.legacy_import.FLARIZE_USER_TABLE)
 ACTION = "customers.legacy_import"
 PINCODE_RE = re.compile(r"^[1-9][0-9]{5}$")
 BILL_CYCLES = {"MONTHLY": Customer.BillCycle.MONTHLY, "BIMONTHLY": Customer.BillCycle.BIMONTHLY, "BI_MONTHLY": Customer.BillCycle.BIMONTHLY}

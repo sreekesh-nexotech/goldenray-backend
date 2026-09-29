@@ -75,7 +75,7 @@ TIER_FILE_KEYS = {"Base": "BASE", "Value": "VALUE", "Premium": "PREMIUM"}
 
 
 def _user(source_id) -> int | None:
-    return mapped_id(FLARIZE, "users", source_id) if source_id else None
+    return mapped_id(FLARIZE, "users.json", source_id) if source_id else None
 
 
 def _service_key(label: str) -> str:
@@ -477,7 +477,7 @@ def _modified_on_platform(run: ImportRun, qid: str, quotation: Quotation) -> boo
 def import_flarize_quotations(state: dict, *, user=None, dry_run: bool = False) -> dict:
     """``quotation-state.json`` → quotations, versions (frozen documents byte for byte), BOM and commercial snapshots.
 
-    Customers resolve through ``FLARIZE customers`` (then by phone), owners/issuers through ``FLARIZE users``
+    Customers resolve through ``FLARIZE customers`` (then by phone), owners/issuers through ``FLARIZE users.json``
     (``unmapped_owner``). Snapshots no quotation refers to (orphans of failed orchestrations) are reported
     (``orphan_snapshot``), not imported. Legacy map ``FLARIZE quotation-state.json <quotationId>``."""
     run = ImportRun(FLARIZE, "quotation-state.json")

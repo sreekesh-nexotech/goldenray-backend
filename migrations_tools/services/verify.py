@@ -1,5 +1,5 @@
-"""``verify_migration`` for the website sources (PLAN §7.6 checks 1–7, 10 and 12; 8, 9 and 11 belong to Flarize,
-quotations and eSSL).
+"""``verify_migration`` (PLAN §7.6): checks 1–7, 10 and 12 for the website sources, #1, #2, #4 and #12 for every
+source, and #8 (packs), #9 (quotations) for Flarize and #11 (attendance) for eSSL (``verify_ops``).
 
 Every check returns a :class:`CheckResult` (``pass`` / ``fail`` / ``skipped`` / ``n/a`` with the reason). A check that
 needs something that was not given (a source URL, the legacy HTTP API) is ``skipped`` and says what it needs; a check
@@ -20,12 +20,17 @@ from django.db import connection, models
 from core.models import LegacyMap
 from migrations_tools.services import backend as backend_plan
 from migrations_tools.services import cms as cms_plan
+from migrations_tools.services import essl as essl_plan
+from migrations_tools.services import flarize as flarize_plan
+from migrations_tools.services import pa as pa_plan
 from migrations_tools.services import parity
+from migrations_tools.services import si as si_plan
+from migrations_tools.services import verify_ops
 from migrations_tools.services.http import head_status
 from migrations_tools.services.runner import BATCH_ACTION, RUN_OBJECT, Plan
 from migrations_tools.services.source import Source, checksum
 
-PLANS: dict[str, Plan] = {"CMS": cms_plan.PLAN, "BACKEND": backend_plan.PLAN}
+PLANS: dict[str, Plan] = {plan.source_system: plan for plan in (cms_plan.PLAN, backend_plan.PLAN, flarize_plan.PLAN, pa_plan.PLAN, si_plan.PLAN, essl_plan.PLAN)}
 MAX_DETAILS = 50
 
 
@@ -71,6 +76,24 @@ def latest_batches(system: str) -> dict[str, dict]:
     return latest
 
 
+def cross_listed(system: str) -> dict[str, set[str]]:
+    """Rows of ``system`` that a later import of **another** source listed: e.g. the Flarize catalog import (D-2) unmaps
+    and reports the main backend ``bom_itemtier`` rows of the tiers catalog.json does not offer. A table counts only
+    when it is not one of that other source's own tables, so a shared table name never hides a row. Every committed run
+    counts, not only the latest: the row was unmapped by the run that listed it, and a later run finds nothing left to
+    unmap (a row mapped again is simply mapped)."""
+    from audit.models import AuditLog
+
+    own = {other: set(plan.tables) | set(plan.not_migrated) for other, plan in PLANS.items() if other != system}
+    rows = AuditLog.objects.filter(action=BATCH_ACTION, object_type=RUN_OBJECT, after__source_system__in=list(own), after__dry_run=False)
+    listed: dict[str, set[str]] = {}
+    for after in rows.values_list("after", flat=True):
+        for table, ids in (after.get("listed") or {}).items():
+            if table not in own[after["source_system"]]:
+                listed.setdefault(table, set()).update(ids)
+    return listed
+
+
 class Verifier:
     def __init__(
         self,
@@ -81,6 +104,9 @@ class Verifier:
         offline: bool = False,
         corpus_dirs: dict[str, Path] | None = None,
         list_prices_as_release: bool = False,
+        flarize_reference: Path | None = None,
+        attendance_report: str | None = None,
+        attendance_signoff: str | None = None,
     ):
         self.sources = sources  # system → Source (None: not given)
         self.list_prices_as_release = list_prices_as_release
@@ -88,6 +114,9 @@ class Verifier:
         self.legacy_cms = legacy_cms
         self.offline = offline
         self.corpus_dirs = corpus_dirs or parity.default_corpus_dirs()
+        self.flarize_reference = flarize_reference or verify_ops.default_reference()
+        self.attendance_report = attendance_report
+        self.attendance_signoff = attendance_signoff
 
     # 1 ───────────────────────────────────────────────────────────────────────────────────────────────────────────
     def row_counts(self) -> CheckResult:
@@ -102,17 +131,26 @@ class Verifier:
             for batch in batches.values():
                 for table, ids in (batch.get("listed") or {}).items():
                     listed.setdefault(table, set()).update(ids)
+            for table, ids in cross_listed(system).items():
+                listed.setdefault(table, set()).update(ids)
+            expected: dict[str, set[str]] = {}
             for table in plan.tables:
                 rows = source.rows(table)
-                ids = {str(row["id"]) for row in rows if "id" in row}
-                mapped = {base_id(value) for value in LegacyMap.objects.filter(source_system=system, source_table=table).values_list("source_id", flat=True)}
-                missing = sorted(ids - mapped - listed.get(table, set()), key=lambda value: (len(value), value))
                 compared += len(rows)
-                if missing:
-                    result.fail(f"{system} {table}: {len(missing)} of {len(rows)} rows neither mapped nor listed ({', '.join(missing[:10])})")
+                keys: dict[str, set[str]] = {}
+                for map_table, source_id in plan.keys_of(table, rows):
+                    keys.setdefault(map_table, set()).add(source_id)
+                for map_table, ids in keys.items():
+                    expected.setdefault(map_table, set()).update(ids)
+                    mapped = {base_id(value) for value in LegacyMap.objects.filter(source_system=system, source_table=map_table).values_list("source_id", flat=True)}
+                    missing = sorted(ids - mapped - listed.get(map_table, set()), key=lambda value: (len(value), value))
+                    if missing:
+                        result.fail(f"{system} {table}: {len(missing)} of {len(ids)} rows neither mapped nor listed ({', '.join(missing[:10])})")
+            for map_table, ids in expected.items():
+                mapped = {base_id(value) for value in LegacyMap.objects.filter(source_system=system, source_table=map_table).values_list("source_id", flat=True)}
                 orphans = mapped - ids
                 if orphans:
-                    result.fail(f"{system} {table}: {len(orphans)} mapped source ids no longer exist in the source ({', '.join(sorted(orphans)[:10])})")
+                    result.fail(f"{system} {map_table}: {len(orphans)} mapped source ids no longer exist in the source ({', '.join(sorted(orphans)[:10])})")
             known = set(plan.tables) | set(plan.not_migrated)
             for table in source.table_names():
                 if table not in known and source.count(table):
@@ -228,11 +266,14 @@ class Verifier:
     # 6 ───────────────────────────────────────────────────────────────────────────────────────────────────────────
     def users(self) -> CheckResult:
         from accounts.models import PasswordReset, User
-        from accounts.services.legacy_import import BACKEND_USER_TABLE, CMS_USER_TABLE, MIGRATED_DOMAIN
+        from accounts.services.legacy_import import USER_MAPS, placeholder_address
 
         result = CheckResult(6, "users: role, reset link, old passwords refused")
-        tables = [table for system, table in (("CMS", CMS_USER_TABLE), ("BACKEND", BACKEND_USER_TABLE)) if system in self.sources]
-        targets = LegacyMap.objects.filter(source_system__in=list(self.sources), source_table__in=tables).values("target_id")
+        pairs = models.Q(pk__in=[])
+        for system, table in USER_MAPS:
+            if system in self.sources:
+                pairs |= models.Q(source_system=system, source_table=table)
+        targets = LegacyMap.objects.filter(pairs).values("target_id")
         users = list(User.all_objects.filter(pk__in=targets).select_related("role"))
         for account in users:
             if account.deleted_at is not None:
@@ -241,7 +282,7 @@ class Verifier:
                 result.fail(f"{account.email}: no live role")
             if account.has_usable_password() and account.password_changed_at is None:
                 result.fail(f"{account.email}: carries a usable password it never set on the platform")
-            real_address = not account.email.endswith(f"@{MIGRATED_DOMAIN}")
+            real_address = not placeholder_address(account.email)
             if account.is_active and account.must_reset_password and real_address and not PasswordReset.all_objects.filter(user=account).exists():
                 result.fail(f"{account.email}: no reset link issued (run the import with --send-reset-links at the cutover)")
         result.summary = f"{len(users)} migrated accounts"
@@ -283,6 +324,35 @@ class Verifier:
                 if per_watt_column and row.get(per_watt_column) not in (None, "") and price.per_watt != Decimal(str(row[per_watt_column])):
                     result.fail(f"{component.sku}: per watt {price.per_watt} ≠ source {row[per_watt_column]}")
         result.summary = f"{compared} prices compared, {flarize_owned} components owned by the Flarize catalog (D-2) not compared"
+        return result
+
+    # 8 ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+    def packs(self) -> CheckResult:
+        name = "packs: PackRelease #1 prices == Flarize reference outputs, BLOCK list empty"
+        if "FLARIZE" not in self.sources:
+            return not_applicable(8, name, "FLARIZE")
+        result = CheckResult(8, name)
+        verify_ops.packs(result, self.sources["FLARIZE"], self.flarize_reference)
+        return result
+
+    # 9 ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+    def quotations(self) -> CheckResult:
+        name = "quotations: frozen payloads re-render with equal hashes"
+        if "FLARIZE" not in self.sources:
+            return not_applicable(9, name, "FLARIZE")
+        result = CheckResult(9, name)
+        verify_ops.quotations(result, self.sources["FLARIZE"])
+        return result
+
+    # 11 ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    def attendance(self) -> CheckResult:
+        name = "attendance: raw punches after dedup, v3/v4 diff signed off by HR"
+        if "ESSL" not in self.sources:
+            return not_applicable(11, name, "ESSL")
+        if self.sources["ESSL"] is None:
+            return skipped(11, name, "needs --essl-url (the eSSL database, read-only)")
+        result = CheckResult(11, name)
+        verify_ops.attendance(result, self.sources["ESSL"], report_path=self.attendance_report, signoff=self.attendance_signoff)
         return result
 
     # 10 ──────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -335,7 +405,20 @@ class Verifier:
         return result
 
     def run(self, only: set[int] | None = None) -> list[CheckResult]:
-        checks = {1: self.row_counts, 2: self.integrity, 3: self.delivery, 4: self.media, 5: self.slugs, 6: self.users, 7: self.pricing, 10: self.calculators, 12: self.audit}
+        checks = {
+            1: self.row_counts,
+            2: self.integrity,
+            3: self.delivery,
+            4: self.media,
+            5: self.slugs,
+            6: self.users,
+            7: self.pricing,
+            8: self.packs,
+            9: self.quotations,
+            10: self.calculators,
+            11: self.attendance,
+            12: self.audit,
+        }
         results = []
         for number, check in checks.items():
             if only and number not in only:

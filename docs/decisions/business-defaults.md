@@ -4,7 +4,8 @@ The owner asked us to assume decisions from the current state of the website rep
 Rule of thumb: keep today's live behaviour, unless it leaks cost/margin to the public.
 
 Copied from `/home/user/platform-reference/business-defaults.md` at the wave-4a integration; B-13 and B-14 were added
-then from the quotations package's open questions. B-8 is implemented (`attendance/tests/test_process_scope.py`).
+then from the quotations package's open questions; B-15 and B-16 at the wave-4d integration from the migration-ops
+open issues. B-8 is implemented (`attendance/tests/test_process_scope.py`).
 
 | # | Question | Decision | Basis |
 |---|----------|----------|-------|
@@ -22,3 +23,5 @@ then from the quotations package's open questions. B-8 is implemented (`attendan
 | B-12 | EMI import skips banks with malformed slug/logo colour | **Keep skipping, list them in the import report** | no such rows in data |
 | B-13 | D-4 applied to the printed "You Pay" (offer and approved discounts subtracted), but the payload's savings/payback and EMI figures are computed on the price before those reductions | **Keep savings/payback/EMI on the pre-discount price** (Flarize parity) — only the printed price follows D-4 (DV-115); revisit with the owner | Flarize computes them before the offer; changing it breaks the offer parity cases (quotations open issue) |
 | B-14 | An explicit `selections.offer_code` applies any ACTIVE offer without checking its system/tier/size or date window | **Keep: an explicit offer code may apply any ACTIVE offer** (Flarize parity); Sales is trusted with explicit codes | Flarize's explicit `offerId` behaves this way (quotations open issue) |
+| B-15 | The second `import_flarize` publishes PriceRelease #2 / PackRelease #2 when `import_pa` added the KSEB statutory fees in between (migration-ops open issue) | **At cutover run `import_pa --only pa.kseb_fees` before `import_flarize`**, so PriceRelease #1 already carries the KSEB fees; the full `import_pa` follows `import_flarize` as before (runbook §7 "Data import order") | one release with the complete pricing masters; nothing is re-published at cutover |
+| B-16 | 5 Flarize owner/user ids named in customers/workspace/quotation state are missing from `users.json` | **Leave them unmapped** (owners/users empty, `unmapped_owner` / `unmapped_user`) and **list them in the import report**; accounts are created by staff afterwards if the business wants them | no source record to build an account from; the import report makes them visible |

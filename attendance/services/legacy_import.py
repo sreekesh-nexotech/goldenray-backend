@@ -215,12 +215,8 @@ def _recompute_history(people: list, v3: dict, first: date, last: date, *, user,
     return total
 
 
-def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None = None) -> dict:
-    """Recompute the range eSSL's ``attendance`` rows cover (v4) and compare the statuses per employee and month."""
-    from attendance.services import inputs
-
-    rows = list(rows)
-    report = Report()
+def _v3_days(rows: list[dict], report: Report) -> tuple[dict[tuple[int, date], dict], list[Employee]]:
+    """eSSL ``attendance`` rows keyed by (platform employee pk, date), and the imported people they belong to."""
     v3: dict[tuple[int, date], dict] = {}
     employees: dict[object, Employee | None] = {}
     for row in rows:
@@ -236,14 +232,13 @@ def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None =
             report.violation(row.get("id"), "is_manual_override", "a manual override (no eSSL API could set one) is not carried over; the day is recomputed")
         v3[(employee.pk, work_date)] = row
     people = sorted({employee for employee in employees.values() if employee is not None}, key=lambda item: item.pk)
-    if not v3:
-        result = {**report.as_dict(), "skipped": len(rows), "months": [], "days_compared": 0, "days_differing": 0}
-        _audit(DAY_TABLE, rows, result, user)
-        return result
-    first, last = min(day for _, day in v3), max(day for _, day in v3)
-    summary = _recompute_history(people, v3, first, last, user=user, at=at)
-    report.created, report.updated = summary["created"], summary["updated"]
-    report.skipped = len(rows) - len(v3)
+    return v3, people
+
+
+def _compare(v3: dict[tuple[int, date], dict], people: list[Employee], first: date, last: date) -> tuple[list[dict], int, int]:
+    """The stored v4 days against the v3 statuses, per employee and month: ``(months, days compared, days differing)``."""
+    from attendance.services import inputs
+
     v4 = {(day.employee_id, day.work_date): day for day in AttendanceDay.objects.filter(employee__in=people, work_date__gte=first, work_date__lte=last)}
     staff = {person.key: person for person in inputs.engine_employees(people)}
     holidays, leaves = inputs.calendars([person.pk for person in people], first, last)
@@ -292,10 +287,48 @@ def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None =
         }
         for _, item in sorted(months.items(), key=lambda entry: (entry[1]["employee"].code, entry[0][1]))
     ]
+    return listing, compared, differing
+
+
+def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None = None) -> dict:
+    """Recompute the range eSSL's ``attendance`` rows cover (v4) and compare the statuses per employee and month."""
+    rows = list(rows)
+    report = Report()
+    v3, people = _v3_days(rows, report)
+    if not v3:
+        result = {**report.as_dict(), "skipped": len(rows), "months": [], "days_compared": 0, "days_differing": 0}
+        _audit(DAY_TABLE, rows, result, user)
+        return result
+    first, last = min(day for _, day in v3), max(day for _, day in v3)
+    summary = _recompute_history(people, v3, first, last, user=user, at=at)
+    report.created, report.updated = summary["created"], summary["updated"]
+    report.skipped = len(rows) - len(v3)
+    listing, compared, differing = _compare(v3, people, first, last)
     result = {**report.as_dict(), "months": listing, "days_compared": compared, "days_differing": differing, "recompute": summary}
     _audit(DAY_TABLE, rows, result, user)
     bump_days()
     return result
+
+
+def diff_report(rows: Iterable[dict]) -> dict:
+    """The per-employee-month v3/v4 comparison of :func:`status_diff_report`, **read-only**: the stored v4 days as they
+    are now (no recompute, no audit row) — what ``verify_migration`` #11 hands to HR for sign-off."""
+    rows = list(rows)
+    report = Report()
+    v3, people = _v3_days(rows, report)
+    if not v3:
+        return {**report.as_dict(), "skipped": len(rows), "months": [], "days_compared": 0, "days_differing": 0}
+    first, last = min(day for _, day in v3), max(day for _, day in v3)
+    listing, compared, differing = _compare(v3, people, first, last)
+    return {
+        **report.as_dict(),
+        "skipped": len(rows) - len(v3),
+        "months": listing,
+        "days_compared": compared,
+        "days_differing": differing,
+        "date_from": first.isoformat(),
+        "date_to": last.isoformat(),
+    }
 
 
 def import_all(tables: dict[str, list[dict]], *, user=None, at: datetime | None = None) -> dict[str, dict]:

@@ -187,8 +187,8 @@ def _modified_on_platform(run: ImportRun, source_id: str, agreement: Agreement) 
 
 
 def _new_uid(run: ImportRun, source_id: str, record_id: str, uid_for) -> uuid.UUID:
-    """The uid of a newly imported agreement: ``uid_for(record id)`` when the caller gives one (``migrations_tools``
-    passes the site-inspection link rule, so a legacy inspection's ``agreement_uid`` finds it), unless another agreement
+    """The uid of a newly imported agreement: ``uid_for(record id)`` (by default the site-inspection link rule, so a
+    legacy inspection's ``agreement_uid`` finds it), unless another agreement
     already holds that uid (the same record id in the other profile: ``duplicate_record_id``, a random uid)."""
     wanted = uid_for(record_id) if uid_for is not None else None
     if wanted is None:

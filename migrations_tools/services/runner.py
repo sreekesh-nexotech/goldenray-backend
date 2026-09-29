@@ -8,6 +8,7 @@ and returns their results. The runner:
   object ``migrations_tools.importrun`` = the run uid): per table the row count and SHA-256, the importers' counts, the
   number of violations and the source ids they name (PLAN §7.6 #12). A failing step is rolled back alone; the steps
   before it stay committed;
+* ``releases`` (PLAN §7.1 "… transactional rows → releases") is the last phase: PriceRelease #1 / PackRelease #1;
 * **resumes** a run (``resume=<run uid>``): a step whose batch row exists for that run with the same source checksum is
   not run again; everything else is (the importers are idempotent, so re-running a step is always safe);
 * ``dry_run`` runs every step in one transaction that is rolled back at the end, with the media storage replaced by a
@@ -31,7 +32,7 @@ from migrations_tools.services.source import Source, checksum
 
 BATCH_ACTION = "migrations_tools.batch_imported"
 RUN_OBJECT = "migrations_tools.importrun"
-PHASES = ("users", "media", "masters", "content", "transactional")
+PHASES = ("users", "media", "masters", "content", "transactional", "releases")
 MAX_LISTED_IDS = 5000
 
 
@@ -60,11 +61,19 @@ class Plan:
     source_system: str
     steps: tuple[Step, ...]
     not_migrated: dict[str, str] = field(default_factory=dict)  # source table → reason (PLAN §7.6 #1 "listed")
+    # PLAN §7.6 #1 for sources whose rows are not ``{id}`` rows of the mapped table (JSON documents, browser exports):
+    # source table → fn(rows) → the ``(core_legacy_map source_table, source_id)`` pairs that must be mapped or listed.
+    row_keys: dict[str, Callable[[list[dict]], list[tuple[str, str]]]] = field(default_factory=dict)
+
+    def keys_of(self, table: str, rows: list[dict]) -> list[tuple[str, str]]:
+        if table in self.row_keys:
+            return self.row_keys[table](rows)
+        return [(table, str(row["id"])) for row in rows if "id" in row]
 
     def __post_init__(self):
         order = [PHASES.index(step.phase) for step in self.steps]
         if order != sorted(order):
-            raise ValueError("plan steps must follow the FK order users → media → masters → content → transactional")
+            raise ValueError("plan steps must follow the FK order users → media → masters → content → transactional → releases")
 
     @property
     def tables(self) -> list[str]:

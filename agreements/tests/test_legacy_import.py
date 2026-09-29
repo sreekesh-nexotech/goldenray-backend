@@ -151,3 +151,28 @@ def test_reimport_keeps_an_agreement_changed_on_the_platform(fees, company, head
     assert accepted.status == "ACCEPTED" and accepted.payload["legacy_record"] == accepted_raw
     assert _by_id(superseded_raw["id"]).status == "SUPERSEDED"
     assert _by_id(untouched_raw["id"]).payload["legacy_record"]["data"]["addoffer"] == "Changed in the browser"
+
+
+def test_uid_for_fixes_the_uid_of_new_agreements_once(fees, company):
+    """``migrations_tools import_pa`` passes the site-inspection link rule; a record id already imported from the other
+    profile keeps its uid there and the second copy gets its own (``duplicate_record_id``)."""
+    import uuid
+
+    namespace = uuid.UUID("00000000-0000-4000-8000-000000000001")
+
+    def uid_for(record_id):
+        return uuid.uuid5(namespace, f"PA:{record_id}")
+
+    records = _records()
+    import_pa_agreements(records, profile="crs", uid_for=uid_for)
+    real = [record for record in records if record["id"].startswith("agr_")]
+    assert all(_by_id(record["id"]).uid == uid_for(record["id"]) for record in real)
+    result = import_pa_agreements(real[:1], profile="admin", uid_for=uid_for)
+    assert [violation["code"] for violation in result["violations"] if violation["code"] == "duplicate_record_id"] == ["duplicate_record_id"]
+    copy_ = Agreement.objects.get(legacy_ref=f"admin/{real[0]['id']}")
+    assert copy_.uid != uid_for(real[0]["id"]) and _by_id(real[0]["id"]).uid == uid_for(real[0]["id"])
+    # without uid_for the default is the site-inspection link rule (``site_inspections`` ``agreement_uid``)
+    from site_inspections.services.legacy_import import agreement_uid
+
+    import_pa_agreements(real[1:2], profile="other")
+    assert Agreement.objects.get(legacy_ref=f"other/{real[1]['id']}").uid == agreement_uid(real[1]["id"]) != uid_for(real[1]["id"])

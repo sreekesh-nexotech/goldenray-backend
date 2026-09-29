@@ -236,11 +236,16 @@ def _import_engineer(run: ImportRun, row: dict, logins: dict) -> None:
         user = User.objects.filter(email=email).first() or User.objects.create_user(email, role=role, must_reset_password=True, **values)
         run.violation(row["id"], "email_placeholder", f"The legacy engineer has no e-mail; {email} was set — replace it before sending the reset link.")
         run.created += 1
-    elif any(getattr(user, key) != value for key, value in values.items()):
-        User.all_objects.filter(pk=user.pk).update(**values)
-        run.updated += 1
     else:
-        run.skipped += 1
+        if active and not user.is_active:
+            # deactivated on the platform: a re-run never reactivates it (the source may still deactivate)
+            values["is_active"] = False
+            run.violation(row["id"], "kept_inactive", f"{row['engineer_code']} was deactivated on the platform; the re-run keeps it inactive.")
+        if any(getattr(user, key) != value for key, value in values.items()):
+            User.all_objects.filter(pk=user.pk).update(**values)
+            run.updated += 1
+        else:
+            run.skipped += 1
     run.link(row["id"], user)
 
 

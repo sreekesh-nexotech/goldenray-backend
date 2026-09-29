@@ -122,6 +122,26 @@ Rollback of a step = flip the line back and reload (one command, no deploy). Bef
 on staging for 24 h (§6.3), `verify_migration` green. C9: when `docs/ops/log-queries.md` "Legacy cutover" shows
 no hits for 7 days, set every group to `gone`, turn `LEGACY_API_SHIM` off, stop the `legacy` profile.
 
+### Data import order (PLAN §7, business default B-15)
+
+Run the imports on the production database in this order (each with `--json <report>`; every report is kept):
+
+```bash
+dc exec api python manage.py import_cms     --source-url $CMS_URL
+dc exec api python manage.py import_backend --source-url $BACKEND_URL
+dc exec api python manage.py import_pa      --export crs=… --export admin=… --catalog … --only pa.kseb_fees   # B-15
+dc exec api python manage.py import_flarize --source-dir $FLARIZE_DATA --send-reset-links
+dc exec api python manage.py import_pa      --export crs=… --export admin=… --catalog …
+dc exec api python manage.py import_si      --source-file flarize-site-inspection.db --send-reset-links
+dc exec api python manage.py import_essl    --source-url $ESSL_URL --diff-report essl-diff.json --credentials-file essl-credentials.json
+dc exec api python manage.py verify_migration --source cms --source backend --source flarize --source pa --source si --source essl …
+```
+
+`import_pa --only pa.kseb_fees` before `import_flarize` puts the KSEB statutory fees into the pricing masters first,
+so PriceRelease #1 carries them (without it the next `import_flarize` publishes PriceRelease #2 / PackRelease #2).
+The Flarize owner/user ids missing from `users.json` stay unmapped (`unmapped_owner` / `unmapped_user` in the import
+report, B-16).
+
 ## 8. Office deployment — HR (PLAN §5.7)
 
 * One always-on PC per office runs `essl-agent` (Windows service `.exe` built with PyInstaller, or the Linux

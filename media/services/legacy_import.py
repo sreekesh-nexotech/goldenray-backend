@@ -1,4 +1,5 @@
-"""Legacy import of the CMS media library (PLAN §7.2 row 3: CMS ``media_asset`` → ``media_asset``, PUBLIC).
+"""Legacy import of the CMS media library (PLAN §7.2 row 3: CMS ``media_asset`` → ``media_asset``, PUBLIC) and of the
+Flarize page-designer assets (PLAN §7.4, :func:`import_flarize_cms_assets`, PRIVATE, for reference).
 
 :func:`import_cms_assets` takes plain row dicts (``SELECT *`` of the CMS table: ``file``, ``storage_path``,
 ``cdn_url``, ``mime``, ``size``, ``width``, ``height``, ``alternative_text``, ``caption``, ``collection_id``,
@@ -34,6 +35,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from audit.services import record
+from core.errors import DomainError
 from core.models import LegacyMap
 from flarize.cache_utils import bump
 from media import folders
@@ -178,6 +180,92 @@ def import_cms_assets(rows: Iterable[dict], *, collections: Mapping | None = Non
         actor=user,
         actor_kind=None if user else "SYSTEM",
         after={"source_table": TABLE, "rows": len(rows), "checksum": checksum(rows), **{**report.as_dict(), "violations": len(report.violations)}},
+    )
+    if dry_run:
+        transaction.set_rollback(True)
+    else:
+        bump(CACHE_NAMESPACE)
+    return report.as_dict()
+
+
+# ── Flarize cms-assets (PLAN §7.4 last row) ──────────────────────────────────────────────────────────────────────
+FLARIZE = LegacyMap.SourceSystem.FLARIZE
+FLARIZE_ASSET_TABLE = "cms-state.json:assets"
+FLARIZE_FOLDER = "flarize-cms"
+
+
+class _FlarizeReport(Report):
+    def violation(self, source_id, code: str, message: str) -> None:
+        self.violations.append({"source_table": FLARIZE_ASSET_TABLE, "source_id": str(source_id), "code": code, "message": message})
+
+
+@transaction.atomic
+def import_flarize_cms_assets(rows: Iterable[dict], *, read_file: Callable[[str], bytes | None] | None = None, user=None, dry_run: bool = False) -> dict:
+    """Flarize page-designer assets (``cms-state.json`` ``assets`` records + the files of ``cms-assets/``) → PRIVATE
+    ``media_asset`` rows in folder ``flarize-cms``, **for reference only** (PLAN §7.4: the page designer is superseded
+    by quotation content versions; nothing links to them).
+
+    Idempotent through ``core_legacy_map`` (``FLARIZE``/``cms-state.json:assets``/<assetId>): a mapped asset is never
+    uploaded again. Records that are not ACTIVE (``not_active``), whose file is missing (``file_unavailable``), whose
+    bytes do not match the recorded SHA-256 (``checksum_mismatch``, still copied) or that the upload pipeline refuses
+    (``file_refused``) are listed. Every upload goes through ``media.services.assets.store_bytes`` (sniffed, size
+    policy); ``dry_run=True`` counts the copies without storing a file (the runner's own dry run swaps the storage
+    instead). One ``media.legacy_import`` audit row."""
+    from media.services.assets import store_bytes
+
+    rows = list(rows)
+    report = _FlarizeReport()
+    for row in rows:
+        source_id = str(row.get("assetId") or "").strip()
+        if not source_id:
+            report.violation("", "incomplete_row", "an asset record without assetId; skipped.")
+            report.skipped += 1
+            continue
+        target_id = LegacyMap.objects.filter(source_system=FLARIZE, source_table=FLARIZE_ASSET_TABLE, source_id=source_id).values_list("target_id", flat=True).first()
+        if target_id is not None:
+            report.skipped += 1
+            continue
+        if str(row.get("status") or "ACTIVE").upper() != "ACTIVE":
+            report.violation(source_id, "not_active", f"asset status {row.get('status')!r}; not copied.")
+            report.skipped += 1
+            continue
+        path = f"cms-assets/{PurePosixPath(str(row.get('storagePath') or '')).name}"
+        data = read_file(path) if read_file is not None and row.get("storagePath") else None
+        if data is None:
+            report.violation(source_id, "file_unavailable", f"{path!r} is not in the Flarize data folder; not copied.")
+            report.skipped += 1
+            continue
+        digest = hashlib.sha256(data).hexdigest()
+        if row.get("checksum") and row["checksum"] != digest:
+            report.violation(source_id, "checksum_mismatch", f"{path!r}: the record says {row['checksum']}, the file is {digest}; copied as it is.")
+        if dry_run:
+            report.created += 1  # counted, not stored: a dry run writes no file
+            continue
+        try:
+            with transaction.atomic():
+                asset = store_bytes(
+                    user=user,
+                    data=data,
+                    filename=str(row.get("filename") or PurePosixPath(path).name)[:255],
+                    kind=MediaAsset.Kind.IMAGE,
+                    visibility=MediaAsset.Visibility.PRIVATE,
+                    folder=FLARIZE_FOLDER,
+                )
+        except DomainError as exc:
+            report.violation(source_id, "file_refused", f"{path!r} refused by the upload pipeline ({exc.code}); not copied.")
+            report.skipped += 1
+            continue
+        uploaded = _dt(row.get("uploadedAt"))
+        if uploaded is not None:
+            MediaAsset.all_objects.filter(pk=asset.pk).update(created_at=uploaded, updated_at=uploaded)
+        LegacyMap.objects.create(source_system=FLARIZE, source_table=FLARIZE_ASSET_TABLE, source_id=source_id[:128], target_table=MediaAsset._meta.db_table, target_id=asset.pk)
+        report.created += 1
+    record(
+        "media.legacy_import",
+        object_type="media.legacyimport",
+        actor=user,
+        actor_kind=None if user else "SYSTEM",
+        after={"source_table": FLARIZE_ASSET_TABLE, "rows": len(rows), "checksum": checksum(rows), **{**report.as_dict(), "violations": len(report.violations)}},
     )
     if dry_run:
         transaction.set_rollback(True)

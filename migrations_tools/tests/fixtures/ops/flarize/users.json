@@ -1,0 +1,54 @@
+[
+ {
+  "userId": "admin-001",
+  "username": "admin",
+  "name": "Flarize User 1",
+  "email": "flarize.user1@example.com",
+  "role": "ADMIN",
+  "status": "ACTIVE",
+  "createdAt": "2026-09-13T14:00:39.919Z",
+  "createdBy": "SYSTEM"
+ },
+ {
+  "userId": "sales-001",
+  "username": "sales1",
+  "name": "Flarize User 2",
+  "email": "flarize.user2@example.com",
+  "role": "SALES",
+  "status": "ACTIVE",
+  "createdAt": "2026-09-13T14:00:39.919Z",
+  "createdBy": "SYSTEM",
+  "updatedAt": "2026-09-13T15:49:10.479Z",
+  "updatedBy": "admin-001"
+ },
+ {
+  "userId": "projhead-001",
+  "username": "projhead1",
+  "name": "Flarize User 3",
+  "email": "flarize.user3@example.com",
+  "role": "PROJECT_HEAD",
+  "status": "ACTIVE",
+  "createdAt": "2026-09-13T14:00:39.919Z",
+  "createdBy": "SYSTEM"
+ },
+ {
+  "userId": "procurement-001",
+  "username": "procurement1",
+  "name": "Flarize User 4",
+  "email": "flarize.user4@example.com",
+  "role": "PROCUREMENT",
+  "status": "ACTIVE",
+  "createdAt": "2026-09-13T14:00:39.919Z",
+  "createdBy": "SYSTEM"
+ },
+ {
+  "userId": "eng-001",
+  "username": "eng1",
+  "name": "Flarize User 5",
+  "email": "flarize.user5@example.com",
+  "role": "ENGINEER",
+  "status": "ACTIVE",
+  "createdAt": "2026-09-13T14:00:39.919Z",
+  "createdBy": "SYSTEM"
+ }
+]

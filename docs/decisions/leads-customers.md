@@ -176,7 +176,7 @@ Reported row by row (`not_an_installation`), nothing written; the rows are commi
 | `currentBill` | `current_bill` | |
 | `billCycle` | `bill_cycle` | MONTHLY/BIMONTHLY (DV-55) |
 | `source` | `source` | known sources, else SALES_ENTRY |
-| `createdBy` | `owner`, `created_by` | through FLARIZE / `users` in `core_legacy_map`; unmapped → empty (`unmapped_owner`) |
+| `createdBy` | `owner`, `created_by` | through FLARIZE / `users.json` in `core_legacy_map`; unmapped → empty (`unmapped_owner`) |
 | `updatedBy` | `updated_by` | same map |
 | `createdAt`, `updatedAt` | `created_at`, `updated_at` | preserved |
 

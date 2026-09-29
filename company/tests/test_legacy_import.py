@@ -113,3 +113,39 @@ class TestQuotationSettings:
     def test_second_row_is_listed(self):
         result = legacy_import.import_quotation_settings([QUOTATION, {**QUOTATION, "id": 2}])
         assert result["violations"][-1]["code"] == "not_singleton"
+
+
+class TestFlarizeCompanyProfile:
+    """Flarize ``company-profile.json`` (PLAN §7.4) — the committed masked export of migration-ops."""
+
+    DOCUMENT = json.loads((FIXTURES / "ops/flarize/company-profile.json").read_text())
+
+    def test_fills_an_empty_profile_and_reports_what_it_does_not_write(self):
+        result = legacy_import.import_flarize_company_profile(self.DOCUMENT)
+        profile = current_profile()
+        assert result["created"] == 1
+        assert (profile.legal_name, profile.trade_name, profile.gstin, profile.address_locality, profile.postal_code) == (
+            "FLARIZE TECHNOLOGIES PRIVATE LIMITED",
+            "FLARIZE",
+            "32AAGCF7283D1ZR",
+            "Alappuzha",
+            "688007",
+        )
+        assert profile.website == "https://www.flarize.com" and profile.phone_e164 == "+919000000001" and profile.email == "sales@example.com"
+        codes = [violation["code"] for violation in result["violations"]]
+        assert codes.count("enter_as_bank_account") == 1 and codes.count("asset_not_linked") == 3 and "listed_only" in codes
+        assert "000000000000" not in json.dumps(result)  # the account number is never repeated
+        assert LegacyMap.objects.filter(source_system="FLARIZE", source_table="company-profile.json", source_id="profile").exists()
+        assert legacy_import.import_flarize_company_profile(self.DOCUMENT)["updated"] == 0
+
+    def test_never_overwrites_a_value_the_profile_holds(self):
+        legacy_import.import_site_settings([filled()])
+        before = current_profile().trade_name
+        result = legacy_import.import_flarize_company_profile(self.DOCUMENT)
+        assert current_profile().trade_name == before == "Flarize Solar" and current_profile().gstin == "32AAGCF7283D1ZR"
+        assert any(violation["code"] == "value_differs" and violation["message"].startswith("trade_name") for violation in result["violations"])
+
+    def test_nothing_to_import(self):
+        assert legacy_import.import_flarize_company_profile(None) == {"created": 0, "updated": 0, "skipped": 0, "violations": []}
+        dry = legacy_import.import_flarize_company_profile(self.DOCUMENT, dry_run=True)
+        assert dry["created"] == 1 and current_profile().pk is None

@@ -1,10 +1,11 @@
-"""Legacy import of staff accounts (PLAN §7.2 rows 1–2, §7.3 ``auth_user``). Called by ``migrations_tools``.
+"""Legacy import of staff accounts (PLAN §7.2 rows 1–2, §7.3 ``auth_user``, §7.4 ``users.json``). Called by
+``migrations_tools``.
 
 Functions take plain row dicts (the source tables' columns, ``SELECT *``) and return ``{"created", "updated",
 "skipped", "violations"}`` (``violations``: ``{"source_table", "source_id", "code", "message"}``):
 
 * **idempotent** through ``core_legacy_map`` (``CMS``/``accounts_role``, ``CMS``/``accounts_admin_user``,
-  ``BACKEND``/``auth_user``): a re-run updates what changed and never duplicates; a mapped row deleted in the platform
+  ``BACKEND``/``auth_user``, ``FLARIZE``/``users.json``): a re-run updates what changed and never duplicates; a mapped row deleted in the platform
   since stays deleted (``skipped``);
 * ``dry_run=True`` runs in a transaction that is rolled back; each call writes one audit row
   (``accounts.legacy_import``) with the counts and the SHA-256 of the source rows.
@@ -38,7 +39,7 @@ from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
@@ -53,9 +54,29 @@ from core.models import LegacyMap
 
 CMS = LegacyMap.SourceSystem.CMS
 BACKEND = LegacyMap.SourceSystem.BACKEND
+FLARIZE = LegacyMap.SourceSystem.FLARIZE
 ROLE_TABLE = "accounts_role"
 CMS_USER_TABLE = "accounts_admin_user"
 BACKEND_USER_TABLE = "auth_user"
+FLARIZE_USER_TABLE = "users.json"
+USER_TABLES = (CMS_USER_TABLE, BACKEND_USER_TABLE, FLARIZE_USER_TABLE)
+# every (source system, legacy map table) whose rows became staff accounts that must set a password at the cutover —
+# the Site Inspection engineers too (PLAN §7.5 "engineers → users (Field Engineer, reset)",
+# ``site_inspections.services.legacy_import.import_engineers``)
+USER_MAPS = ((CMS, CMS_USER_TABLE), (BACKEND, BACKEND_USER_TABLE), (FLARIZE, FLARIZE_USER_TABLE), (LegacyMap.SourceSystem.SI, "engineers"))
+# Flarize ``users.json`` role → (platform role slug, ``title``) — PLAN §7.4 row 1; the sales roles keep their Flarize
+# flavour in ``title`` (``ENGINEER`` is the spelling users.json actually holds for ENGINEERING).
+FLARIZE_ROLES = {
+    "ADMIN": ("admin", ""),
+    "PROJECT_HEAD": ("project-head", ""),
+    "ENGINEERING": ("engineering", ""),
+    "ENGINEER": ("engineering", ""),
+    "PROCUREMENT": ("procurement", ""),
+    "SALES_HEAD": ("sales-head", ""),
+    "SALES": ("sales-executive", "Sales"),
+    "SALES_CRS": ("sales-executive", "Sales (CRS)"),
+    "FIELD_SALES": ("sales-executive", "Field Sales"),
+}
 MIGRATED_DOMAIN = "migrated.invalid"
 ADOPTED_ACTION = "accounts.legacy_user_adopted"
 
@@ -295,6 +316,10 @@ def _import_user(row: dict, report: Report, *, system: str, table: str, role: Ro
         _link(system, table, source_id, account)
         report.created += 1
         return
+    if values["is_active"] and not existing.is_active:
+        # deactivated on the platform: a re-run never reactivates it (the source may still deactivate)
+        report.violation(source_id, "kept_inactive", f"{existing.email} was deactivated on the platform; the re-run keeps it inactive.")
+        values["is_active"] = False
     if role is not None and existing.role_id != role.pk and existing.must_reset_password:
         values["role_id"] = role.pk  # the source still decides until the person has taken the account over
     changed = {name: value for name, value in values.items() if getattr(existing, name) != value}
@@ -330,11 +355,59 @@ def import_backend_users(rows: Iterable[dict], *, user=None, dry_run: bool = Fal
     return _finish(report, rows, user=user, dry_run=dry_run)
 
 
+@transaction.atomic
+def import_flarize_users(rows: Iterable[dict], *, user=None, dry_run: bool = False) -> dict:
+    """Flarize ``users.json`` → ``accounts_user`` (PLAN §7.4 row 1): roles mapped by :data:`FLARIZE_ROLES` (the sales
+    roles keep their flavour in ``title``), ``status`` ACTIVE → active, forced reset (password hashes are never read).
+
+    Legacy map ``FLARIZE users.json <userId>`` — the key every Flarize importer resolves ``createdBy``/``ownerId``
+    through. Same rules as the other sources: e-mail login, an existing account with the address is adopted."""
+    rows = list(rows)
+    report = Report(FLARIZE_USER_TABLE)
+    roles = {slug: Role.objects.filter(slug=slug).first() for slug, _ in FLARIZE_ROLES.values()}
+    for raw in rows:
+        user_id = str(raw.get("userId") or "").strip()
+        if not user_id:
+            report.violation("", "incomplete_row", "a user without userId; skipped.")
+            report.skipped += 1
+            continue
+        slug, title = FLARIZE_ROLES.get(str(raw.get("role") or "").upper(), (None, ""))
+        role = roles.get(slug) if slug else None
+        if slug is None:
+            report.violation(user_id, "unknown_role", f"Flarize role {raw.get('role')!r} has no platform role; row skipped.")
+            report.skipped += 1
+            continue
+        names = str(raw.get("name") or "").strip().split(" ", 1)
+        row = {
+            "id": user_id,
+            "email": raw.get("email"),
+            "username": raw.get("username") or user_id,
+            "first_name": names[0],
+            "last_name": names[1] if len(names) > 1 else "",
+            "is_active": str(raw.get("status") or "ACTIVE").upper() == "ACTIVE",
+            "date_joined": raw.get("createdAt"),
+            "last_login": raw.get("lastLoginAt"),
+        }
+        before = report.created
+        _import_user(row, report, system=FLARIZE, table=FLARIZE_USER_TABLE, role=role, actor=user)
+        if title and report.created > before:
+            User.all_objects.filter(pk=_mapped(FLARIZE, FLARIZE_USER_TABLE, user_id)).update(title=title)
+    return _finish(report, rows, user=user, dry_run=dry_run)
+
+
 # ── Reset links (cutover) ────────────────────────────────────────────────────────────────────────────────────────
 def migrated_users():
     """Live accounts mapped from a legacy user table."""
-    targets = LegacyMap.objects.filter(source_table__in=(CMS_USER_TABLE, BACKEND_USER_TABLE), target_table=User._meta.db_table).values("target_id")
+    pairs = Q()
+    for system, table in USER_MAPS:
+        pairs |= Q(source_system=system, source_table=table)
+    targets = LegacyMap.objects.filter(pairs, target_table=User._meta.db_table).values("target_id")
     return User.objects.filter(pk__in=targets)
+
+
+def placeholder_address(email: str) -> bool:
+    """An address an importer made up (``*.invalid``: ``migrated.invalid``, ``site-engineers.invalid``) — never mailed."""
+    return str(email or "").lower().endswith(".invalid")
 
 
 @transaction.atomic
@@ -350,7 +423,7 @@ def issue_reset_links(*, user=None, send: bool = True) -> dict:
         if not account.must_reset_password:
             report.skipped += 1
             continue
-        if not account.is_active or account.email.endswith(f"@{MIGRATED_DOMAIN}"):
+        if not account.is_active or placeholder_address(account.email):
             report.violation(account.uid, "not_sent", "inactive account or no real e-mail address; no link sent.")
             report.skipped += 1
             continue

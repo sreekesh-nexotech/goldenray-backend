@@ -201,7 +201,7 @@ def test_imported_owner_and_customer_through_the_legacy_map(state, make_user):
     qid, record = next((qid, record) for qid, record in state["quotations"].items() if record.get("salespersonId") == "admin-001")
     owner = make_user(grants={"quotations": ["view"]})
     customer = CustomerFactory()
-    LegacyMap.objects.create(source_system=LegacyMap.SourceSystem.FLARIZE, source_table="users", source_id="admin-001", target_table="accounts_user", target_id=owner.pk)
+    LegacyMap.objects.create(source_system=LegacyMap.SourceSystem.FLARIZE, source_table="users.json", source_id="admin-001", target_table="accounts_user", target_id=owner.pk)
     LegacyMap.objects.create(
         source_system=LegacyMap.SourceSystem.FLARIZE, source_table="customers", source_id=record["customer"]["customerId"], target_table="customers_customer", target_id=customer.pk
     )

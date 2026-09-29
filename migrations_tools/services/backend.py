@@ -12,6 +12,7 @@ from company.services import legacy_import as company_import
 from core.models import LegacyMap
 from emi.services import legacy_import as emi_import
 from leads.services import legacy_import as leads_import
+from migrations_tools.services import business_defaults
 from migrations_tools.services.runner import Context, Plan, Step
 from pricing.services import legacy_import as pricing_import
 from quotations.services import legacy_import as quotations_import
@@ -59,7 +60,11 @@ def _catalog_pricing(rows, ctx: Context) -> dict:
 
 
 def _bom(rows, ctx: Context) -> dict:
-    return {"bom.goldenray": bom_import.import_goldenray_bom(*(rows[table] for table in BOM_TABLES), user=ctx.user)}
+    """The Studio BOM configuration; then business default B-5 lists the inverters a HYB slot never matches."""
+    return {
+        "bom.goldenray": bom_import.import_goldenray_bom(*(rows[table] for table in BOM_TABLES), user=ctx.user),
+        "B-5 hybrid slot phases": business_defaults.hybrid_phase_mismatches(),
+    }
 
 
 def _calculators(rows, ctx: Context) -> dict:

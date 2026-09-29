@@ -50,9 +50,9 @@ def results(check_verifier, *numbers):
 
 def test_a_clean_import_passes_every_check(imported, legacy_cms, corpus):
     outcome = results(verifier(legacy_cms, corpus, list_prices_as_release=True))
-    assert {number: result.status for number, result in outcome.items()} == {number: "pass" for number in (1, 2, 3, 4, 5, 6, 7, 10, 12)}, {
-        number: result.details for number, result in outcome.items() if result.status != "pass"
-    }
+    # #8, #9 (Flarize) and #11 (eSSL) check sources this verification does not cover: n/a (migration-ops)
+    expected = {number: "pass" for number in (1, 2, 3, 4, 5, 6, 7, 10, 12)} | {8: "n/a", 9: "n/a", 11: "n/a"}
+    assert {number: result.status for number, result in outcome.items()} == expected, {number: result.details for number, result in outcome.items() if result.status != "pass"}
     assert outcome[3].summary.startswith("71 requests compared")
     assert "(website product prices: the imported current LIST prices" in outcome[10].summary
 
@@ -241,3 +241,24 @@ def test_first_difference_and_typed_comparison():
     assert parity.first_difference([1], [1, 2]).endswith("1 items in the legacy payload, 2 in the new")
     assert parity.compare_calculator({"status": 500, "response": None}, 400, {"code": "invalid_input"}) is None
     assert parity.compare_calculator({"status": 404, "response": {"error": "x size_id"}}, 404, {"message": "x size_uid"}, message=parity.EmiTranslation.message) is None
+
+
+def test_rows_listed_by_another_sources_import_count_as_accounted(imported, legacy_cms, corpus):
+    """The Flarize catalog import (D-2) unmaps and lists main backend ``bom_itemtier`` rows; a later Flarize run finds
+    nothing left to unmap, so any committed run of another source counts — but never under that source's own tables."""
+    import uuid
+
+    from audit.models import AuditLog
+    from migrations_tools.services.runner import BATCH_ACTION, RUN_OBJECT
+
+    LegacyMap.objects.filter(source_system="BACKEND", source_table="bom_catalogitem", source_id="3").delete()
+    assert results(verifier(legacy_cms, corpus), 1)[1].status == "fail"
+
+    def batch(system, step, listed):
+        AuditLog.objects.create(action=BATCH_ACTION, object_type=RUN_OBJECT, object_uid=uuid.uuid4(), after={"source_system": system, "step": step, "dry_run": False, "listed": listed})
+
+    batch("FLARIZE", "flarize.catalog", {"catalog.json": ["3"]})  # a Flarize table of the same id: not a backend row
+    assert results(verifier(legacy_cms, corpus), 1)[1].status == "fail"
+    batch("FLARIZE", "flarize.catalog", {"bom_catalogitem": ["3"]})
+    batch("FLARIZE", "flarize.catalog", {})  # the later run lists nothing more
+    assert results(verifier(legacy_cms, corpus), 1)[1].status == "pass"
