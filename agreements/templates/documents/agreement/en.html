@@ -1,0 +1,5 @@
+{% extends "documents/base.html" %}
+{# Agreement (English): the Purchase Agreement page's buildDoc, rendered from the frozen payload — formatting only. #}
+{% block title %}{{ payload.agreement.number|default:"Agreement" }}{% endblock %}
+{% block styles %}{% include "documents/agreement/_styles.html" %}{% endblock %}
+{% block content %}{% include "documents/agreement/_document.html" %}{% endblock %}

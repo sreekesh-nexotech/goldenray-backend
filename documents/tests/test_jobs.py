@@ -70,7 +70,7 @@ def test_payload_hash_is_canonical():
         ({"object_type": "PricingRelease"}, "validation_error", "object_type"),
         ({"template": "../../etc"}, "validation_error", "template"),
         ({"template": "fancy"}, "template_not_found", "template"),
-        ({"kind": "AGREEMENT"}, "template_not_found", "template"),  # agreements ship their own templates
+        ({"kind": "AGREEMENT", "template": "internal"}, "template_not_found", "template"),  # agreements ship only the default template
         ({"payload": ["not", "an", "object"]}, "validation_error", "payload"),
         ({"payload": {"blob": "x" * (1024 * 1024)}}, "payload_too_large", "payload"),
         ({"payload": {"when": object()}}, "validation_error", "payload"),

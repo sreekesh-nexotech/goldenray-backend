@@ -451,6 +451,12 @@ SPECTACULAR_SETTINGS = {
         "QuotationBatteryConfigEnum": "quotations.serializers.quotations.BATTERY_CONFIG_CHOICES",
         # named once quotations added a third "battery_config" choice set
         "PricingBatteryConfigEnum": "pricing.models.choices.BatteryConfig",
+        "AgreementStatusEnum": "agreements.models.choices.AgreementStatus",
+        "AgreementKindEnum": "agreements.models.choices.AgreementKind",
+        "AgreementBlankKindEnum": "agreements.serializers.agreements.BLANK_KINDS",
+        "AgreementFromQuotationKindEnum": "agreements.serializers.agreements.FROM_QUOTATION_KINDS",
+        "AgreementLanguageEnum": "agreements.models.choices.Language",
+        "AgreementSystemTypeEnum": "agreements.models.choices.SystemType",
     },
 }
 

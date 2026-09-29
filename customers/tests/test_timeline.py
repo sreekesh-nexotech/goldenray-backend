@@ -31,7 +31,13 @@ def test_entries_from_every_provider_newest_first(auth_client, make_user):
     assert set(kinds) == {"customers.created", "customers.note", "customers.merged", "leads.received", "leads.converted", "leads.warranty_request"}
     ats = [entry["at"] for entry in body["results"]]
     assert ats == sorted(ats, reverse=True) and body["next_before"] is None
-    assert timeline.providers() == {"customers.record": "customers", "leads.leads": "leads", "leads.warranty_requests": "leads", "quotations.quotations": "quotations"}
+    assert timeline.providers() == {
+        "agreements.agreements": "agreements",
+        "customers.record": "customers",
+        "leads.leads": "leads",
+        "leads.warranty_requests": "leads",
+        "quotations.quotations": "quotations",
+    }
 
 
 def test_entries_follow_the_viewers_permissions_and_scope(auth_client, make_user):
