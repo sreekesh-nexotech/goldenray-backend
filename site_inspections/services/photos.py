@@ -18,7 +18,7 @@ from core.errors import Conflict, DomainError, NotFound
 from core.services import check_version, stamp_create
 from media.models import MediaAsset
 from media.services import assets
-from site_inspections.models import Annotation, EquipmentAssessment, Inspection, Photo
+from site_inspections.models import Annotation, EquipmentAssessment, Inspection, LocationApproval, Photo
 from site_inspections.services import common
 
 MEDIA_FOLDER = "site-inspections"
@@ -74,6 +74,18 @@ def references(photo: Photo) -> list[str]:
     return found
 
 
+def in_approval_snapshot(photo: Photo) -> list[int]:
+    """Numbers of the location approvals whose frozen snapshot shows ``photo`` — the file the customer (or the paper
+    fallback) approved is evidence and is never removed, even after the photo leaves the working set."""
+    uid = str(photo.uid)
+    found = []
+    for number, snapshot in LocationApproval.objects.filter(inspection_id=photo.inspection_id).values_list("number", "location_snapshot"):
+        entries = snapshot.values() if isinstance(snapshot, dict) else ()
+        if any(isinstance(entry, dict) and str(entry.get("photo")) == uid for entry in entries):
+            found.append(number)
+    return sorted(found)
+
+
 @transaction.atomic
 def delete_photo(photo: Photo, *, user, expected_version=None) -> None:
     inspection = common.lock(photo.inspection)
@@ -85,8 +97,10 @@ def delete_photo(photo: Photo, *, user, expected_version=None) -> None:
         raise Conflict("photo_in_use", "The photo is referenced by the inspection; replace that reference first.", errors={"photo": used})
     photo.soft_delete(user)
     photo.observations.clear()
-    assets.delete_asset(photo.asset, user=user)
-    common.audit("photo_deleted", inspection, user, before={"photo": str(photo.uid), "photo_type": photo.photo_type})
+    evidence = in_approval_snapshot(photo)
+    if not evidence:
+        assets.delete_asset(photo.asset, user=user)
+    common.audit("photo_deleted", inspection, user, before={"photo": str(photo.uid), "photo_type": photo.photo_type}, after={"file_kept_for_approvals": evidence} if evidence else None)
     common.changed(inspection)
 
 

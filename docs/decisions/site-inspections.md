@@ -174,11 +174,20 @@ released_at, released_by_uid}`. Dedup key: `site_inspections.released:<uid>:<ver
      (`SITE_INSPECTIONS_APPROVAL_TTL_DAYS`).
    * The link is returned once to the requester, who sends it to the customer. Twilio Verify carries only the code
      (`leads.services.otp`, purpose APPROVAL, to the approval's phone). See DV-126.
+   * The code goes to a number on the customer record (`phone_e164`, then `alt_phone`). Because the requester
+     receives the link, an engineer cannot choose another number (403 `phone_not_customer`) — otherwise they could
+     route the code to themselves and approve for the customer. Only `approve` (Project Head, who can also record a
+     paper approval) may use another number or fall back to the KSEB registered phone; the number is audited.
    * `respond/` verifies the code before anything is written. It then records the decision, comment, optional drawn
      signature (private SIGNATURE asset) and the trusted client IP.
    * Only the latest PENDING, unexpired approval of an inspection that is CUSTOMER_APPROVAL_PENDING can be answered.
      A rejection needs a comment.
    * Staff can never answer on the customer's behalf; the D-13 paper route is separate, audited, and requires the scan.
+   * A photo shown in any approval's location snapshot keeps its file when the photo is deleted later (the photo row
+     is soft-deleted; the private asset is the approval's evidence).
+   * An inspection ON_HOLD is protected as the status it was held from: it cannot be archived when held from
+     APPROVED/INSTALLATION_READY, an agreement does not convert it, and an agreement's system-type change while it is
+     held after completion supersedes its approvals and makes `resume/` return to REVISION_REQUIRED.
 7. **Release** evaluates readiness on the current row: annotations, approvals with snapshot comparison, checklists,
    work items and reviews. Customer-impacting work blocks release until APPROVED or NONE (D-12).
 8. **Additional work.** The seven-state map is enforced as in V2 `validateAdditionalWorkTransition`.

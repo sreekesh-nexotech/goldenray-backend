@@ -169,6 +169,21 @@ def _decimal(value, places: int = 2) -> Decimal | None:
     return number.quantize(Decimal(1).scaleb(-places)) if number.is_finite() and number >= 0 else None
 
 
+def _coordinate(run: ImportRun, row_id, column: str, value, limit: int) -> Decimal | None:
+    """A REAL column may hold text in SQLite ("" from an emptied form): anything that is not a number in range is
+    left blank and reported — one bad row must never abort the import."""
+    if value in (None, ""):
+        return None
+    try:
+        number = Decimal(str(value).strip())
+    except InvalidOperation:
+        number = None
+    if number is None or not number.is_finite() or not -limit <= number <= limit:
+        run.violation(row_id, "out_of_range", f"{column}={value!r} is not a coordinate; left blank.")
+        return None
+    return number.quantize(Decimal("0.000001"))
+
+
 def _enum(run: ImportRun, row_id, column: str, value, kind) -> str:
     if value in (None, ""):
         return ""
@@ -297,8 +312,8 @@ def _inspection_values(run: ImportRun, row: dict) -> dict | None:
         "agreement_version": row.get("purchase_agreement_version") if agreement else None,
         "pincode": str(row.get("pincode") or "") if re.fullmatch(r"[1-9][0-9]{5}", str(row.get("pincode") or "")) else "",
         "google_map_link": (row.get("google_map_link") or "")[:500],
-        "latitude": _decimal(row.get("latitude"), 6) if row.get("latitude") is not None and -90 <= float(row["latitude"]) <= 90 else None,
-        "longitude": _decimal(row.get("longitude"), 6) if row.get("longitude") is not None and -180 <= float(row["longitude"]) <= 180 else None,
+        "latitude": _coordinate(run, rid, "latitude", row.get("latitude"), 90),
+        "longitude": _coordinate(run, rid, "longitude", row.get("longitude"), 180),
         "location_captured_at": timestamp(row.get("location_captured_at")),
         "vehicle_type": VEHICLE.get(str(row.get("vehicle_type") or "").strip().lower(), ""),
         "no_of_floors": int(row["no_of_floors"]) if str(row.get("no_of_floors") or "").isdigit() else None,

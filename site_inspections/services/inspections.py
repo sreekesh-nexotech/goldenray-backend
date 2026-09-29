@@ -174,7 +174,7 @@ def set_system_type(instance: Inspection, *, user, system_type: str, reason: str
 @transaction.atomic
 def archive(instance: Inspection, *, user, expected_version=None) -> None:
     inspection = common.lock(instance, expected_version)
-    if inspection.status in common.READ_ONLY:
+    if common.effective_status(inspection) in common.READ_ONLY:
         raise Conflict("inspection_read_only", "An approved or released inspection cannot be archived.", errors={"status": [inspection.status]})
     for approval in LocationApproval.objects.filter(inspection=inspection, status=ApprovalStatus.PENDING):
         approval.versioned_update(user, status=ApprovalStatus.SUPERSEDED)

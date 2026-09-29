@@ -65,6 +65,32 @@ def _latest(inspection: Inspection) -> LocationApproval | None:
     return LocationApproval.objects.filter(inspection=inspection).order_by("-number").first()
 
 
+def customer_phones(customer) -> list[str]:
+    """The numbers the customer record holds (Sales-maintained): the only ones the one-time code may go to by default."""
+    alt = try_normalise(customer.alt_phone) if customer.alt_phone else None
+    return [phone for phone in dict.fromkeys((customer.phone_e164, alt)) if phone]
+
+
+def _approval_phone(inspection: Inspection, user, requested: str) -> str:
+    """The phone that proves the customer. The code must never reach a number the requester chose: an engineer (who
+    receives the link) may only use the customer's own numbers; a Project Head (``approve``, who may also record a
+    paper approval) may use another number or the KSEB registered phone — audited with the request."""
+    known = customer_phones(inspection.customer)
+    approver = common.can_act(user, "approve")
+    phone = requested or (known[0] if known else "")
+    if not phone and approver:
+        phone = try_normalise(inspection.registered_phone_e164) or ""
+    if not phone:
+        raise DomainError("phone_required", "The customer has no phone number for the one-time code.", errors={"customer_phone": ["Required."]})
+    if phone not in known and not approver:
+        raise PermissionDenied(
+            "phone_not_customer",
+            "The one-time code can only go to a phone number on the customer record; ask a Project Head to use another number.",
+            errors={"customer_phone": ["Not a phone number of this customer."]},
+        )
+    return phone
+
+
 @transaction.atomic
 def request_approval(instance: Inspection, *, user, customer_name: str = "", customer_phone_e164: str = "", expected_version=None) -> tuple[LocationApproval, str]:
     if not (common.can_act(user, "submit") or common.can_act(user, "approve")):
@@ -77,9 +103,7 @@ def request_approval(instance: Inspection, *, user, customer_name: str = "", cus
             "site_not_suitable", "Only a suitable or conditionally suitable site is sent for the customer's approval.", errors={"site_suitability": [inspection.site_suitability or "unset"]}
         )
     customer = inspection.customer
-    phone = customer_phone_e164 or customer.phone_e164 or try_normalise(inspection.registered_phone_e164) or ""
-    if not phone:
-        raise DomainError("phone_required", "The customer has no phone number for the one-time code.", errors={"customer_phone": ["Required."]})
+    phone = _approval_phone(inspection, user, customer_phone_e164)
     superseded = []
     for pending in LocationApproval.objects.select_for_update().filter(inspection=inspection, status=ApprovalStatus.PENDING):
         pending.versioned_update(user, status=ApprovalStatus.SUPERSEDED)

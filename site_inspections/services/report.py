@@ -33,7 +33,7 @@ from site_inspections.services import common, equipment, photos, snapshots, work
 VARIANTS = ("customer", "internal")
 KIND = "INSPECTION_REPORT"
 MAX_EVIDENCE = 8
-IMAGE_BUDGET = 700_000  # bytes of embedded images (the documents payload is capped at 1 MB)
+IMAGE_BUDGET = 700_000  # characters of embedded data URIs (base64 grows the bytes by 4/3; the documents payload is capped at 1 MB)
 DISCLAIMER = (
     "This report records the site conditions, proposed installation locations and customer approval captured during the site inspection. "
     "Final installation remains subject to engineering and safety requirements."
@@ -67,10 +67,11 @@ class _Images:
             data = storage.read(asset.thumbnail_key) if asset.thumbnail_key else render_thumbnail(storage.read(asset.file), int(settings.MEDIA_THUMBNAIL_MAX_PX))
         except (StorageError, OSError, ValueError):
             return None
-        if self.used + len(data) > IMAGE_BUDGET:
+        uri = f"data:image/webp;base64,{base64.b64encode(data).decode()}"
+        if self.used + len(uri) > IMAGE_BUDGET:  # counted as embedded text: the payload cap is on the JSON
             return None
-        self.used += len(data)
-        return f"data:image/webp;base64,{base64.b64encode(data).decode()}"
+        self.used += len(uri)
+        return uri
 
 
 def _location(images: _Images, inspection: Inspection, annotation_type: str, title: str) -> dict:

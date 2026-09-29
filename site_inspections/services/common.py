@@ -66,6 +66,13 @@ def changed(inspection: Inspection) -> None:
     bump(CACHE_NAMESPACE)
 
 
+def effective_status(inspection: Inspection) -> str:
+    """The status that governs protection rules: an inspection on hold keeps the one it was held from."""
+    if inspection.status == Status.ON_HOLD and inspection.held_from_status:
+        return inspection.held_from_status
+    return inspection.status
+
+
 def ensure_engineer_writable(inspection: Inspection) -> None:
     if inspection.status in ENGINEER_WRITABLE:
         return

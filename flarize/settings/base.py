@@ -462,6 +462,9 @@ SPECTACULAR_SETTINGS = {
         "SiteInspectionWorkStatusEnum": "site_inspections.models.choices.WorkStatus",
         "SiteInspectionEquipmentStatusEnum": "site_inspections.models.choices.AssessmentStatus",
         "SiteInspectionApprovalStatusEnum": "site_inspections.models.choices.ApprovalStatus",
+        # quotations also has a "roof_type" choice set
+        "SiteInspectionRoofTypeEnum": "site_inspections.models.choices.RoofType",
+        "QuotationRoofTypeEnum": "quotations.models.choices.RoofType",
     },
 }
 

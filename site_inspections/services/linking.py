@@ -34,7 +34,7 @@ from customers.services.phones import try_normalise
 from site_inspections.models import Inspection
 from site_inspections.models.choices import Origin, Phase, SnapshotSource, Status, SystemType
 from site_inspections.services import common, snapshots
-from site_inspections.services.inspections import AFTER_COMPLETION, reset_equipment, send_back
+from site_inspections.services.inspections import AFTER_COMPLETION, reset_equipment, send_back, supersede_approvals
 
 LINKABLE_KINDS = frozenset({"PURCHASE_AGREEMENT", "SALE_ORDER"})
 NOT_LINKABLE = (Status.APPROVED, Status.INSTALLATION_READY, Status.REJECTED)
@@ -174,8 +174,16 @@ def _apply(inspection: Inspection, data: dict, *, version: int, action: str) -> 
         None,
         after={"agreement_uid": str(data["agreement_uid"]), "agreement_number": data["number"], "agreement_version": version, "system_type": data["system_type"], "reset_equipment": removed},
     )
-    if previous_type != inspection.system_type and inspection.status in AFTER_COMPLETION:
-        send_back(inspection, user=None, reason=f"The agreement changed the system type from {previous_type} to {inspection.system_type}.")
+    if previous_type != inspection.system_type and common.effective_status(inspection) in AFTER_COMPLETION:
+        reason = f"The agreement changed the system type from {previous_type} to {inspection.system_type}."
+        if inspection.status == Status.ON_HOLD:
+            # Stays on hold; resume/ returns it to REVISION_REQUIRED (the standing approvals no longer apply).
+            superseded = supersede_approvals(inspection, user=None)
+            held_from = inspection.held_from_status
+            inspection.versioned_update(None, held_from_status=Status.REVISION_REQUIRED, **({"released_at": None, "released_by": None} if held_from == Status.INSTALLATION_READY else {}))
+            common.audit("revision_required", inspection, None, after={"reason": reason, "superseded_approvals": superseded, "held_from": held_from})
+        else:
+            send_back(inspection, user=None, reason=reason)
     common.changed(inspection)
     return inspection
 
@@ -193,7 +201,12 @@ def apply_agreement(payload: dict) -> Inspection | None:
         if linked is not None:
             return _apply(linked, data, version=data["version"] or (linked.agreement_version or 0) + 1, action="agreement_superseded")
     candidate = (
-        Inspection.objects.select_for_update().filter(customer=customer, origin=Origin.PRE_SALE, agreement_uid__isnull=True).exclude(status__in=NOT_LINKABLE).order_by("-created_at", "-id").first()
+        Inspection.objects.select_for_update()
+        .filter(customer=customer, origin=Origin.PRE_SALE, agreement_uid__isnull=True)
+        .exclude(status__in=NOT_LINKABLE)
+        .exclude(status=Status.ON_HOLD, held_from_status__in=NOT_LINKABLE)
+        .order_by("-created_at", "-id")
+        .first()
     )
     if candidate is not None:
         return _apply(candidate, data, version=data["version"] or 1, action="linked_to_agreement")
