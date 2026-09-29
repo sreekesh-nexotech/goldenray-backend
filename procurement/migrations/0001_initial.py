@@ -158,7 +158,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="batch",
-            index=models.Index(fields=["status", "-created_at"], name="procurement_batch_status_created"),
+            index=models.Index(fields=["status", "-created_at"], name="procurement_batch_status_idx"),
         ),
         migrations.AddConstraint(
             model_name="batch",

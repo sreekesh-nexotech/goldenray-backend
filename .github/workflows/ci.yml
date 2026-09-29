@@ -68,6 +68,12 @@ jobs:
         run: lint-imports
       - name: System checks
         run: python manage.py check --fail-level WARNING
+      - name: System checks including database checks (identifier lengths, models.E034 — plain check skips them)
+        # the database checks connect; flarize_ci is never created (pytest makes test_flarize_ci), so point at the
+        # service's own maintenance database — the checks only read connection features, they write nothing
+        env:
+          DB_NAME: postgres
+        run: python manage.py check --database default --fail-level WARNING
       - name: Migrations are complete
         run: python manage.py makemigrations --check --dry-run
       - name: View budget (≤ 250 lines per views/ file)

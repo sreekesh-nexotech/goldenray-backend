@@ -70,7 +70,7 @@ class Batch(BaseModel):
             models.CheckConstraint(condition=Q(reverses__isnull=True) | ~Q(reverses=F("id")), name="procurement_batch_not_own_reversal"),
             models.CheckConstraint(condition=Q(number__regex=r"^[A-Z0-9][A-Z0-9_.-]{0,31}$"), name="procurement_batch_number_format"),
         ]
-        indexes = [models.Index(fields=["status", "-created_at"], name="procurement_batch_status_created")]
+        indexes = [models.Index(fields=["status", "-created_at"], name="procurement_batch_status_idx")]
 
     def __str__(self) -> str:
         return f"{self.number} ({self.status})"
