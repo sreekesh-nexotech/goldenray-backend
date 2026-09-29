@@ -1,0 +1,6 @@
+{% load agreement_document %}{% if payload.prices.statutory_fee_amount %}
+    <div class="kseb">
+      <div class="kseb-row"><span class="kseb-label">{{ L.kseb }}</span><span class="kseb-amount">₹ {{ payload.prices.statutory_fee_amount|inr }}</span></div>
+      <div class="kseb-note">* {{ L.kseb_note }}</div>
+    </div>
+{% endif %}

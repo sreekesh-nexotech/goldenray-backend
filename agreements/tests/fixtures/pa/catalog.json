@@ -1,0 +1,560 @@
+{
+ "panels_dcr": [
+  {
+   "id": "item-001",
+   "value": "Waaree - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-002",
+   "value": "Waaree - Bifacial Topcon - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-003",
+   "value": "Waaree - TopCon - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-004",
+   "value": "Adani - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-005",
+   "value": "Adani - Bifacial Topcon Glass to Sheet - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-006",
+   "value": "Premier Energies - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-007",
+   "value": "Premier Energies - TopCon Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-008",
+   "value": "Premier Energies - Topcon Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-009",
+   "value": "Vikram Solar - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-010",
+   "value": "Renewsys - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-011",
+   "value": "Rayzon - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-012",
+   "value": "Panasonic - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-013",
+   "value": "Axitec - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-014",
+   "value": "Saatvik Solar - Mono Perc Bifacial - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-015",
+   "value": "Saatvik Solar - Bifacial Topcon Glass to Glass - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-016",
+   "value": "Jakson - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-017",
+   "value": "Renew - Mono Perc Bifacial - MODEL",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-018",
+   "value": "Emmvee - TopCon - DCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "panels_ndcr": [
+  {
+   "id": "item-019",
+   "value": "Waaree - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-020",
+   "value": "Waaree - Bifacial Topcon - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-021",
+   "value": "Vikram Solar - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-022",
+   "value": "Renewsys - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-023",
+   "value": "Renewsys - TopCon Bifacial Glass to Glass - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-024",
+   "value": "Rayzon - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-025",
+   "value": "Panasonic - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-026",
+   "value": "Axitec - Bifacial Topcon - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-027",
+   "value": "Premier Energies - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-028",
+   "value": "Premier Energies - Bifacial Topcon - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-029",
+   "value": "Saatvik Solar - Mono Perc Bifacial - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-030",
+   "value": "Saatvik Solar - Bifacial Topcon Glass to Glass - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-031",
+   "value": "Adani - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-032",
+   "value": "Jakson - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-033",
+   "value": "Goldi - Bifacial Topcon Glass to Glass - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-034",
+   "value": "Emmvee - TopCon - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-035",
+   "value": "Renew - TopCon Glass to Glass - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-036",
+   "value": "Adani - Bifacial Glass to Glass - NDCR",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "inverters": [
+  {
+   "id": "item-037",
+   "value": "Growatt",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-038",
+   "value": "Sungrow",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-039",
+   "value": "SolarEdge",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-040",
+   "value": "Solaire",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-041",
+   "value": "DEYE",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-042",
+   "value": "Deye",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-043",
+   "value": "PV BLINK",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-044",
+   "value": "ENPHASE",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-045",
+   "value": "Solis",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-046",
+   "value": "Hoymiles",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-047",
+   "value": "Foxess",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-048",
+   "value": "Eastman",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-049",
+   "value": "Premier",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "invtypes": [
+  {
+   "id": "item-050",
+   "value": "String Inverter",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-051",
+   "value": "Micro Inverter",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-052",
+   "value": "Hybrid Inverter",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "plants": [
+  {
+   "id": "item-053",
+   "value": "3 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-054",
+   "value": "4 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-055",
+   "value": "5 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-056",
+   "value": "6 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-057",
+   "value": "8 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-058",
+   "value": "10 KW",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-059",
+   "value": "3KW Hybrid Plant",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-060",
+   "value": "5KW Hybrid Plant",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-061",
+   "value": "8KW On-Grid Plant",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-062",
+   "value": "8KW Hybrid Plant",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-063",
+   "value": "3KW Plant with 5KW Inverter – On-Grid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-064",
+   "value": "3KW Plant with 5KW Inverter – Hybrid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-065",
+   "value": "5KW Plant with 6KW Inverter – On-Grid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-066",
+   "value": "5KW Plant with 6KW Inverter – Hybrid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-067",
+   "value": "5KW Plant with 8KW Inverter – On-Grid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-068",
+   "value": "5KW Plant with 8KW Inverter – Hybrid",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "capacities": [
+  {
+   "id": "item-069",
+   "value": "545W – 580W",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-070",
+   "value": "530W – 560W",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-071",
+   "value": "590W – 620W",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-072",
+   "value": "600W – 640W",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-073",
+   "value": "445W – 470W",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "batteries": [
+  {
+   "id": "item-074",
+   "value": "None",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-075",
+   "value": "2.4 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-076",
+   "value": "3.0 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-077",
+   "value": "3.5 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-078",
+   "value": "5.0 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-079",
+   "value": "7.0 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-080",
+   "value": "10 kWh",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "structures": [
+  {
+   "id": "item-081",
+   "value": "GI (Galvanized Iron) Structure",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-082",
+   "value": "GP (Pre Galvanized Pipe) Structure",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-083",
+   "value": "Hot Dip Galvanized",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-084",
+   "value": "Aluminium Rails",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ],
+ "kseb": [
+  {
+   "id": "item-085",
+   "value": "3 KW|5400",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-086",
+   "value": "5 KW|7800",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-087",
+   "value": "8 KW|11240",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-088",
+   "value": "10 KW|13600",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-089",
+   "value": "12 KW|15960",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  },
+  {
+   "id": "item-090",
+   "value": "15 KW|19500",
+   "createdAt": "2026-09-20T17:00:00.000Z",
+   "updatedAt": "2026-09-20T17:00:00.000Z"
+  }
+ ]
+}

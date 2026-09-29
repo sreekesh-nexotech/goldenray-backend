@@ -1,0 +1,36 @@
+{# Ported from the Purchase Agreement page's buildDoc inline styles (A4, orange bands, label : value rows, callouts). #}
+.a4 { position: relative; color: #111; font-family: "Noto Serif", "Noto Sans", Georgia, serif; }
+.band { height: 2.4mm; background: #EA7A0C; }
+.letterhead { display: flex; justify-content: space-between; align-items: flex-start; padding: 5mm 4mm 3mm; }
+.letterhead .logo img { height: 22mm; width: auto; display: block; }
+.letterhead .contact { font-family: "Noto Sans", sans-serif; font-size: 8pt; color: #444; text-align: right; line-height: 1.85; }
+.letterhead .company { font-weight: 700; font-size: 9pt; color: #1A1916; margin-bottom: 1.5mm; }
+.rule { height: 0.5mm; background: #1A1916; margin: 0 4mm; }
+.meta { font-family: "Noto Sans", sans-serif; font-size: 8pt; color: #555; text-align: right; padding: 2mm 4mm 0; }
+.body { padding: 18mm 8mm 10mm; }
+.body.lang-ml { font-family: "Noto Sans Malayalam", sans-serif; }
+.body.lang-hi { font-family: "Noto Sans Devanagari", sans-serif; }
+.title { text-align: center; font-weight: 700; font-size: 14pt; text-decoration: underline; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 7mm; }
+.subtitle { text-align: center; font-size: 14pt; font-weight: 600; margin-bottom: 6mm; }
+table.rows { width: 92%; margin: 0 auto; border-collapse: collapse; }
+table.rows td { border: 0; padding: 1.8mm 1mm; font-size: 11pt; vertical-align: top; }
+table.rows td.lbl { font-weight: 700; white-space: nowrap; width: 42%; color: #111; }
+table.rows td.sep { width: 4%; text-align: center; font-weight: 700; }
+table.rows td.val { width: 54%; word-break: break-word; }
+.para { font-size: 11pt; line-height: 1.95; text-align: justify; }
+.para.second { margin-top: 4mm; }
+.extras, .lines, .payment { margin-top: 7mm; }
+.extras-head { font-weight: 700; font-size: 11pt; margin-bottom: 2mm; text-decoration: underline; }
+.extras table, .lines table, .payment table { font-size: 11pt; width: auto; }
+.extras td, .lines td, .lines th, .payment td { border: 0; padding: 1.5mm 3.5mm 1.5mm 0; }
+.extras-lbl { font-weight: 700; white-space: nowrap; }
+.kseb { margin: 7mm auto 0; width: 92%; background: #FFF7EC; border: 0.4mm solid #F3CF92; border-left: 1.3mm solid #EA7A0C; border-radius: 2.5mm; padding: 3.5mm 4.5mm; }
+.kseb-row { display: flex; justify-content: space-between; gap: 4mm; }
+.kseb-label { font-weight: 700; color: #9A6A12; font-size: 10.5pt; }
+.kseb-amount { font-weight: 800; color: #C5650A; font-size: 13pt; white-space: nowrap; }
+.kseb-note { margin-top: 2mm; font-size: 9pt; color: #A07A2E; font-style: italic; }
+.offer { margin: 5mm auto 0; width: 92%; background: #FDEEEC; border: 0.4mm solid #E6A39C; border-left: 1.3mm solid #C7382B; border-radius: 2.5mm; padding: 3.5mm 4.5mm; }
+.offer-head { font-weight: 700; color: #A62D22; font-size: 10.5pt; margin-bottom: 1.5mm; }
+.offer-body { font-size: 10pt; color: #5A2622; line-height: 1.5; }
+.note { font-size: 8.5pt; line-height: 1.6; text-align: justify; margin-top: 8mm; padding-top: 3.5mm; border-top: 0.3mm solid #ccc; color: #333; }
+.sign { margin-top: 14mm; text-align: right; padding-right: 8mm; font-size: 11pt; line-height: 2.4; }
