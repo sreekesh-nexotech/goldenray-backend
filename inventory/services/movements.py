@@ -2,7 +2,10 @@
 
 Rules of :func:`record_movement` (every refusal is a ``DomainError``):
 
-* ``component`` is a live catalog component and ``location`` a live location, both by uid (400);
+* ``component`` is a live catalog component and ``location`` a live location, both by uid (400); a soft-deleted
+  component may only have its remaining stock at the location moved out, or a negative balance brought back towards
+  zero (400 otherwise) — so stock received after the deletion never gets stuck;
+* only an OUT can be refused for the balance: stock arriving at a location already below zero is always booked;
 * ``qty`` is positive with at most 3 decimals (the direction gives the sign) (400);
 * the reason fixes the direction: PURCHASE is IN, ISSUE_TO_PROJECT is OUT, RETURN and ADJUST go either way (400);
 * ``ref_type`` (``<app>.<model>``) and ``ref_uid`` come together; ISSUE_TO_PROJECT needs one (which project?);
@@ -77,16 +80,24 @@ def _uuid(value, field: str) -> uuid.UUID | None:
         raise validation_error({field: ["Must be a valid UUID."]}) from None
 
 
-def _component(value, *, include_deleted: bool = False) -> Component:
+def _component(value) -> Component:
+    """The component, soft-deleted ones included (whether a deleted one may move is decided against its balance)."""
     if isinstance(value, Component):
-        component = value if include_deleted or value.deleted_at is None else None
+        component = value
     else:
         uid = _uuid(value, "component")
-        manager = Component.all_objects if include_deleted else Component.objects
-        component = manager.filter(uid=uid).first() if uid else None
+        component = Component.all_objects.filter(uid=uid).first() if uid else None
     if component is None:
         raise validation_error({"component": ["Unknown component."]})
     return component
+
+
+def _clears_stock(direction: str, qty: Decimal, balance: Decimal) -> bool:
+    """True when the movement brings the balance towards zero without crossing it (OUT of stock on hand, IN to a
+    negative balance) — the only movements a soft-deleted component may still make."""
+    if direction == Direction.OUT:
+        return 0 < qty <= balance
+    return balance < 0 and qty <= -balance
 
 
 def _location_uid(value) -> uuid.UUID:
@@ -167,13 +178,19 @@ def record_movement(*, user, data, by=None, allow_reserved: bool = False, includ
     if reason == Reason.ADJUST and not note:
         raise validation_error({"note": ["An ADJUST needs a note (why the stock is corrected)."]})
     at = _check_at(data.get("at"))
-    component = _component(data.get("component"), include_deleted=include_deleted_component)
+    component = _component(data.get("component"))
     location = _lock_location(_location_uid(data.get("location")))
 
     balance = balance_of(component, location)
+    if component.deleted_at is not None and not include_deleted_component and not _clears_stock(direction, qty, balance):
+        # A deleted component can still hold stock (received after its batch was committed, or deleted while the
+        # ledger was switched off); that stock may be moved out or corrected to zero, never added to.
+        raise validation_error({"component": ["The component was deleted: only its remaining stock at this location can be moved out (towards zero)."]})
     after = balance + qty if direction == Direction.IN else balance - qty
     override = False
-    if after < 0:
+    # Only an OUT can overdraw: stock arriving at a location already below zero is always booked, even when the
+    # balance stays negative (a receipt of 2 into -5 leaves -3).
+    if direction == Direction.OUT and after < 0:
         if reason != Reason.ADJUST or not can(user, "inventory", "edit"):
             raise _refuse_overdraw(component, location, balance, qty)
         override = True

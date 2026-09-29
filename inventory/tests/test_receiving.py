@@ -79,6 +79,14 @@ class TestReceive:
         with pytest.raises(IntegrityError, match="some other constraint"):
             receive_batch(batch((component, "4")))
 
+    def test_a_receipt_into_a_negative_balance_is_booked(self, store, component):
+        """Stock issued before its purchase was received (balance -10): the receipt of 4 must still be booked (-6),
+        otherwise the event is retried and parked and the batch never reaches the ledger."""
+        Movement.objects.create(component=component, location=store, qty=10, direction="OUT", reason="ADJUST", note="issued before receipt")
+        [movement] = receive_batch(batch((component, "4")))
+        assert movement.balance_after == Decimal("-6.000") and movement.negative_override is False
+        assert Movement.objects.filter(ref_type=BATCH_LINE_REF).count() == 1
+
     def test_zero_and_negative_lines_are_skipped(self, store, component):
         assert len(receive_batch(batch((component, "0"), (ComponentFactory(), "-3"), (ComponentFactory(), "1")))) == 1
 

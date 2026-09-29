@@ -1,6 +1,7 @@
 """``inventory/locations/`` — CRUD (module ``inventory``: view / edit; flag ``INVENTORY_STOCK``, 404 while off).
 
-Delete is soft and refused with 409 ``location_has_stock`` while any component has a non-zero balance there.
+Delete is soft and refused with 409 ``location_has_stock`` while any component has a non-zero balance there; the
+location ``INVENTORY_RECEIVING_LOCATION`` names can be neither deleted nor recoded (409 ``receiving_location``).
 """
 
 from __future__ import annotations
@@ -26,12 +27,18 @@ FLAG_NOTE = "Answers 404 while the INVENTORY_STOCK flag is off."
     list=extend_schema(operation_id="inventory_locations_list", tags=TAGS, description=FLAG_NOTE),
     retrieve=extend_schema(operation_id="inventory_locations_retrieve", responses={200: LocationSerializer, **READ_ERRORS}, tags=TAGS, description=FLAG_NOTE),
     create=extend_schema(operation_id="inventory_locations_create", request=LocationCreateSerializer, responses={201: LocationSerializer, **WRITE_ERRORS}, tags=TAGS),
-    partial_update=extend_schema(operation_id="inventory_locations_update", request=LocationUpdateSerializer, responses={200: LocationSerializer, **WRITE_ERRORS}, tags=TAGS),
+    partial_update=extend_schema(
+        operation_id="inventory_locations_update",
+        request=LocationUpdateSerializer,
+        responses={200: LocationSerializer, **WRITE_ERRORS},
+        tags=TAGS,
+        description="409 `location_code_taken`, `stale_version`, or `receiving_location` when recoding the location INVENTORY_RECEIVING_LOCATION names.",
+    ),
     destroy=extend_schema(
         operation_id="inventory_locations_delete",
         responses={204: OpenApiResponse(description="Deleted (soft)."), **WRITE_ERRORS},
         tags=TAGS,
-        description="Soft delete; 409 `location_has_stock` while any component has a non-zero balance at the location.",
+        description="Soft delete; 409 `location_has_stock` while any component has a non-zero balance at the location, `receiving_location` while INVENTORY_RECEIVING_LOCATION names it.",
     ),
 )
 class LocationViewSet(FlagRequiredMixin, ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, BaseViewSet):

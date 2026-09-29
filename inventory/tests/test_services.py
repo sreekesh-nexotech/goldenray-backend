@@ -4,6 +4,7 @@ import threading
 import uuid
 from datetime import datetime
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
 from django.core.management import call_command
@@ -64,6 +65,13 @@ class TestLocationServices:
 
     def test_find_by_code(self, store):
         assert locations.find_by_code(" ho-store ") == store and locations.find_by_code("") is None
+
+    def test_the_receiving_location_is_neither_recoded_nor_deleted(self, settings, keeper, store):
+        settings.INVENTORY_RECEIVING_LOCATION = " HO-STORE "
+        for call in (lambda: locations.update_location(store, user=keeper, data={"code": "X"}), lambda: locations.delete_location(store, user=keeper)):
+            error = error_of(call)
+            assert isinstance(error, Conflict) and error.code == "receiving_location"
+        assert locations.update_location(store, user=keeper, data={"name": "Main"}).name == "Main"
 
     def test_delete_with_stock(self, keeper, store, component):
         MovementFactory(component=component, location=store, qty="1", direction="OUT", reason="ADJUST", note="lost")
@@ -152,9 +160,20 @@ class TestCatalogUsage:
     def test_stock_blocks_deleting_a_component(self, keeper, component, store):
         MovementFactory(component=component, location=store, qty="3")
         section = next(section for section in usage_of(component) if section.name == "inventory.stock")
-        assert section.count == 1 and section.references[0]["label"] == "HO-STORE: 3 in stock" and section.references[0]["status"] == "IN_STOCK"
+        assert section.count == 1 and section.references[0]["label"] == "HO-STORE (in stock)" and section.references[0]["status"] == "IN_STOCK"
         error = error_of(lambda: component_services.delete_component(component, user=keeper))
         assert error.code == "component_in_use"
+
+    def test_the_usage_screen_does_not_disclose_quantities(self, auth_client, make_user, component, store):
+        """catalog/components/<uid>/usage/ needs only catalog.view: it may say where the component is stocked (why it
+        cannot be deleted) but not how much — stock levels are inventory.view data."""
+        MovementFactory(component=component, location=store, qty="37.5")
+        engineer = auth_client(make_user(grants={"catalog": ["view"]}))
+        response = engineer.get(f"/api/v1/catalog/components/{component.uid}/usage/")
+        assert response.status_code == 200, response.json()
+        assert "37.5" not in response.content.decode()
+        [section] = [section for section in response.json()["sections"] if section["name"] == "inventory.stock"]
+        assert section["count"] == 1 and section["references"][0]["label"] == "HO-STORE (in stock)"
 
     def test_zero_stock_and_a_disabled_ledger_do_not_block(self, stock_off, keeper, store):
         component = ComponentFactory()
@@ -174,6 +193,11 @@ class TestSettingsCheck:
         settings.INVENTORY_RECEIVING_LOCATION = value
         [error] = check_receiving_location()
         assert error.id == "inventory.E001"
+
+    def test_the_env_template_lists_it(self, settings):
+        """Ops configure the app from .env.example (every other config() key is there): the receiving switch too."""
+        lines = (Path(settings.BASE_DIR) / ".env.example").read_text().splitlines()
+        assert "INVENTORY_RECEIVING_LOCATION=" in lines
 
     def test_manage_py_check_runs_it(self, settings):
         settings.INVENTORY_RECEIVING_LOCATION = "bad code"

@@ -6,7 +6,9 @@
   ``Location.office`` relation points at. A location whose office was later soft-deleted reads as having no office
   (hr soft-deletes, so the PLAN's ``SET_NULL`` never fires);
 * a location still holding stock (any non-zero balance) cannot be deleted (409 ``location_has_stock``); the delete is
-  soft, its movements stay in the ledger.
+  soft, its movements stay in the ledger;
+* the location ``INVENTORY_RECEIVING_LOCATION`` names (by code, case-insensitive) can be neither deleted nor recoded
+  (409 ``receiving_location``): every committed procurement batch would otherwise fail to book and be parked.
 """
 
 from __future__ import annotations
@@ -21,7 +23,7 @@ from core.errors import Conflict
 from core.services import stamp_create
 from inventory.models import Balance, Location
 from inventory.models.location import CODE_PATTERN
-from inventory.services.common import bump_locations, lock, unique_conflict, validation_error
+from inventory.services.common import bump_locations, lock, receiving_location_code, unique_conflict, validation_error
 
 EDITABLE_FIELDS = ("code", "name", "office")
 SNAPSHOT_FIELDS = EDITABLE_FIELDS
@@ -96,6 +98,18 @@ def location_snapshot(location: Location) -> dict:
     return snapshot(location, SNAPSHOT_FIELDS)
 
 
+def _refuse_if_receiving(location: Location, field: str, what: str) -> None:
+    """``INVENTORY_RECEIVING_LOCATION`` names a location by code: recoding or deleting it would make every
+    ``procurement.batch_committed`` receipt fail (retried, then parked), so the setting has to change first."""
+    code = receiving_location_code()
+    if code and location.code.upper() == code.upper():
+        raise Conflict(
+            "receiving_location",
+            f"'{location.code}' receives committed procurement batches (INVENTORY_RECEIVING_LOCATION); change that setting before {what} it.",
+            errors={field: ["The receiving location."]},
+        )
+
+
 @transaction.atomic
 def create_location(*, user, data) -> Location:
     values = _normalise(data)
@@ -118,6 +132,8 @@ def update_location(instance: Location, *, user, data, expected_version=None) ->
     values = {name: value for name, value in values.items() if getattr(location, name) != value}
     if not values:
         return location
+    if "code" in values and values["code"].upper() != location.code.upper():  # the setting is matched case-insensitively
+        _refuse_if_receiving(location, "code", "recoding")
     _save(lambda: location.versioned_update(user, **values))
     changed_before, changed_after = changes(before, location_snapshot(location))
     record("inventory.location_updated", obj=location, actor=user, before=changed_before, after=changed_after)
@@ -129,6 +145,7 @@ def update_location(instance: Location, *, user, data, expected_version=None) ->
 def delete_location(instance: Location, *, user, expected_version=None) -> None:
     # The row lock also serialises with movements, which lock the location before they read its balance.
     location = lock(Location, instance, expected_version)
+    _refuse_if_receiving(location, "location", "deleting")
     stocked = Balance.objects.filter(location=location).exclude(qty=0).count()
     if stocked:
         raise Conflict(

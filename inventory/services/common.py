@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from django.conf import settings
 from django.db import IntegrityError
 
 from core.errors import Conflict, DomainError, NotFound
@@ -20,6 +21,11 @@ NS_STOCK = "inventory:stock"
 
 def stock_enabled() -> bool:
     return flag_enabled(FLAG)
+
+
+def receiving_location_code() -> str:
+    """``settings.INVENTORY_RECEIVING_LOCATION`` (the code of the location receiving committed batches; '' = off)."""
+    return str(getattr(settings, "INVENTORY_RECEIVING_LOCATION", "") or "").strip()
 
 
 def bump_locations() -> None:

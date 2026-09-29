@@ -150,3 +150,32 @@ class TestUpdateAndDelete:
         assert not Location.objects.filter(pk=store.pk).exists() and Location.all_objects.get(pk=store.pk).deleted_at
         assert AuditLog.objects.get(action="inventory.location_deleted").actor == keeper
         assert client.get(detail(store)).status_code == 404
+
+
+class TestReceivingLocation:
+    """INVENTORY_RECEIVING_LOCATION names a location by code: renaming or deleting that location from the Studio would
+    make every procurement.batch_committed receipt fail and park, so both are refused until the setting changes."""
+
+    @pytest.fixture(autouse=True)
+    def receiving(self, settings):
+        settings.INVENTORY_RECEIVING_LOCATION = "ho-store"
+
+    def test_its_code_cannot_change(self, client, store):
+        response = client.patch(detail(store), {"code": "HQ-STORE"}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "receiving_location"
+        assert "code" in response.json()["errors"] and Location.objects.get(pk=store.pk).code == "HO-STORE"
+        assert client.patch(detail(store), {"name": "Renamed", "code": "HO-STORE"}, format="json").status_code == 200
+        assert client.patch(detail(store), {"code": "Ho-Store"}, format="json").json()["code"] == "Ho-Store"  # still matches
+
+    def test_it_cannot_be_deleted(self, client, store):
+        response = client.delete(detail(store))
+        assert response.status_code == 409 and response.json()["code"] == "receiving_location"
+        assert Location.objects.filter(pk=store.pk).exists()
+
+    def test_other_locations_and_receiving_off_are_unaffected(self, client, settings, store):
+        other = LocationFactory(code="VAN")
+        assert client.patch(detail(other), {"code": "VAN-2"}, format="json").status_code == 200
+        assert client.delete(detail(other)).status_code == 204
+        settings.INVENTORY_RECEIVING_LOCATION = ""
+        assert client.patch(detail(store), {"code": "HQ-STORE"}, format="json").status_code == 200
+        assert client.delete(detail(store)).status_code == 204

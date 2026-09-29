@@ -2,8 +2,9 @@
 
 The application connects as ``DB_APP_ROLE`` while migrations run as the table owner (docs/ops/audit-log.md). The app
 role keeps ``SELECT, INSERT`` on ``inventory_movement`` (and the id sequence) and loses ``UPDATE, DELETE, TRUNCATE``;
-it keeps ``SELECT`` on the ``inventory_balance`` view. Foreign-key actions (``SET NULL`` of ``by``/``created_by`` when a
-user row is removed) run with the owner's rights, so they are unaffected.
+it keeps ``SELECT`` on the ``inventory_balance`` view. The ``SET_NULL`` of ``by``/``created_by``/``updated_by`` is
+emulated by Django as an ``UPDATE`` from the app connection, so hard-deleting a user who recorded movements is refused
+by the REVOKE (the ledger is never rewritten); users are only ever soft-deleted (DV-9), so this never happens.
 
 Applied by ``inventory/migrations/0001_initial.py`` when ``DB_APP_ROLE`` is set and differs from the migrating role,
 and re-applied (idempotently) by ``manage.py ensure_inventory_append_only`` on every deploy, so a role configured

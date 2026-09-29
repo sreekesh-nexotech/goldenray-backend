@@ -25,26 +25,23 @@ import uuid
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
-from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils.dateparse import parse_datetime
 
 from accounts.models import User
 from catalog.models import Component
 from inventory.models import BATCH_LINE_REF, Direction, Location, Movement, Reason
-from inventory.services.common import stock_enabled
+from inventory.services.common import receiving_location_code, stock_enabled
 from inventory.services.locations import find_by_code
 from inventory.services.movements import record_movement
 
 logger = logging.getLogger("flarize.inventory")
 
+__all__ = ["ReceiptError", "booked_lines", "receive_batch", "receiving_location", "receiving_location_code"]
+
 
 class ReceiptError(ValueError):
     """The batch cannot be booked (contract violation or misconfiguration); the outbox retries, then parks it."""
-
-
-def receiving_location_code() -> str:
-    return str(getattr(settings, "INVENTORY_RECEIVING_LOCATION", "") or "").strip()
 
 
 def receiving_location() -> Location | None:

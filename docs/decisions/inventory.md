@@ -17,7 +17,7 @@ Deviations: DV-62 … DV-64 in `docs/DEVIATIONS.md`.
 | Views | `inventory/views/{locations,stock}.py` | `FlagRequiredMixin` + `BaseViewSet`: 404 `not_found` for everyone (anonymous included, before authentication) while the flag is off. |
 | Event handler | `inventory/events.py` | `procurement.batch_committed` → PURCHASE movements into the receiving location (off by default). |
 | Dashboard | `inventory/services/dashboard.py` + `core/dashboard.py` (shared: `register(module, flag=…)`) | `locations`, `stocked_components`, `negative_balances`, `movements_last_7_days`; the module is absent while the flag is off. |
-| Catalog usage | `inventory/services/usage.py` | provider `inventory.stock`: a component with a non-zero balance somewhere cannot be deleted (409 `component_in_use`, catalog's guard). |
+| Catalog usage | `inventory/services/usage.py` | provider `inventory.stock`: a component with a non-zero balance somewhere cannot be deleted (409 `component_in_use`, catalog's guard). The references name the location and "in stock"/"negative balance", never the quantity (`catalog/components/<uid>/usage/` needs only `catalog.view`). |
 | Settings | `flarize/settings/base.py` (shared) | `INVENTORY_RECEIVING_LOCATION` (env; blank = receiving off); system check `inventory.E001` on its format. |
 
 ## Endpoints (`/api/v1/`, all 404 while `INVENTORY_STOCK` is off)
@@ -25,7 +25,7 @@ Deviations: DV-62 … DV-64 in `docs/DEVIATIONS.md`.
 | Path | Permission |
 |---|---|
 | `inventory/locations/` list (`office`, `has_office`, `search` code/name, `ordering` code/name/created_at) / detail | `inventory.view` |
-| `POST inventory/locations/`, `PATCH …/<uid>/` (`expected_version`), `DELETE …/<uid>/` (soft; 409 `location_has_stock`) | `inventory.edit` |
+| `POST inventory/locations/`, `PATCH …/<uid>/` (`expected_version`), `DELETE …/<uid>/` (soft; 409 `location_has_stock`; the receiving location: 409 `receiving_location` on delete or recode) | `inventory.edit` |
 | `inventory/movements/` list (`component`, `location`, `direction`, `reason` (multi), `ref_type`, `ref_uid`, `date_from`, `date_to`, `search`, `ordering` at/created_at/qty; newest first) | `inventory.view` |
 | `POST inventory/movements/` → 201 with `balance_after`, `negative_override` | `inventory.edit` |
 | `GET inventory/balances/` (`component`, `location`, `office`, `category`, `state` = in_stock/zero/negative, `search`, `ordering` qty/last_movement_at) | `inventory.view` |
@@ -54,6 +54,8 @@ pagination is for audit and raw punches) and in the OpenAPI schema with its erro
    a note (it has no external reference; the note is its justification, 400 otherwise) — and the user holds
    `inventory.edit` (the service re-checks it; a system caller never overrides). The override is booked, returned as
    `negative_override: true`, and audited with `negative_override` and a note prefixed `negative-stock override`.
+   Only an OUT is ever refused for the balance: stock arriving (PURCHASE, RETURN, ADJUST IN, a batch receipt) at a
+   location already below zero is always booked, even when the balance stays negative (2 into −5 leaves −3).
 5. **Concurrency.** Every movement takes its location's row lock (`SELECT … FOR UPDATE`) before reading the balance,
    so two concurrent OUTs of the last units cannot both pass (a threaded test proves exactly one succeeds). Deleting a
    location takes the same lock, so no movement lands in a location being deleted.
@@ -64,17 +66,23 @@ pagination is for audit and raw punches) and in the OpenAPI schema with its erro
    stock. `state=zero` lists pairs that were fully consumed.
 7. **Locations.** Codes are unique among live rows case-insensitively (as hr's codes, DV-50), 1-30 of
    `[A-Za-z0-9_.-]`. A location with any non-zero balance (negative included) cannot be deleted (409
-   `location_has_stock`); its movements stay in the ledger. The HR office link: DV-64.
+   `location_has_stock`); its movements stay in the ledger. The HR office link: DV-64. The location
+   `INVENTORY_RECEIVING_LOCATION` names (by code, case-insensitive) can be neither deleted nor recoded (409
+   `receiving_location`): every committed batch would otherwise fail to book and be parked; change the setting first.
 8. **Time.** `at` defaults to now, may be backdated, never in the future (5-minute skew tolerance), must carry a
    time zone. `by` is the acting user, or for receipts the batch committer; `created_by` is who recorded the row
    (NULL for the system).
 9. **Components.** Any live component can move (DRAFT/RETIRED included: a retired panel still sits on the shelf);
-   the receipt also books components soft-deleted after their batch was committed.
+   the receipt also books components soft-deleted after their batch was committed. A soft-deleted component that
+   still holds stock (received after its deletion, or deleted while the flag was off and the usage guard silent) may
+   only have that stock cleared: an OUT of at most its balance at the location, or an IN of at most its negative
+   balance (400 otherwise). Without this the stock could never leave and the location could never be deleted.
 10. **Append-only enforcement.** The migration applies the REVOKE when `DB_APP_ROLE` is set and differs from the
     migrating role (as `audit.0001`); `ensure_inventory_append_only` re-applies it on every deploy (a role configured
     after the first migration, or a broad `GRANT … ON ALL TABLES`, is narrowed again). It fails closed for a role that
-    does not exist, owns the table or inherits the owner's rights. Foreign-key `SET NULL` actions run with the owner's
-    rights and are unaffected. The table keeps the `BaseModel` columns (PLAN marks it *append-only*, not *no base*):
+    does not exist, owns the table or inherits the owner's rights. Django emulates the `SET_NULL` of `by`/`created_by`/
+    `updated_by` with an `UPDATE` from the app connection, so a hard delete of a user who recorded movements is refused
+    by the REVOKE rather than rewriting the ledger (users are only soft-deleted, DV-9). The table keeps the `BaseModel` columns (PLAN marks it *append-only*, not *no base*):
     `deleted_at` stays NULL and `version` 1.
 
 ## `procurement.batch_committed` → stock (hand-over to the procurement package)
@@ -131,5 +139,24 @@ REVOKE under `SET ROLE`, migration step, command, deploy step), `test_dashboard.
   (`dedup_key` = batch uid); mark importer-written batches `imported: true`.
 * **projects**: issue stock with `POST inventory/movements/` (`reason=ISSUE_TO_PROJECT`, `ref_type=projects.project`,
   `ref_uid=<project uid>`) or follow `inventory.movement_recorded`; never import inventory services.
-* **ops**: set `INVENTORY_RECEIVING_LOCATION` only after creating that location; `ensure_inventory_append_only` runs
+* **ops**: set `INVENTORY_RECEIVING_LOCATION` (listed in `.env.example`) only after creating that location; while it
+  names a location, that location cannot be deleted or recoded from the Studio. `ensure_inventory_append_only` runs
   in `deploy/release.sh` after `migrate` (owner role).
+
+## Review findings (adversarial review, each reproduced by a failing test first; the tests stay)
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| 1 | The balance guard ran for every direction: an IN into a location already below zero that left it negative (−5 + 2 = −3) was refused with 409 `insufficient_stock` ("an OUT of 2 …"); a batch receipt into such a balance raised in the outbox handler, was retried and parked | only an OUT is checked against the balance | `test_movements_api.py::TestRecord::test_an_in_into_a_negative_balance_is_never_refused`, `…::test_an_out_from_a_negative_balance_is_still_refused`, `test_receiving.py::TestReceive::test_a_receipt_into_a_negative_balance_is_booked` |
+| 2 | Stock of a soft-deleted component (received after the deletion, or deleted while the flag was off) could never be moved: every movement answered 400 "Unknown component", so it stayed in the balances and the dashboard for ever and its location could never be deleted | a deleted component may move towards zero only (OUT ≤ balance, IN ≤ −balance) | `test_movements_api.py::TestRecord::test_the_remaining_stock_of_a_deleted_component_can_be_cleared` |
+| 3 | Recoding or deleting the location `INVENTORY_RECEIVING_LOCATION` names was allowed from the Studio; every later committed batch then failed to book and was parked | 409 `receiving_location` (case-only recodes allowed) | `test_locations_api.py::TestReceivingLocation`, `test_services.py::TestLocationServices::test_the_receiving_location_is_neither_recoded_nor_deleted` |
+| 4 | The catalog usage provider labelled references `HO-STORE: 37.5 in stock`, disclosing stock levels on `catalog/components/<uid>/usage/`, which needs only `catalog.view` (e.g. Engineering, Project Head hold no `inventory.view`) | label = location code + "in stock"/"negative balance" | `test_services.py::TestCatalogUsage` |
+| 5 | `.env.example` (the ops template; every other `config()` key is in it) did not list `INVENTORY_RECEIVING_LOCATION` | added | `test_services.py::TestSettingsCheck::test_the_env_template_lists_it` |
+| 6 | The movement list's N+1 test had `by = NULL` on every row, so dropping `select_related("by")` still passed | a query-count test with a distinct component, category, location and recorder per row (fails when any join is dropped) | `test_movements_api.py::TestList::test_the_query_count_does_not_grow_with_the_rows` |
+| 7 | `privileges.py` and this file claimed the `SET_NULL` of `by`/`created_by` "runs with the owner's rights"; Django emulates it with an `UPDATE` from the app connection | text corrected (a user hard delete is refused by the REVOKE; users are only soft-deleted) | — |
+
+Still open for integration: the procurement package's current `procurement.batch_committed` payload (in its worktree
+at review time) carries `lines` as a **count** and no `committed_at` / `committed_by_uid` / `imported` / line objects;
+with the flag on and a receiving location set, every committed batch would raise `ReceiptError` and park until the two
+packages agree on the contract above. `procurement.batch_reversed` is not consumed (reversed stock stays booked; staff
+book the RETURN/ADJUST).
