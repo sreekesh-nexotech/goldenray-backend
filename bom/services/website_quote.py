@@ -181,9 +181,13 @@ def _coerce(data: dict) -> dict:
     sections = data.get("upgrade_sections") or dict(DEFAULT_SECTIONS)
     if data["sys_type"] == "upgrade" and not isinstance(sections, dict):
         problems.append(("upgrade_sections", "upgrade_sections must be an object"))
+    if data["sys_type"] != "upgrade":
+        # the standard calculator computes with the size's kW: NaN / ±∞ / huge made the legacy rounding raise (HTTP 500)
+        kw = Calculator._size_to_kw(str(data["size"]))
+        if not math.isfinite(kw) or abs(kw) > MAX_MAGNITUDE:
+            problems.append(("size", f"size must be a size key or a finite number of kW of at most {MAX_MAGNITUDE:.0f}"))
+    # any other value (an object, a list, a number) matches no offer id, as in the legacy view
     offer_id = data.get("selected_offer_id") or None
-    if offer_id is not None and not isinstance(offer_id, (str, int, float)):
-        problems.append(("selected_offer_id", "selected_offer_id must be a string"))
     if problems:
         raise QuoteInvalid([message for _, message in problems], _by_field(problems))
     return {
@@ -257,6 +261,7 @@ class FixedView:
     category_slug: str
     category_gst: int | float | None
     gst: int | float | None
+    slot_category_gst: int | float | None  # the category's rate when a slot of the template uses it (legacy cat_map), else None
     rule: dict
     condition: dict
     section: str
@@ -380,6 +385,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
                 category_slug=category.slug if category else "",
                 category_gst=percent_of(category.gst_rate) if category else None,
                 gst=percent_of(row.gst_rate),
+                slot_category_gst=categories[category.pk].gst_default if category is not None and category.pk in categories else None,
                 rule=row.qty_rule if row.qty_rule is not None else {"type": "fixed", "qty": _plain(row.qty)},
                 condition=row.condition or {},
                 section=row.section,
@@ -579,6 +585,14 @@ class Calculator:
         if fi.gst is not None:
             return fi.gst
         return fi.category_gst if fi.category_gst is not None else 18
+
+    @classmethod
+    def _upgrade_fixed_gst(cls, fi: FixedView):
+        """Legacy upgrade rule ``fi.gst or (cat.gst_default if cat else 18)`` — ``cat`` only when a slot uses the
+        category; a NULL rate (platform-only) is the category's rate as for standard lines."""
+        if fi.gst is None:
+            return cls._fixed_gst(fi)
+        return fi.gst or (fi.slot_category_gst if fi.slot_category_gst is not None else 18)
 
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
         available = []
@@ -845,7 +859,7 @@ class Calculator:
                 continue
             unit_price = float(fi.price if fi.price is not None else item.price)
             amount = qty * unit_price
-            gst_pct = self._fixed_gst(fi)
+            gst_pct = self._upgrade_fixed_gst(fi)
             gst_amt = round(amount * gst_pct / 100)
             lines.append(
                 {

@@ -55,7 +55,10 @@ class TestEndpoint:
             (_body(sys_type=["ongrid"]), {"sys_type"}),
             (_body(sys_type="upgrade", upgrade_sections=[1]), {"upgrade_sections"}),
             (_body(sys_type="upgrade", upgrade_to_kw="x"), {"upgrade_to_kw"}),
-            (_body(selected_offer_id={"a": 1}), {"selected_offer_id"}),
+            (_body(size="nan"), {"size"}),
+            (_body(size="inf"), {"size"}),
+            (_body(size="-1e400"), {"size"}),
+            (_body(size="1e13"), {"size"}),
         ],
     )
     def test_validation_envelope(self, api_client, world, body, fields):
@@ -63,6 +66,13 @@ class TestEndpoint:
         assert response.status_code == 400
         payload = response.json()
         assert payload["code"] == "validation_error" and set(payload["errors"]) == fields
+
+    @pytest.mark.parametrize("offer_id", [{"a": 1}, [1], 5])
+    def test_a_non_string_offer_id_matches_no_offer_as_before(self, api_client, world, offer_id):
+        # the legacy view compared it with every offer id and fell through to no discount (HTTP 200)
+        response = api_client.post(URL, _body(selected_offer_id=offer_id), format="json")
+        assert response.status_code == 200, response.json()
+        assert response.json()["pricing"]["discount_amt"] == 0 and response.json()["pricing"]["discount_label"] == ""
 
     def test_non_object_body(self, api_client, world):
         response = api_client.post(URL, [1, 2], format="json")
@@ -148,6 +158,23 @@ class TestCalculator:
         hybrid = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_sections": {"panels": False, "hybrid_inv": True, "wiring": False}}, today=TODAY)
         # hybrid_inv switches the inverter slot on (its own filter still applies); wiring off drops the MC4 row
         assert [(line["name"], line["section"]) for line in hybrid["bom_lines"]] == [("Inverter 5", "inverter")]
+
+    def test_upgrade_fixed_item_without_gst_falls_back_like_the_legacy(self, world):
+        # legacy: ``fi.gst or (cat.gst_default if cat else 18)`` with ``cat`` looked up among the slot categories only
+        upgrade = TemplateFactory(system_type="UPGRADE", name="Upgrade", sizes=[], three_phase_sizes=[])
+        panels = world.slots.get(key="panel").category
+        SlotFactory(template=upgrade, key="panel", category=panels, qty_rule={"type": "new_panels"}, gst_rate=Decimal("0.05"))
+        clamps = CategoryFactory(slug="solar_clamp", gst_rate=Decimal("0.12"))
+        clamp = ComponentFactory(category=clamps, name="Clamp", status=ComponentStatus.ACTIVE)
+        PriceFactory(component=clamp, amount=Decimal("10.00"))
+        panel = ComponentFactory(category=panels, name="Panel row", status=ComponentStatus.ACTIVE)
+        PriceFactory(component=panel, amount=Decimal("10.00"))
+        rule = {"type": "upgrade_path", "qty": {"3_5": 2}}
+        FixedItemFactory(template=upgrade, name="zero, slot category", component=panel, category=panels, unit_price=None, gst_rate=Decimal("0"), section="panels", qty_rule=rule)
+        FixedItemFactory(template=upgrade, name="zero, other category", component=clamp, category=clamps, unit_price=None, gst_rate=Decimal("0"), section="panels", qty_rule=rule)
+        lines = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_from_kw": 3, "upgrade_to_kw": 5}, today=TODAY)["bom_lines"]
+        gst = {line["name"]: line["gst_pct"] for line in lines if not line["is_variable"]}
+        assert gst == {"Panel row": 5, "Clamp": 18}
 
     def test_request_coercion_matches_the_legacy_defaults(self):
         params = parse_request({"sys_type": "ongrid", "size": 3, "tier": "base", "dist_km": 12.9, "ghs_houses": 0, "bat_config": None})

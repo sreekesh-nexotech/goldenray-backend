@@ -169,12 +169,18 @@ messages.
 | Legacy | Platform |
 |---|---|
 | `custom_discount` sent as a number (`7500`) → HTTP 500 `AttributeError` (the 9 golden cases: on-grid 3/5sp/10 × base/value/premium) | 400 `validation_error` on `custom_discount` |
-| `custom_discount.value`, `ghs_houses`, `upgrade_from_kw`/`upgrade_to_kw`, `dist_km` not convertible (`"12.5"`, `"many"`), `margin_val` NaN/∞, numbers beyond 10¹², a list as `sys_type`, a non-object `upgrade_sections` (upgrades), a non-object body → HTTP 500 | 400 `validation_error` on the field |
+| `custom_discount.value`, `ghs_houses`, `upgrade_from_kw`/`upgrade_to_kw`, `dist_km` not convertible (`"12.5"`, `"many"`), `margin_val` NaN/∞, a standard-quote `size` whose kW is NaN/∞ or beyond 10¹² (`"nan"`, `"inf"`, `"1e400"`), numbers beyond 10¹², a list as `sys_type`, a non-object `upgrade_sections` (upgrades), a non-object body → HTTP 500 | 400 `validation_error` on the field |
 | no `GlobalCosts` row → seeds itself from a JSON file | 503 `quote_not_configured` |
 | no template → 400 `{"error": …}` | 400 `bom_template_missing` (platform envelope) |
 | DRAFT/RETIRED items could be quoted; an item without a price crashed | only ACTIVE/DEPRECATED components with a current LIST price are candidates |
 
-The legacy `mode` field is accepted and ignored, as before.
+The legacy `mode` field is accepted and ignored, as before. A `selected_offer_id` that is not a string (an object, a
+list, a number) matches no offer and the quote falls through to the custom discount, as in the legacy view (HTTP 200).
+An upgrade fixed item's GST keeps the legacy fallback `fi.gst or (category rate if a slot uses the category else 18)`.
+
+A differential corpus of 436 extra requests (sizes off the grid, battery bands, upgrade paths and sections, offer /
+discount / margin / distance / GHS variants, malformed values) was replayed against a private legacy server on the
+UAT dump during the review: every 200 and 400 body is identical; the remaining 22 are legacy HTTP 500s answered 400.
 
 ## For later packages
 
