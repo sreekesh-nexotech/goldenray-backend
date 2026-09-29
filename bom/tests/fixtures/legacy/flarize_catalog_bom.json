@@ -1,0 +1,2882 @@
+{
+ "bomTemplates": {
+  "ongrid": {
+   "sizes": {
+    "3": "3 kW",
+    "6": "6 kW",
+    "8": "8 kW",
+    "10": "10 kW",
+    "5sp": "5kW 1P",
+    "5tp": "5kW 3P"
+   },
+   "tiers": [
+    "base",
+    "value",
+    "premium"
+   ],
+   "threePhase": [
+    "5tp",
+    "6",
+    "8",
+    "10"
+   ],
+   "slots": [
+    {
+     "pos": 0,
+     "category": "panel",
+     "label": "Solar Panel",
+     "variable": true,
+     "gst": 5,
+     "qty": {
+      "3": 6,
+      "6": 11,
+      "8": 15,
+      "10": 18,
+      "5sp": 9,
+      "5tp": 9
+     }
+    },
+    {
+     "pos": 1,
+     "category": "inverter",
+     "label": "Inverter",
+     "variable": true,
+     "gst": 5,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "premiumQty": {
+      "3": 0,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 0,
+      "5tp": 0
+     },
+     "filterType": "ongrid"
+    },
+    {
+     "pos": 2,
+     "category": "dcdb",
+     "label": "DCDB",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "premiumQty": {
+      "3": 0,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 0,
+      "5tp": 0
+     }
+    },
+    {
+     "pos": 3,
+     "category": "acdb",
+     "label": "ACDB",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     }
+    },
+    {
+     "pos": 4,
+     "category": "meter",
+     "label": "Meter",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     }
+    },
+    {
+     "pos": 5,
+     "category": "dc_cable",
+     "label": "DC Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 50,
+      "6": 50,
+      "8": 80,
+      "10": 100,
+      "5sp": 50,
+      "5tp": 50
+     }
+    },
+    {
+     "pos": 6,
+     "category": "ac_cable",
+     "label": "AC Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 20,
+      "6": 35,
+      "8": 35,
+      "10": 35,
+      "5sp": 20,
+      "5tp": 35
+     }
+    },
+    {
+     "pos": 7,
+     "category": "isolator",
+     "label": "Isolator",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     }
+    },
+    {
+     "pos": 8,
+     "category": "cb_rod",
+     "label": "CB Rod",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 3,
+      "6": 3,
+      "8": 3,
+      "10": 3,
+      "5sp": 3,
+      "5tp": 3
+     }
+    },
+    {
+     "pos": 9,
+     "category": "earth_cable",
+     "label": "Earthing Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 20,
+      "6": 20,
+      "8": 20,
+      "10": 20,
+      "5sp": 20,
+      "5tp": 20
+     }
+    },
+    {
+     "pos": 10,
+     "category": "la_cable",
+     "label": "LA Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 20,
+      "6": 20,
+      "8": 20,
+      "10": 40,
+      "5sp": 20,
+      "5tp": 20
+     }
+    }
+   ],
+   "fixedItems": [
+    {
+     "name": "MC4 Connector",
+     "gst": 18,
+     "price": 56,
+     "qty": {
+      "3": 3,
+      "6": 3,
+      "8": 5,
+      "10": 6,
+      "5sp": 3,
+      "5tp": 3
+     },
+     "id": "fi_mc4_connector"
+    },
+    {
+     "name": "Cable Tray",
+     "gst": 18,
+     "price": 186,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_cable_tray"
+    },
+    {
+     "name": "10 SWG Earthing Copper",
+     "gst": 18,
+     "price": 105,
+     "qty": {
+      "3": 23,
+      "6": 23,
+      "8": 23,
+      "10": 23,
+      "5sp": 23,
+      "5tp": 23
+     },
+     "id": "fi_earthing_copper_10swg"
+    },
+    {
+     "name": "SS Terminal Strip 4P",
+     "gst": 18,
+     "price": 150,
+     "qty": {
+      "3": 2,
+      "6": 2,
+      "8": 2,
+      "10": 2,
+      "5sp": 2,
+      "5tp": 2
+     },
+     "id": "fi_ss_terminal_4p"
+    },
+    {
+     "name": "Earthing Chamber 180x180mm",
+     "gst": 18,
+     "price": 270,
+     "qty": {
+      "3": 3,
+      "6": 3,
+      "8": 3,
+      "10": 3,
+      "5sp": 3,
+      "5tp": 3
+     },
+     "id": "fi_earthing_chamber"
+    },
+    {
+     "name": "Lightning Arrester 16mm 1m",
+     "gst": 18,
+     "price": 600,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_lightning_arrester"
+    },
+    {
+     "name": "Flexible Pipe",
+     "gst": 18,
+     "price": 49,
+     "qty": {
+      "3": 1.5,
+      "6": 1.5,
+      "8": 1.5,
+      "10": 1.5,
+      "5sp": 1.5,
+      "5tp": 1.5
+     },
+     "id": "fi_flexible_pipe"
+    },
+    {
+     "name": "Earth Pit Compound",
+     "gst": 18,
+     "price": 167,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_earth_pit_compound"
+    },
+    {
+     "name": "Cable Tie 300mm WR",
+     "gst": 18,
+     "price": 320,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_cable_tie_300mm"
+    },
+    {
+     "name": "SS Star Screw 1.5in",
+     "gst": 18,
+     "price": 1,
+     "qty": {
+      "3": 35,
+      "6": 35,
+      "8": 35,
+      "10": 35,
+      "5sp": 35,
+      "5tp": 35
+     },
+     "id": "fi_ss_screw_1_5in"
+    },
+    {
+     "name": "SS Star Screw 1in",
+     "gst": 18,
+     "price": 1.7,
+     "qty": {
+      "3": 65,
+      "6": 65,
+      "8": 60,
+      "10": 60,
+      "5sp": 65,
+      "5tp": 65
+     },
+     "id": "fi_ss_screw_1in"
+    },
+    {
+     "name": "Ring Type 4-6mm Copper Lug",
+     "gst": 18,
+     "price": 9.3,
+     "qty": {
+      "3": 20,
+      "6": 26,
+      "8": 30,
+      "10": 40,
+      "5sp": 26,
+      "5tp": 26
+     },
+     "id": "fi_copper_lug_4_6mm"
+    },
+    {
+     "name": "Insulation Tape",
+     "gst": 18,
+     "price": 9,
+     "qty": {
+      "3": 1,
+      "6": 4,
+      "8": 4,
+      "10": 4,
+      "5sp": 1,
+      "5tp": 4
+     },
+     "id": "fi_insulation_tape"
+    },
+    {
+     "name": "16mm Aluminium Lug",
+     "gst": 18,
+     "price": 4.2,
+     "qty": {
+      "3": 2,
+      "6": 2,
+      "8": 2,
+      "10": 2,
+      "5sp": 2,
+      "5tp": 2
+     },
+     "id": "fi_alu_lug_16mm"
+    },
+    {
+     "name": "50mm Aluminium Lug",
+     "gst": 18,
+     "price": 13.6,
+     "qty": {
+      "3": 2,
+      "6": 2,
+      "8": 2,
+      "10": 2,
+      "5sp": 2,
+      "5tp": 2
+     },
+     "id": "fi_alu_lug_50mm"
+    },
+    {
+     "name": "20mm PVC Pipe",
+     "gst": 18,
+     "price": 45,
+     "qty": {
+      "3": 5,
+      "6": 7,
+      "8": 7,
+      "10": 8,
+      "5sp": 5,
+      "5tp": 6
+     },
+     "id": "fi_pvc_pipe_20mm"
+    },
+    {
+     "name": "25mm PVC Pipe",
+     "gst": 18,
+     "price": 72,
+     "qty": {
+      "3": 6,
+      "6": 9,
+      "8": 9,
+      "10": 10,
+      "5sp": 6,
+      "5tp": 8
+     },
+     "id": "fi_pvc_pipe_25mm"
+    },
+    {
+     "name": "20mm Bend",
+     "gst": 18,
+     "price": 5.5,
+     "qty": {
+      "3": 10,
+      "6": 10,
+      "8": 10,
+      "10": 12,
+      "5sp": 10,
+      "5tp": 10
+     },
+     "id": "fi_bend_20mm"
+    },
+    {
+     "name": "25mm Bend",
+     "gst": 18,
+     "price": 8,
+     "qty": {
+      "3": 10,
+      "6": 12,
+      "8": 10,
+      "10": 10,
+      "5sp": 10,
+      "5tp": 10
+     },
+     "id": "fi_bend_25mm"
+    },
+    {
+     "name": "20mm Elbow",
+     "gst": 18,
+     "price": 4,
+     "qty": {
+      "3": 12,
+      "6": 10,
+      "8": 12,
+      "10": 12,
+      "5sp": 10,
+      "5tp": 10
+     },
+     "id": "fi_elbow_20mm"
+    },
+    {
+     "name": "25mm Elbow",
+     "gst": 18,
+     "price": 4.5,
+     "qty": {
+      "3": 12,
+      "6": 12,
+      "8": 12,
+      "10": 12,
+      "5sp": 12,
+      "5tp": 12
+     },
+     "id": "fi_elbow_25mm"
+    },
+    {
+     "name": "SS Saddle 20mm",
+     "gst": 18,
+     "price": 2.7,
+     "qty": {
+      "3": 30,
+      "6": 30,
+      "8": 30,
+      "10": 30,
+      "5sp": 30,
+      "5tp": 30
+     },
+     "id": "fi_ss_saddle_20mm"
+    },
+    {
+     "name": "25mm Saddle",
+     "gst": 18,
+     "price": 3,
+     "qty": {
+      "3": 35,
+      "6": 35,
+      "8": 35,
+      "10": 50,
+      "5sp": 35,
+      "5tp": 35
+     },
+     "id": "fi_saddle_25mm"
+    },
+    {
+     "name": "1P Meter Box",
+     "gst": 18,
+     "price": 950,
+     "qty": {
+      "3": 1,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 1,
+      "5tp": 0
+     },
+     "id": "fi_meter_box_1p"
+    },
+    {
+     "name": "3P Meter Box",
+     "gst": 18,
+     "price": 950,
+     "qty": {
+      "3": 0,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 0,
+      "5tp": 1
+     },
+     "id": "fi_meter_box_3p"
+    },
+    {
+     "name": "End Sleeve Green",
+     "gst": 18,
+     "price": 5,
+     "qty": {
+      "3": 1.5,
+      "6": 1.5,
+      "8": 1.5,
+      "10": 1.5,
+      "5sp": 1.5,
+      "5tp": 1.5
+     },
+     "id": "fi_end_sleeve_green"
+    },
+    {
+     "name": "6mm Wall Plug",
+     "gst": 18,
+     "price": 17,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 2,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_wall_plug_6mm"
+    },
+    {
+     "name": "LA Nylon Holder",
+     "gst": 18,
+     "price": 9,
+     "qty": {
+      "3": 30,
+      "6": 30,
+      "8": 30,
+      "10": 50,
+      "5sp": 30,
+      "5tp": 30
+     },
+     "id": "fi_la_nylon_holder"
+    },
+    {
+     "name": "Mid Clamp",
+     "gst": 18,
+     "price": 19,
+     "qty": {
+      "3": 8,
+      "6": 14,
+      "8": 24,
+      "10": 28,
+      "5sp": 14,
+      "5tp": 14
+     },
+     "id": "fi_mid_clamp"
+    },
+    {
+     "name": "End Clamp",
+     "gst": 18,
+     "price": 13,
+     "qty": {
+      "3": 8,
+      "6": 8,
+      "8": 8,
+      "10": 8,
+      "5sp": 8,
+      "5tp": 8
+     },
+     "id": "fi_end_clamp"
+    },
+    {
+     "name": "J Bolt",
+     "gst": 18,
+     "price": 20,
+     "qty": {
+      "3": 16,
+      "6": 22,
+      "8": 32,
+      "10": 36,
+      "5sp": 22,
+      "5tp": 22
+     },
+     "id": "fi_j_bolt"
+    },
+    {
+     "name": "Panel Earthing Nut & Bolt",
+     "gst": 18,
+     "price": 1.6,
+     "qty": {
+      "3": 20,
+      "6": 25,
+      "8": 24,
+      "10": 40,
+      "5sp": 25,
+      "5tp": 25
+     },
+     "id": "fi_panel_earthing_bolt"
+    },
+    {
+     "name": "PVC T 20mm",
+     "gst": 18,
+     "price": 5,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_pvc_t_20mm"
+    },
+    {
+     "name": "PVC T 25mm",
+     "gst": 18,
+     "price": 7.6,
+     "qty": {
+      "3": 1,
+      "6": 1,
+      "8": 1,
+      "10": 1,
+      "5sp": 1,
+      "5tp": 1
+     },
+     "id": "fi_pvc_t_25mm"
+    },
+    {
+     "name": "LA Base Nut & Bolt",
+     "gst": 18,
+     "price": 1.4,
+     "qty": {
+      "3": 7,
+      "6": 7,
+      "8": 7,
+      "10": 7,
+      "5sp": 7,
+      "5tp": 7
+     },
+     "id": "fi_la_base_bolt"
+    },
+    {
+     "name": "20mm Gland",
+     "gst": 18,
+     "price": 7.4,
+     "qty": {
+      "3": 12,
+      "6": 12,
+      "8": 12,
+      "10": 14,
+      "5sp": 12,
+      "5tp": 12
+     },
+     "id": "fi_gland_20mm"
+    }
+   ]
+  },
+  "hybrid": {
+   "sizes": {
+    "3": "3 kW",
+    "5": "5 kW",
+    "8": "8 kW",
+    "10": "10 kW"
+   },
+   "tiers": [
+    "base",
+    "value",
+    "premium"
+   ],
+   "threePhase": [
+    "8",
+    "10"
+   ],
+   "batteryConfigs": [
+    "0",
+    "1",
+    "2"
+   ],
+   "slots": [
+    {
+     "pos": 0,
+     "category": "panel",
+     "label": "Solar Panel",
+     "variable": true,
+     "gst": 5,
+     "qty": {
+      "3": 6,
+      "5": 9,
+      "8": 15,
+      "10": 18
+     }
+    },
+    {
+     "pos": 1,
+     "category": "inverter",
+     "label": "Hybrid Inverter",
+     "variable": true,
+     "gst": 5,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "filterType": "hybrid",
+     "premiumQty": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+     }
+    },
+    {
+     "pos": 2,
+     "category": "dcdb",
+     "label": "DCDB",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "filterPhase": "HYB",
+     "premiumQty": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+     }
+    },
+    {
+     "pos": 3,
+     "category": "acdb",
+     "label": "ACDB",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "filterPhase": "HYB"
+    },
+    {
+     "pos": 4,
+     "category": "mccb_box",
+     "label": "Battery MCCB Box",
+     "variable": true,
+     "gst": 18,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      },
+      "2": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      }
+     },
+     "premiumBatQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "2": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      }
+     }
+    },
+    {
+     "pos": 5,
+     "category": "battery",
+     "label": "Battery",
+     "variable": true,
+     "gst": 18,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      },
+      "2": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      }
+     },
+     "premiumBatQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "2": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      }
+     }
+    },
+    {
+     "pos": 6,
+     "category": "meter",
+     "label": "Meter",
+     "variable": true,
+     "gst": 18,
+     "batQty": {
+      "0": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      },
+      "1": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      },
+      "2": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      }
+     },
+     "premiumBatQty": {
+      "0": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      },
+      "1": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      },
+      "2": {
+       "3": 2,
+       "5": 2,
+       "8": 2,
+       "10": 2
+      }
+     }
+    },
+    {
+     "pos": 7,
+     "category": "dc_cable",
+     "label": "DC Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 50,
+      "5": 50,
+      "8": 120,
+      "10": 120
+     },
+     "premiumQty": {
+      "3": 15,
+      "5": 15,
+      "8": 25,
+      "10": 25
+     }
+    },
+    {
+     "pos": 8,
+     "category": "ac_cable",
+     "label": "AC Cable",
+     "variable": true,
+     "gst": 18,
+     "batQty": {
+      "0": {
+       "3": 30,
+       "5": 30,
+       "8": 80,
+       "10": 80
+      },
+      "1": {
+       "3": 40,
+       "5": 40,
+       "8": 80,
+       "10": 80
+      },
+      "2": {
+       "3": 40,
+       "5": 40,
+       "8": 80,
+       "10": 80
+      }
+     },
+     "premiumQty": {
+      "3": 40,
+      "5": 50,
+      "8": 160,
+      "10": 160
+     }
+    },
+    {
+     "pos": 9,
+     "category": "isolator",
+     "label": "Isolator",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "pos": 10,
+     "category": "cb_rod",
+     "label": "CB Rod",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 3,
+      "10": 3
+     },
+     "premiumQty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 2
+     }
+    },
+    {
+     "pos": 11,
+     "category": "earth_cable",
+     "label": "Earthing Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 20,
+      "5": 20,
+      "8": 20,
+      "10": 20
+     }
+    },
+    {
+     "pos": 12,
+     "category": "la_cable",
+     "label": "LA Cable",
+     "variable": true,
+     "gst": 18,
+     "qty": {
+      "3": 20,
+      "5": 20,
+      "8": 20,
+      "10": 20
+     }
+    }
+   ],
+   "fixedItems": [
+    {
+     "name": "MC4 Connector",
+     "gst": 18,
+     "price": 56,
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 6,
+      "10": 10
+     },
+     "id": "fi_mc4_connector"
+    },
+    {
+     "name": "Cable Tray",
+     "gst": 18,
+     "price": 186,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_cable_tray"
+    },
+    {
+     "name": "10 SWG Earthing Copper",
+     "gst": 18,
+     "price": 105,
+     "qty": {
+      "3": 23,
+      "5": 23,
+      "8": 23,
+      "10": 23
+     },
+     "premiumQty": {
+      "3": 15,
+      "5": 15,
+      "8": 15,
+      "10": 15
+     },
+     "id": "fi_earthing_copper_10swg"
+    },
+    {
+     "name": "SS Terminal Strip 4P Excel",
+     "gst": 18,
+     "price": 150,
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_ss_terminal_4p_excel"
+    },
+    {
+     "name": "Earthing Chamber 180x180mm",
+     "gst": 18,
+     "price": 270,
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 3,
+      "10": 3
+     },
+     "premiumQty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_earthing_chamber"
+    },
+    {
+     "name": "Lightning Arrester 16mm 1m",
+     "gst": 18,
+     "price": 600,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_lightning_arrester"
+    },
+    {
+     "name": "Flexible Pipe",
+     "gst": 18,
+     "price": 49,
+     "qty": {
+      "3": 1.5,
+      "5": 1.5,
+      "8": 1.5,
+      "10": 1.5
+     },
+     "id": "fi_flexible_pipe"
+    },
+    {
+     "name": "Earth Pit Compound",
+     "gst": 18,
+     "price": 167,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_earth_pit_compound"
+    },
+    {
+     "name": "Cable Tie 300mm WR",
+     "gst": 18,
+     "price": 320,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_cable_tie_300mm"
+    },
+    {
+     "name": "SS Star Screw 1.5in",
+     "gst": 18,
+     "price": 1,
+     "qty": {
+      "3": 35,
+      "5": 35,
+      "8": 40,
+      "10": 40
+     },
+     "id": "fi_ss_screw_1_5in"
+    },
+    {
+     "name": "SS Star Screw 1in",
+     "gst": 18,
+     "price": 1.7,
+     "qty": {
+      "3": 60,
+      "5": 60,
+      "8": 80,
+      "10": 80
+     },
+     "id": "fi_ss_screw_1in"
+    },
+    {
+     "name": "Ring Type 4-6mm Copper Lug",
+     "gst": 18,
+     "price": 9.3,
+     "qty": {
+      "3": 20,
+      "5": 26,
+      "8": 40,
+      "10": 50
+     },
+     "id": "fi_copper_lug_4_6mm"
+    },
+    {
+     "name": "Insulation Tape",
+     "gst": 18,
+     "price": 9,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 4,
+      "10": 4
+     },
+     "id": "fi_insulation_tape"
+    },
+    {
+     "name": "16mm Aluminium Lug",
+     "gst": 18,
+     "price": 4.2,
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_alu_lug_16mm"
+    },
+    {
+     "name": "50mm Aluminium Lug",
+     "gst": 18,
+     "price": 13.6,
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_alu_lug_50mm"
+    },
+    {
+     "name": "20mm Pipe",
+     "gst": 18,
+     "price": 45,
+     "qty": {
+      "3": 5,
+      "5": 6,
+      "8": 8,
+      "10": 8
+     },
+     "id": "fi_pipe_20mm"
+    },
+    {
+     "name": "25mm Pipe",
+     "gst": 18,
+     "price": 72,
+     "qty": {
+      "3": 6,
+      "5": 8,
+      "8": 10,
+      "10": 10
+     },
+     "id": "fi_pipe_25mm"
+    },
+    {
+     "name": "20mm Bend",
+     "gst": 18,
+     "price": 5.5,
+     "qty": {
+      "3": 10,
+      "5": 12,
+      "8": 10,
+      "10": 12
+     },
+     "id": "fi_bend_20mm"
+    },
+    {
+     "name": "25mm Bend",
+     "gst": 18,
+     "price": 8,
+     "qty": {
+      "3": 12,
+      "5": 12,
+      "8": 10,
+      "10": 12
+     },
+     "id": "fi_bend_25mm"
+    },
+    {
+     "name": "20mm Elbow",
+     "gst": 18,
+     "price": 4,
+     "qty": {
+      "3": 12,
+      "5": 12,
+      "8": 10,
+      "10": 12
+     },
+     "id": "fi_elbow_20mm"
+    },
+    {
+     "name": "25mm Elbow",
+     "gst": 18,
+     "price": 4.5,
+     "qty": {
+      "3": 12,
+      "5": 12,
+      "8": 10,
+      "10": 0
+     },
+     "id": "fi_elbow_25mm"
+    },
+    {
+     "name": "SS Saddle 20mm",
+     "gst": 18,
+     "price": 2.7,
+     "qty": {
+      "3": 30,
+      "5": 36,
+      "8": 48,
+      "10": 48
+     },
+     "id": "fi_ss_saddle_20mm"
+    },
+    {
+     "name": "25mm Saddle",
+     "gst": 18,
+     "price": 3,
+     "qty": {
+      "3": 36,
+      "5": 48,
+      "8": 60,
+      "10": 60
+     },
+     "id": "fi_saddle_25mm"
+    },
+    {
+     "name": "End Sleeve Green",
+     "gst": 18,
+     "price": 5,
+     "qty": {
+      "3": 1.5,
+      "5": 1.5,
+      "8": 1.5,
+      "10": 1.5
+     },
+     "id": "fi_end_sleeve_green"
+    },
+    {
+     "name": "6mm Plug",
+     "gst": 18,
+     "price": 17,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_plug_6mm"
+    },
+    {
+     "name": "LA Nylon Holder",
+     "gst": 18,
+     "price": 9,
+     "qty": {
+      "3": 30,
+      "5": 30,
+      "8": 30,
+      "10": 30
+     },
+     "id": "fi_la_nylon_holder"
+    },
+    {
+     "name": "Mid Clamp",
+     "gst": 18,
+     "price": 19,
+     "qty": {
+      "3": 8,
+      "5": 14,
+      "8": 24,
+      "10": 32
+     },
+     "id": "fi_mid_clamp"
+    },
+    {
+     "name": "End Clamp",
+     "gst": 18,
+     "price": 13,
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     },
+     "id": "fi_end_clamp"
+    },
+    {
+     "name": "J Bolt",
+     "gst": 18,
+     "price": 20,
+     "qty": {
+      "3": 16,
+      "5": 22,
+      "8": 32,
+      "10": 40
+     },
+     "id": "fi_j_bolt"
+    },
+    {
+     "name": "Panel Earthing Nut & Bolt",
+     "gst": 18,
+     "price": 1.6,
+     "qty": {
+      "3": 25,
+      "5": 30,
+      "8": 40,
+      "10": 40
+     },
+     "id": "fi_panel_earthing_bolt"
+    },
+    {
+     "name": "T 20mm Ivory",
+     "gst": 18,
+     "price": 5,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_t_20mm_ivory"
+    },
+    {
+     "name": "25mm T",
+     "gst": 18,
+     "price": 7.6,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     },
+     "id": "fi_t_25mm"
+    },
+    {
+     "name": "LA Base Nut & Bolt",
+     "gst": 18,
+     "price": 1.4,
+     "qty": {
+      "3": 7,
+      "5": 7,
+      "8": 7,
+      "10": 7
+     },
+     "id": "fi_la_base_bolt"
+    },
+    {
+     "name": "20mm Gland",
+     "gst": 18,
+     "price": 7.4,
+     "qty": {
+      "3": 12,
+      "5": 12,
+      "8": 14,
+      "10": 14
+     },
+     "id": "fi_gland_20mm"
+    },
+    {
+     "name": "40A Change Over Switch",
+     "gst": 18,
+     "price": 3500,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      },
+      "2": {
+       "3": 1,
+       "5": 1,
+       "8": 1,
+       "10": 1
+      }
+     },
+     "premiumQty": {
+      "3": 1,
+      "5": 1,
+      "8": 0,
+      "10": 0
+     },
+     "id": "fi_changeover_40a"
+    },
+    {
+     "name": "25mm Battery Cable",
+     "gst": 18,
+     "price": 180,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 5,
+       "5": 5,
+       "8": 5,
+       "10": 5
+      },
+      "2": {
+       "3": 5,
+       "5": 5,
+       "8": 5,
+       "10": 5
+      }
+     },
+     "premiumQty": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+     },
+     "id": "fi_battery_cable_25mm"
+    },
+    {
+     "name": "25mm Copper Lug",
+     "gst": 18,
+     "price": 85,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 4,
+       "5": 4,
+       "8": 4,
+       "10": 4
+      },
+      "2": {
+       "3": 4,
+       "5": 4,
+       "8": 4,
+       "10": 4
+      }
+     },
+     "premiumQty": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+     },
+     "id": "fi_copper_lug_25mm"
+    },
+    {
+     "name": "1 Phase Meter Box",
+     "gst": 18,
+     "price": 950,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 2,
+       "5": 2,
+       "8": 0,
+       "10": 0
+      },
+      "2": {
+       "3": 2,
+       "5": 2,
+       "8": 0,
+       "10": 0
+      }
+     },
+     "premiumQty": {
+      "3": 2,
+      "5": 2,
+      "8": 0,
+      "10": 0
+     },
+     "id": "fi_meter_box_1phase"
+    },
+    {
+     "name": "Three Phase Meter Box",
+     "gst": 18,
+     "price": 950,
+     "batQty": {
+      "0": {
+       "3": 0,
+       "5": 0,
+       "8": 0,
+       "10": 0
+      },
+      "1": {
+       "3": 0,
+       "5": 0,
+       "8": 2,
+       "10": 2
+      },
+      "2": {
+       "3": 0,
+       "5": 0,
+       "8": 2,
+       "10": 2
+      }
+     },
+     "premiumQty": {
+      "3": 0,
+      "5": 0,
+      "8": 2,
+      "10": 2
+     },
+     "id": "fi_meter_box_3phase"
+    }
+   ]
+  },
+  "upgrade": {
+   "label": "On-Grid Upgrade",
+   "description": "Upgrade existing solar system to higher capacity",
+   "slots": [
+    {
+     "pos": 0,
+     "category": "panel",
+     "label": "Solar Panel (New)",
+     "variable": true,
+     "gst": 5,
+     "qtyMode": "newPanels"
+    },
+    {
+     "pos": 1,
+     "category": "inverter",
+     "label": "Inverter (Replacement)",
+     "variable": true,
+     "gst": 5,
+     "filterType": "ongrid",
+     "qtyMode": "fixed",
+     "fixedQty": 1
+    },
+    {
+     "pos": 2,
+     "category": "dcdb",
+     "label": "DCDB",
+     "variable": true,
+     "gst": 18,
+     "qtyMode": "fixed",
+     "fixedQty": 1
+    },
+    {
+     "pos": 3,
+     "category": "acdb",
+     "label": "ACDB",
+     "variable": true,
+     "gst": 18,
+     "qtyMode": "fixed",
+     "fixedQty": 1
+    },
+    {
+     "pos": 4,
+     "category": "dc_cable",
+     "label": "DC Cable",
+     "variable": true,
+     "gst": 18,
+     "qtyMode": "fixed",
+     "fixedQty": 40
+    },
+    {
+     "pos": 5,
+     "category": "ac_cable",
+     "label": "AC Cable",
+     "variable": true,
+     "gst": 18,
+     "qtyMode": "fixed",
+     "fixedQty": 20,
+     "hybridQty": 30
+    }
+   ],
+   "fixedItems": [
+    {
+     "name": "MC4 Connector Pair",
+     "category": "mc4_connector",
+     "itemId": "mc4_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 3,
+      "5_8": 3,
+      "5_10": 3,
+      "8_10": 3
+     }
+    },
+    {
+     "name": "Cable Tie 300mm Weather Resistant",
+     "category": "cable_tie",
+     "itemId": "ct_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "Flexible Pipe",
+     "category": "flexible_pipe",
+     "itemId": "fp_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "Insulation Tape",
+     "category": "insulation_tape",
+     "itemId": "it_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "Ring Type 4-6mm Copper Lug",
+     "category": "copper_lug",
+     "itemId": "cl_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 8,
+      "5_8": 8,
+      "5_10": 20,
+      "8_10": 8
+     }
+    },
+    {
+     "name": "20mm Conduit Pipe",
+     "category": "conduit_pipe",
+     "itemId": "cp_pipe",
+     "gst": 18,
+     "qty": {
+      "3_5": 6,
+      "5_8": 6,
+      "5_10": 6,
+      "8_10": 6
+     }
+    },
+    {
+     "name": "20mm Bend",
+     "category": "conduit_pipe",
+     "itemId": "cp_bend",
+     "gst": 18,
+     "qty": {
+      "3_5": 5,
+      "5_8": 5,
+      "5_10": 5,
+      "8_10": 5
+     }
+    },
+    {
+     "name": "20mm Elbow",
+     "category": "conduit_pipe",
+     "itemId": "cp_elbow",
+     "gst": 18,
+     "qty": {
+      "3_5": 5,
+      "5_8": 5,
+      "5_10": 5,
+      "8_10": 5
+     }
+    },
+    {
+     "name": "20mm T Connector",
+     "category": "conduit_pipe",
+     "itemId": "cp_t",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "SS Saddle 20mm",
+     "category": "conduit_pipe",
+     "itemId": "cp_saddle",
+     "gst": 18,
+     "qty": {
+      "3_5": 30,
+      "5_8": 30,
+      "5_10": 30,
+      "8_10": 30
+     }
+    },
+    {
+     "name": "20mm Gland",
+     "category": "conduit_pipe",
+     "itemId": "cp_gland",
+     "gst": 18,
+     "qty": {
+      "3_5": 12,
+      "5_8": 12,
+      "5_10": 12,
+      "8_10": 12
+     }
+    },
+    {
+     "name": "Mid Clamp",
+     "category": "solar_clamp",
+     "itemId": "sc_mid",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 18,
+      "8_10": 4
+     }
+    },
+    {
+     "name": "End Clamp",
+     "category": "solar_clamp",
+     "itemId": "sc_end",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 4,
+      "8_10": 4
+     }
+    },
+    {
+     "name": "J Bolt",
+     "category": "solar_clamp",
+     "itemId": "sc_jbolt",
+     "gst": 18,
+     "qty": {
+      "3_5": 8,
+      "5_8": 8,
+      "5_10": 22,
+      "8_10": 8
+     }
+    },
+    {
+     "name": "SS Star Screw 1½ inch",
+     "category": "ss_screw",
+     "itemId": "ss_15",
+     "gst": 18,
+     "qty": {
+      "3_5": 35,
+      "5_8": 35,
+      "5_10": 35,
+      "8_10": 35
+     }
+    },
+    {
+     "name": "SS Star Screw 1 inch",
+     "category": "ss_screw",
+     "itemId": "ss_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 65,
+      "5_8": 65,
+      "5_10": 65,
+      "8_10": 65
+     }
+    },
+    {
+     "name": "¾ inch Self Screw",
+     "category": "ss_screw",
+     "itemId": "ss_self34",
+     "gst": 18,
+     "qty": {
+      "3_5": 10,
+      "5_8": 10,
+      "5_10": 25,
+      "8_10": 10
+     }
+    },
+    {
+     "name": "Self Bolt Corroshield",
+     "category": "ss_screw",
+     "itemId": "ss_selfbolt",
+     "gst": 18,
+     "qty": {
+      "3_5": 6,
+      "5_8": 6,
+      "5_10": 15,
+      "8_10": 6
+     }
+    },
+    {
+     "name": "1.5×1.5 Square Tube 16G GP",
+     "category": "structure_material",
+     "itemId": "sm_15x15",
+     "gst": 18,
+     "qty": {
+      "3_5": 2,
+      "5_8": 2,
+      "5_10": 4,
+      "8_10": 2
+     },
+     "isTube": true
+    },
+    {
+     "name": "2.5×1.5 Square Tube 16G GP",
+     "category": "structure_material",
+     "itemId": "sm_25x15",
+     "gst": 18,
+     "qty": {
+      "3_5": 2,
+      "5_8": 2,
+      "5_10": 4,
+      "8_10": 2
+     },
+     "isTube": true
+    },
+    {
+     "name": "MS Square Plate 5×5",
+     "category": "structure_material",
+     "itemId": "sm_plate",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 6,
+      "8_10": 4
+     }
+    },
+    {
+     "name": "Anchor Bolt 8mm",
+     "category": "structure_material",
+     "itemId": "sm_anchor",
+     "gst": 18,
+     "qty": {
+      "3_5": 16,
+      "5_8": 16,
+      "5_10": 36,
+      "8_10": 36
+     }
+    },
+    {
+     "name": "2.5×1.5 End Cap",
+     "category": "structure_material",
+     "itemId": "sm_endcap_25",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 8,
+      "8_10": 4
+     }
+    },
+    {
+     "name": "1.5×1.5 End Cap",
+     "category": "structure_material",
+     "itemId": "sm_endcap_15",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 8,
+      "8_10": 4
+     }
+    },
+    {
+     "name": "Epoxy Primer ESS Dee Black",
+     "category": "painting_material",
+     "itemId": "pm_epoxy",
+     "gst": 18,
+     "qty": {
+      "3_5": 0.5,
+      "5_8": 0.5,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "Thinner D13",
+     "category": "painting_material",
+     "itemId": "pm_thinner",
+     "gst": 18,
+     "qty": {
+      "3_5": 0.5,
+      "5_8": 0.5,
+      "5_10": 0.5,
+      "8_10": 0.5
+     }
+    },
+    {
+     "name": "Roller 4 inch",
+     "category": "painting_material",
+     "itemId": "pm_roller",
+     "gst": 18,
+     "qty": {
+      "3_5": 2,
+      "5_8": 2,
+      "5_10": 2,
+      "8_10": 2
+     }
+    },
+    {
+     "name": "Cotton Waste 50gm",
+     "category": "painting_material",
+     "itemId": "pm_cotton",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     }
+    },
+    {
+     "name": "4\" Cutting Wheel Bullet",
+     "category": "welding_material",
+     "itemId": "wm_wheel",
+     "gst": 18,
+     "qty": {
+      "3_5": 2,
+      "5_8": 2,
+      "5_10": 3,
+      "8_10": 2
+     }
+    },
+    {
+     "name": "Welding Electrodes 2.50 Sunbond",
+     "category": "welding_material",
+     "itemId": "wm_electrode",
+     "gst": 18,
+     "qty": {
+      "3_5": 0.5,
+      "5_8": 0.5,
+      "5_10": 0.5,
+      "8_10": 0.5
+     }
+    },
+    {
+     "name": "Change Over Switch",
+     "category": "change_over",
+     "itemId": "co_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     },
+     "_section": "battery"
+    },
+    {
+     "name": "25mm Battery Cable",
+     "category": "battery_cable",
+     "itemId": "bc_25",
+     "gst": 18,
+     "qty": {
+      "3_5": 5,
+      "5_8": 5,
+      "5_10": 5,
+      "8_10": 5
+     },
+     "unit": "m",
+     "_section": "battery"
+    },
+    {
+     "name": "25mm Lug",
+     "category": "copper_lug",
+     "itemId": "cl_25",
+     "gst": 18,
+     "qty": {
+      "3_5": 4,
+      "5_8": 4,
+      "5_10": 4,
+      "8_10": 4
+     },
+     "_section": "battery"
+    },
+    {
+     "name": "Meter Box",
+     "category": "meter_box",
+     "itemId": "mbox_1",
+     "gst": 18,
+     "qty": {
+      "3_5": 1,
+      "5_8": 1,
+      "5_10": 1,
+      "8_10": 1
+     },
+     "_section": "hybridInv"
+    }
+   ]
+  }
+ },
+ "structureTemplates": {
+  "flatRoof": {
+   "label": "Flat Roof",
+   "items": [
+    {
+     "name": "2.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "2.5x1.5",
+     "weightKg": 15.3,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 5,
+      "10": 6
+     }
+    },
+    {
+     "name": "1.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "1.5x1.5",
+     "weightKg": 12.2,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 7,
+      "10": 8
+     }
+    },
+    {
+     "name": "Epoxy Primer ESS Dee Grey",
+     "type": "fixed",
+     "price": 350,
+     "unit": "ltr",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "1.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "2.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 15,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 12
+     }
+    },
+    {
+     "name": "Cotton Waste 50gm",
+     "type": "fixed",
+     "price": 30,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "4\" Cutting Wheel Bullet",
+     "type": "fixed",
+     "price": 45,
+     "unit": "nos",
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 4,
+      "10": 4
+     }
+    },
+    {
+     "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+     "type": "fixed",
+     "price": 280,
+     "unit": "pkt",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Thinner D13",
+     "type": "fixed",
+     "price": 180,
+     "unit": "ltr",
+     "qty": {
+      "3": 0.5,
+      "5": 0.5,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Roller 4\"",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 3
+     }
+    },
+    {
+     "name": "4×4 MS Base Plate",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "5×5 MS Square Plate",
+     "type": "fixed",
+     "price": 80,
+     "unit": "nos",
+     "qty": {
+      "3": 4,
+      "5": 6,
+      "8": 8,
+      "10": 10
+     }
+    },
+    {
+     "name": "Anchor Bolt 8mm",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 16,
+      "5": 24,
+      "8": 32,
+      "10": 40
+     }
+    },
+    {
+     "name": "3/4in Self Screw",
+     "type": "fixed",
+     "price": 1.5,
+     "unit": "nos",
+     "qty": {
+      "3": 25,
+      "5": 25,
+      "8": 50,
+      "10": 50
+     }
+    },
+    {
+     "name": "Self Bolt Corroshield",
+     "type": "fixed",
+     "price": 1.2,
+     "unit": "nos",
+     "qty": {
+      "3": 20,
+      "5": 20,
+      "8": 40,
+      "10": 40
+     }
+    }
+   ]
+  },
+  "elevated": {
+   "label": "Elevated",
+   "items": [
+    {
+     "name": "2.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "2.5x1.5",
+     "weightKg": 15.3,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 5,
+      "10": 6
+     }
+    },
+    {
+     "name": "1.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "1.5x1.5",
+     "weightKg": 12.2,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 7,
+      "10": 8
+     }
+    },
+    {
+     "name": "2×1 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "2x1",
+     "weightKg": 10.2,
+     "qty": {
+      "3": 5,
+      "5": 5,
+      "8": 7,
+      "10": 7
+     }
+    },
+    {
+     "name": "Epoxy Primer ESS Dee Grey",
+     "type": "fixed",
+     "price": 350,
+     "unit": "ltr",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1.5
+     }
+    },
+    {
+     "name": "1.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "2.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 15,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "2×1 End Cap",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "Cotton Waste 50gm",
+     "type": "fixed",
+     "price": 30,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "4\" Cutting Wheel Bullet",
+     "type": "fixed",
+     "price": 45,
+     "unit": "nos",
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 4,
+      "10": 4
+     }
+    },
+    {
+     "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+     "type": "fixed",
+     "price": 280,
+     "unit": "pkt",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Thinner D13",
+     "type": "fixed",
+     "price": 180,
+     "unit": "ltr",
+     "qty": {
+      "3": 0.5,
+      "5": 0.5,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Roller 4\"",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 3
+     }
+    },
+    {
+     "name": "4×4 MS Base Plate",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "5×5 MS Square Plate",
+     "type": "fixed",
+     "price": 80,
+     "unit": "nos",
+     "qty": {
+      "3": 4,
+      "5": 4,
+      "8": 8,
+      "10": 10
+     }
+    },
+    {
+     "name": "Anchor Bolt 8mm",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 16,
+      "5": 16,
+      "8": 32,
+      "10": 40
+     }
+    },
+    {
+     "name": "3/4in Self Screw",
+     "type": "fixed",
+     "price": 1.5,
+     "unit": "nos",
+     "qty": {
+      "3": 25,
+      "5": 25,
+      "8": 50,
+      "10": 50
+     }
+    },
+    {
+     "name": "Self Bolt Corroshield",
+     "type": "fixed",
+     "price": 1.2,
+     "unit": "nos",
+     "qty": {
+      "3": 20,
+      "5": 20,
+      "8": 40,
+      "10": 40
+     }
+    }
+   ]
+  },
+  "sheetRoof": {
+   "label": "Sheet Roof",
+   "items": [
+    {
+     "name": "2.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "2.5x1.5",
+     "weightKg": 15.3,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 5,
+      "10": 6
+     }
+    },
+    {
+     "name": "1.5×1.5 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "1.5x1.5",
+     "weightKg": 12.2,
+     "qty": {
+      "3": 3,
+      "5": 4,
+      "8": 7,
+      "10": 8
+     }
+    },
+    {
+     "name": "2×1 Square Tube 16G",
+     "type": "tube",
+     "tubeSize": "2x1",
+     "weightKg": 10.2,
+     "qty": {
+      "3": 5,
+      "5": 5,
+      "8": 7,
+      "10": 7
+     }
+    },
+    {
+     "name": "Epoxy Primer ESS Dee Grey",
+     "type": "fixed",
+     "price": 350,
+     "unit": "ltr",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1.5,
+      "10": 1.5
+     }
+    },
+    {
+     "name": "1.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "2.5×1.5 End Cap",
+     "type": "fixed",
+     "price": 15,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "2×1 End Cap",
+     "type": "fixed",
+     "price": 12,
+     "unit": "nos",
+     "qty": {
+      "3": 8,
+      "5": 8,
+      "8": 8,
+      "10": 8
+     }
+    },
+    {
+     "name": "Cotton Waste 50gm",
+     "type": "fixed",
+     "price": 30,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "4ft Sheet",
+     "type": "fixed",
+     "price": 500,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "1×1 Tube (GI/GP)",
+     "type": "tube",
+     "tubeSize": "1x1",
+     "weightKg": 9,
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "4\" Cutting Wheel Bullet",
+     "type": "fixed",
+     "price": 45,
+     "unit": "nos",
+     "qty": {
+      "3": 3,
+      "5": 3,
+      "8": 4,
+      "10": 4
+     }
+    },
+    {
+     "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+     "type": "fixed",
+     "price": 280,
+     "unit": "pkt",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Thinner D13",
+     "type": "fixed",
+     "price": 180,
+     "unit": "ltr",
+     "qty": {
+      "3": 0.5,
+      "5": 0.5,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Roller 4\"",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 2,
+      "5": 2,
+      "8": 2,
+      "10": 3
+     }
+    },
+    {
+     "name": "4×4 MS Base Plate",
+     "type": "fixed",
+     "price": 60,
+     "unit": "nos",
+     "qty": {
+      "3": 1,
+      "5": 1,
+      "8": 1,
+      "10": 1
+     }
+    },
+    {
+     "name": "Silicon Black",
+     "type": "fixed",
+     "price": 150,
+     "unit": "nos",
+     "qty": {
+      "3": 2,
+      "5": 3,
+      "8": 4,
+      "10": 5
+     }
+    },
+    {
+     "name": "Tar Sheet",
+     "type": "fixed",
+     "price": 200,
+     "unit": "m",
+     "qty": {
+      "3": 1.5,
+      "5": 2,
+      "8": 2.5,
+      "10": 3
+     }
+    },
+    {
+     "name": "3/4in Self Screw",
+     "type": "fixed",
+     "price": 1.5,
+     "unit": "nos",
+     "qty": {
+      "3": 25,
+      "5": 25,
+      "8": 50,
+      "10": 50
+     }
+    },
+    {
+     "name": "Self Bolt Corroshield",
+     "type": "fixed",
+     "price": 1.2,
+     "unit": "nos",
+     "qty": {
+      "3": 20,
+      "5": 20,
+      "8": 40,
+      "10": 40
+     }
+    }
+   ]
+  }
+ },
+ "tubeWeights": {
+  "1x1": 9,
+  "2x1": 10.2,
+  "1.5x1.5": 12.2,
+  "2.5x1.5": 15.3,
+  "3x1.5": 19
+ },
+ "packageProfiles": {
+  "ongrid_base": {
+   "label": "On-Grid Base",
+   "packageKey": "ongrid_base",
+   "structureType": "GP",
+   "inverterType": "ongrid",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "GP Structure (16G Square Tube) for Base On-Grid systems"
+  },
+  "ongrid_value": {
+   "label": "On-Grid Value",
+   "packageKey": "ongrid_value",
+   "structureType": "GI",
+   "inverterType": "ongrid",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "GI Structure (16G Galvanized Iron) for Value On-Grid systems"
+  },
+  "hybrid_base": {
+   "label": "Hybrid Base",
+   "packageKey": "hybrid_base",
+   "structureType": "GI",
+   "inverterType": "hybrid",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Hybrid Inverter Base package without battery"
+  },
+  "hybrid_value": {
+   "label": "Hybrid Value",
+   "packageKey": "hybrid_value",
+   "structureType": "GI",
+   "inverterType": "hybrid",
+   "batteryIncluded": true,
+   "batteryBrand": "LiFePO4 Generic",
+   "batteryModel": "Generic 48V",
+   "batteryCapacity": 10,
+   "batteryQuantity": 1,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Hybrid Inverter Value package with 10kWh battery | 2026-09-07: batteryQuantity aligned to locked D1 (Phase 1C) and to the four APPROVED hybrid VALUE packages (bt1 x1); project-level battery quantity 0/1/2 is set per project by PROJECT_HEAD (B.6).",
+   "batteryComponentId": "bt1"
+  },
+  "hybrid_premium": {
+   "label": "Hybrid Premium",
+   "packageKey": "hybrid_premium",
+   "structureType": "GI",
+   "inverterType": "micro",
+   "batteryIncluded": true,
+   "batteryBrand": "Enphase",
+   "batteryModel": "Enphase Flex Battery",
+   "batteryCapacity": 5,
+   "batteryQuantity": 1,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Enphase Micro-Inverter Premium package with battery"
+  },
+  "hybrid_nobat": {
+   "label": "Hybrid Without Battery",
+   "packageKey": "hybrid_nobat",
+   "structureType": "GI",
+   "inverterType": "hybrid",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Legacy: Hybrid Inverter without battery storage"
+  },
+  "hybrid_bat": {
+   "label": "Hybrid With Battery",
+   "packageKey": "hybrid_bat",
+   "structureType": "GI",
+   "inverterType": "hybrid",
+   "batteryIncluded": true,
+   "batteryBrand": "LiFePO4 Generic",
+   "batteryModel": "Generic 48V",
+   "batteryCapacity": 10,
+   "batteryQuantity": 1,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Legacy: Hybrid Inverter with integrated battery storage"
+  },
+  "premium": {
+   "label": "Premium Enphase",
+   "packageKey": "premium",
+   "structureType": "GI",
+   "inverterType": "micro",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Enphase Microinverter with optional future battery support"
+  },
+  "ongrid_premium": {
+   "label": "On-Grid Premium (Enphase Micro)",
+   "packageKey": "ongrid_premium",
+   "structureType": "GI",
+   "inverterType": "micro",
+   "batteryIncluded": false,
+   "batteryBrand": null,
+   "batteryModel": null,
+   "batteryCapacity": 0,
+   "batteryQuantity": 0,
+   "structureLaborOverride": null,
+   "repairMarginOverride": null,
+   "notes": "Distinct on-grid Premium profile (added Phase B 2026-09-05, locked 2.2). Mirrors global 'premium' at creation; Admin/Project Head may differentiate. getProfileKey() should route on-grid Premium to this key instead of the shared 'premium' fallback."
+  }
+ }
+}
