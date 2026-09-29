@@ -130,7 +130,7 @@ class TestSitemap:
 
     def test_discovery_finds_providers_only_where_the_module_exists(self):
         # every integrated website app that ships ``services/sitemap.py`` — and nothing else
-        assert [module.__name__ for module in providers.sitemap_providers()] == ["blog.services.sitemap", "sitepages.services.sitemap"]
+        assert [module.__name__ for module in providers.sitemap_providers()] == ["blog.services.sitemap", "sitepages.services.sitemap", "careers.services.sitemap"]
         assert [module.__name__ for module in providers.overview_providers()] == ["blog.services.seo_overview"]
 
     def test_query_count_is_bounded(self, api_client, django_assert_max_num_queries):
