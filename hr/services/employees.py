@@ -5,7 +5,9 @@
 * ``is_active`` changes only through ``deactivate/`` and ``activate/`` (archive). Deactivating emits
   ``hr.employee_deactivated`` ``{"employee_uid", "user_uid" | null}`` — accounts then deactivates the linked login and
   ends its sessions. Nobody deactivates their own employee record, nor one whose login they could not manage
-  themselves (the accounts handler acts as SYSTEM and cannot re-check). Activating does not restore the login
+  themselves (the accounts handler acts as SYSTEM and cannot re-check). Deactivating an already inactive employee
+  whose login is still active (eSSL deactivation kept logins; the import reports them) emits the event again, so the
+  login is retired; otherwise it is a no-op. Activating does not restore the login
   (eSSL behaviour): re-link it (``link-user/``) or reactivate the account in ``users/``;
 * an employee with any history (leave records here; attendance days, raw punches, device mappings registered by the
   later packages) cannot be deleted (409 ``employee_has_history``): deactivate instead. Deleting one also retires its
@@ -141,15 +143,21 @@ def deactivate_employee(instance: Employee, *, user, expected_version=None, left
     if left_on is not None and left_on != employee.left_on:
         _check_dates(employee.joined_on, left_on)
         values["left_on"] = left_on
-    if not values:
+    # An inactive employee whose login still works (eSSL's deactivate kept logins; the import reports them): deactivating
+    # again retires the login, like the first deactivation would have.
+    login_still_active = not employee.is_active and employee.user is not None and employee.user.is_active
+    if not values and not login_still_active:
         return employee
-    before = employee_snapshot(employee)
-    employee.versioned_update(user, **values)
-    changed_before, changed_after = changes(before, employee_snapshot(employee))
-    record("hr.employee_deactivated", obj=employee, actor=user, before=changed_before, after=changed_after, note=note)
-    if "is_active" in values:
+    if values:
+        before = employee_snapshot(employee)
+        employee.versioned_update(user, **values)
+        changed_before, changed_after = changes(before, employee_snapshot(employee))
+        record("hr.employee_deactivated", obj=employee, actor=user, before=changed_before, after=changed_after, note=note)
+        recompute.for_employees([employee.uid], *recompute.recent_range(), reason="employee_deactivated")
+    else:
+        record("hr.employee_deactivated", obj=employee, actor=user, after={"login_retired": str(employee.user.uid)}, note=note)
+    if "is_active" in values or login_still_active:
         _announce_deactivation(employee)
-    recompute.for_employees([employee.uid], *recompute.recent_range(), reason="employee_deactivated")
     _bump()
     return employee
 

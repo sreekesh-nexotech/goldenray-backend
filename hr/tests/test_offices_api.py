@@ -185,6 +185,21 @@ class TestSummary:
         assert body["sections"] == {"attendance": {"present": 7}}
         assert seen == [(office.pk, dt.date(2026, 3, 10), hr_user.pk)]
 
+    @pytest.mark.parametrize(
+        "shift_kwargs, day, weekly_off",
+        [
+            (None, "2026-03-15", True),  # no default shift: Sunday is the only day off (eSSL C3, what the engine does)
+            (None, "2026-03-14", False),
+            ({"working_days": [], "weekly_off_days": [6]}, "2026-03-11", False),  # empty working_days: every day but the weekly off
+            ({"working_days": [0, 1, 2, 3, 4], "weekly_off_days": [6]}, "2026-03-14", True),  # a day outside working_days is off
+            ({"working_days": [0, 1, 2, 3, 4, 5, 6], "weekly_off_days": [6]}, "2026-03-15", True),  # weekly off wins
+        ],
+    )
+    def test_working_day_follows_the_engine_rule(self, hr_client, shift_kwargs, day, weekly_off):
+        office = OfficeFactory(default_shift=ShiftFactory(**shift_kwargs) if shift_kwargs is not None else None)
+        body = hr_client.get(detail(office, "summary/"), {"day": day}).json()
+        assert (body["is_weekly_off"], body["is_working_day"]) == (weekly_off, not weekly_off)
+
     def test_bad_day_is_a_validation_error(self, hr_client):
         response = hr_client.get(detail(OfficeFactory(), "summary/"), {"day": "10-03-2026"})
         assert response.status_code == 400 and "day" in response.json()["errors"]

@@ -92,7 +92,7 @@ class TestUsers:
         assert {row["source_id"] for row in violations(imported["users"], "email")} == {str(source_row(tables, "users", username=name)["id"]) for name in ("admin", "elena")}
         assert users["asha"].email == source_row(tables, "users", username="asha")["email"]
         assert users["farhan"].is_active is False and users["asha"].must_reset_password is False
-        assert all(account.password.startswith("bcrypt$$2b$") for account in users.values())
+        assert all(account.password.startswith("bcrypt$$2b$") for name, account in users.items() if name != "admin")  # admin: the seeded default
 
     def test_old_passwords_keep_working_and_are_upgraded(self, imported, tables, api_client):
         email = source_row(tables, "users", username="asha")["email"]
@@ -110,6 +110,21 @@ class TestUsers:
         assert len(PASSWORDS["gita"]) == 80
         assert api_client.post(LOGIN, {"email": email, "password": PASSWORDS["gita"]}, format="json").status_code == 200
         assert api_client.post(LOGIN, {"email": email, "password": PASSWORDS["gita"][:72] + "different"}, format="json").status_code == 401
+
+    def test_the_seeded_default_password_does_not_survive_the_import(self, imported, tables, api_client):
+        # eSSL scripts/seed.py creates admin/admin123 and the production dump still holds it (eSSL spec §B, §I:
+        # "must be rotated"); imported as-is it became a working Admin login at a predictable address
+        row = source_row(tables, "users", username="admin")
+        admin = by_source(User, "users", row["id"])
+        response = api_client.post(LOGIN, {"email": admin.email, "password": "admin123"}, format="json")
+        assert response.status_code == 401, response.json()
+        assert not admin.has_usable_password() and admin.must_reset_password and admin.role.slug == "admin"
+        [problem] = [item for item in violations(imported["users"], "password_hash") if item["source_id"] == str(row["id"])]
+        assert "default" in problem["message"]
+        assert legacy_import.import_users(tables["users"], roles=tables["roles"])["updated"] == 0  # a re-run keeps it retired
+        # every other account keeps its own password (PLAN §7.5)
+        others = [by_source(User, "users", other["id"]) for other in tables["users"] if other["username"] != "admin"]
+        assert all(account.password.startswith("bcrypt$$2b$") and not account.must_reset_password for account in others)
 
     def test_non_bcrypt_hash_needs_a_reset(self, tables):
         rows = [dict(tables["users"][1], id=999, username="odd", email="odd@example.com", password_hash="plain-text")]

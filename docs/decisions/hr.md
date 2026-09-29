@@ -31,9 +31,10 @@ importer (§7.5). Deviations: DV-17 … DV-21 in `docs/DEVIATIONS.md`.
 | `…/deactivate/`, `…/activate/`, `DELETE` (only without history) | `employees.archive` |
 | `GET …/device-mappings/`, `GET …/dependencies/` | `employees.view` |
 | `hr/holidays/` list (`office` = its own + global, `is_global`, `is_active`, `year`, `date_from/to`) / detail / create / `PATCH` / `DELETE` (soft) | `hr_setup` view · edit |
-| `hr/leave-types/` CRUD (409 `leave_type_in_use`) | `hr_setup` view · edit |
+| `hr/leave-types/` list / detail · create / `PATCH` / `DELETE` (409 `leave_type_in_use`) | `leave.view` (whoever files or decides leave) · `hr_setup.edit` |
 | `hr/leave/` list (`employee`, `office`, `leave_type`, `status`, `date_from/to` overlap, `search`) / detail | `leave.view` (scope all/office/self) |
-| `POST hr/leave/`, `…/cancel/` | `leave.create` |
+| `POST hr/leave/` | `leave.create` |
+| `…/cancel/` | gate `leave.view`; own leave needs `leave.create`, anyone else's `leave.approve` |
 | `…/approve/`, `…/reject/` | `leave.approve` (never on your own leave) |
 | `hr/attendance-rules/` list (`scope`, `office`, `shift`, `is_active`) / CRUD | `hr_setup` view · edit |
 
@@ -58,16 +59,20 @@ every endpoint is in the OpenAPI schema with its error envelopes.
 3. **Deactivation.** `deactivate/` (optionally with `left_on`) emits `hr.employee_deactivated`
    `{"employee_uid", "user_uid" | null}` — the accounts handler deactivates the login and ends its sessions. Refused
    on your own record and on a record whose login you could not manage. `activate/` clears `left_on` and does **not**
-   restore the login (eSSL behaviour): re-link it or reactivate it in `users/`. `DELETE` soft-deletes only an
+   restore the login (eSSL behaviour): re-link it or reactivate it in `users/`. Deactivating an already inactive
+   employee whose login is still active (eSSL's deactivation kept logins; the import reports them) emits the event
+   again so the login is retired; otherwise it is a no-op. `DELETE` soft-deletes only an
    employee without history — leave records here plus the counters other packages register (attendance days, raw
    punches, device mappings) — and retires a linked login like a deactivation.
 4. **Leave.** The new record is APPROVED when the caller may approve it (`leave.approve` and not their own record)
    or the type needs no approval (`requires_approval=false`), otherwise PENDING — PLAN's "Staff → PENDING, HR →
    APPROVED" generalised; `decided_by/at` are stamped. A request may not overlap another PENDING/APPROVED request of
    the same employee (409 `leave_overlap`, serialised by a row lock on the employee); approving re-checks overlap with
-   APPROVED leave. `cancel/` (gate `leave.create`): the employee withdraws their PENDING leave, or APPROVED leave that
-   has not started (office-local today; else 409 `leave_already_started`); an approver cancels anyone's
-   PENDING/APPROVED leave. There is no PATCH/DELETE (cancel and file again); `leave.archive` stays unused.
+   APPROVED leave. `cancel/` (gate `leave.view`, decided in the service): the employee withdraws their PENDING leave,
+   or APPROVED leave that has not started (`leave.create`; office-local today; else 409 `leave_already_started`); an
+   approver (`leave.approve`: HR, or the Office Manager within their office) cancels anyone's PENDING/APPROVED leave.
+   Leave types are read with `leave.view` (Staff and the Office Manager hold no `hr_setup`, yet need the types to file
+   and decide leave; a lookup without record scope) and written with `hr_setup.edit`. There is no PATCH/DELETE (cancel and file again); `leave.archive` stays unused.
 5. **`hr.attendance_inputs_changed`** (DV-20; A8). Payload `{"employee_uids": [...]}` or `{"office_uid": uuid | null}`
    (null = every office) plus `date_from`, `date_to` (inclusive, ISO) and `reason`. Leave and holidays carry their own
    dates; shift edits, office default-shift/time-zone changes, employee office/shift/date/activation changes and
@@ -85,7 +90,8 @@ every endpoint is in the OpenAPI schema with its error envelopes.
    office rules depend on the employee and are applied by the engine).
 7. **Office summary.** hr's own part: people (total/active), leave (on approved leave that day / pending covering
    it), the active holiday (an office holiday wins over a global one), weekly off and working day from the default
-   shift. `sections` holds whatever the registered providers return (attendance day counts, devices, agents, raw
+   shift by the engine's rule (`hr.services.common.is_working_day`, eSSL C3: no shift = Sunday off, weekly off wins,
+   empty `working_days` = every other day works; a non-working day is a weekly off). `sections` holds whatever the registered providers return (attendance day counts, devices, agents, raw
    punches) — a failing provider is logged and left out. `device_count` of the eSSL office list moves there too.
 8. **Photo.** `POST …/photo/` (multipart `file`) stores a PRIVATE `PHOTO` asset in `hr/employees` before the
    transaction (media rule), then attaches it under a row lock; a failed attach (stale version) deletes the new file;
@@ -108,7 +114,7 @@ records → attendance rules (`import_all`).
 |---|---|---|
 | `roles.name` | `accounts_role` (seeded) | ADMIN → `admin`, HR → `hr`, USER/VIEWER → `staff`; no role / other → `staff` (reported) |
 | `users.username`, `email` | `accounts_user.email` | e-mail is the login; missing/invalid → `<username>@migrated.invalid` (reported); an e-mail already used by a platform account links to it, nothing overwritten (reported) |
-| `users.password_hash` (bcrypt) | `accounts_user.password` = `bcrypt$<hash>` | verified by `LegacyBCryptPasswordHasher` (72-byte truncation like eSSL), upgraded to Argon2 on the first login; a re-run never replaces an upgraded hash; not bcrypt → unusable + `must_reset_password` (reported) |
+| `users.password_hash` (bcrypt) | `accounts_user.password` = `bcrypt$<hash>` | verified by `LegacyBCryptPasswordHasher` (72-byte truncation like eSSL), upgraded to Argon2 on the first login; a re-run never replaces an upgraded hash; not bcrypt, or a hash of eSSL's seeded default `admin123` (spec §B: "must be rotated") → unusable + `must_reset_password` (reported) |
 | `users.full_name`, `is_active` | `first_name` / `last_name` (first word / rest), `is_active` | |
 | `offices.*` | `hr_office` | `timezone` must be a zoneinfo name, else `Asia/Kolkata` (reported); `default_shift_id` via the shift map |
 | `shifts.*` | `hr_shift` | columns 1:1; v4 columns take the PLAN defaults (180 / 30 / 2); `is_overnight` corrected when it contradicts the clock (reported); minute values outside the DB bounds → default (reported); `office_id` (informational in eSSL) not kept (reported); the A5 half-day deadline change (10:00 wall clock → start + `half_day_after_minutes`) reported per shift where it differs |

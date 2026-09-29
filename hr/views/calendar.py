@@ -2,8 +2,10 @@
 ``leave``: view / create / approve; record scope all / office / self).
 
 Leave: list/detail (scoped), ``POST`` (self-service → PENDING; an approver filing for someone else → APPROVED),
-``approve/`` and ``reject/`` (``leave.approve``, never on your own leave), ``cancel/`` (``leave.create``: your own
-pending or not-yet-started leave; approvers anyone's). There is no PATCH or DELETE: cancel and file again.
+``approve/`` and ``reject/`` (``leave.approve``, never on your own leave), ``cancel/`` (``leave.view`` gate; the service
+requires ``leave.create`` for your own pending or not-yet-started leave and ``leave.approve`` for anyone else's). There
+is no PATCH or DELETE: cancel and file again. Leave types are read with ``leave.view`` (the vocabulary of self-service)
+and written with ``hr_setup.edit``.
 """
 
 from __future__ import annotations
@@ -53,7 +55,8 @@ class HolidayViewSet(HrCrudViewSet):
 @crud_schema("hr_leave_types", LeaveTypeSerializer, LeaveTypeCreateSerializer, LeaveTypeUpdateSerializer, "Soft delete; 409 `leave_type_in_use` while leave records use it.")
 class LeaveTypeViewSet(HrCrudViewSet):
     module = "hr_setup"
-    action_permissions = SETUP_PERMISSIONS
+    # Read by whoever files or decides leave (Staff, Office Manager, HR: leave.view); written by HR setup.
+    action_permissions = {**SETUP_PERMISSIONS, "list": ("leave", "view"), "retrieve": ("leave", "view")}
     services = {"create": leave.create_leave_type, "update": leave.update_leave_type, "destroy": leave.delete_leave_type}
     serializer_class = LeaveTypeSerializer
     write_serializers = {"create": LeaveTypeCreateSerializer, "partial_update": LeaveTypeUpdateSerializer}
@@ -63,6 +66,11 @@ class LeaveTypeViewSet(HrCrudViewSet):
 
     def base_queryset(self):
         return leave.leave_types_queryset()
+
+    def scope_queryset(self, queryset, module=None):
+        # A lookup without record scope (hr_setup is "all"-only; the leave scopes filter leave *records*): a Staff reader
+        # holds no hr_setup scope, which would otherwise empty the list. The permission check above still applies.
+        return queryset
 
 
 @crud_schema("hr_attendance_rules", AttendanceRuleSerializer, AttendanceRuleCreateSerializer, AttendanceRuleUpdateSerializer, "Soft delete; re-computes the people the rule covered.")
@@ -98,7 +106,7 @@ def _decision_schema(name: str, description: str):
 )
 class LeaveViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, BaseViewSet):
     module = "leave"
-    action_permissions = {"list": "view", "retrieve": "view", "create": "create", "cancel": "create", "approve": "approve", "reject": "approve"}
+    action_permissions = {"list": "view", "retrieve": "view", "create": "create", "cancel": "view", "approve": "approve", "reject": "approve"}
     services = {"create": leave.create_leave}
     http_method_names = ["get", "post"]
     lookup_value_regex = UUID_REGEX
@@ -131,7 +139,11 @@ class LeaveViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, BaseVie
     def reject(self, request, *args, **kwargs):
         return self._act(request, leave.reject_leave)
 
-    @_decision_schema("cancel", "PENDING/APPROVED → CANCELLED: your own pending or not-yet-started leave, or anyone's as an approver. 409 `leave_not_cancellable`, `leave_already_started`.")
+    @_decision_schema(
+        "cancel",
+        "PENDING/APPROVED → CANCELLED: your own pending or not-yet-started leave (`leave.create`), or anyone's as an approver (`leave.approve`); "
+        "else 403. 409 `leave_not_cancellable`, `leave_already_started`.",
+    )
     @action(detail=True, methods=["post"])
     def cancel(self, request, *args, **kwargs):
         return self._act(request, leave.cancel_leave)

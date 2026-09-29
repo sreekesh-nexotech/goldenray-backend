@@ -50,6 +50,20 @@ def now() -> datetime:
     return timezone.now()
 
 
+def is_working_day(day: date, shift) -> bool:
+    """Whether ``day`` is a working day under ``shift`` (eSSL C3, unchanged by v4; a non-working day is WEEKLY_OFF).
+
+    No shift: every day but Sunday. Otherwise a weekday in ``weekly_off_days`` is off (it wins); an empty
+    ``working_days`` means every other day works; else the weekday must be in ``working_days``.
+    """
+    weekday = day.weekday()
+    if shift is None:
+        return weekday != 6
+    if weekday in (shift.weekly_off_days or []):
+        return False
+    return not shift.working_days or weekday in shift.working_days
+
+
 def lock(model, instance, expected_version=None, *, manager: str = "objects", related: tuple[str, ...] = ()):
     """Re-read ``instance`` with ``SELECT … FOR UPDATE`` (own row only) and check the client's version."""
     queryset = getattr(model, manager).select_for_update(of=("self",))

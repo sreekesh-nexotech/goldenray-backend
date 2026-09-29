@@ -23,7 +23,7 @@ from core.services import stamp_create
 from hr import registries
 from hr.models import AttendanceRule, Employee, Holiday, LeaveRecord, Office
 from hr.services import recompute, validation
-from hr.services.common import bump_setup, lock, today_in, unique_conflict, validate_timezone
+from hr.services.common import bump_setup, is_working_day, lock, today_in, unique_conflict, validate_timezone
 
 EDITABLE_FIELDS = ("code", "name", "address", "timezone", "default_shift", "is_active")
 SNAPSHOT_FIELDS = EDITABLE_FIELDS
@@ -124,9 +124,8 @@ def summary(office: Office, day: date | None, user) -> dict:
     leave = LeaveRecord.objects.filter(employee__office=office, employee__deleted_at__isnull=True, date_from__lte=day, date_to__gte=day)
     leave_counts = leave.aggregate(on_leave=Count("employee", filter=Q(status=LeaveRecord.Status.APPROVED), distinct=True), pending=Count("id", filter=Q(status=LeaveRecord.Status.PENDING)))
     holiday = holiday_on(office, day)
-    shift = office.default_shift
-    weekly_off = bool(shift and day.weekday() in (shift.weekly_off_days or []))
-    working_day = bool(shift is None or (day.weekday() in (shift.working_days or []) and not weekly_off)) and holiday is None
+    weekly_off = not is_working_day(day, office.default_shift)  # the engine's rule: no shift = Sunday off
+    working_day = not weekly_off and holiday is None
     return {
         "office": office,
         "date": day,

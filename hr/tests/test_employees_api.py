@@ -173,10 +173,27 @@ class TestLifecycle:
         hr_client.post(detail(employee, "deactivate/"), {}, format="json")
         assert events("hr.employee_deactivated") == [{"employee_uid": str(employee.uid), "user_uid": None}]
 
-    def test_deactivate_is_idempotent(self, hr_client):
+    def test_deactivate_is_idempotent(self, hr_client, make_user):
         employee = EmployeeFactory(is_active=False)
         assert hr_client.post(detail(employee, "deactivate/"), {}, format="json").json()["version"] == 1
+        retired = EmployeeFactory(is_active=False, user=make_user(is_active=False))
+        assert hr_client.post(detail(retired, "deactivate/"), {}, format="json").json()["version"] == 1
         assert events("hr.employee_deactivated") == []
+
+    def test_deactivating_again_retires_a_login_that_is_still_active(self, hr_client, make_user, drain_outbox):
+        # eSSL's deactivate kept the login (the import reports it: "deactivate it again to retire the login")
+        login = make_user()
+        employee = EmployeeFactory(is_active=False, user=login)
+        response = hr_client.post(detail(employee, "deactivate/"), {"note": "Left in 2025"}, format="json")
+        assert response.status_code == 200, response.json()
+        assert response.json()["is_active"] is False and response.json()["version"] == 1
+        assert events("hr.employee_deactivated") == [{"employee_uid": str(employee.uid), "user_uid": str(login.uid)}]
+        assert AuditLog.objects.get(action="hr.employee_deactivated").note == "Left in 2025"
+        drain_outbox()
+        login.refresh_from_db()
+        assert login.is_active is False
+        assert hr_client.post(detail(employee, "deactivate/"), {}, format="json").status_code == 200
+        assert len(events("hr.employee_deactivated")) == 1  # nothing left to retire
 
     def test_nobody_deactivates_their_own_record(self, auth_client, hr_user):
         own = EmployeeFactory(user=hr_user)

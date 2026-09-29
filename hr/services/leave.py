@@ -12,9 +12,10 @@ Leave records (PLAN §3.4 "Staff self-service → PENDING; HR → APPROVED"):
   overlap another PENDING or APPROVED one of the same employee (409 ``leave_overlap``, checked under a row lock on
   the employee);
 * ``approve/`` and ``reject/`` (``leave.approve``) act on PENDING only (409 ``leave_not_pending``) and never on the
-  caller's own leave (403 ``self_action_denied``); ``cancel/`` (``leave.create``): the employee withdraws their own
-  PENDING leave, or APPROVED leave that has not started (409 ``leave_already_started``); an approver cancels anyone's
-  PENDING or APPROVED leave; REJECTED/CANCELLED cannot be cancelled (409 ``leave_not_cancellable``);
+  caller's own leave (403 ``self_action_denied``); ``cancel/`` (gate ``leave.view``, decided here): the employee
+  withdraws their own PENDING leave, or APPROVED leave that has not started (``leave.create``; 409
+  ``leave_already_started``); an approver (``leave.approve`` — HR, the Office Manager within their office) cancels
+  anyone's PENDING or APPROVED leave; REJECTED/CANCELLED cannot be cancelled (409 ``leave_not_cancellable``);
 * approved leave (created approved, approved, or cancelled after approval) re-computes those days.
 
 Leave types: codes unique among live types, case-insensitive (409 ``leave_type_code_taken``); a type used by any
@@ -211,6 +212,8 @@ def cancel_leave(instance: LeaveRecord, *, user, expected_version=None, note: st
     if leave.status not in OPEN_STATUSES:
         raise Conflict("leave_not_cancellable", f"{leave.status.capitalize()} leave cannot be cancelled.")
     if is_self(user, leave):
+        if not can(user, "leave", "create"):
+            raise PermissionDenied("permission_denied", "Withdrawing your own leave needs the leave.create permission.")
         today = today_in(leave.employee.office.timezone if leave.employee.office_id else None)
         if leave.status == LeaveRecord.Status.APPROVED and leave.date_from <= today:
             raise Conflict("leave_already_started", "Approved leave that has started can only be cancelled by an approver.")

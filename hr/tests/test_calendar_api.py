@@ -16,13 +16,33 @@ TYPES = "/api/v1/hr/leave-types/"
 RULES = "/api/v1/hr/attendance-rules/"
 
 
-@pytest.mark.parametrize("url", [HOLIDAYS, TYPES, RULES])
+@pytest.mark.parametrize("url", [HOLIDAYS, RULES])
 def test_permissions(url, api_client, auth_client, make_user):
     assert api_client.get(url).status_code == 401
     viewer = auth_client(make_user(grants={"hr_setup": ["view"]}))
     assert viewer.get(url).status_code == 200
     assert viewer.post(url, {"name": "x"}, format="json").status_code == 403
     assert auth_client(make_user(grants={"leave": "*"}, scopes={"leave": "all"})).get(url).status_code == 403
+
+
+def test_leave_types_are_read_by_whoever_files_or_decides_leave(api_client, auth_client, make_user, staff, manager):
+    """Self-service leave (PLAN §3.2 Staff: leave view/create) needs the leave-type uids; the Office Manager decides
+    leave of those types. Neither holds hr_setup: reading is ``leave.view``, writing stays ``hr_setup.edit``."""
+    leave_type = LeaveTypeFactory(code="CL", name="Casual leave")
+    assert api_client.get(TYPES).status_code == 401
+    for user in (staff, manager):
+        client = auth_client(user)
+        response = client.get(TYPES)
+        assert response.status_code == 200, response.json()
+        assert [row["code"] for row in response.json()["results"]] == ["CL"]
+        assert client.get(f"{TYPES}{leave_type.uid}/").json()["name"] == "Casual leave"
+        assert client.post(TYPES, {"code": "X", "name": "X"}, format="json").status_code == 403
+        assert client.patch(f"{TYPES}{leave_type.uid}/", {"name": "x"}, format="json").status_code == 403
+        assert client.delete(f"{TYPES}{leave_type.uid}/").status_code == 403
+    editor = auth_client(make_user(grants={"hr_setup": ["view", "edit"], "leave": ["view"]}, scopes={"leave": "all"}))
+    assert editor.get(TYPES).status_code == 200
+    assert editor.post(TYPES, {"code": "SL", "name": "Sick leave"}, format="json").status_code == 201
+    assert auth_client(make_user(grants={"employees": "*"}, scopes={"employees": "all"})).get(TYPES).status_code == 403
 
 
 class TestHolidays:

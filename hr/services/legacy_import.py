@@ -17,7 +17,8 @@ Order: :func:`import_users` → :func:`import_shifts` → :func:`import_offices`
 
 Users (PLAN §7.5): roles ADMIN→Admin, HR→HR, USER/VIEWER→Staff; bcrypt hashes are stored as Django ``bcrypt$<hash>``
 (``accounts.hashers.LegacyBCryptPasswordHasher``, 72-byte truncation like eSSL) so old passwords keep working and are
-upgraded to Argon2 on the first login; e-mail is the platform login, so an account without a valid e-mail gets
+upgraded to Argon2 on the first login — except a hash of eSSL's seeded default password (``admin123``), which is
+never carried over (unusable password + ``must_reset_password``, reported); e-mail is the platform login, so an account without a valid e-mail gets
 ``<username>@migrated.invalid`` (reported: set a real address before that person can sign in); an account whose
 e-mail already belongs to a platform user is linked to it, never overwritten (reported).
 """
@@ -29,7 +30,9 @@ import json
 import re
 from collections.abc import Callable, Iterable
 from datetime import date, datetime, time, timedelta
+from functools import lru_cache
 
+import bcrypt
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import IntegrityError, transaction
 from django.db.models import F
@@ -55,6 +58,9 @@ ROLE_SLUGS = {"ADMIN": "admin", "HR": "hr", "USER": "staff", "VIEWER": "staff"}
 BCRYPT_PREFIXES = ("$2a$", "$2b$", "$2y$")
 MIGRATED_EMAIL_DOMAIN = "migrated.invalid"
 UNUSABLE_PASSWORD = "!essl-import-no-bcrypt-hash"  # "!" = Django's unusable-password prefix; fixed so a re-run changes nothing
+# eSSL's scripts/seed.py creates admin/admin123 and the production dump still holds it (eSSL spec §B/§I "must be
+# rotated"): a hash of it is never imported as a working password.
+KNOWN_DEFAULT_PASSWORDS = ("admin123",)
 LEGACY_HALF_DAY_AFTER = time(10, 0)  # eSSL v3 DEFAULT_HALF_DAY_AFTER (A5)
 IDENTITY_METHODS = set(Employee.IdentityMethod.values)
 LEAVE_STATUSES = set(LeaveRecord.Status.values)
@@ -196,8 +202,23 @@ def _platform_email(row: dict, report: Report) -> str:
     return email
 
 
+@lru_cache(maxsize=1024)
+def is_known_default(password_hash: str) -> bool:
+    """Whether a bcrypt hash verifies one of :data:`KNOWN_DEFAULT_PASSWORDS` (cached: bcrypt is deliberately slow)."""
+    for candidate in KNOWN_DEFAULT_PASSWORDS:
+        try:
+            if bcrypt.checkpw(candidate.encode(), password_hash.encode()):
+                return True
+        except ValueError:  # not a well-formed bcrypt hash
+            return False
+    return False
+
+
 def _password(row: dict, report: Report) -> tuple[str, bool]:
     raw = _text(row.get("password_hash"))
+    if raw.startswith(BCRYPT_PREFIXES) and is_known_default(raw):
+        report.violation(row.get("id"), "password_hash", "the eSSL seeded default password (scripts/seed.py) is not carried over: the account must set a new password (reset link)")
+        return UNUSABLE_PASSWORD, True
     if raw.startswith(BCRYPT_PREFIXES):
         return f"bcrypt${raw}", False
     report.violation(row.get("id"), "password_hash", "not a bcrypt hash: the account must set a new password (reset link)")

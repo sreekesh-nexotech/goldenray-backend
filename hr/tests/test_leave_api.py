@@ -200,6 +200,24 @@ class TestCancel:
         record = LeaveRecordFactory(status="APPROVED", date_from=dt.date(2020, 1, 1), date_to=dt.date(2020, 1, 2))
         assert hr_client.post(detail(record, "cancel/"), {"note": "Came to work"}, format="json").json()["status"] == "CANCELLED"
 
+    def test_office_manager_cancels_leave_in_their_office(self, auth_client, manager, office):
+        # an approver cancels anyone's open leave (docs/decisions/hr.md #4); the Office Manager is the approver of
+        # their office but holds no leave.create
+        record = LeaveRecordFactory(employee=EmployeeFactory(office=office), status="APPROVED", date_from=dt.date(2026, 3, 2), date_to=dt.date(2026, 3, 3))
+        response = auth_client(manager).post(detail(record, "cancel/"), {"expected_version": 1, "note": "Came to work"}, format="json")
+        assert response.status_code == 200, response.json()
+        assert response.json()["status"] == "CANCELLED" and response.json()["decided_by"]["uid"] == str(manager.uid)
+        assert events("hr.attendance_inputs_changed")[0]["reason"] == "leave_cancelled"
+        assert AuditLog.objects.get(action="hr.leave_cancelled").note == "Came to work"
+        elsewhere = LeaveRecordFactory(employee=EmployeeFactory(office=OfficeFactory()), status="PENDING")
+        assert auth_client(manager).post(detail(elsewhere, "cancel/"), {}, format="json").status_code == 404
+
+    def test_cancelling_your_own_leave_needs_leave_create(self, auth_client, manager):
+        own = LeaveRecordFactory(employee=manager.employee, status="PENDING")
+        response = auth_client(manager).post(detail(own, "cancel/"), {}, format="json")
+        assert response.status_code == 403 and response.json()["code"] == "permission_denied"
+        assert LeaveRecord.objects.get(pk=own.pk).status == "PENDING"
+
     def test_closed_leave_cannot_be_cancelled(self, hr_client):
         record = LeaveRecordFactory(status="REJECTED")
         response = hr_client.post(detail(record, "cancel/"), {}, format="json")
