@@ -266,7 +266,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": THROTTLE_RATES,
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": [
-        "rest_framework.parsers.JSONParser",
+        "flarize.parsers.JSONParser",  # DRF's, with a too-deeply nested body as a 400 parse_error (not a 500)
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ],
@@ -527,6 +527,14 @@ LEADS_OTP_TTL_SECONDS = 600  # matches Twilio Verify's default code lifetime
 LEADS_OTP_MAX_ATTEMPTS = 5  # verification checks per sent code
 LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY = 10  # database backstop behind the (fail-open) otp throttle
 LEADS_VERIFICATION_TOKEN_TTL_SECONDS = 1800
+
+# --------------------------------------------------------------------------------------------------------------------
+# EMI calculator: where the system sizes and their prices come from (DV-83)
+# --------------------------------------------------------------------------------------------------------------------
+# "MANUAL": the emi_system_size rows maintained in Studio (the legacy tiles; transitional, the default).
+# "PACK_RELEASE": the provider the packs package registers (emi.services.price_sources.register), i.e. the packs of
+# the current PackRelease. The system check emi.E001/W001 refuses an unknown value or a missing provider.
+EMI_PRICE_SOURCE = config("EMI_PRICE_SOURCE", default="MANUAL")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Logging: JSON lines to stdout with the request id on every record

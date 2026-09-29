@@ -5,7 +5,9 @@ These are the documented reads other packages use instead of querying ``referenc
 * :func:`find_pincode` / :func:`district_of` / :func:`pincodes_in_district` — the legacy
   ``Pincode.objects.filter(pincode=…).first().district`` and "every pincode of a district" lookups;
 * :func:`current_tariffs` / :func:`slab_for_units` — the KSEB slab schedule in force on a day;
-* :func:`device_type_by_name` / :func:`vehicle_by_model` — the advanced calculator's name lookups.
+* :func:`device_type_by_name` / :func:`vehicle_by_model` — the advanced calculator's name lookups;
+* :func:`active_pincode_codes` / :func:`active_device_types` / :func:`active_vehicles` — whole lists, for the
+  calculators' cached snapshot (``calculators.services.data``).
 """
 
 from __future__ import annotations
@@ -69,6 +71,21 @@ def slab_for_units(units: int, *, on: date | None = None, phase: str | None = No
     """The slab whose range contains ``units`` (the legacy ``min_units__lte=units`` highest match)."""
     candidates = [row for row in current_tariffs(on=on, phase=phase) if row.slab_from_units <= units]
     return max(candidates, key=lambda row: row.slab_from_units) if candidates else None
+
+
+def active_pincode_codes() -> frozenset[str]:
+    """Every live, active pincode (the calculators check a visitor's pincode against it)."""
+    return frozenset(Pincode.objects.filter(is_active=True).values_list("pincode", flat=True))
+
+
+def active_device_types() -> list[DeviceType]:
+    """Every live, active device type in legacy order (``sort_order`` is the legacy id)."""
+    return list(DeviceType.objects.filter(is_active=True).order_by("sort_order", "id"))
+
+
+def active_vehicles() -> tuple[list[EvCar], list[EvScooter]]:
+    """Every live, active EV car and scooter in legacy order."""
+    return list(EvCar.objects.filter(is_active=True).order_by("sort_order", "id")), list(EvScooter.objects.filter(is_active=True).order_by("sort_order", "id"))
 
 
 def device_type_by_name(name: str) -> DeviceType | None:

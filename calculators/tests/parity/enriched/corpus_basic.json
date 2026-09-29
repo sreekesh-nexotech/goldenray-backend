@@ -1,0 +1,3436 @@
+{
+ "endpoint": "POST /api/calculate-solar/",
+ "source": "http://127.0.0.1:18161",
+ "cases": [
+  {
+   "name": "bill 197.07",
+   "request": "{\"monthly_bill\": 197.07, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -0.0,
+    "daily_consumption": -0.0,
+    "buffered_daily": -0.0,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 197.08",
+   "request": "{\"monthly_bill\": 197.08, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 0.0,
+    "daily_consumption": 0.0,
+    "buffered_daily": 0.0,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 197.09",
+   "request": "{\"monthly_bill\": 197.09, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 0.0,
+    "daily_consumption": 0.0,
+    "buffered_daily": 0.0,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2222.07",
+   "request": "{\"monthly_bill\": 2222.07, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 291.37,
+    "daily_consumption": 9.71,
+    "buffered_daily": 12.63,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2222.08",
+   "request": "{\"monthly_bill\": 2222.08, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 291.37,
+    "daily_consumption": 9.71,
+    "buffered_daily": 12.63,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2222.09",
+   "request": "{\"monthly_bill\": 2222.09, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 291.37,
+    "daily_consumption": 9.71,
+    "buffered_daily": 12.63,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2602.07",
+   "request": "{\"monthly_bill\": 2602.07, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 342.1,
+    "daily_consumption": 11.4,
+    "buffered_daily": 14.82,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2602.08",
+   "request": "{\"monthly_bill\": 2602.08, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 342.11,
+    "daily_consumption": 11.4,
+    "buffered_daily": 14.82,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2602.09",
+   "request": "{\"monthly_bill\": 2602.09, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 342.11,
+    "daily_consumption": 11.4,
+    "buffered_daily": 14.82,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2999.57",
+   "request": "{\"monthly_bill\": 2999.57, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 392.45,
+    "daily_consumption": 13.08,
+    "buffered_daily": 17.01,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2999.58",
+   "request": "{\"monthly_bill\": 2999.58, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 392.45,
+    "daily_consumption": 13.08,
+    "buffered_daily": 17.01,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2999.59",
+   "request": "{\"monthly_bill\": 2999.59, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 392.45,
+    "daily_consumption": 13.08,
+    "buffered_daily": 17.01,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3824.57",
+   "request": "{\"monthly_bill\": 3824.57, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 492.73,
+    "daily_consumption": 16.42,
+    "buffered_daily": 21.35,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3824.58",
+   "request": "{\"monthly_bill\": 3824.58, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 492.73,
+    "daily_consumption": 16.42,
+    "buffered_daily": 21.35,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3824.59",
+   "request": "{\"monthly_bill\": 3824.59, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 492.73,
+    "daily_consumption": 16.42,
+    "buffered_daily": 21.35,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 200",
+   "request": "{\"monthly_bill\": 200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 0.42,
+    "daily_consumption": 0.01,
+    "buffered_daily": 0.02,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 400",
+   "request": "{\"monthly_bill\": 400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 29.2,
+    "daily_consumption": 0.97,
+    "buffered_daily": 1.27,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 600",
+   "request": "{\"monthly_bill\": 600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 57.97,
+    "daily_consumption": 1.93,
+    "buffered_daily": 2.51,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 800",
+   "request": "{\"monthly_bill\": 800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 86.75,
+    "daily_consumption": 2.89,
+    "buffered_daily": 3.76,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1000",
+   "request": "{\"monthly_bill\": 1000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 115.53,
+    "daily_consumption": 3.85,
+    "buffered_daily": 5.01,
+    "solar_capacity_kW": 2,
+    "area_required": 160,
+    "installation_time_days": 3,
+    "total_cost": 150000.0,
+    "subsidy": 60000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1200",
+   "request": "{\"monthly_bill\": 1200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 144.31,
+    "daily_consumption": 4.81,
+    "buffered_daily": 6.25,
+    "solar_capacity_kW": 2,
+    "area_required": 160,
+    "installation_time_days": 3,
+    "total_cost": 150000.0,
+    "subsidy": 60000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1400",
+   "request": "{\"monthly_bill\": 1400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 173.08,
+    "daily_consumption": 5.77,
+    "buffered_daily": 7.5,
+    "solar_capacity_kW": 2,
+    "area_required": 160,
+    "installation_time_days": 3,
+    "total_cost": 150000.0,
+    "subsidy": 60000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1600",
+   "request": "{\"monthly_bill\": 1600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 201.86,
+    "daily_consumption": 6.73,
+    "buffered_daily": 8.75,
+    "solar_capacity_kW": 3,
+    "area_required": 240,
+    "installation_time_days": 3,
+    "total_cost": 204000.0,
+    "subsidy": 58500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1800",
+   "request": "{\"monthly_bill\": 1800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 230.64,
+    "daily_consumption": 7.69,
+    "buffered_daily": 9.99,
+    "solar_capacity_kW": 3,
+    "area_required": 240,
+    "installation_time_days": 3,
+    "total_cost": 204000.0,
+    "subsidy": 58500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2000",
+   "request": "{\"monthly_bill\": 2000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 259.41,
+    "daily_consumption": 8.65,
+    "buffered_daily": 11.24,
+    "solar_capacity_kW": 3,
+    "area_required": 240,
+    "installation_time_days": 3,
+    "total_cost": 204000.0,
+    "subsidy": 58500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2200",
+   "request": "{\"monthly_bill\": 2200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 288.19,
+    "daily_consumption": 9.61,
+    "buffered_daily": 12.49,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2400",
+   "request": "{\"monthly_bill\": 2400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 315.52,
+    "daily_consumption": 10.52,
+    "buffered_daily": 13.67,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2600",
+   "request": "{\"monthly_bill\": 2600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 341.83,
+    "daily_consumption": 11.39,
+    "buffered_daily": 14.81,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 2800",
+   "request": "{\"monthly_bill\": 2800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 367.35,
+    "daily_consumption": 12.24,
+    "buffered_daily": 15.92,
+    "solar_capacity_kW": 4,
+    "area_required": 320,
+    "installation_time_days": 4,
+    "total_cost": 272000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3000",
+   "request": "{\"monthly_bill\": 3000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 392.51,
+    "daily_consumption": 13.08,
+    "buffered_daily": 17.01,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3200",
+   "request": "{\"monthly_bill\": 3200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 417.02,
+    "daily_consumption": 13.9,
+    "buffered_daily": 18.07,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3400",
+   "request": "{\"monthly_bill\": 3400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 441.26,
+    "daily_consumption": 14.71,
+    "buffered_daily": 19.12,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3600",
+   "request": "{\"monthly_bill\": 3600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 465.51,
+    "daily_consumption": 15.52,
+    "buffered_daily": 20.17,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 3800",
+   "request": "{\"monthly_bill\": 3800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 489.75,
+    "daily_consumption": 16.32,
+    "buffered_daily": 21.22,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4000",
+   "request": "{\"monthly_bill\": 4000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 512.55,
+    "daily_consumption": 17.08,
+    "buffered_daily": 22.21,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4200",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4400",
+   "request": "{\"monthly_bill\": 4400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 556.02,
+    "daily_consumption": 18.53,
+    "buffered_daily": 24.09,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4600",
+   "request": "{\"monthly_bill\": 4600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 577.76,
+    "daily_consumption": 19.26,
+    "buffered_daily": 25.04,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4800",
+   "request": "{\"monthly_bill\": 4800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 599.5,
+    "daily_consumption": 19.98,
+    "buffered_daily": 25.98,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 5000",
+   "request": "{\"monthly_bill\": 5000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 621.24,
+    "daily_consumption": 20.71,
+    "buffered_daily": 26.92,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 5200",
+   "request": "{\"monthly_bill\": 5200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 642.98,
+    "daily_consumption": 21.43,
+    "buffered_daily": 27.86,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 5400",
+   "request": "{\"monthly_bill\": 5400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 664.72,
+    "daily_consumption": 22.16,
+    "buffered_daily": 28.8,
+    "solar_capacity_kW": 8,
+    "area_required": 640,
+    "installation_time_days": 6,
+    "total_cost": 544000.0,
+    "subsidy": 156000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 5600",
+   "request": "{\"monthly_bill\": 5600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 686.46,
+    "daily_consumption": 22.88,
+    "buffered_daily": 29.75,
+    "solar_capacity_kW": 8,
+    "area_required": 640,
+    "installation_time_days": 6,
+    "total_cost": 544000.0,
+    "subsidy": 156000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 5800",
+   "request": "{\"monthly_bill\": 5800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 708.2,
+    "daily_consumption": 23.61,
+    "buffered_daily": 30.69,
+    "solar_capacity_kW": 8,
+    "area_required": 640,
+    "installation_time_days": 6,
+    "total_cost": 544000.0,
+    "subsidy": 156000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 6000",
+   "request": "{\"monthly_bill\": 6000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 729.94,
+    "daily_consumption": 24.33,
+    "buffered_daily": 31.63,
+    "solar_capacity_kW": 8,
+    "area_required": 640,
+    "installation_time_days": 6,
+    "total_cost": 544000.0,
+    "subsidy": 156000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 6200",
+   "request": "{\"monthly_bill\": 6200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 751.68,
+    "daily_consumption": 25.06,
+    "buffered_daily": 32.57,
+    "solar_capacity_kW": 9,
+    "area_required": 720,
+    "installation_time_days": 7,
+    "total_cost": 612000.0,
+    "subsidy": 175500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 6400",
+   "request": "{\"monthly_bill\": 6400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 773.42,
+    "daily_consumption": 25.78,
+    "buffered_daily": 33.51,
+    "solar_capacity_kW": 9,
+    "area_required": 720,
+    "installation_time_days": 7,
+    "total_cost": 612000.0,
+    "subsidy": 175500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 6600",
+   "request": "{\"monthly_bill\": 6600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 795.15,
+    "daily_consumption": 26.51,
+    "buffered_daily": 34.46,
+    "solar_capacity_kW": 9,
+    "area_required": 720,
+    "installation_time_days": 7,
+    "total_cost": 612000.0,
+    "subsidy": 175500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 6800",
+   "request": "{\"monthly_bill\": 6800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 816.89,
+    "daily_consumption": 27.23,
+    "buffered_daily": 35.4,
+    "solar_capacity_kW": 9,
+    "area_required": 720,
+    "installation_time_days": 7,
+    "total_cost": 612000.0,
+    "subsidy": 175500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 7000",
+   "request": "{\"monthly_bill\": 7000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 838.63,
+    "daily_consumption": 27.95,
+    "buffered_daily": 36.34,
+    "solar_capacity_kW": 10,
+    "area_required": 800,
+    "installation_time_days": 7,
+    "total_cost": 680000.0,
+    "subsidy": 195000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 7200",
+   "request": "{\"monthly_bill\": 7200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 860.37,
+    "daily_consumption": 28.68,
+    "buffered_daily": 37.28,
+    "solar_capacity_kW": 10,
+    "area_required": 800,
+    "installation_time_days": 7,
+    "total_cost": 680000.0,
+    "subsidy": 195000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 7400",
+   "request": "{\"monthly_bill\": 7400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 882.11,
+    "daily_consumption": 29.4,
+    "buffered_daily": 38.22,
+    "solar_capacity_kW": 10,
+    "area_required": 800,
+    "installation_time_days": 7,
+    "total_cost": 680000.0,
+    "subsidy": 195000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 7600",
+   "request": "{\"monthly_bill\": 7600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 903.85,
+    "daily_consumption": 30.13,
+    "buffered_daily": 39.17,
+    "solar_capacity_kW": 10,
+    "area_required": 800,
+    "installation_time_days": 7,
+    "total_cost": 680000.0,
+    "subsidy": 195000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 7800",
+   "request": "{\"monthly_bill\": 7800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 925.59,
+    "daily_consumption": 30.85,
+    "buffered_daily": 40.11,
+    "solar_capacity_kW": 11,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 8000",
+   "request": "{\"monthly_bill\": 8000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 947.33,
+    "daily_consumption": 31.58,
+    "buffered_daily": 41.05,
+    "solar_capacity_kW": 11,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 8200",
+   "request": "{\"monthly_bill\": 8200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 969.07,
+    "daily_consumption": 32.3,
+    "buffered_daily": 41.99,
+    "solar_capacity_kW": 11,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 8400",
+   "request": "{\"monthly_bill\": 8400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 990.81,
+    "daily_consumption": 33.03,
+    "buffered_daily": 42.93,
+    "solar_capacity_kW": 11,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 8600",
+   "request": "{\"monthly_bill\": 8600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1012.55,
+    "daily_consumption": 33.75,
+    "buffered_daily": 43.88,
+    "solar_capacity_kW": 11,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 8800",
+   "request": "{\"monthly_bill\": 8800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1034.28,
+    "daily_consumption": 34.48,
+    "buffered_daily": 44.82,
+    "solar_capacity_kW": 12,
+    "area_required": 960,
+    "installation_time_days": 8,
+    "total_cost": 816000.0,
+    "subsidy": 234000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 9000",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1056.02,
+    "daily_consumption": 35.2,
+    "buffered_daily": 45.76,
+    "solar_capacity_kW": 12,
+    "area_required": 960,
+    "installation_time_days": 8,
+    "total_cost": 816000.0,
+    "subsidy": 234000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 9200",
+   "request": "{\"monthly_bill\": 9200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1077.76,
+    "daily_consumption": 35.93,
+    "buffered_daily": 46.7,
+    "solar_capacity_kW": 12,
+    "area_required": 960,
+    "installation_time_days": 8,
+    "total_cost": 816000.0,
+    "subsidy": 234000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 9400",
+   "request": "{\"monthly_bill\": 9400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1099.5,
+    "daily_consumption": 36.65,
+    "buffered_daily": 47.65,
+    "solar_capacity_kW": 12,
+    "area_required": 960,
+    "installation_time_days": 8,
+    "total_cost": 816000.0,
+    "subsidy": 234000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 9600",
+   "request": "{\"monthly_bill\": 9600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1121.24,
+    "daily_consumption": 37.37,
+    "buffered_daily": 48.59,
+    "solar_capacity_kW": 13,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 9800",
+   "request": "{\"monthly_bill\": 9800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1142.98,
+    "daily_consumption": 38.1,
+    "buffered_daily": 49.53,
+    "solar_capacity_kW": 13,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 10000",
+   "request": "{\"monthly_bill\": 10000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1164.72,
+    "daily_consumption": 38.82,
+    "buffered_daily": 50.47,
+    "solar_capacity_kW": 13,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 10200",
+   "request": "{\"monthly_bill\": 10200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1186.46,
+    "daily_consumption": 39.55,
+    "buffered_daily": 51.41,
+    "solar_capacity_kW": 13,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 10400",
+   "request": "{\"monthly_bill\": 10400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1208.2,
+    "daily_consumption": 40.27,
+    "buffered_daily": 52.36,
+    "solar_capacity_kW": 14,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 10600",
+   "request": "{\"monthly_bill\": 10600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1229.94,
+    "daily_consumption": 41.0,
+    "buffered_daily": 53.3,
+    "solar_capacity_kW": 14,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 10800",
+   "request": "{\"monthly_bill\": 10800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1251.68,
+    "daily_consumption": 41.72,
+    "buffered_daily": 54.24,
+    "solar_capacity_kW": 14,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 11000",
+   "request": "{\"monthly_bill\": 11000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1273.42,
+    "daily_consumption": 42.45,
+    "buffered_daily": 55.18,
+    "solar_capacity_kW": 14,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 11200",
+   "request": "{\"monthly_bill\": 11200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1295.15,
+    "daily_consumption": 43.17,
+    "buffered_daily": 56.12,
+    "solar_capacity_kW": 15,
+    "area_required": 1200,
+    "installation_time_days": 10,
+    "total_cost": 1020000.0,
+    "subsidy": 292500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 11400",
+   "request": "{\"monthly_bill\": 11400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1316.89,
+    "daily_consumption": 43.9,
+    "buffered_daily": 57.07,
+    "solar_capacity_kW": 15,
+    "area_required": 1200,
+    "installation_time_days": 10,
+    "total_cost": 1020000.0,
+    "subsidy": 292500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 11600",
+   "request": "{\"monthly_bill\": 11600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1338.63,
+    "daily_consumption": 44.62,
+    "buffered_daily": 58.01,
+    "solar_capacity_kW": 15,
+    "area_required": 1200,
+    "installation_time_days": 10,
+    "total_cost": 1020000.0,
+    "subsidy": 292500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 11800",
+   "request": "{\"monthly_bill\": 11800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1360.37,
+    "daily_consumption": 45.35,
+    "buffered_daily": 58.95,
+    "solar_capacity_kW": 15,
+    "area_required": 1200,
+    "installation_time_days": 10,
+    "total_cost": 1020000.0,
+    "subsidy": 292500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12000",
+   "request": "{\"monthly_bill\": 12000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1382.11,
+    "daily_consumption": 46.07,
+    "buffered_daily": 59.89,
+    "solar_capacity_kW": 15,
+    "area_required": 1200,
+    "installation_time_days": 10,
+    "total_cost": 1020000.0,
+    "subsidy": 292500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12200",
+   "request": "{\"monthly_bill\": 12200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1403.85,
+    "daily_consumption": 46.79,
+    "buffered_daily": 60.83,
+    "solar_capacity_kW": 16,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12400",
+   "request": "{\"monthly_bill\": 12400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1425.59,
+    "daily_consumption": 47.52,
+    "buffered_daily": 61.78,
+    "solar_capacity_kW": 16,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12600",
+   "request": "{\"monthly_bill\": 12600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1447.33,
+    "daily_consumption": 48.24,
+    "buffered_daily": 62.72,
+    "solar_capacity_kW": 16,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12800",
+   "request": "{\"monthly_bill\": 12800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1469.07,
+    "daily_consumption": 48.97,
+    "buffered_daily": 63.66,
+    "solar_capacity_kW": 16,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 13000",
+   "request": "{\"monthly_bill\": 13000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1490.81,
+    "daily_consumption": 49.69,
+    "buffered_daily": 64.6,
+    "solar_capacity_kW": 17,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 13200",
+   "request": "{\"monthly_bill\": 13200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1512.55,
+    "daily_consumption": 50.42,
+    "buffered_daily": 65.54,
+    "solar_capacity_kW": 17,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 13400",
+   "request": "{\"monthly_bill\": 13400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1534.28,
+    "daily_consumption": 51.14,
+    "buffered_daily": 66.49,
+    "solar_capacity_kW": 17,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 13600",
+   "request": "{\"monthly_bill\": 13600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1556.02,
+    "daily_consumption": 51.87,
+    "buffered_daily": 67.43,
+    "solar_capacity_kW": 17,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 13800",
+   "request": "{\"monthly_bill\": 13800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1577.76,
+    "daily_consumption": 52.59,
+    "buffered_daily": 68.37,
+    "solar_capacity_kW": 18,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 14000",
+   "request": "{\"monthly_bill\": 14000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1599.5,
+    "daily_consumption": 53.32,
+    "buffered_daily": 69.31,
+    "solar_capacity_kW": 18,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 14200",
+   "request": "{\"monthly_bill\": 14200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1621.24,
+    "daily_consumption": 54.04,
+    "buffered_daily": 70.25,
+    "solar_capacity_kW": 18,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 14400",
+   "request": "{\"monthly_bill\": 14400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1642.98,
+    "daily_consumption": 54.77,
+    "buffered_daily": 71.2,
+    "solar_capacity_kW": 18,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 14600",
+   "request": "{\"monthly_bill\": 14600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1664.72,
+    "daily_consumption": 55.49,
+    "buffered_daily": 72.14,
+    "solar_capacity_kW": 19,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 14800",
+   "request": "{\"monthly_bill\": 14800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1686.46,
+    "daily_consumption": 56.22,
+    "buffered_daily": 73.08,
+    "solar_capacity_kW": 19,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 15000",
+   "request": "{\"monthly_bill\": 15000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1708.2,
+    "daily_consumption": 56.94,
+    "buffered_daily": 74.02,
+    "solar_capacity_kW": 19,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 15200",
+   "request": "{\"monthly_bill\": 15200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1729.94,
+    "daily_consumption": 57.66,
+    "buffered_daily": 74.96,
+    "solar_capacity_kW": 19,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 15400",
+   "request": "{\"monthly_bill\": 15400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1751.68,
+    "daily_consumption": 58.39,
+    "buffered_daily": 75.91,
+    "solar_capacity_kW": 19,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 15600",
+   "request": "{\"monthly_bill\": 15600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1773.42,
+    "daily_consumption": 59.11,
+    "buffered_daily": 76.85,
+    "solar_capacity_kW": 20,
+    "area_required": 1600,
+    "installation_time_days": 12,
+    "total_cost": 1300000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 15800",
+   "request": "{\"monthly_bill\": 15800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1795.15,
+    "daily_consumption": 59.84,
+    "buffered_daily": 77.79,
+    "solar_capacity_kW": 20,
+    "area_required": 1600,
+    "installation_time_days": 12,
+    "total_cost": 1300000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 16000",
+   "request": "{\"monthly_bill\": 16000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1816.89,
+    "daily_consumption": 60.56,
+    "buffered_daily": 78.73,
+    "solar_capacity_kW": 20,
+    "area_required": 1600,
+    "installation_time_days": 12,
+    "total_cost": 1300000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 16200",
+   "request": "{\"monthly_bill\": 16200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1838.63,
+    "daily_consumption": 61.29,
+    "buffered_daily": 79.67,
+    "solar_capacity_kW": 20,
+    "area_required": 1600,
+    "installation_time_days": 12,
+    "total_cost": 1300000.0,
+    "subsidy": 78000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 16400",
+   "request": "{\"monthly_bill\": 16400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1860.37,
+    "daily_consumption": 62.01,
+    "buffered_daily": 80.62,
+    "solar_capacity_kW": 21,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 16600",
+   "request": "{\"monthly_bill\": 16600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1882.11,
+    "daily_consumption": 62.74,
+    "buffered_daily": 81.56,
+    "solar_capacity_kW": 21,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 16800",
+   "request": "{\"monthly_bill\": 16800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1903.85,
+    "daily_consumption": 63.46,
+    "buffered_daily": 82.5,
+    "solar_capacity_kW": 21,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 17000",
+   "request": "{\"monthly_bill\": 17000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1925.59,
+    "daily_consumption": 64.19,
+    "buffered_daily": 83.44,
+    "solar_capacity_kW": 21,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 17200",
+   "request": "{\"monthly_bill\": 17200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1947.33,
+    "daily_consumption": 64.91,
+    "buffered_daily": 84.38,
+    "solar_capacity_kW": 22,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 17400",
+   "request": "{\"monthly_bill\": 17400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1969.07,
+    "daily_consumption": 65.64,
+    "buffered_daily": 85.33,
+    "solar_capacity_kW": 22,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 17600",
+   "request": "{\"monthly_bill\": 17600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1990.81,
+    "daily_consumption": 66.36,
+    "buffered_daily": 86.27,
+    "solar_capacity_kW": 22,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 17800",
+   "request": "{\"monthly_bill\": 17800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2012.55,
+    "daily_consumption": 67.08,
+    "buffered_daily": 87.21,
+    "solar_capacity_kW": 22,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 18000",
+   "request": "{\"monthly_bill\": 18000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2034.28,
+    "daily_consumption": 67.81,
+    "buffered_daily": 88.15,
+    "solar_capacity_kW": 23,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 18200",
+   "request": "{\"monthly_bill\": 18200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2056.02,
+    "daily_consumption": 68.53,
+    "buffered_daily": 89.09,
+    "solar_capacity_kW": 23,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 18400",
+   "request": "{\"monthly_bill\": 18400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2077.76,
+    "daily_consumption": 69.26,
+    "buffered_daily": 90.04,
+    "solar_capacity_kW": 23,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 18600",
+   "request": "{\"monthly_bill\": 18600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2099.5,
+    "daily_consumption": 69.98,
+    "buffered_daily": 90.98,
+    "solar_capacity_kW": 23,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 18800",
+   "request": "{\"monthly_bill\": 18800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2121.24,
+    "daily_consumption": 70.71,
+    "buffered_daily": 91.92,
+    "solar_capacity_kW": 23,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 19000",
+   "request": "{\"monthly_bill\": 19000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2142.98,
+    "daily_consumption": 71.43,
+    "buffered_daily": 92.86,
+    "solar_capacity_kW": 24,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 19200",
+   "request": "{\"monthly_bill\": 19200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2164.72,
+    "daily_consumption": 72.16,
+    "buffered_daily": 93.8,
+    "solar_capacity_kW": 24,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 19400",
+   "request": "{\"monthly_bill\": 19400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2186.46,
+    "daily_consumption": 72.88,
+    "buffered_daily": 94.75,
+    "solar_capacity_kW": 24,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 19600",
+   "request": "{\"monthly_bill\": 19600, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2208.2,
+    "daily_consumption": 73.61,
+    "buffered_daily": 95.69,
+    "solar_capacity_kW": 24,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 19800",
+   "request": "{\"monthly_bill\": 19800, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2229.94,
+    "daily_consumption": 74.33,
+    "buffered_daily": 96.63,
+    "solar_capacity_kW": 25,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 20000",
+   "request": "{\"monthly_bill\": 20000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2251.68,
+    "daily_consumption": 75.06,
+    "buffered_daily": 97.57,
+    "solar_capacity_kW": 25,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1",
+   "request": "{\"monthly_bill\": 1, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -28.21,
+    "daily_consumption": -0.94,
+    "buffered_daily": -1.22,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 50",
+   "request": "{\"monthly_bill\": 50, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -21.16,
+    "daily_consumption": -0.71,
+    "buffered_daily": -0.92,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 196",
+   "request": "{\"monthly_bill\": 196, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -0.16,
+    "daily_consumption": -0.01,
+    "buffered_daily": -0.01,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 197",
+   "request": "{\"monthly_bill\": 197, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -0.01,
+    "daily_consumption": -0.0,
+    "buffered_daily": -0.0,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 198",
+   "request": "{\"monthly_bill\": 198, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 0.13,
+    "daily_consumption": 0.0,
+    "buffered_daily": 0.01,
+    "solar_capacity_kW": 1,
+    "area_required": 80,
+    "installation_time_days": 2,
+    "total_cost": 90000.0,
+    "subsidy": 30000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1001",
+   "request": "{\"monthly_bill\": 1001, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 115.67,
+    "daily_consumption": 3.86,
+    "buffered_daily": 5.01,
+    "solar_capacity_kW": 2,
+    "area_required": 160,
+    "installation_time_days": 3,
+    "total_cost": 150000.0,
+    "subsidy": 60000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 4999.99",
+   "request": "{\"monthly_bill\": 4999.99, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 621.24,
+    "daily_consumption": 20.71,
+    "buffered_daily": 26.92,
+    "solar_capacity_kW": 7,
+    "area_required": 560,
+    "installation_time_days": 6,
+    "total_cost": 476000.0,
+    "subsidy": 136500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 25000",
+   "request": "{\"monthly_bill\": 25000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 2795.15,
+    "daily_consumption": 93.17,
+    "buffered_daily": 121.12,
+    "solar_capacity_kW": 31,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 30000",
+   "request": "{\"monthly_bill\": 30000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 3338.63,
+    "daily_consumption": 111.29,
+    "buffered_daily": 144.67,
+    "solar_capacity_kW": 37,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 45000",
+   "request": "{\"monthly_bill\": 45000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 4969.07,
+    "daily_consumption": 165.64,
+    "buffered_daily": 215.33,
+    "solar_capacity_kW": 54,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 60000",
+   "request": "{\"monthly_bill\": 60000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 6599.5,
+    "daily_consumption": 219.98,
+    "buffered_daily": 285.98,
+    "solar_capacity_kW": 72,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 100000",
+   "request": "{\"monthly_bill\": 100000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 10947.33,
+    "daily_consumption": 364.91,
+    "buffered_daily": 474.38,
+    "solar_capacity_kW": 119,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1000000",
+   "request": "{\"monthly_bill\": 1000000, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 108773.42,
+    "daily_consumption": 3625.78,
+    "buffered_daily": 4713.51,
+    "solar_capacity_kW": 1179,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 0.01",
+   "request": "{\"monthly_bill\": 0.01, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -28.36,
+    "daily_consumption": -0.95,
+    "buffered_daily": -1.23,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 0.5",
+   "request": "{\"monthly_bill\": 0.5, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -28.28,
+    "daily_consumption": -0.94,
+    "buffered_daily": -1.23,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 12345.678",
+   "request": "{\"monthly_bill\": 12345.678, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1419.68,
+    "daily_consumption": 47.32,
+    "buffered_daily": 61.52,
+    "solar_capacity_kW": 16,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1e308",
+   "request": "{\"monthly_bill\": 1e308, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1.0869565217391305e+307,
+    "daily_consumption": 3.6231884057971015e+305,
+    "buffered_daily": 4.710144927536232e+305,
+    "solar_capacity_kW": 117753623188405798281284648986720304378728902188136766176302702895732576705141065530784949665065979580814992506655609558162286631434828951158081284133143347866354100055263561205984041711976695628617565412809614884999213874585899892512085961121073637911291401218584220826706781776662574866141254962103975936,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 1e400",
+   "request": "{\"monthly_bill\": 1e400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 500,
+   "response": null,
+   "error_class": "ValueError"
+  },
+  {
+   "name": "bill -1e400",
+   "request": "{\"monthly_bill\": -1e400, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill -1",
+   "request": "{\"monthly_bill\": -1, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill -0.5",
+   "request": "{\"monthly_bill\": -0.5, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 0",
+   "request": "{\"monthly_bill\": 0, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill 0.0",
+   "request": "{\"monthly_bill\": 0.0, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill true",
+   "request": "{\"monthly_bill\": true, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": -28.21,
+    "daily_consumption": -0.94,
+    "buffered_daily": -1.22,
+    "solar_capacity_kW": 0,
+    "area_required": null,
+    "installation_time_days": null,
+    "total_cost": null,
+    "subsidy": null,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill false",
+   "request": "{\"monthly_bill\": false, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill \"3000\"",
+   "request": "{\"monthly_bill\": \"3000\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill \"abc\"",
+   "request": "{\"monthly_bill\": \"abc\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill \"\"",
+   "request": "{\"monthly_bill\": \"\", \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill null",
+   "request": "{\"monthly_bill\": null, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill [3000]",
+   "request": "{\"monthly_bill\": [3000], \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "bill {\"amount\": 3000}",
+   "request": "{\"monthly_bill\": {\"amount\": 3000}, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Invalid monthly bill"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 682001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 695001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"695001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "695001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 673001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"673001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "673001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 680001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"680001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "680001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 688001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"688001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "688001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 686001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"686001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "686001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 685501",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"685501\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "685501",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 670001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"670001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "670001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 678001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"678001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "678001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 691001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"691001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "691001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 679101",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"679101\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "679101",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 689101",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"689101\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "689101",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 671121",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"671121\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "671121",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode pincode 673592",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"673592\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "673592",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 999999",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"999999\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 110001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"110001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 600001",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"600001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 682999",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"682999\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode unknown 000000",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"000000\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode int",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": 682001, \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 453.38,
+    "daily_consumption": 15.11,
+    "buffered_daily": 19.65,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": 682001,
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode int unknown",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": 999999, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode float",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": 682001.0, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode leading space",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \" 682001\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode trailing space",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"682001 \", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode five digits",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"68200\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode seven digits",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"6820011\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode letters",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"abcdef\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode true",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": true, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode false",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": false, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode zero",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": 0, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode empty",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode null",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": null, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode list",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": [\"682001\"], \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode object",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": {\"code\": \"682001\"}, \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "pincode nul char",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"6820\\u000001\", \"property_type\": \"Residential\"}",
+   "status": 500,
+   "response": null,
+   "error_class": "ValueError"
+  },
+  {
+   "name": "pincode unicode digits",
+   "request": "{\"monthly_bill\": 3500, \"pincode\": \"６８２００１\", \"property_type\": \"Residential\"}",
+   "status": 404,
+   "response": {
+    "error": "Pincode not found in database"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'residential'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'RESIDENTIAL'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"RESIDENTIAL\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "RESIDENTIAL"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Commercial'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Commercial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'commercial'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "commercial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'COMMERCIAL'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"COMMERCIAL\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "COMMERCIAL"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Industrial'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Industrial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Industrial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Resi_dential'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Resi_dential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Resi_dential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential%'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Residential%\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential%"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Reſidential'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Reſidential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Reſidential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type ' Residential'",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \" Residential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": " Residential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type 'Residential '",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Residential \"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Residential "
+   },
+   "error_class": null
+  },
+  {
+   "name": "type empty",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type null",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": null}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "type number",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": 5}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": 5
+   },
+   "error_class": null
+  },
+  {
+   "name": "type true",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": true}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": true
+   },
+   "error_class": null
+  },
+  {
+   "name": "type list",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": [\"Residential\"]}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": [
+     "Residential"
+    ]
+   },
+   "error_class": null
+  },
+  {
+   "name": "type object",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": {\"type\": \"Residential\"}}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": {
+     "type": "Residential"
+    }
+   },
+   "error_class": null
+  },
+  {
+   "name": "type nul",
+   "request": "{\"monthly_bill\": 4200, \"pincode\": \"682001\", \"property_type\": \"Resi\\u0000dential\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 534.28,
+    "daily_consumption": 17.81,
+    "buffered_daily": 23.15,
+    "solar_capacity_kW": 6,
+    "area_required": 480,
+    "installation_time_days": 5,
+    "total_cost": 408000.0,
+    "subsidy": 117000.0,
+    "pincode": "682001",
+    "property_type": "Resi\u0000dential"
+   },
+   "error_class": null
+  },
+  {
+   "name": "empty object",
+   "request": "{}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "list body",
+   "request": "[1, 2]",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "string body",
+   "request": "\"monthly_bill=3000\"",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "number body",
+   "request": "3000",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "null body",
+   "request": "null",
+   "status": 500,
+   "response": null,
+   "error_class": "AttributeError"
+  },
+  {
+   "name": "missing bill",
+   "request": "{\"pincode\": \"682001\", \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "missing pincode",
+   "request": "{\"monthly_bill\": 3000, \"property_type\": \"Residential\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "missing type",
+   "request": "{\"monthly_bill\": 3000, \"pincode\": \"682001\"}",
+   "status": 400,
+   "response": {
+    "error": "Missing required fields"
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 1500",
+   "request": "{\"monthly_bill\": 1500, \"pincode\": \"695001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 187.47,
+    "daily_consumption": 6.25,
+    "buffered_daily": 8.12,
+    "solar_capacity_kW": 3,
+    "area_required": 240,
+    "installation_time_days": 3,
+    "total_cost": 204000.0,
+    "subsidy": 58500.0,
+    "pincode": "695001",
+    "property_type": "Commercial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 3000",
+   "request": "{\"monthly_bill\": 3000, \"pincode\": \"695001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 392.51,
+    "daily_consumption": 13.08,
+    "buffered_daily": 17.01,
+    "solar_capacity_kW": 5,
+    "area_required": 400,
+    "installation_time_days": 5,
+    "total_cost": 340000.0,
+    "subsidy": 97500.0,
+    "pincode": "695001",
+    "property_type": "Commercial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 6000",
+   "request": "{\"monthly_bill\": 6000, \"pincode\": \"695001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 729.94,
+    "daily_consumption": 24.33,
+    "buffered_daily": 31.63,
+    "solar_capacity_kW": 8,
+    "area_required": 640,
+    "installation_time_days": 6,
+    "total_cost": 544000.0,
+    "subsidy": 156000.0,
+    "pincode": "695001",
+    "property_type": "Commercial"
+   },
+   "error_class": null
+  },
+  {
+   "name": "commercial bill 9000",
+   "request": "{\"monthly_bill\": 9000, \"pincode\": \"695001\", \"property_type\": \"Commercial\"}",
+   "status": 200,
+   "response": {
+    "estimated_units": 1056.02,
+    "daily_consumption": 35.2,
+    "buffered_daily": 45.76,
+    "solar_capacity_kW": 12,
+    "area_required": 960,
+    "installation_time_days": 8,
+    "total_cost": 816000.0,
+    "subsidy": 234000.0,
+    "pincode": "695001",
+    "property_type": "Commercial"
+   },
+   "error_class": null
+  }
+ ]
+}
