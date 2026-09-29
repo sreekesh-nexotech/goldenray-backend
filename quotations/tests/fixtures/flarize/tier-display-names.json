@@ -1,0 +1,9 @@
+{
+  "_authority": "BUSINESS_DECISION_C6 (revised 2026-09-02)",
+  "_note": "Customer-facing package tier display names. Authoritative business decision — not derived from tier IDs, catalog keys, or array position. The renderer reads these from the quotation payload; it never invents them. Internal keys (base/value/premium) are stable identifiers and MUST NOT be renamed.",
+  "base": "Essential System",
+  "value": "Smart System",
+  "premium": "Elite System",
+  "recommendedTier": "value",
+  "recommendedBadge": "Recommended · Most Popular"
+}

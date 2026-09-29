@@ -1,0 +1,74 @@
+{# The QuotationV2 artwork's tokens and layout (goldenray frontend/src/components/QuotationV2/quotation-v2.css):  #}
+{# every page is the 1440×2038 design canvas scaled to one A4 sheet.                                               #}
+@page { size: A4; margin: 0; }
+html { font-size: 22px; }
+body { margin: 0; }
+.qv2 { --orange: rgb(248, 138, 34); --deep: rgb(18, 53, 50); --cream: rgb(254, 243, 232); --sand: rgb(247, 244, 230); --green: rgb(0, 129, 48); --green-soft: rgba(22, 163, 74, 0.1); --grey: rgb(68, 68, 68); --grey-2: rgb(117, 117, 117); --light: rgb(243, 244, 246); --gold: rgb(247, 186, 65); --red: rgb(220, 38, 38); --blue: rgb(30, 64, 175); font-family: "Poppins", "Noto Sans", "Noto Sans Malayalam", sans-serif; color: var(--grey); }
+html:lang(ml) .qv2 { font-family: "Noto Sans Malayalam", "Poppins", "Noto Sans", sans-serif; }
+.sheet { position: relative; width: 210mm; height: 297mm; overflow: hidden; background: #fff; break-after: page; }
+.sheet:last-child { break-after: auto; }
+.canvas { position: relative; width: 1440px; height: 2038px; transform: scale(0.551181); transform-origin: top left; box-sizing: border-box; padding: 64px 80px 150px; }
+.brandbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; }
+.brand { font-size: 44px; font-weight: 800; color: var(--deep); letter-spacing: 1px; }
+.brand small { display: block; font-size: 18px; font-weight: 500; color: var(--orange); letter-spacing: 3px; text-transform: uppercase; }
+.pageno { font-size: 20px; color: var(--grey-2); }
+h1.hero { font-size: 76px; line-height: 1.1; color: var(--deep); margin: 20px 0 16px; font-weight: 800; }
+h1.hero em { color: var(--orange); font-style: normal; }
+h2.title { font-size: 56px; line-height: 1.15; color: var(--deep); margin: 0 0 12px; font-weight: 800; }
+p.lead { font-size: 26px; line-height: 1.5; margin: 0 0 32px; }
+.badges { display: flex; gap: 24px; margin: 32px 0; }
+.badge { flex: 1; background: var(--cream); border-radius: 20px; padding: 24px 28px; }
+.badge b { display: block; font-size: 30px; color: var(--deep); }
+.badge span { font-size: 20px; color: var(--grey-2); }
+.cols { display: flex; gap: 40px; }
+.cols > * { flex: 1; }
+.letter p { font-size: 22px; line-height: 1.55; margin: 0 0 14px; }
+.panel { background: var(--sand); border-radius: 24px; padding: 32px 36px; }
+.panel h3 { margin: 0 0 18px; font-size: 26px; color: var(--orange); letter-spacing: 2px; }
+.detail { display: flex; font-size: 22px; line-height: 1.3; margin-bottom: 10px; }
+.detail .k { width: 280px; flex-shrink: 0; font-weight: 500; color: rgb(55, 65, 81); }
+.detail .v { flex: 1; font-weight: 600; color: var(--deep); overflow-wrap: anywhere; }
+.footer { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; background: var(--deep); color: #fff; display: flex; align-items: center; justify-content: space-around; font-size: 22px; padding: 0 60px; box-sizing: border-box; }
+.card { background: #fff; border: 2px solid var(--light); border-radius: 24px; padding: 28px 32px; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.08); }
+.card.orange { background: var(--cream); border-color: transparent; }
+.card.green { background: var(--green-soft); border-color: transparent; }
+.card .big { font-size: 54px; font-weight: 800; color: var(--deep); }
+.card .label { font-size: 22px; font-weight: 600; color: var(--grey); }
+.card .note { font-size: 19px; color: var(--grey-2); }
+table.grid { width: 100%; border-collapse: collapse; font-size: 22px; }
+table.grid th { background: var(--deep); color: #fff; font-weight: 600; text-align: left; padding: 14px 18px; width: auto; }
+table.grid td { padding: 12px 18px; border-bottom: 2px solid var(--light); vertical-align: top; }
+table.grid tr.total td { font-weight: 700; color: var(--deep); background: var(--cream); }
+.options { display: flex; gap: 24px; align-items: stretch; }
+.option { flex: 1; border: 3px solid var(--light); border-radius: 28px; padding: 30px 28px; position: relative; }
+.option.recommended { border-color: var(--orange); background: var(--cream); }
+.option .ribbon { position: absolute; top: -22px; left: 28px; background: var(--orange); color: #fff; font-size: 18px; font-weight: 700; padding: 6px 16px; border-radius: 999px; }
+.option h3 { font-size: 34px; color: var(--deep); margin: 8px 0 4px; }
+.option .desc { font-size: 19px; color: var(--grey-2); margin-bottom: 18px; }
+.line { display: flex; justify-content: space-between; font-size: 21px; padding: 7px 0; border-bottom: 1px dashed rgba(0, 0, 0, 0.12); }
+.line.strong { font-weight: 700; color: var(--deep); font-size: 24px; }
+.line.green { color: var(--green); font-weight: 600; }
+.na { font-size: 30px; color: var(--grey-2); padding: 80px 0; text-align: center; }
+.tcards { display: flex; flex-direction: column; gap: 28px; }
+.tcard { display: flex; gap: 28px; background: var(--sand); border-radius: 24px; padding: 28px; }
+.tcard .photo { width: 200px; height: 200px; border-radius: 20px; background: var(--light) center / cover no-repeat; flex-shrink: 0; }
+.tcard q { display: block; font-size: 23px; line-height: 1.5; margin: 10px 0; }
+.tcard .who { font-size: 24px; font-weight: 700; color: var(--deep); }
+.steps { display: flex; flex-direction: column; gap: 18px; }
+.step { display: flex; gap: 24px; align-items: flex-start; }
+.step .day { width: 120px; flex-shrink: 0; background: var(--orange); color: #fff; border-radius: 18px; text-align: center; padding: 14px 0; font-weight: 800; font-size: 30px; }
+.step .day small { display: block; font-size: 15px; font-weight: 600; }
+.step b { display: block; font-size: 25px; color: var(--deep); }
+.step p { margin: 4px 0 0; font-size: 21px; line-height: 1.45; }
+ul.ticks { list-style: none; margin: 0; padding: 0; }
+ul.ticks li { font-size: 21px; line-height: 1.45; padding: 6px 0 6px 38px; position: relative; }
+ul.ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 800; }
+.terms h4 { margin: 18px 0 4px; font-size: 23px; color: var(--deep); }
+.terms p { margin: 0; font-size: 19.5px; line-height: 1.5; text-align: justify; }
+.summary .row { display: flex; justify-content: space-between; font-size: 28px; padding: 18px 0; border-bottom: 2px solid var(--light); }
+.summary .row b { color: var(--deep); }
+.summary .row.key { font-size: 36px; color: var(--green); }
+.campaign { background: linear-gradient(160deg, var(--deep), rgb(7, 74, 77)); color: #fff; border-radius: 32px; padding: 56px; min-height: 1500px; }
+.campaign h2 { font-size: 72px; margin: 0 0 24px; color: var(--gold); }
+.campaign img { width: 100%; border-radius: 24px; margin-top: 32px; }
+.muted { color: var(--grey-2); }

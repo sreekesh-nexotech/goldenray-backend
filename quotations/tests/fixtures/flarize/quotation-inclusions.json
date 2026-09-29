@@ -1,0 +1,146 @@
+{
+  "_authority": "COMMERCIAL_INCLUSION_CONFIG",
+  "_note": "Commercial inclusion matrix for customer-facing quotation. Authoritative business configuration — not derived from BOM or catalog. Boolean true = included, false = not included, null = unresolved (requires business decision). No prices, no costs, no engineering values.",
+  "_source": "Approved quotation design and BOM component structure",
+  "_serviceMatrixNote": "_serviceMatrix: the customer-facing \"What's Included\" service table on the three-option page, transcribed from the owner-approved quotation template v1 (page 5). Ordered rows; per-tier value true = ✓, false = –, string = shown verbatim. Edit here (or via Admin → Company / Quotation content) — the renderer never invents rows.",
+  "_serviceMatrix": [
+    {
+      "label": "Installation",
+      "premium": "5–10 Working Days",
+      "value": "10–15 Working Days",
+      "base": "15–20 Working Days"
+    },
+    {
+      "label": "Service Response",
+      "premium": "24×7 Priority Support",
+      "value": "Priority Support",
+      "base": "Business Hours"
+    },
+    {
+      "label": "Standard Warranty Support",
+      "premium": true,
+      "value": true,
+      "base": true
+    },
+    {
+      "label": "Emergency Visit",
+      "premium": true,
+      "value": true,
+      "base": true
+    },
+    {
+      "label": "WhatsApp Support",
+      "premium": true,
+      "value": true,
+      "base": true
+    },
+    {
+      "label": "Preventive Maintenance",
+      "premium": "5 years",
+      "value": "5 years",
+      "base": "5 years"
+    },
+    {
+      "label": "Annual Health Check",
+      "premium": "2 Free Visits (1st Year)",
+      "value": "2 Free Visits (1st Year)",
+      "base": "2 Free Visits (1st Year)"
+    },
+    {
+      "label": "Panel Cleaning Visit",
+      "premium": "2 Free Visits (1st Year)",
+      "value": "2 Free Visits (1st Year)",
+      "base": false
+    },
+    {
+      "label": "Standby Inverter Access",
+      "premium": true,
+      "value": true,
+      "base": false
+    },
+    {
+      "label": "Priority Service Queue",
+      "premium": true,
+      "value": true,
+      "base": false
+    },
+    {
+      "label": "Annual Energy Audit & Report",
+      "premium": true,
+      "value": true,
+      "base": false
+    },
+    {
+      "label": "Emergency Support",
+      "premium": true,
+      "value": true,
+      "base": false
+    },
+    {
+      "label": "AMC Discount",
+      "premium": true,
+      "value": false,
+      "base": false
+    }
+  ],
+  "Base": {
+    "_tierCode": "base",
+    "solarPanels": true,
+    "inverter": true,
+    "battery": false,
+    "mountingStructure": true,
+    "dcdb": true,
+    "acdb": true,
+    "dcCables": true,
+    "acCables": true,
+    "earthing": true,
+    "lightningProtection": null,
+    "installation": true,
+    "commissioning": true,
+    "netMeteringAssistance": true,
+    "transportation": true,
+    "monitoring": null,
+    "warranty": true,
+    "amc": false
+  },
+  "Value": {
+    "_tierCode": "value",
+    "solarPanels": true,
+    "inverter": true,
+    "battery": true,
+    "mountingStructure": true,
+    "dcdb": true,
+    "acdb": true,
+    "dcCables": true,
+    "acCables": true,
+    "earthing": true,
+    "lightningProtection": null,
+    "installation": true,
+    "commissioning": true,
+    "netMeteringAssistance": true,
+    "transportation": true,
+    "monitoring": null,
+    "warranty": true,
+    "amc": false
+  },
+  "Premium": {
+    "_tierCode": "premium",
+    "solarPanels": true,
+    "inverter": true,
+    "battery": true,
+    "mountingStructure": true,
+    "dcdb": true,
+    "acdb": true,
+    "dcCables": true,
+    "acCables": true,
+    "earthing": true,
+    "lightningProtection": null,
+    "installation": true,
+    "commissioning": true,
+    "netMeteringAssistance": true,
+    "transportation": true,
+    "monitoring": null,
+    "warranty": true,
+    "amc": null
+  }
+}
