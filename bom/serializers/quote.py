@@ -104,6 +104,15 @@ class BomQuoteSerializer(serializers.Serializer):
     available_offers = BomQuoteOfferSerializer(many=True)
 
 
+class BomQuotePublicSerializer(serializers.Serializer):
+    """The public quote (business default B-1): the legacy body without ``cost_breakdown`` and ``totals``."""
+
+    bom_lines = BomQuoteLineSerializer(many=True)
+    pricing = BomQuotePricingSerializer()
+    meta = BomQuoteMetaSerializer()
+    available_offers = BomQuoteOfferSerializer(many=True)
+
+
 class BomBuildRequestSerializer(serializers.Serializer):
     system_type = serializers.ChoiceField(choices=["ONGRID", "HYBRID"], help_text="The engine builds on-grid and hybrid packs (upgrades are quoted, not built).")
     size = serializers.CharField(max_length=16, help_text="A size key of the template (3, 5sp, 5tp …).")

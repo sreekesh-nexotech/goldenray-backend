@@ -26,7 +26,8 @@ class TestEndpoint:
         response = api_client.post(URL, _body(), format="json")
         assert response.status_code == 200, response.json()
         body = response.json()
-        assert list(body) == ["bom_lines", "cost_breakdown", "totals", "pricing", "meta", "available_offers"]
+        assert list(body) == ["bom_lines", "pricing", "meta", "available_offers"]  # business default B-1: no cost_breakdown/totals
+        assert list(quote(_body(), today=date.today())) == ["bom_lines", "cost_breakdown", "totals", "pricing", "meta", "available_offers"]
         assert list(body["bom_lines"][0]) == ["pos", "name", "brand", "qty", "unit", "unit_price", "amount", "gst_pct", "gst_amt", "section", "is_variable"]
         assert response["Cache-Control"] == "no-store"
         assert body["meta"] == {"system_type": "ongrid", "size": "3", "tier": "base", "bat_config": "0", "is_three_phase": False, "new_panels": None}

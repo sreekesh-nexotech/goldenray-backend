@@ -960,3 +960,14 @@ def quote(data, *, today: date) -> dict:
     params = parse_request(data)
     snapshot = load_snapshot(params["sys_type"])
     return Calculator(snapshot, params, today).compute()
+
+
+# Business default B-1: the internal cost and margin never reach a public caller. ``quote()`` keeps the full legacy
+# body (byte parity); every PUBLIC response — ``POST /api/public/v1/bom/quote/`` and the ``/legacy/bom/api/calculate/``
+# shim — is filtered through :func:`public_body`. The website reads only ``bom_lines[].name/qty/unit`` and ``pricing.*``.
+INTERNAL_KEYS = ("cost_breakdown", "totals")
+
+
+def public_body(result: dict) -> dict:
+    """The quote without ``cost_breakdown`` and ``totals``; every other key, in order, unchanged."""
+    return {key: value for key, value in result.items() if key not in INTERNAL_KEYS}

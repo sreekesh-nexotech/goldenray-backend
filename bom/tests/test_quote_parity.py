@@ -12,7 +12,7 @@ from datetime import date
 
 import pytest
 
-from bom.services.website_quote import QuoteInvalid, quote
+from bom.services.website_quote import INTERNAL_KEYS, QuoteInvalid, quote
 from bom.tests.legacy_fixtures import GOLDEN_DAY, golden_cases, import_legacy_database
 
 pytestmark = pytest.mark.django_db
@@ -59,7 +59,9 @@ def test_the_legacy_500_cases_are_validation_errors(legacy_data):
     assert caught.value.code == "validation_error" and "custom_discount" in caught.value.errors
 
 
-def test_the_public_endpoint_serves_the_same_json(legacy_data, api_client, settings):
+def test_the_public_endpoint_serves_the_same_json_without_internal_costs(legacy_data, api_client, settings):
+    """Business default B-1: the public response omits ``cost_breakdown`` and ``totals``; every other key, in order,
+    is byte-identical to the golden body (the service-level test above keeps the full body)."""
     from freezegun import freeze_time
 
     rates = settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
@@ -70,7 +72,10 @@ def test_the_public_endpoint_serves_the_same_json(legacy_data, api_client, setti
         for case in sample:
             response = api_client.post("/api/public/v1/bom/quote/", case["request"], format="json")
             if case["status"] == 200:
-                assert response.status_code == 200 and _dumped(response.json()) == _dumped(case["response"]), case["request"]
+                assert response.status_code == 200 and not set(INTERNAL_KEYS) & set(response.json())
+                expected = {key: value for key, value in case["response"].items() if key not in INTERNAL_KEYS}
+                assert list(expected) == ["bom_lines", "pricing", "meta", "available_offers"]
+                assert _dumped(json.loads(response.content)) == _dumped(expected), case["request"]
             else:
                 assert response.status_code == 400 and response.json()["code"] == "validation_error"
                 assert response.json()["message"] == "; ".join(case["response"]["errors"])
