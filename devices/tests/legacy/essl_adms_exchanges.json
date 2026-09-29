@@ -1,0 +1,189 @@
+[
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/cdata",
+   "query": {
+    "SN": "NCD8252101398",
+    "language": "69",
+    "options": "all",
+    "pushver": "2.4.1"
+   }
+  },
+  "response": {
+   "body": "GET OPTION FROM: NCD8252101398\r\nStamp=9999\r\nOpStamp=9999\r\nErrorDelay=30\r\nDelay=10\r\nTransTimes=00:00;14:05\r\nTransInterval=1\r\nTransFlag=TransData AttLog OpLog AttPhoto EnrollUser ChgUser EnrollFP ChgFP UserPic\r\nRealtime=1\r\nEncrypt=0\r\n",
+   "content_length": "232",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": "7\t2026-09-22 09:31:05\t0\t15\t0\t0\n8\t2026-09-22 09:40:44\t0\t1\t\t0\nnot a punch line\n",
+   "method": "POST",
+   "path": "/iclock/cdata",
+   "query": {
+    "SN": "NCD8252101398",
+    "Stamp": "9999",
+    "table": "ATTLOG"
+   }
+  },
+  "response": {
+   "body": "OK: 2",
+   "content_length": "5",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": "7\t2026-09-22 09:31:05\t0\t15\t0\t0\n8\t2026-09-22 09:40:44\t0\t1\t\t0\nnot a punch line\n",
+   "method": "POST",
+   "path": "/iclock/cdata",
+   "query": {
+    "SN": "NCD8252101398",
+    "Stamp": "9999",
+    "table": "ATTLOG"
+   }
+  },
+  "response": {
+   "body": "OK: 2",
+   "content_length": "5",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": "USER PIN=7\tName=Ravi\tPri=0\tPasswd=4321\tCard=[000]\tGrp=1\tTZ=0000000100000000\tVerify=0\nOPLOG 4\t0\t2026-09-22 09:35:00\t0\t0\t0\t0\n",
+   "method": "POST",
+   "path": "/iclock/cdata",
+   "query": {
+    "OpStamp": "9999",
+    "SN": "NCD8252101398",
+    "table": "OPERLOG"
+   }
+  },
+  "response": {
+   "body": "OK: 2",
+   "content_length": "5",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/getrequest",
+   "query": {
+    "SN": "NCD8252101398"
+   }
+  },
+  "response": {
+   "body": "OK",
+   "content_length": "2",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": "ID=1&Return=0&CMD=INFO\n",
+   "method": "POST",
+   "path": "/iclock/devicecmd",
+   "query": {
+    "SN": "NCD8252101398"
+   }
+  },
+  "response": {
+   "body": "OK",
+   "content_length": "2",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/ping",
+   "query": {
+    "SN": "NCD8252101398"
+   }
+  },
+  "response": {
+   "body": "OK",
+   "content_length": "2",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/registry",
+   "query": {
+    "SN": "NCD8252101398"
+   }
+  },
+  "response": {
+   "body": "OK",
+   "content_length": "2",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/cdata",
+   "query": {
+    "SN": "ZZZ0000000001",
+    "options": "all"
+   }
+  },
+  "response": {
+   "body": "GET OPTION FROM: ZZZ0000000001\r\nStamp=9999\r\nOpStamp=9999\r\nErrorDelay=30\r\nDelay=10\r\nTransTimes=00:00;14:05\r\nTransInterval=1\r\nTransFlag=TransData AttLog OpLog AttPhoto EnrollUser ChgUser EnrollFP ChgFP UserPic\r\nRealtime=1\r\nEncrypt=0\r\n",
+   "content_length": "232",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": "1\t2026-09-22 10:00:00\t0\t15\n",
+   "method": "POST",
+   "path": "/iclock/cdata",
+   "query": {
+    "SN": "ZZZ0000000001",
+    "table": "ATTLOG"
+   }
+  },
+  "response": {
+   "body": "OK",
+   "content_length": "2",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ },
+ {
+  "request": {
+   "body": null,
+   "method": "GET",
+   "path": "/iclock/cdata",
+   "query": {
+    "options": "all"
+   }
+  },
+  "response": {
+   "body": "GET OPTION FROM: UNKNOWN\r\nStamp=9999\r\nOpStamp=9999\r\nErrorDelay=30\r\nDelay=10\r\nTransTimes=00:00;14:05\r\nTransInterval=1\r\nTransFlag=TransData AttLog OpLog AttPhoto EnrollUser ChgUser EnrollFP ChgFP UserPic\r\nRealtime=1\r\nEncrypt=0\r\n",
+   "content_length": "226",
+   "content_type": "text/plain; charset=utf-8",
+   "status": 200
+  }
+ }
+]

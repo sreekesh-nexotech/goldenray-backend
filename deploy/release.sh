@@ -2,7 +2,7 @@
 # deploy/release.sh <git-sha> — zero-downtime release of the Flarize backend (PLAN §5.5).
 #
 #   1. pull the images built by CI for <git-sha>
-#   2. migrate (expand phase only), extend the audit_log partitions and seed the maintained-pages registry — one-off,
+#   2. migrate (expand phase only), extend the audit_log and ADMS evidence partitions and seed the maintained-pages registry — one-off,
 #      as the owner role
 #   3. rolling restart: api-a, wait until healthy, then api-b (nginx keeps serving from the other replica)
 #   4. restart worker-default, worker-documents and beat (warm shutdown: running tasks finish first)
@@ -86,6 +86,8 @@ STEP="migrate"
 log "migrating (expand phase) as the owner role"
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py migrate --noinput
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py ensure_audit_partitions --months 3
+# The ADMS evidence table (devices_adms_request) is partitioned monthly too; the owner creates the next partitions.
+"${COMPOSE[@]}" --profile ops run --rm migrate python manage.py maintain_adms_evidence --months 3
 # Register the website's maintained pages/slots the release's code knows about (additive, idempotent; sitepages).
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py seed_pages
 

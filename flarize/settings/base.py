@@ -397,6 +397,9 @@ SPECTACULAR_SETTINGS = {
         "WarrantyIssueTypeEnum": "leads.models.forms.IssueType",
         "InstallationStatusEnum": "leads.models.installation.CustomerInstallation.Status",
         "InstallationSystemTypeEnum": "leads.models.installation.CustomerInstallation.SystemType",
+        "DeviceHealthStatusEnum": "devices.services.health.DEVICE_STATUSES",
+        "DeviceAgentStatusEnum": "devices.services.health.AGENT_STATUSES",
+        "DeviceSyncLogStatusEnum": "devices.models.logs.SyncLog.Status",
     },
 }
 
@@ -438,6 +441,8 @@ CELERY_BEAT_SCHEDULE = {
     "core.send_ops_report": {"task": "core.tasks.send_ops_report", "schedule": crontab(day_of_week="mon", hour=8, minute=5)},
     # Scheduled blog publications (blog.services.workflow.publish_due_entries).
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
+    # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
+    "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())
