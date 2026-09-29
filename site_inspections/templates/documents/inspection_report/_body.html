@@ -1,0 +1,90 @@
+{# Site inspection report body. Payload: site_inspections.services.report.payload (both variants). #}
+{% load l10n %}
+<header class="avoid-break">
+  <p class="muted">{{ payload.company }}</p>
+  <h1>Customer Site Inspection Report</h1>
+  <p>Site Visit No. <strong>{{ payload.number }}</strong> · {{ payload.visit_date }} · <span class="badge">{{ payload.status }}</span></p>
+</header>
+
+<h2>Customer</h2>
+<table>{% for row in payload.customer %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+
+<h2>Proposed System</h2>
+<table>{% for row in payload.system %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+
+<h2>Site Location</h2>
+<table>{% for row in payload.site %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+{% if payload.map_link %}<p class="muted">GPS location captured during the visit.</p>{% endif %}
+
+<h2>Proposed Installation Layout</h2>
+<div class="layout">
+{% for location in payload.locations %}
+  <div class="location avoid-break">
+    <h3>{{ location.title }}</h3>
+    {% if location.image %}
+    <div class="frame"><img src="{{ location.image }}" alt="{{ location.title }}">{% if location.box %}<div class="box box-{{ forloop.counter }}" style="left: {{ location.box.x|unlocalize }}%; top: {{ location.box.y|unlocalize }}%; width: {{ location.box.w|unlocalize }}%; height: {{ location.box.h|unlocalize }}%;"></div>{% endif %}</div>
+    {% else %}<div class="placeholder">No photo</div>{% endif %}
+    <p>{% if location.width_m %}{{ location.width_m }} m × {{ location.height_m }} m{% if location.area_m2 %} = {{ location.area_m2 }} m²{% endif %}{% else %}Not measured{% endif %}</p>
+    {% if location.legacy_geometry %}<p class="muted">Drawn in the previous app; the rectangle position is approximate.</p>{% endif %}
+  </div>
+{% endfor %}
+</div>
+
+<h2 class="page-break">Site &amp; Roof Assessment</h2>
+<table>{% for row in payload.roof %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+
+<h2>Shading</h2>
+<table>{% for row in payload.shading %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+
+<h2>Electrical</h2>
+<table>{% for row in payload.electrical %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+
+<h2>Equipment Safety</h2>
+{% for item in payload.equipment %}
+<div class="avoid-break">
+  <p><strong>{{ item.title }}</strong>: {{ item.status }}{% if item.review != "Not required" %} ({{ item.review }}){% endif %}</p>
+  {% if item.issue %}<p>Issue: {{ item.issue }}</p>{% endif %}
+  {% if item.corrective_action %}<p>Corrective action: {{ item.corrective_action }}</p>{% endif %}
+  {% if item.checks %}<table class="checks">{% for check in item.checks %}<tr><th>{{ check.0 }}</th><td>{{ check.1 }}</td></tr>{% endfor %}</table>{% endif %}
+</div>
+{% empty %}<p class="muted">Not assessed.</p>{% endfor %}
+
+<h2>Site Evidence</h2>
+<div class="evidence">
+{% for photo in payload.evidence %}<figure>{% if photo.image %}<img src="{{ photo.image }}" alt="{{ photo.label }}">{% else %}<div class="placeholder">No preview</div>{% endif %}<figcaption>{{ photo.label }}{% if photo.caption %} — {{ photo.caption }}{% endif %}</figcaption></figure>{% empty %}<p class="muted">No additional photos.</p>{% endfor %}
+</div>
+
+<h2>Additional Work</h2>
+{% if payload.additional_work %}
+<table>{% for item in payload.additional_work %}<tr><th>{{ item.label }}</th><td>{{ item.status }}{% if item.quantity %} · {{ item.quantity }}{% endif %}{% if item.dimensions %} · {{ item.dimensions }}{% endif %}</td></tr>{% endfor %}</table>
+{% else %}<p class="muted">No additional work identified.</p>{% endif %}
+
+<h2>Site Suitability</h2>
+<p>{{ payload.suitability }}</p>
+
+{% if payload.observations %}
+<h2>Engineer Observations</h2>
+<table>{% for o in payload.observations %}<tr><th>{{ o.category }}</th><td>{{ o.note }}</td></tr>{% endfor %}</table>
+{% endif %}
+
+{% if payload.internal %}
+<h2>Internal</h2>
+<table>{% for row in payload.internal.remarks %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}<tr><th>Complexity</th><td>{{ payload.internal.complexity }}</td></tr></table>
+<table>{% for row in payload.internal.cables %}<tr><th>{{ row.0 }}</th><td>{{ row.1 }}</td></tr>{% endfor %}</table>
+<h3>Readiness blockers</h3>
+{% if payload.internal.blockers %}<ul>{% for text in payload.internal.blockers %}<li>{{ text }}</li>{% endfor %}</ul>{% else %}<p>Ready for installation.</p>{% endif %}
+{% if payload.internal.reviews %}<h3>Engineering reviews</h3><table>{% for r in payload.internal.reviews %}<tr><th>{{ r.trigger }} — {{ r.decision }}</th><td>{{ r.reason }}{% if r.notes %}<br>{{ r.notes }}{% endif %}</td></tr>{% endfor %}</table>{% endif %}
+{% endif %}
+
+<h2>Customer Approval</h2>
+{% if payload.approval %}
+<table>
+  <tr><th>Customer</th><td>{{ payload.approval.customer }}</td></tr>
+  <tr><th>Approval</th><td>#{{ payload.approval.number }} ({{ payload.approval.via }})</td></tr>
+  <tr><th>Approved at</th><td>{{ payload.approval.at|default:"—" }}</td></tr>
+  {% if payload.approval.comment %}<tr><th>Remarks</th><td>{{ payload.approval.comment }}</td></tr>{% endif %}
+</table>
+{% else %}<p class="muted">Not approved yet.</p>{% endif %}
+
+<p class="muted small">{{ payload.disclaimer }}</p>
+<p class="muted small">Generated {{ requested_at|date:"Y-m-d H:i" }}</p>

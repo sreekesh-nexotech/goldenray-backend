@@ -451,6 +451,20 @@ SPECTACULAR_SETTINGS = {
         "QuotationBatteryConfigEnum": "quotations.serializers.quotations.BATTERY_CONFIG_CHOICES",
         # named once quotations added a third "battery_config" choice set
         "PricingBatteryConfigEnum": "pricing.models.choices.BatteryConfig",
+        # site_inspections: its shared choice sets (status / held_from_status, the four electrical availability columns, …)
+        "SiteInspectionStatusEnum": "site_inspections.models.choices.Status",
+        "SiteInspectionSystemTypeEnum": "site_inspections.models.choices.SystemType",
+        "SiteInspectionShadingEnum": "site_inspections.models.choices.Shading",
+        "SiteInspectionAvailabilityEnum": "site_inspections.models.choices.Availability",
+        "SiteInspectionPhaseEnum": "site_inspections.models.choices.Phase",
+        "SiteInspectionObservationCategoryEnum": "site_inspections.models.choices.ObservationCategory",
+        "SiteInspectionWorkUnitEnum": "site_inspections.models.choices.WorkUnit",
+        "SiteInspectionWorkStatusEnum": "site_inspections.models.choices.WorkStatus",
+        "SiteInspectionEquipmentStatusEnum": "site_inspections.models.choices.AssessmentStatus",
+        "SiteInspectionApprovalStatusEnum": "site_inspections.models.choices.ApprovalStatus",
+        # quotations also has a "roof_type" choice set
+        "SiteInspectionRoofTypeEnum": "site_inspections.models.choices.RoofType",
+        "QuotationRoofTypeEnum": "quotations.models.choices.RoofType",
     },
 }
 
