@@ -114,6 +114,11 @@ def import_cms_assets(rows: Iterable[dict], *, collections: Mapping | None = Non
                 report.violation(source_id, "file_unavailable", f"no CDN URL and {key!r} is not in the legacy uploads volume; skipped.")
                 report.skipped += 1
                 continue
+            if MediaAsset.all_objects.filter(visibility=MediaAsset.Visibility.PUBLIC, file=key).exists():
+                # Checked before writing: the storage key is unique, and saving first would overwrite that asset's file.
+                report.violation(source_id, "storage_key_taken", f"another asset already uses the storage key {key!r}; skipped.")
+                report.skipped += 1
+                continue
             if dry_run:
                 report.violation(source_id, "reupload_pending", f"{key!r} would be uploaded to the public storage.")
             else:

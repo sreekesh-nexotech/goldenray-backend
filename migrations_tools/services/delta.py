@@ -4,7 +4,8 @@ When a website source is rolled back (nginx back to the legacy containers), what
 the platform between the cutover and the rollback must be replayed into the legacy system by hand; the window is
 hours. This exports, per target table of the source's import plan, every row created, changed or deleted in the
 window: its uid, the legacy row it came from (``core_legacy_map``) or ``null`` for a platform-born row, the kind of
-change and its current field values (foreign keys as the related row's uid; secrets and password hashes masked),
+change and its current field values (foreign keys as the related row's uid; secrets and password hashes masked);
+link tables without timestamps (``blog_entry_tag`` …) export the current links of every exported parent (``current``),
 plus the window's audit actions as context. The file holds personal data (leads, applications): it is written
 ``0600`` and belongs to the operator running the rollback.
 """
@@ -140,6 +141,7 @@ def _change(instance, since) -> str:
 def export(system: str, *, since: dt.datetime, until: dt.datetime | None = None) -> dict:
     """The delta of ``system``'s target tables in ``[since, until)``."""
     tables: dict[str, list[dict]] = {}
+    exported: dict[str, list[int]] = {}  # table → pks of the rows exported (link tables follow their parents)
     missing = []
     for table in TARGETS[system]:
         model = model_for(table)
@@ -152,18 +154,25 @@ def export(system: str, *, since: dt.datetime, until: dt.datetime | None = None)
             if column in names:
                 bounded = Q(**{f"{column}__gte": since}) & (Q(**{f"{column}__lt": until}) if until else Q())
                 window |= bounded
-        if not window:
-            continue
+        links = not window
+        if links:
+            # A link table without timestamps (blog_entry_tag …): the current links of every exported parent row.
+            for field_ in model._meta.concrete_fields:
+                if field_.is_relation and exported.get(field_.related_model._meta.db_table):
+                    window |= Q(**{f"{field_.attname}__in": exported[field_.related_model._meta.db_table]})
+            if not window:
+                continue
         rows = list(model._base_manager.filter(window).order_by("pk"))
         if not rows:
             continue
+        exported[table] = [row.pk for row in rows]
         legacy = defaultdict(list)
         for entry in LegacyMap.objects.filter(target_table=table, target_id__in=[row.pk for row in rows]):
             legacy[entry.target_id].append({"source_system": entry.source_system, "source_table": entry.source_table, "source_id": entry.source_id})
         tables[table] = [
             {
                 "uid": str(getattr(row, "uid", "")) or None,
-                "change": _change(row, since),
+                "change": "current" if links else _change(row, since),
                 "legacy": legacy.get(row.pk) or None,
                 "fields": {field_.name: _value(row, field_) for field_ in model._meta.concrete_fields if field_.name not in ("id", "uid")},
             }
@@ -186,6 +195,7 @@ def export(system: str, *, since: dt.datetime, until: dt.datetime | None = None)
 def write(payload: dict, path: str | Path) -> Path:
     path = Path(path)
     descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    os.fchmod(descriptor, 0o600)  # an existing file keeps its mode through O_CREAT: make it private before writing
     with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=1, ensure_ascii=False, default=str)
     return path

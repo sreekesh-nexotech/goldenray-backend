@@ -141,6 +141,25 @@ class TestUsers:
         assert LegacyMap.objects.get(source_table="accounts_admin_user").target_id == existing.pk
         assert User.objects.get(pk=existing.pk).role_id == existing.role_id
 
+    def test_adopted_account_is_never_rewritten_by_a_rerun(self, roles):
+        # e.g. the bootstrap Super Admin, who has not set a password yet, shares the address of a CMS author.
+        existing = UserFactory(email="editor.one@example.com", role=by_slug("super-admin"), must_reset_password=True, first_name="Boot")
+        rows = [admin_user(access_role_id=None, role="author", first_name="Other", is_active=False)]
+        assert legacy_import.import_cms_users(rows)["skipped"] == 1
+        again = legacy_import.import_cms_users(rows)
+        user = User.objects.get(pk=existing.pk)
+        assert (again["created"], again["updated"], again["skipped"]) == (0, 0, 1)
+        assert user.role.slug == "super-admin" and user.first_name == "Boot" and user.is_active
+
+    def test_account_adopted_across_sources_keeps_the_creating_source(self, roles):
+        legacy_import.import_cms_users([admin_user()])  # CMS editor → Content Manager
+        backend = [admin_user(id=7, username="bom", first_name="Bom")]  # the same address among the /bom/ superusers
+        assert legacy_import.import_backend_users(backend)["violations"][0]["code"] == "email_adopted"
+        rerun = legacy_import.import_backend_users(backend)
+        user = User.objects.get(email="editor.one@example.com")
+        assert rerun["updated"] == 0 and user.role.slug == "content-manager" and user.first_name == "Edi"
+        assert legacy_import.import_cms_users([admin_user()])["updated"] == 0
+
     def test_rerun_updates_names_and_role_until_taken_over(self, roles):
         legacy_import.import_cms_users([admin_user()])
         assert legacy_import.import_cms_users([admin_user()])["skipped"] == 1

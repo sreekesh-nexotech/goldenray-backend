@@ -55,3 +55,27 @@ def test_bad_windows(db, tmp_path):
         run("export_delta", "--source", "cms", "--since", "yesterday", "--output", str(tmp_path / "d.json"))
     with pytest.raises(CommandError, match="after --since"):
         run("export_delta", "--source", "cms", "--since", "2026-10-02T00:00:00", "--until", "2026-10-01T00:00:00", "--output", str(tmp_path / "d.json"))
+
+
+def test_an_existing_output_file_is_made_private(db, tmp_path):
+    output = tmp_path / "delta.json"
+    output.write_text("{}")
+    output.chmod(0o644)
+    run("export_delta", "--source", "cms", "--since", timezone.now().isoformat(), "--output", str(output))
+    assert stat.S_IMODE(output.stat().st_mode) == 0o600
+
+
+def test_link_tables_without_timestamps_follow_their_changed_entry(imported, tmp_path):
+    from blog.models import Entry, EntryTag, Tag
+
+    cutover = timezone.now()
+    entry = Entry.objects.order_by("pk").first()
+    tag = Tag.objects.exclude(pk__in=EntryTag.objects.filter(entry=entry).values("tag")).order_by("pk").first()
+    EntryTag.objects.create(entry=entry, tag=tag)  # a tag added to the article after the cutover…
+    Entry.objects.filter(pk=entry.pk).update(updated_at=cutover + dt.timedelta(minutes=1))  # …which touches the entry
+    output = tmp_path / "delta.json"
+    run("export_delta", "--source", "cms", "--since", cutover.isoformat(), "--output", str(output))
+    links = json.loads(output.read_text())["tables"]["blog_entry_tag"]
+    expected = Tag.objects.filter(pk__in=EntryTag.objects.filter(entry=entry).values("tag")).values_list("uid", flat=True)
+    assert {row["fields"]["tag"] for row in links} == {str(uid) for uid in expected}
+    assert {row["fields"]["entry"] for row in links} == {str(entry.uid)} and {row["change"] for row in links} == {"current"}

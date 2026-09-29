@@ -91,6 +91,18 @@ class TestOptions:
         with pytest.raises(CommandError, match="no earlier run"):
             run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--resume")
 
+    def test_resume_needs_a_run_of_this_source(self, db):
+        seed_roles()
+        with pytest.raises(CommandError, match="not a run uid"):
+            run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--resume", "yesterday")
+        with pytest.raises(CommandError, match="no CMS import run"):
+            run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--resume", "5c1f3a52-0000-4000-8000-000000000000")
+        run("import_backend", "--source-fixture", str(BACKEND_FIXTURE), "--only", "backend.users")
+        backend_run = str(batches().get().object_uid)
+        with pytest.raises(CommandError, match="no CMS import run"):
+            run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--resume", backend_run)
+        assert batches().count() == 1
+
     def test_json_report_and_media_root(self, db, tmp_path):
         seed_roles()
         report = tmp_path / "report.json"

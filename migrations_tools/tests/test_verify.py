@@ -10,6 +10,7 @@ from django.core.management.base import CommandError
 
 from accounts.models import User
 from accounts.services import legacy_import as accounts_import
+from accounts.services.seeds import seed_roles
 from catalog.models import Component
 from core.models import LegacyMap
 from media.models import MediaAsset
@@ -206,6 +207,28 @@ class TestCommand:
         report = tmp_path / "verify.json"
         out = run("verify_migration", "--source", "cms", "--cms-fixture", str(CMS_FIXTURE), "--check", "3", "--allow-skipped", "--json", str(report))
         assert "SKIPPED" in out and json.loads(report.read_text())[0]["status"] == "skipped"
+
+    def test_one_source_is_not_failed_by_the_other_sources_checks(self, imported):
+        # #3/#5 belong to the CMS, #7/#10 to the main backend: verifying one source must not fail on the other's checks.
+        out = run("verify_migration", "--source", "backend", "--backend-fixture", str(BACKEND_FIXTURE), "--offline", "--check", "3", "--check", "5", "--check", "12")
+        assert "verification passed" in out and "#3  N/A" in out and "#12 PASS" in out
+        out = run("verify_migration", "--source", "cms", "--cms-fixture", str(CMS_FIXTURE), "--offline", "--check", "7", "--check", "10", "--check", "12")
+        assert "verification passed" in out and "#7  N/A" in out and "#10 N/A" in out
+
+    def test_import_verify_verifies_the_imported_fixture(self, db, monkeypatch):
+        from migrations_tools.services import cli
+
+        seed_roles()
+        calls = []
+        monkeypatch.setattr(cli, "call_command", lambda name, **options: calls.append((name, options)))
+        run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--only", "cms.users", "--verify", "--offline")
+        assert calls and calls[0][0] == "verify_migration"
+        assert calls[0][1]["source"] == ["cms"] and calls[0][1]["cms_fixture"] == str(CMS_FIXTURE) and calls[0][1]["offline"] is True
+
+    def test_import_refuses_verify_with_dry_run(self, db):
+        seed_roles()
+        with pytest.raises(CommandError, match="--dry-run"):
+            run("import_cms", "--source-fixture", str(CMS_FIXTURE), "--dry-run", "--verify")
 
     def test_bad_source_url(self, db):
         with pytest.raises(CommandError, match="postgresql://"):

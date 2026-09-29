@@ -159,3 +159,24 @@ HEAD check may be skipped with `--offline`).
   first run with real volumes (pass `--media-root`).
 * `verify_migration` #3 covers the CMS delivery endpoints named in §7.6 #3; the main backend's public endpoints are
   covered by their packages' parity suites and the calculators replay (#10).
+
+## Review findings (adversarial review of the package)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| R1 | An account **adopted** by e-mail (the bootstrap Super Admin, or the same person in both sources) was rewritten by every re-run of the adopting row while it still had `must_reset_password`: role, names and active flag followed that row — the CMS and main-backend imports flipped a shared account between Content Manager and Admin on alternate runs, and a CMS author row could demote a Super Admin who had not set a password yet | adoption is audited (`accounts.legacy_user_adopted`, naming the source row); a re-run of an adopting row never writes the account — only the row that created an account keeps it in step with the source | `accounts/tests/test_legacy_import.py::TestUsers::test_adopted_account_is_never_rewritten_by_a_rerun`, `…::test_account_adopted_across_sources_keeps_the_creating_source` |
+| R2 | `verify_migration --source cms|backend` (and therefore `import_cms/import_backend --verify`) always failed: the other source's checks (#3/#5 or #7/#10) were reported `skipped` and a skipped check fails the command | those checks are `n/a` (printed, never a failure); `skipped` stays for checks that miss an input | `migrations_tools/tests/test_verify.py::TestCommand::test_one_source_is_not_failed_by_the_other_sources_checks` |
+| R3 | `--verify` after `--source-fixture` verified without the source (checks #1, #3, #5, #7 skipped → failure); `--verify` with `--dry-run` verified the state before the (rolled back) import | the fixture is passed on as `--cms-fixture/--backend-fixture`; `--dry-run --verify` is refused | `…::test_import_verify_verifies_the_imported_fixture`, `…::test_import_refuses_verify_with_dry_run` |
+| R4 | The CMS media re-upload saved the bytes **before** the storage-key uniqueness was checked: a CMS `/uploads` row whose key another asset already used overwrote that asset's public file, then was refused | the key is checked before anything is written (`storage_key_taken`, skipped) | `media/tests/test_legacy_import.py::test_reupload_never_overwrites_a_file_another_asset_owns` |
+| R5 | `export_delta --output` onto an existing file kept that file's mode (`O_CREAT` only applies the mode to new files): the personal-data export could stay world-readable | `fchmod(0600)` before writing | `migrations_tools/tests/test_export_delta.py::test_an_existing_output_file_is_made_private` |
+| R6 | `export_delta` silently skipped the link tables without timestamps (`blog_entry_category/_tag/_badge`): an article's taxonomy changed after the cutover could not be replayed | link tables export the current links of every exported parent row (`change: current`) | `…::test_link_tables_without_timestamps_follow_their_changed_entry` |
+| R7 | `--resume <uid>` accepted any text (every step then crashed on the audit row's UUID) and any run uid, including a run of the other source, whose steps it then extended | the uid must be a UUID with batch rows of this source | `migrations_tools/tests/test_import_commands.py::TestOptions::test_resume_needs_a_run_of_this_source` |
+
+Re-run of the rehearsal on fresh private restores (`rv_migration_website_{cms,goldenapp}` → `flarize_rv_migration_website_target`):
+the same counts as the committed report (CMS 231 created / 1 updated, main backend 6,061 / 1), every check passing with
+`--list-prices-as-release` (#3: 71 requests against the legacy CMS, 0 differences; #10: 1,228 requests, 0 differences),
+second run 0 created / 0 updated. With synthetic admin users, auth users and media rows added to the private sources
+(what UAT lacks): users adopted across sources stay stable over repeated runs of both imports, `--send-reset-links`
+issued 3 links (3 listed: no real address or inactive), and #1, #2, #4, #6 and #12 pass.

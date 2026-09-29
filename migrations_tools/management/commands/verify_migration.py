@@ -61,7 +61,7 @@ class Command(BaseCommand):
                 if source is not None:
                     source.close()
         for result in results:
-            style = {"pass": self.style.SUCCESS, "fail": self.style.ERROR, "skipped": self.style.WARNING}[result.status]
+            style = {"pass": self.style.SUCCESS, "fail": self.style.ERROR, "skipped": self.style.WARNING, "n/a": self.style.NOTICE}[result.status]
             self.stdout.write(style(f"#{result.number:<2} {result.status.upper():7} {result.name}") + f" — {result.summary}")
             for detail in result.details:
                 self.stdout.write(f"      {detail}")

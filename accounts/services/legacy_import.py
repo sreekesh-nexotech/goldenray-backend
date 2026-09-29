@@ -22,7 +22,9 @@ gets an unusable password and ``must_reset_password`` (reset links are issued by
 cutover). CMS role: the mapped ``access_role_id``, else by ``role`` (``admin`` → Admin, ``editor`` → Content
 Manager, ``author`` → the custom role ``cms-author``: Content Manager with blogs only); main-backend accounts (the
 ``/bom/`` superusers) become Admin. ``is_superuser``/``is_staff`` are ignored. A live platform account with the same
-e-mail (e.g. the bootstrap admin, or the same person in both sources) is adopted: mapped, its role left unchanged.
+e-mail (e.g. the bootstrap admin, or the same person in both sources) is adopted: mapped, its role left unchanged,
+and audited (``accounts.legacy_user_adopted``) so that a re-run never rewrites it from that row either — only the row
+that created an account keeps its role, names and active flag in step with the source.
 """
 
 from __future__ import annotations
@@ -45,6 +47,7 @@ from accounts.registry import MODULES, SCOPE_ALL, full_access, normalise_scopes
 from accounts.services import authz, emails, passwords
 from accounts.services.authz import SUPER_ADMIN_SLUG
 from accounts.services.seeds import SEEDED_SLUGS
+from audit.models import AuditLog
 from audit.services import record
 from core.models import LegacyMap
 
@@ -54,6 +57,7 @@ ROLE_TABLE = "accounts_role"
 CMS_USER_TABLE = "accounts_admin_user"
 BACKEND_USER_TABLE = "auth_user"
 MIGRATED_DOMAIN = "migrated.invalid"
+ADOPTED_ACTION = "accounts.legacy_user_adopted"
 
 # CMS module → registry modules (PLAN §7.2 row 1).
 CMS_MODULES: dict[str, tuple[str, ...]] = {
@@ -248,12 +252,20 @@ def _email(row: dict, report: Report, *, exclude_pk=None) -> str:
     return raw
 
 
-def _import_user(row: dict, report: Report, *, system: str, table: str, role: Role | None) -> None:
+def _was_adopted(account: User, *, system: str, table: str, source_id) -> bool:
+    """Did this legacy row adopt ``account`` (an existing account with its address) rather than create it?"""
+    return AuditLog.objects.filter(action=ADOPTED_ACTION, object_uid=account.uid, after__source_system=system, after__source_table=table, after__source_id=str(source_id)).exists()
+
+
+def _import_user(row: dict, report: Report, *, system: str, table: str, role: Role | None, actor=None) -> None:
     source_id = row["id"]
     target_id = _mapped(system, table, source_id)
     existing = User.all_objects.filter(pk=target_id).first() if target_id else None
     if existing is not None and existing.deleted_at is not None:
         report.skipped += 1
+        return
+    if existing is not None and _was_adopted(existing, system=system, table=table, source_id=source_id):
+        report.skipped += 1  # the account belongs to another source or to the platform: never rewritten from this row
         return
     email = _email(row, report)
     values = {"first_name": (row.get("first_name") or "")[:150], "last_name": (row.get("last_name") or "")[:150], "is_active": bool(row.get("is_active", True))}
@@ -262,6 +274,7 @@ def _import_user(row: dict, report: Report, *, system: str, table: str, role: Ro
         if adopted is not None:
             report.violation(source_id, "email_adopted", f"{email} already has a platform account; mapped to it, its role unchanged.")
             _link(system, table, source_id, adopted)
+            record(ADOPTED_ACTION, obj=adopted, actor=actor, actor_kind=None if actor else "SYSTEM", after={"source_system": system, "source_table": table, "source_id": str(source_id)})
             report.skipped += 1
             return
         if role is None:
@@ -300,7 +313,7 @@ def import_cms_users(rows: Iterable[dict], *, user=None, dry_run: bool = False) 
     rows = list(rows)
     report = Report(CMS_USER_TABLE)
     for row in rows:
-        _import_user(row, report, system=CMS, table=CMS_USER_TABLE, role=_role_for_cms_user(row, report))
+        _import_user(row, report, system=CMS, table=CMS_USER_TABLE, role=_role_for_cms_user(row, report), actor=user)
     return _finish(report, rows, user=user, dry_run=dry_run)
 
 
@@ -313,7 +326,7 @@ def import_backend_users(rows: Iterable[dict], *, user=None, dry_run: bool = Fal
     if admin is None:
         report.violation("", "admin_role_missing", "the Admin role does not exist; run seed_roles first.")
     for row in rows:
-        _import_user(row, report, system=BACKEND, table=BACKEND_USER_TABLE, role=admin)
+        _import_user(row, report, system=BACKEND, table=BACKEND_USER_TABLE, role=admin, actor=user)
     return _finish(report, rows, user=user, dry_run=dry_run)
 
 

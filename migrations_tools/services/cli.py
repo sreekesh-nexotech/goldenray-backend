@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import json
+import uuid
 from pathlib import Path
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.core.serializers.json import DjangoJSONEncoder
 
-from migrations_tools.services.runner import Context, FileReader, Plan, RunReport, latest_run, run_plan
+from migrations_tools.services.runner import Context, FileReader, Plan, RunReport, batch_rows, latest_run, run_plan
 from migrations_tools.services.source import SourceError, open_source
 
 MAX_PRINTED_VIOLATIONS = 40
@@ -70,6 +71,8 @@ class ImportCommand(BaseCommand):
             return
         if not options["source_url"] and not options["source_fixture"]:
             raise CommandError("one of --source-url / --source-fixture is required.")
+        if options["verify"] and options["dry_run"]:
+            raise CommandError("--verify cannot follow a --dry-run: nothing was imported to verify.")
         unknown = set(options["only"]) - {step.name for step in self.plan.steps}
         if unknown:
             raise CommandError(f"unknown step(s): {', '.join(sorted(unknown))}")
@@ -78,6 +81,13 @@ class ImportCommand(BaseCommand):
             resume = latest_run(self.plan.source_system)
             if resume is None:
                 raise CommandError("--resume latest: no earlier run of this source.")
+        elif resume is not None:
+            try:
+                resume = str(uuid.UUID(resume))
+            except ValueError as exc:
+                raise CommandError(f"--resume {resume}: not a run uid (see the 'run uid:' line of the run to continue).") from exc
+            if not batch_rows(resume).filter(after__source_system=self.plan.source_system).exists():
+                raise CommandError(f"--resume {resume}: no {self.plan.source_system} import run with that uid.")
         context = Context(
             source_system=self.plan.source_system,
             user=resolve_actor(options["actor"]),
@@ -106,6 +116,8 @@ class ImportCommand(BaseCommand):
             verify_options = {"source": [system], "offline": options["offline"]}
             if options["source_url"]:
                 verify_options[f"{system}_url"] = options["source_url"]
+            if options["source_fixture"]:
+                verify_options[f"{system}_fixture"] = options["source_fixture"]
             if options["legacy_api_url"]:
                 verify_options["legacy_api_url"] = options["legacy_api_url"]
             call_command("verify_migration", stdout=self.stdout, **verify_options)

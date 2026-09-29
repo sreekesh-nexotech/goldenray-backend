@@ -105,3 +105,16 @@ def test_pdf_kind_bad_folder_and_storage_key_clash():
     first = MediaAsset.all_objects.get()
     assert first.kind == "DOCUMENT" and first.folder == "cms"
     assert [violation["code"] for violation in result["violations"]] == ["size_mismatch", "folder_invalid", "size_mismatch", "storage_key_taken"]
+
+
+def test_reupload_never_overwrites_a_file_another_asset_owns(settings):
+    ours = webp()
+    (settings.PUBLIC_MEDIA_ROOT / "uploads").mkdir(parents=True)
+    (settings.PUBLIC_MEDIA_ROOT / "uploads/logo.webp").write_bytes(ours)
+    MediaAsset.objects.create(
+        visibility="PUBLIC", kind="IMAGE", file="uploads/logo.webp", cdn_url="/media/public/uploads/logo.webp", original_filename="logo.webp", mime_type="image/webp", size_bytes=len(ours)
+    )
+    result = legacy_import.import_cms_assets([cms_row(cdn_url="", storage_path="", file="uploads/logo.webp")], read_file=lambda path: b"legacy bytes")
+    assert [violation["code"] for violation in result["violations"]] == ["storage_key_taken"]
+    assert (settings.PUBLIC_MEDIA_ROOT / "uploads/logo.webp").read_bytes() == ours  # the platform's file is untouched
+    assert result["skipped"] == 1 and not LegacyMap.objects.exists()

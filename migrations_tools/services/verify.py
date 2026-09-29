@@ -1,9 +1,10 @@
 """``verify_migration`` for the website sources (PLAN §7.6 checks 1–7, 10 and 12; 8, 9 and 11 belong to Flarize,
 quotations and eSSL).
 
-Every check returns a :class:`CheckResult` (``pass`` / ``fail`` / ``skipped`` with the reason). A check that needs
-something that was not given (a source URL, the legacy HTTP API) is ``skipped`` and says what it needs; the command
-fails when any check fails, and — unless ``allow_skipped`` — when a required check was skipped.
+Every check returns a :class:`CheckResult` (``pass`` / ``fail`` / ``skipped`` / ``n/a`` with the reason). A check that
+needs something that was not given (a source URL, the legacy HTTP API) is ``skipped`` and says what it needs; a check
+of a source that is not being verified (``--source cms`` has no pricing check) is ``n/a``. The command fails when any
+check fails, and — unless ``allow_skipped`` — when a required check was skipped.
 """
 
 from __future__ import annotations
@@ -47,6 +48,11 @@ class CheckResult:
 
 def skipped(number: int, name: str, reason: str) -> CheckResult:
     return CheckResult(number, name, "skipped", reason)
+
+
+def not_applicable(number: int, name: str, system: str) -> CheckResult:
+    """A check of a source that is not being verified (``--source``): reported, never a failure."""
+    return CheckResult(number, name, "n/a", f"checks the {system} migration, which is not being verified")
 
 
 def base_id(source_id: str) -> str:
@@ -157,7 +163,7 @@ class Verifier:
         result = CheckResult(3, "delivery parity (collections, page-content, faqs, job-positions)")
         source = self.sources.get("CMS")
         if "CMS" not in self.sources:
-            return skipped(3, result.name, "CMS not verified")
+            return not_applicable(3, result.name, "CMS")
         if source is None or self.legacy_cms is None:
             return skipped(3, result.name, "needs --cms-url and --legacy-cms-api (the legacy CMS HTTP API)")
         cases = []
@@ -210,7 +216,7 @@ class Verifier:
     def slugs(self) -> CheckResult:
         name = "historical and current slugs resolve"
         if "CMS" not in self.sources:
-            return skipped(5, name, "CMS not verified")
+            return not_applicable(5, name, "CMS")
         if self.sources["CMS"] is None:
             return skipped(5, name, "needs --cms-url")
         count, problems = parity.slug_problems(self.sources["CMS"], self.new)
@@ -245,7 +251,7 @@ class Verifier:
     def pricing(self) -> CheckResult:
         name = "pricing: current LIST price == BOM / website price"
         if "BACKEND" not in self.sources:
-            return skipped(7, name, "BACKEND not verified")
+            return not_applicable(7, name, "BACKEND")
         source = self.sources["BACKEND"]
         if source is None:
             return skipped(7, name, "needs --backend-url")
@@ -283,7 +289,7 @@ class Verifier:
     def calculators(self) -> CheckResult:
         name = "calculators: committed corpora answer identically"
         if "BACKEND" not in self.sources:
-            return skipped(10, name, "BACKEND not verified")
+            return not_applicable(10, name, "BACKEND")
         missing = [str(path) for path in self.corpus_dirs.values() if not path.is_dir()]
         if missing:
             return skipped(10, name, f"corpus not found: {', '.join(missing)} (--corpus-dir)")
