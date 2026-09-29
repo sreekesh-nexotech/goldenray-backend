@@ -137,7 +137,7 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
-    "django.contrib.auth.hashers.BCryptPasswordHasher",
+    "accounts.hashers.LegacyBCryptPasswordHasher",  # eSSL bcrypt hashes (72-byte truncation), upgraded on login
 ]
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -377,6 +377,10 @@ SPECTACULAR_SETTINGS = {
         "JobApplicationSalaryEnum": "careers.models.application.JobApplication.Salary",
         "JobApplicationEventKindEnum": "careers.models.application.JobApplicationEvent.Kind",
         "KsebTariffPhaseEnum": "reference.models.tariff.KsebTariff.Phase",
+        "EmployeeIdentityMethodEnum": "hr.models.employee.Employee.IdentityMethod",
+        "LeaveRecordStatusEnum": "hr.models.calendar.LeaveRecord.Status",
+        "AttendanceRuleScopeEnum": "hr.models.calendar.AttendanceRule.Scope",
+        "ShiftHalfDayAfterSourceEnum": "hr.models.shift.Shift.HalfDayAfterSource",
     },
 }
 

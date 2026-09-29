@@ -136,7 +136,7 @@ def test_test_settings_use_isolated_backends():
     assert settings.DATABASES["default"]["CONN_MAX_AGE"] == 0
     assert settings.DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] is True
     assert settings.PASSWORD_HASHERS[0] == "django.contrib.auth.hashers.Argon2PasswordHasher"
-    assert "django.contrib.auth.hashers.BCryptPasswordHasher" in settings.PASSWORD_HASHERS
+    assert "accounts.hashers.LegacyBCryptPasswordHasher" in settings.PASSWORD_HASHERS  # eSSL bcrypt hashes, 72-byte truncation (DV-53)
     assert settings.FEATURE_FLAG_DEFAULTS == {"ADMS_RECEIVER": False, "AGREEMENTS_PRICE_OVERRIDE": False, "LEGACY_API_SHIM": False, "INVENTORY_STOCK": False}
     assert settings.SIMPLE_JWT["ROTATE_REFRESH_TOKENS"] and settings.SIMPLE_JWT["BLACKLIST_AFTER_ROTATION"]
     assert settings.SIMPLE_JWT["USER_ID_FIELD"] == "uid" and settings.SIMPLE_JWT["USER_ID_CLAIM"] == "sub"
