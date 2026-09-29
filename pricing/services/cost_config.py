@@ -263,6 +263,11 @@ def set_value(key: str, value, *, user, effective_from: date | None = None, note
     """Append ``key = value`` (closing the open row). Returns the new row, or ``None`` when the value is unchanged."""
     value = validate_value(key, plain_json(value))
     effective_from = effective_from or today()
+    if effective_from > today():
+        # The open row is the current value (releases and the engines read it now); nothing resolves rows by date.
+        raise DomainError(
+            "effective_from_in_future", f"{key}: a configuration value takes effect when it is written; it cannot start in the future.", errors={"effective_from": ["Must be today or earlier."]}
+        )
     previous = CostConfig.objects.select_for_update().filter(key=key, effective_to__isnull=True).first()
     if current_uid is not None and str(previous.uid if previous else "") != str(current_uid or ""):
         raise StaleVersion("stale_version", f"{key} was changed by someone else. Reload and try again.", errors={key: [f"Current row is {previous.uid if previous else 'none'}."]})

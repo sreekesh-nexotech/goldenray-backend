@@ -54,7 +54,7 @@ class CostConfigEntrySerializer(serializers.Serializer):
 
 class CostConfigPutSerializer(serializers.Serializer):
     entries = CostConfigEntrySerializer(many=True, allow_empty=False)
-    effective_from = serializers.DateField(required=False, help_text="Default today.")
+    effective_from = serializers.DateField(required=False, help_text="Default today; never in the future (400 `effective_from_in_future`), never before a key's current row.")
     note = serializers.CharField(required=False, allow_blank=True, max_length=2000)
 
 

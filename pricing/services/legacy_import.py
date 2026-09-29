@@ -57,7 +57,7 @@ from pricing.models import (
     ValidityWindowStatus,
 )
 from pricing.services import cost_config, market_rates
-from pricing.services.common import AUTHORING_NAMESPACE, parse_size_key, today
+from pricing.services.common import AUTHORING_NAMESPACE, today, valid_size_key
 from pricing.services.import_support import (
     BACKEND,
     FLARIZE,
@@ -387,6 +387,17 @@ def _bom_market_rate(result: ImportRun, rate_set: MarketRateSet, row: dict, *, u
         result.violation(table, row["id"], "unknown_value", f"system_type={row.get('system_type')!r} tier={row.get('tier')!r} is not a known combination.")
         result.count(table, "skipped")
         return
+    if system != SystemType.UPGRADE and (row.get("from_size") or row.get("to_size")):
+        # No home: only UPGRADE rows have from/to sizes. Imported as a plain row it would silently replace the cells
+        # of the row the calculator really reads (the on-grid lookup even skips rows with a from_size).
+        result.violation(
+            table,
+            row["id"],
+            "upgrade_sizes_on_non_upgrade",
+            f"A {row.get('system_type')} row with from_size={row.get('from_size')!r} to_size={row.get('to_size')!r} is not imported; only upgrade rows carry these sizes.",
+        )
+        result.count(table, "skipped")
+        return
     rates = row.get("size_rates") or {}
     if isinstance(rates, str):
         rates = json.loads(rates)
@@ -570,7 +581,7 @@ def _flarize_offer(result: ImportRun, item: dict, *, user) -> str:
     if offer_type is None or system is None or tier is None or status not in OfferStatus.values:
         raise BadValue(f"type={item.get('type')!r} appliesTo={item.get('appliesTo')!r} appliesToTier={item.get('appliesToTier')!r} status={status!r}: unknown value")
     size_key = "" if (item.get("appliesToSize") or "all") == "all" else str(item["appliesToSize"])
-    parsed = parse_size_key(size_key) if size_key else None
+    parsed = valid_size_key(size_key) if size_key else None
     if size_key and parsed is None:
         raise BadValue(f"appliesToSize={size_key!r}: not a size key")
     values = {
@@ -643,7 +654,7 @@ ROOF_KEYS = {"flat": InstallationType.FLAT, "sheet": InstallationType.SHEET, "el
 def _installation_matrix(result: ImportRun, matrix: dict, *, user) -> None:
     table = "catalog.json:installationMatrix"
     for size, roofs in matrix.items():
-        parsed = parse_size_key(size)
+        parsed = valid_size_key(size)
         for roof, cost in (roofs or {}).items():
             source_id = f"{size}:{roof}"
             if parsed is None or roof not in ROOF_KEYS:

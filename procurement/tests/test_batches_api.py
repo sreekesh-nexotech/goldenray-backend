@@ -132,7 +132,8 @@ class TestPreviewAndCommit:
         assert [by_sku[sku]["allocated_charges"] for sku in ("a1", "b1", "c1")] == ["3500.00", "1000.00", "500.00"]
         assert by_sku["a1"]["landed_unit_cost"] == "7350.00" and by_sku["b1"]["landed_unit_cost"] == "5250.00"
         hidden = clerk.post(detail(batch, "preview-allocation/")).json()
-        assert "landed_unit_cost" not in hidden["lines"][0] and hidden["lines"][0]["allocated_charges"]
+        assert "landed_unit_cost" not in hidden["lines"][0] and "allocated_charges" not in hidden["lines"][0] and "allocation_pct" not in hidden["lines"][0]
+        assert hidden["lines"][0]["purchase_value"] and hidden["can_commit"] is True
 
     def test_blockers(self, client):
         empty = BatchFactory()

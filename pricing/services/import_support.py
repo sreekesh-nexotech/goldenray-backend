@@ -16,7 +16,7 @@ from collections.abc import Callable
 from decimal import Decimal, InvalidOperation
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import IntegrityError, models, transaction
+from django.db import DataError, IntegrityError, models, transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
 
@@ -104,6 +104,10 @@ def guarded(result: ImportRun, table: str, source_id, fn: Callable[[], str | Non
         return
     except IntegrityError as exc:
         result.violation(table, source_id, "integrity_error", str(exc).splitlines()[0])
+        result.count(table, "skipped")
+        return
+    except DataError as exc:  # a value the column cannot hold (too long, numeric overflow): this row only
+        result.violation(table, source_id, "invalid_value", str(exc).splitlines()[0])
         result.count(table, "skipped")
         return
     if outcome:

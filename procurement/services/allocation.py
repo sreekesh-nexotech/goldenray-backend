@@ -179,8 +179,15 @@ def commit(instance: Batch, *, user, reason: str, effective_from=None, expected_
 
 
 def _prior_row(row: Price) -> Price | None:
-    """The row ``row`` superseded when it was written (the latest earlier row of the same component and kind)."""
-    return Price.objects.filter(component_id=row.component_id, kind=row.kind, id__lt=row.pk).order_by("-id").first()
+    """The price ``row`` replaced: the latest earlier row of the same component and kind that still stands.
+
+    Rows written by a batch that has since been reversed do not stand — the reversal undid them (closing them, or
+    replacing them by the price before) — so they are skipped: reversing a later batch never brings a reversed price
+    back.
+    """
+    column = "price_row" if row.kind == PriceKind.PURCHASE else "landed_row"
+    reversed_rows = BatchLine.all_objects.filter(batch__reversals__isnull=False, **{f"{column}__isnull": False}).values(column)
+    return Price.objects.filter(component_id=row.component_id, kind=row.kind, id__lt=row.pk).exclude(id__in=reversed_rows).order_by("-id").first()
 
 
 @transaction.atomic

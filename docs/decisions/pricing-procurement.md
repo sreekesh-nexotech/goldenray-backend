@@ -263,3 +263,24 @@ Flarize replaces stays in history (closed row); the current state is the same in
   catalog import), `import_bom_global_costs`, `import_bom_market_rates`, `import_bom_offers`, `import_flarize_pricing`,
   `import_flarize_documents`, `import_pa_kseb_fees`, then `procurement.services.legacy_import.import_flarize_procurement`
   (after the users import so `createdBy`/`changedBy` resolve); each takes `dry_run=` and returns counts + violations.
+
+## Review fixes
+
+Each defect was reproduced by a failing test first (`pricing/tests/test_review_fixes.py`,
+`procurement/tests/test_review_fixes.py`); the tests stay in the suite.
+
+| # | Defect | Fix |
+|---|---|---|
+| 1 | Market-rate size keys the `numeric(6,2)` size columns cannot hold or that are not positive (`0`, `99999`, `3.125`, also as `from_size_key`/`future_size_key`) reached the database: 500 | `pricing.services.common.valid_size_key` (more than 0, at most 9999.99 kW, 2 decimals) in `normalise_rate` → 400 `validation_error` on the field |
+| 2 | Offer `applies_to_size_key` `0` answered 409 `offer_code_taken` on create and 500 on PATCH; a key beyond `numeric(6,2)` was a 500 | the offer validation uses `valid_size_key` → 400 on `applies_to_size_key` |
+| 3 | A cost-config PUT with a future `effective_from` became the current value at once (the open row is what releases and engines read; nothing resolves rows by date) | `set_value` refuses it: 400 `effective_from_in_future` (like price rows) |
+| 4 | One legacy row whose value its column cannot hold (`DataError`: a 200-character Flarize offer name, a size beyond `numeric(6,2)`) aborted the whole import | `import_support.guarded` reports it as that row's `invalid_value`; the importers' size keys use `valid_size_key` |
+| 5 | `preview-allocation/` showed callers without `pricing_internal.view` the per-line `allocated_charges` / `allocation_pct` that batch lines hide (landed = unit price + charges / qty), also on committed batches | both are internal fields of the preview lines too |
+| 6 | Once an imported batch held the next `BATCH-<YYYY>-<nnn>` (Flarize batch ids are free text), every new batch was refused 409 `batch_number_taken` for good (the refused transaction rolled the counter back) | `batch_number()` skips numbers already used |
+| 7 | Reversing a batch restored the price of an earlier batch that had itself been reversed (its reversal had closed the price with nothing before it) | the restored "prior" row skips rows written by reversed batches (`allocation._prior_row`) |
+| 8 | Batch totals beyond `numeric(14,2)` (lines or charges) were a 500 | 400 `validation_error` on `lines` / `charges`, nothing written |
+| 9 | A `bom_marketrate` on-grid/hybrid row carrying `from_size`/`to_size` (no home: only upgrade rows have them; the on-grid lookup even skips such rows) was imported as a plain row and silently replaced the cells of the row the calculator reads | reported `upgrade_sizes_on_non_upgrade` (error), not imported |
+
+Not changed (checked): the PriceRelease report does not list the `bt1` protection rating / PBC-M-003 controller
+blockers — `docs/decisions/engines-rules.md` places the PBC-M-003 finding in the PackRelease report (checker run on
+the packs), which is where a pack-level blocker can be evaluated.

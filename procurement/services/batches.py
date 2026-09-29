@@ -24,11 +24,18 @@ from procurement.models import Batch, BatchCharge, BatchLine, BatchStatus
 HEADER_FIELDS = ("supplier", "invoice_no", "invoice_date", "note", "other_charges_declared")
 SNAPSHOT_FIELDS = ("number", "supplier", "invoice_no", "invoice_date", "status", "subtotal", "charges_total", "total", "note")
 TWO_PLACES = Decimal("0.01")
+MAX_TOTAL = Decimal("999999999999.99")  # numeric(14,2): subtotal, charges_total, total
 
 
 def batch_number(on=None) -> str:
+    """The next free ``BATCH-<YYYY>-<nnn>``. Imported batches keep their source numbers (Flarize batch ids are free
+    text), so a number the sequence reaches may already exist: it is skipped rather than refused (409 forever, since
+    the refused transaction also rolls the counter back)."""
     year = (on or today()).year
-    return next_number("BATCH", period_key=str(year), fmt=lambda n, period: f"BATCH-{period}-{n:03d}")
+    while True:
+        number = next_number("BATCH", period_key=str(year), fmt=lambda n, period: f"BATCH-{period}-{n:03d}")
+        if not Batch.all_objects.filter(number=number).exists():
+            return number
 
 
 def batches_queryset():
@@ -130,7 +137,7 @@ def put_lines(instance: Batch, *, user, rows: list[dict], expected_version=None)
             line.versioned_update(user, qty=row["qty"], unit_purchase_price=row["unit_purchase_price"])
     for line in existing.values():
         line.soft_delete(user)
-    return _after_change(batch, user=user, action="procurement.batch_lines_set", detail={"lines": len(rows)})
+    return _after_change(batch, user=user, action="procurement.batch_lines_set", detail={"lines": len(rows)}, field="lines")
 
 
 @transaction.atomic
@@ -146,11 +153,15 @@ def put_charges(instance: Batch, *, user, rows: list[dict], expected_version=Non
         charge = BatchCharge(batch=batch, kind=row["kind"], amount=row["amount"], note=row.get("note", ""))
         stamp_create(charge, user)
         charge.save()
-    return _after_change(batch, user=user, action="procurement.batch_charges_set", detail={"charges": [{"kind": row["kind"], "amount": str(row["amount"])} for row in rows]})
+    detail = {"charges": [{"kind": row["kind"], "amount": str(row["amount"])} for row in rows]}
+    return _after_change(batch, user=user, action="procurement.batch_charges_set", detail=detail, field="charges")
 
 
-def _after_change(batch: Batch, *, user, action: str, detail: dict) -> Batch:
+def _after_change(batch: Batch, *, user, action: str, detail: dict, field: str) -> Batch:
     totals = recompute_totals(batch)
+    if any(abs(value) > MAX_TOTAL for value in totals.values()):
+        # numeric(14,2) cannot hold it; the caller's transaction rolls the line/charge writes back.
+        raise DomainError("validation_error", "The batch totals are too large to record.", errors={field: [f"The batch total must stay within {MAX_TOTAL}."]})
     batch.versioned_update(user, **totals)
     record(action, obj=batch, actor=user, after={**detail, **{name: str(value) for name, value in totals.items()}})
     return batch

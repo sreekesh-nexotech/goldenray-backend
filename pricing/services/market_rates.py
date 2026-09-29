@@ -22,9 +22,10 @@ from core.outbox import emit
 from core.services import check_version, stamp_create
 from flarize.cache_utils import bump
 from pricing.models import MarketRate, MarketRateSet, MarketRateSetStatus, PriceRelease, RoofAddon, SwapDelta, SystemType
-from pricing.services.common import AUTHORING_NAMESPACE, decimal_text, parse_size_key
+from pricing.services.common import AUTHORING_NAMESPACE, MAX_SIZE_KW, decimal_text, valid_size_key
 
 SET_FIELDS = ("name", "status", "note", "activated_at", "retired_at")
+SIZE_KEY_HELP = f"A size key like 3, 5sp, 5tp or 10 (more than 0 and at most {MAX_SIZE_KW} kW, 2 decimals)."
 VARIANT_RE = re.compile(r"^[A-Za-z0-9]{1,24}$")
 EDITABLE = (MarketRateSetStatus.DRAFT,)
 
@@ -202,15 +203,15 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
     system = values.get("system_type")
     tier = values.get("tier") or ""
     battery = values.get("battery_config") or ""
-    size = parse_size_key(values.get("size_key", ""))
+    size = valid_size_key(values.get("size_key", ""))
     from_key = values.get("from_size_key") or ""
     future_key = values.get("future_size_key") or ""
     variant = values.get("variant") or ""
     if size is None:
-        errors["size_key"] = ["A size key like 3, 5sp, 5tp or 10."]
+        errors["size_key"] = [SIZE_KEY_HELP]
     if system == SystemType.UPGRADE:
-        if parse_size_key(from_key) is None:
-            errors["from_size_key"] = ["UPGRADE rows need the starting size key."]
+        if valid_size_key(from_key) is None:
+            errors["from_size_key"] = [f"UPGRADE rows need the starting size key ({SIZE_KEY_HELP})"]
         if battery or future_key or variant:
             errors["system_type"] = ["UPGRADE rows carry no battery band, future size or variant."]
     else:
@@ -222,8 +223,8 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
             errors["battery_config"] = ["HYBRID rows need a battery band (0, 1 or 2)."]
         if system == SystemType.ONGRID and battery:
             errors["battery_config"] = ["ON-GRID rows have no battery band."]
-    if future_key and parse_size_key(future_key) is None:
-        errors["future_size_key"] = ["A size key like 5sp or 10."]
+    if future_key and valid_size_key(future_key) is None:
+        errors["future_size_key"] = [SIZE_KEY_HELP]
     if variant and not VARIANT_RE.match(variant):
         errors["variant"] = ["Letters and digits only (≤ 24)."]
     price = values.get("customer_price_incl_gst")
@@ -239,7 +240,7 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
         "size_kw": size[0],
         "phase": size[1],
         "from_size_key": from_key,
-        "from_size_kw": parse_size_key(from_key)[0] if from_key else None,
+        "from_size_kw": valid_size_key(from_key)[0] if from_key else None,
         "future_size_key": future_key,
         "variant": variant,
         "customer_price_incl_gst": Decimal(price).quantize(Decimal("0.01")),

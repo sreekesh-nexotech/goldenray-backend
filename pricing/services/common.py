@@ -75,5 +75,20 @@ def parse_size_key(key: str) -> tuple[Decimal, str] | None:
     return Decimal(match.group("kw")), PHASE_OF_SUFFIX.get(match.group("phase") or "", "")
 
 
+MAX_SIZE_KW = Decimal("9999.99")  # numeric(6,2), the size columns (size_kw, from_size_kw, applies_to_size_kw)
+
+
+def valid_size_key(key: str) -> tuple[Decimal, str] | None:
+    """:func:`parse_size_key` limited to the sizes the ``numeric(6,2)`` columns hold: more than 0, at most
+    ``9999.99`` kW, at most 2 decimal places (``None`` otherwise, so the caller reports a validation error)."""
+    parsed = parse_size_key(key)
+    if parsed is None:
+        return None
+    size_kw = parsed[0]
+    if size_kw <= 0 or size_kw > MAX_SIZE_KW or size_kw != size_kw.quantize(Decimal("0.01")):
+        return None
+    return parsed
+
+
 def size_key_for(size_kw: Decimal, phase: str = "") -> str:
     return f"{decimal_text(size_kw)}{SUFFIX_OF_PHASE.get(phase, '')}"

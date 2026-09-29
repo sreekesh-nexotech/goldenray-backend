@@ -155,13 +155,15 @@ class CommitSerializer(ExpectedVersionMixin, serializers.Serializer):
 
 
 class AllocationLineSerializer(InternalFieldsMixin, serializers.Serializer):
-    internal_fields = ("landed_unit_cost", "landed_unit_cost_exact", "formula", "differs_from_purchase_price")
+    # The same fields BatchLineSerializer hides: the per-line allocation gives the landed cost away
+    # (landed = unit price + allocated charges / qty).
+    internal_fields = ("allocation_pct", "allocated_charges", "landed_unit_cost", "landed_unit_cost_exact", "formula", "differs_from_purchase_price")
     component = PricingComponentRefSerializer()
     qty = serializers.DecimalField(max_digits=12, decimal_places=3)
     unit_purchase_price = serializers.DecimalField(max_digits=14, decimal_places=2)
     purchase_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-    allocation_pct = serializers.DecimalField(max_digits=9, decimal_places=4)
-    allocated_charges = serializers.DecimalField(max_digits=14, decimal_places=2)
+    allocation_pct = serializers.DecimalField(max_digits=9, decimal_places=4, required=False, help_text=INTERNAL_NOTE)
+    allocated_charges = serializers.DecimalField(max_digits=14, decimal_places=2, required=False, help_text=INTERNAL_NOTE)
     landed_unit_cost = serializers.DecimalField(max_digits=14, decimal_places=2, required=False, help_text=INTERNAL_NOTE)
     landed_unit_cost_exact = serializers.DecimalField(max_digits=24, decimal_places=6, required=False, help_text=INTERNAL_NOTE)
     formula = serializers.CharField(required=False, help_text=INTERNAL_NOTE)

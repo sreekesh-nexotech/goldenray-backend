@@ -29,7 +29,7 @@ from core.sequences import next_number
 from core.services import check_version, stamp_create
 from engines import offers as offer_engine
 from pricing.models import Offer, OfferStatus, OfferSystem, OfferTier, OfferTransition, OfferType
-from pricing.services.common import decimal_text, parse_size_key, today
+from pricing.services.common import decimal_text, today, valid_size_key
 
 EDITABLE_FIELDS = ("name", "type", "value", "applies_to_system", "applies_to_tier", "applies_to_size_key", "starts_on", "ends_on", "print_on_quotation", "stackable", "description")
 SNAPSHOT_FIELDS = ("code", *EDITABLE_FIELDS, "status", "content_version")
@@ -92,12 +92,12 @@ def _validate(values: dict) -> None:
             errors.setdefault(field, []).append(message)
         raise DomainError("validation_error", "Invalid offer.", errors=errors)
     size_key = values.get("applies_to_size_key") or ""
-    if size_key and parse_size_key(size_key) is None:
-        raise DomainError("validation_error", "Invalid size key.", errors={"applies_to_size_key": ["A size key like 3, 5sp, 5tp or 10 (blank = every size)."]})
+    if size_key and valid_size_key(size_key) is None:
+        raise DomainError("validation_error", "Invalid size key.", errors={"applies_to_size_key": ["A size key like 3, 5sp, 5tp or 10 — more than 0 and at most 9999.99 kW (blank = every size)."]})
 
 
 def _size_kw(size_key: str) -> Decimal | None:
-    parsed = parse_size_key(size_key) if size_key else None
+    parsed = valid_size_key(size_key) if size_key else None
     return parsed[0] if parsed else None
 
 
