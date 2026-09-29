@@ -395,10 +395,14 @@ class Agent:
                 continue
             pending = self.store.pending_count(serial)
             users = self._users_due(dev, serial)
-            if not pending and users is None and not (self._announce_due(serial) and self.address(dev) in self._verified):
+            # an announce is contact (the platform moves the terminal's last_seen_at and measures its clock from it): only
+            # a terminal that answered as itself in this process is announced, never an identity remembered from an
+            # earlier run while the terminal is down
+            reached = self.address(dev) in self._verified
+            if not pending and users is None and not (self._announce_due(serial) and reached):
                 continue  # nothing to say: no request at all
             try:
-                if self._announce_due(serial) and self._refusal(serial) is None:
+                if reached and self._announce_due(serial) and self._refusal(serial) is None:
                     summary["requests"] += 1
                     if self.announce(dev, serial):
                         summary["announced"] += 1

@@ -175,6 +175,23 @@ class TestFewerRequests:
         agent.run_once()
         assert platform.calls == []
 
+    def test_nothing_is_announced_for_a_terminal_this_process_has_not_reached(self, make_agent, lan, platform, tmp_path):
+        """An announce is contact (the platform moves last_seen_at and measures the clock from it): after a restart with
+        a backlog and the terminal down, the stored identity of an earlier run must not be announced as seen now."""
+        terminal = terminal_at(lan)
+        first = make_agent(mars())
+        first.read_device(first.cfg.devices[0])  # read, then the process stops before delivering
+        first.store.close()
+        terminal.online = False
+        restarted = make_agent(mars(), store=Store(tmp_path / "queue.sqlite3"))
+        result = restarted.run_once()
+        assert "announce" not in platform.names() and result["announced"] == 0
+        assert result["uploaded"] == 3 and restarted.store.pending_count(SERIAL) == 0  # the backlog was read earlier: it is delivered
+        terminal.online = True
+        restarted.run_once()
+        announce = [payload for name, payload in platform.calls if name == "announce"]
+        assert len(announce) == 1 and announce[0]["observed_at"] is not None
+
     def test_announce_refusal_holds_that_terminal_only(self, make_agent, lan, platform, clock):
         terminal_at(lan)
         terminal_at(lan, serial="NCD8252101212", ip="192.168.1.60")

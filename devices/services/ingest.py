@@ -28,7 +28,7 @@ from django.utils.dateparse import parse_datetime
 from core.outbox import emit
 from devices.models import Device, DeviceUser, SyncLog
 from devices.services import punch_sink
-from devices.services.common import now
+from devices.services.common import INT_RANGE, SMALLINT_RANGE, fits, now
 
 EVENT = "attendance.punches_ingested"
 AGENT_PUSH = "AGENT_PUSH"
@@ -103,6 +103,12 @@ def build_punches(device: Device, records, *, source: str, agent=None, adms_requ
             invalid += 1
             continue
         status_code, punch_code = _to_int(record.get("status")), _to_int(record.get("punch"))
+        record_uid = _to_int(record.get("device_record_uid"))
+        # the punch store's columns (PLAN §2.9: smallint codes, int record uid); beyond them a record is unreadable, and
+        # storing it would fail the whole batch again on every resend
+        if not (fits(status_code, SMALLINT_RANGE) and fits(punch_code, SMALLINT_RANGE) and fits(record_uid, INT_RANGE)):
+            invalid += 1
+            continue
         key = punch_sink.dedup_key(serial, pin, device_time, status_code, punch_code)
         if key in seen:
             duplicates += 1
@@ -120,7 +126,7 @@ def build_punches(device: Device, records, *, source: str, agent=None, adms_requ
                 punch_code=punch_code,
                 source=source,
                 dedup_key=key,
-                device_record_uid=_to_int(record.get("device_record_uid")),
+                device_record_uid=record_uid,
                 agent_id=agent.pk if agent is not None else None,
                 adms_request_id=adms_request_id,
                 raw_payload=dict(record.get("raw_payload") or {}),

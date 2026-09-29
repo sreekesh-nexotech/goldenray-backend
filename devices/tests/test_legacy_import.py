@@ -141,6 +141,16 @@ class TestDeviceUsers:
         by_pin = {row.pin: described[row.pk]["device_state"] for row in DeviceUser.objects.filter(device=sales)}
         assert by_pin == {"1": "ACTIVE_ON_DEVICE", "2": "ACTIVE_ON_DEVICE", "5": "MISSING_FROM_DEVICE"}
 
+    def test_terminal_user_passwords_are_not_imported(self, imported, admin_client):
+        """eSSL stored pyzk's whole user object (``vars(user)``) as raw_payload: the terminal user's password in clear."""
+        raw = {"uid": 12, "user_id": "12", "name": "Ravi", "privilege": 0, "password": "4321", "group_id": "1", "card": 0}
+        report = legacy_import.import_device_users([{"id": 93, "device_id": 1, "device_user_id": "12", "name": "Ravi", "has_password": True, "raw_payload": raw}])
+        assert report["created"] == 1
+        row = DeviceUser.objects.get(device__name="MARS-01", pin="12")
+        assert row.raw_payload == {**raw, "password": "***"} and row.has_password is True
+        listed = admin_client.get("/api/v1/devices/device-users/", {"search": "Ravi"}).json()["results"]
+        assert [item["raw_payload"]["password"] for item in listed] == ["***"]
+
     def test_unresolvable_rows(self, imported):
         report = legacy_import.import_device_users(
             [{"id": 90, "device_id": 999, "device_user_id": "1"}, {"id": 91, "device_id": 1, "device_user_id": ""}, {"id": 92, "device_id": 1, "device_user_id": "77", "employee_id": 999}]
@@ -194,3 +204,11 @@ class TestAdmsEvidence:
         entry = AdmsUnknownDevice.objects.get()
         assert (entry.serial_number, entry.request_count, entry.last_reason, entry.last_source_ip) == ("ZZZ0000000001", 2, "UNKNOWN_SERIAL", "127.0.0.1")
         assert legacy_import.import_adms_unknown_devices([{"id": 9, "serial_number": " "}])["violations"][0]["field"] == "serial_number"
+
+    def test_quarantine_excerpts_get_the_receivers_redaction(self, imported):
+        """eSSL kept the first 4000 characters of whatever an unknown serial pushed, USERINFO passwords included."""
+        excerpt = "PIN=5\tName=Elena\tPri=0\tPasswd=2468\tCard=77\nPIN=6\tFID=0\tTMP=AAAAQUJD"
+        row = {"id": 10, "serial_number": "ZZZ0000000077", "request_count": 3, "last_body_excerpt": excerpt, "first_seen_at": "2026-09-28T10:00:00+00:00", "last_seen_at": "2026-09-29T10:00:00+00:00"}
+        assert legacy_import.import_adms_unknown_devices([row])["created"] == 1
+        stored = AdmsUnknownDevice.objects.get(serial_number="ZZZ0000000077").last_body_excerpt
+        assert "2468" not in stored and "AAAAQUJD" not in stored and "Passwd=***" in stored and "Name=Elena" in stored

@@ -217,6 +217,27 @@ class TestUsers:
         user = DeviceUser.objects.get(device=device)
         assert (user.pin, user.name, user.has_password) == ("7", "Ravi", True) and "4321" not in bytes(last_request().body).decode()
 
+    def test_a_push_changes_only_what_it_carries(self, pushed):
+        """A USER line without Card/Grp/Passwd (and never with the terminal's internal uid) leaves what an agent read."""
+        device, token = pushed
+        DeviceUserFactory(device=device, pin="7", name="Ravi", device_uid=42, card="999", group_id="3", privilege=0, has_password=True)
+        assert text(iclock(token, query=f"SN={SERIAL}&table=OPERLOG", body="USER PIN=7\tName=Ravi K\tPri=14\n")) == "OK: 1"
+        user = DeviceUser.objects.get(device=device, pin="7")
+        assert (user.name, user.privilege, user.device_uid, user.card, user.group_id, user.has_password) == ("Ravi K", 14, 42, "999", "3", True)
+
+    def test_an_out_of_range_privilege_is_not_a_poison_push(self, pushed):
+        """Pri beyond a smallint used to fail the insert: ERROR, and the terminal resent the same push forever."""
+        device, token = pushed
+        assert text(iclock(token, query=f"SN={SERIAL}&table=USERINFO", body="PIN=11\tName=Asha\tPri=99999\n")) == "OK: 1"
+        user = DeviceUser.objects.get(device=device, pin="11")
+        assert user.privilege is None and user.raw_payload["Pri"] == "99999" and last_request().parse_error == ""
+
+    def test_out_of_range_codes_are_invalid_punches_not_a_poison_push(self, pushed, sink):
+        _, token = pushed
+        body = "7\t2026-09-22 09:31:05\t99999\t15\t0\n8\t2026-09-22 09:40:44\t0\t1\t0\n"
+        assert text(iclock(token, query=f"SN={SERIAL}&table=ATTLOG", body=body)) == "OK: 2"
+        assert [punch.pin for punch in sink.punches.values()] == ["8"] and last_request().records_invalid == 1
+
 
 class TestEvidence:
     def test_biometric_bodies_are_never_stored(self, pushed):
@@ -225,6 +246,18 @@ class TestEvidence:
             assert text(iclock(token, query=f"SN={SERIAL}&table={table}", body=b"\xff\xd8" + b"photo" * 100)) == "OK"
             row = last_request()
             assert row.request_kind == table and row.body is None and row.body_text == "" and row.body_bytes == 502
+
+    @pytest.mark.parametrize("table", ["ATTPHOTO", "BIODATA"])
+    def test_biometric_bodies_are_never_stored_when_quarantined_or_refused(self, pushed, table):
+        device, token = pushed
+        template = b"PIN=7\tFID=0\tTMP=SECRETTEMPLATE" * 20
+        iclock("not-the-token", query=f"SN=ZZZ0000000042&table={table}", body=template)  # unknown serial: quarantined
+        iclock(token, query=f"SN=NCD0000000999&table={table}", body=template)  # the token with another serial: quarantined
+        Device.all_objects.filter(pk=device.pk).update(is_active=False)
+        iclock(token, query=f"SN={SERIAL}&table={table}", body=template)  # refused
+        rows = list(AdmsRequest.objects.order_by("id"))
+        assert len(rows) == 3 and all(row.request_kind == table and row.body is None and row.body_text == "" and row.body_bytes == len(template) for row in rows)
+        assert not any("SECRETTEMPLATE" in entry.last_body_excerpt for entry in AdmsUnknownDevice.objects.all())
 
     def test_the_stored_body_is_capped_at_one_mebibyte(self, pushed):
         _, token = pushed

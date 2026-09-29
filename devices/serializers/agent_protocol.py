@@ -6,6 +6,11 @@ from rest_framework import serializers
 
 from devices.models import Device
 from devices.serializers.refs import OfficeRefSerializer
+from devices.services.common import INT_RANGE
+
+# The agent's own counters land in int columns: beyond them a heartbeat is a 400, never a database error. Terminal data
+# (user tables, punches) is never refused for one odd number: the services keep what fits and count the rest invalid.
+INT_MAX = INT_RANGE[1]
 
 
 class AgentIdentitySerializer(serializers.Serializer):
@@ -71,8 +76,8 @@ class HeartbeatSerializer(serializers.Serializer):
     hostname = serializers.CharField(max_length=120, required=False, allow_blank=True, default="")
     platform = serializers.CharField(max_length=120, required=False, allow_blank=True, default="")
     local_ip = serializers.IPAddressField(required=False, allow_null=True, default=None)
-    queued_records = serializers.IntegerField(min_value=0, required=False, default=0)
-    failed_uploads = serializers.IntegerField(min_value=0, required=False, default=0)
+    queued_records = serializers.IntegerField(min_value=0, max_value=INT_MAX, required=False, default=0)
+    failed_uploads = serializers.IntegerField(min_value=0, max_value=INT_MAX, required=False, default=0)
     last_error = serializers.CharField(max_length=2000, required=False, allow_blank=True, allow_null=True, default=None)
     devices = DeviceHealthReportSerializer(many=True, required=False, default=list)
 
@@ -173,9 +178,9 @@ class TargetSerializer(serializers.Serializer):
 
 class AgentUserSerializer(serializers.Serializer):
     pin = serializers.CharField(max_length=200, allow_blank=True, help_text="The terminal's user id, always a string.")
-    device_uid = serializers.IntegerField(required=False, allow_null=True, default=None)
+    device_uid = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="The terminal's internal row id (kept only when an int column holds it).")
     name = serializers.CharField(max_length=500, required=False, allow_blank=True, allow_null=True, default="")
-    privilege = serializers.IntegerField(required=False, allow_null=True, default=None, min_value=-32768, max_value=32767)
+    privilege = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="The terminal's privilege byte (kept only when a smallint holds it).")
     card = serializers.CharField(max_length=200, required=False, allow_blank=True, allow_null=True, default="")
     group_id = serializers.CharField(max_length=200, required=False, allow_blank=True, allow_null=True, default="")
     has_password = serializers.BooleanField(required=False, default=False)
@@ -191,8 +196,8 @@ class AgentPunchSerializer(serializers.Serializer):
     device_record_uid = serializers.IntegerField(required=False, allow_null=True, default=None)
     pin = serializers.CharField(max_length=200, allow_blank=True)
     device_time = serializers.CharField(max_length=40, help_text="The terminal's wall clock, naive (YYYY-MM-DDTHH:MM:SS); an offset is dropped, never converted.")
-    status = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="Raw code, never interpreted.")
-    punch = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="Raw code, never interpreted.")
+    status = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="Raw code, never interpreted (beyond a smallint the record is counted invalid).")
+    punch = serializers.IntegerField(required=False, allow_null=True, default=None, help_text="Raw code, never interpreted (beyond a smallint the record is counted invalid).")
     raw_payload = serializers.DictField(required=False, default=dict)
 
 

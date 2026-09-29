@@ -21,6 +21,27 @@ NS_PROTOCOL = "devices:protocol"
 
 _MAC_STRIP = re.compile(r"[^0-9a-f]")
 
+# Keys whose values are a terminal user's password or biometric data (ADMS USERINFO/OPERLOG fields, pyzk's user
+# object). They are never kept: not in stored bodies, parsed rows or raw payloads.
+SECRET_KEYS = frozenset({"passwd", "password", "pwd", "tmp", "template", "content", "face", "photo"})
+SECRET_MASK = "***"
+SMALLINT_RANGE = (-(2**15), 2**15 - 1)
+INT_RANGE = (-(2**31), 2**31 - 1)
+
+
+def mask_secret_values(value):
+    """``value`` with every value under a :data:`SECRET_KEYS` key replaced by ``***`` (nested dicts and lists too)."""
+    if isinstance(value, dict):
+        return {key: (SECRET_MASK if str(key).lower() in SECRET_KEYS else mask_secret_values(item)) for key, item in value.items()}
+    if isinstance(value, list):
+        return [mask_secret_values(item) for item in value]
+    return value
+
+
+def fits(value: int | None, bounds: tuple[int, int]) -> bool:
+    """Whether ``value`` (``None`` allowed) fits a database integer column of ``bounds``."""
+    return value is None or bounds[0] <= value <= bounds[1]
+
 
 def bump_devices(*extra: str) -> None:
     bump(NS_DEVICES, *extra)

@@ -19,11 +19,13 @@ quarantine list → the ADMS evidence of the last 30 days.
   issued by ``adms/enable/`` (reported); MACs are normalised; invalid addresses/ports/timeouts are repaired (reported);
   ``serial_verified_at`` fills ``identity_checked_at``; ``last_punch_at`` (naive device time) is read in the office zone.
 * **Device users** keep their per-device links; PINs linked on more than one device are reported for HR to confirm
-  (eSSL's ``map-pin`` linked a PIN on every terminal, spec §I.8).
+  (eSSL's ``map-pin`` linked a PIN on every terminal, spec §I.8). Their raw payload loses the terminal user's
+  password (eSSL stored pyzk's whole user object).
 * **Watermarks**: the latest USERS sync log of each device (and its latest successful one) so presence states survive.
 * **ADMS evidence**: ``adms_requests`` younger than the retention window (30 days) with the receiver's own redaction
   (eSSL kept terminal-user passwords in the stored bodies); older requests are not migrated (PLAN §7.5). The
-  quarantine list keeps its counters; every eSSL entry had the one reason eSSL knew (``UNKNOWN_SERIAL``).
+  quarantine list keeps its counters (its body excerpts redacted the same way); every eSSL entry had the one reason
+  eSSL knew (``UNKNOWN_SERIAL``).
 """
 
 from __future__ import annotations
@@ -43,7 +45,7 @@ from core.models import LegacyMap, ServiceCredential
 from devices.models import AdmsRequest, AdmsUnknownDevice, Agent, Device, DeviceUser, ProtocolMapping, SyncLog
 from devices.models.adms import BODY_EXCERPT_CHARS, MAX_STORED_BODY_BYTES
 from devices.services import adms, adms_evidence
-from devices.services.common import NS_AGENTS, NS_DEVICE_USERS, NS_DEVICES, NS_PROTOCOL, normalize_ip, normalize_mac, normalize_serial
+from devices.services.common import NS_AGENTS, NS_DEVICE_USERS, NS_DEVICES, NS_PROTOCOL, mask_secret_values, normalize_ip, normalize_mac, normalize_serial
 from flarize.cache_utils import bump
 from flarize.logging import redact_path
 from hr.models import Employee, Office
@@ -298,7 +300,8 @@ def import_device_users(rows: Iterable[dict], *, user=None) -> dict:
             "group_id": _text(row.get("group_id"))[:40],
             "has_password": bool(row.get("has_password")),
             "employee": employee,
-            "raw_payload": row.get("raw_payload") if isinstance(row.get("raw_payload"), dict) else {},
+            # eSSL stored pyzk's whole user object here (``vars(user)``): the terminal user's password in clear
+            "raw_payload": mask_secret_values(row.get("raw_payload")) if isinstance(row.get("raw_payload"), dict) else {},
             "first_seen_at": _dt(row.get("first_seen_at")),
             "last_seen_at": _dt(row.get("last_seen_at")),
         }
@@ -408,7 +411,8 @@ def import_adms_unknown_devices(rows: Iterable[dict], *, user=None) -> dict:
             "request_count": max(0, int(row.get("request_count") or 0)),
             "last_source_ip": normalize_ip(row.get("last_source_ip")),
             "last_path": _text(row.get("last_path"))[:255],
-            "last_body_excerpt": adms.scrub(_text(row.get("last_body_excerpt")))[:BODY_EXCERPT_CHARS],
+            # what an unknown serial pushed (USERINFO passwords, templates): the receiver's own redaction
+            "last_body_excerpt": adms.redact_secrets(adms.scrub(_text(row.get("last_body_excerpt"))))[0][:BODY_EXCERPT_CHARS],
             "last_reason": AdmsUnknownDevice.Reason.UNKNOWN_SERIAL,
             "notes": _text(row.get("notes")),
         }

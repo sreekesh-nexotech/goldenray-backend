@@ -22,7 +22,8 @@ from __future__ import annotations
 from django.db import transaction
 
 from accounts.services.authz import can
-from core.errors import DomainError
+from core import scopes
+from core.errors import DomainError, PermissionDenied
 from devices.models import Device, DeviceUser
 from devices.services import device_users, devices, health, roster
 from hr.models import Employee
@@ -147,7 +148,13 @@ def _apply(user, current: dict) -> dict:
 
 
 def reconcile_employees(*, user, read_devices: bool = True, apply: bool = False) -> dict:
-    """The provider behind ``hr.registries.device_reconciler`` (hr checks ``confirm`` for ``apply``)."""
+    """The provider behind ``hr.registries.device_reconciler`` (hr checks ``confirm`` for ``apply``).
+
+    The reconciliation spans every terminal and every employee, so it needs the ``employees`` record scope ``all``: an
+    office- or self-scoped caller would otherwise see, link and deactivate people outside their scope (403).
+    """
+    if scopes.resolve_scope(user, "employees") != scopes.ALL:
+        raise PermissionDenied("permission_denied", "The device reconciliation covers every office and terminal: it needs the employees scope 'all'.")
     reads = request_reads(user) if read_devices else []
     current = plan()
     changes = None

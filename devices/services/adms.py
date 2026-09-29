@@ -36,7 +36,7 @@ from django.db.models import F
 from devices.models import AdmsRequest, AdmsUnknownDevice, Device
 from devices.models.adms import BODY_EXCERPT_CHARS, MAX_STORED_BODY_BYTES
 from devices.services import agent_protocol, ingest
-from devices.services.common import NS_DEVICE_USERS, bump_devices, ip_allowed, normalize_serial, now, setting
+from devices.services.common import NS_DEVICE_USERS, SECRET_KEYS, SMALLINT_RANGE, bump_devices, fits, ip_allowed, normalize_serial, now, setting
 from devices.services.devices import device_for_token
 
 logger = logging.getLogger("flarize.devices.adms")
@@ -45,7 +45,7 @@ DECODE_CANDIDATES = ("utf-8", "gb18030", "latin-1")
 SERIAL_KEYS = ("SN", "sn", "DeviceSN", "deviceSN", "serialNumber")
 TABLE_KINDS = ("ATTLOG", "OPERLOG", "USERINFO", "ATTPHOTO", "BIODATA")
 BIOMETRIC_KINDS = ("ATTPHOTO", "BIODATA")
-SECRET_KEYS = {"passwd", "password", "pwd", "tmp", "template", "content", "face", "photo"}
+BIOMETRIC_NOTE = "biometric payload: not stored and not applied (the handshake never asks for it)"
 DROPPED_HEADERS = {"authorization", "cookie", "proxy-authorization", "x-api-key"}
 OK = "OK"
 ERROR = "ERROR"
@@ -217,25 +217,36 @@ def redact_secrets(text: str) -> tuple[str, bool]:
     return pattern.sub(replace, text), changed
 
 
+def _privilege(value: str) -> int | None:
+    """The ``Pri`` byte, or ``None`` when it is not an integer a smallint holds (the raw text stays in raw_payload)."""
+    text = (value or "").strip()
+    if not text.lstrip("-").isdigit():
+        return None
+    number = int(text)
+    return number if fits(number, SMALLINT_RANGE) else None
+
+
 def user_rows(rows: list[dict], table: str) -> list[dict]:
-    """The rows that describe a terminal user (USERINFO lines, OPERLOG ``USER`` lines) as agent-style entries."""
+    """The rows that describe a terminal user (USERINFO lines, OPERLOG ``USER`` lines) as agent-style entries.
+
+    An entry carries only the fields the line states (a push is not a whole record: a USER line without ``Card`` says
+    nothing about the card, and no push knows the terminal's internal uid), so applying it never blanks what an agent
+    read of the same terminal holds.
+    """
     users = []
     for row in rows:
         prefix = row.get("_prefix", "").upper()
         if "PIN" not in row or (table != "USERINFO" and prefix != "USER"):
             continue
-        privilege = row.get("Pri")
-        users.append(
-            {
-                "pin": row.get("PIN", ""),
-                "name": row.get("Name", ""),
-                "privilege": int(privilege) if privilege and privilege.lstrip("-").isdigit() else None,
-                "card": row.get("Card", ""),
-                "group_id": row.get("Grp", ""),
-                "has_password": bool(row.get("Passwd")),
-                "raw_payload": {key: ("***" if key.lower() in SECRET_KEYS else value) for key, value in row.items()},
-            }
-        )
+        entry = {"pin": row.get("PIN", ""), "raw_payload": {key: ("***" if key.lower() in SECRET_KEYS else value) for key, value in row.items()}}
+        for source, target in (("Name", "name"), ("Card", "card"), ("Grp", "group_id")):
+            if source in row:
+                entry[target] = row[source]
+        if "Pri" in row:
+            entry["privilege"] = _privilege(row["Pri"])
+        if "Passwd" in row:
+            entry["has_password"] = bool(row["Passwd"])
+        users.append(entry)
     return users
 
 
@@ -326,16 +337,13 @@ def _interpret(device: Device, kind: str, table: str, serial: str, incoming: Inc
         users = user_rows(rows, kind)
         applied = 0
         if users:
-            created, updated, invalid, present = agent_protocol.upsert_users(device, users, at=now())
+            created, updated, invalid, present = agent_protocol.upsert_users(device, users, at=now(), partial=True)
             applied = created + updated
             outcome.records["invalid"] = invalid
             bump_devices(NS_DEVICE_USERS)
         outcome.records["parsed"] = len(rows)
         outcome.extra.update(parsed=[{key: ("***" if key.lower() in SECRET_KEYS else value) for key, value in row.items()} for row in rows[:200]], users_applied=applied)
         outcome.reply = f"OK: {len(rows)}"
-    elif kind in BIOMETRIC_KINDS:
-        outcome.store_body = False
-        outcome.extra["note"] = "biometric payload: not stored and not applied (the handshake never asks for it)"
     elif kind == "DEVICECMD":
         outcome.extra["note"] = "command result received; this server issues no commands"
 
@@ -414,11 +422,16 @@ def receive(incoming: Incoming) -> str:
             request_id = _next_id()
             kind, table = classify(incoming.method, incoming.endpoint, incoming.query)
             serial = extract_serial(incoming.query)
-            text, encoding = decode_best_effort(incoming.body) if incoming.body else ("", "")
+            biometric = kind in BIOMETRIC_KINDS
+            # a photo or template is never decoded, excerpted or stored — whoever sent it and whether or not it is admitted
+            text, encoding = decode_best_effort(incoming.body) if incoming.body and not biometric else ("", "")
             redacted = False
             if kind in ("USERINFO", "OPERLOG", "CDATA", "UNKNOWN") and text:
                 text, redacted = redact_secrets(text)
             outcome = _decide(incoming, kind, table, serial, text, request_id)
+            if biometric:
+                outcome.store_body = False
+                outcome.extra["note"] = BIOMETRIC_NOTE
             if redacted:
                 outcome.body_override = text.encode(encoding if encoding in DECODE_CANDIDATES else "utf-8", errors="replace")
                 outcome.extra["redacted"] = "terminal-user passwords and biometric templates"

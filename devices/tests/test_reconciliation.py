@@ -10,7 +10,7 @@ from devices.models import Device
 from devices.services import roster
 from devices.tests.factories import AgentFactory, DeviceFactory, DeviceUserFactory, SyncLogFactory, users_log
 from hr.models import Employee
-from hr.tests.factories import EmployeeFactory
+from hr.tests.factories import EmployeeFactory, OfficeFactory
 
 pytestmark = pytest.mark.django_db
 URL = "/api/v1/devices/"
@@ -145,6 +145,20 @@ class TestEstate:
         result = client.post(RECONCILE, {"read_devices": False, "apply": True, "confirm": True}, format="json").json()["result"]
         assert result["changes"]["linked"] == 1 and result["changes"]["created"] == 0 and result["changes"]["deactivated"] == 0
         assert sorted(item["bucket"] for item in result["changes"]["skipped"]) == ["added", "removed"]
+
+    @pytest.mark.parametrize("scope", ["office", "self"])
+    def test_the_estate_spans_every_office_so_it_needs_the_all_scope(self, auth_client, make_user, estate, scope):
+        """An office-scoped employees editor saw every office's people here and could deactivate them."""
+        a, _, people = estate
+        manager = make_user(grants={"employees": ["view", "create", "edit", "archive"], "devices": ["view", "edit"]}, scopes={"employees": scope})
+        EmployeeFactory(user=manager, office=OfficeFactory())  # their own office is not the estate's
+        client = auth_client(manager)
+        for body in ({"read_devices": False}, {"read_devices": False, "apply": True, "confirm": True}):
+            response = client.post(RECONCILE, body, format="json")
+            assert response.status_code == 403 and response.json()["code"] == "permission_denied", body
+        people["E005"].refresh_from_db()
+        assert people["E005"].is_active is True and a.device_users.get(pin="2").employee is None
+        assert not AuditLog.objects.filter(action__startswith="devices.").exists()
 
     def test_apply_needs_confirm(self, admin_client, estate):
         response = admin_client.post(RECONCILE, {"apply": True}, format="json")

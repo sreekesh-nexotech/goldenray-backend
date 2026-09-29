@@ -212,6 +212,16 @@ class TestAdms:
         again = admin_client.post(detail(device, "adms/enable/"), {}, format="json").json()
         assert again["token"] != token and again["device"]["adms_allowed_ips"] == ["59.88.139.169/32", "10.0.0.0/8"]
 
+    def test_a_terminal_without_a_serial_cannot_be_given_a_push_token(self, admin_client):
+        """The receiver admits serial AND token: a token for a device with no serial could only ever be quarantined."""
+        device = DeviceFactory(serial_number=None, expected_serial=None, ip_address="192.168.1.50")
+        response = admin_client.post(detail(device, "adms/enable/"), {}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "device_serial_required"
+        device.refresh_from_db()
+        assert device.adms_enabled is False and device.adms_token_hash is None and device.version == 1
+        label_only = DeviceFactory(serial_number=None, expected_serial="NCD8252101212", ip_address=None)
+        assert admin_client.post(detail(label_only, "adms/enable/"), {}, format="json").status_code == 200  # the pin is enough
+
     def test_invalid_allow_list(self, admin_client):
         response = admin_client.post(detail(DeviceFactory(), "adms/enable/"), {"allowed_ips": ["not-an-ip"]}, format="json")
         assert response.status_code == 400 and "allowed_ips" in response.json()["errors"]

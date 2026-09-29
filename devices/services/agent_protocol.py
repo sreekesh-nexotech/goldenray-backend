@@ -29,7 +29,20 @@ from core.errors import Conflict, NotFound
 from core.services import stamp_create
 from devices.models import Agent, Device, DeviceUser, SyncLog
 from devices.services import health, ingest, punch_sink
-from devices.services.common import NS_AGENTS, bump_devices, macs_match, normalize_ip, normalize_mac, normalize_serial, now, setting
+from devices.services.common import (
+    INT_RANGE,
+    NS_AGENTS,
+    SMALLINT_RANGE,
+    bump_devices,
+    fits,
+    macs_match,
+    mask_secret_values,
+    normalize_ip,
+    normalize_mac,
+    normalize_serial,
+    now,
+    setting,
+)
 
 ANNOUNCE_INTERVAL_SECONDS = 3600
 UPLOAD_BATCH_SIZE = 200
@@ -230,7 +243,9 @@ def announce(agent: Agent, data: dict) -> tuple[Device, bool]:
         created = device is None
         if device is not None:
             other_agent = device.agent_id is not None and device.agent_id != agent.pk
-            other_office = device.agent_id is None and device.office_id and agent.office_id and device.office_id != agent.office_id
+            # an unbound device standing in an office is adopted only by that office's agent (an agent filed nowhere is
+            # not it): no cross-office adoption
+            other_office = device.agent_id is None and device.office_id is not None and device.office_id != agent.office_id
             if other_agent or other_office:
                 refusal = Conflict("device_bound_elsewhere", _record_bound_elsewhere(agent, device, serial, address))
             elif not device.is_active:
@@ -418,31 +433,45 @@ def record_discovery(agent: Agent, data: dict) -> dict:
 USER_FIELDS = ("device_uid", "name", "privilege", "card", "group_id", "has_password", "raw_payload")
 
 
-def _user_values(entry: dict) -> dict:
-    return {
-        "device_uid": entry.get("device_uid"),
+def _user_values(entry: dict, *, partial: bool = False) -> dict:
+    """Column values of one terminal user. ``partial`` (an ADMS push): only the fields the entry states.
+
+    The raw payload never keeps a terminal user's password or template (eSSL's reader stored pyzk's whole user object).
+    A number its column cannot hold is kept only in the raw payload: one odd field never fails a whole-table read.
+    """
+    device_uid, privilege = entry.get("device_uid"), entry.get("privilege")
+    values = {
+        "device_uid": device_uid if isinstance(device_uid, int) and fits(device_uid, INT_RANGE) else None,
         "name": str(entry.get("name") or "").strip()[:150],
-        "privilege": entry.get("privilege"),
+        "privilege": privilege if isinstance(privilege, int) and fits(privilege, SMALLINT_RANGE) else None,
         "card": str(entry.get("card") or "").strip()[:40],
         "group_id": str(entry.get("group_id") or "").strip()[:40],
         "has_password": bool(entry.get("has_password")),
-        "raw_payload": entry.get("raw_payload") if isinstance(entry.get("raw_payload"), dict) else {},
+        "raw_payload": mask_secret_values(entry.get("raw_payload")) if isinstance(entry.get("raw_payload"), dict) else {},
     }
+    if partial:
+        values = {name: value for name, value in values.items() if name == "raw_payload" or name in entry}
+    return values
 
 
-def upsert_users(device: Device, users, *, at: datetime) -> tuple[int, int, int, list[str]]:
-    """Upsert terminal users (never deletes). Returns ``(created, updated, invalid, pins_present)``."""
+def upsert_users(device: Device, users, *, at: datetime, partial: bool = False) -> tuple[int, int, int, list[str]]:
+    """Upsert terminal users (never deletes). Returns ``(created, updated, invalid, pins_present)``.
+
+    ``partial``: the entries are pushes (ADMS USERINFO / OPERLOG lines) that change only the fields they state.
+    """
     existing = {row.pin: row for row in DeviceUser.objects.select_for_update(of=("self",)).filter(device=device)}
     created, changed, present, invalid = [], [], [], 0
+    seen: set[str] = set()
     for entry in users:
         pin = str(entry.get("pin") or "").strip()
         if not pin or len(pin) > 80:
             invalid += 1
             continue
-        if pin in present:
+        if pin in seen:
             continue
+        seen.add(pin)
         present.append(pin)
-        values = _user_values(entry)
+        values = _user_values(entry, partial=partial)
         row = existing.get(pin)
         if row is None:
             row = DeviceUser(device=device, pin=pin, first_seen_at=at, last_seen_at=at, **values)

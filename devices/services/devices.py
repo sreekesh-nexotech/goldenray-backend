@@ -210,8 +210,18 @@ def _token_hash(token: str) -> str:
 
 @transaction.atomic
 def enable_adms(instance: Device, *, user, allowed_ips=None, expected_version=None) -> tuple[Device, str]:
-    """Issue a new ``/iclock/<device_token>/`` token (any previous one stops working) and enable push."""
+    """Issue a new ``/iclock/<device_token>/`` token (any previous one stops working) and enable push.
+
+    The receiver admits a push only when the serial it states belongs to the token (serial AND token): a device with no
+    serial and no pin could only ever be quarantined, so it gets no token (409 ``device_serial_required``).
+    """
     device = lock(Device, instance, expected_version)
+    if not (device.serial_number or device.expected_serial):
+        raise Conflict(
+            "device_serial_required",
+            f"{device.name} has no serial: a pushing terminal is admitted by its serial and its token together. Set the serial on the label (expected serial) first.",
+            errors={"expected_serial": ["Required before push can be enabled."]},
+        )
     networks = normalize_networks(allowed_ips) if allowed_ips is not None else list(device.adms_allowed_ips or [])
     token = secrets.token_urlsafe(24)
     device.versioned_update(user, adms_enabled=True, adms_token_hash=_token_hash(token), adms_allowed_ips=networks)

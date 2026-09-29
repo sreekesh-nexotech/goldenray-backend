@@ -34,7 +34,7 @@ Staff (`/api/v1/`, module `devices`):
 | `devices/` list (`office`, `agent`, `unassigned`, `is_active`, `adms_enabled`, `identity_status`, `protocol`, `search`, `ordering`) / detail · create · `PATCH` · `DELETE` (409 `device_has_history`) | view · create · edit · manage |
 | `GET devices/mapping/`, `GET devices/<uid>/logs/` (cursor), `…/employee-reconciliation/`, `…/user-reconciliation/` | view |
 | `POST devices/<uid>/refresh-employees/` (409 `device_inactive`) | sync |
-| `POST devices/<uid>/rehome/`, `…/adms/enable/` (token shown once), `…/adms/disable/` | manage |
+| `POST devices/<uid>/rehome/`, `…/adms/enable/` (token shown once; 409 `device_serial_required`), `…/adms/disable/` | manage |
 | `devices/device-users/` list (`device`, `linked`, `device_state`, `software_state`, `active_only`, `search`) / detail, `GET …/unmapped/?device=` | view |
 | `POST devices/device-users/<uid>/link/`, `…/resolve/`, `devices/device-users/auto-link/?device=`, `devices/device-users/map-pin/` | edit |
 | `devices/agents/` list (`office` = filed there or serving a device there) / detail, `GET …/logs/` | view |
@@ -91,7 +91,7 @@ recorded; 404 while `ADMS_RECEIVER` is off.
    `unknown` from rows present on their terminal's last read, `removed` / `unconfirmed` / `unlinked` from each active
    employee's presence. `apply` links, creates (needs `employees.create`) and deactivates (needs `employees.archive`,
    hr's own guards) exactly what the plan names; what the caller may not do is listed in `skipped`. `read_devices`
-   asks each agent to re-read (it cannot dial).
+   asks each agent to re-read (it cannot dial). It spans every office, so it needs the `employees` scope `all` (403).
 10. **Throttles.** `iclock` is applied per device token inside the view (the receiver is not a DRF view); beyond it the
     terminal gets `ERROR` and nothing is recorded.
 
@@ -170,6 +170,26 @@ violations}` and writes one `devices.legacy_imported` audit row.
 * `hr/tests/test_employees_api.py`: the two "until the devices package provides them" tests set the providers to
   `None` for their duration (monkeypatch restores devices' providers); the dependency-count test expects the
   `device_mappings` counter devices now contributes.
+
+## Review findings (adversarial review of the package)
+
+Each finding was reproduced by a failing test first; the tests stay in the suite.
+
+| # | Finding | Fix | Tests |
+|---|---|---|---|
+| R1 | ATTPHOTO / BIODATA bodies were stored (bytes, text excerpt, quarantine excerpt) whenever the push was quarantined (unknown serial, token mismatch) or refused (inactive, ADMS off, address not allowed): the "never stored" rule only ran for admitted pushes | `adms.receive` decides it before identity: a biometric body is never decoded, excerpted or stored, whoever sent it | `test_iclock.py::TestEvidence::test_biometric_bodies_are_never_stored_when_quarantined_or_refused` |
+| R2 | A USERINFO/OPERLOG push rewrote every column of the terminal user: a `USER` line without `Card`/`Grp`/`Passwd` blanked them, and `device_uid` (never in a push) was set to null on rows an agent read | pushes are partial: `user_rows` states only the fields the line carries, `upsert_users(partial=True)` changes only those | `test_iclock.py::TestUsers::test_a_push_changes_only_what_it_carries` |
+| R3 | Poison inputs: `Pri=99999` (smallint) failed the insert, the push was answered `ERROR` and the terminal resent it forever; an ATTLOG code beyond a smallint would do the same once the attendance sink stores it; an agent `device_uid` beyond an int answered 500 (and the agent held that terminal's queue); heartbeat counters beyond an int answered 500 | out-of-range privilege / device uid are kept only in the raw payload (the read still is the watermark); punches whose status/punch code or record uid do not fit `attendance_raw_punch` are counted invalid like an unreadable time; heartbeat counters are bounded (400) | `test_iclock.py::TestUsers::test_an_out_of_range_privilege_is_not_a_poison_push`, `…::test_out_of_range_codes_are_invalid_punches_not_a_poison_push`, `test_agent_protocol.py::TestUsers::test_numbers_beyond_their_columns_never_fail_the_read`, `TestAttendance::test_codes_beyond_the_punch_columns_are_invalid_records`, `TestHeartbeat::test_counters_beyond_their_columns_are_validation_errors` |
+| R4 | Terminal-user passwords were kept: eSSL's readers stored pyzk's whole user object as `device_users.raw_payload` (`password` in clear), the import copied it and `devices/device-users/` returned it to every `devices.view` holder; agent uploads were not masked either | `mask_secret_values` (the receiver's secret keys) on every raw payload of a terminal user: agent uploads, ADMS pushes, the eSSL import | `test_legacy_import.py::TestDeviceUsers::test_terminal_user_passwords_are_not_imported`, `test_agent_protocol.py::TestUsers::test_terminal_user_secrets_are_never_kept` |
+| R5 | The eSSL quarantine list's `last_body_excerpt` (what an unknown serial pushed: USERINFO passwords, templates) was imported unredacted | the receiver's `redact_secrets` on import | `test_legacy_import.py::TestAdmsEvidence::test_quarantine_excerpts_get_the_receivers_redaction` |
+| R6 | Scope leak: `POST hr/employees/reconcile-devices/` (provider `devices.services.reconcile`) listed every office's employees to an office- or self-scoped `employees.edit` caller, and `apply` linked and deactivated people outside their scope | the estate reconciliation needs the `employees` scope `all` (403 `permission_denied` otherwise, before anything is read or requested) | `test_reconciliation.py::TestEstate::test_the_estate_spans_every_office_so_it_needs_the_all_scope` |
+| R7 | `adms/enable/` issued a push token to a device with neither serial nor pin: the receiver admits serial AND token, so every push of it could only be quarantined | 409 `device_serial_required` | `test_devices_api.py::TestAdms::test_a_terminal_without_a_serial_cannot_be_given_a_push_token` |
+| R8 | essl-agent: after a restart with a backlog while the terminal was down, the agent announced the identity stored by an earlier run; the platform took that as contact (`last_seen_at` = now, VERIFIED) and measured the clock offset from a stale terminal time — "reachable only if it answered as itself" did not hold for announce | a terminal is announced only after it answered as itself in this process; the backlog (read earlier) is still delivered | `essl-agent/tests/test_runner.py::TestFewerRequests::test_nothing_is_announced_for_a_terminal_this_process_has_not_reached` |
+
+| R9 | Cross-office adoption: an agent filed under no office adopted (bound) any unbound device standing in an office on announce — the office check only ran when the agent had an office | an unbound device standing in an office is adopted only by that office's agent (409 `device_bound_elsewhere` otherwise); a device with no office is still adopted | `test_agent_protocol.py::TestAnnounce::test_an_agent_filed_nowhere_does_not_adopt_an_offices_device` |
+
+Also: `upsert_users` tracked the PINs already seen in a list (quadratic for a 20 000-user table held under row locks);
+it uses a set now.
 
 ## Open issues
 

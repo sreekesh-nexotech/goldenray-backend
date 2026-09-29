@@ -91,7 +91,7 @@ class DeviceActionsMixin:
         request=AdmsEnableSerializer,
         responses={200: AdmsTokenSerializer, **WRITE_ERRORS, 503: ErrorSerializer},
         tags=TAGS,
-        description="Issue the per-device push token for /iclock/<token>/ (shown once) and set the source allow-list.",
+        description="Issue the per-device push token for /iclock/<token>/ (shown once) and set the source allow-list. 409 `device_serial_required` for a device without a serial.",
     )
     @action(detail=True, methods=["post"], url_path="adms/enable")
     def adms_enable(self, request, *args, **kwargs):

@@ -86,6 +86,12 @@ class TestHeartbeat:
         assert agent.agent_version == "2.0.0" and agent.queued_records == 12 and str(agent.local_ip) == "192.168.1.20" and agent.last_device_contact_at is not None
         assert health.agent_status(agent) == health.ONLINE and seen.version == 1  # telemetry never bumps the version
 
+    def test_counters_beyond_their_columns_are_validation_errors(self, agent_client, agent):
+        response = agent_client.post(f"{API}heartbeat/", {"queued_records": 2**40, "failed_uploads": 2**31}, format="json")
+        assert response.status_code == 400 and {"queued_records", "failed_uploads"} <= set(response.json()["errors"])
+        agent.refresh_from_db()
+        assert agent.last_heartbeat_at is None
+
     def test_a_dead_agent_ages_its_devices(self, agent):
         device = DeviceFactory(agent=agent, last_seen_at=timezone.now() - timedelta(minutes=20))
         assert health.connection_state(device) == health.OFFLINE  # eSSL kept is_online=True forever
@@ -124,6 +130,19 @@ class TestAnnounce:
         assert response.status_code == 409 and response.json()["code"] == "device_bound_elsewhere"
         device.refresh_from_db()
         assert device.agent_id is None
+
+    def test_an_agent_filed_nowhere_does_not_adopt_an_offices_device(self):
+        """No cross-office adoption: an agent with no office is not the office's agent (re-homing is a staff action)."""
+        unfiled = AgentFactory(office=None)
+        device = DeviceFactory(serial_number=MARS["serial_number"], expected_serial=MARS["serial_number"], agent=None, office=OfficeFactory())
+        response = agent_client_for(unfiled).post(f"{API}devices/announce/", MARS, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "device_bound_elsewhere"
+        device.refresh_from_db()
+        assert device.agent_id is None
+        loose = DeviceFactory(serial_number="NCD0000000777", expected_serial="NCD0000000777", agent=None, office=None)
+        assert agent_client_for(unfiled).post(f"{API}devices/announce/", {**MARS, "serial_number": "NCD0000000777"}, format="json").status_code == 200
+        loose.refresh_from_db()
+        assert loose.agent_id == unfiled.pk and loose.office_id is None
 
     def test_a_serial_against_the_pin_is_a_recorded_mismatch(self, agent_client, agent):
         device = DeviceFactory(serial_number=None, expected_serial="NCD0000000001", ip_address="192.168.1.210", agent=agent)
@@ -205,6 +224,24 @@ class TestUsers:
         device.refresh_from_db()
         assert device.user_count == 2
 
+    def test_terminal_user_secrets_are_never_kept(self, agent_client, agent):
+        """An old agent build (and eSSL's own reader) sent pyzk's whole user object, the user's password included."""
+        device = DeviceFactory(agent=agent)
+        users = [{"pin": "2", "name": "Binu", "has_password": True, "raw_payload": {"uid": 2, "user_id": "2", "password": "1234", "card": 0}}]
+        assert agent_client.post(f"{API}sync/users/", {"device": str(device.uid), "users": users}, format="json").status_code == 200
+        row = DeviceUser.objects.get(device=device, pin="2")
+        assert row.raw_payload == {"uid": 2, "user_id": "2", "password": "***", "card": 0} and row.has_password is True
+
+    def test_numbers_beyond_their_columns_never_fail_the_read(self, agent_client, agent):
+        """The terminal's uid is an int column: 2**40 used to answer 500, and the agent retried (and held) that terminal forever."""
+        device = DeviceFactory(agent=agent)
+        users = [{"pin": "1", "device_uid": 2**40, "privilege": 2**20, "raw_payload": {"uid": 2**40}}, {"pin": "2", "device_uid": 7, "privilege": 14}]
+        response = agent_client.post(f"{API}sync/users/", {"device": str(device.uid), "users": users}, format="json")
+        assert response.status_code == 200 and response.json()["created"] == 2
+        rows = {row.pin: row for row in DeviceUser.objects.filter(device=device)}
+        assert (rows["1"].device_uid, rows["1"].privilege, rows["1"].raw_payload) == (None, None, {"uid": 2**40}) and (rows["2"].device_uid, rows["2"].privilege) == (7, 14)
+        assert SyncLog.objects.get(device=device, sync_type="USERS").status == "SUCCESS"  # still the presence watermark
+
     def test_only_this_agents_devices(self, agent_client):
         other = DeviceFactory(agent=AgentFactory())
         response = agent_client.post(f"{API}sync/users/", {"device": str(other.uid), "users": []}, format="json")
@@ -240,6 +277,16 @@ class TestAttendance:
         response = agent_client.post(f"{API}sync/attendance/", {"device": str(device.uid), "records": [punch("1", "2026-09-21T09:00:00")] * 201}, format="json")
         assert response.status_code == 400 and "records" in response.json()["errors"]
         assert agent_client.post(f"{API}sync/attendance/", {"device": str(device.uid), "records": []}, format="json").status_code == 400
+
+    @pytest.mark.parametrize("field, value", [("status", 2**15), ("punch", -(2**15) - 1), ("device_record_uid", 2**31)])
+    def test_codes_beyond_the_punch_columns_are_invalid_records(self, agent_client, agent, sink, field, value):
+        """attendance_raw_punch holds smallint codes and an int record uid (PLAN §2.9): the sink never sees more (its insert
+        would fail the batch on every resend); the record is counted invalid like an unreadable time, the rest is stored."""
+        device = DeviceFactory(agent=agent)
+        records = [{**punch("1", "2026-09-21T09:28:11", 1), field: value}, punch("2", "2026-09-21T09:30:00", 2)]
+        response = agent_client.post(f"{API}sync/attendance/", {"device": str(device.uid), "records": records}, format="json")
+        assert response.status_code == 200 and (response.json()["new"], response.json()["invalid"]) == (1, 1)
+        assert [stored.pin for stored in sink.punches.values()] == ["2"]
 
     def test_idempotency_key_replays_the_first_answer(self, agent_client, agent, sink):
         device = DeviceFactory(agent=agent)
