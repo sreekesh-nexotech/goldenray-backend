@@ -465,6 +465,8 @@ SPECTACULAR_SETTINGS = {
         # quotations also has a "roof_type" choice set
         "SiteInspectionRoofTypeEnum": "site_inspections.models.choices.RoofType",
         "QuotationRoofTypeEnum": "quotations.models.choices.RoofType",
+        "ProjectStatusEnum": "projects.models.project.ProjectStatus",
+        "ProjectSystemTypeEnum": "projects.models.project.SystemType",
     },
 }
 
@@ -549,6 +551,8 @@ FEATURE_FLAG_DEFAULTS = {
 # Inventory (behind INVENTORY_STOCK): code of the location that receives committed procurement batches as PURCHASE
 # movements (outbox procurement.batch_committed). Blank = off (the default).
 INVENTORY_RECEIVING_LOCATION = config("INVENTORY_RECEIVING_LOCATION", default="")
+# Projects: create a PLANNED project when a site inspection is released (outbox site_inspections.released, D-8). Off.
+PROJECTS_AUTO_CREATE_ON_RELEASE = config("PROJECTS_AUTO_CREATE_ON_RELEASE", default=False, cast=bool)
 
 # --------------------------------------------------------------------------------------------------------------------
 # Idempotency-Key replay store
