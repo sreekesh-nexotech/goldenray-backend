@@ -300,6 +300,7 @@ def test_live_nginx_access_log_redacts_capability_tokens(tmp_path):
         ("/api/v1/media/download/SIGNED-MEDIA-TOKEN/", "https", "/api/v1/media/download/[redacted]/"),
         ("/api/v1/documents/download/SIGNED-DOC-TOKEN/", "https", "/api/v1/documents/download/[redacted]/"),
         ("/api/customer/v1/inspection-approvals/CUSTOMER-LINK-TOKEN/send-otp/", "https", "/api/customer/v1/inspection-approvals/[redacted]/send-otp/"),
+        ("/api/public/v1/content/preview/BLOG-PREVIEW-TOKEN/", "https", "/api/public/v1/content/preview/[redacted]/"),
         ("/iclock/DEVICE-SECRET-TOKEN/cdata?SN=ABC", "plain", "/iclock/[redacted]/cdata?SN=ABC"),
         ("/api/v1/auth/me/?x=1", "https", "/api/v1/auth/me/?x=1"),
     ]

@@ -118,6 +118,7 @@ CAPABILITY_PATHS = [
     ("/api/v1/documents/download/SIGNED-DOC-TOKEN/", "/api/v1/documents/download/[redacted]/"),
     ("/iclock/DEVICE-SECRET-TOKEN/cdata", "/iclock/[redacted]/cdata"),
     ("/api/customer/v1/inspection-approvals/CUSTOMER-LINK-TOKEN/send-otp/", "/api/customer/v1/inspection-approvals/[redacted]/send-otp/"),
+    ("/api/public/v1/content/preview/BLOG-PREVIEW-TOKEN/", "/api/public/v1/content/preview/[redacted]/"),
 ]
 
 

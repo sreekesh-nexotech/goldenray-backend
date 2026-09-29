@@ -1,0 +1,147 @@
+{
+ "goldenray_metadata": [
+  {
+   "id": 1,
+   "page": "home",
+   "title": "Golden Ray - Solar Solutions",
+   "description": "Empowering sustainable energy with innovative solar solutions for residential, commercial, and industrial needs.",
+   "keywords": [
+    "solar energy",
+    "renewable energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/heroImg.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 2,
+   "page": "about",
+   "title": "About Us | Golden Ray",
+   "description": "Learn about Golden Ray's mission, vision, and commitment to sustainable solar energy solutions.",
+   "keywords": [
+    "solar energy",
+    "about",
+    "Golden Ray"
+   ],
+   "imageUrl": "/aboutHeroImg.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 3,
+   "page": "advanced-calculator",
+   "title": "Solar Calculator | Golden Ray",
+   "description": "Calculate your solar energy needs with our advanced solar calculator tool.",
+   "keywords": [
+    "solar calculator",
+    "solar energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/metrics-1.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 4,
+   "page": "faq",
+   "title": "FAQ | Golden Ray",
+   "description": "Find answers to frequently asked questions about solar energy and our services.",
+   "keywords": [
+    "solar faq",
+    "solar energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/heroImg.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 5,
+   "page": "projects",
+   "title": "Projects | Golden Ray",
+   "description": "Explore our portfolio of successful solar energy projects.",
+   "keywords": [
+    "solar projects",
+    "renewable energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/p-1.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 6,
+   "page": "projects/123",
+   "title": "Solar Farm Project | Golden Ray",
+   "description": "A large-scale solar farm for sustainable energy production.",
+   "keywords": [
+    "solar farm",
+    "renewable energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/p-1.png",
+   "ogtype": "article"
+  },
+  {
+   "id": 7,
+   "page": "projects/456",
+   "title": "Residential Solar Installation | Golden Ray",
+   "description": "A residential solar installation for energy efficiency.",
+   "keywords": [
+    "residential solar",
+    "solar energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/Residential-1.png",
+   "ogtype": "article"
+  },
+  {
+   "id": 8,
+   "page": "resources",
+   "title": "Resources | Golden Ray",
+   "description": "Discover our latest blogs and resources on solar energy solutions.",
+   "keywords": [
+    "solar blogs",
+    "solar resources",
+    "Golden Ray"
+   ],
+   "imageUrl": "/resources-1.png",
+   "ogtype": "website"
+  },
+  {
+   "id": 9,
+   "page": "resources/789",
+   "title": "Guide to Solar Energy | Golden Ray",
+   "description": "A comprehensive guide to understanding solar energy benefits.",
+   "keywords": [
+    "solar guide",
+    "solar energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/resources-1.png",
+   "ogtype": "article"
+  },
+  {
+   "id": 10,
+   "page": "resources/012",
+   "title": "Solar Panel Maintenance Tips | Golden Ray",
+   "description": "Tips for maintaining your solar panels for optimal performance.",
+   "keywords": [
+    "solar maintenance",
+    "solar panels",
+    "Golden Ray"
+   ],
+   "imageUrl": "/resources-2.png",
+   "ogtype": "article"
+  },
+  {
+   "id": 11,
+   "page": "solutions",
+   "title": "Solutions | Golden Ray",
+   "description": "Discover our innovative solar energy solutions for residential, commercial, and industrial needs.",
+   "keywords": [
+    "solar solutions",
+    "renewable energy",
+    "Golden Ray"
+   ],
+   "imageUrl": "/Commercial-1.png",
+   "ogtype": "website"
+  }
+ ]
+}

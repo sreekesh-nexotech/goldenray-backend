@@ -362,6 +362,8 @@ SPECTACULAR_SETTINGS = {
         "CatalogComponentStatusEnum": "catalog.models.component.ComponentStatus",
         "CatalogProfileStatusEnum": "catalog.models.profile.ProfileStatus",
         "CatalogUnitEnum": "catalog.models.category.Unit",
+        "BlogEntryStatusEnum": "blog.models.entry.Entry.Status",
+        "BlogContentBlockKindEnum": "blog.models.entry.ContentBlock.Kind",
     },
 }
 
@@ -401,6 +403,8 @@ CELERY_BEAT_SCHEDULE = {
     "audit.ensure_partitions": {"task": "audit.tasks.ensure_partitions", "schedule": crontab(day_of_month=1, hour=2, minute=7)},
     "documents.sweep_render_jobs": {"task": "documents.tasks.sweep_render_jobs", "schedule": crontab(minute="*/5")},
     "core.send_ops_report": {"task": "core.tasks.send_ops_report", "schedule": crontab(day_of_week="mon", hour=8, minute=5)},
+    # Scheduled blog publications (blog.services.workflow.publish_due_entries).
+    "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())

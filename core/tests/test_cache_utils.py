@@ -153,3 +153,58 @@ class TestHttpMaxAge:
         with mock.patch("flarize.cache_utils.cache.set") as cache_set:
             self._serve(300)
         assert cache_set.call_args.args[2] == 300
+
+
+@pytest.mark.django_db
+class TestKeyOrder:
+    """content-blog WP: a cached response keeps the view's key order (byte parity of the Strapi delivery contract)."""
+
+    @staticmethod
+    def _serve():
+        from rest_framework.response import Response
+        from rest_framework.test import APIRequestFactory
+
+        from flarize.cache_utils import serve_cached
+
+        request = APIRequestFactory().get("/api/public/v1/order/")
+        request.query_params = request.GET
+        return serve_cached(object(), request, ["tests:order"], 60, lambda: Response({"zeta": 1, "alpha": {"b": 2, "a": 1}}))
+
+    def test_miss_and_hit_keep_insertion_order_and_the_etag_is_canonical(self):
+        import hashlib
+
+        miss, hit = self._serve(), self._serve()
+        assert miss["X-Cache"] == "MISS" and hit["X-Cache"] == "HIT"
+        assert list(miss.data) == ["zeta", "alpha"] and list(hit.data["alpha"]) == ["b", "a"]
+        canonical = '{"alpha":{"a":1,"b":2},"zeta":1}'
+        assert miss["ETag"] == hit["ETag"] == '"' + hashlib.sha256(canonical.encode()).hexdigest()[:40] + '"'
+
+
+@pytest.mark.django_db
+class TestOrderedQueryKey:
+    """content-blog review: a view whose result depends on parameter order opts into an order-preserving key."""
+
+    @staticmethod
+    def _serve(query: str, *, ordered: bool):
+        from rest_framework.response import Response
+        from rest_framework.test import APIRequestFactory
+
+        from flarize.cache_utils import serve_cached
+
+        request = APIRequestFactory().get(f"/api/public/v1/ordered/?{query}")
+        request.query_params = request.GET
+        body = {"keys": list(request.query_params.keys()), "last": request.query_params.get("v")}
+        return serve_cached(object(), request, ["tests:ordered"], 60, lambda: Response(body), ordered_query=ordered)
+
+    def test_default_key_normalises_parameter_and_value_order(self):
+        assert self._serve("a=1&b=2", ordered=False)["X-Cache"] == "MISS"
+        assert self._serve("b=2&a=1", ordered=False)["X-Cache"] == "HIT"
+
+    def test_ordered_key_never_shares_an_entry_between_differently_ordered_queries(self):
+        first = self._serve("sort[1]=x&sort[0]=y&v=1&v=2", ordered=True)
+        assert first["X-Cache"] == "MISS" and first.data == {"keys": ["sort[1]", "sort[0]", "v"], "last": "2"}
+        reordered = self._serve("sort[0]=y&sort[1]=x&v=1&v=2", ordered=True)
+        assert reordered["X-Cache"] == "MISS" and reordered.data["keys"] == ["sort[0]", "sort[1]", "v"]
+        values = self._serve("sort[1]=x&sort[0]=y&v=2&v=1", ordered=True)
+        assert values["X-Cache"] == "MISS" and values.data["last"] == "1"
+        assert self._serve("sort[1]=x&sort[0]=y&v=1&v=2", ordered=True)["X-Cache"] == "HIT"

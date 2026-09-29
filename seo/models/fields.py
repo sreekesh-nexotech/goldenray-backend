@@ -42,6 +42,72 @@ DESCRIPTION_MIN = 70
 DESCRIPTION_MAX = 160
 
 
+def seo_issues_for(title: str, description: str, noindex: bool) -> list[dict]:
+    """Plain-language problems for an effective SEO title/description, worst first.
+
+    Returns dicts of ``{level, field, message}``. ``level`` is "error" for something that will actually misbehave (a
+    missing title has no fallback, an indexed page with no description gets one invented for it) and "warning" for
+    length advice. The Studio renders these directly, so the messages are written for a content manager rather than a
+    developer. ``title`` is the effective title (the SEO title, else the record's own). The SEO overview evaluates the
+    same rules in SQL (``seo.services.overview.seo_status_expression``) so it can filter and paginate in the database.
+    """
+    issues: list[dict] = []
+    title = (title or "").strip()
+    desc = (description or "").strip()
+
+    if not title:
+        issues.append({"level": "error", "field": "seo_title", "message": "No SEO title, and nothing to fall back on."})
+    elif len(title) > TITLE_MAX:
+        issues.append(
+            {
+                "level": "warning",
+                "field": "seo_title",
+                "message": f"Title is {len(title)} characters — search results usually cut off near {TITLE_MAX}.",
+            }
+        )
+
+    if not desc:
+        issues.append(
+            {
+                "level": "error" if not noindex else "warning",
+                "field": "meta_description",
+                "message": "No meta description — search engines will invent one from the page copy.",
+            }
+        )
+    elif len(desc) > DESCRIPTION_MAX:
+        issues.append(
+            {
+                "level": "warning",
+                "field": "meta_description",
+                "message": f"Description is {len(desc)} characters — usually cut off near {DESCRIPTION_MAX}.",
+            }
+        )
+    elif len(desc) < DESCRIPTION_MIN:
+        issues.append(
+            {
+                "level": "warning",
+                "field": "meta_description",
+                "message": f"Description is only {len(desc)} characters — under {DESCRIPTION_MIN} tends to read as thin.",
+            }
+        )
+
+    return issues
+
+
+def status_of(issues: list[dict]) -> str:
+    levels = {issue["level"] for issue in issues}
+    if "error" in levels:
+        return "error"
+    if "warning" in levels:
+        return "warning"
+    return "ok"
+
+
+def seo_status_for(title: str, description: str, noindex: bool) -> str:
+    """``ok`` | ``warning`` | ``error`` for an effective title/description."""
+    return status_of(seo_issues_for(title, description, noindex))
+
+
 class SeoFields(models.Model):
     """Abstract SEO block mixed into every publicly addressable record."""
 
@@ -71,64 +137,12 @@ class SeoFields(models.Model):
 
     # ── Validity indicator ───────────────────────────────────────────────────
     def seo_issues(self) -> list[dict]:
-        """Plain-language problems with this record's SEO, worst first.
-
-        Returns dicts of ``{level, field, message}``. ``level`` is "error" for
-        something that will actually misbehave (a missing title has no fallback,
-        an indexed page with no description gets one invented for it) and
-        "warning" for length advice. The Studio renders these directly, so the
-        messages are written for a content manager rather than a developer.
-        """
-        issues: list[dict] = []
-        title = (self.seo_title or self.seo_fallback_title() or "").strip()
-        desc = (self.meta_description or "").strip()
-
-        if not title:
-            issues.append({"level": "error", "field": "seo_title", "message": "No SEO title, and nothing to fall back on."})
-        elif len(title) > TITLE_MAX:
-            issues.append(
-                {
-                    "level": "warning",
-                    "field": "seo_title",
-                    "message": f"Title is {len(title)} characters — search results usually cut off near {TITLE_MAX}.",
-                }
-            )
-
-        if not desc:
-            issues.append(
-                {
-                    "level": "error" if not self.noindex else "warning",
-                    "field": "meta_description",
-                    "message": "No meta description — search engines will invent one from the page copy.",
-                }
-            )
-        elif len(desc) > DESCRIPTION_MAX:
-            issues.append(
-                {
-                    "level": "warning",
-                    "field": "meta_description",
-                    "message": f"Description is {len(desc)} characters — usually cut off near {DESCRIPTION_MAX}.",
-                }
-            )
-        elif len(desc) < DESCRIPTION_MIN:
-            issues.append(
-                {
-                    "level": "warning",
-                    "field": "meta_description",
-                    "message": f"Description is only {len(desc)} characters — under {DESCRIPTION_MIN} tends to read as thin.",
-                }
-            )
-
-        return issues
+        """Plain-language problems with this record's SEO, worst first (see :func:`seo_issues_for`)."""
+        return seo_issues_for(self.seo_title or self.seo_fallback_title() or "", self.meta_description or "", self.noindex)
 
     def seo_status(self) -> str:
         """``ok`` | ``warning`` | ``error`` — the one-glance indicator."""
-        levels = {i["level"] for i in self.seo_issues()}
-        if "error" in levels:
-            return "error"
-        if "warning" in levels:
-            return "warning"
-        return "ok"
+        return status_of(self.seo_issues())
 
     # ── Hooks for the concrete model ─────────────────────────────────────────
     def seo_fallback_title(self) -> str:
