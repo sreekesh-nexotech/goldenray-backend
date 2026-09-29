@@ -158,6 +158,22 @@ schema with its error envelopes; error codes: `validation_error`, `range_too_lon
   attendance and devices packages install (an order-dependent failure for any test running after them); the summary
   test states hr's own part with no package sections.
 
+## Review fixes
+
+Each was reproduced by a failing test first (`attendance/tests/test_review_fixes.py`); the tests stay in the suite.
+
+| # | Defect | Fix |
+|---|---|---|
+| 1 | `manage.py migrate` (release step 2) aborted on a fresh database: the index `attendance_recompute_office_idx` is 31 characters (models.E034, a database-dependent check that `manage.py check` does not run) | renamed `attendance_recomp_office_idx` in the model and `0001_initial` (not yet released); a test runs the database checks of the app |
+| 2 | N+1 on `attendance/days/` (the first terminal's office), `attendance/corrections/` and `attendance/raw/` + `dashboard/recent-punches/` (the employee's office) | `select_related` of `first_device__office`, `day__employee__office`, `employee__office`; query counts are pinned flat as the page grows |
+| 3 | An employee code with a quote or a line break broke the CSV/XLSX `Content-Disposition` header (a line break was a 500) | attachment names keep `[A-Za-z0-9._-]` only |
+| 4 | The eSSL history recompute kept only the latest `ATTENDANCE_MAX_RECOMPUTE_DAYS` (400) days: older v3 days were never stored and all showed as `NOT_STORED` in the sign-off diff | `status_diff_report` recomputes the covered range in windows of that size |
+| 5 | The same recompute skipped deactivated employees (eSSL has no `left_on`): their whole v3 history was dropped | each deactivated person is recomputed over the dates eSSL stored for them (`recompute(include_inactive=True)`, import only) |
+| 6 | `attendance/day/` returned one row per employee in scope without a bound | at most `MAX_DAY_EMPLOYEES` (1,000), else 400 `too_many_employees` (never truncated) |
+| 7 | A correction of minutes beyond `int` (e.g. 10¹²) was a 500 (`integer out of range`); a well-formed but impossible time (`2026-13-14T09:00`) was a 500 | minutes are at most 2 × 24 × 60; impossible times are 400 `validation_error` |
+| 8 | Dates at the ends of the calendar (`0001-01-01`, `9999-12-31`) in `day/`, `dashboard/summary/`, the timeline and `process/`/`recalculate/` were 500s (`OverflowError` in the ±1–3 day windows) | every requested date is 2000-01-01 … 2100-12-31 (`InputDateField`, the years the month queries already accept) |
+| 9 | `process-all/` queued a recompute that runs as the system: nothing recorded who asked | audit row `attendance.process_all_requested` with the actor and the range |
+
 ## Open issues
 
 * ADMS stays behind `ADMS_RECEIVER` (devices D-10); the ATTLOG column mapping is still UNPROVEN.

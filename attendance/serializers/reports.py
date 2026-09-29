@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
-from attendance.serializers.common import STATUS_CHOICES, MonthQuerySerializer
+from attendance.serializers.common import STATUS_CHOICES, InputDateField, MonthQuerySerializer
 from documents.serializers.jobs import RenderJobSerializer
 
 FORMATS = [("json", "json"), ("csv", "csv"), ("xlsx", "xlsx"), ("pdf", "pdf")]
@@ -17,13 +17,13 @@ class ReportBaseQuerySerializer(serializers.Serializer):
 
 
 class DailyQuerySerializer(ReportBaseQuerySerializer):
-    day = serializers.DateField(required=False, help_text="Default: today in the office's zone.")
+    day = InputDateField(required=False, help_text="Default: today in the office's zone.")
     employee = serializers.UUIDField(required=False)
     status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
 
 
 class WeeklyQuerySerializer(ReportBaseQuerySerializer):
-    week_start = serializers.DateField()
+    week_start = InputDateField()
 
 
 class MonthlyQuerySerializer(ReportBaseQuerySerializer, MonthQuerySerializer):
@@ -31,8 +31,8 @@ class MonthlyQuerySerializer(ReportBaseQuerySerializer, MonthQuerySerializer):
 
 
 class RangeReportQuerySerializer(ReportBaseQuerySerializer):
-    date_from = serializers.DateField()
-    date_to = serializers.DateField()
+    date_from = InputDateField()
+    date_to = InputDateField()
     employee = serializers.UUIDField(required=False)
 
 

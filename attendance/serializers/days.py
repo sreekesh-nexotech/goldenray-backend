@@ -12,6 +12,7 @@ from attendance.serializers.common import (
     STATUS_CODE_CHOICES,
     AttendanceDeviceRefSerializer,
     EmployeeRefSerializer,
+    InputDateField,
     OfficeRefSerializer,
     OriginSerializer,
     ShiftRefSerializer,
@@ -98,12 +99,12 @@ class RawQuerySerializer(serializers.Serializer):
     device = serializers.UUIDField(required=False, help_text="Device uid.")
     pin = serializers.CharField(required=False, max_length=80)
     employee = serializers.UUIDField(required=False, help_text="Employee uid: the punches of their per-device PIN links (A1).")
-    date_from = serializers.DateField(required=False, help_text="Terminal-local date.")
-    date_to = serializers.DateField(required=False)
+    date_from = InputDateField(required=False, help_text="Terminal-local date.")
+    date_to = InputDateField(required=False)
 
 
 class TimelineQuerySerializer(serializers.Serializer):
-    work_date = serializers.DateField()
+    work_date = InputDateField()
 
 
 class AttendanceTimelinePunchSerializer(serializers.Serializer):

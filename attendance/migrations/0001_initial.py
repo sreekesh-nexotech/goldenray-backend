@@ -301,7 +301,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="recomputerequest",
-            index=models.Index(fields=["office"], name="attendance_recompute_office_idx"),
+            index=models.Index(fields=["office"], name="attendance_recomp_office_idx"),
         ),
         migrations.AddConstraint(
             model_name="recomputerequest",

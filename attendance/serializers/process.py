@@ -5,14 +5,14 @@ from __future__ import annotations
 from rest_framework import serializers
 
 from attendance.models import AttendanceCorrection
-from attendance.serializers.common import CORRECTION_FIELD_CHOICES, TRANSPORT_CHOICES, AttendanceDeviceRefSerializer, EmployeeRefSerializer
+from attendance.serializers.common import CORRECTION_FIELD_CHOICES, TRANSPORT_CHOICES, AttendanceDeviceRefSerializer, EmployeeRefSerializer, InputDateField
 from core.serializers import ExpectedVersionMixin
 from hr.serializers.refs import HrActorRefSerializer
 
 
 class ProcessRequestSerializer(serializers.Serializer):
-    date_from = serializers.DateField()
-    date_to = serializers.DateField()
+    date_from = InputDateField()
+    date_to = InputDateField()
     employee_uids = serializers.ListField(child=serializers.UUIDField(), required=False, allow_empty=True, max_length=1000, help_text="Default: every employee.")
 
     def validate(self, attrs):
@@ -22,8 +22,8 @@ class ProcessRequestSerializer(serializers.Serializer):
 
 
 class RecalculateRequestSerializer(serializers.Serializer):
-    date_from = serializers.DateField(required=False, help_text="Default: yesterday (today is never stored, A7).")
-    date_to = serializers.DateField(required=False)
+    date_from = InputDateField(required=False, help_text="Default: yesterday (today is never stored, A7).")
+    date_to = InputDateField(required=False)
     employee_uids = serializers.ListField(child=serializers.UUIDField(), required=False, allow_empty=True, max_length=1000)
 
 

@@ -23,13 +23,13 @@ UNKNOWN = "Unknown"
 
 
 def days_queryset():
-    return AttendanceDay.objects.select_related("employee", "employee__office", "office", "shift", "first_device")
+    return AttendanceDay.objects.select_related("employee", "employee__office", "office", "shift", "first_device", "first_device__office")
 
 
 def corrections_queryset():
     from attendance.models import AttendanceCorrection
 
-    return AttendanceCorrection.objects.select_related("day", "day__employee", "created_by", "revoked_by")
+    return AttendanceCorrection.objects.select_related("day", "day__employee", "day__employee__office", "created_by", "revoked_by")
 
 
 def device_label(device) -> str:
@@ -93,7 +93,7 @@ def people_by_pin(punches) -> dict[tuple[int, str], object]:
     condition = inputs.pin_filter((punch.device_id, punch.pin) for punch in punches)
     if condition is None:
         return {}
-    rows = DeviceUser.objects.filter(condition, employee__isnull=False).select_related("employee")
+    rows = DeviceUser.objects.filter(condition, employee__isnull=False).select_related("employee", "employee__office")
     return {(row.device_id, row.pin): row.employee for row in rows}
 
 

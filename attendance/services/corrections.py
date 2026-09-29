@@ -27,6 +27,9 @@ from hr.models import Employee
 
 DAY_SNAPSHOT = ("status", "first_in", "last_out", "working_minutes", "break_minutes", "late_minutes", "early_exit_minutes", "overtime_minutes", "is_late", "is_early_exit", "is_corrected")
 CLOCK_FIELDS = ("first_in", "last_out")
+MINUTE_FIELDS = ("working_minutes", "break_minutes", "late_minutes", "early_exit_minutes", "overtime_minutes")
+# a work date's punches span less than two days (overnight shift + buffer), so no minute figure can exceed that
+MAX_MINUTES = 2 * 24 * 60
 
 
 def _invalid(field: str, message: str) -> DomainError:
@@ -38,10 +41,15 @@ def _parse(field: str, value):
     if field in CLOCK_FIELDS:
         if value is None:
             return None
-        parsed = parse_datetime(value) if isinstance(value, str) else None
+        try:
+            parsed = parse_datetime(value) if isinstance(value, str) else None
+        except ValueError:  # well-formed but impossible (month 13, hour 25)
+            parsed = None
         if parsed is None or parsed.tzinfo is not None:
             raise _invalid("new", f"{field} is an office wall-clock time 'YYYY-MM-DDTHH:MM[:SS]' without a zone, or null.")
         return parsed.replace(microsecond=0)
+    if field in MINUTE_FIELDS and isinstance(value, int) and not isinstance(value, bool) and value > MAX_MINUTES:
+        raise _invalid("new", f"{field} is at most {MAX_MINUTES} minutes.")
     return value
 
 

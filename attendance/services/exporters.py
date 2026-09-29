@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import csv
 import io
+import re
 import uuid
 
 from django.utils import timezone
@@ -97,9 +98,17 @@ def needs_render_job(report: Report, fmt: str) -> bool:
     return fmt == "pdf" or (fmt in RENDERERS and len(report.rows) > ASYNC_ROW_LIMIT) or (fmt == "json" and len(report.rows) > ASYNC_ROW_LIMIT)
 
 
+UNSAFE_FILENAME = re.compile(r"[^A-Za-z0-9._-]")
+
+
+def file_name(report: Report, fmt: str) -> str:
+    """The attachment name: employee codes are free text (quotes, line breaks, any script) and never reach the header."""
+    return f"{UNSAFE_FILENAME.sub('_', report.filename)[:150]}.{fmt}"
+
+
 def render_file(report: Report, fmt: str) -> tuple[bytes, str, str]:
     """``(bytes, media type, file name)`` for csv / xlsx."""
-    return RENDERERS[fmt](report), MEDIA_TYPES[fmt], f"{report.filename}.{fmt}"
+    return RENDERERS[fmt](report), MEDIA_TYPES[fmt], file_name(report, fmt)
 
 
 def payload(report: Report, *, requested_format: str) -> dict:
@@ -114,7 +123,7 @@ def payload(report: Report, *, requested_format: str) -> dict:
         "landscape": len(report.columns) > 8,
         "generated_at": timezone.now().isoformat(),
         "requested_format": requested_format,
-        "filename": f"{report.filename}.pdf",
+        "filename": file_name(report, "pdf"),
     }
 
 

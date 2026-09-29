@@ -70,9 +70,14 @@ def debounce_seconds() -> int:
 # --------------------------------------------------------------------------------------------------------------------
 # the recompute
 # --------------------------------------------------------------------------------------------------------------------
-def _employees(employee_ids, office_ids, date_from: date):
-    """Who is recomputed: live employees who are active, or who left on or after ``date_from`` (their last days)."""
-    queryset = inputs.employees_queryset().filter(Q(is_active=True) | Q(left_on__gte=date_from))
+def _employees(employee_ids, office_ids, date_from: date, include_inactive: bool = False):
+    """Who is recomputed: live employees who are active, or who left on or after ``date_from`` (their last days).
+
+    ``include_inactive`` (the eSSL history import only) also takes deactivated people, for the dates it is given.
+    """
+    queryset = inputs.employees_queryset()
+    if not include_inactive:
+        queryset = queryset.filter(Q(is_active=True) | Q(left_on__gte=date_from))
     if employee_ids is not None:
         queryset = queryset.filter(pk__in=list(employee_ids))
     if office_ids is not None:
@@ -105,7 +110,7 @@ def _clamp(date_from: date, date_to: date, at: datetime) -> tuple[date, date, da
 
 
 @transaction.atomic
-def recompute(*, date_from: date, date_to: date, employee_ids=None, office_ids=None, reason: str, user=None, at: datetime | None = None) -> dict:
+def recompute(*, date_from: date, date_to: date, employee_ids=None, office_ids=None, reason: str, user=None, at: datetime | None = None, include_inactive: bool = False) -> dict:
     """Recompute and store the days of ``[date_from, date_to]`` for the chosen people (every employee by default)."""
     at = at or now()
     requested = {"date_from": date_from.isoformat(), "date_to": date_to.isoformat()}
@@ -114,7 +119,7 @@ def recompute(*, date_from: date, date_to: date, employee_ids=None, office_ids=N
     summary = {**requested, "computed_from": date_from.isoformat(), "computed_to": date_to.isoformat(), "not_recomputed_before": clipped.isoformat() if clipped else None, "reason": reason, **counts}
     if date_to < date_from:
         return summary
-    people = _employees(employee_ids, office_ids, date_from)
+    people = _employees(employee_ids, office_ids, date_from, include_inactive)
     if not people:
         return summary
     ids = [employee.pk for employee in people]

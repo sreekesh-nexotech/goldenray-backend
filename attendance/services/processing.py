@@ -18,6 +18,7 @@ from django.db.models import Max, Min
 from attendance.models import RawPunch
 from attendance.services import recompute
 from attendance.services.common import now, today_for, validate_range
+from audit.services import record
 from core.errors import DomainError
 from devices.models import Device
 from devices.services import health
@@ -50,8 +51,11 @@ def process_all(*, user) -> dict:
         return {"queued": False, "date_from": None, "date_to": None, "requests": 0}
     date_from = bounds["first"].date() - timedelta(days=1)
     date_to = min(bounds["last"].date() + timedelta(days=1), today_for(None))
-    requests = recompute.request_recompute(all_employees=True, date_from=date_from, date_to=max(date_from, date_to), reason="process_all", delay_seconds=0)
-    return {"queued": True, "date_from": date_from, "date_to": max(date_from, date_to), "requests": requests}
+    date_to = max(date_from, date_to)
+    requests = recompute.request_recompute(all_employees=True, date_from=date_from, date_to=date_to, reason="process_all", delay_seconds=0)
+    # the queued recompute runs (and is audited) as the system: this row says who asked for it
+    record("attendance.process_all_requested", object_type="attendance.attendanceday", actor=user, after={"date_from": date_from.isoformat(), "date_to": date_to.isoformat()})
+    return {"queued": True, "date_from": date_from, "date_to": date_to, "requests": requests}
 
 
 def recalculate(*, user, date_from: date | None = None, date_to: date | None = None, employee_uids=None) -> dict:

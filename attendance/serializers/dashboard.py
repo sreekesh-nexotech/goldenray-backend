@@ -5,13 +5,13 @@ from __future__ import annotations
 from rest_framework import serializers
 
 from attendance.serializers.calendar import StatusCountsSerializer
-from attendance.serializers.common import OfficeRefSerializer
+from attendance.serializers.common import InputDateField, OfficeRefSerializer
 from attendance.serializers.days import AttendanceRawPunchSerializer
 from hr.serializers.refs import EmployeeRefSerializer
 
 
 class SummaryQuerySerializer(serializers.Serializer):
-    day = serializers.DateField(required=False, help_text="Default: today in the office's zone (the caller's office without `office`).")
+    day = InputDateField(required=False, help_text="Default: today in the office's zone (the caller's office without `office`).")
     office = serializers.UUIDField(required=False)
 
 

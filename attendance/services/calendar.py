@@ -19,6 +19,7 @@ from core.errors import DomainError
 from engines import attendance as engine
 
 MAX_ROSTER_EMPLOYEES = 300
+MAX_DAY_EMPLOYEES = 1000  # one row each on attendance/day/ (never truncated: narrow by office or search)
 PROVISIONAL = "PROVISIONAL"
 
 
@@ -105,6 +106,18 @@ def day_cells(employees, day: date, *, at: datetime | None = None) -> tuple[dict
     return cells, rows
 
 
+def check_size(employees, limit: int) -> list:
+    """The people of a roster, or 400 ``too_many_employees`` — a roster is never silently truncated."""
+    employees = list(employees)
+    if len(employees) > limit:
+        raise DomainError(
+            "too_many_employees",
+            f"{len(employees)} employees match; this view draws at most {limit}. Narrow it by office or search.",
+            errors={"office": [f"At most {limit} employees."]},
+        )
+    return employees
+
+
 def month_view(employee, year: int, month: int, *, at: datetime | None = None) -> dict:
     first, last = engine.month_bounds(year, month)
     days = fill([employee], first, last, at=at)[employee.pk]
@@ -113,13 +126,7 @@ def month_view(employee, year: int, month: int, *, at: datetime | None = None) -
 
 def roster(employees, year: int, month: int, *, at: datetime | None = None) -> dict:
     """Every employee's month on one calendar (at most :data:`MAX_ROSTER_EMPLOYEES`, else 400 — never truncated)."""
-    employees = list(employees)
-    if len(employees) > MAX_ROSTER_EMPLOYEES:
-        raise DomainError(
-            "too_many_employees",
-            f"{len(employees)} employees match; this view draws at most {MAX_ROSTER_EMPLOYEES}. Narrow it by office or search.",
-            errors={"office": [f"At most {MAX_ROSTER_EMPLOYEES} employees."]},
-        )
+    employees = check_size(employees, MAX_ROSTER_EMPLOYEES)
     first, last = engine.month_bounds(year, month)
     calendars = fill(employees, first, last, at=at)
     rows = [{"employee": employee, "days": calendars[employee.pk], "summary": engine.summarise(calendars[employee.pk])} for employee in employees]

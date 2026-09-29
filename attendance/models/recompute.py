@@ -49,7 +49,7 @@ class RecomputeRequest(models.Model):
         indexes = [
             models.Index(fields=["due_at"], name="attendance_recompute_due_idx"),
             models.Index(fields=["employee"], name="attendance_recompute_emp_idx"),
-            models.Index(fields=["office"], name="attendance_recompute_office_idx"),
+            models.Index(fields=["office"], name="attendance_recomp_office_idx"),
         ]
 
     def __str__(self) -> str:

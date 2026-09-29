@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
@@ -57,9 +57,24 @@ class OriginSerializer(serializers.Serializer):
     offices = serializers.ListField(child=serializers.CharField())
 
 
+EARLIEST_DATE = date(2000, 1, 1)
+LATEST_DATE = date(2100, 12, 31)
+
+
+class InputDateField(serializers.DateField):
+    """A requested date: 2000-01-01 … 2100-12-31 (the years the month queries accept). Every window around it (the
+    day before for overnight shifts, a week, a month) stays a real date, so the ends of the calendar are a 400."""
+
+    def to_internal_value(self, value):
+        parsed = super().to_internal_value(value)
+        if not EARLIEST_DATE <= parsed <= LATEST_DATE:
+            raise serializers.ValidationError(f"Use a date between {EARLIEST_DATE.isoformat()} and {LATEST_DATE.isoformat()}.")
+        return parsed
+
+
 class RangeQuerySerializer(serializers.Serializer):
-    date_from = serializers.DateField()
-    date_to = serializers.DateField()
+    date_from = InputDateField()
+    date_to = InputDateField()
 
     def validate(self, attrs):
         if attrs["date_to"] < attrs["date_from"]:

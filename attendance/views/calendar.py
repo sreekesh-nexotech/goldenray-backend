@@ -75,12 +75,15 @@ class DayView(AttendanceReadView):
         parameters=[DayQuerySerializer],
         responses={200: DayRosterSerializer, **READ_ERRORS},
         tags=TAGS,
-        description="One day for everybody in scope, each with a stated reason. Final days come from the stored/filled calendar; today from the punches so far (`fill: PROVISIONAL`, nothing stored).",
+        description=(
+            f"One day for everybody in scope (at most {calendar.MAX_DAY_EMPLOYEES}; 400 `too_many_employees`, never truncated), each with a stated reason. "
+            "Final days come from the stored/filled calendar; today from the punches so far (`fill: PROVISIONAL`, nothing stored)."
+        ),
     )
     def get(self, request, *args, **kwargs):
         query = self.query(DayQuerySerializer)
         office = dashboard.office_or_none(query.get("office"))
-        people = list(self.people(office=office, employee=query.get("employee"), search=query.get("search"), include_inactive=query["include_inactive"]))
+        people = calendar.check_size(self.people(office=office, employee=query.get("employee"), search=query.get("search"), include_inactive=query["include_inactive"]), calendar.MAX_DAY_EMPLOYEES)
         day = query.get("day") or today_for(dashboard.reference_office(request.user, office))
         cells, stored = calendar.day_cells(people, day)
         rows = [

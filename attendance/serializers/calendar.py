@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
-from attendance.serializers.common import STATUS_CHOICES, STATUS_CODE_CHOICES, EmployeeRefSerializer, MonthQuerySerializer, ShiftRefSerializer
+from attendance.serializers.common import STATUS_CHOICES, STATUS_CODE_CHOICES, EmployeeRefSerializer, InputDateField, MonthQuerySerializer, ShiftRefSerializer
 from engines import attendance as engine
 
 FILL_CHOICES = [(value, value) for value in (*engine.Fill, "PROVISIONAL")]
@@ -130,7 +130,7 @@ class RosterSerializer(serializers.Serializer):
 
 
 class DayQuerySerializer(serializers.Serializer):
-    day = serializers.DateField(required=False, help_text="Default: today in the office's zone (the caller's office without `office`).")
+    day = InputDateField(required=False, help_text="Default: today in the office's zone (the caller's office without `office`).")
     office = serializers.UUIDField(required=False)
     employee = serializers.UUIDField(required=False)
     search = serializers.CharField(required=False, max_length=100)

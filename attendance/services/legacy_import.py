@@ -180,6 +180,41 @@ def _v3_unstored_status(employee: engine.Employee, day: date, holidays, leaves) 
     return "WEEKLY_OFF" if not engine.is_working_day(day, employee.shift) else "ABSENT"
 
 
+SUMMED = ("employees", "created", "updated", "unchanged", "removed", "skipped_corrected", "skipped_future", "absent_days", "raw_punches_considered", "unmapped_pins")
+
+
+def _windows(first: date, last: date) -> list[tuple[date, date]]:
+    """``[first, last]`` in slices the recompute takes whole (it keeps only the latest ``ATTENDANCE_MAX_RECOMPUTE_DAYS``)."""
+    size = recompute.max_range_days()
+    windows, start = [], first
+    while start <= last:
+        end = min(last, start + timedelta(days=size - 1))
+        windows.append((start, end))
+        start = end + timedelta(days=1)
+    return windows
+
+
+def _recompute_history(people: list, v3: dict, first: date, last: date, *, user, at) -> dict:
+    """v4 over the whole history eSSL stored: every window of ``[first, last]`` for the people the recompute keeps, and
+    each deactivated person (whom the recompute otherwise leaves alone) over the dates eSSL stored for them only."""
+    total = {"date_from": first.isoformat(), "date_to": last.isoformat(), "computed_from": None, "computed_to": None, "not_recomputed_before": None, "reason": "essl_import"}
+    total.update(dict.fromkeys(SUMMED, 0))
+    current = [person for person in people if person.is_active or (person.left_on is not None and person.left_on >= first)]
+    departed = [person for person in people if person not in current]
+    calls = [(low, high, [person.pk for person in current], False) for low, high in _windows(first, last)] if current else []
+    for person in departed:
+        own = [day for (pk, day) in v3 if pk == person.pk]
+        calls += [(low, high, [person.pk], True) for low, high in _windows(min(own), max(own))]
+    for low, high, employee_ids, include_inactive in calls:
+        summary = recompute.recompute(date_from=low, date_to=high, employee_ids=employee_ids, reason="essl_import", user=user, at=at, include_inactive=include_inactive)
+        for key in SUMMED:
+            total[key] += summary[key]
+        total["computed_from"] = min(filter(None, [total["computed_from"], summary["computed_from"]]))
+        total["computed_to"] = max(filter(None, [total["computed_to"], summary["computed_to"]]))
+    total["employees"] = len(people)
+    return total
+
+
 def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None = None) -> dict:
     """Recompute the range eSSL's ``attendance`` rows cover (v4) and compare the statuses per employee and month."""
     from attendance.services import inputs
@@ -206,7 +241,7 @@ def status_diff_report(rows: Iterable[dict], *, user=None, at: datetime | None =
         _audit(DAY_TABLE, rows, result, user)
         return result
     first, last = min(day for _, day in v3), max(day for _, day in v3)
-    summary = recompute.recompute(date_from=first, date_to=last, employee_ids=[person.pk for person in people], reason="essl_import", user=user, at=at)
+    summary = _recompute_history(people, v3, first, last, user=user, at=at)
     report.created, report.updated = summary["created"], summary["updated"]
     report.skipped = len(rows) - len(v3)
     v4 = {(day.employee_id, day.work_date): day for day in AttendanceDay.objects.filter(employee__in=people, work_date__gte=first, work_date__lte=last)}
