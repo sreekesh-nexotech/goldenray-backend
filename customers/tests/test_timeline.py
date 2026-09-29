@@ -31,8 +31,8 @@ def test_entries_from_every_provider_newest_first(auth_client, make_user):
     assert set(kinds) == {"customers.created", "customers.note", "customers.merged", "leads.received", "leads.converted", "leads.warranty_request"}
     ats = [entry["at"] for entry in body["results"]]
     assert ats == sorted(ats, reverse=True) and body["next_before"] is None
-    # Later sales contexts (site_inspections, …) register their own providers; these three are this package's.
-    assert {"customers.record": "customers", "leads.leads": "leads", "leads.warranty_requests": "leads"}.items() <= timeline.providers().items()
+    # Later sales contexts (site_inspections, …) register their own providers; these are the ones present on integration.
+    assert {"customers.record": "customers", "leads.leads": "leads", "leads.warranty_requests": "leads", "quotations.quotations": "quotations"}.items() <= timeline.providers().items()
 
 
 def test_entries_follow_the_viewers_permissions_and_scope(auth_client, make_user):

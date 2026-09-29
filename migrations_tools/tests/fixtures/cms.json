@@ -1,0 +1,4639 @@
+{
+ "tables": {
+  "accounts_admin_user": [],
+  "accounts_role": [
+   {
+    "created_at": "2026-09-28T17:39:58.324680+00:00",
+    "description": "Full access to every Phase 1 module.",
+    "id": 1,
+    "is_system": true,
+    "legacy_role": "admin",
+    "name": "Super Admin",
+    "permissions": {
+     "applications": [
+      "view",
+      "edit",
+      "archive"
+     ],
+     "blogs": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "career_page": [
+      "view",
+      "edit",
+      "publish",
+      "verify"
+     ],
+     "careers": [
+      "view"
+     ],
+     "dashboard": [
+      "view"
+     ],
+     "departments": [
+      "view",
+      "create",
+      "edit",
+      "archive"
+     ],
+     "emi": [
+      "view",
+      "edit"
+     ],
+     "faqs": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "job_positions": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "leads": [
+      "view",
+      "edit",
+      "archive"
+     ],
+     "media": [
+      "view",
+      "create",
+      "edit",
+      "archive"
+     ],
+     "pages": [
+      "view",
+      "edit",
+      "publish",
+      "verify"
+     ],
+     "quotations": [
+      "view"
+     ],
+     "roles": [
+      "view",
+      "create",
+      "edit",
+      "manage"
+     ],
+     "seo": [
+      "view",
+      "edit",
+      "publish"
+     ],
+     "settings": [
+      "view",
+      "edit"
+     ],
+     "users": [
+      "view",
+      "create",
+      "edit",
+      "archive",
+      "manage"
+     ]
+    },
+    "slug": "super-admin",
+    "sort_order": 0,
+    "updated_at": "2026-09-28T17:39:58.324695+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:58.326974+00:00",
+    "description": "Website maintenance, Blogs, FAQs, Media and basic SEO. Explicitly excludes unrestricted full-page editing, leads and careers.",
+    "id": 2,
+    "is_system": true,
+    "legacy_role": "editor",
+    "name": "Content Manager",
+    "permissions": {
+     "blogs": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "dashboard": [
+      "view"
+     ],
+     "faqs": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "media": [
+      "view",
+      "create",
+      "edit",
+      "archive"
+     ],
+     "pages": [
+      "view",
+      "edit"
+     ],
+     "seo": [
+      "view",
+      "edit",
+      "publish"
+     ]
+    },
+    "slug": "content-manager",
+    "sort_order": 1,
+    "updated_at": "2026-09-28T17:39:58.326987+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:58.329224+00:00",
+    "description": "Job Positions, Applications, Departments and Career Page maintenance.",
+    "id": 3,
+    "is_system": true,
+    "legacy_role": "editor",
+    "name": "Career / HR",
+    "permissions": {
+     "applications": [
+      "view",
+      "edit",
+      "archive"
+     ],
+     "career_page": [
+      "view",
+      "edit"
+     ],
+     "careers": [
+      "view"
+     ],
+     "dashboard": [
+      "view"
+     ],
+     "departments": [
+      "view",
+      "create",
+      "edit",
+      "archive"
+     ],
+     "job_positions": [
+      "view",
+      "create",
+      "edit",
+      "publish",
+      "verify",
+      "archive"
+     ],
+     "media": [
+      "view",
+      "create",
+      "edit"
+     ]
+    },
+    "slug": "careers-hr",
+    "sort_order": 2,
+    "updated_at": "2026-09-28T17:39:58.329235+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:39:58.331205+00:00",
+    "description": "Leads / Entries, the EMI calculator and quotation accounting copies. Nothing else without explicit approval.",
+    "id": 4,
+    "is_system": true,
+    "legacy_role": "author",
+    "name": "Sales / Lead",
+    "permissions": {
+     "dashboard": [
+      "view"
+     ],
+     "emi": [
+      "view"
+     ],
+     "leads": [
+      "view",
+      "edit",
+      "archive"
+     ],
+     "quotations": [
+      "view"
+     ]
+    },
+    "slug": "sales-lead",
+    "sort_order": 3,
+    "updated_at": "2026-09-28T17:39:58.331217+00:00"
+   }
+  ],
+  "auth_permission": [
+   {
+    "codename": "add_logentry",
+    "content_type_id": 1,
+    "id": 1,
+    "name": "Can add log entry"
+   },
+   {
+    "codename": "change_logentry",
+    "content_type_id": 1,
+    "id": 2,
+    "name": "Can change log entry"
+   },
+   {
+    "codename": "delete_logentry",
+    "content_type_id": 1,
+    "id": 3,
+    "name": "Can delete log entry"
+   }
+  ],
+  "careers_department": [
+   {
+    "created_at": "2026-09-28T17:43:51.478790+00:00",
+    "description": "",
+    "id": 1,
+    "is_active": true,
+    "name": "Engineering",
+    "slug": "engineering",
+    "sort_order": 0,
+    "updated_at": "2026-09-28T17:43:51.478802+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:43:51.481916+00:00",
+    "description": "",
+    "id": 2,
+    "is_active": true,
+    "name": "Sales",
+    "slug": "sales",
+    "sort_order": 0,
+    "updated_at": "2026-09-28T17:43:51.481927+00:00"
+   },
+   {
+    "created_at": "2026-09-28T17:43:51.484479+00:00",
+    "description": "",
+    "id": 3,
+    "is_active": true,
+    "name": "Operations",
+    "slug": "operations",
+    "sort_order": 0,
+    "updated_at": "2026-09-28T17:43:51.484490+00:00"
+   }
+  ],
+  "careers_job_position": [
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": null,
+    "created_at": "2026-09-28T17:43:51.487582+00:00",
+    "created_by_id": null,
+    "department_id": 1,
+    "description": "We are hiring a Solar Installation Engineer.",
+    "employment_type": "full_time",
+    "experience_required": "1-3 years",
+    "id": 1,
+    "location": "Alappuzha",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": "2026-05-01T03:30:00+00:00",
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "solar-installation-engineer",
+    "sort_order": 1,
+    "status": "published",
+    "title": "Solar Installation Engineer",
+    "updated_at": "2026-09-28T17:43:51.487589+00:00",
+    "updated_by_id": null
+   },
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": null,
+    "created_at": "2026-09-28T17:43:51.491232+00:00",
+    "created_by_id": null,
+    "department_id": 2,
+    "description": "We are hiring a Field Sales Executive.",
+    "employment_type": "full_time",
+    "experience_required": "1-3 years",
+    "id": 2,
+    "location": "Kochi",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": "2026-05-01T03:30:00+00:00",
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "field-sales-executive",
+    "sort_order": 2,
+    "status": "published",
+    "title": "Field Sales Executive",
+    "updated_at": "2026-09-28T17:43:51.491239+00:00",
+    "updated_by_id": null
+   },
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": null,
+    "created_at": "2026-09-28T17:43:51.494026+00:00",
+    "created_by_id": null,
+    "department_id": 2,
+    "description": "We are hiring a Customer Relations Executive.",
+    "employment_type": "full_time",
+    "experience_required": "1-3 years",
+    "id": 3,
+    "location": "Alappuzha",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": "2026-05-01T03:30:00+00:00",
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "crs-executive",
+    "sort_order": 3,
+    "status": "published",
+    "title": "Customer Relations Executive",
+    "updated_at": "2026-09-28T17:43:51.494033+00:00",
+    "updated_by_id": null
+   },
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": null,
+    "created_at": "2026-09-28T17:43:51.496886+00:00",
+    "created_by_id": null,
+    "department_id": 3,
+    "description": "We are hiring a Site Supervisor Intern.",
+    "employment_type": "internship",
+    "experience_required": "1-3 years",
+    "id": 4,
+    "location": "Kottayam",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": "2026-05-01T03:30:00+00:00",
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "site-supervisor-intern",
+    "sort_order": 4,
+    "status": "published",
+    "title": "Site Supervisor Intern",
+    "updated_at": "2026-09-28T17:43:51.496893+00:00",
+    "updated_by_id": null
+   },
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": null,
+    "created_at": "2026-09-28T17:43:51.499819+00:00",
+    "created_by_id": null,
+    "department_id": 1,
+    "description": "We are hiring a Design Engineer.",
+    "employment_type": "contract",
+    "experience_required": "1-3 years",
+    "id": 5,
+    "location": "Remote",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": null,
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "design-engineer-draft",
+    "sort_order": 5,
+    "status": "draft",
+    "title": "Design Engineer",
+    "updated_at": "2026-09-28T17:43:51.499827+00:00",
+    "updated_by_id": null
+   },
+   {
+    "application_deadline": "2026-12-31",
+    "application_instructions": "Apply with your resume.",
+    "benefits": "Health cover\nTravel allowance",
+    "canonical_url": "",
+    "closed_at": "2026-05-01T03:30:00+00:00",
+    "created_at": "2026-09-28T17:43:51.502675+00:00",
+    "created_by_id": null,
+    "department_id": 3,
+    "description": "We are hiring a Store Keeper.",
+    "employment_type": "full_time",
+    "experience_required": "1-3 years",
+    "id": 6,
+    "location": "Alappuzha",
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "published_at": null,
+    "requirements": "Relevant diploma\nTwo-wheeler licence",
+    "responsibilities": "Plan work\nExecute safely\nReport daily",
+    "schema_extra": {},
+    "schema_type": "none",
+    "seo_title": "",
+    "slug": "store-keeper-closed",
+    "sort_order": 6,
+    "status": "closed",
+    "title": "Store Keeper",
+    "updated_at": "2026-09-28T17:43:51.502682+00:00",
+    "updated_by_id": null
+   }
+  ],
+  "catalog_author": [
+   {
+    "bio": "Solar experts at Golden Ray.",
+    "id": 1,
+    "name": "Golden Ray Solar",
+    "role": "Editorial team"
+   },
+   {
+    "bio": "Designs residential systems.",
+    "id": 2,
+    "name": "Anu Thomas",
+    "role": "Solar Engineer"
+   }
+  ],
+  "catalog_badge": [
+   {
+    "color": "#ED8723",
+    "id": 1,
+    "label": "Reviewed by Engineering"
+   }
+  ],
+  "catalog_category": [
+   {
+    "id": 1,
+    "name": "Subsidy & Government",
+    "slug": "subsidy-government"
+   },
+   {
+    "id": 2,
+    "name": "Solar Basics",
+    "slug": "solar-basics"
+   },
+   {
+    "id": 3,
+    "name": "Batteries & Storage",
+    "slug": "batteries-storage"
+   }
+  ],
+  "catalog_collection": [
+   {
+    "api_uid": "articles",
+    "created_at": "2026-09-28T17:40:00.354707+00:00",
+    "description": "Solar blog articles served to the website.",
+    "id": 1,
+    "is_active": true,
+    "plural_name": "Articles",
+    "singular_name": "Article",
+    "updated_at": "2026-09-28T17:40:00.354727+00:00"
+   }
+  ],
+  "catalog_tag": [
+   {
+    "id": 1,
+    "name": "PM Surya Ghar"
+   },
+   {
+    "id": 2,
+    "name": "Kerala"
+   },
+   {
+    "id": 3,
+    "name": "On-grid"
+   },
+   {
+    "id": 4,
+    "name": "Hybrid"
+   },
+   {
+    "id": 5,
+    "name": "Net metering"
+   },
+   {
+    "id": 6,
+    "name": "Maintenance"
+   }
+  ],
+  "catalog_template": [
+   {
+    "created_at": "2026-09-28T17:40:00.358751+00:00",
+    "description": "Default blog article layout.",
+    "id": 1,
+    "is_active": true,
+    "name": "Solar Guide",
+    "slug": "solar-guide",
+    "sort_order": 0,
+    "updated_at": "2026-09-28T17:40:00.358765+00:00"
+   }
+  ],
+  "catalog_template_attribute_slot": [
+   {
+    "id": 1,
+    "key": "difficulty",
+    "label": "Difficulty",
+    "options": {
+     "choices": [
+      "Beginner",
+      "Intermediate",
+      "Advanced"
+     ]
+    },
+    "order": 0,
+    "required": false,
+    "template_id": 1,
+    "type": "enum"
+   }
+  ],
+  "catalog_template_image_group": [
+   {
+    "id": 1,
+    "key": "coverImg",
+    "label": "Cover image",
+    "max_items": null,
+    "order": 0,
+    "repeatable": false,
+    "required": false,
+    "template_id": 1
+   },
+   {
+    "id": 2,
+    "key": "mainImg",
+    "label": "Main image",
+    "max_items": null,
+    "order": 0,
+    "repeatable": false,
+    "required": false,
+    "template_id": 1
+   },
+   {
+    "id": 3,
+    "key": "socialSharing",
+    "label": "Social sharing image",
+    "max_items": null,
+    "order": 0,
+    "repeatable": false,
+    "required": false,
+    "template_id": 1
+   },
+   {
+    "id": 4,
+    "key": "bodyImages",
+    "label": "Body gallery",
+    "max_items": null,
+    "order": 0,
+    "repeatable": true,
+    "required": false,
+    "template_id": 1
+   }
+  ],
+  "content_content_block": [
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Understanding the subsidy slabs",
+        "type": "text"
+       }
+      ],
+      "level": 2,
+      "type": "heading"
+     },
+     {
+      "children": [
+       {
+        "text": "The subsidy is tiered by system capacity.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "[TABLE]",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "| Capacity | Central Subsidy |",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "| 1 kW | ₹30,000 |",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "| 2 kW | ₹60,000 |",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "| 3 kW and above | ₹78,000 |",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "These amounts are credited after successful installation and inspection.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 1,
+    "id": 1,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Who is eligible",
+        "type": "text"
+       }
+      ],
+      "level": 2,
+      "type": "heading"
+     },
+     {
+      "children": [
+       {
+        "text": "Most Kerala homeowners with a valid KSEB residential connection qualify.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Own the rooftop (or have owner consent).",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Have a sanctioned residential KSEB connection.",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Do not already have a subsidised system on the same connection.",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 1,
+    "id": 2,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of On-grid vs Hybrid Solar in Kerala.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 2,
+    "id": 3,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 2,
+    "id": 4,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of How KSEB Net Metering Works.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 3,
+    "id": 5,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 3,
+    "id": 6,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of Battery Sizing for Power Cuts.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 4,
+    "id": 7,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 4,
+    "id": 8,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of Cleaning and Maintaining Your Panels.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 5,
+    "id": 9,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 5,
+    "id": 10,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of Choosing an Inverter (draft).",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 6,
+    "id": 11,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 6,
+    "id": 12,
+    "order": 1
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Body section one of Old Subsidy Scheme 2022.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     },
+     {
+      "children": [
+       {
+        "text": "Second paragraph.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 7,
+    "id": 13,
+    "order": 0
+   },
+   {
+    "body": [
+     {
+      "children": [
+       {
+        "text": "Closing notes.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "component": "shared.rich-text",
+    "entry_id": 7,
+    "id": 14,
+    "order": 1
+   }
+  ],
+  "content_entry": [
+   {
+    "author_id": 1,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:40:00.392205+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "e6748356-b991-4ece-8c3a-146b9c03ecf4",
+    "excerpt": "Everything Kerala homeowners need to know about the PM Surya Ghar rooftop solar subsidy.",
+    "id": 1,
+    "insights": "Households that pair a 3 kW system with net-metering see the fastest payback in Kerala's tariff structure.",
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "The PM Surya Ghar Muft Bijli Yojana makes rooftop solar dramatically more affordable for Kerala households. This guide walks through eligibility, the subsidy slabs, and how to apply.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": true,
+    "published_at": "2026-09-28T17:40:00.417587+00:00",
+    "published_on": "2026-09-28T17:40:00.391746+00:00",
+    "read_time": 6,
+    "slug": "pm-surya-ghar-subsidy-guide",
+    "sort_order": 1,
+    "status": "published",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Up to ₹78,000 central subsidy for rooftop solar.",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Applies to residential connections in Kerala via the national portal.",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Payback typically under 5 years with KSEB net-metering.",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "PM Surya Ghar Subsidy: A Complete Kerala Guide",
+    "updated_at": "2026-09-28T17:40:00.419084+00:00",
+    "updated_by_id": null,
+    "warning": "Subsidy slabs are revised periodically — always confirm current rates on the national portal before applying."
+   },
+   {
+    "author_id": 2,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.352031+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "95ff8b72-d4bc-41da-9f94-7554fc8cf1fd",
+    "excerpt": "On-grid vs Hybrid Solar in Kerala — a practical guide for Kerala homeowners.",
+    "id": 2,
+    "insights": "Most homes recover cost in 4-5 years.",
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to On-grid vs Hybrid Solar in Kerala.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": true,
+    "published_at": "2026-05-01T04:30:00+00:00",
+    "published_on": "2026-05-01T03:30:00+00:00",
+    "read_time": 7,
+    "slug": "on-grid-vs-hybrid-kerala",
+    "sort_order": 2,
+    "status": "published",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about On-grid vs Hybrid Solar in Kerala",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about On-grid vs Hybrid Solar in Kerala",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about On-grid vs Hybrid Solar in Kerala",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "On-grid vs Hybrid Solar in Kerala",
+    "updated_at": "2026-09-28T17:43:51.370580+00:00",
+    "updated_by_id": null,
+    "warning": "Check KSEB rules before applying."
+   },
+   {
+    "author_id": 1,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.373530+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "3c41703e-65e1-4381-b354-b87b4913eb9f",
+    "excerpt": "How KSEB Net Metering Works — a practical guide for Kerala homeowners.",
+    "id": 3,
+    "insights": null,
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to How KSEB Net Metering Works.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": false,
+    "published_at": "2026-05-02T04:30:00+00:00",
+    "published_on": "2026-05-02T03:30:00+00:00",
+    "read_time": 5,
+    "slug": "how-net-metering-works",
+    "sort_order": 3,
+    "status": "published",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about How KSEB Net Metering Works",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about How KSEB Net Metering Works",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about How KSEB Net Metering Works",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "How KSEB Net Metering Works",
+    "updated_at": "2026-09-28T17:43:51.388951+00:00",
+    "updated_by_id": null,
+    "warning": null
+   },
+   {
+    "author_id": 2,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.393026+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "0bf58542-a8dd-4b57-bece-2770134c70c3",
+    "excerpt": "Battery Sizing for Power Cuts — a practical guide for Kerala homeowners.",
+    "id": 4,
+    "insights": null,
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to Battery Sizing for Power Cuts.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": false,
+    "published_at": "2026-05-03T04:30:00+00:00",
+    "published_on": "2026-05-03T03:30:00+00:00",
+    "read_time": 9,
+    "slug": "battery-sizing-guide",
+    "sort_order": null,
+    "status": "published",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about Battery Sizing for Power Cuts",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about Battery Sizing for Power Cuts",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about Battery Sizing for Power Cuts",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "Battery Sizing for Power Cuts",
+    "updated_at": "2026-09-28T17:43:51.414580+00:00",
+    "updated_by_id": null,
+    "warning": "Check KSEB rules before applying."
+   },
+   {
+    "author_id": 1,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.418531+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "0a01569f-584b-4df4-ac16-840f70ffd0b1",
+    "excerpt": "Cleaning and Maintaining Your Panels — a practical guide for Kerala homeowners.",
+    "id": 5,
+    "insights": "Most homes recover cost in 4-5 years.",
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to Cleaning and Maintaining Your Panels.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": false,
+    "published_at": "2026-05-04T04:30:00+00:00",
+    "published_on": "2026-05-04T03:30:00+00:00",
+    "read_time": 4,
+    "slug": "solar-panel-cleaning",
+    "sort_order": 5,
+    "status": "published",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about Cleaning and Maintaining Your Panels",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about Cleaning and Maintaining Your Panels",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about Cleaning and Maintaining Your Panels",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "Cleaning and Maintaining Your Panels",
+    "updated_at": "2026-09-28T17:43:51.432954+00:00",
+    "updated_by_id": null,
+    "warning": null
+   },
+   {
+    "author_id": 1,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.435965+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "f4c5cdd7-66f6-4d29-b6af-8ad33116f134",
+    "excerpt": "Choosing an Inverter (draft) — a practical guide for Kerala homeowners.",
+    "id": 6,
+    "insights": null,
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to Choosing an Inverter (draft).",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "published_on": "2026-05-05T03:30:00+00:00",
+    "read_time": 6,
+    "slug": "draft-inverter-guide",
+    "sort_order": null,
+    "status": "draft",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about Choosing an Inverter (draft)",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about Choosing an Inverter (draft)",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about Choosing an Inverter (draft)",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "Choosing an Inverter (draft)",
+    "updated_at": "2026-09-28T17:43:51.435971+00:00",
+    "updated_by_id": null,
+    "warning": "Check KSEB rules before applying."
+   },
+   {
+    "author_id": 1,
+    "collection_id": 1,
+    "cover_image_id": null,
+    "created_at": "2026-09-28T17:43:51.456544+00:00",
+    "created_by_id": null,
+    "deleted_at": null,
+    "document_id": "aa5ed7e2-ca0b-4359-bfac-2747affebf73",
+    "excerpt": "Old Subsidy Scheme 2022 — a practical guide for Kerala homeowners.",
+    "id": 7,
+    "insights": null,
+    "introduction": [
+     {
+      "children": [
+       {
+        "text": "Introduction to Old Subsidy Scheme 2022.",
+        "type": "text"
+       }
+      ],
+      "type": "paragraph"
+     }
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "published_on": "2026-05-06T03:30:00+00:00",
+    "read_time": 3,
+    "slug": "archived-old-subsidy",
+    "sort_order": null,
+    "status": "archived",
+    "summary": [
+     {
+      "children": [
+       {
+        "children": [
+         {
+          "text": "Point 1 about Old Subsidy Scheme 2022",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 2 about Old Subsidy Scheme 2022",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       },
+       {
+        "children": [
+         {
+          "text": "Point 3 about Old Subsidy Scheme 2022",
+          "type": "text"
+         }
+        ],
+        "type": "list-item"
+       }
+      ],
+      "format": "unordered",
+      "type": "list"
+     }
+    ],
+    "template_id": 1,
+    "title": "Old Subsidy Scheme 2022",
+    "updated_at": "2026-09-28T17:43:51.470657+00:00",
+    "updated_by_id": null,
+    "warning": null
+   }
+  ],
+  "content_entry_attribute_value": [],
+  "content_entry_badges": [
+   {
+    "badge_id": 1,
+    "entry_id": 1,
+    "id": 1
+   },
+   {
+    "badge_id": 1,
+    "entry_id": 2,
+    "id": 2
+   },
+   {
+    "badge_id": 1,
+    "entry_id": 4,
+    "id": 3
+   },
+   {
+    "badge_id": 1,
+    "entry_id": 6,
+    "id": 4
+   }
+  ],
+  "content_entry_categories": [
+   {
+    "category_id": 1,
+    "entry_id": 1,
+    "id": 1
+   },
+   {
+    "category_id": 2,
+    "entry_id": 2,
+    "id": 2
+   },
+   {
+    "category_id": 2,
+    "entry_id": 3,
+    "id": 3
+   },
+   {
+    "category_id": 3,
+    "entry_id": 4,
+    "id": 4
+   },
+   {
+    "category_id": 2,
+    "entry_id": 5,
+    "id": 5
+   },
+   {
+    "category_id": 2,
+    "entry_id": 6,
+    "id": 6
+   },
+   {
+    "category_id": 1,
+    "entry_id": 7,
+    "id": 7
+   }
+  ],
+  "content_entry_image": [
+   {
+    "entry_id": 1,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "coverImg",
+    "id": 1,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 1,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "mainImg",
+    "id": 2,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 2,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "coverImg",
+    "id": 3,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 2,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "mainImg",
+    "id": 4,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 3,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+    "group_key": "coverImg",
+    "id": 5,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 3,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+    "group_key": "mainImg",
+    "id": 6,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 3,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+    "group_key": "bodyImages",
+    "id": 7,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 4,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+    "group_key": "coverImg",
+    "id": 8,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 4,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+    "group_key": "mainImg",
+    "id": 9,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 4,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+    "group_key": "bodyImages",
+    "id": 10,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 4,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-1.png",
+    "group_key": "bodyImages",
+    "id": 11,
+    "media_asset_id": null,
+    "position": 1
+   },
+   {
+    "entry_id": 5,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "coverImg",
+    "id": 12,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 5,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-1.png",
+    "group_key": "mainImg",
+    "id": 13,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 6,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+    "group_key": "coverImg",
+    "id": 14,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 6,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-2.png",
+    "group_key": "mainImg",
+    "id": 15,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 6,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+    "group_key": "bodyImages",
+    "id": 16,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 7,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+    "group_key": "coverImg",
+    "id": 17,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 7,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/resources-3.png",
+    "group_key": "mainImg",
+    "id": 18,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 7,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-0.png",
+    "group_key": "bodyImages",
+    "id": 19,
+    "media_asset_id": null,
+    "position": 0
+   },
+   {
+    "entry_id": 7,
+    "external_url": "https://gym-manager-pull.b-cdn.net/golden_ray/resources/body-1.png",
+    "group_key": "bodyImages",
+    "id": 20,
+    "media_asset_id": null,
+    "position": 1
+   }
+  ],
+  "content_entry_slug_history": [
+   {
+    "collection_id": 1,
+    "created_at": "2026-09-28T17:43:51.475488+00:00",
+    "entry_id": 3,
+    "id": 1,
+    "is_active": true,
+    "note": "old URL",
+    "slug": "net-metering-explained"
+   }
+  ],
+  "content_entry_tags": [
+   {
+    "entry_id": 1,
+    "id": 1,
+    "tag_id": 1
+   },
+   {
+    "entry_id": 1,
+    "id": 2,
+    "tag_id": 2
+   },
+   {
+    "entry_id": 2,
+    "id": 3,
+    "tag_id": 3
+   },
+   {
+    "entry_id": 2,
+    "id": 4,
+    "tag_id": 4
+   },
+   {
+    "entry_id": 3,
+    "id": 5,
+    "tag_id": 2
+   },
+   {
+    "entry_id": 3,
+    "id": 6,
+    "tag_id": 5
+   },
+   {
+    "entry_id": 4,
+    "id": 7,
+    "tag_id": 4
+   },
+   {
+    "entry_id": 5,
+    "id": 8,
+    "tag_id": 6
+   },
+   {
+    "entry_id": 6,
+    "id": 9,
+    "tag_id": 3
+   },
+   {
+    "entry_id": 7,
+    "id": 10,
+    "tag_id": 2
+   }
+  ],
+  "content_seo": [
+   {
+    "canonical_url": null,
+    "entry_id": 1,
+    "id": 1,
+    "keywords": "PM Surya Ghar, Kerala solar subsidy, rooftop solar",
+    "meta_description": "Complete guide to the PM Surya Ghar rooftop solar subsidy for Kerala homeowners — slabs, eligibility, and how to apply.",
+    "meta_title": "PM Surya Ghar Subsidy Guide for Kerala | Golden Ray Solar"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/on-grid-vs-hybrid-kerala",
+    "entry_id": 2,
+    "id": 2,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about on-grid vs hybrid solar in kerala.",
+    "meta_title": "On-grid vs Hybrid Solar in Kerala | Flarize"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/how-net-metering-works",
+    "entry_id": 3,
+    "id": 3,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about how kseb net metering works.",
+    "meta_title": "How KSEB Net Metering Works | Flarize"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/battery-sizing-guide",
+    "entry_id": 4,
+    "id": 4,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about battery sizing for power cuts.",
+    "meta_title": "Battery Sizing for Power Cuts | Flarize"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/solar-panel-cleaning",
+    "entry_id": 5,
+    "id": 5,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about cleaning and maintaining your panels.",
+    "meta_title": "Cleaning and Maintaining Your Panels | Flarize"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/draft-inverter-guide",
+    "entry_id": 6,
+    "id": 6,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about choosing an inverter (draft).",
+    "meta_title": "Choosing an Inverter (draft) | Flarize"
+   },
+   {
+    "canonical_url": "https://flarize.com/blog/archived-old-subsidy",
+    "entry_id": 7,
+    "id": 7,
+    "keywords": "solar, kerala",
+    "meta_description": "Learn about old subsidy scheme 2022.",
+    "meta_title": "Old Subsidy Scheme 2022 | Flarize"
+   }
+  ],
+  "django_content_type": [
+   {
+    "app_label": "admin",
+    "id": 1,
+    "model": "logentry"
+   },
+   {
+    "app_label": "auth",
+    "id": 2,
+    "model": "permission"
+   },
+   {
+    "app_label": "auth",
+    "id": 3,
+    "model": "group"
+   }
+  ],
+  "django_migrations": [
+   {
+    "app": "contenttypes",
+    "applied": "2026-09-28T17:39:58.160788+00:00",
+    "id": 1,
+    "name": "0001_initial"
+   },
+   {
+    "app": "contenttypes",
+    "applied": "2026-09-28T17:39:58.165990+00:00",
+    "id": 2,
+    "name": "0002_remove_content_type_name"
+   },
+   {
+    "app": "auth",
+    "applied": "2026-09-28T17:39:58.200460+00:00",
+    "id": 3,
+    "name": "0001_initial"
+   }
+  ],
+  "faqs_category": [],
+  "faqs_faq": [
+   {
+    "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.319823+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 1,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What maintenance is required for solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.319831+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.323540+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 2,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I run my home completely on solar power?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.323549+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.327590+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 3,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the lifespan of solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.327598+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.330076+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 4,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does it take to install a solar system?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.330083+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.332381+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 5,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the cost of installing solar panels at home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.332387+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.334755+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 6,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much can I save by switching to solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.334761+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.337704+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 7,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens during a power outage?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.337711+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.340426+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 8,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 1,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the ₹78,000 subsidy available for commercial solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.340432+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.344402+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 9,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What maintenance is required for solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.344410+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.346525+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 10,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I run my home completely on solar power?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.346532+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.348317+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 11,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the lifespan of solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.348323+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.350125+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 12,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does it take to install a solar system?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.350130+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.352756+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 13,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the cost of installing solar panels at home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.352761+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.355147+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 14,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much can I save by switching to solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.355153+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.357428+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 15,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens during a power outage?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.357434+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.359831+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 16,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 2,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the ₹78,000 subsidy available for commercial solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.359838+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.365283+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 17,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What maintenance is required for solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.365290+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.367770+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 18,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I run my home completely on solar power?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.367776+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.369949+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 19,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the lifespan of solar panels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.369956+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.372926+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 20,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does it take to install a solar system?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.372934+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.376828+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 21,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the cost of installing solar panels at home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.376837+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.380234+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 22,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much can I save by switching to solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.380241+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.383267+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 23,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens during a power outage?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.383273+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.386824+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 24,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 3,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the ₹78,000 subsidy available for commercial solar?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.386847+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Solar panels are designed to withstand heavy rain and wind. They are waterproof and have a robust build, ensuring they function efficiently even during the monsoon season.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.391502+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 25,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Will panels work during Kerala monsoon?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.391508+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Most residential roofs in Kerala are suitable for solar panel installation. Our team conducts a structural assessment to ensure your roof can support the panels and mounting equipment safely.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.395744+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 26,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is our roof strong enough?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.395751+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. While it's ideal for group members to be in the same locality for logistical efficiency, they can be from different areas. The key is that the group reaches the minimum number of families required for a confirmed installation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.398151+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 27,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do group members have to be neighbours?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.398157+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Income Tax Returns (ITR) are typically required for loan applications to verify income and financial stability. However, specific requirements may vary based on the lender's policies. Our team can guide you through the documentation needed for your loan application.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.400368+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 28,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do we need ITR for the loan?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.400374+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Our team handles all KSEB documentation and subsidy applications on your behalf. We ensure that all necessary forms are completed accurately and submitted in a timely manner, maximizing your chances of receiving the subsidy without any hassle.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.402209+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 29,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What about KSEB paperwork and subsidy?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.402214+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes, anyone who refers a friend or family member to the group purchase program can earn referral rewards. The specific rewards and terms will be communicated to you by our team.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.404902+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 30,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can anyone earn referral rewards?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.404908+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "During a power outage, your solar system will automatically shut down for safety reasons. However, if you have a battery storage system installed, it can provide backup power to your home during outages, depending on the capacity of the battery.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.407465+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 31,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 4,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens during a power outage?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.407471+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "You send your KSEB bill, we visit your roof, and you get 3 checked options. Pick one, and we handle the install, the KSEB paperwork, and your subsidy.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.412280+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 32,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does solar installation work in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.412286+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Once your option is approved, the install takes 7 to 12 days. We use pre-packed kits and a local team, so there's no long wait for parts.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.414526+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 33,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does installation take?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.414533+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "We check every installer before you meet them, your payment follows real progress, and our engineer inspects the finished job. You deal with one team for 25 years.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.416801+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 34,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does Flarize differ from other companies?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.416806+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. We file your application and follow it through approval. You don't deal with KSEB yourself.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.419106+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 35,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Does Flarize handle KSEB net metering?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.419113+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "You stay with Flarize. App monitoring, service visits, and a written energy-loss guarantee, for 25 years. One number to call.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.420881+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 36,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens after installation?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.420887+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "For most Kerala homes with a high bill, the monthly saving beats FD interest, and it lasts for decades. We'll show you the real numbers for your home.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.422524+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 37,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 5,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is solar a better choice than a fixed deposit?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.422530+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.426461+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 38,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 6,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the best solar inverter for Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.426466+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.428794+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 39,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 6,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "String inverter vs microinverter — which is better for Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.428799+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.431810+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 40,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 6,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do I need a hybrid inverter for my Kerala home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.431816+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.434212+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 41,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 6,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does Kerala's climate affect inverter performance?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.434218+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.437519+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 42,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 6,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What inverter size do I need for my home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.437526+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.443031+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 43,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 7,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the best solar inverter for Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.443037+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.445718+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 44,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 7,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "String inverter vs microinverter — which is better for Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.445724+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.447951+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 45,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 7,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do I need a hybrid inverter for my Kerala home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.447956+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.450189+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 46,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 7,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does Kerala's climate affect inverter performance?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.450195+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.452608+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 47,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 7,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What inverter size do I need for my home?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.452614+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes — you're our most valued partner. Existing Flarize owners join as Advisor Partners, refer neighbours and friends, and earn rewards for every home that goes solar on your word.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.456945+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 48,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "I already installed solar with Flarize — can I earn?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.456951+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "You introduce a homeowner or business to Flarize. We handle consultation, design, paperwork, KSEB and installation. When the system is installed successfully, a fixed commission is credited to your partner account.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.459019+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 49,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How do I earn?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.459024+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Commission is credited after the installation is completed and verified. Your dashboard shows the exact status and next payout date for every referral.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.460796+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 50,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "When do I get paid?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.460802+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "You get a unique tracking link, and referrals shared directly with your partner manager are also logged. Every lead is timestamped through submission, site visit, installation and payout — visible to you in real time.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.462572+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 51,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How are referrals tracked?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.462577+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "You only earn on completed installations, so a cancellation simply means no commission for that lead — no penalty, no clawback. Your other referrals are unaffected.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.465001+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 52,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens if a customer cancels?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.465009+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "None. Our team handles every technical conversation, quote and approval. Your only job is the introduction and the trust you already have with your network.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.467520+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 53,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do I need any solar knowledge?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.467529+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Creator partners get a tracking link and ready-to-use content. You earn on completed installations from your audience — not on clicks, views or impressions.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.470106+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 54,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can influencers and creators join?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.470114+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Absolutely — they're core partners. Solar fits naturally into electrical work, property handovers and design conversations, and you earn without changing your workflow.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.472720+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 55,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can electricians, builders and agents join?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.472729+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. There's no quota and no pressure. Refer one home a year or ten a month — you earn the same fixed rate on each successful installation.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.475106+00:00",
+    "created_by_id": null,
+    "display_order": 8,
+    "id": 56,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is there a minimum target?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.475113+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Flarize installs across all 14 Kerala districts, so any qualified referral within Kerala can convert regardless of where you or the homeowner are based.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.476926+00:00",
+    "created_by_id": null,
+    "display_order": 9,
+    "id": 57,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I refer customers outside my district?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.476931+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Every partner gets a dedicated relationship manager, a live tracking dashboard, ready-made referral content, and full handling of consultation, paperwork, KSEB, warranty and after-sales — so the customer experience reflects well on you.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.478407+00:00",
+    "created_by_id": null,
+    "display_order": 10,
+    "id": 58,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 8,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does Flarize support partners?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.478411+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A 3kW on-grid system costs ₹2–2.30 lakh, a 5kW system ₹3–3.30 lakh and a 10kW system ₹5–6 lakh before the ₹78,000 PM Surya Ghar subsidy. The range exists because a flat concrete roof is cheaper to work on than a tiled roof needing a raised frame, taller buildings need more cable and scaffolding, and panel and inverter brands differ in price. After the free site assessment your proposal shows one fixed, item-by-item price that does not change once work starts.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.480983+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 59,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much do solar panels cost for a home in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.480988+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. It is paid under the central PM Surya Ghar Muft Bijli Yojana and credited directly to your bank account after installation and inspection. Flarize files the national portal application, the KSEB paperwork and the subsidy claim on your behalf, so you are not chasing forms yourself.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.482390+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 60,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the ₹78,000 solar subsidy real, and how do I get it?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.482395+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A bidirectional KSEB meter records the units your roof exports during the day and the units you draw at night. You are billed only on the net difference, so daytime generation offsets night-time consumption. Flarize handles the net-metering application, feasibility approval and meter installation with KSEB.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.483703+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 61,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does KSEB net metering work?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.483719+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes, at reduced output. Panels run on daylight rather than direct sun, so they keep generating on overcast monsoon days, typically at a lower percentage of rated output. Systems are sized against your full-year consumption, so strong generation from January to May covers the monsoon dip — and rain also washes dust off the panels.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.484984+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 62,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Will solar panels work during the Kerala monsoon?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.484989+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. A Flarize engineer visits your home, measures usable shadow-free roof area, checks orientation and shading between 9 AM and 4 PM, reviews your KSEB bill and returns three tailored proposals. There is no cost and no obligation to proceed.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.486469+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 63,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the site assessment free?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.486473+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Most Kerala homes do not. An on-grid system is cheapest and pays back fastest, but shuts down during a power cut as a KSEB safety rule. Choose a hybrid system with a battery if outages are frequent in your area, or you need fans, lights, Wi-Fi and the fridge to keep running at night.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.487960+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 64,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Do I need a battery with my solar system?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.487966+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes, if the system is planned for it. Sizing the inverter with headroom and leaving spare roof area lets you add panels later, and an EV charger can be added to a suitably sized system. Tell the engineer at the assessment so the design allows for future load.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.489360+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 65,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 9,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I add more panels later or charge an EV?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.489364+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "PM Surya Ghar gives ₹78,000 subsidy for 3kW residential systems in Kerala (₹26,000/kW). Flarize handles full documentation & KSEB approval. Net cost: ₹78,000–₹1,27,000 (after subsidy). Eligibility: own home roof, KSEB connection.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.492780+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 66,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is PM Surya Ghar subsidy? How much can I get?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.492785+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Covers: installation quality defects (5yr), panel performance (25yr on some), inverter warranty (5–10yr per brand), and Energy Loss Guarantee — if system down >3 days, Flarize pays for lost generation. Post-install: WhatsApp support + 3-layer technician backup.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.495612+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 67,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What exactly is included in the \"Full Flarize Guarantee\"?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.495618+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Optional paid plans (price not listed, call for quote). Covers: bi-annual cleaning, health checkups, pest/rodent inspections, priority technician dispatch, performance reporting. Prevents 10–15% efficiency loss from dust/debris.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.497526+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 68,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What does a Solar Care Plan cost? What's included?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.497532+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Depends on system size & roof space. Example 3kW system: saves ₹12,000–₹18,000/yr (₹1,000–₹1,500/month). Payback: 6–8 years (after subsidy). Then 17+ years of near-free power. Use free estimate calculator on site.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.499353+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 69,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much will I save per year? When is payback?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.499358+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Flarize handles 100% — application, inspection coordination, net metering approval. You sign an approval letter only. Flarize tracks status & pushes KSEB (typically 15–30 days post-install).",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.501523+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 70,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Does Flarize get KSEB approval or do I do it?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.501529+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "System undersized. Flarize analyzes your bill (Step 1) and avoids over-sizing. If consumption <100 kWh/month, 1–1.5kW system is better. Subsidy applies to 1kW too (₹26,000). Discuss in free site visit.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.503390+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 71,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What if my electricity consumption is very low?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.503396+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Add panels/inverter capacity. But KSEB needs new net metering (15–30 day wait). Cost varies. Contact Flarize service team post-install.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.505340+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 72,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 10,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I upgrade the system size after 1 year?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.505345+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "The ₹78,000 subsidy is applied directly to your loan principal before your EMI is calculated. For a 3kW system costing ₹2L, the subsidy reduces your loan to ₹1,22,000. Every EMI is calculated on the lower amount — you save on both principal and total interest.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.509601+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 73,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How does the PM Surya Ghar subsidy reduce my solar loan EMI?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.509606+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Minimum CIBIL score of 650 is required.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.511823+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 74,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the minimum CIBIL score for a solar loan in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.511830+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "For a 3kW system in Kerala, EMI starts at ₹2,500/month through Flarize's SBI partnership at 5.75% over 5 years.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.513804+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 75,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the EMI for a 3kW solar system in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.513810+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Flarize is an MNRE-empanelled vendor on India's national PM Surya Ghar portal. This enables a direct SBI channel partnership that gives Flarize customers 5.75% — lower than SBI's published rate of 7%.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.515782+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 76,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is Flarize's 5.75% rate and how is it different from SBI's standard rate?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.515788+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Our documentation process takes up to one week, while bank procedures vary depending on the partner bank.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.518115+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 77,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does solar loan approval take through Flarize?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.518121+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "For a 3kW system at 5.75% over 5 years, your total investment is approximately ₹1,22,000 after subsidy. Over 25 years at a conservative 5% annual KSEB tariff increase, cumulative savings exceed ₹11 lakh. After year 5, invest ₹2,500/month at 12% SIP returns — that's ₹30 lakh in wealth.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.520858+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 78,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much will I save over 25 years with a solar loan in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.520864+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Aadhaar card, PAN card, passbook/ bank statements, latest KSEB electricity bill, property ownership proof. For loans above ₹2L: income proof. For 3kW systems: no income proof required. Flarize collects and submits all documents on your behalf.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.523761+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 79,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What documents do I need for a solar loan in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.523768+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Your solar system transfers with the house. KSEB net metering agreements and remaining warranty transfer to the new owner. A solar-equipped Kerala home commands a premium — buyers factor in zero electricity bills as a financial asset.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.526803+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 80,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 11,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens to my solar system if I sell my house?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.526811+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A group solar purchase allows nearby homeowners to install solar together. By combining multiple installations in the same area, costs are reduced and installation becomes more efficient.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.531792+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 81,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is a group solar purchase?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.531799+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "A group is confirmed when at least 5 families in the same area complete their booking. Once confirmed, installations are scheduled together.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.534587+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 82,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How many families are required to form a group?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.534594+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Your ₹1,000 booking amount reserves your spot in the group and is fully adjusted against your final solar system cost.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.537156+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 83,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What happens to my ₹1,000 booking amount?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.537163+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "If the required number of families is not reached within the specified period, you can either receive a full refund, or continue with an individual installation while retaining your locked pricing (if applicable).",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.539620+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 84,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What if the group does not form?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.539626+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "No. Group purchase customers receive the same panels, inverter brands, installation standards, warranty coverage, and service support as individual customers.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.542418+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 85,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Is the solar system quality different from individual bookings?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.542425+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Savings vary based on system size and location, but most homeowners can save up to ₹10,000 compared to standard individual pricing.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.545259+00:00",
+    "created_by_id": null,
+    "display_order": 5,
+    "id": 86,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How much can I save through a group purchase?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.545266+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Once a group is confirmed, installations are typically completed within the scheduled group installation week, usually faster than individual installations.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.547978+00:00",
+    "created_by_id": null,
+    "display_order": 6,
+    "id": 87,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How long does installation take after a group is confirmed?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.547985+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. You can still join the group purchase program. Our team can review your existing quotation and help you compare costs, specifications, and potential savings.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.550361+00:00",
+    "created_by_id": null,
+    "display_order": 7,
+    "id": 88,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Can I join if I already have a solar quotation?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.550388+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "After booking, you'll receive updates via WhatsApp, SMS, or phone regarding the number of families joined, group formation progress, installation schedule, and next steps.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.552879+00:00",
+    "created_by_id": null,
+    "display_order": 8,
+    "id": 89,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How do I know the status of my group?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.552886+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Group installations reduce logistics, survey, transportation, and crew mobilization costs by serving multiple nearby homes during the same installation period. These savings are passed directly to homeowners without compromising quality.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.555085+00:00",
+    "created_by_id": null,
+    "display_order": 9,
+    "id": 90,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 12,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Why is group solar cheaper?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.555092+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.559280+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 91,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 13,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the best solar panel for Kerala's climate?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.559288+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.561469+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 92,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 13,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How important is temperature coefficient for solar panels in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.561476+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.563608+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 93,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 13,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Does high humidity affect solar panel performance?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.563615+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.566802+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 94,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 13,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What does a 25-year solar panel warranty actually cover?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.566810+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.569359+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 95,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 13,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How many solar panels do I need for my home in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.569366+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.573939+00:00",
+    "created_by_id": null,
+    "display_order": 0,
+    "id": 96,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 14,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What is the best solar panel for Kerala's climate?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.573947+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.576693+00:00",
+    "created_by_id": null,
+    "display_order": 1,
+    "id": 97,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 14,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How important is temperature coefficient for solar panels in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.576701+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.579067+00:00",
+    "created_by_id": null,
+    "display_order": 2,
+    "id": 98,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 14,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "Does high humidity affect solar panel performance?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.579074+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.582112+00:00",
+    "created_by_id": null,
+    "display_order": 3,
+    "id": 99,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 14,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "What does a 25-year solar panel warranty actually cover?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.582120+00:00",
+    "updated_by_id": null
+   },
+   {
+    "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+    "archived_at": null,
+    "canonical_url": "",
+    "category_id": null,
+    "created_at": "2026-09-28T17:39:59.584429+00:00",
+    "created_by_id": null,
+    "display_order": 4,
+    "id": 100,
+    "meta_description": "",
+    "noindex": false,
+    "og_image_id": null,
+    "page_id": 14,
+    "published_at": "2026-09-28T17:39:59.308095+00:00",
+    "question": "How many solar panels do I need for my home in Kerala?",
+    "schema_extra": {},
+    "schema_type": "none",
+    "section": "",
+    "seo_title": "",
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.584437+00:00",
+    "updated_by_id": null
+   }
+  ],
+  "media_asset": [],
+  "siteconfig_settings": [
+   {
+    "address_line": "",
+    "address_locality": "",
+    "address_region": "",
+    "application_notification_emails": "",
+    "careers_accepting_general_applications": true,
+    "careers_intro": "",
+    "company_email": "",
+    "company_name": "",
+    "company_phone": "",
+    "country_code": "IN",
+    "default_meta_description": "",
+    "default_og_image_id": null,
+    "id": 1,
+    "lead_notification_emails": "",
+    "notify_on_new_application": true,
+    "notify_on_new_lead": true,
+    "postal_code": "",
+    "updated_at": "2026-09-28T17:43:51.507516+00:00",
+    "updated_by_id": null
+   }
+  ],
+  "sitepages_page": [
+   {
+    "created_at": "2026-09-28T17:39:59.313990+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Main",
+    "id": 1,
+    "is_protected": true,
+    "name": "Home",
+    "route": "/",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.314009+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.342367+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Solutions",
+    "id": 2,
+    "is_protected": true,
+    "name": "Solutions",
+    "route": "/solutions",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.342379+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.362699+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 3,
+    "is_protected": true,
+    "name": "Quote Analyser",
+    "route": "/quote-analyser",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.362716+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.388847+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Programmes",
+    "id": 4,
+    "is_protected": true,
+    "name": "Subsidy",
+    "route": "/subsidy",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.388857+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.409617+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Main",
+    "id": 5,
+    "is_protected": true,
+    "name": "How Flarize Works",
+    "route": "/how-flarize-works",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.409628+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.424326+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 6,
+    "is_protected": true,
+    "name": "Inverter Comparison",
+    "route": "/inverter-comparison",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.424335+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.440104+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 7,
+    "is_protected": true,
+    "name": "Inverter Comparison Table",
+    "route": "/inverter-comparison-table",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.440116+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.454721+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Programmes",
+    "id": 8,
+    "is_protected": true,
+    "name": "Referral Programme",
+    "route": "/solar-referral-program",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.454733+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.479584+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Solutions",
+    "id": 9,
+    "is_protected": true,
+    "name": "Residential",
+    "route": "/residential",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.479592+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.490921+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Programmes",
+    "id": 10,
+    "is_protected": true,
+    "name": "Solar Warranty",
+    "route": "/solar-warranty",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.490929+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.507460+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 11,
+    "is_protected": true,
+    "name": "EMI Calculator",
+    "route": "/emi-calculator",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.507471+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.529341+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 12,
+    "is_protected": true,
+    "name": "Group Purchase",
+    "route": "/group-purchase",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.529352+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.556976+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 13,
+    "is_protected": true,
+    "name": "Solar Comparison",
+    "route": "/solar-comparison",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.556987+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:39:59.571456+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 14,
+    "is_protected": true,
+    "name": "Solar Comparison Table",
+    "route": "/comparison-table",
+    "sort_order": 0,
+    "status": "published",
+    "updated_at": "2026-09-28T17:39:59.571468+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.038082+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Main",
+    "id": 15,
+    "is_protected": true,
+    "name": "About",
+    "route": "/about",
+    "sort_order": 1,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.038101+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.044819+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Main",
+    "id": 16,
+    "is_protected": true,
+    "name": "Contact",
+    "route": "/contactus",
+    "sort_order": 3,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.044832+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.047145+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Main",
+    "id": 17,
+    "is_protected": true,
+    "name": "FAQ hub",
+    "route": "/faq",
+    "sort_order": 4,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.047155+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.051150+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Solutions",
+    "id": 18,
+    "is_protected": true,
+    "name": "Commercial",
+    "route": "/commercial",
+    "sort_order": 6,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.051161+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.054306+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Solutions",
+    "id": 19,
+    "is_protected": true,
+    "name": "Industrial",
+    "route": "/industrial",
+    "sort_order": 7,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.054359+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.060520+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Programmes",
+    "id": 20,
+    "is_protected": true,
+    "name": "Service Areas",
+    "route": "/service-area",
+    "sort_order": 12,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.060531+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.064768+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Tools",
+    "id": 21,
+    "is_protected": true,
+    "name": "Advanced Calculator",
+    "route": "/advanced-calculator",
+    "sort_order": 14,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.064779+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.073329+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Careers",
+    "id": 22,
+    "is_protected": true,
+    "name": "Careers",
+    "route": "/career",
+    "sort_order": 21,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.073339+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.076226+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Content",
+    "id": 23,
+    "is_protected": true,
+    "name": "Projects",
+    "route": "/projects",
+    "sort_order": 22,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.076236+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.078456+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Content",
+    "id": 24,
+    "is_protected": true,
+    "name": "Resources",
+    "route": "/resources",
+    "sort_order": 23,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.078465+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.080296+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Content",
+    "id": 25,
+    "is_protected": true,
+    "name": "Blog",
+    "route": "/blog",
+    "sort_order": 24,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.080303+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.081753+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Legal",
+    "id": 26,
+    "is_protected": true,
+    "name": "Privacy Policy",
+    "route": "/privacy",
+    "sort_order": 25,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.081760+00:00",
+    "updated_by_id": null
+   },
+   {
+    "created_at": "2026-09-28T17:40:01.083530+00:00",
+    "created_by_id": null,
+    "description": "",
+    "group": "Legal",
+    "id": 27,
+    "is_protected": true,
+    "name": "Terms",
+    "route": "/terms",
+    "sort_order": 26,
+    "status": "published",
+    "updated_at": "2026-09-28T17:40:01.083537+00:00",
+    "updated_by_id": null
+   }
+  ],
+  "sitepages_page_image_slot": [
+   {
+    "alt_text": "",
+    "asset_id": null,
+    "guidance": "Full-width photo behind the headline; landscape, at least 1920×1080.",
+    "id": 1,
+    "key": "hero_background",
+    "label": "Hero background",
+    "order": 0,
+    "page_id": 22,
+    "updated_at": "2026-09-28T17:40:01.087754+00:00",
+    "updated_by_id": null
+   }
+  ],
+  "sitepages_page_seo": [],
+  "sitepages_page_text_slot": [
+   {
+    "guidance": "One line; keep it under ~70 characters so it stays on two lines on phones.",
+    "id": 1,
+    "key": "hero_title",
+    "kind": "short_text",
+    "label": "Hero headline",
+    "max_length": 90,
+    "order": 0,
+    "page_id": 22,
+    "updated_at": "2026-09-28T17:40:01.091165+00:00",
+    "updated_by_id": null,
+    "value": ""
+   },
+   {
+    "guidance": "One or two short sentences under the headline.",
+    "id": 2,
+    "key": "hero_subtitle",
+    "kind": "long_text",
+    "label": "Hero sub-headline",
+    "max_length": 220,
+    "order": 1,
+    "page_id": 22,
+    "updated_at": "2026-09-28T17:40:01.093741+00:00",
+    "updated_by_id": null,
+    "value": ""
+   }
+  ]
+ }
+}

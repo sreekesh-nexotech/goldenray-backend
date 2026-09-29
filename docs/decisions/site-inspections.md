@@ -4,7 +4,7 @@ Work package `site-inspections` builds the `site_inspections` app of PLAN §2.7,
 (staff and customer surfaces), the `agreements.issued` / `agreements.superseded` consumers and the
 `site_inspections.released` producer of §3.5, and the Site Inspection V2 importer of §7.5. The detailed design is
 Plan 2 §3.2. The readiness and checklist rules are the engines-ops package's (`engines.inspection_readiness`,
-`engines.inspection_checks`); this package feeds them the current rows. Deviations: DV-104 … DV-109.
+`engines.inspection_checks`); this package feeds them the current rows. Deviations: DV-122 … DV-127.
 
 ## What exists
 
@@ -12,15 +12,15 @@ Plan 2 §3.2. The readiness and checklist rules are the engines-ops package's (`
 
 | Table | Model | Notes |
 |---|---|---|
-| `site_inspections_inspection` | `Inspection` | Every PLAN column, typed and grouped by wizard stage, with **no commercial column**. `number` is unique (`SV-YYYYMMDD-NNNN`). CHECKs cover every enum (4 required, 20 optional), the E.164 phone, the pincode, lat/long ranges, percentages 0–100 and 24 non-negative measurements. Other CHECKs: AGREEMENT origin ⇒ `agreement_uid`; ON_HOLD ⇒ reason and `held_from_status`; INSTALLATION_READY ⇒ `released_at`. Partial unique: one live inspection per `agreement_uid`. Indexes: (engineer, status), (status, visit_date), created_at, and every FK. Agreement and quotation references are uid columns (DV-104). Extras: `held_from_status`, `agreement_number` (DV-105). |
+| `site_inspections_inspection` | `Inspection` | Every PLAN column, typed and grouped by wizard stage, with **no commercial column**. `number` is unique (`SV-YYYYMMDD-NNNN`). CHECKs cover every enum (4 required, 20 optional), the E.164 phone, the pincode, lat/long ranges, percentages 0–100 and 24 non-negative measurements. Other CHECKs: AGREEMENT origin ⇒ `agreement_uid`; ON_HOLD ⇒ reason and `held_from_status`; INSTALLATION_READY ⇒ `released_at`. Partial unique: one live inspection per `agreement_uid`. Indexes: (engineer, status), (status, visit_date), created_at, and every FK. Agreement and quotation references are uid columns (DV-122). Extras: `held_from_status`, `agreement_number` (DV-123). |
 | `site_inspections_snapshot` | `Snapshot` | Versioned `number` (unique per inspection), `source` PRE_SALE/AGREEMENT, `agreement_version`, `data`. Written only by services. |
 | `site_inspections_photo` | `Photo` | A private `media_asset` (PROTECT) in the reserved folder `site-inspections/<inspection uid>`. Fields: `photo_type` (10 values), `stage` 1–10, `captured_at` (EXIF), `caption`. Unique (id, inspection) is the target of the annotation composite FK. |
 | `site_inspections_annotation` | `Annotation` | `geometry {x,y,w,h}` in image space, `geometry_space` IMAGE/LEGACY_CONTAINER, measurements, `number`, `is_current`. Partial unique: one current per (inspection, type). **Composite FK** `(photo_id, inspection_id) → photo(id, inspection_id)`, added by migration 0002 as raw SQL. |
 | `site_inspections_equipment_assessment` | `EquipmentAssessment` | `checks_version` is pinned. `results` holds every check of the definition. `status` is recomputed. Review fields: `review_status`, `resolved_by/at`, `resolution_note` (a CHECK requires the note and time for RESOLVED/WAIVED). Partial unique on (inspection, type). |
 | `site_inspections_engineering_review` | `EngineeringReview` | `trigger` (MANUAL, EQUIPMENT, STRUCTURE, ROOF, GENERATION), `decision`, `reviewer`, `decided_at` (CHECK). Partial unique: one PENDING per inspection. |
 | `site_inspections_observation` | `Observation` | `stage`, `category`, `note`, photos M2M (`site_inspections_observation_photo`). |
-| `site_inspections_location_approval` | `LocationApproval` | PLAN columns plus `paper_reason` (DV-106). Partial uniques: one PENDING per inspection, and the token hash. CHECKs: PENDING ⇒ link hash and expiry; a paper approval ⇒ scan and reason; E.164 phone; hex hash. |
-| `site_inspections_additional_work_item` | `AdditionalWorkItem` | 13 work types. `agreement_uid` points to the EXTRA_STRUCTURE agreement (DV-104). Partial unique on (inspection, work_type). CHECKs: a costed or quote-sent item ⇒ `agreement_uid`; a decided item ⇒ `decided_at`. |
+| `site_inspections_location_approval` | `LocationApproval` | PLAN columns plus `paper_reason` (DV-124). Partial uniques: one PENDING per inspection, and the token hash. CHECKs: PENDING ⇒ link hash and expiry; a paper approval ⇒ scan and reason; E.164 phone; hex hash. |
+| `site_inspections_additional_work_item` | `AdditionalWorkItem` | 13 work types. `agreement_uid` points to the EXTRA_STRUCTURE agreement (DV-122). Partial unique on (inspection, work_type). CHECKs: a costed or quote-sent item ⇒ `agreement_uid`; a decided item ⇒ `decided_at`. |
 
 ### Endpoints
 
@@ -149,7 +149,7 @@ released_at, released_by_uid}`. Dedup key: `site_inspections.released:<uid>:<ver
      INSTALLATION_READY.
    * APPROVED and INSTALLATION_READY are read-only (409 `inspection_read_only`). This is enforced in the services for
      every write: stages, photos, annotations, equipment, observations, work items.
-   * DV-108 covers the COMPLETED lock.
+   * DV-126 covers the COMPLETED lock.
 2. **Stage allow-lists are strict.** A key outside the stage is a 400 naming the key; it is never silently dropped.
    The following are never writable through a stage: `status`, `system_type`, `origin`, the agreement columns,
    `engineer`, `customer`, `number`, `visit_date`, `quoted_*`, and the layout columns.
@@ -173,7 +173,7 @@ released_at, released_by_uid}`. Dedup key: `site_inspections.released:<uid>:<ver
    * The link token is 256 random bits. Only its SHA-256 is stored, and it expires after 7 days
      (`SITE_INSPECTIONS_APPROVAL_TTL_DAYS`).
    * The link is returned once to the requester, who sends it to the customer. Twilio Verify carries only the code
-     (`leads.services.otp`, purpose APPROVAL, to the approval's phone). See DV-108.
+     (`leads.services.otp`, purpose APPROVAL, to the approval's phone). See DV-126.
    * `respond/` verifies the code before anything is written. It then records the decision, comment, optional drawn
      signature (private SIGNATURE asset) and the trusted client IP.
    * Only the latest PENDING, unexpired approval of an inspection that is CUSTOMER_APPROVAL_PENDING can be answered.
