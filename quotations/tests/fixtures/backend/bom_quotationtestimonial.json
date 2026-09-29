@@ -1,0 +1,53 @@
+[
+ {
+  "id": 1,
+  "name": "Homeowner 01",
+  "location": "Vadakkal, Alappuzha",
+  "system_label": "5 kW System",
+  "installed_on": "2025-06-01",
+  "quote": "The solar panel installation process was smooth from the very beginning. The team clearly explained each stage—from understanding our energy needs to system design, installation, and final activation. All timelines were communicated in advance, and the execution stayed on track without unnecessary delays. The overall experience felt well-planned and dependable.",
+  "quote_ml": "തുടക്കം മുതൽ അവസാനം വരെ മുഴുവൻ പ്രക്രിയയും വളരെ സുഗമമായിരുന്നു. ഞങ്ങളുടെ ആവശ്യങ്ങൾ മനസ്സിലാക്കി ശരിയായ സിസ്റ്റം നിർദേശിക്കുകയും എല്ലാ കാര്യങ്ങളും സമയബന്ധിതമായി പൂർത്തിയാക്കുകയും ചെയ്തു. ടീമിന്റെ സമീപനവും സേവനവും വളരെ മികച്ചതായിരുന്നു.",
+  "photo": "",
+  "photo_url": "",
+  "bill_before": 3200,
+  "bill_after": 200,
+  "is_active": true,
+  "sort_order": 1,
+  "created_at": "2026-09-28T17:39:24.009207+00:00",
+  "updated_at": "2026-09-28T17:39:24.00922+00:00"
+ },
+ {
+  "id": 2,
+  "name": "Homeowner 02",
+  "location": "Cherthala, Alappuzha",
+  "system_label": "5 kW System",
+  "installed_on": "2025-03-01",
+  "quote": "Our commercial solar installation brought better predictability to our monthly power expenses. The team maintained transparent communication throughout the project and handled the technical and approval processes professionally. The transition to solar was structured, efficient, and free from operational disruption, which made the decision feel reassuring.",
+  "quote_ml": "സോളാർ സ്ഥാപിച്ചതോടെ ഞങ്ങളുടെ വൈദ്യുതി ചെലവുകൾ കൂടുതൽ നിയന്ത്രണവിധേയമായി. എല്ലാ ഘട്ടങ്ങളിലും വ്യക്തമായ വിവരങ്ങൾ ലഭിച്ചു. KSEB നടപടികളും സാങ്കേതിക കാര്യങ്ങളും ടീം വളരെ പ്രൊഫഷണലായി കൈകാര്യം ചെയ്തു.",
+  "photo": "",
+  "photo_url": "",
+  "bill_before": 3200,
+  "bill_after": 200,
+  "is_active": true,
+  "sort_order": 2,
+  "created_at": "2026-09-28T17:39:24.010759+00:00",
+  "updated_at": "2026-09-28T17:39:24.010772+00:00"
+ },
+ {
+  "id": 3,
+  "name": "Homeowner 03",
+  "location": "Vattayal, Alappuzha",
+  "system_label": "5 kW System",
+  "installed_on": "2024-05-01",
+  "quote": "What stood out most was the honest guidance we received on system capacity and realistic expectations around savings. The team took time to explain what would work best for our usage rather than overselling. From planning to completion, the project felt reliable, transparent, and well managed.",
+  "quote_ml": "വിൽപ്പനയ്ക്കായി അധിക വാഗ്ദാനങ്ങൾ നൽകാതെ, ഞങ്ങൾക്ക് യഥാർത്ഥത്തിൽ അനുയോജ്യമായ സിസ്റ്റം നിർദേശിച്ചതാണ് ഏറ്റവും ഇഷ്ടപ്പെട്ടത്. പ്ലാനിംഗ് മുതൽ ഇൻസ്റ്റലേഷൻ വരെ മുഴുവൻ പ്രക്രിയയും സുതാര്യവും വിശ്വസ്തതയുള്ളതുമായിരുന്നു.",
+  "photo": "",
+  "photo_url": "",
+  "bill_before": 3200,
+  "bill_after": 200,
+  "is_active": true,
+  "sort_order": 3,
+  "created_at": "2026-09-28T17:39:24.011983+00:00",
+  "updated_at": "2026-09-28T17:39:24.011995+00:00"
+ }
+]

@@ -1,0 +1,225 @@
+{% load quotation_artwork %}{% quotation_artwork payload language as d %}{# the frozen document → the artwork's figures (formatting only) #}
+<div class="qv2">
+
+{# ── 01 · Cover ─────────────────────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="01-cover"><div class="canvas">
+  <div class="brandbar"><div class="brand">{{ d.company.name|upper }}<small>{{ d.copy.brand_line }}</small></div><div class="pageno">{{ d.number }}</div></div>
+  <h1 class="hero">{{ d.cover.headline }}</h1>
+  <p class="lead">{{ d.cover.subline }}</p>
+  <div class="badges">
+    {% if d.cover.badge_subsidy %}<div class="badge"><b>{{ d.cover.badge_subsidy }}</b><span>{{ d.cover.badge_subsidy_sub }}</span></div>{% endif %}
+    {% if d.cover.badge_homes %}<div class="badge"><b>{{ d.cover.badge_homes }}</b><span>{{ d.cover.badge_homes_sub }}</span></div>{% endif %}
+    {% if d.cover.badge_mnre %}<div class="badge"><b>{{ d.cover.badge_mnre }}</b><span>{{ d.cover.badge_mnre_sub }}</span></div>{% endif %}
+  </div>
+  <div class="cols">
+    <div class="letter">
+      <p><b>{{ d.cover.dear }}</b></p>
+      {% for paragraph in d.cover.letter %}<p>{{ paragraph }}</p>{% endfor %}
+      <p>{{ d.cover.regards }}<br><b>{{ d.cover.team }}</b></p>
+    </div>
+    <div class="panel">
+      <h3>{{ d.cover.details_title }}</h3>
+      {% for key, value in d.cover.details %}<div class="detail"><span class="k">{{ key }}</span><span class="v">: {{ value }}</span></div>{% endfor %}
+    </div>
+  </div>
+  <div class="footer"><span>{{ d.company.address }}</span><span>{{ d.company.website }}</span><span>{{ d.company.email }}</span><span>{{ d.company.phone }}</span></div>
+</div></section>
+
+{# ── 02 · Campaign (only while a campaign is active) ────────────────────────────────────────────────────── #}
+{% if d.campaign.available %}
+<section class="sheet" data-page="02-campaign"><div class="canvas">
+  <div class="campaign">
+    <h2>{{ d.campaign.headline }}</h2>
+    <p class="lead" style="color:#fff">{{ d.campaign.subheadline }}</p>
+    {% if d.campaign.period %}<p class="lead" style="color:var(--gold)">{{ d.campaign.period }}</p>{% endif %}
+    {% if d.campaign.image %}<img src="{{ d.campaign.image }}" alt="">{% endif %}
+  </div>
+</div></section>
+{% endif %}
+
+{# ── 03 · Generation and appliance usage ────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="03-usage"><div class="canvas">
+  <h2 class="title">{{ d.usage.title }}</h2>
+  <p class="lead">{{ d.usage.subtitle }}</p>
+  <div class="cols">
+    <div class="card orange"><div class="label">{{ d.usage.gen_label }}</div><div class="big">{{ d.usage.gen_range }} <small>{{ d.usage.gen_units }}</small></div><div class="note">{{ d.usage.gen_note }}</div></div>
+    <div class="card green"><div class="label">{{ d.usage.value_label }}</div><div class="big">{{ d.usage.value_range }}</div><div class="note">{{ d.usage.value_note }}</div></div>
+  </div>
+  <h3 style="font-size:30px;color:var(--deep);margin:40px 0 16px">{{ d.usage.table_title }}</h3>
+  <table class="grid">
+    <tr>{% for header in d.usage.headers %}<th>{{ header }}</th>{% endfor %}</tr>
+    {% for row in d.usage.rows %}<tr><td>{{ row.icon }} {{ row.name }}</td><td>{{ row.qty }}</td><td>{{ row.hours }}</td><td>{{ row.units }}</td></tr>{% endfor %}
+    <tr class="total"><td colspan="3">{{ d.usage.total_label }}</td><td>{{ d.usage.total }} {{ d.usage.units }}</td></tr>
+  </table>
+  <div class="cols" style="margin-top:36px">
+    {% for title, value, note in d.usage.cards %}<div class="card"><div class="label">{{ title }}</div><div class="big">{{ value|default:"–" }}</div><div class="note">{{ note }}</div></div>{% endfor %}
+  </div>
+  <div class="cols" style="margin-top:36px">
+    <div class="panel"><h3>{{ d.usage.life_now_title }}</h3>{% for item in d.usage.life_now %}<p><b>{{ item.title }}</b><br>{{ item.body }}</p>{% endfor %}</div>
+    <div class="panel" style="background:var(--green-soft)"><h3 style="color:var(--green)">{{ d.usage.life_solar_title }}</h3>{% for item in d.usage.life_solar %}<p><b>{{ item.title }}</b><br>{{ item.body }}</p>{% endfor %}</div>
+  </div>
+</div></section>
+
+{# ── 04 · Why Flarize ───────────────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="04-why-flarize"><div class="canvas">
+  <h2 class="title">{{ d.copy.why_title }}</h2>
+  <p class="lead">{{ d.copy.why_body }}</p>
+  <div class="badges">
+    {% if d.company.installations %}<div class="badge"><b>{{ d.company.installations }}+</b><span>{{ d.copy.why_installations }}</span></div>{% endif %}
+    {% if d.company.years %}<div class="badge"><b>{{ d.company.years }}+</b><span>{{ d.copy.why_years }}</span></div>{% endif %}
+    <div class="badge"><b>✓</b><span>{{ d.copy.why_team }}</span></div>
+    <div class="badge"><b>✓</b><span>{{ d.copy.why_office }}</span></div>
+    <div class="badge"><b>✓</b><span>{{ d.copy.why_mnre }}</span></div>
+  </div>
+  <div class="footer"><span>{{ d.company.address }}</span><span>{{ d.company.website }}</span><span>{{ d.company.phone }}</span></div>
+</div></section>
+
+{# ── 05 · Three options ─────────────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="05-options"><div class="canvas">
+  <h2 class="title">{{ d.copy.options_title }}</h2>
+  <p class="lead">{{ d.copy.options_subtitle }}</p>
+  <div class="options">
+    {% for column in d.options.columns %}
+    <div class="option{% if column.tier == d.options.recommended %} recommended{% endif %}">
+      {% if column.tier == d.options.recommended and column.badge %}<span class="ribbon">{{ column.badge }}</span>{% endif %}
+      <h3>{{ column.name }}</h3>
+      {% if column.available %}
+        <div class="desc">{{ column.panel }}{% if column.inverter %} · {{ column.inverter }}{% endif %}</div>
+        <div class="line"><span>{{ d.copy.price_before_gst }}</span><span>{{ column.before_gst }}</span></div>
+        <div class="line"><span>{{ d.copy.gst }} ({{ column.gst_rate }}%)</span><span>{{ column.gst }}</span></div>
+        {% if column.extras %}<div class="line"><span>{{ d.copy.extras }}</span><span>{{ column.extras }}</span></div>{% endif %}
+        <div class="line strong"><span>{{ d.copy.total }}</span><span>{{ column.total }}</span></div>
+        {% if column.discount %}<div class="line green"><span>{{ d.copy.discount }}</span><span>− {{ column.discount }}</span></div><div class="line strong"><span>{{ d.copy.payable }}</span><span>{{ column.payable }}</span></div>{% endif %}
+        {% if column.subsidy %}<div class="line green"><span>{{ d.copy.subsidy }}</span><span>− {{ column.subsidy }}</span></div>{% endif %}
+        {% if column.after_subsidy %}<div class="line strong"><span>{{ d.copy.after_subsidy }}</span><span>{{ column.after_subsidy }}</span></div>{% endif %}
+        {% if column.down_payment %}<div class="line"><span>{{ d.copy.down_payment }}</span><span>{{ column.down_payment }}</span></div>{% endif %}
+        {% if column.emi %}<div class="line strong"><span>{{ d.copy.emi }} ({{ column.emi_rate }}%, {{ column.emi_years }} {{ d.copy.years }})</span><span>{{ column.emi }}{{ d.copy.per_month_short }}</span></div>{% endif %}
+      {% else %}
+        <div class="na">{{ column.not_available }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if d.options.service_rows %}
+  <h3 style="font-size:30px;color:var(--deep);margin:40px 0 16px">{{ d.copy.whats_included }}</h3>
+  <table class="grid">
+    <tr><th></th>{% for column in d.options.columns %}<th>{{ column.name }}</th>{% endfor %}</tr>
+    {% for row in d.options.service_rows %}<tr><td>{{ row.label }}</td>{% for cell in row.cells %}<td>{{ cell }}</td>{% endfor %}</tr>{% endfor %}
+  </table>
+  {% endif %}
+</div></section>
+
+{# ── 06 · Testimonials (left out without real testimonials) ─────────────────────────────────────────────── #}
+{% if d.testimonials.available %}
+<section class="sheet" data-page="06-social-proof"><div class="canvas">
+  <h2 class="title">{{ d.copy.testimonials_title }}</h2>
+  {% if d.testimonials.intro %}<p class="lead">{{ d.testimonials.intro }}</p>{% endif %}
+  <div class="tcards">
+    {% for entry in d.testimonials.entries %}
+    <div class="tcard">
+      <div class="photo"{% if entry.photo %} style="background-image:url('{{ entry.photo }}')"{% endif %}></div>
+      <div>
+        <div class="who">{{ entry.name }}{% if entry.place %} — {{ entry.place }}{% endif %}</div>
+        <div class="muted">{{ entry.system }}{% if entry.installed %} | {{ entry.installed }}{% endif %}</div>
+        <q>{{ entry.quote }}</q>
+        {% if entry.bill_before %}<div class="line"><span>{{ d.copy.bill_before }} {{ entry.bill_before }}</span><span>{{ d.copy.bill_after }} {{ entry.bill_after }}</span><span>{{ d.copy.saving }} {{ entry.saving }}</span></div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div></section>
+{% endif %}
+
+{# ── 07 · Technical specifications ──────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="07-tech-specs"><div class="canvas">
+  <h2 class="title">{{ d.copy.specs_title }}</h2>
+  <p class="lead">{{ d.copy.specs_subtitle }}</p>
+  {% for column in d.options.columns %}{% if column.available %}
+  <h3 style="font-size:28px;color:var(--orange);margin:28px 0 10px">{{ column.name }}</h3>
+  <table class="grid">
+    <tr><th>{{ d.copy.component }}</th><th></th><th></th><th>{{ d.copy.qty }}</th></tr>
+    {% for spec in column.specs %}<tr><td>{{ spec.role }}</td><td>{{ spec.brand }} {{ spec.model }}</td><td>{{ spec.capacity }}</td><td>{{ spec.qty }}</td></tr>{% endfor %}
+    <tr class="total"><td>{{ d.copy.total }}</td><td colspan="3">{{ column.total }}</td></tr>
+  </table>
+  {% endif %}{% endfor %}
+</div></section>
+
+{# ── 08 · Savings and payment ───────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="08-savings"><div class="canvas">
+  <h2 class="title">{{ d.copy.savings_title }}</h2>
+  {% if d.savings.available %}
+  <div class="cols">
+    <div class="card"><div class="label">{{ d.copy.current_bill }}</div><div class="big">{{ d.savings.current_bill }}</div></div>
+    <div class="card green"><div class="label">{{ d.copy.with_solar }}</div><div class="big">{{ d.savings.with_solar }}</div></div>
+    <div class="card orange"><div class="label">{{ d.copy.monthly_savings }}</div><div class="big">{{ d.savings.monthly }}</div></div>
+  </div>
+  <div class="cols" style="margin-top:28px">
+    <div class="card"><div class="label">{{ d.copy.payback }}</div><div class="big">{{ d.savings.payback_months }} {{ d.copy.months }}</div></div>
+    {% if d.savings.lifetime %}<div class="card"><div class="label">{{ d.copy.lifetime_savings }}</div><div class="big">{{ d.savings.lifetime }}</div></div>{% endif %}
+  </div>
+  {% else %}<div class="na">{{ d.copy.not_available }}</div>{% endif %}
+  {% if d.finance.available %}
+  <div class="panel" style="margin-top:32px"><h3>{{ d.copy.emi_option }}</h3>
+    <div class="line"><span>{{ d.copy.down_payment }}</span><span>{{ d.finance.down_payment }}</span></div>
+    <div class="line"><span>{{ d.copy.after_subsidy }}</span><span>{{ d.finance.post_subsidy }}</span></div>
+    <div class="line strong"><span>{{ d.copy.emi }} ({{ d.finance.rate }}%, {{ d.finance.years }} {{ d.copy.years }})</span><span>{{ d.finance.emi }}{{ d.copy.per_month }}</span></div>
+  </div>
+  {% endif %}
+  <div class="cols" style="margin-top:32px">
+    {% if d.bank.available %}
+    <div class="panel"><h3>{{ d.copy.bank_details }}</h3>
+      <div class="detail"><span class="k">{{ d.copy.bank_name }}</span><span class="v">: {{ d.bank.name }}{% if d.bank.branch %}, {{ d.bank.branch }}{% endif %}</span></div>
+      <div class="detail"><span class="k">{{ d.copy.account_name }}</span><span class="v">: {{ d.bank.account_name }}</span></div>
+      <div class="detail"><span class="k">{{ d.copy.account_number }}</span><span class="v">: {{ d.bank.account_number }}</span></div>
+      <div class="detail"><span class="k">{{ d.copy.ifsc }}</span><span class="v">: {{ d.bank.ifsc }}</span></div>
+      {% if d.bank.upi %}<div class="detail"><span class="k">{{ d.copy.upi }}</span><span class="v">: {{ d.bank.upi }}</span></div>{% endif %}
+    </div>
+    {% endif %}
+    <div class="panel"><h3>{{ d.savings.docs_title }}</h3><ul class="ticks">{% for item in d.savings.docs %}<li>{{ item }}</li>{% endfor %}</ul>
+      {% if d.savings.structure_label %}<p class="muted" style="font-size:20px">{{ d.savings.structure_label }}: <b>{{ d.savings.structure_value }}</b></p>{% endif %}
+    </div>
+  </div>
+</div></section>
+
+{# ── 09 · Installation timeline ─────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="09-journey"><div class="canvas">
+  <h2 class="title">{{ d.journey.title }}</h2>
+  <div class="steps">
+    {% for step in d.journey.steps %}<div class="step"><div class="day">{{ step.days }}<small>{{ d.journey.days }}</small></div><div><b>{{ step.title }}</b><p>{{ step.body }}</p></div></div>{% endfor %}
+  </div>
+  <div class="card orange" style="margin:32px 0"><div class="label">{{ d.journey.refund_title }}</div><p style="font-size:21px;margin:8px 0">{{ d.journey.refund_body }}</p>{% if d.journey.refund_line %}<b style="font-size:26px;color:var(--deep)">{{ d.journey.refund_line }}</b>{% endif %}</div>
+  <div class="cols">
+    <div class="panel"><h3>{{ d.journey.we_handle_title }}</h3><ul class="ticks">{% for item in d.journey.we_handle %}<li>{{ item }}</li>{% endfor %}</ul></div>
+    <div class="panel"><h3>{{ d.journey.customer_scope_title }}</h3><ul class="ticks">{% for item in d.journey.customer_scope %}<li>{{ item }}</li>{% endfor %}</ul></div>
+  </div>
+</div></section>
+
+{# ── 10 / 11 · Terms and conditions ─────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="10-terms"><div class="canvas terms">
+  <h2 class="title">{{ d.terms.title }}</h2>
+  {% for term in d.terms.page10 %}<h4>{{ term.number }}. {{ term.title }}</h4><p>{{ term.body }}</p>{% endfor %}
+</div></section>
+{% if d.terms.page11 %}
+<section class="sheet" data-page="11-terms-2"><div class="canvas terms">
+  <h2 class="title">{{ d.terms.title }}</h2>
+  {% for term in d.terms.page11 %}<h4>{{ term.number }}. {{ term.title }}</h4><p>{{ term.body }}</p>{% endfor %}
+</div></section>
+{% endif %}
+
+{# ── 12 · Investment summary ────────────────────────────────────────────────────────────────────────────── #}
+<section class="sheet" data-page="12-summary"><div class="canvas summary">
+  <h2 class="title">{{ d.copy.summary_title }}</h2>
+  <div class="row"><span>{{ d.copy.system_size }}</span><b>{{ d.summary.size }}</b></div>
+  <div class="row"><span>{{ d.copy.package }}</span><b>{{ d.summary.package }}</b></div>
+  <div class="row"><span>{{ d.copy.system_cost }}</span><b>{{ d.summary.system_cost }}</b></div>
+  {% if d.summary.subsidy %}<div class="row"><span>{{ d.copy.subsidy }}</span><b>− {{ d.summary.subsidy }}</b></div>{% endif %}
+  {% if d.summary.investment %}<div class="row key"><span>{{ d.copy.your_investment }}</span><b>{{ d.summary.investment }}</b></div>{% endif %}
+  {% if d.summary.monthly_savings %}<div class="row"><span>{{ d.copy.monthly_savings }}</span><b>{{ d.summary.monthly_savings }}{{ d.copy.per_month }}</b></div>{% endif %}
+  {% if d.summary.payback_months %}<div class="row"><span>{{ d.copy.payback }}</span><b>{{ d.summary.payback_months }} {{ d.copy.months }}</b></div>{% endif %}
+  {% if d.summary.lifetime %}<div class="row"><span>{{ d.copy.lifetime_savings }}</span><b>{{ d.summary.lifetime }}</b></div>{% endif %}
+  {% if d.summary.emi %}<div class="row"><span>{{ d.copy.emi_option }}</span><b>{{ d.summary.emi }}{{ d.copy.per_month }} ({{ d.summary.emi_rate }}%, {{ d.summary.emi_years }} {{ d.copy.years }})</b></div>{% endif %}
+  <div class="card orange" style="margin-top:48px"><div class="label">{{ d.copy.refer }}</div></div>
+  <div class="footer"><span>{{ d.company.address }}</span><span>{{ d.company.website }}</span><span>{{ d.company.email }}</span><span>{{ d.company.phone }}</span></div>
+</div></section>
+
+</div>

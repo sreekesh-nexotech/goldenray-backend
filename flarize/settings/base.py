@@ -440,6 +440,17 @@ SPECTACULAR_SETTINGS = {
         "EngineeringSubjectTypeEnum": "engineering.models.choices.SubjectType",
         "EngineeringRunResultEnum": "engineering.models.choices.RunResult",
         "EngineeringSeverityEnum": "engineering.models.choices.Severity",
+        "QuotationStatusEnum": "quotations.models.choices.QuotationStatus",
+        "QuotationVersionStatusEnum": "quotations.models.choices.VersionStatus",
+        "QuotationDiscountStatusEnum": "quotations.models.choices.DiscountStatus",
+        "QuotationContentStatusEnum": "quotations.models.choices.ContentStatus",
+        "QuotationEmailStatusEnum": "quotations.models.choices.EmailStatus",
+        "QuotationSourceEnum": "quotations.models.choices.QuotationSource",
+        "QuotationSubsidyTypeEnum": "quotations.models.choices.SubsidyType",
+        "QuotationLanguageEnum": "quotations.models.choices.Language",
+        "QuotationBatteryConfigEnum": "quotations.serializers.quotations.BATTERY_CONFIG_CHOICES",
+        # named once quotations added a third "battery_config" choice set
+        "PricingBatteryConfigEnum": "pricing.models.choices.BatteryConfig",
     },
 }
 
@@ -483,6 +494,8 @@ CELERY_BEAT_SCHEDULE = {
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
     # Offers whose ends_on has passed become EXPIRED (pricing.services.offers.expire_due_offers).
     "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
+    # ISSUED quotations past their frozen validity become EXPIRED (quotations.services.lifecycle.expire_due).
+    "quotations.expire_quotations": {"task": "quotations.tasks.expire_quotations", "schedule": crontab(hour=0, minute=23)},
     # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
     "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
     # attendance (A7, A8): the debounced recompute's safety net, each office's day finalised after 00:30 office time,
