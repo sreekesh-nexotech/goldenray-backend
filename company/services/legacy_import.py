@@ -3,6 +3,7 @@
 * :func:`import_site_settings` — CMS ``siteconfig_settings`` (PLAN §7.2 row 11) → ``company_profile``: company name,
   e-mail, phone (E.164), address, notification lists and switches, careers settings. The SEO defaults of the same row
   (``default_meta_description``, ``default_og_image_id``) are ``seo.services.legacy_import.import_site_seo_defaults``.
+* :func:`import_flarize_company_profile` — Flarize ``company-profile.json`` (PLAN §7.4), fill-only;
 * :func:`import_quotation_settings` — main backend ``bom_quotationsettings`` (PLAN §7.3) → the ``quotation_offer_*``
   fields; the uploaded ``offer_image`` file is read with ``read_file(path)`` and stored through the media upload
   pipeline (sniffed, public IMAGE, folder ``company``).
@@ -232,4 +233,63 @@ def import_quotation_settings(rows: Iterable[dict], *, read_file: Callable[[str]
             if image is not False:
                 data["quotation_offer_image"] = image
         _apply(report, data, user=user, source_system=BACKEND, source_id=source_id)
+    return _finish(report, rows, user=user, dry_run=dry_run)
+
+
+# ── Flarize company-profile.json (PLAN §7.4) ─────────────────────────────────────────────────────────────────────
+FLARIZE = LegacyMap.SourceSystem.FLARIZE
+FLARIZE_PROFILE_TABLE = "company-profile.json"
+FLARIZE_TEXTS = {
+    "legalName": "legal_name",
+    "brandName": "trade_name",
+    "gstin": "gstin",
+    "address": "address_line",
+    "city": "address_locality",
+    "state": "address_region",
+    "pincode": "postal_code",
+}
+FLARIZE_BANK_FIELDS = ("bankName", "bankAccountName", "bankAccountNumber", "bankIfsc", "bankBranch", "upiId")
+FLARIZE_ASSET_FIELDS = ("upiQrAssetId", "signatureAssetId", "sealAssetId")
+FLARIZE_LISTED_FIELDS = ("displayName", "parentBrandLine", "companyRegistration", "paymentInstructions", "completedInstallations", "yearsExperience", "mnreEmpanelled")
+
+
+@transaction.atomic
+def import_flarize_company_profile(document: dict | None, *, user=None, dry_run: bool = False) -> dict:
+    """Flarize ``company-profile.json`` → ``company_profile``, **fill only**: a value the profile already holds (CMS
+    import, Studio) is kept and the difference listed (``value_differs``; D-9 — the entity text is the business's
+    choice). Bank/UPI details are never written (``enter_as_bank_account``: ``company_bank_account`` is entered by
+    staff, D-9; the account number is not repeated in the report); the Flarize CMS asset ids of the signature, seal and
+    UPI QR are listed (``asset_not_linked``: the files are copied privately by the ``flarize.cms_assets`` step); fields
+    without a column are listed (``listed_only``). Legacy map ``FLARIZE company-profile.json profile``."""
+    rows = [document] if document else []
+    report = Report(FLARIZE_PROFILE_TABLE)
+    for row in rows:
+        source_id = "profile"
+        profile = current_profile()
+        wanted = {target: str(row.get(column) or "").strip() for column, target in FLARIZE_TEXTS.items() if str(row.get(column) or "").strip()}
+        emails = _emails(row.get("email"), report, source_id, "email")
+        if emails:
+            wanted["email"] = emails[0]
+        phone = _phone(row.get("phone"), report, source_id)
+        if phone:
+            wanted["phone_e164"] = phone
+        website = str(row.get("website") or "").strip()
+        if website:
+            wanted["website"] = website if website.startswith(("http://", "https://")) else f"https://{website}"
+        data = {}
+        for field, value in wanted.items():
+            current = getattr(profile, field)
+            if not current:
+                data[field] = value
+            elif current != value:
+                report.violation(source_id, "value_differs", f"{field}: the profile says {current!r}, Flarize says {value!r}; the profile value is kept.")
+        if any(row.get(column) for column in FLARIZE_BANK_FIELDS):
+            report.violation(source_id, "enter_as_bank_account", f"bank/UPI details ({row.get('bankName') or '—'}): enter them as a company bank account (D-9); not migrated.")
+        for column in FLARIZE_ASSET_FIELDS:
+            if row.get(column):
+                report.violation(source_id, "asset_not_linked", f"{column} {row[column]!r} is a Flarize CMS asset (copied privately with the cms-assets); set it in the company settings.")
+        for column in FLARIZE_LISTED_FIELDS:
+            if row.get(column) not in (None, ""):
+                report.violation(source_id, "listed_only", f"{column}={row[column]!r} has no company profile column; not imported.")
+        _apply(report, data, user=user, source_system=FLARIZE, source_id=source_id)
     return _finish(report, rows, user=user, dry_run=dry_run)

@@ -24,7 +24,7 @@ def _target(customer_id):
 
 def test_every_row_imports_with_its_code_and_timestamps():
     owner = UserFactory()
-    LegacyMap.objects.create(source_system="FLARIZE", source_table="users", source_id="user-1788862142433-ba6751ae", target_table="accounts_user", target_id=owner.pk)
+    LegacyMap.objects.create(source_system="FLARIZE", source_table="users.json", source_id="user-1788862142433-ba6751ae", target_table="accounts_user", target_id=owner.pk)
     result = legacy_import.import_flarize_customers(ROWS)
     assert result["created"] == 34 and result["updated"] == result["skipped"] == 0
     codes = sorted({violation["code"] for violation in result["violations"]})

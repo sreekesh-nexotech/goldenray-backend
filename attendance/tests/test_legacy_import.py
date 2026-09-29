@@ -42,6 +42,19 @@ def by_code(report):
     return {(month["employee_code"], month["month"]): month for month in report["months"]}
 
 
+def test_read_only_diff_report_equals_the_import_diff_and_writes_nothing(tables, people):
+    """``diff_report`` (``verify_migration`` #11) rebuilds the import's per-employee-month comparison from the stored v4
+    days without recomputing or auditing."""
+    legacy_import.import_raw_punches(tables["attendance_raw"])
+    imported = legacy_import.status_diff_report(tables["attendance"], at=AT)
+    days, audits = AttendanceDay.all_objects.count(), AuditLog.objects.count()
+    report = legacy_import.diff_report(tables["attendance"])
+    assert report["months"] == imported["months"] and (report["days_compared"], report["days_differing"]) == (155, 5)
+    assert (report["date_from"], report["date_to"]) == ("2026-08-01", "2026-08-31")
+    assert AttendanceDay.all_objects.count() == days and AuditLog.objects.count() == audits
+    assert legacy_import.diff_report([])["months"] == []
+
+
 class TestRawPunches:
     def test_every_punch_once_with_its_content_key(self, tables, people):
         report = legacy_import.import_raw_punches(tables["attendance_raw"])

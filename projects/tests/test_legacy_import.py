@@ -32,7 +32,7 @@ def _rows():
 @pytest.fixture
 def sources(db):
     admin = UserFactory()
-    LegacyMap.objects.create(source_system="FLARIZE", source_table="users", source_id="admin-001", target_table="accounts_user", target_id=admin.pk)
+    LegacyMap.objects.create(source_system="FLARIZE", source_table="users.json", source_id="admin-001", target_table="accounts_user", target_id=admin.pk)
     imported = CustomerFactory(code="CUST-TMP")
     LegacyMap.objects.create(source_system="FLARIZE", source_table="customers", source_id="CUST-MTBP1EAI-582059", target_table="customers_customer", target_id=imported.pk)
     by_phone = CustomerFactory(phone_e164="+919847000004")

@@ -1,0 +1,61 @@
+{
+ "storeVersion": "cms.1",
+ "pages": {
+  "pg_mt9zz3c3buse971": {
+   "pageId": "pg_mt9zz3c3buse971",
+   "note": "stub (page designer not migrated)"
+  }
+ },
+ "pageVersions": {},
+ "assets": {
+  "asset_mt9zz3e3mctcx09": {
+   "assetId": "asset_mt9zz3e3mctcx09",
+   "filename": "logo.png",
+   "storagePath": "asset_mt9zz3e3mctcx09.png",
+   "mimeType": "image/png",
+   "width": null,
+   "height": null,
+   "fileSizeBytes": 70,
+   "checksum": "cdb30873bdf16770bfea1fe86e44db7476e504c2dca1542b0660b20f47f523a7",
+   "uploadedBy": "admin",
+   "uploadedAt": "2026-08-26T11:15:17.357Z",
+   "status": "ACTIVE",
+   "usedByPageVersionIds": []
+  },
+  "asset_mt9zz6rczgkdr09": {
+   "assetId": "asset_mt9zz6rczgkdr09",
+   "filename": "logo.png",
+   "storagePath": "asset_mt9zz6rczgkdr09.png",
+   "mimeType": "image/png",
+   "width": null,
+   "height": null,
+   "fileSizeBytes": 70,
+   "checksum": "cdb30873bdf16770bfea1fe86e44db7476e504c2dca1542b0660b20f47f523a7",
+   "uploadedBy": "admin",
+   "uploadedAt": "2026-08-26T11:15:21.720Z",
+   "status": "ACTIVE",
+   "usedByPageVersionIds": []
+  },
+  "asset_mt9zz3efehkul210": {
+   "assetId": "asset_mt9zz3efehkul210",
+   "filename": "unused.png",
+   "storagePath": "asset_mt9zz3efehkul210.png",
+   "mimeType": "image/png",
+   "width": null,
+   "height": null,
+   "fileSizeBytes": 70,
+   "checksum": "cdb30873bdf16770bfea1fe86e44db7476e504c2dca1542b0660b20f47f523a7",
+   "uploadedBy": "admin",
+   "uploadedAt": "2026-08-26T11:15:17.367Z",
+   "status": "ARCHIVED",
+   "usedByPageVersionIds": []
+  }
+ },
+ "campaigns": {
+  "cmp_mt9zz3ey5li8ir11": {
+   "campaignId": "cmp_mt9zz3ey5li8ir11",
+   "note": "stub"
+  }
+ },
+ "fieldRegistry": {}
+}

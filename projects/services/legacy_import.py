@@ -14,7 +14,7 @@ Rules (:func:`import_flarize_workspace_projects`, rows = ``workspace-state.json`
 * ``sysType`` ongrid/hybrid → ``ON_GRID``/``HYBRID`` (anything else ``UNDECIDED``, ``unknown_system_type``), ``tier`` →
   upper case, ``sizeKw`` → ``size_kw``, ``phase`` kept, ``packageId`` → ``title``;
 * status IN_PROGRESS (the BOM is locked; PLAN lifecycle), ``bom_locked_at`` = ``lock.lockedAt``, ``bom_locked_by`` =
-  ``lock.lockedBy`` through the imported users (``FLARIZE`` / ``users``; unmapped → empty, ``unmapped_user``);
+  ``lock.lockedBy`` through the imported users (``FLARIZE`` / ``users.json``; unmapped → empty, ``unmapped_user``);
 * ``bom_lock`` = the lock snapshot in the platform shape with ``legacy: true``: each line's ``componentId`` is the SKU
   (``component_uid`` resolved from the catalog, else null with ``unknown_component``), ``unitSellingPrice`` /
   ``unitPurchaseCost`` → ``unit_list_price`` / ``unit_landed_cost``; the engineering verdict (``engineeringStatus``
@@ -64,7 +64,7 @@ def _text(value, limit: int) -> str:
 def _user(run: ImportRun, row_id: str, legacy_user, column: str) -> User | None:
     if legacy_user in (None, "", "SYSTEM"):
         return None
-    target = mapped_id(FLARIZE, "users", legacy_user)
+    target = mapped_id(FLARIZE, "users.json", legacy_user)
     if target is None:
         run.violation(row_id, "unmapped_user", f"{column}={legacy_user!r} has no imported user; left empty.")
         return None
@@ -126,7 +126,7 @@ def _snapshot(run: ImportRun, row_id: str, row: dict, lock: dict) -> dict:
         )
     acknowledgements = []
     for ack in lock.get("acknowledgements") or row.get("acknowledgements") or []:
-        by = mapped_id(FLARIZE, "users", ack.get("acknowledgedBy")) if ack.get("acknowledgedBy") else None
+        by = mapped_id(FLARIZE, "users.json", ack.get("acknowledgedBy")) if ack.get("acknowledgedBy") else None
         by_uid = User.objects.filter(pk=by).values_list("uid", flat=True).first() if by else None
         acknowledgements.append(
             {

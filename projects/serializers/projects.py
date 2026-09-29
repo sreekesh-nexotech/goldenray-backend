@@ -174,5 +174,6 @@ class CloseSerializer(ExpectedVersionMixin):
     note = serializers.CharField(required=False, allow_blank=True, max_length=10_000, default="")
 
 
+@extend_schema_serializer(component_name="ProjectCancel")  # quotations has a CancelSerializer too
 class CancelSerializer(ExpectedVersionMixin):
     reason = serializers.CharField(max_length=2000)

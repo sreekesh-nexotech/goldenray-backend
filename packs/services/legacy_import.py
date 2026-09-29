@@ -135,7 +135,8 @@ def _validated(result: ImportRun, number, config) -> dict | None:
 
 
 def _pins(result: ImportRun, version: ConfigVersion, registry: dict, *, user) -> int:
-    """Pins of every pack of ``version`` from the registry package ``buildBom`` reads for it (replaces earlier pins)."""
+    """Pins of every pack of ``version`` from the registry package ``buildBom`` reads for it (replaces earlier pins).
+    Returns the number of pins written (created, changed or removed): 0 when a re-run finds them as they were."""
     config = version.config or {}
     slots = {system: {slot.get("category") for slot in (template or {}).get("slots") or [] if slot.get("variable", True)} for system, template in (config.get("bomTemplates") or {}).items()}
     packs = {pack.key: pack for pack in ConfigPack.objects.filter(config_version=version)}
@@ -167,15 +168,17 @@ def _pins(result: ImportRun, version: ConfigVersion, registry: dict, *, user) ->
         for slot_key, pin in current.items():
             if slot_key not in wanted:
                 pin.soft_delete(user)
+                count += 1
         for slot_key, (component, authoritative, alternates) in wanted.items():
             pin = current.get(slot_key)
             if pin is None:
                 pin = ConfigPin(pack=pack, slot_key=slot_key, component=component, authoritative=authoritative, alternates=alternates)
                 pin.created_by = pin.updated_by = user if getattr(user, "pk", None) else None
                 pin.save()
+                count += 1
             elif (pin.component_id, pin.authoritative, pin.alternates) != (component.pk, authoritative, alternates):
                 pin.versioned_update(user, component=component, authoritative=authoritative, alternates=alternates)
-            count += 1
+                count += 1
     return count
 
 

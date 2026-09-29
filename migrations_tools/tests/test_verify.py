@@ -50,7 +50,9 @@ def results(check_verifier, *numbers):
 
 def test_a_clean_import_passes_every_check(imported, legacy_cms, corpus):
     outcome = results(verifier(legacy_cms, corpus, list_prices_as_release=True))
-    assert {number: result.status for number, result in outcome.items()} == {number: "pass" for number in (1, 2, 3, 4, 5, 6, 7, 10, 12)}, {
+    # #8, #9 (Flarize) and #11 (eSSL) check sources this verification does not cover: n/a (migration-ops)
+    expected = {number: "pass" for number in (1, 2, 3, 4, 5, 6, 7, 10, 12)} | {8: "n/a", 9: "n/a", 11: "n/a"}
+    assert {number: result.status for number, result in outcome.items()} == expected, {
         number: result.details for number, result in outcome.items() if result.status != "pass"
     }
     assert outcome[3].summary.startswith("71 requests compared")

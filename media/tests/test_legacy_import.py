@@ -10,7 +10,7 @@ from core.models import LegacyMap
 from media.models import MediaAsset
 from media.services import legacy_import
 from media.services.storage import StorageError
-from media.tests.files import pdf, webp
+from media.tests.files import pdf, png, webp
 
 pytestmark = pytest.mark.django_db
 
@@ -118,3 +118,47 @@ def test_reupload_never_overwrites_a_file_another_asset_owns(settings):
     assert [violation["code"] for violation in result["violations"]] == ["storage_key_taken"]
     assert (settings.PUBLIC_MEDIA_ROOT / "uploads/logo.webp").read_bytes() == ours  # the platform's file is untouched
     assert result["skipped"] == 1 and not LegacyMap.objects.exists()
+
+
+def flarize_asset(**overrides):
+    """A Flarize ``cms-state.json`` asset record (the page designer's library), in the file's exact shape."""
+    return {
+        "assetId": "asset_a1",
+        "filename": "logo.png",
+        "storagePath": "asset_a1.png",
+        "mimeType": "image/png",
+        "fileSizeBytes": 70,
+        "checksum": "",
+        "uploadedBy": "admin",
+        "uploadedAt": "2026-08-26T11:15:17.357Z",
+        "status": "ACTIVE",
+        "usedByPageVersionIds": [],
+        **overrides,
+    }
+
+
+def test_flarize_cms_assets_are_copied_privately_once():
+    image = png()
+    files = {"cms-assets/asset_a1.png": image, "cms-assets/asset_a2.png": image, "cms-assets/asset_a3.png": b"not an image"}
+    rows = [
+        flarize_asset(checksum=hashlib.sha256(image).hexdigest()),
+        flarize_asset(assetId="asset_a2", storagePath="asset_a2.png", checksum="0" * 64),
+        flarize_asset(assetId="asset_a3", storagePath="asset_a3.png"),
+        flarize_asset(assetId="asset_a4", storagePath="asset_a4.png"),
+        flarize_asset(assetId="asset_a5", status="ARCHIVED"),
+        {"filename": "no id"},
+    ]
+    result = legacy_import.import_flarize_cms_assets(rows, read_file=files.get)
+    assert result["created"] == 2 and result["skipped"] == 4
+    codes = {violation["source_id"]: violation["code"] for violation in result["violations"]}
+    assert codes == {"asset_a2": "checksum_mismatch", "asset_a3": "file_refused", "asset_a4": "file_unavailable", "asset_a5": "not_active", "": "incomplete_row"}
+    copied = MediaAsset.objects.get(pk=LegacyMap.objects.get(source_system="FLARIZE", source_id="asset_a1").target_id)
+    assert copied.visibility == "PRIVATE" and copied.folder == "flarize-cms" and copied.checksum_sha256 == hashlib.sha256(image).hexdigest()
+    assert copied.created_at.isoformat().startswith("2026-08-26T11:15:17")
+    assert legacy_import.import_flarize_cms_assets(rows, read_file=files.get)["created"] == 0 and MediaAsset.objects.count() == 2
+    assert AuditLog.objects.filter(action="media.legacy_import", after__source_table="cms-state.json:assets").count() == 2
+
+
+def test_flarize_cms_assets_dry_run_writes_no_row():
+    result = legacy_import.import_flarize_cms_assets([flarize_asset()], read_file={"cms-assets/asset_a1.png": png()}.get, dry_run=True)
+    assert result["created"] == 1 and not MediaAsset.objects.exists() and not LegacyMap.objects.exists()

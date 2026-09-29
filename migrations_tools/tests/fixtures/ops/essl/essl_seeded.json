@@ -1,0 +1,208 @@
+{
+ "source": "eSSL alembic head + scripts/seed.py (private database)",
+ "tables": {
+  "adms_requests": [],
+  "adms_unknown_devices": [],
+  "agents": [],
+  "attendance": [],
+  "attendance_raw": [],
+  "attendance_rules": [],
+  "device_users": [],
+  "devices": [
+   {
+    "adms_enabled": false,
+    "adms_last_command_poll_at": null,
+    "adms_last_handshake_at": null,
+    "adms_last_push_at": null,
+    "adms_last_seen_at": null,
+    "adms_options": {},
+    "adms_port": null,
+    "adms_registration_state": "NEVER_SEEN",
+    "adms_request_count": 0,
+    "adms_server": null,
+    "adms_source_ip": null,
+    "agent_id": null,
+    "attendance_count": 0,
+    "comm_password": 0,
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "device_info": {},
+    "expected_mac": null,
+    "expected_serial": null,
+    "firmware_version": null,
+    "id": 1,
+    "identity_checked_at": null,
+    "identity_message": null,
+    "identity_status": "UNVERIFIED",
+    "ip_address": "192.168.1.209",
+    "is_active": true,
+    "is_online": false,
+    "last_error": null,
+    "last_punch_at": null,
+    "last_seen_at": null,
+    "last_sync_at": null,
+    "mac_address": null,
+    "model": null,
+    "name": "MARS-01",
+    "notes": "eSSL AI FACE MARS. Read-only ZK/TCP integration.",
+    "office_id": 1,
+    "platform": null,
+    "port": 4370,
+    "protocol": "ZK_TCP",
+    "serial_number": null,
+    "serial_verified_at": null,
+    "timeout_seconds": 15,
+    "updated_at": "2026-09-29T17:57:09.077693+00:00",
+    "user_count": 0
+   }
+  ],
+  "employees": [],
+  "holidays": [],
+  "leave_records": [],
+  "offices": [
+   {
+    "address": null,
+    "code": "HO",
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "default_shift_id": 1,
+    "id": 1,
+    "is_active": true,
+    "name": "Main Office",
+    "timezone": "Asia/Kolkata",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   },
+   {
+    "address": null,
+    "code": "BR1",
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "default_shift_id": 1,
+    "id": 2,
+    "is_active": true,
+    "name": "Branch 1",
+    "timezone": "Asia/Kolkata",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   },
+   {
+    "address": null,
+    "code": "BR2",
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "default_shift_id": 1,
+    "id": 3,
+    "is_active": true,
+    "name": "Branch 2",
+    "timezone": "Asia/Kolkata",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   }
+  ],
+  "protocol_mappings": [],
+  "roles": [
+   {
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "description": "Full access to configuration and attendance",
+    "id": 1,
+    "name": "ADMIN",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   },
+   {
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "description": "Attendance, employees and reports",
+    "id": 2,
+    "name": "HR",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   },
+   {
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "description": "Sees their own attendance and reports",
+    "id": 3,
+    "name": "USER",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   },
+   {
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "description": "Read-only access",
+    "id": 4,
+    "name": "VIEWER",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00"
+   }
+  ],
+  "shifts": [
+   {
+    "auto_deduct_break": true,
+    "break_minutes": 60,
+    "code": "GEN",
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "early_exit_threshold_minutes": 15,
+    "end_time": "18:30:00",
+    "full_day_minutes": 480,
+    "grace_minutes": 10,
+    "half_day_minutes": 240,
+    "id": 1,
+    "is_active": true,
+    "is_overnight": false,
+    "late_threshold_minutes": 0,
+    "name": "General Shift",
+    "office_id": null,
+    "overtime_after_minutes": 480,
+    "overtime_enabled": true,
+    "start_time": "09:30:00",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00",
+    "weekly_off_days": [
+     6
+    ],
+    "working_days": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   },
+   {
+    "auto_deduct_break": true,
+    "break_minutes": 60,
+    "code": "NIGHT",
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "early_exit_threshold_minutes": 15,
+    "end_time": "06:00:00",
+    "full_day_minutes": 480,
+    "grace_minutes": 10,
+    "half_day_minutes": 240,
+    "id": 2,
+    "is_active": true,
+    "is_overnight": true,
+    "late_threshold_minutes": 0,
+    "name": "Night Shift",
+    "office_id": null,
+    "overtime_after_minutes": 480,
+    "overtime_enabled": true,
+    "start_time": "22:00:00",
+    "updated_at": "2026-09-29T17:57:09.077693+00:00",
+    "weekly_off_days": [
+     6
+    ],
+    "working_days": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ]
+   }
+  ],
+  "sync_logs": [],
+  "users": [
+   {
+    "created_at": "2026-09-29T17:57:09.077693+00:00",
+    "email": null,
+    "full_name": "Administrator",
+    "id": 1,
+    "is_active": true,
+    "password_hash": "$2b$04$4rrafTgGJ9a3iL7VFyKMhu.jQihoBwxXhIiJ5jd3tmVapem.gym9G",
+    "role_id": 1,
+    "updated_at": "2026-09-29T17:57:09.077693+00:00",
+    "username": "admin"
+   }
+  ]
+ }
+}

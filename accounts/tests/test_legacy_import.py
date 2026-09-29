@@ -201,3 +201,40 @@ class TestResetLinks:
         assert PasswordReset.objects.filter(user=user).count() == 1
         User.objects.filter(pk=user.pk).update(must_reset_password=False)
         assert legacy_import.issue_reset_links(send=False)["created"] == 0
+
+
+class TestFlarizeUsers:
+    """Flarize ``users.json`` (PLAN §7.4 row 1) — masked rows in the file's exact shape."""
+
+    ROWS = [
+        {"userId": "admin-001", "username": "admin", "name": "Ada Admin", "email": "Ada@Example.com", "role": "ADMIN", "status": "ACTIVE", "createdAt": "2026-09-13T14:00:39.919Z"},
+        {"userId": "crs-001", "username": "crs1", "name": "Cee Ress", "email": "crs@example.com", "role": "SALES_CRS", "status": "ACTIVE"},
+        {"userId": "field-001", "username": "field1", "name": "Fiona", "email": "", "role": "FIELD_SALES", "status": "DISABLED"},
+        {"userId": "eng-001", "username": "eng1", "name": "En Gineer", "email": "eng@example.com", "role": "ENGINEER", "status": "ACTIVE"},
+        {"userId": "odd-001", "username": "odd", "name": "Odd", "email": "odd@example.com", "role": "AUDITOR", "status": "ACTIVE"},
+        {"username": "no-id", "role": "ADMIN"},
+    ]
+
+    def test_roles_titles_forced_reset_and_idempotency(self, seeded, django_capture_on_commit_callbacks):
+        result = legacy_import.import_flarize_users(self.ROWS)
+        assert result["created"] == 4 and result["skipped"] == 2
+        assert sorted(violation["code"] for violation in result["violations"]) == ["email_missing", "incomplete_row", "unknown_role"]
+        crs = User.objects.get(email="crs@example.com")
+        assert (crs.role.slug, crs.title, crs.first_name, crs.last_name) == ("sales-executive", "Sales (CRS)", "Cee", "Ress")
+        assert crs.must_reset_password and not crs.has_usable_password()
+        field = User.objects.get(email="field1@migrated.invalid")
+        assert field.title == "Field Sales" and not field.is_active
+        assert User.objects.get(email="eng@example.com").role.slug == "engineering"
+        assert LegacyMap.objects.get(source_system="FLARIZE", source_table="users.json", source_id="admin-001").target_id == User.objects.get(email="ada@example.com").pk
+        again = legacy_import.import_flarize_users(self.ROWS)
+        assert again["created"] == 0 and again["updated"] == 0
+        # the cutover reset links reach the Flarize accounts too
+        with django_capture_on_commit_callbacks(execute=True):
+            links = legacy_import.issue_reset_links()
+        assert links["created"] == 3 and {message.to[0] for message in mail.outbox} == {"ada@example.com", "crs@example.com", "eng@example.com"}
+
+    def test_existing_account_is_adopted(self, seeded):
+        UserFactory(email="ada@example.com", role=by_slug("sales-head"))
+        result = legacy_import.import_flarize_users(self.ROWS[:1])
+        assert [violation["code"] for violation in result["violations"]] == ["email_adopted"]
+        assert User.objects.get(email="ada@example.com").role.slug == "sales-head"
