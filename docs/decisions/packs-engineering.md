@@ -4,13 +4,13 @@ Work package *packs-engineering* builds the `packs` and `engineering` apps of PL
 §3.3 (`packs`), §3.4 (BOM & packs: `packs/*`; Engineering), §3.5 (`packs.release_published`) and the §7.4 import of
 Flarize `pack-config.json` with the first releases. Legacy sources: Flarize `packConfig.js`, `packageApproval.js`,
 `packageAuthoring.js`, `packageAuthority.js`, `packageProjection.js`, `server-pack-publish.js` and the pack routes of
-`server.js` (workflows spec B.8, B.11, C.3, C.4; engines spec §8, §9, §11, §17). Deviations: DV-91 … DV-98.
+`server.js` (workflows spec B.8, B.11, C.3, C.4; engines spec §8, §9, §11, §17). Deviations: DV-96 … DV-103.
 
 ## What exists
 
 | Area | Where | Notes |
 |---|---|---|
-| Tables | `packs/models/`, `engineering/models/` | `packs_config_version`, `packs_config_pack`, `packs_config_line`, `packs_config_pin` (DV-93), `packs_release`, `packs_release_pack` *(no base, composite PK)*; `engineering_rule_set`, `engineering_run`, `engineering_finding`, `engineering_acknowledgement`. Every enum has a `CHECK`; lifecycle invariants are partial unique indexes: one open draft (DRAFT/SUBMITTED), one current version (APPROVED/PUBLISHED), one PUBLISHED release, one ACTIVE rule set per engine, one acknowledgement per finding, live pack keys / natural keys / pins per slot. |
+| Tables | `packs/models/`, `engineering/models/` | `packs_config_version`, `packs_config_pack`, `packs_config_line`, `packs_config_pin` (DV-98), `packs_release`, `packs_release_pack` *(no base, composite PK)*; `engineering_rule_set`, `engineering_run`, `engineering_finding`, `engineering_acknowledgement`. Every enum has a `CHECK`; lifecycle invariants are partial unique indexes: one open draft (DRAFT/SUBMITTED), one current version (APPROVED/PUBLISHED), one PUBLISHED release, one ACTIVE rule set per engine, one acknowledgement per finding, live pack keys / natural keys / pins per slot. |
 | Seed | `engineering/migrations/0002_seed_rule_sets.py` | `phase1e.1` (35 PBC rules, `engines.engineering_checker.DEFAULT_RULE_SET`) and `phase1e.eng` (30 ENG rules), both ACTIVE. |
 | Services | `packs/services/` | `catalog_adapter` (platform catalog → Flarize catalog shape), `context`, `engine` (glue to `bom_builder`, `pack_pricing`, `pack_config`, `engineering_checker`, `package_registry`), `mirror` (typed mirror), `versions` (lifecycle, pins, checker), `releases` (preview/publish/compare), `public`, `maintenance` (event reactions), `registrations`, `legacy_import`, `common`. |
 | | `engineering/services/` | `rule_sets` (active, activate, parse), `runs` (record a run, acknowledge, carried acknowledgements). |
@@ -52,7 +52,7 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
    battery, battery quantity, profile, market-rate key, flat-roof structure template, `pair_of` for future-ready packs)
    and `packs_config_line` (SLOT, MANUAL, FIXED, STRUCTURE). Packs are upserted by key (pins survive), packs the
    configuration no longer offers are soft-deleted, lines are derived rows and are replaced.
-2. **Pins replace the Flarize package registry (DV-93).** `build_bom` resolves a slot default from the pack config
+2. **Pins replace the Flarize package registry (DV-98).** `build_bom` resolves a slot default from the pack config
    (`defaults`), then from the registry package of (system type, system size, tier, phase), then nearest kW / first
    eligible item. In the real data 1,037 of the approved BOM lines come from the registry, so the platform keeps them as
    per-pack pins; each pack's pins are handed to the engine as a one-package registry for exactly that pack.
@@ -60,7 +60,7 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
    (`status` ACTIVE for ACTIVE/DEPRECATED — the engines select only ACTIVE), prices from the PriceRelease payload,
    package profiles from `bom_package_profile`, the battery-master overlay from `catalog_battery_spec`. Item order is
    the Flarize file order (legacy-map order, then `created_at`): the engines' "first eligible item" depends on it.
-4. **Lifecycle** (DV-91): DRAFT → SUBMITTED → APPROVED (or `direct` approve of a DRAFT, recorded as submitted and
+4. **Lifecycle** (DV-96): DRAFT → SUBMITTED → APPROVED (or `direct` approve of a DRAFT, recorded as submitted and
    approved by the approver — Flarize's Admin path) → PUBLISHED (first release built from it) → SUPERSEDED (another
    version approved); SUBMITTED → REJECTED (reason). Editing a SUBMITTED draft withdraws it (Flarize). Submit /
    direct approve refuse a draft identical to the version it is based on (configuration and pins: 409 `no_changes`).
@@ -71,10 +71,10 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
    `componentsFromBom` derives from the BOM, template scope, the architecture from the profile's inverter type, with the
    ACTIVE rule set parsed from `engineering_rule_set.rules`. One `engineering_run` per checker pass over a version
    (`summary.scopes.<pack>` holds each pack's status, counts and deterministic key; findings carry `context.pack`).
-6. **Acknowledgements carry over** (DV-96): a finding's `identity` is `pack|rule|component ids`; an acknowledgement on
+6. **Acknowledgements carry over** (DV-101): a finding's `identity` is `pack|rule|component ids`; an acknowledgement on
    any run of a subject counts in later runs of it. Acknowledging a BLOCK finding is a waiver (`engineering.finding_waived`
    audit action) and lets the pack into the next release (`PACK_ENGINEERING_WAIVED` INFO).
-7. **Release pricing** (DV-95): component prices and market rates from the current PriceRelease, the pack formula
+7. **Release pricing** (DV-100): component prices and market rates from the current PriceRelease, the pack formula
    from the approved configuration; the released price is `price_pack` for the FLAT roof at 0 km (swaps, roof add-ons
    and transport are quotation-time extras; the full pricing result is kept in `packs_release_pack.pricing`).
    `landed_cost_total` = the pack-pricing reference cost with the material at landed cost where the PriceRelease has
@@ -95,7 +95,7 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
 10. **Public payload**: customer price incl./excl. GST, GST, and a BOM summary (category, name, qty) — never landed cost,
     margin, component unit prices or the pricing `internal` block. `size_kw` accepts `3`, `5.00` (both 5 kW packs) or
     a size key (`5sp`).
-11. **EMI provider** (DV-98): one size tile per standard on-grid pack of the current PackRelease (`uid` = pack key,
+11. **EMI provider** (DV-103): one size tile per standard on-grid pack of the current PackRelease (`uid` = pack key,
     `system_cost` = customer price, `price_per_kw` derived), cache namespace `packs`; active with
     `EMI_PRICE_SOURCE=PACK_RELEASE`.
 12. **Events**: `pricing.release_published` marks the open draft stale (a `change_log` entry, once per release number)

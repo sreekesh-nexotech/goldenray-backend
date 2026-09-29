@@ -218,14 +218,13 @@ class TestLifecycle:
 
 
 class TestDependenciesAndDelete:
-    def test_dependencies_count_history_from_every_package(self, hr_client, make_user):
+    def test_dependencies_count_history_from_every_package(self, hr_client, make_user, monkeypatch):
         employee = EmployeeFactory(user=make_user())
         LeaveRecordFactory(employee=employee)
+        # a stand-in for the attendance counter; the installed providers come back after the test
+        monkeypatch.setattr(registries.employee_dependencies, "_providers", dict(registries.employee_dependencies._providers))
         registries.employee_dependencies.register("attendance")(lambda row: {"attendance_days": 12, "raw_punches": 30})
-        try:
-            body = hr_client.get(detail(employee, "dependencies/")).json()
-        finally:
-            registries.employee_dependencies.unregister("attendance")
+        body = hr_client.get(detail(employee, "dependencies/")).json()
         assert body["counts"] == {"leave_records": 1, "attendance_days": 12, "raw_punches": 30, "device_mappings": 0}  # device_mappings: the installed devices package
         assert body["has_login"] is True and body["can_delete"] is False and body["employee"]["code"] == employee.code
 

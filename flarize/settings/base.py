@@ -381,6 +381,15 @@ SPECTACULAR_SETTINGS = {
         "JobApplicationEventKindEnum": "careers.models.application.JobApplicationEvent.Kind",
         "KsebTariffPhaseEnum": "reference.models.tariff.KsebTariff.Phase",
         "EmployeeIdentityMethodEnum": "hr.models.employee.Employee.IdentityMethod",
+        # attendance: the day status, its unambiguous codes (A9), correctable fields, how a terminal's punches arrive.
+        "AttendanceStatusEnum": "attendance.models.day.AttendanceDay.Status",
+        "AttendanceStatusCodeEnum": "attendance.serializers.common.STATUS_CODE_CHOICES",
+        "AttendanceCorrectionFieldEnum": "attendance.serializers.common.CORRECTION_FIELD_CHOICES",
+        "AttendanceTransportEnum": "attendance.serializers.common.TRANSPORT_CHOICES",
+        # named once attendance added fields of the same names (field / status_code / transport)
+        "DeviceProtocolFieldEnum": "devices.models.logs.ProtocolMapping.Field",
+        "SeoRedirectStatusCodeEnum": "seo.models.redirect.Redirect.StatusCode",
+        "DeviceTransportEnum": "devices.services.health.TRANSPORTS",
         "LeaveRecordStatusEnum": "hr.models.calendar.LeaveRecord.Status",
         "AttendanceRuleScopeEnum": "hr.models.calendar.AttendanceRule.Scope",
         "ShiftHalfDayAfterSourceEnum": "hr.models.shift.Shift.HalfDayAfterSource",
@@ -476,6 +485,11 @@ CELERY_BEAT_SCHEDULE = {
     "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
     # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
     "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
+    # attendance (A7, A8): the debounced recompute's safety net, each office's day finalised after 00:30 office time,
+    # next months' attendance_raw_punch partitions (when the worker owns the table; release.sh does it as the owner).
+    "attendance.run_due_recomputes": {"task": "attendance.tasks.run_due_recomputes", "schedule": 60.0},
+    "attendance.finalise_days": {"task": "attendance.tasks.finalise_days", "schedule": crontab(minute="*/15")},
+    "attendance.maintain_punch_partitions": {"task": "attendance.tasks.maintain_punch_partitions", "schedule": crontab(day_of_month=1, hour=2, minute=23)},
 }
 # Recipients of the weekly ops report (PLAN §5.6) and of the healthz cron alerts (deploy/scripts/healthz-check.sh).
 OPS_EMAILS = config("OPS_EMAILS", default="", cast=Csv())
