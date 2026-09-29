@@ -80,8 +80,8 @@ class TestLegacyLookups:
     def test_float_lookup_and_finite_check(self):
         assert lookups.float_exact(5)(5.0)
         with pytest.raises(lookups.LegacyCrash):
-            lookups.check_finite({"a": [1.0, float("inf")]})
-        lookups.check_finite({"a": [1.0, (2, 3.5)], "b": None})
+            lookups.check_renderable({"a": [1.0, float("inf")]})
+        lookups.check_renderable({"a": [1.0, (2, 3.5)], "b": None})
 
 
 class TestBasic:

@@ -13,7 +13,7 @@ from collections.abc import Callable, Iterable
 from decimal import Decimal, InvalidOperation
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import IntegrityError, transaction
+from django.db import DataError, IntegrityError, transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -134,7 +134,7 @@ def run(rows: Iterable[dict], table: str, model, transform: Callable[[dict, Repo
                 upsert(model, table=table, source_id=row["id"], values=values, report=report, created_at=created_at, updated_at=updated_at)
         except Skip:
             continue
-        except IntegrityError as exc:
+        except (IntegrityError, DataError) as exc:  # a CHECK/unique clash, or a value beyond a column (smallint)
             report.violation(row.get("id"), "row", f"rejected by the database: {str(exc).splitlines()[0]}")
     result = report.as_dict()
     record(

@@ -266,7 +266,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": THROTTLE_RATES,
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": [
-        "rest_framework.parsers.JSONParser",
+        "flarize.parsers.JSONParser",  # DRF's, with a too-deeply nested body as a 400 parse_error (not a 500)
         "rest_framework.parsers.FormParser",
         "rest_framework.parsers.MultiPartParser",
     ],

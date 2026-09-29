@@ -37,7 +37,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from decimal import ROUND_CEILING, ROUND_HALF_UP, Decimal
 
-from engines.legacy_lookups import LegacyCrash, check_finite, decimal_param
+from engines.legacy_lookups import LegacyCrash, check_renderable, crash_detail, decimal_param
 from engines.website_calculators import emi_with_interest
 
 INVALID_INPUT_MESSAGE = "The EMI calculator cannot process these inputs."
@@ -115,10 +115,11 @@ class SubsidyRule:
         return True
 
     def subsidy_for(self, capacity_kw: Decimal) -> Decimal:
-        """The legacy flat ``amount``; plus ``amount_per_kw`` × kW and capped at ``cap_amount`` when those are set."""
+        """The legacy flat ``amount``; plus ``amount_per_kw`` × kW (rounded to paise, half-up, like every amount of
+        the calculator) and capped at ``cap_amount`` when those are set."""
         amount = Decimal(self.amount)
         if self.amount_per_kw:
-            amount = amount + Decimal(self.amount_per_kw) * capacity_kw
+            amount = _money(amount + Decimal(self.amount_per_kw) * capacity_kw)
         if self.cap_amount is not None:
             amount = min(amount, Decimal(self.cap_amount))
         return amount
@@ -226,16 +227,26 @@ def _to_bool(value, default=True):
     return str(value).strip().lower() in {"1", "true", "yes", "y"}
 
 
+def check_renderable_error(message: str) -> None:
+    """An error answer carrying text that is not UTF-8 (a lone surrogate in a package key) crashed the legacy
+    renderer: the answer is ``invalid_input`` instead."""
+    try:
+        check_renderable(message)
+    except LegacyCrash as exc:
+        raise EmiError("invalid_input", INVALID_INPUT_MESSAGE, detail=crash_detail(exc)) from None
+
+
 def _run(compute: Callable[[], dict]) -> dict:
     try:
         with decimal.localcontext(decimal.Context()):
             result = compute()
-            check_finite(result)
+            check_renderable(result)
             return result
-    except EmiError:
+    except EmiError as exc:
+        check_renderable_error(exc.message)  # a message quoting a package key the legacy renderer could not encode
         raise
     except (LegacyCrash, ArithmeticError, AttributeError, LookupError, TypeError, ValueError) as exc:
-        raise EmiError("invalid_input", INVALID_INPUT_MESSAGE, detail=f"{type(exc).__name__}: {exc}") from exc
+        raise EmiError("invalid_input", INVALID_INPUT_MESSAGE, detail=crash_detail(exc)) from exc
 
 
 # ── policy lookups ────────────────────────────────────────────────────────────────────────────────────────────────

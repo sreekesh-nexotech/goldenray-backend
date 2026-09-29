@@ -20,8 +20,9 @@ Faithful on purpose (docs/decisions/calculators-emi.md, DV-62):
   ``engines.energy`` (the Flarize bill → units search with KSEB fixed charges, duty and meter rent),
   ``engines.subsidy`` (PM Surya Ghar per-kW tiers) and ``engines.finance`` (EMI rounded to whole rupees) are
   different formulas and are not used.
-* **Lookups compare like the ORM did** (:mod:`engines.legacy_lookups`): ``str()`` of a non-text value, LIKE-escaped
-  ``iexact``, integer truncation/ceil of float bounds, ``DecimalField`` rounding of floats.
+* **Lookups compare like the ORM did** (:mod:`engines.legacy_lookups`): ``str()`` of a non-text value, ``iexact`` as
+  PostgreSQL ``UPPER()`` (one character for one), integer truncation/ceil of float bounds, ``DecimalField`` rounding
+  of floats.
 * **A legacy crash is a 400.** Whatever raised an unhandled exception in the legacy view (a non-object body, a text
   where a number is needed, ``inf``, a NUL character, a missing tariff table …) raises
   ``CalculatorError("invalid_input", …, 400)`` here (PLAN §6 approved difference: legacy 500 → 400).
@@ -34,7 +35,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from decimal import Decimal
 
-from engines.legacy_lookups import LegacyCrash, check_finite, decimal_param, exact_text, float_exact, iexact_text, int_gte, int_lte, text_param
+from engines.legacy_lookups import LegacyCrash, check_renderable, crash_detail, decimal_param, exact_text, float_exact, iexact_text, int_gte, int_lte, text_param
 
 INVALID_INPUT_MESSAGE = "The calculator cannot process these inputs."
 LIGHT_WATTS = 15.0  # the advanced calculator's built-in "Light" device
@@ -144,12 +145,12 @@ def _run(compute: Callable[[], dict]) -> dict:
     try:
         with decimal.localcontext(decimal.Context()):
             result = compute()
-            check_finite(result)
+            check_renderable(result)
             return result
     except CalculatorError:
         raise
     except (LegacyCrash, ArithmeticError, AttributeError, LookupError, TypeError, ValueError) as exc:
-        raise CalculatorError("invalid_input", INVALID_INPUT_MESSAGE, 400, detail=f"{type(exc).__name__}: {exc}") from exc
+        raise CalculatorError("invalid_input", INVALID_INPUT_MESSAGE, 400, detail=crash_detail(exc)) from exc
 
 
 def _pincode_exists(data: CalculatorData, value) -> bool:

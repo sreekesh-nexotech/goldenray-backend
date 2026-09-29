@@ -41,9 +41,11 @@ field. Record scope: both modules allow only `all` (PLAN §3.2).
 ### Engines and services
 
 * `engines/legacy_lookups.py` — how the legacy ORM prepared request values before comparing them (text `exact` =
-  `str(v)`; PostgreSQL `iexact` = `UPPER(col) = UPPER(v)` for a text and a crash for anything else; integer `lte`
+  `str(v)`; PostgreSQL `iexact` = `UPPER(col) = UPPER(v)` for a text — PostgreSQL's one-for-one case mapping
+  (`pg_upper`: `ﬆ`/`ß` stay, `ᾳ` → `ᾼ`), not Python's `str.upper()` — and a crash for anything else; integer `lte`
   truncates and `gte` rounds a float up, int32 overflow = every row/no row; `DecimalField` rounds a float to the
-  column's `max_digits`; NUL in a text and non-finite decimals crash; `inf`/`nan` in a response crash the renderer).
+  column's `max_digits`; NUL or a lone surrogate in a text and non-finite decimals crash; `inf`/`nan` or a
+  non-UTF-8 text in a response crash the renderer).
 * `engines/website_calculators.py` — `basic`, `basic_v2`, `advanced` (+ `emi_with_interest` = legacy
   `utils/finance.emi_calc`, `emi_advanced` = the advanced view's own `emi_calc`), line-by-line ports over plain lookup
   tables (`CalculatorData`).
@@ -70,7 +72,9 @@ field. Record scope: both modules allow only `all` (PLAN §3.2).
 2. **A legacy crash is a 400.** Whatever raised an unhandled exception in a legacy view (a non-object body, a text where
    a number is needed, `1e400`, a NUL character, a missing tariff table, `final_cost` NULL, a JSON `inf` result) is
    `400 invalid_input` ("The calculator cannot process these inputs." / "The EMI calculator cannot process these
-   inputs."), with the cause logged at INFO. Every legacy 4xx keeps its status and its text as `message`; codes:
+   inputs."), with the cause logged at INFO (cut to 300 characters: the cause often quotes the visitor's value).
+   A body nested too deeply for the JSON parser (legacy `RecursionError`, 500) is `400 parse_error` (shared
+   `flarize.parsers.JSONParser`). Every legacy 4xx keeps its status and its text as `message`; codes:
    `missing_fields`, `invalid_monthly_bill`, `pincode_not_found` (404), `bill_out_of_range`, `no_sizing_row` (404),
    `unsupported_grid_type`, `no_matching_installation` (404), `invalid_number`, `size_required`, `invalid_request`
    (the legacy `ValueError` texts), `invalid_packages`, `too_many_packages`, `capacity_required`, `invalid_tenure`,
@@ -268,6 +272,30 @@ integer (the legacy printed the JSON as stored: integers when seeded, floats aft
 
 Engine-level tests (`engines/tests/test_website_calculators.py`, `engines/tests/test_emi.py`) pin each legacy rule
 separately, including those no recorded data can reach (empty tariff table, zero-rate slab, int32 overflow).
+
+## Review fixes (calculators-emi review)
+
+Each was reproduced first (against the legacy UAT server, the legacy database or the platform) and is pinned by a
+test that failed before the fix: `engines/tests/test_calculators_review.py`, `calculators/tests/test_review.py`,
+`emi/tests/test_review.py`.
+
+| # | Finding | Fix |
+|---|---|---|
+| 1 | `iexact` used Python's `str.upper()` (full case mapping: `"Toaﬆer".upper() == "TOASTER"`); the legacy PostgreSQL `UPPER()` (C.UTF-8) maps one character to one, so a ligature/`ß` device or property-type name matched a row the legacy never matched (advanced: 1000 W of a "Toaﬆer" counted; legacy 0 W) | `legacy_lookups.pg_upper`: the simple mapping (a multi-letter upper case keeps the character, the iota-subscript letters take their titlecase form) — equal to `UPPER(chr(i))` of the legacy database for every code point (1,114,111 compared) |
+| 2 | A lone UTF-16 surrogate (`"\ud800"`, valid JSON) in a pincode, property type, device name or EV model made the legacy crash in psycopg (500), and one echoed in a response (basic `property_type`, a quotation package key, a package-key error message) crashed the legacy renderer (500); the platform answered 404/200, or 500 from its own renderer | text parameters and responses (keys, values, EMI error messages) must be UTF-8 → `400 invalid_input` |
+| 3 | A deeply nested JSON body (`[[[[…]]]]`) raised `RecursionError` inside DRF's JSON parser: 500 and a `SystemException` row per anonymous request on every JSON endpoint (the error sink F-FIX #2 protects) | shared `flarize/parsers.py` `JSONParser` (the default parser): `400 parse_error` |
+| 4 | The refused-input INFO log line carried the exception text unbounded (`float("<2 MB text>")` echoes the text) | `legacy_lookups.crash_detail`: at most 300 characters, non-UTF-8 escaped |
+| 5 | `emi_bank`/`emi_calculator_settings` legacy `integer` columns are `smallint` here; a larger legacy value raised `DataError`, which escaped the importer's per-row savepoint and aborted the whole import | `import_support.run` reports `DataError` as a row violation like `IntegrityError` |
+| 6 | A PLAN per-kW subsidy (`amount_per_kw` × kW) carried fractions of a paisa into `subsidy.amount` / `net_cost_after_subsidy` | rounded to paise half-up like every other amount (legacy flat amounts unchanged) |
+
+Additional evidence: a seeded random fuzz (not committed; it needs the live legacy servers) sent the same random
+requests to the legacy server and the platform. After fix 1: 7,500 against the UAT server with the UAT rows and 7,500
+against a private enriched copy (`legacy_goldenapp_rv_calculators_emi`, `enrich_private.sql`, port 18163) with the
+enriched rows, over all five POST endpoints (bills, pincode classes, property-type spellings, device/EV mixes with
+case and ligature variants, backup preferences, EMI sizes/capacities/tenures/rates/prices/down payments/toggles,
+quotation packages) — no difference. After fix 2: 5,000 calculator requests with lone-surrogate variants against the
+UAT server — no difference (the matching EMI round did not finish: the disk filled up). Every recorded corpus case was also replayed against the legacy
+servers and still answers as recorded (2,454 of 2,454).
 
 ## Hand-over notes
 

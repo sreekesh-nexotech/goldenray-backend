@@ -9,9 +9,11 @@ or the same request would select a different row or fail differently:
   stored text); anything else is compared as ``str(v)`` — ``682001`` matches ``"682001"``, ``682001.0`` does not;
 * ``CharField`` ``iexact`` (``filter(name__iexact=v)``): ``None`` → ``IS NULL``; the value is sent to PostgreSQL
   as it is (the PostgreSQL backend neither converts nor escapes it) and compared as ``UPPER(column) = UPPER(v)`` —
-  a text compares case-insensitively, any other JSON value (number, boolean, list, object) made PostgreSQL fail
+  a text compares case-insensitively (PostgreSQL's one-for-one case mapping, :func:`pg_upper`), any other JSON value (number, boolean, list, object) made PostgreSQL fail
   (``function upper(integer) does not exist``: HTTP 500);
-* a text parameter containing NUL cannot be sent to PostgreSQL: the legacy endpoint crashed (HTTP 500);
+* a text parameter containing NUL, or a lone UTF-16 surrogate (``"\\ud800"`` is valid JSON but no UTF-8), cannot be
+  sent to PostgreSQL: the legacy endpoint crashed (HTTP 500) — and so did its JSON renderer on a response carrying
+  such a text (:func:`check_renderable`);
 * ``IntegerField`` ``lte`` / ``gte`` with a float: ``lte`` truncates (``int(v)``), ``gte`` rounds up
   (``math.ceil``); ``inf``/``nan`` raise (500); a prepared value outside int32 matches every row or none
   (Django's ``FullResultSet`` / ``EmptyResultSet``);
@@ -37,10 +39,31 @@ class LegacyCrash(Exception):
     """The legacy endpoint raised an unhandled exception (HTTP 500) for this input."""
 
 
+CRASH_DETAIL_LIMIT = 300
+
+
+def crash_detail(exc: BaseException) -> str:
+    """``"<class>: <message>"`` of a refused input's exception, for the log — cut to :data:`CRASH_DETAIL_LIMIT`
+    characters: the message often quotes the visitor's value (``float("<a 2 MB text>")``)."""
+    text = f"{type(exc).__name__}: {exc}".encode("utf-8", "backslashreplace").decode("utf-8")
+    return text if len(text) <= CRASH_DETAIL_LIMIT else text[: CRASH_DETAIL_LIMIT - 1] + "…"
+
+
+def _encodable(text: str) -> bool:
+    """Whether ``text`` is UTF-8 text (a lone surrogate is not: psycopg and the JSON renderer both failed on it)."""
+    try:
+        text.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
 def _text(value) -> str:
     text = value if isinstance(value, str) else str(value)
     if "\x00" in text:
         raise LegacyCrash(NUL_MESSAGE)
+    if not _encodable(text):
+        raise LegacyCrash("the text is not valid UTF-8 (a lone surrogate)")
     return text
 
 
@@ -55,14 +78,31 @@ def exact_text(value) -> Callable[[str | None], bool]:
     return lambda column: param is not None and column is not None and column == param
 
 
+def _pg_upper_char(char: str) -> str:
+    """PostgreSQL ``UPPER()`` of one character in the legacy database (C.UTF-8): the Unicode *simple* mapping — one
+    character for one — so a character whose full mapping is several letters (``ß``, ``ﬆ``) stays as it is, and the
+    iota-subscript letters take their titlecase form (``ᾳ`` → ``ᾼ``). Python's ``str.upper()`` is the full mapping
+    (``"ﬆ".upper() == "ST"``). Verified against ``UPPER(chr(i))`` for every code point of the legacy database."""
+    upper = char.upper()
+    if len(upper) == 1:
+        return upper
+    title = char.title()
+    return title if len(title) == 1 else char
+
+
+def pg_upper(text: str) -> str:
+    """``UPPER(text)`` as the legacy PostgreSQL computed it (see :func:`_pg_upper_char`)."""
+    return text.upper() if text.isascii() else "".join(_pg_upper_char(char) for char in text)
+
+
 def iexact_text(value) -> Callable[[str | None], bool]:
     """``filter(column__iexact=value)`` on PostgreSQL: ``UPPER(column) = UPPER(value)`` for a text value."""
     if value is None:
         return lambda column: False
     if not isinstance(value, str):
         raise LegacyCrash(f"function upper({type(value).__name__}) does not exist")
-    param = _text(value).upper()
-    return lambda column: column is not None and column.upper() == param
+    param = pg_upper(_text(value))
+    return lambda column: column is not None and pg_upper(column) == param
 
 
 def int_lte(value) -> Callable[[int], bool]:
@@ -104,14 +144,19 @@ def decimal_param(value, max_digits: int) -> Decimal | None:
     return prepared
 
 
-def check_finite(payload) -> None:
-    """The legacy JSON renderer refused ``inf``/``nan`` (DRF ``STRICT_JSON``): such a response was a 500."""
+def check_renderable(payload) -> None:
+    """The legacy JSON renderer refused ``inf``/``nan`` (DRF ``STRICT_JSON``) and any text that is not UTF-8 (a lone
+    surrogate echoed from the request, as a value or a key): such a response was a 500."""
     if isinstance(payload, float):
         if not math.isfinite(payload):
             raise LegacyCrash("Out of range float values are not JSON compliant")
+    elif isinstance(payload, str):
+        if not _encodable(payload):
+            raise LegacyCrash("the response text is not valid UTF-8 (a lone surrogate)")
     elif isinstance(payload, dict):
-        for item in payload.values():
-            check_finite(item)
+        for key, item in payload.items():
+            check_renderable(key)
+            check_renderable(item)
     elif isinstance(payload, (list, tuple)):
         for item in payload:
-            check_finite(item)
+            check_renderable(item)
