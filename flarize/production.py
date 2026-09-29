@@ -59,6 +59,8 @@ def validate_production_settings(settings: Mapping) -> None:
         problems.append("EMAIL_BACKEND does not deliver mail (console/locmem/dummy/filebased); password resets would be lost")
     if settings.get("MEDIA_PUBLIC_BACKEND") != "bunny":
         problems.append("MEDIA_PUBLIC_BACKEND must be 'bunny' (the local public backend is served only while DEBUG)")
+    if settings.get("LEADS_OTP_BACKEND") != "twilio":
+        problems.append("LEADS_OTP_BACKEND must be 'twilio' (the fake backend accepts the code 000000 for any number)")
     if settings.get("DOCUMENTS_RENDERER") != "playwright":
         problems.append("DOCUMENTS_RENDERER must be 'playwright' (the stub renderer produces placeholder PDFs)")
     private_root = str(settings.get("PRIVATE_MEDIA_ROOT", ""))

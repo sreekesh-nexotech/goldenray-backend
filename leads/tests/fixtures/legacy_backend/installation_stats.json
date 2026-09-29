@@ -1,0 +1,562 @@
+{
+ "captured_on": "2026-09-28",
+ "timezone": "Asia/Kolkata",
+ "uat": [
+  {
+   "pincode": null,
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  },
+  {
+   "pincode": "",
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  },
+  {
+   "pincode": "688008",
+   "status": 200,
+   "body": {
+    "pincode": "688008",
+    "district": "ALAPPUZHA",
+    "pincode_installations": 4,
+    "district_installations": 9,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688012",
+   "status": 200,
+   "body": {
+    "pincode": "688012",
+    "district": "Alappuzha",
+    "pincode_installations": 1,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688001",
+   "status": 200,
+   "body": {
+    "pincode": "688001",
+    "district": "ALAPPUZHA",
+    "pincode_installations": 2,
+    "district_installations": 9,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682016",
+   "status": 200,
+   "body": {
+    "pincode": "682016",
+    "district": "ERNAKULAM",
+    "pincode_installations": 0,
+    "district_installations": 4,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682001",
+   "status": 200,
+   "body": {
+    "pincode": "682001",
+    "district": "ERNAKULAM",
+    "pincode_installations": 1,
+    "district_installations": 4,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "689122",
+   "status": 200,
+   "body": {
+    "pincode": "689122",
+    "district": "PATHANAMTHITTA",
+    "pincode_installations": 1,
+    "district_installations": 1,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "686102",
+   "status": 200,
+   "body": {
+    "pincode": "686102",
+    "district": "KOTTAYAM",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "685533",
+   "status": 200,
+   "body": {
+    "pincode": "685533",
+    "district": "IDUKKI",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "695001",
+   "status": 200,
+   "body": {
+    "pincode": "695001",
+    "district": "THIRUVANANTHAPURAM",
+    "pincode_installations": 1,
+    "district_installations": 3,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "680001",
+   "status": 200,
+   "body": {
+    "pincode": "680001",
+    "district": "THRISSUR",
+    "pincode_installations": 1,
+    "district_installations": 3,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "673001",
+   "status": 200,
+   "body": {
+    "pincode": "673001",
+    "district": "KOZHIKODE",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "670511",
+   "status": 200,
+   "body": {
+    "pincode": "670511",
+    "district": "KANNUR",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682999",
+   "status": 200,
+   "body": {
+    "pincode": "682999",
+    "district": "Ernakulam",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "110001",
+   "status": 200,
+   "body": {
+    "pincode": "110001",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "999999",
+   "status": 200,
+   "body": {
+    "pincode": "999999",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "abc",
+   "status": 200,
+   "body": {
+    "pincode": "abc",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "68",
+   "status": 200,
+   "body": {
+    "pincode": "68",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "6880081",
+   "status": 200,
+   "body": {
+    "pincode": "6880081",
+    "district": "Alappuzha",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": " 688008",
+   "status": 200,
+   "body": {
+    "pincode": " 688008",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688008 ",
+   "status": 200,
+   "body": {
+    "pincode": "688008 ",
+    "district": "Alappuzha",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": [
+    "688008",
+    "682016"
+   ],
+   "status": 200,
+   "body": {
+    "pincode": "682016",
+    "district": "ERNAKULAM",
+    "pincode_installations": 0,
+    "district_installations": 4,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": null,
+   "raw_query": "PINCODE=688008",
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  }
+ ],
+ "enriched": [
+  {
+   "pincode": null,
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  },
+  {
+   "pincode": "",
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  },
+  {
+   "pincode": "688008",
+   "status": 200,
+   "body": {
+    "pincode": "688008",
+    "district": "ALAPPUZHA",
+    "pincode_installations": 5,
+    "district_installations": 12,
+    "current_year_installations": 2,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688012",
+   "status": 200,
+   "body": {
+    "pincode": "688012",
+    "district": "Alappuzha",
+    "pincode_installations": 1,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688001",
+   "status": 200,
+   "body": {
+    "pincode": "688001",
+    "district": "ALAPPUZHA",
+    "pincode_installations": 2,
+    "district_installations": 12,
+    "current_year_installations": 2,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682016",
+   "status": 200,
+   "body": {
+    "pincode": "682016",
+    "district": "ERNAKULAM",
+    "pincode_installations": 1,
+    "district_installations": 5,
+    "current_year_installations": 1,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682001",
+   "status": 200,
+   "body": {
+    "pincode": "682001",
+    "district": "ERNAKULAM",
+    "pincode_installations": 1,
+    "district_installations": 5,
+    "current_year_installations": 1,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "689122",
+   "status": 200,
+   "body": {
+    "pincode": "689122",
+    "district": "PATHANAMTHITTA",
+    "pincode_installations": 2,
+    "district_installations": 2,
+    "current_year_installations": 1,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "686102",
+   "status": 200,
+   "body": {
+    "pincode": "686102",
+    "district": "KOTTAYAM",
+    "pincode_installations": 1,
+    "district_installations": 1,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "685533",
+   "status": 200,
+   "body": {
+    "pincode": "685533",
+    "district": "IDUKKI",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "695001",
+   "status": 200,
+   "body": {
+    "pincode": "695001",
+    "district": "THIRUVANANTHAPURAM",
+    "pincode_installations": 1,
+    "district_installations": 3,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "680001",
+   "status": 200,
+   "body": {
+    "pincode": "680001",
+    "district": "THRISSUR",
+    "pincode_installations": 1,
+    "district_installations": 3,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "673001",
+   "status": 200,
+   "body": {
+    "pincode": "673001",
+    "district": "KOZHIKODE",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "670511",
+   "status": 200,
+   "body": {
+    "pincode": "670511",
+    "district": "KANNUR",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "682999",
+   "status": 200,
+   "body": {
+    "pincode": "682999",
+    "district": "Ernakulam",
+    "pincode_installations": 1,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "110001",
+   "status": 200,
+   "body": {
+    "pincode": "110001",
+    "district": "Kerala",
+    "pincode_installations": 1,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "999999",
+   "status": 200,
+   "body": {
+    "pincode": "999999",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "abc",
+   "status": 200,
+   "body": {
+    "pincode": "abc",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "68",
+   "status": 200,
+   "body": {
+    "pincode": "68",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "6880081",
+   "status": 200,
+   "body": {
+    "pincode": "6880081",
+    "district": "Alappuzha",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": " 688008",
+   "status": 200,
+   "body": {
+    "pincode": " 688008",
+    "district": "Kerala",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": "688008 ",
+   "status": 200,
+   "body": {
+    "pincode": "688008 ",
+    "district": "Alappuzha",
+    "pincode_installations": 0,
+    "district_installations": 0,
+    "current_year_installations": 0,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": [
+    "688008",
+    "682016"
+   ],
+   "status": 200,
+   "body": {
+    "pincode": "682016",
+    "district": "ERNAKULAM",
+    "pincode_installations": 1,
+    "district_installations": 5,
+    "current_year_installations": 1,
+    "year": 2026
+   }
+  },
+  {
+   "pincode": null,
+   "raw_query": "PINCODE=688008",
+   "status": 400,
+   "body": {
+    "error": "Pincode parameter is required"
+   }
+  }
+ ]
+}

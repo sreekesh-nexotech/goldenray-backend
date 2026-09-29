@@ -1,0 +1,892 @@
+{
+ "lead_collection_home": {
+  "empty": {
+   "request": {},
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "name": [
+      "This field is required."
+     ],
+     "phone_number": [
+      "This field is required."
+     ]
+    }
+   }
+  },
+  "blank_name": {
+   "request": {
+    "name": "   ",
+    "phone_number": "9876500001",
+    "source": "footer"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "name": [
+      "This field may not be blank."
+     ]
+    }
+   }
+  },
+  "short_phone": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "12345",
+    "source": "footer"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "phone_number": [
+      "Enter a valid 10-digit Indian mobile number."
+     ]
+    }
+   }
+  },
+  "landline_like_phone": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "5876500001",
+    "source": "footer"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "phone_number": [
+      "Enter a valid 10-digit Indian mobile number."
+     ]
+    }
+   }
+  },
+  "unknown_source": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "9876500001",
+    "source": "bogus"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "source": [
+      "\"bogus\" is not a valid choice."
+     ]
+    }
+   }
+  },
+  "details_not_object": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "9876500001",
+    "details": "x"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "details": [
+      "Invalid details."
+     ]
+    }
+   }
+  },
+  "details_nested": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "9876500001",
+    "details": {
+     "a": {
+      "b": 1
+     }
+    }
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "details": [
+      "Invalid details."
+     ]
+    }
+   }
+  },
+  "details_too_many": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "9876500001",
+    "details": {
+     "k0": 0,
+     "k1": 1,
+     "k2": 2,
+     "k3": 3,
+     "k4": 4,
+     "k5": 5,
+     "k6": 6,
+     "k7": 7,
+     "k8": 8,
+     "k9": 9,
+     "k10": 10,
+     "k11": 11,
+     "k12": 12,
+     "k13": 13,
+     "k14": 14,
+     "k15": 15,
+     "k16": 16,
+     "k17": 17,
+     "k18": 18,
+     "k19": 19,
+     "k20": 20,
+     "k21": 21,
+     "k22": 22,
+     "k23": 23,
+     "k24": 24,
+     "k25": 25,
+     "k26": 26,
+     "k27": 27,
+     "k28": 28,
+     "k29": 29,
+     "k30": 30
+    }
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "details": [
+      "Invalid details."
+     ]
+    }
+   }
+  },
+  "name_too_long": {
+   "request": {
+    "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "phone_number": "9876500001"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "name": [
+      "Ensure this field has no more than 255 characters."
+     ]
+    }
+   }
+  },
+  "page_too_long": {
+   "request": {
+    "name": "Asha",
+    "phone_number": "9876500001",
+    "page": "/ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "page": [
+      "Ensure this field has no more than 255 characters."
+     ]
+    }
+   }
+  },
+  "footer": {
+   "request": {
+    "name": "Footer Lead",
+    "phone_number": "9876500011",
+    "source": "footer",
+    "page": "/"
+   },
+   "status": 201,
+   "body": {
+    "id": 1,
+    "name": "Footer Lead",
+    "phone_number": "9876500011",
+    "source": "footer",
+    "source_label": "Footer — Ready to go solar",
+    "page": "/",
+    "details": {},
+    "created_at": "2026-09-29T03:32:35.289285+05:30",
+    "updated_at": "2026-09-29T03:32:35.289305+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "home_booking": {
+   "request": {
+    "name": "Booking Lead",
+    "phone_number": "+91 98765-00012",
+    "source": "home_booking",
+    "page": "/"
+   },
+   "status": 201,
+   "body": {
+    "id": 2,
+    "name": "Booking Lead",
+    "phone_number": "9876500012",
+    "source": "home_booking",
+    "source_label": "Book a consultation form",
+    "page": "/",
+    "details": {},
+    "created_at": "2026-09-29T03:32:35.303867+05:30",
+    "updated_at": "2026-09-29T03:32:35.303882+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "contact_page": {
+   "request": {
+    "name": "Contact Lead",
+    "phone_number": "919876500013",
+    "source": "contact_page",
+    "page": "/contact-us",
+    "details": {
+     "Pincode": "682016",
+     "Property type": "Residential"
+    }
+   },
+   "status": 201,
+   "body": {
+    "id": 3,
+    "name": "Contact Lead",
+    "phone_number": "9876500013",
+    "source": "contact_page",
+    "source_label": "Contact Us page",
+    "page": "/contact-us",
+    "details": {
+     "Pincode": "682016",
+     "Property type": "Residential"
+    },
+    "created_at": "2026-09-29T03:32:35.318249+05:30",
+    "updated_at": "2026-09-29T03:32:35.318262+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "group_purchase": {
+   "request": {
+    "name": "Group Lead",
+    "phone_number": "9876500014",
+    "source": "group_purchase",
+    "page": "/group-purchase",
+    "details": {
+     "Email": "group@example.com",
+     "Role": "Organiser",
+     "District": "Ernakulam",
+     "Locality": "Kakkanad",
+     "Estimated homes": "25",
+     "Monthly bill": "3000",
+     "Group name": "Green Flats"
+    }
+   },
+   "status": 201,
+   "body": {
+    "id": 4,
+    "name": "Group Lead",
+    "phone_number": "9876500014",
+    "source": "group_purchase",
+    "source_label": "Group Purchase reservation",
+    "page": "/group-purchase",
+    "details": {
+     "Email": "group@example.com",
+     "Role": "Organiser",
+     "District": "Ernakulam",
+     "Locality": "Kakkanad",
+     "Estimated homes": "25",
+     "Monthly bill": "3000",
+     "Group name": "Green Flats"
+    },
+    "created_at": "2026-09-29T03:32:35.332506+05:30",
+    "updated_at": "2026-09-29T03:32:35.332519+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "quotation": {
+   "request": {
+    "name": "Quote Lead",
+    "phone_number": "9876500015",
+    "source": "quotation",
+    "page": "/solar-calculator",
+    "details": {
+     "Address": "12 Beach Road",
+     "Pincode": "695001",
+     "Monthly bill": "₹4500",
+     "System size": "5 kW",
+     "Subsidy eligibility": "Yes",
+     "Language": "ml",
+     "Empty": "",
+     "Nothing": null
+    }
+   },
+   "status": 201,
+   "body": {
+    "id": 5,
+    "name": "Quote Lead",
+    "phone_number": "9876500015",
+    "source": "quotation",
+    "source_label": "Quotation request (calculator)",
+    "page": "/solar-calculator",
+    "details": {
+     "Address": "12 Beach Road",
+     "Pincode": "695001",
+     "Monthly bill": "₹4500",
+     "System size": "5 kW",
+     "Subsidy eligibility": "Yes",
+     "Language": "ml"
+    },
+    "created_at": "2026-09-29T03:32:35.344769+05:30",
+    "updated_at": "2026-09-29T03:32:35.344781+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "leading_zero_phone": {
+   "request": {
+    "name": "Zero Lead",
+    "phone_number": "09876500018",
+    "source": "footer"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "phone_number": [
+      "Enter a valid 10-digit Indian mobile number."
+     ]
+    }
+   }
+  },
+  "default_source": {
+   "request": {
+    "name": "No Source",
+    "phone_number": "9876500016"
+   },
+   "status": 201,
+   "body": {
+    "id": 6,
+    "name": "No Source",
+    "phone_number": "9876500016",
+    "source": "other",
+    "source_label": "Website form",
+    "page": "",
+    "details": {},
+    "created_at": "2026-09-29T03:32:35.362005+05:30",
+    "updated_at": "2026-09-29T03:32:35.362030+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "long_detail_value": {
+   "request": {
+    "name": "Long Detail",
+    "phone_number": "9876500017",
+    "source": "other",
+    "details": {
+     "Note": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "Count": 3,
+     "Flag": true,
+     "Ratio": 1.5
+    }
+   },
+   "status": 201,
+   "body": {
+    "id": 7,
+    "name": "Long Detail",
+    "phone_number": "9876500017",
+    "source": "other",
+    "source_label": "Website form",
+    "page": "",
+    "details": {
+     "Note": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "Count": 3,
+     "Flag": true,
+     "Ratio": 1.5
+    },
+    "created_at": "2026-09-29T03:32:35.378504+05:30",
+    "updated_at": "2026-09-29T03:32:35.378517+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "plus_prefix_phone": {
+   "request": {
+    "name": "Plus",
+    "phone_number": "+9876500051",
+    "source": "footer"
+   },
+   "status": 201,
+   "body": {
+    "id": 1,
+    "name": "Plus",
+    "phone_number": "9876500051",
+    "source": "footer",
+    "source_label": "Footer — Ready to go solar",
+    "page": "",
+    "details": {},
+    "created_at": "2026-09-29T04:41:48.845865+05:30",
+    "updated_at": "2026-09-29T04:41:48.845884+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  },
+  "plus_inside_phone": {
+   "request": {
+    "name": "Plus2",
+    "phone_number": "98765+00058",
+    "source": "quotation"
+   },
+   "status": 201,
+   "body": {
+    "id": 8,
+    "name": "Plus2",
+    "phone_number": "9876500058",
+    "source": "quotation",
+    "source_label": "Quotation request (calculator)",
+    "page": "",
+    "details": {},
+    "created_at": "2026-09-29T04:41:48.931713+05:30",
+    "updated_at": "2026-09-29T04:41:48.931725+05:30",
+    "message": "Thank you! We'll be in touch shortly.",
+    "status": "success"
+   }
+  }
+ },
+ "affiliate_applications": {
+  "empty": {
+   "request": {},
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "full_name": [
+      "This field is required."
+     ],
+     "phone": [
+      "This field is required."
+     ],
+     "email": [
+      "This field is required."
+     ],
+     "profession": [
+      "This field is required."
+     ],
+     "district": [
+      "This field is required."
+     ]
+    }
+   }
+  },
+  "bad_email": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "9876500021",
+    "email": "not-an-email",
+    "profession": "Real Estate Agent",
+    "district": "Ernakulam"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "email": [
+      "Enter a valid email address."
+     ]
+    }
+   }
+  },
+  "bad_profession": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "9876500021",
+    "email": "Partner.One@Example.com ",
+    "profession": "Astronaut",
+    "district": "Ernakulam"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "profession": [
+      "\"Astronaut\" is not a valid choice."
+     ]
+    }
+   }
+  },
+  "bad_district": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "9876500021",
+    "email": "Partner.One@Example.com ",
+    "profession": "Real Estate Agent",
+    "district": "Chennai"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "district": [
+      "\"Chennai\" is not a valid choice."
+     ]
+    }
+   }
+  },
+  "bad_phone": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "12345",
+    "email": "Partner.One@Example.com ",
+    "profession": "Real Estate Agent",
+    "district": "Ernakulam"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "phone": [
+      "Enter a valid 10-digit Indian mobile number."
+     ]
+    }
+   }
+  },
+  "blank_name": {
+   "request": {
+    "full_name": "  ",
+    "phone": "9876500021",
+    "email": "Partner.One@Example.com ",
+    "profession": "Real Estate Agent",
+    "district": "Ernakulam"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "full_name": [
+      "This field may not be blank."
+     ]
+    }
+   }
+  },
+  "honeypot": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "9876500021",
+    "email": "Partner.One@Example.com ",
+    "profession": "Real Estate Agent",
+    "district": "Ernakulam",
+    "website": "http://spam.example"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "non_field_errors": [
+      "Invalid submission."
+     ]
+    }
+   }
+  },
+  "valid": {
+   "request": {
+    "full_name": "Partner One",
+    "phone": "9876500021",
+    "email": "Partner.One@Example.com ",
+    "profession": "Real Estate Agent",
+    "district": "Ernakulam"
+   },
+   "status": 201,
+   "body": {
+    "message": "Message sent!",
+    "status": "success",
+    "data": {
+     "id": 1,
+     "full_name": "Partner One",
+     "phone": "9876500021",
+     "email": "partner.one@example.com",
+     "profession": "Real Estate Agent",
+     "district": "Ernakulam",
+     "created_at": "2026-09-29T03:32:35.416580+05:30"
+    }
+   }
+  },
+  "valid_other": {
+   "request": {
+    "full_name": "Partner Two",
+    "phone": "+91 98765 00022",
+    "email": "two@example.com",
+    "profession": "Society / RWA Representative",
+    "district": "Thiruvananthapuram",
+    "website": ""
+   },
+   "status": 201,
+   "body": {
+    "message": "Message sent!",
+    "status": "success",
+    "data": {
+     "id": 2,
+     "full_name": "Partner Two",
+     "phone": "9876500022",
+     "email": "two@example.com",
+     "profession": "Society / RWA Representative",
+     "district": "Thiruvananthapuram",
+     "created_at": "2026-09-29T03:32:35.432766+05:30"
+    }
+   }
+  }
+ },
+ "warranty_service_requests": {
+  "empty": {
+   "request": {},
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "full_name": [
+      "This field is required."
+     ],
+     "phone": [
+      "This field is required."
+     ],
+     "issue_type": [
+      "This field is required."
+     ]
+    }
+   }
+  },
+  "bad_issue": {
+   "request": {
+    "full_name": "Owner One",
+    "phone": "9876500031",
+    "issue_type": "Roof Leak",
+    "description": "  Inverter shows error E02  "
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "issue_type": [
+      "\"Roof Leak\" is not a valid choice."
+     ]
+    }
+   }
+  },
+  "long_description": {
+   "request": {
+    "full_name": "Owner One",
+    "phone": "9876500031",
+    "issue_type": "Inverter Fault",
+    "description": "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "description": [
+      "Ensure this field has no more than 2000 characters."
+     ]
+    }
+   }
+  },
+  "bad_phone": {
+   "request": {
+    "full_name": "Owner One",
+    "phone": "98765",
+    "issue_type": "Inverter Fault",
+    "description": "  Inverter shows error E02  "
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "phone": [
+      "Enter a valid 10-digit Indian mobile number."
+     ]
+    }
+   }
+  },
+  "honeypot": {
+   "request": {
+    "full_name": "Owner One",
+    "phone": "9876500031",
+    "issue_type": "Inverter Fault",
+    "description": "  Inverter shows error E02  ",
+    "website": "x"
+   },
+   "status": 400,
+   "body": {
+    "message": "Validation failed",
+    "status": "error",
+    "errors": {
+     "non_field_errors": [
+      "Invalid submission."
+     ]
+    }
+   }
+  },
+  "valid": {
+   "request": {
+    "full_name": "Owner One",
+    "phone": "9876500031",
+    "issue_type": "Inverter Fault",
+    "description": "  Inverter shows error E02  "
+   },
+   "status": 201,
+   "body": {
+    "message": "Service request received. Our team will contact you shortly.",
+    "status": "success",
+    "data": {
+     "id": 1,
+     "full_name": "Owner One",
+     "phone": "9876500031",
+     "issue_type": "Inverter Fault",
+     "description": "Inverter shows error E02",
+     "created_at": "2026-09-29T03:32:35.463963+05:30"
+    }
+   }
+  },
+  "valid_no_description": {
+   "request": {
+    "full_name": "Owner Two",
+    "phone": "9876500032",
+    "issue_type": "KSEB / Net Metering"
+   },
+   "status": 201,
+   "body": {
+    "message": "Service request received. Our team will contact you shortly.",
+    "status": "success",
+    "data": {
+     "id": 2,
+     "full_name": "Owner Two",
+     "phone": "9876500032",
+     "issue_type": "KSEB / Net Metering",
+     "description": "",
+     "created_at": "2026-09-29T03:32:35.476961+05:30"
+    }
+   }
+  }
+ },
+ "send_otp": {
+  "empty": {
+   "request": {},
+   "status": 400,
+   "body": {
+    "phone_number": [
+     "This field is required."
+    ]
+   }
+  },
+  "phone_too_long": {
+   "request": {
+    "phone_number": "999999999999999999999"
+   },
+   "status": 400,
+   "body": {
+    "phone_number": [
+     "Ensure this field has no more than 20 characters."
+    ]
+   }
+  },
+  "fake_twilio": {
+   "request": {
+    "phone_number": "9876500041",
+    "name": "Otp Lead"
+   },
+   "status": 400,
+   "body": {
+    "error": "HTTPSConnectionPool(host='verify.twilio.com', port=443): Max retries exceeded with url: /v2/Services/VAfake/Verifications (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+   }
+  },
+  "repeat_within_30_days": {
+   "request": {
+    "phone_number": "9876500041",
+    "name": "Otp Lead"
+   },
+   "status": 429,
+   "body": {
+    "error": "rate_limit_exceeded",
+    "message": "You have already requested a quote recently. Please try again after 30 days or contact our team directly.",
+    "days_remaining": 30
+   }
+  },
+  "foreign_number": {
+   "request": {
+    "phone_number": "+15005550006"
+   },
+   "status": 400,
+   "body": {
+    "error": "HTTPSConnectionPool(host='verify.twilio.com', port=443): Max retries exceeded with url: /v2/Services/VAfake/Verifications (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+   }
+  }
+ },
+ "verify_otp": {
+  "empty": {
+   "request": {},
+   "status": 400,
+   "body": {
+    "phone_number": [
+     "This field is required."
+    ],
+    "code": [
+     "This field is required."
+    ]
+   }
+  },
+  "code_too_long": {
+   "request": {
+    "phone_number": "9876500041",
+    "code": "12345678901"
+   },
+   "status": 400,
+   "body": {
+    "code": [
+     "Ensure this field has no more than 10 characters."
+    ]
+   }
+  },
+  "fake_twilio": {
+   "request": {
+    "phone_number": "9876500041",
+    "code": "123456",
+    "name": "Otp Lead"
+   },
+   "status": 400,
+   "body": {
+    "error": "HTTPSConnectionPool(host='verify.twilio.com', port=443): Max retries exceeded with url: /v2/Services/VAfake/VerificationCheck (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))"
+   }
+  }
+ },
+ "warranty_throttle_statuses_same_ip": [
+  400,
+  400,
+  400,
+  400,
+  400,
+  429
+ ]
+}

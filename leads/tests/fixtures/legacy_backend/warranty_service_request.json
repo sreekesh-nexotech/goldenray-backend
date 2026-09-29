@@ -1,0 +1,18 @@
+[
+ {
+  "id": 1,
+  "full_name": "Person 7112",
+  "phone": "9843136866",
+  "issue_type": "Inverter Fault",
+  "description": "Inverter shows error E02",
+  "created_at": "2026-09-28T22:02:35.463963+00:00"
+ },
+ {
+  "id": 2,
+  "full_name": "Person 1841",
+  "phone": "9863400987",
+  "issue_type": "KSEB / Net Metering",
+  "description": "",
+  "created_at": "2026-09-28T22:02:35.476961+00:00"
+ }
+]

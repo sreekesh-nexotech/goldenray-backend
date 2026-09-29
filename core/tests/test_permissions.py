@@ -99,9 +99,12 @@ class TestBaseViewSet:
         def owned(queryset, user):
             return queryset.filter(created_by=user)
 
+        previous = scopes._FILTERS.get(("customers", "owned"))  # the customers app's own filter: restored afterwards
         scopes.register("customers", "owned")(owned)
         yield
         scopes._FILTERS.pop(("customers", "owned"), None)
+        if previous is not None:
+            scopes._FILTERS[("customers", "owned")] = previous
 
     def _client(self, make_user, auth_client, grants=None, scope="all"):
         user = make_user(grants=grants or {"settings": ["view", "edit"], "customers": ["view"]}, scopes={"customers": scope})

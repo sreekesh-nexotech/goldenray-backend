@@ -24,3 +24,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Public media on the local filesystem (served by Django under PUBLIC_MEDIA_URL while DEBUG) unless a Bunny zone is set.
 MEDIA_PUBLIC_BACKEND = config("MEDIA_PUBLIC_BACKEND", default="local")
+
+# Website OTP without SMS: every code is 000000 (leads.services.twilio_verify.FakeVerifyClient) unless overridden.
+LEADS_OTP_BACKEND = config("LEADS_OTP_BACKEND", default="fake")
