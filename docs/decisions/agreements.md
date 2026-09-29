@@ -113,6 +113,7 @@ For `agreements.superseded`, `agreement_uid` is the new agreement in force and `
 | Page | Platform | Notes |
 |---|---|---|
 | `{id}` + export profile (`crs`/`admin`) | `legacy_ref = <profile>/<id>`, `number = <PROFILE>-<id>` | legacy map `PA flarize_agr <profile>/<id>`; the page numbered nothing (D2-2) |
+| `{id}` | `uid = uuid5(SI_AGREEMENT_NAMESPACE, "PA:<id>")` (`site_inspections.services.legacy_import.agreement_uid`, the default `uid_for`) | the reference a legacy PA inspection carries, so `import_si` links it (wave-4c integration); the same id in the second profile gets a random uid (`duplicate_record_id`) |
 | `type` 1 / 2 / 3 | `kind` PURCHASE_AGREEMENT / SALE_ORDER / EXTRA_STRUCTURE | other values: `invalid_record` |
 | `createdAt` | `issued_at`, `created_at`, `updated_at` | bare dates (demo records) accepted |
 | `id` `a1` … `a5` (the page's `seed()` demo records) | — | `demo_record_not_migrated` |
@@ -169,7 +170,9 @@ Not migrated: `flarize_trash` (soft-deleted in the page), `flarize_user` / `flar
 `wp/quotations` (tip `e16b464`, reviewed) was merged right after the integration branch, as instructed. The
 integration branch then moved (wave 4a, `9e3f7d1`: quotations and migration-website integrated) and was merged
 again; its DV-117 … DV-121 (migration-website) kept their numbers and this package's rows were renumbered to
-DV-135 … DV-141 (DEVIATIONS, this file, the `revision` help text in the model and its unreleased initial migration).
+DV-122 … DV-128 (DEVIATIONS, this file, the `revision` help text in the model and its unreleased initial migration).
+At the wave-4c integration (site-inspections, projects and legacy-shim had taken DV-122 … DV-134) they were renumbered
+again to DV-135 … DV-141 (docs/decisions/integration-wave4c.md).
 
 ## Shared changes
 

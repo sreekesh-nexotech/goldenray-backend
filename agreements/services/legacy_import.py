@@ -16,6 +16,9 @@ Each record ``{id, type, typeName, customerName, createdAt, data}`` becomes one 
   fee); a value that does not parse is left empty and reported (``unparsed_value``); nothing is re-priced;
 * ``payload`` = the document the templates print, built from those columns, plus ``legacy_record`` = the raw record,
   frozen with its SHA-256. A record already imported unchanged is skipped (its frozen payload is never rebuilt);
+* ``uid`` = ``uuid5(SI_AGREEMENT_NAMESPACE, "PA:<record id>")`` (``site_inspections.services.legacy_import.agreement_uid``),
+  the reference a legacy PA site inspection carries, so imported inspections link without a lookup (a record id seen
+  in both profiles keeps it for the first import only: ``duplicate_record_id``);
 * the page's built-in demo records (``seed()``: ids ``a1`` … ``a5``) are not migrated (``demo_record_not_migrated``).
 
 :func:`report_pa_catalog` compares the page's Upstash catalog with the platform masters and lists the differences;
@@ -183,7 +186,20 @@ def _modified_on_platform(run: ImportRun, source_id: str, agreement: Agreement) 
     return imported_at is not None and agreement.updated_at > imported_at
 
 
-def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict) -> None:
+def _new_uid(run: ImportRun, source_id: str, record_id: str, uid_for) -> uuid.UUID:
+    """The uid of a newly imported agreement: ``uid_for(record id)`` when the caller gives one (``migrations_tools``
+    passes the site-inspection link rule, so a legacy inspection's ``agreement_uid`` finds it), unless another agreement
+    already holds that uid (the same record id in the other profile: ``duplicate_record_id``, a random uid)."""
+    wanted = uid_for(record_id) if uid_for is not None else None
+    if wanted is None:
+        return uuid.uuid4()
+    if Agreement.all_objects.filter(uid=wanted).exists():
+        run.violation(source_id, "duplicate_record_id", f"Record id {record_id!r} was already imported from another profile; this copy gets its own uid (inspections link to the first).")
+        return uuid.uuid4()
+    return wanted
+
+
+def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict, uid_for=None) -> None:
     record = row["record"]
     record_id = _text(record.get("id"), 64)
     source_id = f"{profile}/{record_id}"
@@ -222,7 +238,9 @@ def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict) -> 
         "legacy_ref": source_id[:96],
         **_columns(run, source_id, kind, data),
     }
-    agreement = Agreement(uid=target.uid if target is not None else uuid.uuid4(), customer=customer, **{key: value for key, value in values.items() if key != "customer_id"})
+    agreement = Agreement(
+        uid=target.uid if target is not None else _new_uid(run, source_id, record_id, uid_for), customer=customer, **{key: value for key, value in values.items() if key != "customer_id"}
+    )
     payload = {**document.build(agreement, company=company), "legacy_record": record}
     values.update(payload=payload, payload_sha256=sha256_hex(payload))
     if target is None:
@@ -230,8 +248,14 @@ def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict) -> 
     upsert(run, Agreement, source_id, target=target, values=values, created_at=issued_at, updated_at=issued_at)
 
 
-def import_pa_agreements(records: list[dict], *, profile: str, user=None, dry_run: bool = False) -> dict:
-    """Import one browser profile's ``flarize_agr`` export (``profile`` = ``crs`` or ``admin``), oldest first."""
+def import_pa_agreements(records: list[dict], *, profile: str, user=None, dry_run: bool = False, uid_for=None) -> dict:
+    """Import one browser profile's ``flarize_agr`` export (``profile`` = ``crs`` or ``admin``), oldest first.
+
+    ``uid_for(record id) -> UUID`` fixes the uid of a newly imported agreement. It defaults to
+    ``site_inspections.services.legacy_import.agreement_uid`` — ``uuid5(SI_AGREEMENT_NAMESPACE, "PA:<id>")``, the key a
+    legacy PA inspection carries — so imported inspections link without a lookup."""
+    if uid_for is None:
+        from site_inspections.services.legacy_import import agreement_uid as uid_for
     profile = re.sub(r"[^a-z0-9_-]", "", (profile or "").lower())[:16] or "pa"
     company = document.company_block()
     rows = [{"record": record, "created": str(record.get("createdAt") or "") if isinstance(record, dict) else ""} for record in records or []]
@@ -240,7 +264,7 @@ def import_pa_agreements(records: list[dict], *, profile: str, user=None, dry_ru
         if not isinstance(row["record"], dict):
             run.violation("?", "invalid_record", "A record must be an object; skipped.")
             return
-        _record(run, row, profile=profile, user=user, company=company)
+        _record(run, row, profile=profile, user=user, company=company, uid_for=uid_for)
 
     return run_import(
         ImportRun(PA, SOURCE_TABLE), rows, import_row, user=user, dry_run=dry_run, action=ACTION, object_type="agreements.agreement", namespaces=(CACHE_NAMESPACE,), order=lambda row: row["created"]

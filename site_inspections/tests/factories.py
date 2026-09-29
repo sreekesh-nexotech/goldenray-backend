@@ -92,3 +92,24 @@ def approved(inspection: Inspection, user) -> Inspection:
     Inspection.objects.filter(pk=inspection.pk).update(status=Status.APPROVED)
     inspection.refresh_from_db()
     return inspection
+
+
+def issued_extra_structure(inspection: Inspection):
+    """A live ISSUED EXTRA_STRUCTURE agreement raised from ``inspection`` — what the agreements context's
+    COST_CALCULATED validator (registered by ``AgreementsConfig.ready``) accepts."""
+    from agreements.models import AgreementKind, AgreementStatus, SourceType
+    from agreements.tests.factories import AgreementFactory
+    from engines.frozen import sha256_hex
+
+    payload = {"kind": "EXTRA_STRUCTURE", "source_uid": str(inspection.uid)}
+    return AgreementFactory(
+        kind=AgreementKind.EXTRA_STRUCTURE,
+        customer=inspection.customer,
+        status=AgreementStatus.ISSUED,
+        source_type=SourceType.SITE_INSPECTION,
+        source_uid=inspection.uid,
+        number=f"AGR-X-{str(inspection.uid)[:8]}",
+        payload=payload,
+        payload_sha256=sha256_hex(payload),
+        issued_at=dt.datetime(2026, 9, 29, tzinfo=dt.UTC),
+    )

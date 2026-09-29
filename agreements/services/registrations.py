@@ -6,7 +6,8 @@
 * ``documents.access`` — an agreement PDF is visible to whoever can see the agreement (record scope);
 * ``media.usage`` / ``media.folders`` — acceptance scans are referenced and live in a reserved private folder;
 * ``catalog.services.usage`` — components named by issued agreements;
-* ``core.dashboard`` — counters for the ``agreements`` module.
+* ``core.dashboard`` — counters for the ``agreements`` module;
+* ``site_inspections.services.work`` — the COST_CALCULATED agreement validator (:func:`extra_structure_problem`).
 """
 
 from __future__ import annotations
@@ -61,6 +62,30 @@ def agreement_counts(user) -> dict[str, int]:
     }
 
 
+def extra_structure_problem(agreement_uid, inspection) -> str | None:
+    """``site_inspections.services.work`` validator: an additional-work item reaches COST_CALCULATED only with a live
+    ISSUED/ACCEPTED EXTRA_STRUCTURE agreement raised from that same inspection (``source_type = SITE_INSPECTION``,
+    ``source_uid`` = the inspection's uid). Returns the problem, or None when the agreement qualifies."""
+    import uuid
+
+    from agreements.models import AgreementKind, SourceType
+
+    try:
+        uid = agreement_uid if isinstance(agreement_uid, uuid.UUID) else uuid.UUID(str(agreement_uid))
+    except (TypeError, ValueError, AttributeError):
+        return "Not a valid agreement uid."
+    agreement = Agreement.objects.filter(uid=uid).only("kind", "status", "source_type", "source_uid").first()
+    if agreement is None:
+        return "No such agreement."
+    if agreement.kind != AgreementKind.EXTRA_STRUCTURE:
+        return "Not an EXTRA_STRUCTURE agreement."
+    if agreement.status not in (AgreementStatus.ISSUED, AgreementStatus.ACCEPTED):
+        return f"The EXTRA_STRUCTURE agreement is {agreement.status}; it must be ISSUED or ACCEPTED."
+    if agreement.source_type != SourceType.SITE_INSPECTION or agreement.source_uid != inspection.uid:
+        return "The EXTRA_STRUCTURE agreement was not raised from this site inspection."
+    return None
+
+
 def register() -> None:
     from catalog.services import usage as catalog_usage
     from core import dashboard
@@ -68,6 +93,7 @@ def register() -> None:
     from documents import access
     from media import folders
     from media import usage as media_usage
+    from site_inspections.services import work
 
     merge.register_dependant(Agreement, "customer", blocks_delete=True)
     access.register(OBJECT_TYPE, module=MODULE, action="view", visible=document_visible)
@@ -75,3 +101,4 @@ def register() -> None:
     folders.reserve(ACCEPTANCE_FOLDER)
     catalog_usage.register("agreements.issued")(component_usage)
     dashboard.register(MODULE)(agreement_counts)
+    work.register_agreement_validator(extra_structure_problem)

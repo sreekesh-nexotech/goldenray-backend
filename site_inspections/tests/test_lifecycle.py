@@ -10,7 +10,7 @@ from core.models import OutboxEvent
 from site_inspections.models import AdditionalWorkItem, EngineeringReview, EquipmentAssessment, Inspection, LocationApproval
 from site_inspections.models.choices import Status
 from site_inspections.services import equipment, inspections, lifecycle, reviews, work
-from site_inspections.tests.factories import PASS_ALL_OG, InspectionFactory, add_photo, approved, completed_fields
+from site_inspections.tests.factories import PASS_ALL_OG, InspectionFactory, add_photo, approved, completed_fields, issued_extra_structure
 
 pytestmark = pytest.mark.django_db
 BASE = "/api/v1/site-inspections/"
@@ -212,7 +212,10 @@ class TestAdditionalWork:
         assert move("ENGINEERING_REVIEW").json()["status"] == "ENGINEERING_REVIEW"
         assert client.patch(f"{BASE}{working.uid}/additional-work/{item}/", {"dimensions": "x"}, format="json").json()["code"] == "work_item_locked"
         assert move("COST_CALCULATED").json()["code"] == "agreement_required"
-        agreement = uuid.uuid4()
+        # The agreements context's validator (AgreementsConfig.ready) needs a live ISSUED EXTRA_STRUCTURE agreement
+        # raised from this inspection; an unknown uid is refused.
+        assert move("COST_CALCULATED", agreement_uid=str(uuid.uuid4())).json()["code"] == "agreement_invalid"
+        agreement = issued_extra_structure(working).uid
         assert move("COST_CALCULATED", agreement_uid=str(agreement)).json()["agreement_uid"] == str(agreement)
         assert move("CUSTOMER_QUOTE_SENT").json()["status"] == "CUSTOMER_QUOTE_SENT"
         decided = move("APPROVED").json()

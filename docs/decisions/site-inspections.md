@@ -196,7 +196,9 @@ wave 4b integration to meet the projects contract (docs/decisions/projects.md "E
    * Identifying an item and editing or deleting an IDENTIFIED item are the engineer's actions (`edit`); every other
      move needs `approve`.
    * COST_CALCULATED needs the EXTRA_STRUCTURE `agreement_uid`. `work.register_agreement_validator(fn)` lets the
-     agreements package verify it; until one is registered, any uid is accepted.
+     agreements package verify it. Since the wave-4c integration `AgreementsConfig.ready()` registers
+     `agreements.services.registrations.extra_structure_problem`: the uid must name a live ISSUED/ACCEPTED
+     EXTRA_STRUCTURE agreement raised from this inspection (`source_type = SITE_INSPECTION`, `source_uid` = its uid).
 9. **Scopes.** `owned` means the inspections of customers I own, plus the ones I created. `assigned` means
    `engineer = me`. Child rows are only ever reached through a visible inspection.
 10. **Report.**
@@ -307,7 +309,8 @@ wave 4b integration to meet the projects contract (docs/decisions/projects.md "E
   * Give imported legacy PA agreements `uid = uuid5(SI_AGREEMENT_NAMESPACE, "PA:<legacy id>")`
     (`site_inspections.services.legacy_import`).
   * Optionally register `site_inspections.services.work.register_agreement_validator(fn)` from `AgreementsConfig.ready()`
-    to verify EXTRA_STRUCTURE uids (the sales apps share one layer). Until then, any uid is accepted.
+    to verify EXTRA_STRUCTURE uids (the sales apps share one layer). Done at the wave-4c integration
+    (docs/decisions/integration-wave4c.md), as are the two items above.
 * **projects**: consume `site_inspections.released`.
 * **migrations_tools**
   * Run `seed_roles` first, then `site_inspections.services.legacy_import.import_all(tables)` with `tables` from the

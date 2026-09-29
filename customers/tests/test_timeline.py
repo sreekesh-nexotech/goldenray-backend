@@ -32,7 +32,13 @@ def test_entries_from_every_provider_newest_first(auth_client, make_user):
     ats = [entry["at"] for entry in body["results"]]
     assert ats == sorted(ats, reverse=True) and body["next_before"] is None
     # Later sales contexts (site_inspections, …) register their own providers; these are the ones present on integration.
-    assert {"agreements.agreements": "agreements", "customers.record": "customers", "leads.leads": "leads", "leads.warranty_requests": "leads", "quotations.quotations": "quotations"}.items() <= timeline.providers().items()
+    assert {
+        "agreements.agreements": "agreements",
+        "customers.record": "customers",
+        "leads.leads": "leads",
+        "leads.warranty_requests": "leads",
+        "quotations.quotations": "quotations",
+    }.items() <= timeline.providers().items()
 
 
 def test_entries_follow_the_viewers_permissions_and_scope(auth_client, make_user):
