@@ -124,13 +124,12 @@ class TestUpdateAndDelete:
         response = hr_client.delete(detail(office))
         assert response.status_code == 409 and response.json()["code"] == "office_in_use" and response.json()["errors"]["employees"] == ["1"]
 
-    def test_delete_is_refused_while_other_packages_depend_on_it(self, hr_client):
+    def test_delete_is_refused_while_other_packages_depend_on_it(self, hr_client, monkeypatch):
         office = OfficeFactory()
+        # a stand-in for the devices counter; the installed providers come back after the test
+        monkeypatch.setattr(registries.office_dependencies, "_providers", {})
         registries.office_dependencies.register("devices")(lambda row: {"devices": 2})
-        try:
-            response = hr_client.delete(detail(office))
-        finally:
-            registries.office_dependencies.unregister("devices")
+        response = hr_client.delete(detail(office))
         assert response.status_code == 409 and response.json()["errors"]["devices"] == ["2"]
 
     def test_delete_soft_deletes_the_office_its_holidays_and_rules(self, hr_client):
@@ -144,7 +143,8 @@ class TestUpdateAndDelete:
 
 
 class TestSummary:
-    def test_summary_for_a_day(self, hr_client):
+    def test_summary_for_a_day(self, hr_client, monkeypatch):
+        monkeypatch.setattr(registries.office_summary, "_providers", {})  # hr's own part only (no package sections)
         shift = ShiftFactory(weekly_off_days=[6])
         office = OfficeFactory(default_shift=shift, timezone="Asia/Kolkata")
         people = EmployeeFactory.create_batch(3, office=office)
@@ -166,7 +166,7 @@ class TestSummary:
             body = auth_client(hr_user).get(detail(office, "summary/")).json()
         assert body["date"] == "2026-03-15" and body["is_weekly_off"] is True and body["is_working_day"] is False
 
-    def test_sections_come_from_the_registry(self, hr_client, hr_user):
+    def test_sections_come_from_the_registry(self, hr_client, hr_user, monkeypatch):
         office = OfficeFactory()
         seen = []
 
@@ -174,14 +174,12 @@ class TestSummary:
             seen.append((row.pk, day, user.pk))
             return {"present": 7}
 
+        # stand-ins only; the installed providers come back after the test
+        monkeypatch.setattr(registries.office_summary, "_providers", {})
         registries.office_summary.register("attendance")(attendance)
         registries.office_summary.register("broken")(lambda *args: 1 / 0)
         registries.office_summary.register("hidden")(lambda *args: None)
-        try:
-            body = hr_client.get(detail(office, "summary/"), {"day": "2026-03-10"}).json()
-        finally:
-            for name in ("attendance", "broken", "hidden"):
-                registries.office_summary.unregister(name)
+        body = hr_client.get(detail(office, "summary/"), {"day": "2026-03-10"}).json()
         assert body["sections"] == {"attendance": {"present": 7}}
         assert seen == [(office.pk, dt.date(2026, 3, 10), hr_user.pk)]
 
