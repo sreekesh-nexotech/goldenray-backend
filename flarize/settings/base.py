@@ -425,6 +425,12 @@ SPECTACULAR_SETTINGS = {
         "BomQuoteStructureTypeEnum": "bom.serializers.quote.QUOTE_STRUCTURE_TYPES",
         # percent / flat — the quote's margin_type and an offer's offer_type (legacy /bom/api/calculate/ contract).
         "BomQuoteAmountTypeEnum": "bom.serializers.quote.QUOTE_AMOUNT_TYPES",
+        "PackConfigStatusEnum": "packs.models.choices.ConfigStatus",
+        "PackLineSourceEnum": "packs.models.choices.LineSource",
+        "EngineeringEngineEnum": "engineering.models.choices.Engine",
+        "EngineeringSubjectTypeEnum": "engineering.models.choices.SubjectType",
+        "EngineeringRunResultEnum": "engineering.models.choices.RunResult",
+        "EngineeringSeverityEnum": "engineering.models.choices.Severity",
     },
 }
 
