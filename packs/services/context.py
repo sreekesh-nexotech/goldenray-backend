@@ -38,10 +38,16 @@ def engine_context(price_release: PriceRelease | None = None, *, use_current: bo
     return EngineContext(catalog=flarize_catalog(release_prices(release)), price_release=release)
 
 
-def version_pins(version: ConfigVersion) -> dict[str, list[dict]]:
-    """``{pack key: [{slot_key, sku, authoritative, alternates}]}`` of the version's live packs."""
+def version_pins(version: ConfigVersion, *, removed_packs: bool = False) -> dict[str, list[dict]]:
+    """``{pack key: [{slot_key, sku, authoritative, alternates}]}`` of the version's live packs (``removed_packs``: of the
+    soft-deleted ones too, which the mirror restores when the configuration offers them again; a live pack wins)."""
     pins: dict[str, list[dict]] = {}
-    rows = ConfigPin.objects.filter(pack__config_version=version, pack__deleted_at__isnull=True).select_related("pack", "component").order_by("pack_id", "id")
-    for pin in rows:
+    rows = ConfigPin.objects.filter(pack__config_version=version).select_related("pack", "component").order_by("pack_id", "id")
+    if not removed_packs:
+        rows = rows.filter(pack__deleted_at__isnull=True)
+    owner: dict[str, object] = {}
+    for pin in sorted(rows, key=lambda row: (row.pack.deleted_at is not None, -row.pack_id, row.id)):
+        if owner.setdefault(pin.pack.key, pin.pack_id) != pin.pack_id:
+            continue
         pins.setdefault(pin.pack.key, []).append({"slot_key": pin.slot_key, "sku": pin.component.sku, "authoritative": pin.authoritative, "alternates": list(pin.alternates or [])})
     return pins

@@ -34,6 +34,10 @@ class TestAccess:
         assert viewer.post(BASE, {}, format="json").status_code == 403
         assert viewer.post(f"{BASE}{world['version'].uid}/submit/", {}, format="json").status_code == 403
         assert viewer.post(f"{BASE}{world['version'].uid}/run-checker/", {}, format="json").status_code == 403
+        assert viewer.patch(f"{BASE}{world['version'].uid}/", {"sections": {"marketRates": {}}}, format="json").status_code == 403
+        assert viewer.put(f"{BASE}{world['version'].uid}/packs/ongrid-value-3/", {"pins": {}}, format="json").status_code == 403
+        assert viewer.post(f"{BASE}{world['version'].uid}/approve/", {"direct": True}, format="json").status_code == 403
+        assert viewer.post(f"{BASE}{world['version'].uid}/reject/", {"reason": "x"}, format="json").status_code == 403
 
     def test_editor_cannot_approve_or_reject(self, editor, world):
         draft = editor.post(BASE, {}, format="json").json()
@@ -236,3 +240,52 @@ class TestLifecycle:
         before = ConfigLine.objects.filter(pack__config_version__uid=draft["uid"]).count()
         admin.patch(f"{BASE}{draft['uid']}/", {"sections": {"marketRates": {"ongrid_value": {"3": 1}}}}, format="json")
         assert ConfigLine.objects.filter(pack__config_version__uid=draft["uid"]).count() == before
+
+
+class TestReviewFixes:
+    def test_costs_and_margin_need_pricing_internal(self, viewer, admin, world):
+        """PLAN §3.2: `pricing_internal` unlocks margin and cost fields on packs responses (Flarize refused pack-config reads to Sales)."""
+        detail = viewer.get(f"{BASE}{world['version'].uid}/").json()
+        assert detail["config"]["costs"] is None and detail["config"]["pricing"] is None
+        assert detail["config"]["marketRates"] == {"ongrid_value": {"3": 229000}}
+        internal = admin.get(f"{BASE}{world['version'].uid}/").json()
+        assert internal["config"]["costs"]["office"] == 5500 and internal["config"]["pricing"]["marginPct"] == 20
+
+    def test_costs_are_redacted_in_write_responses_too(self, editor, world):
+        draft = editor.post(BASE, {}, format="json").json()
+        assert draft["config"]["costs"] is None and draft["config"]["pricing"] is None
+        patched = editor.patch(f"{BASE}{draft['uid']}/", {"sections": {"marketRates": {"ongrid_value": {"3": 1}}}}, format="json").json()
+        assert patched["config"]["costs"] is None and patched["config"]["marketRates"] == {"ongrid_value": {"3": 1}}
+        assert ConfigVersion.objects.get(uid=draft["uid"]).config["costs"]["office"] == 5500  # stored untouched
+
+    def test_a_pack_removed_and_offered_again_keeps_its_pins(self, admin, world):
+        draft = _draft(admin, world)
+        url = f"{BASE}{draft['uid']}/packs/ongrid-value-5/"
+        assert admin.put(url, {"pins": {"panel": str(world["pnl2"].uid)}}, format="json").status_code == 200
+        templates = dict(draft["config"]["bomTemplates"])
+        templates["ongrid"] = {**templates["ongrid"], "sizes": {"3": "3 kW"}}
+        removed = admin.patch(f"{BASE}{draft['uid']}/", {"sections": {"bomTemplates": templates}}, format="json")
+        assert removed.status_code == 200, removed.json()
+        assert admin.get(url).status_code == 404
+        admin.patch(f"{BASE}{draft['uid']}/", {"sections": {"bomTemplates": draft["config"]["bomTemplates"]}}, format="json")
+        back = admin.get(url).json()
+        assert back["panel"]["sku"] == "pnl2" and [pin["slot_key"] for pin in back["pins"]] == ["panel"]
+        assert ConfigPack.all_objects.filter(config_version__uid=draft["uid"], key="ongrid-value-5").count() == 1
+
+    def test_a_draft_identical_to_the_approved_version_is_not_submitted(self, admin, world):
+        """Flarize ``submitDraft`` / ``approveDraftDirect``: NO_CHANGES compares with the approved configuration."""
+        draft = _draft(admin, world)
+        approved_rates = draft["config"]["marketRates"]
+        admin.patch(f"{BASE}{draft['uid']}/", {"sections": {"marketRates": {"ongrid_value": {"3": 239000}}}}, format="json")
+        admin.post(f"{BASE}{draft['uid']}/submit/", {}, format="json")
+        rejected = admin.post(f"{BASE}{draft['uid']}/reject/", {"reason": "too high"}, format="json").json()
+        second = admin.post(BASE, {"based_on_uid": rejected["uid"]}, format="json").json()
+        # unchanged from the rejected proposal but different from the approved version: it may be proposed again
+        resubmitted = admin.post(f"{BASE}{second['uid']}/submit/", {}, format="json")
+        assert resubmitted.status_code == 200, resubmitted.json()
+        # back to exactly the approved configuration: nothing to submit or approve
+        admin.patch(f"{BASE}{second['uid']}/", {"sections": {"marketRates": approved_rates}}, format="json")
+        same = admin.post(f"{BASE}{second['uid']}/submit/", {}, format="json")
+        assert same.status_code == 409 and same.json()["code"] == "no_changes"
+        direct = admin.post(f"{BASE}{second['uid']}/approve/", {"direct": True}, format="json")
+        assert direct.status_code == 409 and direct.json()["code"] == "no_changes"

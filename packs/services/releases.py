@@ -46,7 +46,7 @@ from engineering.models import Engine, SubjectType
 from engineering.services import rule_sets, runs
 from engines.engineering_checker import Severity
 from flarize.cache_utils import bump
-from packs.models import ConfigPin, ConfigStatus, ConfigVersion, PackRelease, ReleasePack, ReleaseStatus
+from packs.models import CURRENT_STATUSES, ConfigPin, ConfigStatus, ConfigVersion, PackRelease, ReleasePack, ReleaseStatus
 from packs.services import engine
 from packs.services.common import CACHE_NAMESPACE, json_safe, money, platform_system, platform_tier, sha256_of, size_kw
 from packs.services.context import engine_context, version_pins
@@ -369,6 +369,9 @@ def publish(*, user, note: str = "", expected_current_number=None) -> PackReleas
             "publish_blocked", "The publish report has blocking items.", errors={"report": [f"{item['code']}: {item['message']}" for item in built.report.items if item["severity"] == BLOCK]}
         )
     version = ConfigVersion.objects.select_for_update().get(pk=built.version.pk)
+    if version.status not in CURRENT_STATUSES or version.config != built.version.config:
+        # another version was approved between the (unlocked) build and this lock: the report no longer describes it
+        raise Conflict("publish_conflict", f"v{version.number} is no longer the approved configuration; review the new preview.")
     run = runs.record_run(
         rule_set=built.rule_set,
         subject_type=SubjectType.PACK_CONFIG_VERSION,

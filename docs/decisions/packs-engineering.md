@@ -25,7 +25,7 @@ Flarize `pack-config.json` with the first releases. Legacy sources: Flarize `pac
 
 | Surface | Path | Permission |
 |---|---|---|
-| staff | `GET packs/config-versions/` (`status`, `search`, `ordering`), `GET …/<uid>/` (with `config`, `change_log`) | `packs.view` |
+| staff | `GET packs/config-versions/` (`status`, `search`, `ordering`), `GET …/<uid>/` (with `config`, `change_log`) | `packs.view`; the `costs` and `pricing` (margin) sections of `config` are `null` without `pricing_internal.view` (also in write responses) |
 | staff | `POST packs/config-versions/` (`based_on_uid?`, `config?`, `note?`) — new DRAFT | `packs.edit` |
 | staff | `PATCH packs/config-versions/<uid>/` (`config` or `sections`, `note`, `expected_version`) | `packs.edit` |
 | staff | `GET …/<uid>/packs/` (`system_type`, `tier`; packs with pins and lines), `GET …/<uid>/packs/<key>/` | `packs.view` |
@@ -63,7 +63,7 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
 4. **Lifecycle** (DV-96): DRAFT → SUBMITTED → APPROVED (or `direct` approve of a DRAFT, recorded as submitted and
    approved by the approver — Flarize's Admin path) → PUBLISHED (first release built from it) → SUPERSEDED (another
    version approved); SUBMITTED → REJECTED (reason). Editing a SUBMITTED draft withdraws it (Flarize). Submit /
-   direct approve refuse a draft identical to the version it is based on (configuration and pins: 409 `no_changes`).
+   direct approve refuse a draft identical to the current approved version (configuration and pins: 409 `no_changes`, Flarize `NO_CHANGES`).
    Error codes: `draft_exists`, `based_on_has_no_config`, `version_not_editable`, `version_not_draft`,
    `already_submitted`, `version_not_submitted`, `approve_conflict`, `pack_not_found`, `version_has_no_config`,
    `invalid_config`, `validation_error`, `stale_version`.
@@ -87,7 +87,8 @@ Record scope: `packs` and `engineering` allow only `all` (PLAN §3.2), applied b
    `matrix` is the readiness matrix (one row per pack: READY/EXCLUDED, reasons, price, engineering verdict). PLAN D-8's
    "PBC-M-003 controller flagged in the publish report" and the `bt1` rating blocker appear as
    `PACK_ENGINEERING_BLOCKED` items.
-9. **Publish** (one transaction): stale guard on `expected_current_number`, the report re-built inside the transaction,
+9. **Publish** (one transaction): stale guard on `expected_current_number`, the report re-built inside the transaction
+   (409 `publish_conflict` when the version it was built from is no longer the approved one once locked),
    the checker run stored, previous release SUPERSEDED, version PUBLISHED, number from `core.sequences` (`PACK_RELEASE`),
    payload (canonical, without number and time) + SHA-256 + report stored, cache namespace `packs` bumped,
    `packs.release_published` `{release_uid, number, previous_number, config_version_number, price_release_number,

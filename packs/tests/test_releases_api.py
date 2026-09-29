@@ -129,6 +129,22 @@ class TestPublish:
         assert viewer.get("/api/v1/packs/compare/", {"a": "x", "b": 2}).status_code == 400
         assert viewer.get("/api/v1/packs/compare/", {"a": 1, "b": 9}).status_code == 404
 
+    def test_version_superseded_during_the_build_is_a_conflict(self, admin, world, monkeypatch):
+        """The build reads the approved version unlocked; an approval committed meanwhile must not be published over."""
+        from packs.models import ConfigVersion
+
+        real_build = releases.build
+
+        def build_then_supersede(**kwargs):
+            built = real_build(**kwargs)
+            ConfigVersion.objects.filter(pk=world["version"].pk).update(status=ConfigStatus.SUPERSEDED)
+            return built
+
+        monkeypatch.setattr(releases, "build", build_then_supersede)
+        response = admin.post(BASE, {}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "publish_conflict"
+        assert PackRelease.objects.count() == 0 and Run.objects.count() == 0
+
     def test_waived_block_findings_let_the_pack_through(self, admin, world):
         from engineering.models import SubjectType
 

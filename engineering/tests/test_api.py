@@ -101,6 +101,17 @@ class TestRuns:
         assert admin.post(f"{BASE}findings/00000000-0000-0000-0000-000000000000/acknowledge/", {"reason": "x"}, format="json").status_code == 404
         assert OutboxEvent.objects.filter(event_type="engineering.finding_acknowledged").exists()
 
+    def test_access(self, api_client, auth_client, make_user, run):
+        finding = Finding.objects.filter(run=run).first()
+        assert api_client.get(f"{BASE}runs/").status_code == 401
+        assert api_client.get(f"{BASE}runs/{run.uid}/").status_code == 401
+        assert api_client.post(f"{BASE}findings/{finding.uid}/acknowledge/", {"reason": "x"}, format="json").status_code == 401
+        outsider = auth_client(make_user(grants={"packs": ["view"]}))
+        assert outsider.get(f"{BASE}runs/").status_code == 403
+        assert outsider.get(f"{BASE}runs/{run.uid}/").status_code == 403
+        assert outsider.post(f"{BASE}findings/{finding.uid}/acknowledge/", {"reason": "x"}, format="json").status_code == 403
+        assert not Acknowledgement.objects.exists()
+
     def test_no_active_rule_set(self):
         RuleSet.objects.update(active=False)
         with pytest.raises(Exception) as caught:

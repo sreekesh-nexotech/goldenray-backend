@@ -177,7 +177,7 @@ class ConfigVersionViewSet(ListModelMixin, RetrieveModelMixin, BaseViewSet):
         run = versions.run_checker(self.get_object(), user=request.user)
         return Response(RunDetailSerializer(run).data, status=201)
 
-    @_transition("submit", TransitionSerializer, "DRAFT → SUBMITTED (409 `no_changes` when identical to the version it is based on).")
+    @_transition("submit", TransitionSerializer, "DRAFT → SUBMITTED (409 `no_changes` when identical to the current approved version).")
     @action(detail=True, methods=["post"], filter_backends=[], pagination_class=None)
     def submit(self, request, *args, **kwargs):
         body = TransitionSerializer(data=request.data)

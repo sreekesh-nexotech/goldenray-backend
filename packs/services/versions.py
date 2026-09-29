@@ -10,8 +10,8 @@ Lifecycle (``packs_config_version.status``; the Flarize ``packConfig.js`` store 
   ``change_log`` gets ``{at, by, section, note, changed}`` per section.
 * ``set_pins`` — ``PUT …/packs/<key>/``: the pack's pinned components (the platform's replacement of the Flarize
   package registry); each must be selectable (``catalog.assert_selectable``) and of the slot's category.
-* ``submit`` (``packs.submit``) — DRAFT → SUBMITTED; 409 ``no_changes`` when configuration and pins equal the version
-  it is based on.
+* ``submit`` (``packs.submit``) — DRAFT → SUBMITTED; 409 ``no_changes`` when configuration and pins equal the current
+  approved version (Flarize ``submitDraft``).
 * ``approve`` (``packs.approve``) — SUBMITTED → APPROVED (``direct=true`` approves a DRAFT in one step, recorded as
   submitted and approved by the approver — Flarize's Admin path); the previous APPROVED/PUBLISHED version becomes
   SUPERSEDED in the same transaction (one current version: partial unique index).
@@ -248,6 +248,15 @@ def set_pins(version: ConfigVersion, key: str, *, user, pins: dict, expected_ver
     return get_pack(locked, key)
 
 
+def _refuse_unchanged(version: ConfigVersion, verb: str) -> None:
+    """409 ``no_changes`` when configuration and pins equal the current approved version (Flarize ``NO_CHANGES``)."""
+    approved = current_version()
+    if approved is None or approved.pk == version.pk:
+        return
+    if approved.config == version.config and _pins_signature(approved) == _pins_signature(version):
+        raise Conflict("no_changes", f"v{version.number} is identical to the approved v{approved.number}; nothing to {verb}.")
+
+
 @transaction.atomic
 def submit(version: ConfigVersion, *, user, expected_version=None) -> ConfigVersion:
     locked = _locked(version, expected_version)
@@ -255,9 +264,7 @@ def submit(version: ConfigVersion, *, user, expected_version=None) -> ConfigVers
         raise Conflict("already_submitted", f"v{locked.number} is already submitted.")
     if locked.status != ConfigStatus.DRAFT:
         raise Conflict("version_not_draft", f"Only a DRAFT is submitted; v{locked.number} is {locked.status}.")
-    base = locked.based_on
-    if base is not None and base.config == locked.config and _pins_signature(base) == _pins_signature(locked):
-        raise Conflict("no_changes", f"v{locked.number} is identical to v{base.number}; nothing to submit.")
+    _refuse_unchanged(locked, "submit")
     locked.versioned_update(user, status=ConfigStatus.SUBMITTED, submitted_by=user, submitted_at=timezone.now())
     _events("submitted", locked, user=user)
     return locked
@@ -269,9 +276,7 @@ def approve(version: ConfigVersion, *, user, expected_version=None, note: str = 
     now = timezone.now()
     values = {"status": ConfigStatus.APPROVED, "approved_by": user, "approved_at": now, "note": note or locked.note}
     if locked.status == ConfigStatus.DRAFT and direct:
-        base = locked.based_on
-        if base is not None and base.config == locked.config and _pins_signature(base) == _pins_signature(locked):
-            raise Conflict("no_changes", f"v{locked.number} is identical to v{base.number}; nothing to approve.")
+        _refuse_unchanged(locked, "approve")
         values.update(submitted_by=user, submitted_at=now)
     elif locked.status != ConfigStatus.SUBMITTED:
         raise Conflict("version_not_submitted", f"Only a SUBMITTED version is approved (or a DRAFT with direct=true); v{locked.number} is {locked.status}.")

@@ -64,9 +64,13 @@ def mirror(version: ConfigVersion, *, user, ctx: EngineContext | None = None) ->
         return {"packs": 0, "built": 0, "refused": 0}
     ctx = ctx or engine_context()
     config = version.config
-    pins = version_pins(version)
+    pins = version_pins(version, removed_packs=True)
     specs = engine.enumerate_packs(config)
-    existing = {pack.key: pack for pack in ConfigPack.objects.filter(config_version=version)}
+    # Soft-deleted packs too: a pack the configuration offers again is restored with its pins (a live row wins).
+    existing: dict[str, ConfigPack] = {}
+    for pack in ConfigPack.all_objects.filter(config_version=version).order_by("-id"):
+        if pack.key not in existing or (existing[pack.key].deleted_at is not None and pack.deleted_at is None):
+            existing[pack.key] = pack
     flat_roof = StructureTemplate.objects.filter(slug="flat_roof").first()
     built: dict[str, tuple[engine.PackSpec, dict | None]] = {}
     skus: set[str] = set()

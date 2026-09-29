@@ -6,6 +6,9 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from packs.models import ConfigLine, ConfigPack, ConfigPin, ConfigVersion, LineSource, Phase, SystemType, Tier
+from pricing.services.common import can_see_internal
+
+INTERNAL_SECTIONS = ("costs", "pricing")
 
 
 class PacksUserRefSerializer(serializers.Serializer):
@@ -50,12 +53,22 @@ class ConfigVersionSerializer(serializers.ModelSerializer):
 
 
 class ConfigVersionDetailSerializer(ConfigVersionSerializer):
-    config = serializers.JSONField(read_only=True, allow_null=True)
+    config = serializers.SerializerMethodField(help_text=f"The configuration; {', '.join(INTERNAL_SECTIONS)} are null without pricing_internal.view.")
     change_log = serializers.JSONField(read_only=True)
 
     class Meta(ConfigVersionSerializer.Meta):
         fields = [*ConfigVersionSerializer.Meta.fields, "config", "change_log"]
         read_only_fields = fields
+
+    @extend_schema_field(serializers.JSONField(allow_null=True))
+    def get_config(self, obj):
+        if obj.config is None:
+            return None
+        request = self.context.get("request")
+        if can_see_internal(getattr(request, "user", None)):
+            return obj.config
+        # Cost rates and the margin are internal pricing data (PLAN §3.2 pricing_internal; Flarize refused these reads to Sales).
+        return {section: (None if section in INTERNAL_SECTIONS else value) for section, value in obj.config.items()}
 
 
 class ConfigVersionCreateSerializer(serializers.Serializer):
