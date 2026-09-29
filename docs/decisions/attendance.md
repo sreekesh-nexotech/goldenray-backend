@@ -6,13 +6,13 @@ and `engines.attendance`: the punch store behind devices' ingestion, the recompu
 consumers of §3.5 (`attendance.punches_ingested`, `hr.attendance_inputs_changed`) and the eSSL import of §7.5 (raw
 punches + the v3/v4 status diff for HR sign-off). Legacy: eSSL `services/processing.py`, `calendar_service.py`,
 `reports.py`, `exporters.py`, `attendance_source.py`, `attendance_sync.py`, routers `attendance`, `reports`,
-`dashboard` (spec `essl-attendance-spec.md`; none of its §I defects are carried over). Deviations: DV-87 … DV-91.
+`dashboard` (spec `essl-attendance-spec.md`; none of its §I defects are carried over). Deviations: DV-91 … DV-95.
 
 ## What exists
 
 | Area | Where | Notes |
 |---|---|---|
-| Models | `attendance/models/{punch,day,recompute,fields}.py` | `attendance_raw_punch` *(no base, append-only, partitioned — DV-87)*, `attendance_day` (every §2.9 column; PU `(employee, work_date)` among live rows; status CHECK; minutes ≥ 0; OUT needs IN and is not before it; `missing_out` derived and checked), `attendance_correction` (+ `revoke_reason`, one active correction per field — DV-90), `attendance_recompute_request` *(no base — DV-88)*. `WallClockDateTimeField` stores `timestamp` (wall clock) columns and refuses an aware value. |
+| Models | `attendance/models/{punch,day,recompute,fields}.py` | `attendance_raw_punch` *(no base, append-only, partitioned — DV-91)*, `attendance_day` (every §2.9 column; PU `(employee, work_date)` among live rows; status CHECK; minutes ≥ 0; OUT needs IN and is not before it; `missing_out` derived and checked), `attendance_correction` (+ `revoke_reason`, one active correction per field — DV-94), `attendance_recompute_request` *(no base — DV-92)*. `WallClockDateTimeField` stores `timestamp` (wall clock) columns and refuses an aware value. |
 | Raw SQL | `attendance/migrations/0001_initial.py` | the partitioned table, its DEFAULT partition, keys, indexes, the first three monthly partitions and the append-only REVOKE for `DB_APP_ROLE` (like `audit_log`). |
 | Punch store | `attendance/services/sink.py` | `RawPunchSink` registered in `AttendanceConfig.ready` as `devices.services.punch_sink` (DV-78): `INSERT … ON CONFLICT (dedup_key, device_time) DO NOTHING RETURNING` — the agent upload and the ADMS push of one punch are one row; `status`, `pin_activity`, `observed_codes` for the devices screens. |
 | Partitions / privileges | `attendance/services/partitions.py`, `manage.py maintain_attendance_punches` | monthly partitions on `device_time` (stranded DEFAULT rows moved in), append-only privileges (app role: SELECT/INSERT only, partitions closed); run by `deploy/release.sh` as the owner and monthly by Beat when the worker may. |
@@ -49,7 +49,7 @@ schema with its error envelopes; error codes: `validation_error`, `range_too_lon
 
 ## Decisions not spelled out in the PLAN
 
-1. **Partitioned on the terminal clock** (DV-87). `device_time` is part of the hashed content, so the unique key the
+1. **Partitioned on the terminal clock** (DV-91). `device_time` is part of the hashed content, so the unique key the
    partitioning forces, `(dedup_key, device_time)`, is exactly "one row per content hash" (A11). Readers bound
    `device_time` (a punch belongs at most a day either side of its work date in any zone, `inputs.device_time_window`)
    so every query prunes partitions. The model is managed (its DDL is raw SQL) so test flushes truncate it with
@@ -66,7 +66,7 @@ schema with its error envelopes; error codes: `validation_error`, `range_too_lon
    before, for late uploads); a cache marker makes it once per office and date, and repeating it is harmless.
    `attendance/day/` and the dashboard show today **provisionally** from the punches received so far (`PROVISIONAL`,
    computed in memory by `compute_day`, punches later than now ignored); nobody-in-yet is blank, never ABSENT.
-4. **Debounce** (A8, DV-88). Handlers only record requests; `run_due` merges the due ones (everyone / per office / per
+4. **Debounce** (A8, DV-92). Handlers only record requests; `run_due` merges the due ones (everyone / per office / per
    employee grouped by identical windows) and runs them in one transaction; a failure keeps them with `attempts` and
    `last_error` and retries after 5 minutes. `attendance.punches_ingested` recomputes the linked people from the day
    before the first punch date to the day after the last (overnight shifts, zones); an event with only unmapped PINs
@@ -83,14 +83,14 @@ schema with its error envelopes; error codes: `validation_error`, `range_too_lon
    prints H:MM when time was worked, else the code: `H` is only ever a holiday).
 7. **Where a day came from** is read back from its `source_raw_ids` (every contributing terminal by its registered
    label, its office, the transports) in one query per page — never from the single `first_device` column (§I.17).
-8. **Corrections** (A12, DV-90): fields `status`, `first_in`, `last_out` (office wall clock, no zone), the minute
+8. **Corrections** (A12, DV-94): fields `status`, `first_in`, `last_out` (office wall clock, no zone), the minute
    fields and the two flags, validated by `engines.attendance.apply_correction`; `missing_out` follows; the day is
    pinned (`is_corrected`). Revoke restores `old` (refused with `correction_revoke_conflict` when it would contradict
    another active correction, e.g. an OUT without an IN) and, when nothing is left on the day, un-pins it and queues
    its recompute immediately. `attendance.edit` is never granted on your own day (`deny_self_action`).
 9. **Files.** CSV (UTF-8 BOM) and XLSX carry title, subtitle, header, rows and a Summary block like eSSL; every text
    cell that a spreadsheet would evaluate (`= + - @ \t \r`) is prefixed with `'` (§I.7). PDFs and reports over 5,000
-   rows are `ATTENDANCE_REPORT` render jobs (DV-89) whose object is a fresh report uid (`attendance.report`); the
+   rows are `ATTENDANCE_REPORT` render jobs (DV-93) whose object is a fresh report uid (`attendance.report`); the
    documents default access rule applies (`attendance.export`; the requester or an `all`-scope reader). DRF's `?format=`
    renderer override is disabled on the report views (it would answer 404 for `csv`).
 10. **Dashboard** is scoped (§I.1): counts cover the caller's people; the per-office terminal block
@@ -161,7 +161,7 @@ schema with its error envelopes; error codes: `validation_error`, `range_too_lon
 ## Open issues
 
 * ADMS stays behind `ADMS_RECEIVER` (devices D-10); the ATTLOG column mapping is still UNPROVEN.
-* Large exports are PDF only (DV-89); CSV/XLSX beyond 5,000 rows need a narrower selection until the documents package
+* Large exports are PDF only (DV-93); CSV/XLSX beyond 5,000 rows need a narrower selection until the documents package
   can store other file types.
 * The weekly ops report has no attendance section (pending recompute requests are visible in the recompute queue
   table; a `/healthz` check was not added — core pins the set of checks).

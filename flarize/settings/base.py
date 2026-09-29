@@ -424,6 +424,16 @@ SPECTACULAR_SETTINGS = {
         "DeviceHealthStatusEnum": "devices.services.health.DEVICE_STATUSES",
         "DeviceAgentStatusEnum": "devices.services.health.AGENT_STATUSES",
         "DeviceSyncLogStatusEnum": "devices.models.logs.SyncLog.Status",
+        # catalog's names, pinned now that bom declares other "inverter_type" / "structure_type" choice sets.
+        "InverterTypeEnum": "catalog.models.specs.InverterType",
+        "StructureTypeEnum": "catalog.models.specs.StructureType",
+        "BomProfileInverterTypeEnum": "bom.models.choices.ProfileInverterType",
+        "BomStructureItemTypeEnum": "bom.models.choices.StructureItemType",
+        "BomSlotFilterTypeEnum": "bom.models.choices.FilterType",
+        "BomSlotFilterPhaseEnum": "bom.models.choices.FilterPhase",
+        "BomQuoteStructureTypeEnum": "bom.serializers.quote.QUOTE_STRUCTURE_TYPES",
+        # percent / flat — the quote's margin_type and an offer's offer_type (legacy /bom/api/calculate/ contract).
+        "BomQuoteAmountTypeEnum": "bom.serializers.quote.QUOTE_AMOUNT_TYPES",
     },
 }
 

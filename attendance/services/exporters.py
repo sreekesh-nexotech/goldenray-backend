@@ -7,7 +7,7 @@
   stay numbers.
 * **PDF** is rendered only by the documents worker (Playwright; reportlab is gone, PLAN §1.4), so a PDF request is
   answered ``202`` with the ``ATTENDANCE_REPORT`` render job (``documents/jobs/<uid>/`` → ``download-url/``).
-  A report of more than :data:`ASYNC_ROW_LIMIT` rows is rendered the same way whatever format was asked (DV-89): the
+  A report of more than :data:`ASYNC_ROW_LIMIT` rows is rendered the same way whatever format was asked (DV-93): the
   request never holds a worker for a large export, and the frozen payload is capped at 1 MB by the documents package
   (narrow the selection beyond that).
 """

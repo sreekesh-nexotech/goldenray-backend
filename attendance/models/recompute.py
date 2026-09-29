@@ -1,4 +1,4 @@
-"""``attendance_recompute_request`` *(no base; DV-88)* — the debounce queue of the event-driven recompute (A8).
+"""``attendance_recompute_request`` *(no base; DV-92)* — the debounce queue of the event-driven recompute (A8).
 
 The outbox handlers of ``attendance.punches_ingested`` and ``hr.attendance_inputs_changed`` record what has to be
 recomputed (whom, which dates, why) with ``due_at`` = now + the debounce; a Celery task (enqueued on commit, with a

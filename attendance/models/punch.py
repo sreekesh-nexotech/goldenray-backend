@@ -7,7 +7,7 @@
   the same thing: the key is a hash of ``device_time``.
 * **Two clocks** (A10): ``device_time`` is the terminal's wall clock as reported (``timestamp``, never corrected);
   ``punch_at`` is that reading placed in the office's time zone (``timestamptz``) — the instant every computation uses.
-* **Monthly partitions** on ``device_time`` (DV-87): the table, its DEFAULT partition, the unique key and the indexes
+* **Monthly partitions** on ``device_time`` (DV-91): the table, its DEFAULT partition, the unique key and the indexes
   are created by raw SQL in ``attendance/migrations/0001_initial.py``; the Django state mirrors them, so the model is
   managed (flushed with ``devices_device`` in tests) but its DDL is not Django's.
 * A punch has no ``uid``: it is identified outside the service layer by its ``dedup_key``.
@@ -57,7 +57,7 @@ class RawPunch(models.Model):
     source = models.CharField(max_length=12, choices=Source.choices)
     # Attribution: SET_NULL (agents are only soft-deleted, so this never rewrites the ledger).
     agent = models.ForeignKey("devices.Agent", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    # devices_adms_request is partitioned with a composite key: the evidence row id without a database FK (DV-87).
+    # devices_adms_request is partitioned with a composite key: the evidence row id without a database FK (DV-91).
     adms_request_id = models.BigIntegerField(null=True, blank=True)
     dedup_key = models.CharField(max_length=64)
     raw_payload = models.JSONField(default=dict, blank=True)
