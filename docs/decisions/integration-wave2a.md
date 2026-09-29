@@ -52,3 +52,25 @@ Both fail on the merged packages without the wiring.
   functions are not yet called by `migrations_tools` (call order in `docs/decisions/pricing-procurement.md`).
 * Packs (mark stale drafts on `pricing.release_published`), bom, quotations and calculators consumers of pricing:
   later packages.
+* Low-risk items left as the pricing-procurement review found them: `version_key` `<batch number>::<sku>` can exceed
+  `varchar(64)` only for a 32-character imported batch number with a 32-character SKU (platform numbers are 14
+  characters); `applicable_offer` compares `createdAt` isoformat strings, so two offers created in the same second
+  with zero microseconds may order wrongly.
+* The spectacular gate is run both without and with `--api-version v1` (the latter is what
+  `core/tests/test_schema.py` exercises); both pass with zero warnings. Adding `--api-version v1` to the CI step is
+  recommended.
+
+## Resumption
+
+A first integrator was interrupted by a container restart after both merges (`e6947fe`, `007d1dc`); its unfinished
+edits were committed as `5904eb4` (WIP). Every change in it was re-verified before the final commit:
+
+* `procurement.services.allocation.committed_payload` matches `inventory.services.receiving` field by field
+  (`line_uid`, `component_uid`, `qty` as a decimal string, `committed_at` timezone-aware ISO 8601,
+  `committed_by_uid`, `imported`); `inventory/tests/test_procurement_contract.py` fails on `007d1dc`'s
+  `allocation.py` and passes with the wiring. Procurement still never imports inventory (import-linter green).
+* `blog/events.py` `FIXED_PATH_EVENTS`: only the event name is known to blog (no pricing import in production code);
+  the paths are the PLAN §3.5 event-table entry for `pricing.release_published`. The test fails on `007d1dc`'s
+  `blog/events.py` and passes with the wiring.
+* The DV renumbering (inventory DV-62…64 → DV-71…73) is complete in `docs/DEVIATIONS.md` and
+  `docs/decisions/inventory.md`; no code, migration or help text cites those numbers.
