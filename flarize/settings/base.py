@@ -504,6 +504,14 @@ LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY = 10  # database backstop behind the (fail
 LEADS_VERIFICATION_TOKEN_TTL_SECONDS = 1800
 
 # --------------------------------------------------------------------------------------------------------------------
+# EMI calculator: where the system sizes and their prices come from (DV-64)
+# --------------------------------------------------------------------------------------------------------------------
+# "MANUAL": the emi_system_size rows maintained in Studio (the legacy tiles; transitional, the default).
+# "PACK_RELEASE": the provider the packs package registers (emi.services.price_sources.register), i.e. the packs of
+# the current PackRelease. The system check emi.E001/W001 refuses an unknown value or a missing provider.
+EMI_PRICE_SOURCE = config("EMI_PRICE_SOURCE", default="MANUAL")
+
+# --------------------------------------------------------------------------------------------------------------------
 # Logging: JSON lines to stdout with the request id on every record
 # --------------------------------------------------------------------------------------------------------------------
 LOG_LEVEL = config("LOG_LEVEL", default="INFO")
