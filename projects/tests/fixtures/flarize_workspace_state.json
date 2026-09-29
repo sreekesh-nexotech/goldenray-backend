@@ -1,0 +1,1815 @@
+{
+ "workspaceVersion": "workspace.1",
+ "projects": {
+  "PRJ-ALT-ongrid_3_base_20260913132522769j9e1": {
+   "projectId": "PRJ-ALT-ongrid_3_base_20260913132522769j9e1",
+   "customer": {
+    "customerId": "CUST-MTBP1EAI-582059",
+    "customerName": "Masked Customer 1",
+    "name": "Masked Customer 1",
+    "phone": "9847000001",
+    "address": "masked",
+    "pincode": "masked",
+    "email": null,
+    "district": null,
+    "currentBillAmount": 3500,
+    "currentBillCycle": "masked"
+   },
+   "architecture": "DEYE",
+   "sysType": "ongrid",
+   "sizeKw": 3,
+   "phase": "1P",
+   "tier": "base",
+   "packageId": "CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00",
+   "bom": {
+    "projectId": "PRJ-ALT-ongrid_3_base_20260913132522769j9e1",
+    "packageId": "CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00",
+    "architecture": "DEYE",
+    "sysType": "ongrid",
+    "tier": "base",
+    "sizeKw": 3,
+    "phase": "1P",
+    "status": "LOCKED",
+    "createdBy": "admin-001",
+    "createdAt": "2026-09-13T13:25:22.769Z",
+    "packageLines": [
+     {
+      "role": "ACDB",
+      "componentId": "a1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_CABLE",
+      "componentId": "ac1",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_ISOLATOR",
+      "componentId": "is1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DCDB",
+      "componentId": "d1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DC_CABLE",
+      "componentId": "dc1",
+      "quantity": 50,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "cb1",
+      "quantity": 3,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "ec1",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "INVERTER",
+      "componentId": "i95",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "METER",
+      "componentId": "m1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PANEL",
+      "componentId": "p1",
+      "quantity": 6,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PROTECTION",
+      "componentId": "la2",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     }
+    ],
+    "overrides": {
+     "STRUCTURE": {
+      "role": "STRUCTURE",
+      "componentId": "sm_25x15",
+      "quantity": 3,
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "admin-001",
+      "selectionTimestamp": "2026-09-13T13:25:22.769Z",
+      "reason": "Structure pack FLAT 3 kW — primary tube 2.5x1.5 × 3"
+     }
+    },
+    "removedRoles": [],
+    "lock": {
+     "projectId": "PRJ-ALT-ongrid_3_base_20260913132522769j9e1",
+     "status": "LOCKED",
+     "lockedBy": "admin-001",
+     "lockedAt": "2026-09-13T13:25:22.769Z",
+     "dataVersion": "catalog@2026-08-15",
+     "engineeringStatus": "WARNING",
+     "lines": [
+      {
+       "componentId": "a1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "ACDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "ac1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_CABLE",
+       "quantity": 20,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "is1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_ISOLATOR",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "d1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DCDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "dc1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DC_CABLE",
+       "quantity": 50,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "cb1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "EARTHING",
+       "quantity": 3,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "i95",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "INVERTER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "m1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "METER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "p1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PANEL",
+       "quantity": 6,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "la2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PROTECTION",
+       "quantity": 20,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "sm_25x15",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "STRUCTURE",
+       "quantity": 3,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+       "selectedBy": "admin-001",
+       "selectionTimestamp": "2026-09-13T13:25:22.769Z"
+      }
+     ],
+     "packageId": "CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00",
+     "architecture": "DEYE",
+     "rulesVersion": "phase1e.1",
+     "validationStatus": "WARNING",
+     "acknowledgements": [
+      {
+       "ruleId": "PBC-D-003",
+       "acknowledgedBy": "admin-001",
+       "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+       "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+      },
+      {
+       "ruleId": "PBC-N-001",
+       "acknowledgedBy": "admin-001",
+       "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+       "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+      }
+     ]
+    }
+   },
+   "lastValidation": {
+    "status": "WARNING",
+    "findings": [
+     {
+      "ruleId": "PBC-D-003",
+      "category": "INVERTER_ELECTRICAL_LIMITS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i95",
+       "p1"
+      ],
+      "message": "String length is not declared in the project BOM.",
+      "reason": "String voltage and current cannot be verified. No string configuration is assumed.",
+      "source": "Phase 1E — string configuration is not modelled in V1",
+      "inputs": [
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-13T13:25:22.769Z"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "category": "BRANCH_CIRCUIT_CONSTRAINTS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i95"
+      ],
+      "message": "Inverter records mpptCount=1 and maxStringsPerMppt=1, but the BOM declares no string layout.",
+      "reason": "Branch/circuit constraints are unverifiable in V1.",
+      "source": "Phase 1E — declared as unverifiable rather than assumed",
+      "inputs": [
+       "inverter.mpptCount",
+       "inverter.maxStringsPerMppt",
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-13T13:25:22.769Z"
+     }
+    ],
+    "counts": {
+     "blocked": 0,
+     "warning": 2,
+     "info": 0,
+     "checksRun": 35
+    },
+    "rulesVersion": "phase1e.1",
+    "catalogVersion": "catalog@2026-08-15",
+    "at": "2026-09-13T13:25:22.769Z",
+    "deterministicKey": "PBC-D-003|i95+p1;PBC-N-001|i95"
+   },
+   "lock": {
+    "projectId": "PRJ-ALT-ongrid_3_base_20260913132522769j9e1",
+    "status": "LOCKED",
+    "lockedBy": "admin-001",
+    "lockedAt": "2026-09-13T13:25:22.769Z",
+    "dataVersion": "catalog@2026-08-15",
+    "engineeringStatus": "WARNING",
+    "lines": [
+     {
+      "componentId": "a1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "ACDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "ac1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_CABLE",
+      "quantity": 20,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "is1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_ISOLATOR",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "d1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DCDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "dc1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DC_CABLE",
+      "quantity": 50,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "cb1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "EARTHING",
+      "quantity": 3,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "i95",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "INVERTER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "m1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "METER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "p1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PANEL",
+      "quantity": 6,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "la2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PROTECTION",
+      "quantity": 20,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "sm_25x15",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "STRUCTURE",
+      "quantity": 3,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "admin-001",
+      "selectionTimestamp": "2026-09-13T13:25:22.769Z"
+     }
+    ],
+    "packageId": "CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00",
+    "architecture": "DEYE",
+    "rulesVersion": "phase1e.1",
+    "validationStatus": "WARNING",
+    "acknowledgements": [
+     {
+      "ruleId": "PBC-D-003",
+      "acknowledgedBy": "admin-001",
+      "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+      "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "acknowledgedBy": "admin-001",
+      "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+      "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+     }
+    ]
+   },
+   "acknowledgements": [
+    {
+     "ruleId": "PBC-D-003",
+     "acknowledgedBy": "admin-001",
+     "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+     "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+    },
+    {
+     "ruleId": "PBC-N-001",
+     "acknowledgedBy": "admin-001",
+     "acknowledgedAt": "2026-09-13T13:25:22.769Z",
+     "reason": "Auto-acknowledged: alternative tier base package CFGPKG-ONGRID-3-1P-BASE-mttmtf3l00 is APPROVED"
+    }
+   ],
+   "costInputs": {
+    "distanceKm": 100,
+    "vehicleType": "ACE",
+    "installationType": "FLAT",
+    "sizeKey": "3"
+   },
+   "discount": null,
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-13T13:25:22.769Z"
+  },
+  "PRJ-ongrid_3_value_20260830170726": {
+   "projectId": "PRJ-ongrid_3_value_20260830170726",
+   "customer": {
+    "name": "Masked Customer 4",
+    "phone": "9847000004"
+   },
+   "architecture": "GRID_TIED",
+   "sysType": "ongrid",
+   "sizeKw": 3,
+   "phase": "1P",
+   "tier": "value",
+   "packageId": "PKG-ONGRID-3-1P-VALUE",
+   "bom": {
+    "projectId": "PRJ-ongrid_3_value_20260830170726",
+    "packageId": "PKG-ONGRID-3-1P-VALUE",
+    "architecture": "GRID_TIED",
+    "sysType": "ongrid",
+    "tier": "value",
+    "sizeKw": 3,
+    "phase": "1P",
+    "status": "LOCKED",
+    "createdBy": "user-1787942393650-e48ae05d",
+    "createdAt": "2026-08-30T17:07:26.039Z",
+    "packageLines": [
+     {
+      "role": "ACDB",
+      "componentId": "a1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_CABLE",
+      "componentId": "ac2",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_ISOLATOR",
+      "componentId": "is1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DCDB",
+      "componentId": "d2",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DC_CABLE",
+      "componentId": "dc3",
+      "quantity": 50,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "cb4",
+      "quantity": 3,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "ec2",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "INVERTER",
+      "componentId": "i87",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "METER",
+      "componentId": "m2",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PANEL",
+      "componentId": "p2",
+      "quantity": 6,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PROTECTION",
+      "componentId": "la1",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     }
+    ],
+    "overrides": {
+     "STRUCTURE": {
+      "role": "STRUCTURE",
+      "componentId": "sm_15x15",
+      "quantity": 1,
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "user-1787942393650-e48ae05d",
+      "selectionTimestamp": "2026-08-30T17:07:26.039Z",
+      "reason": "Default structure material — automated orchestration"
+     }
+    },
+    "removedRoles": [],
+    "lock": {
+     "projectId": "PRJ-ongrid_3_value_20260830170726",
+     "status": "LOCKED",
+     "lockedBy": "user-1787942393650-e48ae05d",
+     "lockedAt": "2026-08-30T17:07:26.039Z",
+     "dataVersion": "catalog@2026-08-15",
+     "engineeringStatus": "WARNING",
+     "lines": [
+      {
+       "componentId": "a1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "ACDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "ac2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_CABLE",
+       "quantity": 20,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "is1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_ISOLATOR",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "d2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DCDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "dc3",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DC_CABLE",
+       "quantity": 50,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "cb4",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "EARTHING",
+       "quantity": 3,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "i87",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "INVERTER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "m2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "METER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "p2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PANEL",
+       "quantity": 6,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "la1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PROTECTION",
+       "quantity": 20,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "sm_15x15",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "STRUCTURE",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+       "selectedBy": "user-1787942393650-e48ae05d",
+       "selectionTimestamp": "2026-08-30T17:07:26.039Z"
+      }
+     ],
+     "packageId": "PKG-ONGRID-3-1P-VALUE",
+     "architecture": "GRID_TIED",
+     "rulesVersion": "phase1e.1",
+     "validationStatus": "WARNING",
+     "acknowledgements": [
+      {
+       "ruleId": "PBC-D-003",
+       "acknowledgedBy": "user-1787942393650-e48ae05d",
+       "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+       "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+      },
+      {
+       "ruleId": "PBC-N-001",
+       "acknowledgedBy": "user-1787942393650-e48ae05d",
+       "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+       "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+      }
+     ]
+    }
+   },
+   "lastValidation": {
+    "status": "WARNING",
+    "findings": [
+     {
+      "ruleId": "PBC-D-003",
+      "category": "INVERTER_ELECTRICAL_LIMITS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i87",
+       "p2"
+      ],
+      "message": "String length is not declared in the project BOM.",
+      "reason": "String voltage and current cannot be verified. No string configuration is assumed.",
+      "source": "Phase 1E — string configuration is not modelled in V1",
+      "inputs": [
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-08-30T17:07:26.039Z"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "category": "BRANCH_CIRCUIT_CONSTRAINTS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i87"
+      ],
+      "message": "Inverter records mpptCount=2 and maxStringsPerMppt=1, but the BOM declares no string layout.",
+      "reason": "Branch/circuit constraints are unverifiable in V1.",
+      "source": "Phase 1E — declared as unverifiable rather than assumed",
+      "inputs": [
+       "inverter.mpptCount",
+       "inverter.maxStringsPerMppt",
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-08-30T17:07:26.039Z"
+     }
+    ],
+    "counts": {
+     "blocked": 0,
+     "warning": 2,
+     "info": 0,
+     "checksRun": 35
+    },
+    "rulesVersion": "phase1e.1",
+    "catalogVersion": "catalog@2026-08-15",
+    "at": "2026-08-30T17:07:26.039Z",
+    "deterministicKey": "PBC-D-003|i87+p2;PBC-N-001|i87"
+   },
+   "lock": {
+    "projectId": "PRJ-ongrid_3_value_20260830170726",
+    "status": "LOCKED",
+    "lockedBy": "user-1787942393650-e48ae05d",
+    "lockedAt": "2026-08-30T17:07:26.039Z",
+    "dataVersion": "catalog@2026-08-15",
+    "engineeringStatus": "WARNING",
+    "lines": [
+     {
+      "componentId": "a1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "ACDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "ac2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_CABLE",
+      "quantity": 20,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "is1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_ISOLATOR",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "d2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DCDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "dc3",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DC_CABLE",
+      "quantity": 50,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "cb4",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "EARTHING",
+      "quantity": 3,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "i87",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "INVERTER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "m2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "METER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "p2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PANEL",
+      "quantity": 6,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "la1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PROTECTION",
+      "quantity": 20,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "sm_15x15",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "STRUCTURE",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "user-1787942393650-e48ae05d",
+      "selectionTimestamp": "2026-08-30T17:07:26.039Z"
+     }
+    ],
+    "packageId": "PKG-ONGRID-3-1P-VALUE",
+    "architecture": "GRID_TIED",
+    "rulesVersion": "phase1e.1",
+    "validationStatus": "WARNING",
+    "acknowledgements": [
+     {
+      "ruleId": "PBC-D-003",
+      "acknowledgedBy": "user-1787942393650-e48ae05d",
+      "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+      "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "acknowledgedBy": "user-1787942393650-e48ae05d",
+      "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+      "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+     }
+    ]
+   },
+   "acknowledgements": [
+    {
+     "ruleId": "PBC-D-003",
+     "acknowledgedBy": "user-1787942393650-e48ae05d",
+     "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+     "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+    },
+    {
+     "ruleId": "PBC-N-001",
+     "acknowledgedBy": "user-1787942393650-e48ae05d",
+     "acknowledgedAt": "2026-08-30T17:07:26.039Z",
+     "reason": "Auto-acknowledged: package PKG-ONGRID-3-1P-VALUE is APPROVED"
+    }
+   ],
+   "costInputs": {
+    "distanceKm": 0,
+    "vehicleType": "STANDARD",
+    "installationType": "FLAT",
+    "sizeKey": "3"
+   },
+   "discount": null,
+   "createdBy": "user-1787942393650-e48ae05d",
+   "createdAt": "2026-08-30T17:07:26.039Z"
+  },
+  "PRJ-hybrid_5_base_20260905193912": {
+   "projectId": "PRJ-hybrid_5_base_20260905193912",
+   "customer": {
+    "customerId": "UAT-hybrid_base_bat2",
+    "name": "Masked Customer 3",
+    "phone": "9847000003",
+    "district": "masked"
+   },
+   "architecture": "HYBRID",
+   "sysType": "hybrid",
+   "sizeKw": 5,
+   "phase": "1P",
+   "tier": "base",
+   "packageId": "PKG-HYBRID-5-1P-BASE",
+   "bom": {
+    "projectId": "PRJ-hybrid_5_base_20260905193912",
+    "packageId": "PKG-HYBRID-5-1P-BASE",
+    "architecture": "HYBRID",
+    "sysType": "hybrid",
+    "tier": "base",
+    "sizeKw": 5,
+    "phase": "1P",
+    "status": "LOCKED",
+    "createdBy": "user-1787942393650-e48ae05d",
+    "createdAt": "2026-09-05T19:39:12.239Z",
+    "packageLines": [
+     {
+      "role": "ACDB",
+      "componentId": "a7",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_CABLE",
+      "componentId": "ac1",
+      "quantity": 30,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_ISOLATOR",
+      "componentId": "is1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DCDB",
+      "componentId": "d9",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DC_CABLE",
+      "componentId": "dc1",
+      "quantity": 50,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "cb1",
+      "quantity": 3,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "ec1",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "INVERTER",
+      "componentId": "i58",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "METER",
+      "componentId": "m1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PANEL",
+      "componentId": "p1",
+      "quantity": 9,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PROTECTION",
+      "componentId": "la2",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     }
+    ],
+    "overrides": {
+     "STRUCTURE": {
+      "role": "STRUCTURE",
+      "componentId": "sm_15x15",
+      "quantity": 1,
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "user-1787942393650-e48ae05d",
+      "selectionTimestamp": "2026-09-05T19:39:12.239Z",
+      "reason": "Default structure material — automated orchestration"
+     }
+    },
+    "removedRoles": [],
+    "lock": {
+     "projectId": "PRJ-hybrid_5_base_20260905193912",
+     "status": "LOCKED",
+     "lockedBy": "user-1787942393650-e48ae05d",
+     "lockedAt": "2026-09-05T19:39:12.239Z",
+     "dataVersion": "catalog@2026-08-15",
+     "engineeringStatus": "WARNING",
+     "lines": [
+      {
+       "componentId": "a7",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "ACDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "ac1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_CABLE",
+       "quantity": 30,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "is1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "AC_ISOLATOR",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "d9",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DCDB",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "dc1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "DC_CABLE",
+       "quantity": 50,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "cb1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "EARTHING",
+       "quantity": 3,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "i58",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "INVERTER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "m1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "METER",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "p1",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PANEL",
+       "quantity": 9,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "la2",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "PROTECTION",
+       "quantity": 20,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PACKAGE_DEFAULT",
+       "selectedBy": null,
+       "selectionTimestamp": null
+      },
+      {
+       "componentId": "sm_15x15",
+       "componentDataVersion": "catalog@2026-08-15",
+       "role": "STRUCTURE",
+       "quantity": 1,
+       "unitPurchaseCost": null,
+       "unitSellingPrice": null,
+       "engineeringApprovalState": "WARNING",
+       "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+       "selectedBy": "user-1787942393650-e48ae05d",
+       "selectionTimestamp": "2026-09-05T19:39:12.239Z"
+      }
+     ],
+     "packageId": "PKG-HYBRID-5-1P-BASE",
+     "architecture": "HYBRID",
+     "rulesVersion": "phase1e.1",
+     "validationStatus": "WARNING",
+     "acknowledgements": [
+      {
+       "ruleId": "PBC-D-003",
+       "acknowledgedBy": "user-1787942393650-e48ae05d",
+       "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+       "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+      },
+      {
+       "ruleId": "PBC-N-001",
+       "acknowledgedBy": "user-1787942393650-e48ae05d",
+       "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+       "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+      }
+     ]
+    }
+   },
+   "lastValidation": {
+    "status": "WARNING",
+    "findings": [
+     {
+      "ruleId": "PBC-D-003",
+      "category": "INVERTER_ELECTRICAL_LIMITS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i58",
+       "p1"
+      ],
+      "message": "String length is not declared in the project BOM.",
+      "reason": "String voltage and current cannot be verified. No string configuration is assumed.",
+      "source": "Phase 1E — string configuration is not modelled in V1",
+      "inputs": [
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-05T19:39:12.239Z"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "category": "BRANCH_CIRCUIT_CONSTRAINTS",
+      "severity": "WARNING",
+      "componentIds": [
+       "i58"
+      ],
+      "message": "Inverter records mpptCount=2 and maxStringsPerMppt=1, but the BOM declares no string layout.",
+      "reason": "Branch/circuit constraints are unverifiable in V1.",
+      "source": "Phase 1E — declared as unverifiable rather than assumed",
+      "inputs": [
+       "inverter.mpptCount",
+       "inverter.maxStringsPerMppt",
+       "bom.stringConfiguration"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-05T19:39:12.239Z"
+     }
+    ],
+    "counts": {
+     "blocked": 0,
+     "warning": 2,
+     "info": 0,
+     "checksRun": 35
+    },
+    "rulesVersion": "phase1e.1",
+    "catalogVersion": "catalog@2026-08-15",
+    "at": "2026-09-05T19:39:12.239Z",
+    "deterministicKey": "PBC-D-003|i58+p1;PBC-N-001|i58"
+   },
+   "lock": {
+    "projectId": "PRJ-hybrid_5_base_20260905193912",
+    "status": "LOCKED",
+    "lockedBy": "user-1787942393650-e48ae05d",
+    "lockedAt": "2026-09-05T19:39:12.239Z",
+    "dataVersion": "catalog@2026-08-15",
+    "engineeringStatus": "WARNING",
+    "lines": [
+     {
+      "componentId": "a7",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "ACDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "ac1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_CABLE",
+      "quantity": 30,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "is1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "AC_ISOLATOR",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "d9",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DCDB",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "dc1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "DC_CABLE",
+      "quantity": 50,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "cb1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "EARTHING",
+      "quantity": 3,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "i58",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "INVERTER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "m1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "METER",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "p1",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PANEL",
+      "quantity": 9,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "la2",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "PROTECTION",
+      "quantity": 20,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null
+     },
+     {
+      "componentId": "sm_15x15",
+      "componentDataVersion": "catalog@2026-08-15",
+      "role": "STRUCTURE",
+      "quantity": 1,
+      "unitPurchaseCost": null,
+      "unitSellingPrice": null,
+      "engineeringApprovalState": "WARNING",
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "user-1787942393650-e48ae05d",
+      "selectionTimestamp": "2026-09-05T19:39:12.239Z"
+     }
+    ],
+    "packageId": "PKG-HYBRID-5-1P-BASE",
+    "architecture": "HYBRID",
+    "rulesVersion": "phase1e.1",
+    "validationStatus": "WARNING",
+    "acknowledgements": [
+     {
+      "ruleId": "PBC-D-003",
+      "acknowledgedBy": "user-1787942393650-e48ae05d",
+      "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+      "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+     },
+     {
+      "ruleId": "PBC-N-001",
+      "acknowledgedBy": "user-1787942393650-e48ae05d",
+      "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+      "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+     }
+    ]
+   },
+   "acknowledgements": [
+    {
+     "ruleId": "PBC-D-003",
+     "acknowledgedBy": "user-1787942393650-e48ae05d",
+     "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+     "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+    },
+    {
+     "ruleId": "PBC-N-001",
+     "acknowledgedBy": "user-1787942393650-e48ae05d",
+     "acknowledgedAt": "2026-09-05T19:39:12.239Z",
+     "reason": "Auto-acknowledged: package PKG-HYBRID-5-1P-BASE is APPROVED"
+    }
+   ],
+   "costInputs": {
+    "distanceKm": 30,
+    "vehicleType": "STANDARD",
+    "installationType": "FLAT",
+    "sizeKey": "5"
+   },
+   "discount": null,
+   "createdBy": "user-1787942393650-e48ae05d",
+   "createdAt": "2026-09-05T19:39:12.239Z"
+  },
+  "PRJ-ongrid_5sp_premium_20260905193912": {
+   "projectId": "PRJ-ongrid_5sp_premium_20260905193912",
+   "customer": {
+    "customerId": "UAT-5sp_premium_1P",
+    "name": "Masked Customer 5",
+    "phone": "9847000005",
+    "district": "masked"
+   },
+   "architecture": "GRID_TIED",
+   "sysType": "ongrid",
+   "sizeKw": 5,
+   "phase": "1P",
+   "tier": "premium",
+   "packageId": "PKG-ONGRID-5sp-1P-PREMIUM",
+   "bom": {
+    "projectId": "PRJ-ongrid_5sp_premium_20260905193912",
+    "packageId": "PKG-ONGRID-5sp-1P-PREMIUM",
+    "architecture": "GRID_TIED",
+    "sysType": "ongrid",
+    "tier": "premium",
+    "sizeKw": 5,
+    "phase": "1P",
+    "status": "DRAFT",
+    "createdBy": "user-1787942393650-e48ae05d",
+    "createdAt": "2026-09-05T19:39:12.338Z",
+    "packageLines": [
+     {
+      "role": "ACDB",
+      "componentId": "a5",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_CABLE",
+      "componentId": "ac3",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "AC_ISOLATOR",
+      "componentId": "is1",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "DC_CABLE",
+      "componentId": "dc4",
+      "quantity": 50,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "cb5",
+      "quantity": 3,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "EARTHING",
+      "componentId": "ec3",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "METER",
+      "componentId": "m2",
+      "quantity": 1,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PANEL",
+      "componentId": "p3",
+      "quantity": 9,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     },
+     {
+      "role": "PROTECTION",
+      "componentId": "la1",
+      "quantity": 20,
+      "selectionMethod": "PACKAGE_DEFAULT",
+      "selectedBy": null,
+      "selectionTimestamp": null,
+      "reason": null
+     }
+    ],
+    "overrides": {
+     "STRUCTURE": {
+      "role": "STRUCTURE",
+      "componentId": "sm_15x15",
+      "quantity": 1,
+      "selectionMethod": "PROJECT_HEAD_OVERRIDE",
+      "selectedBy": "user-1787942393650-e48ae05d",
+      "selectionTimestamp": "2026-09-05T19:39:12.338Z",
+      "reason": "Default structure material — automated orchestration"
+     }
+    },
+    "removedRoles": [],
+    "lock": null
+   },
+   "lastValidation": {
+    "status": "BLOCKED",
+    "findings": [
+     {
+      "ruleId": "PBC-A-002",
+      "category": "SYSTEM_ARCHITECTURE",
+      "severity": "BLOCKED",
+      "componentIds": [
+       "a5"
+      ],
+      "message": "\"Enphase ACDB + AJ Box ABB MCB 16A 2P\" is an Enphase component and cannot be used on a GRID_TIED architecture.",
+      "reason": "Component belongs to a different system architecture",
+      "source": "decision D12 — Enphase and Deye/SEG are separate architectures",
+      "inputs": [
+       "bom.architecture",
+       "component.brand"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-05T19:39:12.338Z"
+     },
+     {
+      "ruleId": "PBC-B-001",
+      "category": "PANEL_INVERTER_COMPATIBILITY",
+      "severity": "WARNING",
+      "componentIds": [
+       "p3"
+      ],
+      "message": "No inverter is selected; panel/inverter compatibility cannot be evaluated.",
+      "reason": "Panel/inverter compatibility cannot be verified — data missing",
+      "source": "catalog fields absent; no threshold assumed",
+      "inputs": [
+       "panel",
+       "inverter"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-05T19:39:12.338Z"
+     },
+     {
+      "ruleId": "PBC-K-001",
+      "category": "REQUIRED_COMPONENT_PRESENCE",
+      "severity": "BLOCKED",
+      "componentIds": [],
+      "message": "Required role INVERTER is missing from the project BOM.",
+      "reason": "INVERTER is mandatory for architecture GRID_TIED.",
+      "source": "Phase 1E §6 K — required component presence",
+      "inputs": [
+       "bom.lines",
+       "bom.architecture"
+      ],
+      "rulesVersion": "phase1e.1",
+      "catalogVersion": "catalog@2026-08-15",
+      "at": "2026-09-05T19:39:12.338Z"
+     }
+    ],
+    "counts": {
+     "blocked": 2,
+     "warning": 1,
+     "info": 0,
+     "checksRun": 35
+    },
+    "rulesVersion": "phase1e.1",
+    "catalogVersion": "catalog@2026-08-15",
+    "at": "2026-09-05T19:39:12.338Z",
+    "deterministicKey": "PBC-A-002|a5;PBC-B-001|p3;PBC-K-001|"
+   },
+   "lock": null,
+   "acknowledgements": [],
+   "costInputs": {
+    "distanceKm": 30,
+    "vehicleType": "STANDARD",
+    "installationType": "FLAT",
+    "sizeKey": "5sp"
+   },
+   "discount": null,
+   "createdBy": "user-1787942393650-e48ae05d",
+   "createdAt": "2026-09-05T19:39:12.338Z"
+  }
+ }
+}

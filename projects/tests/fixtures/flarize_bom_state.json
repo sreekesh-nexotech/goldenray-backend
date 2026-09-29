@@ -1,0 +1,88 @@
+{
+ "selections": {
+  "ongrid_value_5_1": "goodwe_5k",
+  "ongrid_value_3_1": "i87"
+ },
+ "qtyOverrides": {
+  "hybrid_3_value_1_5": 2
+ },
+ "priceOverrides": {},
+ "customItems": "masked",
+ "upgradeSelections": {},
+ "upgradeQtyOverrides": {},
+ "upgradePriceOverrides": {},
+ "upgradeCustomItems": [],
+ "sysType": "hybrid",
+ "size": "3",
+ "tier": "premium",
+ "batConfig": "1",
+ "mode": "quotation",
+ "distKm": 100,
+ "costOvr": {},
+ "marginType": "percent",
+ "marginVal": 20,
+ "subsidyType": "residential",
+ "ghsHouses": 1,
+ "structGrade": "default",
+ "structGradeMode": "manual",
+ "upgradeFromKw": "3",
+ "upgradeToKw": "5",
+ "upgradePhase": "1P",
+ "upgradeTier": "value",
+ "upgradeSections": {
+  "panels": false,
+  "structure": false,
+  "inverter": false,
+  "hybridInv": false,
+  "battery": false,
+  "wiring": true
+ },
+ "addOns": {
+  "structure": {
+   "enabled": false,
+   "type": "elevated"
+  },
+  "extraDcCable": {
+   "enabled": false,
+   "itemId": "",
+   "qty": 0
+  },
+  "extraAcCable": {
+   "enabled": false,
+   "itemId": "",
+   "qty": 0
+  },
+  "armouredCable": {
+   "enabled": false,
+   "itemId": "",
+   "qty": 0
+  }
+ },
+ "upgradeAddOns": {
+  "structure": {
+   "enabled": false,
+   "type": "elevated"
+  }
+ },
+ "microBrand": "enphase",
+ "zeroExport": true,
+ "futureUpgrade": false,
+ "upgradeSize": "",
+ "fuOpts": {
+  "includeStructure": true,
+  "includeDB": true,
+  "includeCables": true,
+  "includeMeter": true
+ },
+ "housePhase": "1P",
+ "custName": "masked",
+ "custPhone": "masked",
+ "custAddress": "masked",
+ "salesPerson": "masked",
+ "selectedOffer": "",
+ "panelTypeFilter": "all",
+ "quotationViewMode": "sales",
+ "lang": "en",
+ "roofType": "flat",
+ "savedAt": "2026-08-28T09:57:44.713Z"
+}
