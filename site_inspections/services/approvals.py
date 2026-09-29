@@ -88,6 +88,13 @@ def _approval_phone(inspection: Inspection, user, requested: str) -> str:
             "The one-time code can only go to a phone number on the customer record; ask a Project Head to use another number.",
             errors={"customer_phone": ["Not a phone number of this customer."]},
         )
+    if not otp.is_indian_mobile(phone):
+        # The code goes by SMS, and never to a foreign or landline number (the paper approval remains available).
+        raise DomainError(
+            "phone_not_indian_mobile",
+            "The one-time code can only be sent to an Indian mobile number; use another number or record a paper approval.",
+            errors={"customer_phone": ["Use an Indian mobile number."]},
+        )
     return phone
 
 

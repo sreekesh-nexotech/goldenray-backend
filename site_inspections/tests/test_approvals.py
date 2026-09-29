@@ -142,3 +142,25 @@ class TestPaperFallback:
         assert auth_client(engineer).post(url, {"scan": NamedBytes(files.pdf(), "scan.pdf"), "reason": "x"}, format="multipart").status_code == 403
         again = client.post(url, {"scan": NamedBytes(files.jpeg(), "scan.jpg"), "reason": "again"}, format="multipart")
         assert again.status_code == 409 and again.json()["code"] == "invalid_status"
+
+
+class TestIndianMobileOnly:
+    """The one-time code goes by SMS, so a link is never issued for a number that cannot receive it — a foreign or a
+    landline number (final review); the paper fallback stays available."""
+
+    @pytest.mark.parametrize("phone", ["+447911123456", "+914842000000"])
+    def test_head_cannot_choose_a_number_that_cannot_receive_the_code(self, auth_client, head, completed, phone):
+        response = auth_client(head).post(f"{BASE}{completed.uid}/approval/request/", {"customer_phone": phone}, format="json")
+        assert response.status_code == 400 and response.json()["code"] == "phone_not_indian_mobile"
+        assert not LocationApproval.objects.filter(inspection=completed).exists()
+
+    def test_customer_record_with_a_foreign_number_is_refused(self, auth_client, engineer, completed):
+        completed.customer.__class__.objects.filter(pk=completed.customer_id).update(phone_e164="+447911123456", alt_phone="")
+        response = auth_client(engineer).post(f"{BASE}{completed.uid}/approval/request/", {}, format="json")
+        assert response.status_code == 400 and response.json()["code"] == "phone_not_indian_mobile"
+
+    def test_send_otp_refuses_a_foreign_number_stored_on_an_older_link(self, api_client, link, completed):
+        LocationApproval.objects.filter(inspection=completed).update(customer_phone_e164="+447911123456")
+        response = api_client.post(f"{CUSTOMER}{link}/send-otp/")
+        assert response.status_code == 400 and response.json()["code"] == "otp_phone_unsupported"
+        assert twilio_verify.SENT == []
