@@ -1,0 +1,25 @@
+{# Attendance report body. Payload (attendance.services.exporters.payload):                                        #}
+{#   title, subtitle, headers: [..], rows: [[..]], totals: [[label, value]], landscape, generated_at               #}
+<header class="avoid-break">
+  <h1>{{ payload.title }}</h1>
+  <p class="muted">{{ payload.subtitle }}</p>
+</header>
+{% if payload.rows %}
+<table class="grid">
+  <thead><tr>{% for header in payload.headers %}<th>{{ header }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    {% for row in payload.rows %}<tr>{% for value in row %}<td>{{ value }}</td>{% endfor %}</tr>{% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>{{ l_empty }}</p>
+{% endif %}
+{% if payload.totals %}
+<section class="avoid-break">
+  <h2>{{ l_summary }}</h2>
+  <table class="summary">
+    {% for pair in payload.totals %}<tr><th>{{ pair.0 }}</th><td>{{ pair.1 }}</td></tr>{% endfor %}
+  </table>
+</section>
+{% endif %}
+<p class="muted small">{{ l_generated }} {{ payload.generated_at }}</p>

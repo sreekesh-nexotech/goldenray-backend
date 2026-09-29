@@ -90,6 +90,8 @@ log "migrating (expand phase) as the owner role"
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py maintain_adms_evidence --months 3
 # Keep the stock ledger append-only for the app role (inventory_movement: REVOKE UPDATE, DELETE, TRUNCATE; idempotent).
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py ensure_inventory_append_only
+# Raw punches: next months' attendance_raw_punch partitions and the append-only privileges (idempotent, owner role).
+"${COMPOSE[@]}" --profile ops run --rm migrate python manage.py maintain_attendance_punches --months 3
 # Register the website's maintained pages/slots the release's code knows about (additive, idempotent; sitepages).
 "${COMPOSE[@]}" --profile ops run --rm migrate python manage.py seed_pages
 

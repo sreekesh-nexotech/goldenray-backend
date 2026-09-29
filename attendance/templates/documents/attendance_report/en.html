@@ -1,0 +1,12 @@
+{% extends "documents/base.html" %}
+{% block title %}{{ payload.title }}{% endblock %}
+{% block styles %}
+{% if payload.landscape %}@page { size: A4 landscape; margin: 12mm; }{% endif %}
+.grid th, .grid td { font-size: 7.5pt; padding: 1mm 1.2mm; width: auto; }
+.grid thead th { background: #1F4E79; color: #fff; font-weight: 700; }
+.grid tbody tr:nth-child(even) td { background: #F2F5FA; }
+.grid thead { display: table-header-group; }
+.summary th { width: 60mm; }
+.small { font-size: 7pt; margin-top: 6mm; }
+{% endblock %}
+{% block content %}{% include "documents/attendance_report/_body.html" with l_summary="Summary" l_generated="Generated" l_empty="No records for this selection." %}{% endblock %}
