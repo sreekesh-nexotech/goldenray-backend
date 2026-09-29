@@ -6,6 +6,8 @@ reads of the same URLs are not shimmed — Studio moved to ``/api/v1/``). Thrott
 
 from __future__ import annotations
 
+import math
+
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
@@ -75,16 +77,44 @@ def _legacy_phone(throttle_class):
     return LegacyPhoneThrottle
 
 
-class SendOtpView(_FormView):
+class OtpRateLimited(DomainError):
+    """A throttled OTP request (per phone or per client IP); ``wait`` = seconds until the next one is allowed."""
+
+    def __init__(self, wait: float | None):
+        self.wait = None if wait is None else max(1, math.ceil(wait))
+        minutes = math.ceil(self.wait / 60) if self.wait else 0
+        later = f"in {minutes} minute{'' if minutes == 1 else 's'}" if minutes else "later"
+        super().__init__("rate_limit_exceeded", f"Too many code requests. Please try again {later} or contact our team directly.", status=429)
+
+
+class _OtpView(_FormView):
+    """Every refusal for too many requests answers the legacy send-otp 429 body ``{error: "rate_limit_exceeded",
+    message, days_remaining}``: the website's quote popup shows ``message`` on a 429 (without it, it printed "try
+    again after undefined days"). The legacy 30-day block is replaced by the throttles and the daily cap
+    (docs/decisions/leads-customers.md), so the longest wait is under a day: ``days_remaining`` is 1."""
+
     throttle_scope = None
+
+    def throttled(self, request, wait):
+        raise OtpRateLimited(wait)
+
+    def legacy_error(self, exc: DomainError) -> Response:
+        if exc.status != 429:
+            return super().legacy_error(exc)
+        response = Response({"error": "rate_limit_exceeded", "message": exc.message, "days_remaining": 1}, status=429)
+        if getattr(exc, "wait", None):
+            response["Retry-After"] = str(exc.wait)
+        return response
+
+
+class SendOtpView(_OtpView):
     throttle_classes = [_legacy_phone(OtpPhoneThrottle), OtpIpThrottle]
 
     def post(self, request, *args, **kwargs):
         return Response(forms.send_otp(request.data, ip=get_client_ip(request)))
 
 
-class VerifyOtpView(_FormView):
-    throttle_scope = None
+class VerifyOtpView(_OtpView):
     throttle_classes = [_legacy_phone(OtpVerifyPhoneThrottle), OtpIpThrottle]
 
     def post(self, request, *args, **kwargs):

@@ -13,7 +13,7 @@ exactly those paths; and the parity harness with its corpus and report. Deviatio
 | Base view | `legacy/views/base.py` | `LegacyView`: flag `LEGACY_API_SHIM` checked in `dispatch` (off → the platform's plain 404, like an unrouted path), `versioning_class = None`, anonymous, `schema = None`, JSON only; `legacy_exception_handler` (DRF's own exceptions → DRF's default bodies as the legacy DRF servers answered them; `DomainError` → the view's `legacy_error`; anything else → the platform handler). `AppendSlashView`: the legacy `APPEND_SLASH` 301. |
 | Main backend reads | `legacy/views/backend.py`, `legacy/services/{reference,products,website}.py` | device-types, wattages, room-sizes, ev-cars, ev-scooters, tariffs, pincodes, solar-panels, solar-inverters, batteries, metadata, installation-stats |
 | Calculators | `legacy/views/backend.py`, `legacy/services/calculators.py` | calculate-solar, calculate-solar-new, calculate-solar-advanced, emi-calculator, emi-calculator/config, emi-calculator/quotation |
-| Forms | `legacy/views/forms.py`, `legacy/services/forms.py` | lead-collection-home, send-otp, verify-otp, affiliate-applications, warranty-service-requests, job-applications |
+| Forms | `legacy/views/forms.py`, `legacy/services/forms.py` | lead-collection-home, send-otp, verify-otp, affiliate-applications, warranty-service-requests, job-applications (OTP 429s in the legacy `rate_limit_exceeded` shape, W-1) |
 | CMS delivery | `legacy/views/cms.py`, `legacy/services/cms.py` | `<collection>` (articles, and any active collection), faqs, job-positions, job-positions/`<slug>`, page-content |
 | BOM app | `legacy/views/bom.py`, `legacy/services/website.py` | calculate (B-1), quotation-settings and quotation-testimonials (GET; testimonials wired by the review after quotations was integrated) |
 | Ids | `legacy/services/ids.py` | legacy integer ids ↔ platform rows through `core_legacy_map` (DV-130) |
@@ -69,7 +69,7 @@ detail routes (`/api/solar-panels/<id>/` …) and `/api/customer-installations/`
 3. **Errors keep the legacy bodies**: `{"error": m}` for the calculators, EMI (the canonical message with `size_uid`
    renamed back), installation stats and product parameters; `{"errors": [...]}` for the quote (`QuoteInvalid.legacy_errors`);
    `{"message": "Validation failed", "status": "error", "errors": {…}}` for the forms (legacy field names);
-   the bare serializer errors for the OTP views; `{"detail": …}` for the CMS 404s and DRF's own 405/429/parse errors.
+   the bare serializer errors for the OTP views (their 429s: `{"error": "rate_limit_exceeded", "message", "days_remaining"}`, W-1); `{"detail": …}` for the CMS 404s and DRF's own 405/429/parse errors.
    Where the legacy crashed (HTTP 500) the shim answers 400 with the legacy error shape (DV-132).
 4. **Trailing slashes**: main-backend and BOM URLs answer the slash-less spelling with a 301 to the slashed old URL
    (relative `Location`, query kept) — the legacy `APPEND_SLASH`; a slash-less POST (legacy DEBUG 500) gets the same
@@ -129,6 +129,17 @@ python tools/parity/harness.py --legacy-backend-writes http://127.0.0.1:18151 --
   test `test_otp_phone_throttle_falls_back_to_the_client_ip_instead_of_failing_open`.
 * **`/bom/api/quotation-testimonials/` wired** once quotations was integrated (`legacy/tests/test_testimonials.py`,
   nginx `bom_public`; live parity: the legacy list byte for byte).
+
+## Website UAT fixes (docs/uat/website-uat.md)
+
+* **W-1 — OTP "try again after undefined days"**: a throttled `send-otp`/`verify-otp` (per-phone `otp`, per-IP
+  `otp_ip`) answered DRF's `{"detail": …}` and the daily cap / too-many-wrong-codes answered `{"error": …}`; the
+  website's quote popup (`QuotePopup.tsx`) reads `message` on a 429 and otherwise prints "… after
+  `${days_remaining}` days …", so it showed "Please try again after undefined days". Every 429 of the two OTP views
+  now answers the legacy send-otp shape `{"error": "rate_limit_exceeded", "message": …, "days_remaining": 1}`
+  (`legacy.views.forms._OtpView`; the throttle wait is in the message and in `Retry-After`; the longest platform
+  block is the rolling-day cap, hence 1). Tests: `test_otp_throttled_answers_the_legacy_rate_limit_body_the_website_renders`,
+  `test_otp_daily_cap_answers_the_legacy_rate_limit_body`, `test_otp_too_many_wrong_codes_answers_the_legacy_rate_limit_body`.
 
 ## Wired at integration (wave 4b)
 

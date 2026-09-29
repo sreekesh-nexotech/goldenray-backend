@@ -17,6 +17,7 @@ from leads.tests.conftest import load_fixture
 from legacy.services import forms as form_service
 from legacy.services.ids import SHIM_ID_OFFSET
 from legacy.tests.conftest import ordered, throttled
+from legacy.views.forms import OtpRateLimited
 from quotations.models import EmailLog
 from quotations.models.choices import EmailChannel
 
@@ -155,6 +156,45 @@ def test_otp_throttles_per_legacy_phone_field(api_client, settings):
     statuses = [api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500042"}, format="json").status_code for _ in range(3)]
     assert statuses == [200, 200, 429]
     assert api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500043"}, format="json").status_code == 200
+
+
+def _assert_legacy_rate_limit_body(response, message_part: str):
+    """The legacy send-otp 429 shape (``{error, message, days_remaining}``). The website's quote popup
+    (``QuotePopup.tsx``) shows ``message`` on a 429 and otherwise prints ``… after ${days_remaining} days …`` — a
+    DRF ``{"detail": …}`` body made it read "Please try again after undefined days" (website UAT defect W-1)."""
+    body = ordered(response)
+    assert response.status_code == 429, body
+    assert list(body) == ["error", "message", "days_remaining"], body
+    assert body["error"] == "rate_limit_exceeded" and body["days_remaining"] == 1
+    assert message_part in body["message"] and "undefined" not in body["message"]
+
+
+@pytest.mark.parametrize("path", ["/legacy/api/send-otp/", "/legacy/api/verify-otp/"])
+def test_otp_throttled_answers_the_legacy_rate_limit_body_the_website_renders(api_client, settings, path):
+    throttled(settings, "otp", "2/10min")
+    responses = [api_client.post(path, {"phone_number": "9876500044", "code": "123456", "name": "Busy"}, format="json") for _ in range(3)]
+    _assert_legacy_rate_limit_body(responses[-1], "Please try again in 10 minutes or contact our team directly.")
+    assert responses[-1]["Retry-After"] == "600"
+
+
+@pytest.mark.parametrize("wait,text", [(600, "in 10 minutes"), (59.2, "in 1 minute "), (None, "try again later")])
+def test_otp_rate_limit_message_names_the_wait(wait, text):
+    assert text in OtpRateLimited(wait).message
+
+
+def test_otp_daily_cap_answers_the_legacy_rate_limit_body(api_client, settings):
+    settings.LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY = 1
+    assert api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500045"}, format="json").status_code == 200
+    response = api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500045"}, format="json")
+    _assert_legacy_rate_limit_body(response, "Too many codes were requested for this number.")
+
+
+def test_otp_too_many_wrong_codes_answers_the_legacy_rate_limit_body(api_client, settings):
+    settings.LEADS_OTP_MAX_ATTEMPTS = 1
+    assert api_client.post("/legacy/api/send-otp/", {"phone_number": "9876500046"}, format="json").status_code == 200
+    wrong = {"phone_number": "9876500046", "code": "999999"}
+    assert api_client.post("/legacy/api/verify-otp/", wrong, format="json").status_code == 400
+    _assert_legacy_rate_limit_body(api_client.post("/legacy/api/verify-otp/", wrong, format="json"), "Too many wrong codes.")
 
 
 @pytest.mark.parametrize("path", ["/legacy/api/send-otp/", "/legacy/api/verify-otp/"])
