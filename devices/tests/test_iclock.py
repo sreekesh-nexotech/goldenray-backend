@@ -267,6 +267,19 @@ class TestEvidence:
         assert row.request_kind == "CDATA" and row.table_name == "FIRSTSEEN" and row.body_bytes == MAX_STORED_BODY_BYTES + 10
         assert len(row.body) == MAX_STORED_BODY_BYTES and row.body_truncated and len(row.body_text) == 4000
 
+    @pytest.mark.parametrize("table", ["ATTLOG", "USERINFO"])
+    def test_a_table_push_beyond_the_cap_is_not_interpreted_nor_acknowledged(self, pushed, sink, table):
+        # Only the first MiB is kept: interpreting it would store a cut last line (a punch without its punch code, a
+        # PIN cut short) and "OK" would tell the terminal that every record beyond the cap had been delivered.
+        device, token = pushed
+        line = "7\t2026-09-22 09:31:05\t0\t15\t0\t0\n" if table == "ATTLOG" else "PIN=7\tName=Asha\tPri=0\tCard=\tGrp=1\n"
+        payload = (line * (MAX_STORED_BODY_BYTES // len(line) + 5)).encode()
+        response = iclock(token, query=f"SN={SERIAL}&table={table}", body=payload)
+        assert response.status_code == 200 and text(response) == "ERROR"
+        row = last_request()
+        assert row.body_truncated and row.body_bytes == len(payload) and "1 MiB" in row.parse_error and row.records_new == 0
+        assert not sink.punches and not DeviceUser.objects.filter(device=device).exists()
+
     def test_credentials_headers_are_dropped(self, pushed):
         _, token = pushed
         iclock(token, endpoint="ping", query=f"SN={SERIAL}", method="get", HTTP_AUTHORIZATION="Bearer secret", HTTP_USER_AGENT="iClock Proxy/1.09")

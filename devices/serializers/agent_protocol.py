@@ -11,6 +11,8 @@ from devices.services.common import INT_RANGE
 # The agent's own counters land in int columns: beyond them a heartbeat is a 400, never a database error. Terminal data
 # (user tables, punches) is never refused for one odd number: the services keep what fits and count the rest invalid.
 INT_MAX = INT_RANGE[1]
+# One report per terminal the agent reads: an office never has more (each entry costs a lookup and a write).
+HEARTBEAT_MAX_DEVICES = 500
 
 
 class AgentIdentitySerializer(serializers.Serializer):
@@ -79,7 +81,7 @@ class HeartbeatSerializer(serializers.Serializer):
     queued_records = serializers.IntegerField(min_value=0, max_value=INT_MAX, required=False, default=0)
     failed_uploads = serializers.IntegerField(min_value=0, max_value=INT_MAX, required=False, default=0)
     last_error = serializers.CharField(max_length=2000, required=False, allow_blank=True, allow_null=True, default=None)
-    devices = DeviceHealthReportSerializer(many=True, required=False, default=list)
+    devices = DeviceHealthReportSerializer(many=True, required=False, default=list, max_length=HEARTBEAT_MAX_DEVICES)
 
     def validate(self, attrs):
         attrs["agent_version"] = attrs.pop("version", "")

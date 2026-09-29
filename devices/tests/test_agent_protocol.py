@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from audit.models import AuditLog
 from devices.models import Device, DeviceUser, SyncLog
+from devices.serializers.agent_protocol import HEARTBEAT_MAX_DEVICES
 from devices.services import health, punch_sink
 from devices.tests.conftest import agent_client_for, events
 from devices.tests.factories import AgentFactory, DeviceFactory, DeviceUserFactory
@@ -85,6 +86,14 @@ class TestHeartbeat:
         assert lost.last_error == "TCP 4370 timed out" and health.connection_state(lost) == health.OFFLINE
         assert agent.agent_version == "2.0.0" and agent.queued_records == 12 and str(agent.local_ip) == "192.168.1.20" and agent.last_device_contact_at is not None
         assert health.agent_status(agent) == health.ONLINE and seen.version == 1  # telemetry never bumps the version
+
+    def test_the_device_report_list_is_bounded(self, agent_client, agent):
+        # every entry costs a lookup and a write: a heartbeat never carries more reports than an office has terminals
+        reports = [{"serial_number": f"SN{index:06d}", "reachable": False} for index in range(HEARTBEAT_MAX_DEVICES + 1)]
+        response = agent_client.post(f"{API}heartbeat/", {"devices": reports}, format="json")
+        assert response.status_code == 400 and "devices" in response.json()["errors"]
+        agent.refresh_from_db()
+        assert agent.last_heartbeat_at is None
 
     def test_counters_beyond_their_columns_are_validation_errors(self, agent_client, agent):
         response = agent_client.post(f"{API}heartbeat/", {"queued_records": 2**40, "failed_uploads": 2**31}, format="json")

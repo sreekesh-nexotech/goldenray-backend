@@ -45,6 +45,8 @@ DECODE_CANDIDATES = ("utf-8", "gb18030", "latin-1")
 SERIAL_KEYS = ("SN", "sn", "DeviceSN", "deviceSN", "serialNumber")
 TABLE_KINDS = ("ATTLOG", "OPERLOG", "USERINFO", "ATTPHOTO", "BIODATA")
 BIOMETRIC_KINDS = ("ATTPHOTO", "BIODATA")
+# Record tables: a cut body cannot be interpreted (its last line is damaged, the rest was never read).
+TRUNCATION_SENSITIVE_KINDS = ("ATTLOG", "OPERLOG", "USERINFO")
 BIOMETRIC_NOTE = "biometric payload: not stored and not applied (the handshake never asks for it)"
 DROPPED_HEADERS = {"authorization", "cookie", "proxy-authorization", "x-api-key"}
 OK = "OK"
@@ -351,6 +353,12 @@ def _decide(incoming: Incoming, kind: str, table: str, serial: str | None, text:
         outcome.parse_error = refused
         return outcome
     touch(device, kind, incoming.client_ip)
+    if incoming.truncated and kind in TRUNCATION_SENSITIVE_KINDS:
+        # Only the first MiB was kept: its last line is cut and the records beyond it were never read. Interpreting it
+        # would store a damaged record, and "OK" would tell the terminal that the whole batch was delivered.
+        outcome.parse_error = f"The {kind} push is larger than 1 MiB ({incoming.body_bytes} bytes); only the first MiB was kept, so nothing was interpreted."
+        outcome.reply = ERROR  # not acknowledged: the terminal keeps its records
+        return outcome
     try:
         with transaction.atomic():
             _interpret(device, kind, table, serial, incoming, text, request_id, outcome)
