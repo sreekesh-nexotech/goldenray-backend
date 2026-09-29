@@ -1,4 +1,4 @@
-"""The website calculators' sizing and price lookup tables (DV-58, DV-63).
+"""The website calculators' sizing and price lookup tables (DV-58, DV-75).
 
 The legacy tables ``solar_installations`` and ``solar_installation_new`` are not installations: they are what the
 legacy ``calculate-solar`` and ``calculate-solar-new``/``calculate-solar-advanced`` endpoints looked up — per system

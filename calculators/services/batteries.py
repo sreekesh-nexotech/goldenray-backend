@@ -1,4 +1,4 @@
-"""Backup batteries offered by the advanced calculator's hybrid option (DV-66).
+"""Backup batteries offered by the advanced calculator's hybrid option (DV-78).
 
 The legacy view picked from the ``batteries`` table (capacity, price). That table is now the website's battery
 products in the catalog (``catalog.services.legacy_import`` imports each row as a public battery component with a

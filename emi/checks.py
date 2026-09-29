@@ -1,4 +1,4 @@
-"""System checks of the EMI price source (``settings.EMI_PRICE_SOURCE``, DV-64).
+"""System checks of the EMI price source (``settings.EMI_PRICE_SOURCE``, DV-76).
 
 * ``emi.E001`` — the setting is neither ``MANUAL`` nor ``PACK_RELEASE``;
 * ``emi.W001`` — ``PACK_RELEASE`` is configured but no provider was registered (``emi.services.price_sources``): the

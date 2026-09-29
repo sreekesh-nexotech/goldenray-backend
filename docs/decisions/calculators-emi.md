@@ -5,7 +5,7 @@ Work package calculators-emi builds the `calculators` and `emi` apps: faithful p
 `…/config/`, `…/quotation/`) as pure engines (`engines/website_calculators.py`, `engines/emi.py`), exposed on the
 public surface (PLAN §3.3 `calculators/*`), their staff configuration (PLAN §3.4 `emi/*` + the sizing tables), the
 tables of PLAN §2.8 `emi_*` and the legacy imports of §7.3 (`emi_*`, `solar_installations`, `solar_installation_new`).
-Deviations: DV-62 … DV-67 in `docs/DEVIATIONS.md`.
+Deviations: DV-74 … DV-79 in `docs/DEVIATIONS.md`.
 
 ## What exists
 
@@ -13,13 +13,13 @@ Deviations: DV-62 … DV-67 in `docs/DEVIATIONS.md`.
 
 | Table | Model | Notes |
 |---|---|---|
-| `calculators_capacity_size` | `calculators.CapacitySize` | ← legacy `solar_installations` (DV-63): `power_capacity_kw` numeric(7,3), `installation_days`, `total_cost`, `total_subsidy`, `area_required_sqft`, `is_active`. PU(`power_capacity_kw`) (the legacy `.get(power_capacity=…)` crashed on duplicates); checks: kW > 0, money ≥ 0. |
-| `calculators_bill_range_size` | `calculators.BillRangeSize` | ← legacy `solar_installation_new` (DV-63): `bill_range`, `property_type` (RESIDENTIAL/COMMERCIAL; the label is what the responses print), `power_capacity_kw`, `installation_days_range` (text, "3-7"), `total_cost`, `total_subsidy`, `area_required_sqft`, `loan_available` (text), `per_kw_rate`, `final_cost`, `interest_rate` (fraction), `inverter_price`, `is_active`. PU(`bill_range`, `property_type`); checks: enum, bill range > 0, kW > 0, money ≥ 0, rate a fraction. Index (`property_type`, `bill_range`). |
-| `emi_bank` | `emi.Bank` | PLAN + every legacy column (DV-64): `name`, `abbr`, `slug` (PU, slug format), `logo_bg` (hex check), `annual_rate` (fraction), `min_loan`/`max_loan` (ordered unless max 0), `upfront_requirement`, `eligibility`, `cibil_required`, `processing_fee_pct` (fraction), `processing_fee_note`, `approval_min_days`/`approval_max_days` (ordered), `max_tenure_years`, `features` (varchar[]), `best_for`, `is_recommended`, `sort_order`, `is_active`. |
+| `calculators_capacity_size` | `calculators.CapacitySize` | ← legacy `solar_installations` (DV-75): `power_capacity_kw` numeric(7,3), `installation_days`, `total_cost`, `total_subsidy`, `area_required_sqft`, `is_active`. PU(`power_capacity_kw`) (the legacy `.get(power_capacity=…)` crashed on duplicates); checks: kW > 0, money ≥ 0. |
+| `calculators_bill_range_size` | `calculators.BillRangeSize` | ← legacy `solar_installation_new` (DV-75): `bill_range`, `property_type` (RESIDENTIAL/COMMERCIAL; the label is what the responses print), `power_capacity_kw`, `installation_days_range` (text, "3-7"), `total_cost`, `total_subsidy`, `area_required_sqft`, `loan_available` (text), `per_kw_rate`, `final_cost`, `interest_rate` (fraction), `inverter_price`, `is_active`. PU(`bill_range`, `property_type`); checks: enum, bill range > 0, kW > 0, money ≥ 0, rate a fraction. Index (`property_type`, `bill_range`). |
+| `emi_bank` | `emi.Bank` | PLAN + every legacy column (DV-76): `name`, `abbr`, `slug` (PU, slug format), `logo_bg` (hex check), `annual_rate` (fraction), `min_loan`/`max_loan` (ordered unless max 0), `upfront_requirement`, `eligibility`, `cibil_required`, `processing_fee_pct` (fraction), `processing_fee_note`, `approval_min_days`/`approval_max_days` (ordered), `max_tenure_years`, `features` (varchar[]), `best_for`, `is_recommended`, `sort_order`, `is_active`. |
 | `emi_interest_rate_rule` | `emi.InterestRateRule` | `label`, `min_kw`/`max_kw`, `min_system_cost`/`max_system_cost`, `min_amount`/`max_amount` (the loan band: price − down payment), `annual_rate` + `min_annual_rate` (fractions; rate ≥ floor), `is_locked`, `priority`, `is_active`, `effective_from`/`effective_to` (PLAN). Every band ordered by a check. Ordering = the legacy query order (`-priority`, `min_kw`, `min_system_cost`, `min_amount`, NULLs last). |
 | `emi_subsidy_rule` | `emi.SubsidyRule` | `scheme` (PM_SURYA_GHAR/OTHER), `label`, `kw_from`/`kw_to`, `amount` (flat), `amount_per_kw`, `cap_amount` (PLAN), `priority`, `is_active`, `effective_from`/`effective_to`. |
 | `emi_settings` | `emi.EmiSettings` | singleton (unique index on a constant among live rows): tenure band/default (years), `daily_saving_divisor`, `price_step`, `down_payment_min_pct`/`max_pct`/`step_pct` (fractions), `down_payment_quick_adds` (numeric[]), `rate_max`, `default_annual_rate` (fractions), `panel_life_years`, `disclaimer_en`/`disclaimer_ml` (PLAN). Checks: tenure min ≤ default ≤ max, 0 < min ≤ max ≤ 1, steps > 0, rates fractions. |
-| `emi_system_size` | `emi.SystemSize` | transitional price source (DV-64): `label`, `capacity_kw` (PU), `price_per_kw` (> 0), `price_min`/`price_max` (ordered), `monthly_bill_reference`, `sort_order`, `is_active`. |
+| `emi_system_size` | `emi.SystemSize` | transitional price source (DV-76): `label`, `capacity_kw` (PU), `price_per_kw` (> 0), `price_min`/`price_max` (ordered), `monthly_bill_reference`, `sort_order`, `is_active`. |
 
 ### Endpoints
 
@@ -52,15 +52,15 @@ field. Record scope: both modules allow only `all` (PLAN §3.2).
 * `engines/emi.py` — `calculate` (view parsing + `utils/emi.calculate` + the flattened legacy keys), `quotation`
   (view + `quotation_breakdown`), `resolve_subsidy`, `resolve_interest_rule`, `resolve_rate`, `resolve_rate_unlock`,
   `find_system_size` over an `EmiConfig`.
-* `calculators.services`: `sizing` (staff writes), `data` (the cached snapshot), `batteries` (DV-66), `calculate`
+* `calculators.services`: `sizing` (staff writes), `data` (the cached snapshot), `batteries` (DV-78), `calculate`
   (engine → `DomainError`), `import_support` + `legacy_import`.
-* `emi.services`: `rows` (staff writes of the four lists), `settings` (singleton), `price_sources` (DV-64),
+* `emi.services`: `rows` (staff writes of the four lists), `settings` (singleton), `price_sources` (DV-76),
   `calculator` (snapshot, public config, calculate, quotation), `legacy_import`; `emi/checks.py` (`emi.E001`,
   `emi.W001`).
 
 ## Decisions not spelled out in the PLAN
 
-1. **Faithful ports, not reinterpretations (DV-62).** Acceptance is "calculator outputs equal old endpoints for a
+1. **Faithful ports, not reinterpretations (DV-74).** Acceptance is "calculator outputs equal old endpoints for a
    recorded set of 200 inputs" (PLAN §4.5, §7.6 #10), so the engines keep the legacy binary64 arithmetic in the legacy
    operation order and the legacy value parsing (a JSON body is read raw: `int("5000")`, `float("30")`, `x or y`
    fallbacks, `str()` of a non-text pincode). Reuse of `engines.finance` / `engines.subsidy` / `engines.energy` was
@@ -96,12 +96,12 @@ field. Record scope: both modules allow only `all` (PLAN §3.2).
    down-payment band are stored as fractions (CLAUDE.md); the staff API speaks fractions (`"0.0575"`); the public
    payloads and the engines use the legacy percent values (`"5.75"`, `5.75`), converted exactly (a 2-place percent is
    a 4-place fraction).
-7. **Batteries (DV-66).** The hybrid option picks from the website's published battery products (catalog profile
+7. **Batteries (DV-78).** The hybrid option picks from the website's published battery products (catalog profile
    PUBLISHED, public, ACTIVE/DEPRECATED, `battery_spec.capacity_kwh` set) priced by the price provider
    (`catalog.services.pricing_hooks`: the pricing package's current LIST price; `min_amount`, else `max_amount`). A
    battery without a price is not offered. Until the pricing package registers its provider, the hybrid option
    answers "No battery found …" as the legacy did with an empty table.
-8. **EMI price source (DV-64).** `EMI_PRICE_SOURCE` (`flarize/settings/base.py`, env) is `MANUAL` (default: the
+8. **EMI price source (DV-76).** `EMI_PRICE_SOURCE` (`flarize/settings/base.py`, env) is `MANUAL` (default: the
    `emi_system_size` rows) or `PACK_RELEASE` (the provider registered with
    `emi.services.price_sources.register(fn, cache_namespaces=(…))`, returning `SizeOption`s — a pack may give a
    lump-sum `system_cost`). `PACK_RELEASE` without a provider fails the deploy check (`emi.W001` under
@@ -199,7 +199,7 @@ read by the legacy calculator). See docs/decisions/catalog.md.
 `updated_at` → `created_at` and `updated_at`; — → disclaimers empty. A platform settings row that did not come from
 the import (a Studio edit before the first import) is kept and reported.
 
-### `emi_system_size` → `emi_system_size` (DV-64: kept, not "not migrated")
+### `emi_system_size` → `emi_system_size` (DV-76: kept, not "not migrated")
 
 Every column 1:1 (`label`, `capacity_kw`, `price_per_kw`, `price_min`, `price_max`, `monthly_bill_reference`,
 `sort_order`, `is_active`, timestamps). The comparison "price it held vs the PackRelease price" of PLAN §7.3 is due
@@ -287,6 +287,11 @@ test that failed before the fix: `engines/tests/test_calculators_review.py`, `ca
 | 4 | The refused-input INFO log line carried the exception text unbounded (`float("<2 MB text>")` echoes the text) | `legacy_lookups.crash_detail`: at most 300 characters, non-UTF-8 escaped |
 | 5 | `emi_bank`/`emi_calculator_settings` legacy `integer` columns are `smallint` here; a larger legacy value raised `DataError`, which escaped the importer's per-row savepoint and aborted the whole import | `import_support.run` reports `DataError` as a row violation like `IntegrityError` |
 | 6 | A PLAN per-kW subsidy (`amount_per_kw` × kW) carried fractions of a paisa into `subsidy.amount` / `net_cost_after_subsidy` | rounded to paise half-up like every other amount (legacy flat amounts unchanged) |
+| 7 | `calculate-solar` echoes `property_type` unchecked; the legacy answered 200 for a value nested ~10,000 levels deep, the port's render check recursed in Python: from ~950 levels 500 + a `SystemException` per anonymous request | `legacy_lookups.check_renderable` walks the payload with an explicit stack |
+| 8 | A list in an `iexact` lookup: psycopg2 sent `[]` / all-`None` lists as the text `'{}'` / `'{NULL,…}'` (no match: 404 / a 0 W device), any other list as `ARRAY[…]` (500); the port refused every list (400) | `legacy_lookups.iexact_param` reproduces the psycopg2 literal |
+| 9 | The advanced calculator matched each requested device against every device row (`UPPER()` of every name, per device): ~1 s of CPU for a 2 MB anonymous body | name indexes built once per calculation (first row in legacy primary-key order wins) |
+| 10 | A `PACK_RELEASE` tile could not be selected: `size_uid` had to be a UUID, the provider's tile ids are texts (and two packs of one size differ only by it) | `size_uid` also accepts the exact uid of a tile of the configuration |
+| 11 | A bank slug or logo colour in the wrong format was refused by the database checks with a generic `non_field_errors` | serializer validators with the same patterns name the field |
 
 Additional evidence: a seeded random fuzz (not committed; it needs the live legacy servers) sent the same random
 requests to the legacy server and the platform. After fix 1: 7,500 against the UAT server with the UAT rows and 7,500
@@ -294,8 +299,16 @@ against a private enriched copy (`legacy_goldenapp_rv_calculators_emi`, `enrich_
 enriched rows, over all five POST endpoints (bills, pincode classes, property-type spellings, device/EV mixes with
 case and ligature variants, backup preferences, EMI sizes/capacities/tenures/rates/prices/down payments/toggles,
 quotation packages) — no difference. After fix 2: 5,000 calculator requests with lone-surrogate variants against the
-UAT server — no difference (the matching EMI round did not finish: the disk filled up). Every recorded corpus case was also replayed against the legacy
+UAT server — no difference (the matching EMI round did not finish: the disk filled up); fixes 7–9 were each recorded against the UAT server
+first. Every recorded corpus case was also replayed against the legacy
 servers and still answers as recorded (2,454 of 2,454).
+A final replay of 125 random corpus cases (25 per endpoint) against the UAT server matched as recorded. The deviation
+rows were renumbered DV-74 … DV-79 on merging the integration branch (DV-62 … DV-73 went to pricing-procurement and
+inventory).
+
+Known limit (not changed): the legacy Studio accepted any Django slug (`SBI_Home`) and any `logo_bg` text (`blue`) for a
+bank; the platform checks a lowercase-hyphen slug and a hex colour, so the importer skips and reports such a bank (none
+exists in the recorded data). Fix the row in the legacy Studio, or add it in `emi/banks/`, before the cut-over import.
 
 ## Hand-over notes
 

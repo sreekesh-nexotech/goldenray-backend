@@ -1,4 +1,4 @@
-"""EMI calculator configuration (PLAN §2.8 ``emi_*``, DV-64).
+"""EMI calculator configuration (PLAN §2.8 ``emi_*``, DV-76).
 
 Every column of the legacy ``goldenray.models.emi_config`` tables has a typed home (the calculator's policy depends
 on all of them) and the PLAN's additions are kept where they fit the legacy policy: ``effective_from``/``to`` on
@@ -192,7 +192,7 @@ class EmiSettings(BaseModel):
 
 
 class SystemSize(BaseModel):
-    """``emi_system_size``: a size tile and its per-kW price — the manual price source (DV-64, ``EMI_PRICE_SOURCE``)."""
+    """``emi_system_size``: a size tile and its per-kW price — the manual price source (DV-76, ``EMI_PRICE_SOURCE``)."""
 
     label = models.CharField(max_length=32, help_text='Shown on the tile, e.g. "3kW".')
     capacity_kw = _kw()

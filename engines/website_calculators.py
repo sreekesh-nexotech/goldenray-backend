@@ -12,7 +12,7 @@ Each function takes the request body exactly as parsed from JSON (any JSON value
 view queried, and returns the legacy response body **key for key and value for value**, or raises
 :class:`CalculatorError` with the legacy status and message.
 
-Faithful on purpose (docs/decisions/calculators-emi.md, DV-62):
+Faithful on purpose (docs/decisions/calculators-emi.md, DV-74):
 
 * **Binary64 arithmetic in the legacy operation order.** The legacy views computed in Python floats (``float()`` of
   the Decimal columns, ``round(x, 2)``, ``round(x)``, ``-(-x // 4)``, ``(1 + r) ** i``); the published figures

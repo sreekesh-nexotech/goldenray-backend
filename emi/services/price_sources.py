@@ -1,4 +1,4 @@
-"""Where the EMI calculator's system sizes and prices come from (``settings.EMI_PRICE_SOURCE``, DV-64).
+"""Where the EMI calculator's system sizes and prices come from (``settings.EMI_PRICE_SOURCE``, DV-76).
 
 * ``MANUAL`` (default) — the active ``emi_system_size`` rows: the legacy tiles and per-kW prices, edited in Studio
   under ``emi/system-sizes/``. This is the transitional source until the first pack release is published.

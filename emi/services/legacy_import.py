@@ -1,8 +1,8 @@
-"""Legacy import of the EMI calculator configuration (PLAN §7.3 ``emi_*``: copy; DV-64).
+"""Legacy import of the EMI calculator configuration (PLAN §7.3 ``emi_*``: copy; DV-76).
 
 ``emi_bank`` → ``emi_bank``, ``emi_interest_rate_rule`` → ``emi_interest_rate_rule``, ``emi_subsidy_rule`` →
 ``emi_subsidy_rule``, ``emi_calculator_settings`` (the singleton row) → ``emi_settings`` and ``emi_system_size`` →
-``emi_system_size`` (kept as the ``MANUAL`` price source instead of "not migrated": DV-64). Each function takes plain
+``emi_system_size`` (kept as the ``MANUAL`` price source instead of "not migrated": DV-76). Each function takes plain
 row dicts as the legacy table holds them (``SELECT *``) and returns ``{"created", "updated", "skipped",
 "violations"}``:
 

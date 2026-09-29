@@ -23,8 +23,8 @@ MONEY = {"min_value": Decimal("0")}
 KW = {"min_value": Decimal("0")}
 SORT_ORDER = {"min_value": -1000000, "max_value": 1000000}
 # The formats the database checks (emi_bank_slug_format, emi_bank_logo_bg_hex) enforce, answered on the field.
-SLUG_FORMAT = RegexValidator(SLUG_REGEX, "Use lowercase letters and digits in words joined by single hyphens, e.g. \"state-bank\".")
-HEX_COLOUR = RegexValidator(HEX_COLOUR_REGEX, "Use a hex colour, e.g. \"#074A4D\".")
+SLUG_FORMAT = RegexValidator(SLUG_REGEX, 'Use lowercase letters and digits in words joined by single hyphens, e.g. "state-bank".')
+HEX_COLOUR = RegexValidator(HEX_COLOUR_REGEX, 'Use a hex colour, e.g. "#074A4D".')
 
 EXTRA_KWARGS = {
     Bank: {

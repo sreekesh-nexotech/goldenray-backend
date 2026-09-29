@@ -1,4 +1,4 @@
-"""Legacy import of the calculators' sizing tables (PLAN §7.3, DV-58, DV-63).
+"""Legacy import of the calculators' sizing tables (PLAN §7.3, DV-58, DV-75).
 
 ``solar_installations`` → ``calculators_capacity_size`` and ``solar_installation_new`` →
 ``calculators_bill_range_size``. Each function takes plain row dicts exactly as the legacy table holds them
