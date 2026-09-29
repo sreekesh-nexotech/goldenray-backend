@@ -11,7 +11,7 @@ EN/ML/HI, hybrid detection, payee and letterhead; `api/products.js`: the Upstash
 
 | Area | Where | Notes |
 |---|---|---|
-| Tables | `agreements/models/` | `agreements_agreement`, `agreements_line`. Every enum has a `CHECK` (kind, status, language en/ml/hi, system type ON_GRID/HYBRID, phase, variant, inverter type, source type, accepted via). Partial uniques: live number, live `legacy_ref`, one ISSUED and one DRAFT per (quotation version, kind) (PLAN's PU plus the draft one), one live revision per `supersedes`. Row rules: `source_type`/`source_uid` together and never with a quotation version (DV-3), legacy rows have no quotation, positive capacity, non-negative money, `final = original + extra − discount` (legacy rows exempt), an ISSUED/ACCEPTED/SUPERSEDED row is frozen (number, payload, SHA-256, `issued_at`) and a DRAFT is not, ACCEPTED has `accepted_at` + `accepted_via`, CANCELLED has `cancelled_at`; lines: description, positive quantity, non-negative money. |
+| Tables | `agreements/models/` | `agreements_agreement`, `agreements_line`. Every enum has a `CHECK` (kind, status, language en/ml/hi, system type ON_GRID/HYBRID, phase, variant, inverter type, source type, accepted via). Partial uniques: live number, live `legacy_ref`, one in force (ISSUED or ACCEPTED) and one DRAFT per (quotation version, kind) (PLAN's PU widened to ACCEPTED, plus the draft one), one live revision per `supersedes`. Row rules: `source_type`/`source_uid` together and never with a quotation version (DV-3), legacy rows have no quotation, positive capacity, non-negative money, `final = original + extra − discount` (legacy rows exempt), an ISSUED/ACCEPTED/SUPERSEDED row is frozen (number, payload, SHA-256, `issued_at`) and a DRAFT is not, ACCEPTED has `accepted_at` + `accepted_via`, CANCELLED has `cancelled_at`; lines: description, positive quantity, non-negative money. |
 | Services | `agreements/services/` | `agreements` (from quotation, `quotations.accepted` draft, blank, DRAFT edit, supersede, cancel), `issuing` (issue, render, document lookup), `acceptance` (paper acceptance, price override), `pinning` (values from an issued quotation version; catalog component columns), `fees` (KSEB registration fee), `document` (frozen document + event payload), `registrations`, `scoping`, `legacy_import`, `common`. |
 | Document | `agreements/templates/documents/agreement/{en,ml,hi}.html`, `_document.html`, `_paragraph.html`, `_kseb.html`, `_styles.html`, `templatetags/agreement_document.py` | the page's `buildDoc` ported per kind × language (texts copied verbatim), rendered by `documents` from the frozen payload; the template tag only holds the three label sets and Indian digit grouping. |
 | Staff API | `agreements/views/agreements.py`, `price_override.py` | table below. |
@@ -187,3 +187,31 @@ DV-122 … DV-128 (DEVIATIONS, this file, the `revision` help text in the model 
 * OTP acceptance by the customer (`accepted_via = OTP`) needs a customer surface; only paper acceptance exists.
 * The legacy import is not yet called by `migrations_tools` (`import_pa`: call with each profile's export, after
   `pricing.services.legacy_import.import_pa_kseb_fees`).
+
+## Review (adversarial pass)
+
+Defects found and fixed, each with a test written first:
+
+1. **A legacy re-import undid platform changes** (`test_legacy_import.py::test_reimport_keeps_an_agreement_changed_on_the_platform`).
+   A changed browser record was upserted over its agreement whatever had happened since: an ACCEPTED agreement went
+   back to ISSUED (acceptance silently lost; no CHECK catches ISSUED + `accepted_at`), a SUPERSEDED one was issued
+   again beside its revision. Now an agreement that is not ISSUED, has a revision, is deleted, or was written after its
+   legacy map's `imported_at` is skipped and reported `modified_on_platform` (the quotations importer's rule).
+2. **Two agreements in force for one quotation version** (`test_services.py::test_a_repinned_revision_cannot_become_a_second_agreement_in_force`).
+   PLAN's partial unique covers ISSUED only; re-pinning a revision onto a version whose agreement of that kind was
+   already ACCEPTED issued a second one. The unique is now WHERE status IN (ISSUED, ACCEPTED)
+   (migration `0002_one_agreement_in_force`); the issue answers 409 `agreement_exists` and rolls back.
+3. **500 on amounts beyond numeric(14, 2)** (`test_agreements_api.py::test_amounts_beyond_the_money_columns_are_a_400`).
+   A line amount (quantity × rate), the lines' sum or price + extra cost past 999,999,999,999.99 raised a DataError;
+   now 400 (`lines` / `original_price`). The legacy parser reports such typed amounts as `unparsed_value`.
+4. **A revision of an imported agreement lost the typed quotation number** (`test_services.py::test_a_revision_of_a_legacy_agreement_keeps_its_quotation_number`):
+   `legacy_quotation_ref` is now copied to the revision, so its document keeps the QUOTATION NO row.
+5. **The document printed the UTC date** (`test_services.py::test_the_document_prints_the_issue_date_in_india`): an
+   agreement issued between 00:00 and 05:30 IST was dated the previous day. The payload now carries
+   `agreement.issued_on` (the local date, `TIME_ZONE` Asia/Kolkata), which the template prints.
+
+Re-verified: the golden (`export_pa_records.mjs` re-run against the page: byte-identical fixtures and `builddoc.json`),
+the 7 × 3 document parity, pinning of all 64 frozen Flarize quotation documents (`quotation-state.json`: every one
+yields the PA's required panel, inverter, type and structure), the event payload against the site-inspection
+consumer's parser (`wp/site-inspections` `linking.parse`), and the owned scope on every detail action (404).
+

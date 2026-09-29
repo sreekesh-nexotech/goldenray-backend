@@ -45,6 +45,23 @@ def test_owned_scope_lists_own_agreements_only(executive, executive_user, head, 
     assert {row["uid"] for row in head.get(BASE).json()["results"]} == {str(mine.uid), str(other.uid)}
 
 
+def test_owned_scope_applies_to_every_action_on_someone_elses_agreement(executive, world):
+    other = AgreementFactory()
+    path = f"{BASE}{other.uid}/"
+    assert executive.patch(path, {"add_on_offer": "x"}, format="json").status_code == 404
+    assert executive.post(f"{path}cancel/", {"reason": "x"}, format="json").status_code == 404
+    assert executive.post(f"{path}render/", {"language": "en"}, format="json").status_code == 404
+    assert executive.get(f"{path}document/").status_code == 404
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    from media.tests import files
+
+    scan = SimpleUploadedFile("signed.pdf", files.pdf(), content_type="application/pdf")
+    assert executive.post(f"{path}record-acceptance/", {"file": scan}, format="multipart").status_code == 404
+    other.refresh_from_db()
+    assert other.status == "DRAFT" and other.add_on_offer == ""
+
+
 def test_list_filters_and_query_budget(head, world, django_assert_max_num_queries):
     for _ in range(6):
         AgreementFactory()
@@ -222,3 +239,20 @@ def test_blank_draft_equipment_edits_and_revision_copies_lines(head, world, comp
     assert [line["description"] for line in revision["lines"]] == ["Walkway"] and revision["extra_cost"] == "2500.00"
     response = head.post(f"{path}supersede/", {"quotation_version_uid": "8b1a3c55-2a4b-4b8e-9d6f-0a1b2c3d4e5f"}, format="json")
     assert response.status_code == 409
+
+
+def test_amounts_beyond_the_money_columns_are_a_400(head, world):
+    """Review: a line amount (quantity × rate) or a price plus extra cost beyond numeric(14, 2) was a 500 (DataError)."""
+    from agreements.models import Agreement
+
+    customer = issued_version().quotation.customer
+    huge_line = {"description": "Huge", "quantity": "99999999.99", "unit_price": "999999999999.99"}
+    response = head.post(BASE, {"kind": "EXTRA_STRUCTURE", "customer_uid": str(customer.uid), "original_price": "100", "lines": [huge_line]}, format="json")
+    assert response.status_code == 400 and "lines" in response.json()["errors"], response.json()
+    data = {"kind": "SALE_ORDER", "customer_uid": str(customer.uid), "original_price": "999999999999.99", "extra_cost": "999999999999.99"}
+    response = head.post(BASE, data, format="json")
+    assert response.status_code == 400 and "original_price" in response.json()["errors"], response.json()
+    created = head.post(BASE, {"kind": "SALE_ORDER", "customer_uid": str(customer.uid), "original_price": "999999999999.99"}, format="json").json()
+    response = head.patch(f"{BASE}{created['uid']}/", {"extra_cost": "1"}, format="json")
+    assert response.status_code == 400 and "original_price" in response.json()["errors"], response.json()
+    assert Agreement.objects.count() == 1

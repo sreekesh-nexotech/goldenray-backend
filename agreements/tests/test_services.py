@@ -183,3 +183,64 @@ def test_registrations(head_user, make_user, world, company, document_storage):
     with pytest.raises(NotFound):
         ensure_can_view(outsider, issued.document_job)
     ensure_can_view(head_user, issued.document_job)
+
+
+def test_the_document_prints_the_issue_date_in_india(world, company):
+    """Review: the document printed the UTC date of ``issued_at`` — an agreement issued at 01:30 IST was dated the
+    previous day."""
+    import datetime as dt
+
+    from django.template.loader import get_template
+
+    agreement = AgreementFactory.build(number="AGR-2026-27-0009", issued_at=dt.datetime(2026, 9, 29, 20, 0, tzinfo=dt.UTC))
+    payload = document.build(agreement)
+    assert payload["agreement"]["issued_on"] == "2026-09-30"
+    html = get_template("documents/agreement/en.html").render({"payload": payload, "language": "en"})
+    assert "2026-09-30" in html and "2026-09-29" not in html
+
+
+def _signed_scan():
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    from media.tests import files
+
+    return SimpleUploadedFile("signed.pdf", files.pdf(), content_type="application/pdf")
+
+
+def test_a_repinned_revision_cannot_become_a_second_agreement_in_force(head_user, version, company, document_storage):
+    """Review: re-pinning a revision onto a version whose Purchase Agreement is already ACCEPTED issued a second
+    agreement in force for that version (the partial unique covered ISSUED only)."""
+    first = issuing.issue(agreements.create_from_quotation(user=head_user, data={"quotation_version_uid": version.uid}), user=head_user)
+    other = issued_version(customer=version.quotation.customer)
+    accepted = issuing.issue(agreements.create_from_quotation(user=head_user, data={"quotation_version_uid": other.uid}), user=head_user)
+    accepted = acceptance.record_acceptance(accepted, user=head_user, file=_signed_scan())
+    assert accepted.status == AgreementStatus.ACCEPTED
+    revision = agreements.supersede(first, user=head_user, data={"quotation_version_uid": other.uid})
+    with pytest.raises(Conflict) as error:
+        issuing.issue(revision, user=head_user)
+    assert error.value.code == "agreement_exists"
+    first.refresh_from_db()
+    assert first.status == AgreementStatus.ISSUED
+    assert Agreement.objects.filter(quotation_version=other, kind="PURCHASE_AGREEMENT", status__in=["ISSUED", "ACCEPTED"]).count() == 1
+
+
+def test_a_revision_of_a_legacy_agreement_keeps_its_quotation_number(head_user, world, company, document_storage):
+    """Review: the revision of an imported agreement lost the typed quotation number (its QUOTATION NO row)."""
+    legacy = AgreementFactory(
+        kind="PURCHASE_AGREEMENT",
+        status=AgreementStatus.ISSUED,
+        number="CRS-agr_2",
+        legacy=True,
+        legacy_quotation_ref="QUO-GR-AS-26-1024",
+        structure_material="GI",
+        payload={"legacy_record": {}},
+        payload_sha256="0" * 64,
+        issued_at=world["panel"].created_at,
+    )
+    legacy.customer.address = "Test Street 1"
+    legacy.customer.phone_e164 = "+919000000123"
+    legacy.customer.save()
+    revision = agreements.supersede(legacy, user=head_user)
+    assert revision.legacy_quotation_ref == "QUO-GR-AS-26-1024"
+    issued = issuing.issue(revision, user=head_user)
+    assert issued.payload["quotation"]["number"] == "QUO-GR-AS-26-1024"

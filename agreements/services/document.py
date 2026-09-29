@@ -14,6 +14,8 @@ from __future__ import annotations
 
 import re
 
+from django.utils import timezone
+
 from agreements.models import Agreement, AgreementKind, InverterType, SystemType
 from agreements.services.common import text
 from agreements.services.pinning import PHASE_LABELS
@@ -90,6 +92,8 @@ def build(agreement: Agreement, *, company: dict | None = None) -> dict:
             "revision": agreement.revision,
             "language": agreement.language,
             "issued_at": agreement.issued_at.isoformat() if agreement.issued_at else None,
+            # the date printed on the document: the day of issue in India (TIME_ZONE), not the UTC date
+            "issued_on": timezone.localdate(agreement.issued_at).isoformat() if agreement.issued_at else None,
             "supersedes_number": agreement.supersedes.number if agreement.supersedes_id else None,
             "legacy": agreement.legacy,
         },

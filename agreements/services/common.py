@@ -14,6 +14,8 @@ CACHE_NAMESPACE = "agreements"
 OBJECT_TYPE = "agreements.agreement"
 ACCEPTANCE_FOLDER = "agreements/acceptance"
 CENT = Decimal("0.01")
+# The largest amount a money column (numeric(14, 2)) holds.
+MAX_MONEY = Decimal("999999999999.99")
 AUDIT_FIELDS = (
     "number",
     "kind",

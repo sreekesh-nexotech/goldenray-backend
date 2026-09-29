@@ -121,3 +121,33 @@ def test_the_upstash_catalog_is_compared_not_imported(world):
     assert "kseb:3 KW|5400" not in listed and "kseb:15 KW|19500" in listed and world["fees"]
     assert "inverters:Growatt" in listed
     assert any(violation["code"] == "listed_only" for violation in result["violations"])
+
+
+def test_reimport_keeps_an_agreement_changed_on_the_platform(fees, company, head_user, document_storage):
+    """Review: a re-run with a changed browser record rebuilt the agreement whatever the platform had done to it since —
+    an ACCEPTED agreement went back to ISSUED (the acceptance silently lost), a superseded one was issued again."""
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    from agreements.services import acceptance, agreements, issuing
+    from media.tests import files
+
+    records = _records()
+    import_pa_agreements(records, profile="crs")
+    accepted_raw = next(record for record in records if record["data"].get("quoteno") == "1024")
+    scan = SimpleUploadedFile("signed.pdf", files.pdf(), content_type="application/pdf")
+    accepted = acceptance.record_acceptance(_by_id(accepted_raw["id"]), user=head_user, file=scan)
+    superseded_raw = next(record for record in records if record["data"].get("amt") == "585000")
+    issuing.issue(agreements.supersede(_by_id(superseded_raw["id"]), user=head_user), user=head_user)
+    untouched_raw = next(record for record in records if record["data"].get("total") == "372000")
+    changed = copy.deepcopy(records)
+    for record in changed:
+        if record["id"] in (accepted_raw["id"], superseded_raw["id"], untouched_raw["id"]):
+            record["data"]["addoffer"] = "Changed in the browser"
+    result = import_pa_agreements(changed, profile="crs")
+    assert (result["created"], result["updated"], result["skipped"]) == (0, 1, 6)
+    modified = sorted(violation["source_id"] for violation in result["violations"] if violation["code"] == "modified_on_platform")
+    assert modified == sorted([f"crs/{accepted_raw['id']}", f"crs/{superseded_raw['id']}"])
+    accepted.refresh_from_db()
+    assert accepted.status == "ACCEPTED" and accepted.payload["legacy_record"] == accepted_raw
+    assert _by_id(superseded_raw["id"]).status == "SUPERSEDED"
+    assert _by_id(untouched_raw["id"]).payload["legacy_record"]["data"]["addoffer"] == "Changed in the browser"

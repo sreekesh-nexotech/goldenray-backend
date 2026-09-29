@@ -26,7 +26,7 @@ from django.utils import timezone
 from accounts.services.authz import can
 from agreements.models import Agreement, AgreementKind, AgreementLine, AgreementStatus, InverterType, Language, Phase, SourceType, SystemType, Variant
 from agreements.services import fees, pinning
-from agreements.services.common import CACHE_NAMESPACE, MODULE, agreement_snapshot, lock, money, require_draft
+from agreements.services.common import CACHE_NAMESPACE, MAX_MONEY, MODULE, agreement_snapshot, lock, money, require_draft
 from audit.services import changes, record
 from core.errors import Conflict, DomainError, PermissionDenied
 from core.outbox import emit
@@ -82,6 +82,7 @@ COPIED_FIELDS = (
     "statutory_fee_label",
     "statutory_fee_amount",
     "price_override_reason",
+    "legacy_quotation_ref",
 )
 
 
@@ -302,12 +303,17 @@ def _reprice(agreement: Agreement, values: dict, *, lines=None) -> None:
     """A blank agreement's derived prices: lines → extra cost (Extra Structure), final = original + extra − discount,
     and the KSEB fee of its size and phase (Sale Order)."""
     if lines is not None:
-        agreement.extra_cost = sum((_line_amount(line) for line in lines), Decimal("0.00"))
+        amounts = [_line_amount(line) for line in lines]
+        if any(amount > MAX_MONEY for amount in amounts) or sum(amounts, Decimal("0.00")) > MAX_MONEY:
+            raise _invalid("lines", f"The lines add up to more than {MAX_MONEY}.")
+        agreement.extra_cost = sum(amounts, Decimal("0.00"))
         values["extra_cost"] = agreement.extra_cost
     if agreement.original_price is not None:
         agreement.final_price = money(agreement.original_price + (agreement.extra_cost or 0) - (agreement.discount or 0))
         if agreement.final_price < 0:
             raise _invalid("original_price", "The discount exceeds the price.")
+        if agreement.final_price > MAX_MONEY:
+            raise _invalid("original_price", f"The price plus the extra cost exceeds {MAX_MONEY}.")
     else:
         agreement.final_price = None
     if agreement.kind == AgreementKind.SALE_ORDER and agreement.quotation_version_id is None and ({"capacity_kw", "phase"} & set(values) or agreement.pk is None):

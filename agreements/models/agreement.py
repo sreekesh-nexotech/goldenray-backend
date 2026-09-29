@@ -21,6 +21,7 @@ from core.models import BaseModel
 LIVE = Q(deleted_at__isnull=True)
 SHA256_RE = r"^[0-9a-f]{64}$"
 FROZEN = ("ISSUED", "ACCEPTED", "SUPERSEDED")
+IN_FORCE = ("ISSUED", "ACCEPTED")
 
 
 class Agreement(BaseModel):
@@ -112,7 +113,8 @@ class Agreement(BaseModel):
         constraints = [
             models.UniqueConstraint(fields=["number"], condition=LIVE & ~Q(number=""), name="agreements_agreement_number_uniq"),
             models.UniqueConstraint(fields=["legacy_ref"], condition=LIVE & ~Q(legacy_ref=""), name="agreements_agreement_legacy_uniq"),
-            models.UniqueConstraint(fields=["quotation_version", "kind"], condition=LIVE & Q(status="ISSUED"), name="agreements_agreement_one_issued"),
+            # PLAN's PU (one ISSUED per version and kind), widened to ACCEPTED: one agreement in force (DV-125).
+            models.UniqueConstraint(fields=["quotation_version", "kind"], condition=LIVE & Q(status__in=IN_FORCE), name="agreements_agreement_one_in_force"),
             models.UniqueConstraint(fields=["quotation_version", "kind"], condition=LIVE & Q(status="DRAFT"), name="agreements_agreement_one_draft"),
             models.UniqueConstraint(fields=["supersedes"], condition=LIVE & ~Q(status="CANCELLED"), name="agreements_agreement_superseded_once"),
             models.CheckConstraint(condition=in_choices("kind", AgreementKind), name="agreements_agreement_kind_valid"),

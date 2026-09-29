@@ -31,7 +31,7 @@ from decimal import Decimal
 
 from agreements.models import Agreement, AgreementKind, AgreementStatus, InverterType, Language, Phase, SystemType, Variant
 from agreements.services import document, fees
-from agreements.services.common import CACHE_NAMESPACE, money
+from agreements.services.common import CACHE_NAMESPACE, MAX_MONEY, money
 from core.models import LegacyMap
 from customers.services.import_support import ImportRun, date_value, mapped_id, run_import, timestamp, upsert
 from engines.frozen import sha256_hex
@@ -67,7 +67,7 @@ class _Parser:
         if not raw:
             return None
         value = money(raw)
-        if value is None or value < 0:
+        if value is None or value < 0 or value > MAX_MONEY:
             self.run.violation(self.source_id, "unparsed_value", f"{key}={raw!r} is not an amount; left empty.")
             return None
         return value
@@ -125,7 +125,7 @@ def _columns(run: ImportRun, source_id: str, kind: str, data: dict) -> dict:
     else:
         original = parse.money("amt" if kind == AgreementKind.SALE_ORDER else "total")
         discount = Decimal("0.00")
-        final = money(original + extra) if original is not None else None
+        final = money(original + extra) if original is not None and original + extra <= MAX_MONEY else None
     values.update(original_price=original, extra_cost=extra, discount=discount, final_price=final)
     fee = parse.money("kseb") if kind != AgreementKind.EXTRA_STRUCTURE else None
     row = fees.by_amount(fee)
@@ -170,6 +170,19 @@ def _customer(run: ImportRun, source_id: str, record: dict, data: dict, user):
     return customer
 
 
+def _modified_on_platform(run: ImportRun, source_id: str, agreement: Agreement) -> bool:
+    """True when the platform wrote the imported agreement after its last import (accepted, cancelled, superseded, a
+    revision drafted, …). The import stamps ``updated_at`` from ``createdAt`` and links the legacy map afterwards, so an
+    imported row's ``updated_at`` never passes its map's ``imported_at``; every platform write (``versioned_update``)
+    stamps now. A re-run must never take such an agreement back to the browser record (e.g. ACCEPTED → ISSUED)."""
+    if agreement.status != AgreementStatus.ISSUED or agreement.deleted_at is not None:
+        return True
+    if Agreement.all_objects.filter(supersedes=agreement).exists():
+        return True
+    imported_at = LegacyMap.objects.filter(source_system=run.source_system, source_table=run.source_table, source_id=source_id, target_id=agreement.pk).values_list("imported_at", flat=True).first()
+    return imported_at is not None and agreement.updated_at > imported_at
+
+
 def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict) -> None:
     record = row["record"]
     record_id = _text(record.get("id"), 64)
@@ -190,6 +203,10 @@ def _record(run: ImportRun, row: dict, *, profile: str, user, company: dict) -> 
     if target is not None and (target.payload or {}).get("legacy_record") == record:
         run.skipped += 1
         run.link(source_id, target)
+        return
+    if target is not None and _modified_on_platform(run, source_id, target):
+        run.skipped += 1
+        run.violation(source_id, "modified_on_platform", f"Agreement {target.number} changed on the platform after it was imported ({target.status}); left as it is.")
         return
     if target is not None:
         run.violation(source_id, "legacy_record_changed", "The browser record changed since the last import; its agreement was rebuilt.")

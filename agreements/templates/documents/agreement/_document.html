@@ -13,7 +13,7 @@
     </div>
   </header>
   <div class="rule"></div>
-  <div class="meta platform-extra">{% if a.number %}{{ L.agreement_no }}: {{ a.number }}{% endif %}{% if a.issued_at %} · {{ L.issued_on }}: {{ a.issued_at|slice:":10" }}{% endif %}</div>
+  <div class="meta platform-extra">{% if a.number %}{{ L.agreement_no }}: {{ a.number }}{% endif %}{% if a.issued_on %} · {{ L.issued_on }}: {{ a.issued_on }}{% elif a.issued_at %} · {{ L.issued_on }}: {{ a.issued_at|slice:":10" }}{% endif %}</div>
   <main class="body lang-{{ language }}">
 {% if a.kind == "PURCHASE_AGREEMENT" %}
     <div class="title">{{ L.title }}</div>
