@@ -4,7 +4,7 @@ Work package **legacy-shim** builds the `legacy` app: for every old website URL 
 (`platform-reference/website-api-inventory.md`) plus the legacy public reads `pincodes/` and `tariffs/`, an adapter
 under `/legacy/` that answers the OLD request/response contract (status codes, JSON shape and key order, pagination
 style — none —, error bodies, trailing-slash behaviour) by calling the new services; the nginx rewrite map listing
-exactly those paths; and the parity harness with its corpus and report. Deviations: DV-117 … DV-121.
+exactly those paths; and the parity harness with its corpus and report. Deviations: DV-122 … DV-126.
 
 ## What exists
 
@@ -16,7 +16,7 @@ exactly those paths; and the parity harness with its corpus and report. Deviatio
 | Forms | `legacy/views/forms.py`, `legacy/services/forms.py` | lead-collection-home, send-otp, verify-otp, affiliate-applications, warranty-service-requests, job-applications |
 | CMS delivery | `legacy/views/cms.py`, `legacy/services/cms.py` | `<collection>` (articles, and any active collection), faqs, job-positions, job-positions/`<slug>`, page-content |
 | BOM app | `legacy/views/bom.py`, `legacy/services/website.py` | calculate (B-1), quotation-settings (GET) |
-| Ids | `legacy/services/ids.py` | legacy integer ids ↔ platform rows through `core_legacy_map` (DV-117) |
+| Ids | `legacy/services/ids.py` | legacy integer ids ↔ platform rows through `core_legacy_map` (DV-122) |
 | B-1 (shared, bom) | `bom/services/website_quote.py` (`INTERNAL_KEYS`, `public_body`), `bom/views/quote.py`, `bom/serializers/quote.py` (`BomQuotePublicSerializer`) | the public quote and the shim omit `cost_breakdown` and `totals` |
 | nginx | `deploy/nginx/legacy/groups.conf` | the shim groups list exactly the shimmed paths (with the slash-less spelling) |
 | Parity | `tools/parity/{harness.py,build_corpus.py,serve.py,corpus.jsonl,approved.json}`, `docs/migration/parity-report.md` | 574 requests; 0 unapproved differences |
@@ -61,7 +61,7 @@ detail routes (`/api/solar-panels/<id>/` …) and `/api/customer-installations/`
    endpoint deliberately dropped, the shim reproduces it at the edge: the CMS ignored the indexed `filters[f][$in][0]`
    spelling (the shim strips those keys), the legacy lead form required `phone_number` with DRF's wording, the job
    form keeps DRF's HTML-input rules (an empty optional field is its default; a missing checkbox is false).
-2. **Ids (DV-117).** A migrated row answers its legacy integer id (`core_legacy_map.source_id`); a row created on the
+2. **Ids (DV-122).** A migrated row answers its legacy integer id (`core_legacy_map.source_id`); a row created on the
    platform answers `10,000,000 + <platform id>` (above every legacy id, stable, resolvable back). Ids the website
    posts back (EMI `size_id`/`installation_id`/`id`, job `position_id`) resolve the same way; an unknown EMI id is a uid
    no size has (the engine's own "not found" answer, as in the calculators-emi parity).
@@ -69,7 +69,7 @@ detail routes (`/api/solar-panels/<id>/` …) and `/api/customer-installations/`
    renamed back), installation stats and product parameters; `{"errors": [...]}` for the quote (`QuoteInvalid.legacy_errors`);
    `{"message": "Validation failed", "status": "error", "errors": {…}}` for the forms (legacy field names);
    the bare serializer errors for the OTP views; `{"detail": …}` for the CMS 404s and DRF's own 405/429/parse errors.
-   Where the legacy crashed (HTTP 500) the shim answers 400 with the legacy error shape (DV-119).
+   Where the legacy crashed (HTTP 500) the shim answers 400 with the legacy error shape (DV-124).
 4. **Trailing slashes**: main-backend and BOM URLs answer the slash-less spelling with a 301 to the slashed old URL
    (relative `Location`, query kept) — the legacy `APPEND_SLASH`; a slash-less POST (legacy DEBUG 500) gets the same
    301. CMS URLs are routed as the CMS routed them: `faqs`, `job-positions`, `job-positions/<slug>`, `page-content`
@@ -78,8 +78,8 @@ detail routes (`/api/solar-panels/<id>/` …) and `/api/customer-installations/`
    shim) through `website_quote.public_body`; `quote()` still returns the full legacy body (the service-level
    byte-parity test is unchanged; `test_the_public_endpoint_serves_the_same_json_without_internal_costs` proves the two
    keys are absent and every other key and byte equals the golden body). No staff quote endpoint exists yet, so no
-   caller receives the full body over HTTP (DV-120).
-6. **Not in OpenAPI (DV-118)**: `schema = None` on every legacy view — the contracts are the old ones, frozen, and
+   caller receives the full body over HTTP (DV-125).
+6. **Not in OpenAPI (DV-123)**: `schema = None` on every legacy view — the contracts are the old ones, frozen, and
    documented here and executable in `tools/parity/corpus.jsonl`.
 7. **The legacy app owns no table**, so the LEGACY IMPORT CONTRACT (`<app>/services/legacy_import.py`) does not apply:
    every row the shim serves is imported by its owning package's importer (run by `migrations_tools`).

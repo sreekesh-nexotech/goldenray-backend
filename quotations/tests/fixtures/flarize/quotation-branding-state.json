@@ -1,0 +1,531 @@
+{
+ "schema": "flarize.quotation-branding/2",
+ "note": "Phase F (locked 2.4 + 2.5) + Phase I multi-account extension (2026-09-05). Bank and UPI carry multiple accounts (primary + accounts map); signature and seal remain single-slot. Admin + Project Head publish accounts + versions; Sales cannot mutate. Versions are IMMUTABLE once published; publish a new versionId to change a live value. Deactivating an account never mutates already-issued snapshots. Never delete an account/version referenced by an issued quotation. See src/lib/quotationBranding.js.",
+ "bank": {
+  "primary": "ACC-E2E-HDFC",
+  "accounts": {
+   "ACC-E2E-HDFC": {
+    "accountId": "ACC-E2E-HDFC",
+    "label": "E2E HDFC",
+    "status": "ACTIVE",
+    "isDemo": true,
+    "current": "BK-ACC-E2E-HDFC-20260912055807815",
+    "versions": {
+     "BK-ACC-E2E-HDFC-20260910043955522": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910043955522",
+      "publishedAt": "2026-09-10T04:39:55.522Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910044159407": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910044159407",
+      "publishedAt": "2026-09-10T04:41:59.407Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910044205991": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910044205991",
+      "publishedAt": "2026-09-10T04:42:05.991Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910044220438": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910044220438",
+      "publishedAt": "2026-09-10T04:42:20.438Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910112953948": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910112953948",
+      "publishedAt": "2026-09-10T11:29:53.948Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910113001386": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910113001386",
+      "publishedAt": "2026-09-10T11:30:01.386Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910113106275": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910113106275",
+      "publishedAt": "2026-09-10T11:31:06.275Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910113107583": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910113107583",
+      "publishedAt": "2026-09-10T11:31:07.583Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910113144911": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910113144911",
+      "publishedAt": "2026-09-10T11:31:44.911Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260910113146200": {
+      "versionId": "BK-ACC-E2E-HDFC-20260910113146200",
+      "publishedAt": "2026-09-10T11:31:46.200Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912053144027": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912053144027",
+      "publishedAt": "2026-09-12T05:31:44.027Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912053145768": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912053145768",
+      "publishedAt": "2026-09-12T05:31:45.768Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912055228655": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912055228655",
+      "publishedAt": "2026-09-12T05:52:28.655Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912055230513": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912055230513",
+      "publishedAt": "2026-09-12T05:52:30.513Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912055805873": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912055805873",
+      "publishedAt": "2026-09-12T05:58:05.873Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     },
+     "BK-ACC-E2E-HDFC-20260912055807815": {
+      "versionId": "BK-ACC-E2E-HDFC-20260912055807815",
+      "publishedAt": "2026-09-12T05:58:07.815Z",
+      "publishedBy": "admin-001",
+      "isDemo": true,
+      "values": {
+       "bankName": "HDFC Bank",
+       "accountName": "Flarize Technologies Private Limited",
+       "accountNumber": "TEST-0000",
+       "ifsc": "HDFC0000001"
+      }
+     }
+    }
+   }
+  }
+ },
+ "upi": {
+  "primary": "UPI-E2E",
+  "accounts": {
+   "UPI-E2E": {
+    "accountId": "UPI-E2E",
+    "label": "UPI-E2E",
+    "status": "ACTIVE",
+    "isDemo": true,
+    "current": "UPI-UPI-E2E-20260912055805876",
+    "versions": {
+     "UPI-UPI-E2E-20260910043955524": {
+      "versionId": "UPI-UPI-E2E-20260910043955524",
+      "publishedAt": "2026-09-10T04:39:55.524Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910044159409": {
+      "versionId": "UPI-UPI-E2E-20260910044159409",
+      "publishedAt": "2026-09-10T04:41:59.409Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910044205992": {
+      "versionId": "UPI-UPI-E2E-20260910044205992",
+      "publishedAt": "2026-09-10T04:42:05.992Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910044220441": {
+      "versionId": "UPI-UPI-E2E-20260910044220441",
+      "publishedAt": "2026-09-10T04:42:20.441Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910112953950": {
+      "versionId": "UPI-UPI-E2E-20260910112953950",
+      "publishedAt": "2026-09-10T11:29:53.950Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910113001387": {
+      "versionId": "UPI-UPI-E2E-20260910113001387",
+      "publishedAt": "2026-09-10T11:30:01.387Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910113106277": {
+      "versionId": "UPI-UPI-E2E-20260910113106277",
+      "publishedAt": "2026-09-10T11:31:06.277Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260910113144913": {
+      "versionId": "UPI-UPI-E2E-20260910113144913",
+      "publishedAt": "2026-09-10T11:31:44.913Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260912053144030": {
+      "versionId": "UPI-UPI-E2E-20260912053144030",
+      "publishedAt": "2026-09-12T05:31:44.030Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260912055228658": {
+      "versionId": "UPI-UPI-E2E-20260912055228658",
+      "publishedAt": "2026-09-12T05:52:28.658Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     },
+     "UPI-UPI-E2E-20260912055805876": {
+      "versionId": "UPI-UPI-E2E-20260912055805876",
+      "publishedAt": "2026-09-12T05:58:05.876Z",
+      "publishedBy": "user-1788862142273-2af8aa7d",
+      "isDemo": true,
+      "values": {
+       "upiId": "test@upi"
+      }
+     }
+    }
+   }
+  }
+ },
+ "signature": {
+  "current": "SIG-slot-20260912055805878",
+  "versions": {
+   "SIG-slot-20260910043955526": {
+    "versionId": "SIG-slot-20260910043955526",
+    "publishedAt": "2026-09-10T04:39:55.526Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910044159411": {
+    "versionId": "SIG-slot-20260910044159411",
+    "publishedAt": "2026-09-10T04:41:59.411Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910044205994": {
+    "versionId": "SIG-slot-20260910044205994",
+    "publishedAt": "2026-09-10T04:42:05.994Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910044220442": {
+    "versionId": "SIG-slot-20260910044220442",
+    "publishedAt": "2026-09-10T04:42:20.442Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910112953951": {
+    "versionId": "SIG-slot-20260910112953951",
+    "publishedAt": "2026-09-10T11:29:53.951Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910113001389": {
+    "versionId": "SIG-slot-20260910113001389",
+    "publishedAt": "2026-09-10T11:30:01.389Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910113106278": {
+    "versionId": "SIG-slot-20260910113106278",
+    "publishedAt": "2026-09-10T11:31:06.278Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260910113144915": {
+    "versionId": "SIG-slot-20260910113144915",
+    "publishedAt": "2026-09-10T11:31:44.915Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260912053144032": {
+    "versionId": "SIG-slot-20260912053144032",
+    "publishedAt": "2026-09-12T05:31:44.032Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260912055228659": {
+    "versionId": "SIG-slot-20260912055228659",
+    "publishedAt": "2026-09-12T05:52:28.659Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   },
+   "SIG-slot-20260912055805878": {
+    "versionId": "SIG-slot-20260912055805878",
+    "publishedAt": "2026-09-12T05:58:05.878Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "signatoryName": "E2E Signatory"
+    }
+   }
+  }
+ },
+ "seal": {
+  "current": "SEAL-slot-20260912055805879",
+  "versions": {
+   "SEAL-slot-20260910043955528": {
+    "versionId": "SEAL-slot-20260910043955528",
+    "publishedAt": "2026-09-10T04:39:55.528Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910044159412": {
+    "versionId": "SEAL-slot-20260910044159412",
+    "publishedAt": "2026-09-10T04:41:59.412Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910044205995": {
+    "versionId": "SEAL-slot-20260910044205995",
+    "publishedAt": "2026-09-10T04:42:05.995Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910044220444": {
+    "versionId": "SEAL-slot-20260910044220444",
+    "publishedAt": "2026-09-10T04:42:20.444Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910112953952": {
+    "versionId": "SEAL-slot-20260910112953952",
+    "publishedAt": "2026-09-10T11:29:53.952Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910113001390": {
+    "versionId": "SEAL-slot-20260910113001390",
+    "publishedAt": "2026-09-10T11:30:01.390Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910113106279": {
+    "versionId": "SEAL-slot-20260910113106279",
+    "publishedAt": "2026-09-10T11:31:06.279Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260910113144916": {
+    "versionId": "SEAL-slot-20260910113144916",
+    "publishedAt": "2026-09-10T11:31:44.916Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260912053144033": {
+    "versionId": "SEAL-slot-20260912053144033",
+    "publishedAt": "2026-09-12T05:31:44.033Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260912055228661": {
+    "versionId": "SEAL-slot-20260912055228661",
+    "publishedAt": "2026-09-12T05:52:28.661Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   },
+   "SEAL-slot-20260912055805879": {
+    "versionId": "SEAL-slot-20260912055805879",
+    "publishedAt": "2026-09-12T05:58:05.879Z",
+    "publishedBy": "admin-001",
+    "isDemo": true,
+    "values": {
+     "label": "E2E seal"
+    }
+   }
+  }
+ }
+}

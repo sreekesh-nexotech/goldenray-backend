@@ -1,0 +1,25 @@
+{
+ "_note": "Customer testimonials printed on quotation page 6 (approved template v1 layout). Enter REAL customers only — the page is left out of the PDF while `entries` is empty. Each entry: name (required), place, systemKw, installedOn (free text, e.g. 'June 2025'), quote (required), billBefore, billAfter (monthly ₹), monthlySaving (₹), photoUri (optional image path/URL). Up to 3 are printed. `intro` is the green banner line (e.g. '12 homes in Alappuzha (688008) are already running on Flarize solar.'). `video` is the QR block (title, text, link, qrImageUri).",
+ "intro": null,
+ "entries": [
+  {
+   "name": "Homeowner 01",
+   "place": "Alappuzha",
+   "systemKw": 3,
+   "installedOn": null,
+   "quote": "Bill went down a lot.",
+   "billBefore": 6000,
+   "billAfter": 250,
+   "monthlySaving": 5750,
+   "photoUri": "/api/cms/assets/asset_mtzxcrztny3str1/file"
+  }
+ ],
+ "video": {
+  "title": null,
+  "text": null,
+  "link": null,
+  "qrImageUri": null
+ },
+ "updatedBy": "admin-001",
+ "updatedAt": "2026-09-13T14:50:49.502Z"
+}

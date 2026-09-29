@@ -1,0 +1,5 @@
+{% extends "documents/base.html" %}
+{# Quotation (Malayalam): the QuotationV2 artwork rendered from the frozen document payload — formatting only, no business logic. #}
+{% block title %}Quotation {{ payload.payload.quotation.quotationNumber|default:"" }}{% endblock %}
+{% block styles %}{% include "documents/quotation/_styles.html" %}{% endblock %}
+{% block content %}{% include "documents/quotation/_document.html" %}{% endblock %}

@@ -1,0 +1,1974 @@
+{
+  "storeVersion": "quotationContent.1",
+  "_note": "Customer-facing quotation text (EN + ML) for pages 3, 8, 9, 10, 11. Edit in Admin/Project Head → Quotation content; publish makes it live for NEW quotations only. Issued quotations keep the content version they were printed with.",
+  "published": {
+    "version": 1,
+    "publishedAt": "2026-09-13T16:22:51Z",
+    "publishedBy": "SEED",
+    "content": {
+      "labels": {
+        "p1.headline": {
+          "en": "Stop Worrying About Electricity Bills Forever",
+          "ml": "വൈദ്യുതി ബില്ലിനെ കുറിച്ചുള്ള ആശങ്കകൾക്ക് ഇനി വിട"
+        },
+        "p1.subline": {
+          "en": "Empowering Kerala homes with clean energy, smart savings, and the joy of sustainability.",
+          "ml": "സുരക്ഷിതമായ ഊർജ്ജം, മികച്ച ലാഭം, ദീർഘകാല സാമ്പത്തിക സുരക്ഷ — നിങ്ങളുടെ വീടിനായി."
+        },
+        "p1.badge.subsidy": {
+          "en": "{amount} Subsidy",
+          "ml": "{amount} സബ്‌സിഡി"
+        },
+        "p1.badge.subsidy.sub": {
+          "en": "PM Surya Ghar – guaranteed",
+          "ml": "PM സൂര്യ ഘർ പദ്ധതിയിലൂടെ"
+        },
+        "p1.badge.homes": {
+          "en": "{count}+ Homes",
+          "ml": "{count}+ Homes"
+        },
+        "p1.badge.homes.sub": {
+          "en": "Installed in Kerala",
+          "ml": "വിജയകരമായ ഇൻസ്റ്റലേഷനുകൾ"
+        },
+        "p1.badge.mnre": {
+          "en": "MNRE Empanelled",
+          "ml": "MNRE Government"
+        },
+        "p1.badge.mnre.sub": {
+          "en": "Government certified",
+          "ml": "അംഗീകൃത സ്ഥാപനം"
+        },
+        "p1.dear": {
+          "en": "Dear {name},",
+          "ml": "പ്രിയ {name}"
+        },
+        "p1.letter1": {
+          "en": "Thank you for considering Flarize for your home.",
+          "ml": "നിങ്ങളുടെ വീടിനായി Flarize തിരഞ്ഞെടുക്കാൻ താൽപര്യം പ്രകടിപ്പിച്ചതിന് നന്ദി."
+        },
+        "p1.letter2": {
+          "en": "Choosing solar is one of the smartest decisions you can make for your home. It's more than reducing your electricity bill—it's about enjoying a better lifestyle, protecting your family from rising electricity costs, and investing in a home that continues to reward you for years to come.",
+          "ml": "സോളാർ തിരഞ്ഞെടുക്കുന്നത് വൈദ്യുതി ബിൽ കുറയ്ക്കാൻ മാത്രമല്ല. അത് നിങ്ങളുടെ കുടുംബത്തിന്റെ ഭാവിയിലേക്കുള്ള ഒരു മികച്ച നിക്ഷേപമാണ്. ഓരോ മാസവും ലാഭം നേടാനും, ഉയരുന്ന വൈദ്യുതി നിരക്കുകളിൽ നിന്ന് സംരക്ഷണം നേടാനും, വർഷങ്ങളോളം സ്വന്തം വൈദ്യുതി ഉപയോഗിക്കാനും ഇത് സഹായിക്കുന്നു."
+        },
+        "p1.letter3": {
+          "en": "We've carefully designed this solution specifically for your home's energy needs, so you can make your decision with complete confidence.",
+          "ml": "നിങ്ങളുടെ വീട്ടിലെ വൈദ്യുതി ഉപയോഗം, ആവശ്യകത, ബജറ്റ് എന്നിവ കണക്കിലെടുത്താണ് ഈ സോളാർ പദ്ധതി പ്രത്യേകം തയ്യാറാക്കിയിരിക്കുന്നത്. അതിനാൽ നിങ്ങൾക്ക് ആത്മവിശ്വാസത്തോടെ തീരുമാനമെടുക്കാം."
+        },
+        "p1.regards": {
+          "en": "Warm Regards,",
+          "ml": "സ്നേഹപൂർവ്വം"
+        },
+        "p1.team": {
+          "en": "Team Flarize",
+          "ml": "Flarize ടീം"
+        },
+        "p1.details.title": {
+          "en": "YOUR PROPOSAL DETAILS",
+          "ml": "YOUR PROPOSAL DETAILS"
+        },
+        "p1.f.name": {
+          "en": "Name",
+          "ml": "പേര്"
+        },
+        "p1.f.address": {
+          "en": "Address",
+          "ml": "വിലാസം"
+        },
+        "p1.f.pincode": {
+          "en": "Pincode",
+          "ml": "പിൻകോഡ്"
+        },
+        "p1.f.phone": {
+          "en": "Phone Number",
+          "ml": "ഫോൺ നമ്പർ"
+        },
+        "p1.f.bill": {
+          "en": "Current Bill",
+          "ml": "നിലവിലെ വൈദ്യുതി ബിൽ"
+        },
+        "p1.f.size": {
+          "en": "System Size",
+          "ml": "സോളാർ സിസ്റ്റം"
+        },
+        "p1.f.qno": {
+          "en": "Quotation No.",
+          "ml": "ക്വട്ടേഷൻ നമ്പർ"
+        },
+        "p1.f.by": {
+          "en": "Proposal By",
+          "ml": "നിർദ്ദേശം നൽകുന്നത്"
+        },
+        "p1.f.date": {
+          "en": "Date",
+          "ml": "തീയതി"
+        },
+        "p1.f.valid": {
+          "en": "Valid Until",
+          "ml": "കാലാവധി"
+        },
+        "p1.f.gst": {
+          "en": "GST No",
+          "ml": "GST നമ്പർ"
+        },
+        "p1.f.reg": {
+          "en": "Company Registration",
+          "ml": "കമ്പനി രജിസ്ട്രേഷൻ നമ്പർ"
+        },
+        "p3.title": {
+          "en": "See Exactly What Your Solar Powers Every Day",
+          "ml": "നിങ്ങളുടെ Solar ഓരോ ദിവസവും എന്തെല്ലാം പ്രവർത്തിപ്പിക്കുന്നു"
+        },
+        "p3.subtitle": {
+          "en": "Real numbers calculated from your usage — not estimates.",
+          "ml": "നിങ്ങളുടെ വൈദ്യുതി ഉപയോഗത്തെ അടിസ്ഥാനമാക്കി കണക്കാക്കിയ യഥാർത്ഥ വിവരങ്ങൾ"
+        },
+        "p3.gen.label": {
+          "en": "Your Daily Solar Generation",
+          "ml": "പ്രതിദിന ഉൽപ്പാദനം"
+        },
+        "p3.gen.units": {
+          "en": "units",
+          "ml": "units"
+        },
+        "p3.gen.note": {
+          "en": "Average across all seasons",
+          "ml": "എല്ലാ സീസണുകളിലെയും ശരാശരി ഉൽപ്പാദനം"
+        },
+        "p3.value.label": {
+          "en": "Monthly Value at KSEB Rate",
+          "ml": "നിലവിലെ KSEB നിരക്കിൽ മാസത്തിലെ മൂല്യം"
+        },
+        "p3.value.note": {
+          "en": "Worth of free electricity every month",
+          "ml": "ഓരോ മാസവും ലഭിക്കുന്ന സൗജന്യ വൈദ്യുതിയുടെ മൂല്യം"
+        },
+        "p3.table.title": {
+          "en": "Your Daily Appliance Usage",
+          "ml": "നിങ്ങളുടെ വീടിന്റെ പ്രതിദിന വൈദ്യുതി ഉപയോഗം"
+        },
+        "p3.th.appliance": {
+          "en": "Appliance",
+          "ml": "ഉപകരണം"
+        },
+        "p3.th.qty": {
+          "en": "Quantity",
+          "ml": "എണ്ണം"
+        },
+        "p3.th.hours": {
+          "en": "Hours/Day",
+          "ml": "ദിവസേന"
+        },
+        "p3.th.units": {
+          "en": "Units/Day",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.hrs": {
+          "en": "hrs",
+          "ml": "മണിക്കൂർ"
+        },
+        "p3.hr": {
+          "en": "hr",
+          "ml": "മണിക്കൂർ"
+        },
+        "p3.units": {
+          "en": "units",
+          "ml": "യൂണിറ്റ്"
+        },
+        "p3.total": {
+          "en": "Total Daily Usage:",
+          "ml": "ആകെ പ്രതിദിന ഉപയോഗം:"
+        },
+        "p3.card.gen": {
+          "en": "Solar Generates",
+          "ml": "Solar ഉൽപ്പാദിപ്പിക്കുന്നത്"
+        },
+        "p3.card.use": {
+          "en": "Your Home Uses",
+          "ml": "നിങ്ങളുടെ വീടിന്റെ ഉപയോഗം"
+        },
+        "p3.card.surplus": {
+          "en": "Surplus Exported",
+          "ml": "അധിക വൈദ്യുതി KSEB-ലേക്ക്"
+        },
+        "p3.card.gen.note": {
+          "en": "units/day (average)",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.card.use.note": {
+          "en": "units/day (all appliances)",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.card.surplus.note": {
+          "en": "units/day → KSEB credits",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.lifeNow": {
+          "en": "Your Life Now",
+          "ml": "ഇപ്പോഴത്തെ അവസ്ഥ"
+        },
+        "p3.lifeSolar": {
+          "en": "Your Life with Solar",
+          "ml": "Solar-നൊപ്പം നിങ്ങളുടെ ജീവിതം"
+        },
+        "p9.title": {
+          "en": "From Booking to Savings — Step by Step",
+          "ml": "ബുക്കിംഗ് മുതൽ ലാഭം വരെ — ഓരോ ഘട്ടവും വ്യക്തമായി"
+        },
+        "p9.days": {
+          "en": "DAYS",
+          "ml": "ദിവസം"
+        },
+        "p9.refund.title": {
+          "en": "REFUND FROM KSEB",
+          "ml": "KSEB-യിൽ നിന്ന് ലഭിക്കുന്ന റീഫണ്ട്"
+        },
+        "p9.refund.body": {
+          "en": "80% of the pre-tax value of the registration fee is refunded by KSEB (₹1,000 per kW + 18% GST basis).",
+          "ml": "രജിസ്ട്രേഷൻ ഫീസിന്റെ Pre-Tax തുകയുടെ 80% വരെ KSEB-യിൽ നിന്ന് തിരികെ ലഭിക്കും. (₹1,000 per kW + 18% GST അടിസ്ഥാനത്തിൽ)"
+        },
+        "p9.refund.line": {
+          "en": "{kw} kW system — approx. ₹{amount} refund",
+          "ml": "{kw} kW സിസ്റ്റത്തിന് ഏകദേശം ₹{amount} വരെ റീഫണ്ട്"
+        },
+        "p9.weHandle": {
+          "en": "WHAT WE HANDLE",
+          "ml": "ഞങ്ങൾ കൈകാര്യം ചെയ്യുന്നത്"
+        },
+        "p9.customerScope": {
+          "en": "WHAT YOU NEED TO DO",
+          "ml": "നിങ്ങൾ ചെയ്യേണ്ടത് (CUSTOMER SCOPE)"
+        },
+        "p10.title": {
+          "en": "Terms and Conditions",
+          "ml": "നിബന്ധനകളും വ്യവസ്ഥകളും"
+        },
+        "p8.docs.title": {
+          "en": "Required Documents:",
+          "ml": "ആവശ്യമായ രേഖകൾ"
+        },
+        "p8.structure.label": {
+          "en": "Additional Structure Cost (if required)",
+          "ml": "അധിക Structure Cost (ആവശ്യമെങ്കിൽ)"
+        }
+      },
+      "terms": [
+        {
+          "title": {
+            "en": "Warranty",
+            "ml": "വാറന്റി"
+          },
+          "body": {
+            "en": "Golden Ray Renewable Energy provides a five (5) year warranty for the complete solar power system against manufacturing and technical defects, subject to the terms and conditions mentioned herein. Solar panels, inverters, and other OEM products shall carry warranty coverage as provided by their respective manufacturers.",
+            "ml": "Golden Ray Renewable Energy നൽകുന്ന മുഴുവൻ Solar System-നും നിർമ്മാണപരമായും സാങ്കേതികപരമായും ഉണ്ടാവാവുന്ന തകരാറുകൾക്കെതിരെ 5 വർഷത്തെ വാറന്റി ലഭിക്കും. പാനൽ, ഇൻവെർട്ടർ, മറ്റ് ഉപകരണങ്ങൾ എന്നിവയ്ക്ക് അതത് നിർമ്മാതാക്കൾ നൽകുന്ന വാറന്റി ബാധകമായിരിക്കും."
+          }
+        },
+        {
+          "title": {
+            "en": "Warranty Exclusions",
+            "ml": "വാറന്റിയിൽ ഉൾപ്പെടാത്തവ"
+          },
+          "body": {
+            "en": "The warranty shall not apply to defects or damages resulting from misuse, negligence, unauthorized modifications, third-party interference, improper operation, storage, or maintenance. Warranty coverage also excludes damage caused by accidents, natural calamities, lightning, flooding, landslides, external grid surges, or any other Force Majeure events.",
+            "ml": "തെറ്റായ ഉപയോഗം, അശ്രദ്ധ, അനധികൃത മാറ്റങ്ങൾ, മൂന്നാം കക്ഷികളുടെ ഇടപെടൽ, തെറ്റായ പരിപാലനം, അപകടങ്ങൾ, മിന്നൽ, വെള്ളപ്പൊക്കം, ഉരുൾപൊട്ടൽ, പ്രകൃതി ദുരന്തങ്ങൾ, വൈദ്യുതി ലൈൻ സർജുകൾ എന്നിവ മൂലമുള്ള കേടുപാടുകൾ വാറന്റിയിൽ ഉൾപ്പെടുന്നതല്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Consumables",
+            "ml": "ഉപഭോഗ വസ്തുക്കൾ (Consumables)"
+          },
+          "body": {
+            "en": "Consumable and protective components such as Fuses, Surge Protection Devices (SPDs), connectors, and similar accessories are not covered under warranty and may require periodic replacement as part of normal maintenance.",
+            "ml": "Fuse, SPD (Surge Protection Device), Connectors എന്നിവയുൾപ്പെടെയുള്ള ഉപഭോഗ വസ്തുക്കൾ വാറന്റിയിൽ ഉൾപ്പെടില്ല. സാധാരണ പരിപാലനത്തിന്റെ ഭാഗമായി ഇവ ആവശ്യാനുസരണം മാറ്റിസ്ഥാപിക്കേണ്ടതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Customer Responsibilities",
+            "ml": "ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്തങ്ങൾ"
+          },
+          "body": {
+            "en": "The customer shall provide a shade-free area suitable for solar panel installation along with adequate space for inverters, meters, and associated equipment. Water access for panel cleaning, site accessibility, internet connectivity for monitoring systems, and any loading or unloading arrangements at site shall be arranged by the customer. If vehicle access to the installation site is restricted or unavailable, the customer shall arrange the necessary manpower or alternate transportation required for material movement, installation, servicing, or maintenance activities. Any additional costs arising due to restricted site access shall be borne by the customer.",
+            "ml": "Solar Panel സ്ഥാപിക്കുന്ന നിഴൽ തടസ്സമില്ലാത്ത സ്ഥലം, ഇൻവെർട്ടറിനും മറ്റ് ഉപകരണങ്ങൾക്കും ആവശ്യമായ ഇടം എന്നിവ ഉപഭോക്താവ് ഒരുക്കണം. വെള്ളം, ഇന്റർനെറ്റ്, സൈറ്റ് ആക്സ സ്, ലോഡിംഗ്/അൺലോഡിംഗ് സൗകര്യങ്ങൾ എന്നിവയും ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്തമാണ്. വാഹന പ്രവേശനം ലഭ്യമല്ലെങ്കിൽ ആവശ്യമായ ആളുകളെയോ മറ്റ് സൗകര്യങ്ങളെയോ ഉപഭോക്താവ് ഒരുക്കണം."
+          }
+        },
+        {
+          "title": {
+            "en": "Service & Training",
+            "ml": "സേവനവും പരിശീലനവും"
+          },
+          "body": {
+            "en": "Basic service and maintenance training shall be provided to the customer at the time of commissioning. Standby inverter support may be provided during inverter repair periods, subject to availability.",
+            "ml": "സിസ്റ്റം പ്രവർത്തനം ആരംഭിക്കുന്ന സമയത്ത് അടിസ്ഥാന സേവന-പരിപാലന പരിശീലനം നൽകും. ഇൻവെർട്ടർ അറ്റകുറ്റപ്പണി നടക്കുന്ന സമയത്ത്, ലഭ്യതയ്ക്ക് വിധേയമായി Standby Inverter Support നൽകാവുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Payment Terms",
+            "ml": "പണമടയ്ക്കൽ നിബന്ധനകൾ"
+          },
+          "body": {
+            "en": "Payments shall be made as per the payment schedule agreed in the quotation and are due immediately upon completion of each project stage. In case the project duration is extended, invoices for completed work, supplied materials, or specially ordered materials may be raised periodically and shall be payable upon receipt. Any additional charges arising from scope changes, statutory requirements, material variations, or customer-requested modifications shall be paid before the related work is undertaken. The agreed project price shall be considered final upon acceptance of the quotation and requests for price reductions, discounts, or renegotiation after order confirmation shall not be entertained. Payments shall be made only to the official bank account of Golden Ray Renewable Energy, and the Company shall not be responsible for payments made to employee or third-party accounts. Eligible refunds shall be processed within seven (7) working days, subject to banking procedures.",
+            "ml": "Quotation-ൽ വ്യക്തമാക്കിയിരിക്കുന്ന Payment Schedule അനുസരിച്ച് ഓരോ ഘട്ടവും പൂർത്തിയാകുമ്പോൾ പണമടയ്ക്കണം. Scope മാറ്റങ്ങൾ, അധിക ജോലികൾ, മെറ്റീരിയൽ വ്യത്യാസങ്ങൾ എന്നിവ മൂലമുള്ള അധിക തുക ബന്ധപ്പെട്ട ജോലി ആരംഭിക്കുന്നതിന് മുമ്പ് അടയ്ക്കേണ്ടതാണ്. Quotation അംഗീകരിച്ചതിന് ശേഷം വില അന്തിമമായി കണക്കാക്കും. പിന്നീട് വിലക്കുറവ്, ഡിസ്കൗ ണ്ട്, പുനഃചർച്ച എന്നിവ അനുവദിക്കില്ല. പണമടയ്ക്കൽ കമ്പനിയുടെ ഔദ്യോഗിക ബാങ്ക് അക്കൗണ്ടിലേക്ക് മാത്രമേ നടത്താവൂ. അർഹമായ Refund-കൾ 7 പ്രവൃത്തി ദിവസത്തിനുള്ളിൽ നൽകുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Price Variations",
+            "ml": "വില വ്യത്യാസങ്ങൾ"
+          },
+          "body": {
+            "en": "If payments are not made as agreed, any increase in labour costs, material costs, taxes, duties, or statutory charges occurring after the quotation date may be charged additionally to the customer. Such revisions shall be reflected in the final invoice.",
+            "ml": "കരാറനുസരിച്ചുള്ള പണമടയ്ക്കൽ വൈകുകയാണെങ്കിൽ, തൊഴിൽ ചെലവ്, മെറ്റീരിയൽ വില, നികുതി, സർക്കാർ ഫീസ് എന്നിവയിലെ വർധനവ് ഉപഭോക്താവിൽ നിന്ന് ഈടാക്കും."
+          }
+        },
+        {
+          "title": {
+            "en": "GST & Tax Changes",
+            "ml": "GST & നികുതി മാറ്റങ്ങൾ"
+          },
+          "body": {
+            "en": "Prices quoted are inclusive of applicable GST and taxes prevailing on the date of quotation. Any revision in GST, government levies, duties, or statutory charges shall be reflected in the final invoice.",
+            "ml": "Quotation നൽകുന്ന സമയത്തെ GSTയും മറ്റ് നികുതികളും ഉൾപ്പെടുത്തിയതാണ് വില. പിന്നീട് സർക്കാർ നികുതികളിൽ മാറ്റമുണ്ടായാൽ അത് അന്തിമ ബില്ലിൽ ഉൾപ്പെടുത്തും."
+          }
+        },
+        {
+          "title": {
+            "en": "System Capacity & Product Confirmation",
+            "ml": "സിസ്റ്റം സ്ഥിരീകരണം"
+          },
+          "body": {
+            "en": "Once the customer confirms the system capacity, panel make/model, inverter make/model, and quotation, subsequent changes may not be possible. Any changes requested thereafter may result in revised pricing, additional charges, material replacement costs, or project delays.",
+            "ml": "സിസ്റ്റം ശേഷി, പാനൽ മോഡൽ, ഇൻവെർട്ടർ മോഡൽ, Quotation എന്നിവ ഉപഭോക്താവ് അംഗീകരിച്ച ശേഷം മാറ്റങ്ങൾ വരുത്തുന്നത് അധിക ചെലവിനും കാലതാമസത്തിനും കാരണമായേക്കാം."
+          }
+        },
+        {
+          "title": {
+            "en": "Project Completion Timeline",
+            "ml": "പദ്ധതി പൂർത്തീകരണ സമയം"
+          },
+          "body": {
+            "en": "The Company shall endeavour to complete the project within the timeline specified in the quotation or within a reasonable period where no timeline is specified. However, the Company shall not be responsible for delays caused by approvals, shipment delays, transportation issues, weather conditions, or other factors beyond its reasonable control.",
+            "ml": "Quotation-ൽ പറഞ്ഞ സമയപരിധിക്കുള്ളിൽ പദ്ധതി പൂർത്തിയാക്കാൻ ഞങ്ങൾ ശ്രമിക്കും. എന്നാൽ സർക്കാർ അനുമതികൾ, കാലാവസ്ഥ, ഗതാഗത പ്രശ്നങ്ങൾ, ഷിപ്പിംഗ് വൈകൽ തുടങ്ങിയ നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ ഉണ്ടാകുന്ന കാലതാമസത്തിൽ കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Statutory & KSEB Related Scope",
+            "ml": "KSEB & നിയമപരമായ നടപടികൾ"
+          },
+          "body": {
+            "en": "Golden Ray Renewable Energy shall assist with statutory approvals and KSEB-related procedures as applicable. Any charges, deposits, penalties, load enhancement costs, tariff changes, name changes, ownership transfers, meter shifting, or similar modifications shall be borne by the customer.",
+            "ml": "KSEB-യുമായി ബന്ധപ്പെട്ട അപേക്ഷകൾക്കും നടപടികൾക്കും കമ്പനി സഹായം നൽകും. എന്നാൽ Load Enhancement, Tariff Change, Name Change, Ownership Transfer, Meter Shifting തുടങ്ങിയവയുമായി ബന്ധപ്പെട്ട എല്ലാ ചെലവുകളും ഉപഭോക്താവാണ് വഹിക്കേണ്ടത്."
+          }
+        },
+        {
+          "title": {
+            "en": "Government Subsidy Disclaimer",
+            "ml": "സർക്കാർ സബ്സിഡി"
+          },
+          "body": {
+            "en": "Government subsidy schemes, eligibility criteria, approval procedures, and reimbursement timelines are governed by the respective authorities and may change without prior notice. The Company shall not be responsible for delays, rejections, policy changes, reduction in subsidy amount, or subsidy disbursement timelines.",
+            "ml": "സബ്സിഡി പദ്ധതികൾ, അർഹതാ മാനദണ്ഡങ്ങൾ, അംഗീകാര നടപടികൾ, പണമടയ്ക്കൽ സമയം എന്നിവ സർക്കാർ നയങ്ങൾക്ക് വിധേയമാണ്. സബ്സിഡി വൈകുക, കുറയുക, നിരസിക്കപ്പെടുക തുടങ്ങിയ കാര്യങ്ങൾക്ക് കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Data Privacy",
+            "ml": "ഡാറ്റാ സ്വകാര്യത"
+          },
+          "body": {
+            "en": "The Company reserves the right to monitor, record, and utilize customer information and solar production data obtained directly from the system or through remote monitoring platforms. Such information may be shared with vendors, technical support teams, regulatory authorities, and other relevant agencies for warranty support, compliance requirements, research, service improvement, and promotional activities.",
+            "ml": "സിസ്റ്റത്തിൽ നിന്നോ Remote Monitoring Platform-കളിൽ നിന്നോ ലഭിക്കുന്ന ഉപഭോക്തൃ വിവരങ്ങളും ഉൽപ്പാദന വിവരങ്ങളും കമ്പനി നിരീക്ഷിക്കാനും രേഖപ്പെടുത്താനും ഉപയോഗിക്കാനും അധികാരമുള്ളതാണ്. Warranty, Service Support, ഗവേഷണം, സേവന മെച്ചപ്പെടുത്തൽ, പ്രചാരണ പ്രവർത്തനങ്ങൾ എന്നിവയ്ക്കായി ബന്ധപ്പെട്ട സ്ഥാപനങ്ങളുമായി ഈ വിവരങ്ങൾ പങ്കിടാവുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Additional Expenses & Civil Works",
+            "ml": "അധിക ചെലവുകളും സിവിൽ ജോലികളും"
+          },
+          "body": {
+            "en": "Unless specifically included in the quotation, charges relating to KSEB applications, registration, documentation, testing, agreements, net meter connections, additional structures, extended cable runs, site-specific modifications, and any civil work including foundation work, roof repairs, waterproofing, structural modifications, masonry work, painting, trenching, cutting, restoration work, or related activities shall be borne by the customer.",
+            "ml": "Quotation-ൽ പ്രത്യേകം ഉൾപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ KSEB Fees, Registration, Documentation, Net Meter Charges, അധിക Structure, Cable Extension, Foundation Work, Roof Repair, Waterproofing, Painting, Trenching, Masonry Work തുടങ്ങിയ ചെലവുകൾ ഉപഭോക്താവ് വഹിക്കേണ്ടതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Retention of Title",
+            "ml": "ഉടമസ്ഥാവകാശം"
+          },
+          "body": {
+            "en": "All materials, equipment, and goods supplied by the Company shall remain its property until full payment has been received and all outstanding dues have been cleared. Ownership shall transfer to the customer only upon complete settlement of outstanding dues.",
+            "ml": "കമ്പനി നൽകുന്ന എല്ലാ മെറ്റീരിയലുകളും ഉപകരണങ്ങളും പൂർണ്ണമായും പണമടയ്ക്കുന്നതുവരെ കമ്പനിയുടെ ഉടമസ്ഥതയിൽ തുടരും. എല്ലാ കുടിശ്ശികയും തീർത്തതിന് ശേഷം ഉടമസ്ഥാവകാശം ഉപഭോക്താവിലേക്ക് മാറ്റപ്പെടും."
+          }
+        },
+        {
+          "title": {
+            "en": "Liability",
+            "ml": "ബാധ്യതാ പരിമിതി"
+          },
+          "body": {
+            "en": "The Company shall not be liable for business interruption, loss of profit, loss of savings, or any indirect or consequential damages arising from the use or performance of the solar power system. Claims arising from non- compliance with operating, maintenance, or installation instructions shall also be excluded.",
+            "ml": "Solar System ഉപയോഗിക്കുന്നതിലൂടെ ഉണ്ടാകുന്ന ലാഭനഷ്ടം, വരുമാന നഷ്ടം, പരോക്ഷ നഷ്ടങ്ങൾ തുടങ്ങിയവയ്ക്ക് കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല. പ്രവർത്തന നിർദേശങ്ങൾ പാലിക്കാത്തതിൽ നിന്നുള്ള പ്രശ്നങ്ങൾ ഇതിൽ ഉൾപ്പെടുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Force Majeure",
+            "ml": "നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ (Force Majeure)"
+          },
+          "body": {
+            "en": "The Company shall not be liable for delays or failure to perform its obligations due to circumstances beyond its reasonable control. Such circumstances include natural disasters, strikes, transportation disruptions, utility delays, government actions, regulatory changes, or other Force Majeure events.",
+            "ml": "പ്രകൃതി ദുരന്തങ്ങൾ, പണിമുടക്ക്, ഗതാഗത തടസ്സങ്ങൾ, സർക്കാർ ഉത്തരവുകൾ, നിയമപരമായ മാറ്റങ്ങൾ തുടങ്ങിയ നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ മൂലമുള്ള കാലതാമസത്തിനും പ്രവർത്തന തടസ്സങ്ങൾക്കും കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Confidentiality",
+            "ml": "രഹസ്യാത്മകത"
+          },
+          "body": {
+            "en": "Both parties shall treat all non-public commercial and technical information exchanged during the course of the project as confidential. Such information shall not be disclosed to any third party without prior written consent, except where required by law.",
+            "ml": "പദ്ധതിയുമായി ബന്ധപ്പെട്ട വാണിജ്യ-സാങ്കേതിക വിവരങ്ങൾ ഇരുകൂട്ടരും രഹസ്യമായി സൂക്ഷിക്കണം. നിയമപരമായി ആവശ്യമായ സാഹചര്യങ്ങൾ ഒഴികെ മൂന്നാം കക്ഷികളുമായി വിവരങ്ങൾ പങ്കിടാൻ പാടില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Jurisdiction",
+            "ml": "നിയമപരമായ അധികാരപരിധി"
+          },
+          "body": {
+            "en": "This quotation and all related agreements shall be governed by the laws of India. Any disputes arising out of or in connection with this agreement shall be subject to the jurisdiction of the courts of Kerala.",
+            "ml": "ഈ Quotation-നും അതുമായി ബന്ധപ്പെട്ട എല്ലാ കരാറുകൾക്കും ഇന്ത്യൻ നിയമങ്ങൾ ബാധകമാണ്. തർക്കങ്ങൾ ഉണ്ടാകുമ്പോൾ കേരളത്തിലെ കോടതികളുടെ അധികാരപരിധിയിലായിരിക്കും അവ പരിഗണിക്കുക."
+          }
+        }
+      ],
+      "timeline": [
+        {
+          "days": {
+            "en": "1",
+            "ml": "1"
+          },
+          "title": {
+            "en": "Pay ₹5,000 — Slot Locked",
+            "ml": "₹5,000 നൽകി നിങ്ങളുടെ സ്ലോട്ട് ഉറപ്പാക്കൂ"
+          },
+          "body": {
+            "en": "Lock your installation slot with a small booking fee and we'll begin the technical assessment right away.",
+            "ml": "ഒരു ചെറിയ ബുക്കിംഗ് തുക നൽകി ഇൻസ്റ്റലേഷൻ സ്ലോട്ട് ഉറപ്പാക്കുകയും, സാങ്കേതിക പരിശോധന ആരംഭിക്കുകയും ചെയ്യും."
+          }
+        },
+        {
+          "days": {
+            "en": "3-4",
+            "ml": "3-4"
+          },
+          "title": {
+            "en": "Site Inspection & Documentation",
+            "ml": "സൈറ്റ് പരിശോധനയും ഡോക്യുമെന്റേഷൻ നടപടികളും"
+          },
+          "body": {
+            "en": "Our team visits your site to evaluate roof, wiring, and shading. All measurements and documentation are managed by us.",
+            "ml": "ഞങ്ങളുടെ ടീം നിങ്ങളുടെ വീടും മേൽക്കൂരയും പരിശോധിക്കും. ആവശ്യമായ അളവുകളും രേഖകളും ഞങ്ങൾ കൈകാര്യം ചെയ്യും."
+          }
+        },
+        {
+          "days": {
+            "en": "5-7",
+            "ml": "5-7"
+          },
+          "title": {
+            "en": "Payment and Material Delivery",
+            "ml": "പേയ്‌മെന്റും മെറ്റീരിയൽ ഡെലിവറിയും"
+          },
+          "body": {
+            "en": "Solar panels, inverters and structures are delivered to site; the installation-stage payment (80% / loan amount) follows.",
+            "ml": "സോളാർ പാനൽ, ഇൻവെർട്ടർ, സ്ട്രക്ചർ എന്നിവ സൈറ്റിലെത്തിക്കും. തുടർന്ന് ഇൻസ്റ്റലേഷൻ ഘട്ടത്തിലെ പേയ്‌മെന്റ് പൂർത്തിയാക്കാം."
+          }
+        },
+        {
+          "days": {
+            "en": "9-13",
+            "ml": "9-13"
+          },
+          "title": {
+            "en": "Installation",
+            "ml": "ഇൻസ്റ്റലേഷൻ"
+          },
+          "body": {
+            "en": "We handle the full installation and system integration. Once complete, your solar system is ready to produce clean energy.",
+            "ml": "സിസ്റ്റത്തിന്റെ മുഴുവൻ ഇൻസ്റ്റലേഷനും ഞങ്ങൾ നിർവഹിക്കും. ഇൻസ്റ്റലേഷൻ പൂർത്തിയായാൽ നിങ്ങളുടെ Solar System ഉൽപ്പാദിപ്പിക്കാൻ തുടങ്ങും."
+          }
+        },
+        {
+          "days": {
+            "en": "14",
+            "ml": "14"
+          },
+          "title": {
+            "en": "Commissioning and Customer Orientation",
+            "ml": "കമ്മീഷനിംഗും ഉപഭോക്തൃ പരിശീലനവും"
+          },
+          "body": {
+            "en": "We commission the system and walk you through operation, safety and maintenance.",
+            "ml": "സിസ്റ്റം പ്രവർത്തനക്ഷമമാക്കി ഉപയോഗ രീതികൾ, സുരക്ഷാ നിർദേശങ്ങൾ, അറ്റകുറ്റപ്പണികൾ എന്നിവ വിശദീകരിക്കും."
+          }
+        },
+        {
+          "days": {
+            "en": "15-17",
+            "ml": "15-17"
+          },
+          "title": {
+            "en": "Net Meter Installation and Activation",
+            "ml": "Net Meter ഇൻസ്റ്റലേഷനും ആക്ടിവേഷനും"
+          },
+          "body": {
+            "en": "The net meter is installed and the system connected to the grid — you start using solar power.",
+            "ml": "Net Meter സ്ഥാപിച്ച് Grid-ലേക്ക് കണക്ട് ചെയ്യും. തുടർന്ന് Solar വഴി വൈദ്യുതി ഉപയോഗം ആരംഭിക്കാം."
+          }
+        }
+      ],
+      "weHandle": [
+        {
+          "en": "Design the panels according to site-specific requirements",
+          "ml": "നിങ്ങളുടെ വീടിന് അനുയോജ്യമായ Solar System ഡിസൈനിംഗ്"
+        },
+        {
+          "en": "Analyze the site for shading and optimize panel placement",
+          "ml": "നിഴൽ പരിശോധനയും പാനൽ സ്ഥാപിക്കാനുള്ള മികച്ച സ്ഥാനം കണ്ടെത്തലും"
+        },
+        {
+          "en": "Procure Solar Panels, Inverter, Structure and BOQ according to project requirements",
+          "ml": "Solar Panel, Inverter, Structure, BOQ എന്നിവയുടെ ക്രമീകരണം"
+        },
+        {
+          "en": "Install all required components, fittings, and equipment",
+          "ml": "ആവശ്യമായ എല്ലാ ഉപകരണങ്ങളുടെയും ഇൻസ്റ്റലേഷൻ"
+        },
+        {
+          "en": "Test and commission the solar power plant; invite authorities for final approval before commissioning",
+          "ml": "സിസ്റ്റം പരിശോധന, കമ്മീഷനിംഗ്, ആവശ്യമായ അനുമതി നടപടികൾ"
+        },
+        {
+          "en": "Installation scope is limited to the DC side; solar meter installation is included",
+          "ml": "Solar Meter ഇൻസ്റ്റലേഷൻ ഉൾപ്പെടെയുള്ള DC Side ജോലികൾ"
+        },
+        {
+          "en": "Train the client's personnel on system operation, safety, and maintenance",
+          "ml": "സിസ്റ്റത്തിന്റെ ഉപയോഗം, സുരക്ഷ, പരിപാലനം എന്നിവയെക്കുറിച്ചുള്ള പരിശീലനം"
+        }
+      ],
+      "customerScope": [
+        {
+          "en": "Provide a shade-free roof area and a safe, weather-protected space for the inverter.",
+          "ml": "നിഴൽ ഇല്ലാത്ത മേൽക്കൂരയും ഇൻവെർട്ടറിനായി സുരക്ഷിതമായ സ്ഥലവും ഒരുക്കുക"
+        },
+        {
+          "en": "Arrange basic installation support, including water, electricity, storage space, and site access.",
+          "ml": "വെള്ളം, വൈദ്യുതി, സ്റ്റോറേജ് സൗകര്യം, സൈറ്റ് ആക്‌സസ് എന്നിവ ലഭ്യമാക്കുക"
+        },
+        {
+          "en": "Provide necessary technical provisions such as internet connectivity, termination points, CT/AC components, and upgrades required for HT or generator setups.",
+          "ml": "Internet Connection, CT/AC Components തുടങ്ങിയ ആവശ്യമായ സാങ്കേതിക സൗകര്യങ്ങൾ ഒരുക്കുക (ആവശ്യമെങ്കിൽ)"
+        },
+        {
+          "en": "Complete any KSEB-related requirements, including net metering formalities, load enhancement, consumer name change, ownership transfer, or other utility-related modifications, if applicable.",
+          "ml": "Net Metering, Load Enhancement, Name Change, Ownership Transfer തുടങ്ങിയ KSEB നടപടികൾ പൂർത്തിയാക്കുക (ബാധകമെങ്കിൽ)"
+        },
+        {
+          "en": "Pay applicable statutory fees, deposits, registration charges, and other charges imposed by KSEB or relevant authorities.",
+          "ml": "KSEB അല്ലെങ്കിൽ മറ്റ് അധികാരികൾ ഈടാക്കുന്ന ഫീസ്, ഡെപ്പോസിറ്റ്, രജിസ്ട്രേഷൻ ചാർജുകൾ എന്നിവ അടക്കുക"
+        },
+        {
+          "en": "Any civil work, roof repairs, waterproofing, structural modifications, trenching, masonry work, painting, restoration work, or additional structural work required for installation shall be under the customer's scope unless specifically included in the quotation.",
+          "ml": "Civil Work, Roof Repair, Waterproofing, Structural Modification, Trenching, Masonry Work തുടങ്ങിയ ജോലികൾ ക്വട്ടേഷനിൽ ഉൾപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്വമായിരിക്കും."
+        }
+      ],
+      "requiredDocuments": [
+        {
+          "en": "Bank Account details",
+          "ml": "ബാങ്ക് അക്കൗണ്ട് വിവരങ്ങൾ"
+        },
+        {
+          "en": "Aadhaar Card & PAN Card",
+          "ml": "ആധാർ കാർഡും PAN കാർഡും"
+        },
+        {
+          "en": "Address Proof",
+          "ml": "അഡ്രസ് പ്രൂഫ് (Address Proof)"
+        },
+        {
+          "en": "Salary slips / Bank statements (loan above ₹2 lakh)",
+          "ml": "ശമ്പള സ്ലിപ്പ് / ബാങ്ക് സ്റ്റേറ്റ്മെന്റ് (ലോൺ ₹2 ലക്ഷത്തിന് മുകളിൽ ആണെങ്കിൽ)"
+        },
+        {
+          "en": "Land tax / Building tax receipt",
+          "ml": "ഭൂനികുതി / കെട്ടിട നികുതി രസീത്"
+        },
+        {
+          "en": "Latest KSEB bill (2 months)",
+          "ml": "ഏറ്റവും പുതിയ 2 മാസത്തെ KSEB ബിൽ"
+        },
+        {
+          "en": "KSEB Feasibility Report",
+          "ml": "KSEB ഫീസിബിലിറ്റി റിപ്പോർട്ട്"
+        },
+        {
+          "en": "ITR (loan above ₹2 lakh)",
+          "ml": "ITR (ലോൺ ₹2 ലക്ഷത്തിന് മുകളിൽ ആണെങ്കിൽ)"
+        }
+      ],
+      "lifeNow": [
+        {
+          "title": {
+            "en": "Limiting AC Usage",
+            "ml": "AC ഉപയോഗത്തിൽ നിയന്ത്രണം"
+          },
+          "body": {
+            "en": "Constantly adjusting temperature, turning off rooms, compromising comfort",
+            "ml": "വൈദ്യുതി ബിൽ കൂടുമോ എന്ന ആശങ്ക കാരണം AC ഉപയോഗം പരിമിതപ്പെടുത്തേണ്ടി വരുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Electricity Anxiety",
+            "ml": "ഇന്ധനച്ചെലവിനെ ആശ്രയിക്കൽ"
+          },
+          "body": {
+            "en": "Constant worry about power cuts, generator costs, UPS limitations",
+            "ml": "പെട്രോൾ, ഡീസൽ വില വർധിക്കുന്നത് കുടുംബ ബജറ്റിനെ ബാധിക്കുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Gas & Fuel Expenses",
+            "ml": "ഗ്യാസ്, ഇന്ധന ചെലവുകൾ"
+          },
+          "body": {
+            "en": "Monthly LPG refills and rising fuel costs add to your household expenses",
+            "ml": "എൽ.പി.ജി. ഗ്യാസ് നിറയ്ക്കുന്നതിനും ഇന്ധന വില വർധനവിനും ഓരോ മാസവും അധിക ചെലവ് വരുന്നു."
+          }
+        }
+      ],
+      "lifeSolar": [
+        {
+          "title": {
+            "en": "Comfort Without Guilt",
+            "ml": "ആശങ്കകളില്ലാത്ത സൗകര്യം"
+          },
+          "body": {
+            "en": "Use AC freely, perfect temperature always, no compromises needed",
+            "ml": "ബിൽ കൂടുമെന്ന ഭയം കൂടാതെ ACയും മറ്റ് ഉപകരണങ്ങളും കൂടുതൽ സ്വതന്ത്രമായി ഉപയോഗിക്കാം."
+          }
+        },
+        {
+          "title": {
+            "en": "Complete Confidence",
+            "ml": "സ്വന്തം വൈദ്യുതി ഉൽപ്പാദനം"
+          },
+          "body": {
+            "en": "Peace of mind, future-ready home, smart investment that pays daily",
+            "ml": "നിങ്ങളുടെ വീട് തന്നെ ഒരു ചെറിയ പവർ സ്റ്റേഷനായി മാറുന്നു. Grid-നെ ആശ്രയിക്കുന്നത് കുറയുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Reduced Energy Expenses",
+            "ml": "ഊർജ്ജ ചെലവ് കുറയും"
+          },
+          "body": {
+            "en": "Lower monthly spending on electricity and household energy.",
+            "ml": "വൈദ്യുതിക്കും മറ്റ് ഊർജ്ജ ആവശ്യങ്ങൾക്കും വരുന്ന മാസച്ചെലവ് കുറയും."
+          }
+        }
+      ],
+      "extraStructureCost": {
+        "label": {
+          "en": "Additional Structure Cost (if required)",
+          "ml": "അധിക Structure Cost (ആവശ്യമെങ്കിൽ)"
+        },
+        "value": "₹4,500/kW"
+      },
+      "appliances": {
+        "master": [
+          {
+            "id": "lights_fans",
+            "name": {
+              "en": "Lights + Fans",
+              "ml": "Lights + Fans"
+            },
+            "icon": "💡",
+            "watts": 25,
+            "defaultHours": 5
+          },
+          {
+            "id": "refrigerator",
+            "name": {
+              "en": "Refrigerator",
+              "ml": "Refrigerator"
+            },
+            "icon": "🧊",
+            "watts": 60,
+            "defaultHours": 24
+          },
+          {
+            "id": "induction",
+            "name": {
+              "en": "Induction Stove",
+              "ml": "Induction Stove"
+            },
+            "icon": "🍳",
+            "watts": 1200,
+            "defaultHours": 1
+          },
+          {
+            "id": "washing_machine",
+            "name": {
+              "en": "Washing Machine",
+              "ml": "Washing Machine"
+            },
+            "icon": "🪣",
+            "watts": 500,
+            "defaultHours": 1
+          },
+          {
+            "id": "tv_ott",
+            "name": {
+              "en": "TV + OTT",
+              "ml": "TV + OTT"
+            },
+            "icon": "📺",
+            "watts": 100,
+            "defaultHours": 5
+          },
+          {
+            "id": "ac",
+            "name": {
+              "en": "Air Conditioner",
+              "ml": "Air Conditioner"
+            },
+            "icon": "❄️",
+            "watts": 1200,
+            "defaultHours": 5
+          },
+          {
+            "id": "inverter_chargers",
+            "name": {
+              "en": "Inverter + Chargers",
+              "ml": "Inverter + Chargers"
+            },
+            "icon": "🔌",
+            "watts": 20,
+            "defaultHours": 24
+          },
+          {
+            "id": "water_pump",
+            "name": {
+              "en": "Water Pump",
+              "ml": "Water Pump"
+            },
+            "icon": "🚰",
+            "watts": 750,
+            "defaultHours": 1,
+            "optional": true
+          },
+          {
+            "id": "water_heater",
+            "name": {
+              "en": "Water Heater",
+              "ml": "Water Heater"
+            },
+            "icon": "♨️",
+            "watts": 2000,
+            "defaultHours": 0.5,
+            "optional": true
+          },
+          {
+            "id": "ev_2w",
+            "name": {
+              "en": "EV Charging (2-wheeler)",
+              "ml": "EV Charging (2-wheeler)"
+            },
+            "icon": "🛵",
+            "watts": 1000,
+            "defaultHours": 1,
+            "optional": true
+          },
+          {
+            "id": "ev_car",
+            "name": {
+              "en": "EV Charging (car)",
+              "ml": "EV Charging (car)"
+            },
+            "icon": "🚗",
+            "watts": 3300,
+            "defaultHours": 1,
+            "optional": true
+          }
+        ],
+        "profiles": {
+          "3": [
+            {
+              "id": "lights_fans",
+              "qty": 10,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "inverter_chargers",
+              "qty": 1,
+              "hours": 24
+            }
+          ],
+          "5": [
+            {
+              "id": "lights_fans",
+              "qty": 15,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "inverter_chargers",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            }
+          ],
+          "8": [
+            {
+              "id": "lights_fans",
+              "qty": 20,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1.25
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 3,
+              "hours": 5
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "water_heater",
+              "qty": 1,
+              "hours": 0.5
+            },
+            {
+              "id": "ev_2w",
+              "qty": 1,
+              "hours": 1
+            }
+          ],
+          "10": [
+            {
+              "id": "lights_fans",
+              "qty": 25,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 2,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1.25
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 4,
+              "hours": 5
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "water_heater",
+              "qty": 1,
+              "hours": 0.5
+            },
+            {
+              "id": "ev_car",
+              "qty": 1,
+              "hours": 0.75
+            }
+          ]
+        }
+      }
+    }
+  },
+  "draft": {
+    "version": 2,
+    "updatedAt": null,
+    "updatedBy": null,
+    "content": {
+      "labels": {
+        "p1.headline": {
+          "en": "Stop Worrying About Electricity Bills Forever",
+          "ml": "വൈദ്യുതി ബില്ലിനെ കുറിച്ചുള്ള ആശങ്കകൾക്ക് ഇനി വിട"
+        },
+        "p1.subline": {
+          "en": "Empowering Kerala homes with clean energy, smart savings, and the joy of sustainability.",
+          "ml": "സുരക്ഷിതമായ ഊർജ്ജം, മികച്ച ലാഭം, ദീർഘകാല സാമ്പത്തിക സുരക്ഷ — നിങ്ങളുടെ വീടിനായി."
+        },
+        "p1.badge.subsidy": {
+          "en": "{amount} Subsidy",
+          "ml": "{amount} സബ്‌സിഡി"
+        },
+        "p1.badge.subsidy.sub": {
+          "en": "PM Surya Ghar – guaranteed",
+          "ml": "PM സൂര്യ ഘർ പദ്ധതിയിലൂടെ"
+        },
+        "p1.badge.homes": {
+          "en": "{count}+ Homes",
+          "ml": "{count}+ Homes"
+        },
+        "p1.badge.homes.sub": {
+          "en": "Installed in Kerala",
+          "ml": "വിജയകരമായ ഇൻസ്റ്റലേഷനുകൾ"
+        },
+        "p1.badge.mnre": {
+          "en": "MNRE Empanelled",
+          "ml": "MNRE Government"
+        },
+        "p1.badge.mnre.sub": {
+          "en": "Government certified",
+          "ml": "അംഗീകൃത സ്ഥാപനം"
+        },
+        "p1.dear": {
+          "en": "Dear {name},",
+          "ml": "പ്രിയ {name}"
+        },
+        "p1.letter1": {
+          "en": "Thank you for considering Flarize for your home.",
+          "ml": "നിങ്ങളുടെ വീടിനായി Flarize തിരഞ്ഞെടുക്കാൻ താൽപര്യം പ്രകടിപ്പിച്ചതിന് നന്ദി."
+        },
+        "p1.letter2": {
+          "en": "Choosing solar is one of the smartest decisions you can make for your home. It's more than reducing your electricity bill—it's about enjoying a better lifestyle, protecting your family from rising electricity costs, and investing in a home that continues to reward you for years to come.",
+          "ml": "സോളാർ തിരഞ്ഞെടുക്കുന്നത് വൈദ്യുതി ബിൽ കുറയ്ക്കാൻ മാത്രമല്ല. അത് നിങ്ങളുടെ കുടുംബത്തിന്റെ ഭാവിയിലേക്കുള്ള ഒരു മികച്ച നിക്ഷേപമാണ്. ഓരോ മാസവും ലാഭം നേടാനും, ഉയരുന്ന വൈദ്യുതി നിരക്കുകളിൽ നിന്ന് സംരക്ഷണം നേടാനും, വർഷങ്ങളോളം സ്വന്തം വൈദ്യുതി ഉപയോഗിക്കാനും ഇത് സഹായിക്കുന്നു."
+        },
+        "p1.letter3": {
+          "en": "We've carefully designed this solution specifically for your home's energy needs, so you can make your decision with complete confidence.",
+          "ml": "നിങ്ങളുടെ വീട്ടിലെ വൈദ്യുതി ഉപയോഗം, ആവശ്യകത, ബജറ്റ് എന്നിവ കണക്കിലെടുത്താണ് ഈ സോളാർ പദ്ധതി പ്രത്യേകം തയ്യാറാക്കിയിരിക്കുന്നത്. അതിനാൽ നിങ്ങൾക്ക് ആത്മവിശ്വാസത്തോടെ തീരുമാനമെടുക്കാം."
+        },
+        "p1.regards": {
+          "en": "Warm Regards,",
+          "ml": "സ്നേഹപൂർവ്വം"
+        },
+        "p1.team": {
+          "en": "Team Flarize",
+          "ml": "Flarize ടീം"
+        },
+        "p1.details.title": {
+          "en": "YOUR PROPOSAL DETAILS",
+          "ml": "YOUR PROPOSAL DETAILS"
+        },
+        "p1.f.name": {
+          "en": "Name",
+          "ml": "പേര്"
+        },
+        "p1.f.address": {
+          "en": "Address",
+          "ml": "വിലാസം"
+        },
+        "p1.f.pincode": {
+          "en": "Pincode",
+          "ml": "പിൻകോഡ്"
+        },
+        "p1.f.phone": {
+          "en": "Phone Number",
+          "ml": "ഫോൺ നമ്പർ"
+        },
+        "p1.f.bill": {
+          "en": "Current Bill",
+          "ml": "നിലവിലെ വൈദ്യുതി ബിൽ"
+        },
+        "p1.f.size": {
+          "en": "System Size",
+          "ml": "സോളാർ സിസ്റ്റം"
+        },
+        "p1.f.qno": {
+          "en": "Quotation No.",
+          "ml": "ക്വട്ടേഷൻ നമ്പർ"
+        },
+        "p1.f.by": {
+          "en": "Proposal By",
+          "ml": "നിർദ്ദേശം നൽകുന്നത്"
+        },
+        "p1.f.date": {
+          "en": "Date",
+          "ml": "തീയതി"
+        },
+        "p1.f.valid": {
+          "en": "Valid Until",
+          "ml": "കാലാവധി"
+        },
+        "p1.f.gst": {
+          "en": "GST No",
+          "ml": "GST നമ്പർ"
+        },
+        "p1.f.reg": {
+          "en": "Company Registration",
+          "ml": "കമ്പനി രജിസ്ട്രേഷൻ നമ്പർ"
+        },
+        "p3.title": {
+          "en": "See Exactly What Your Solar Powers Every Day",
+          "ml": "നിങ്ങളുടെ Solar ഓരോ ദിവസവും എന്തെല്ലാം പ്രവർത്തിപ്പിക്കുന്നു"
+        },
+        "p3.subtitle": {
+          "en": "Real numbers calculated from your usage — not estimates.",
+          "ml": "നിങ്ങളുടെ വൈദ്യുതി ഉപയോഗത്തെ അടിസ്ഥാനമാക്കി കണക്കാക്കിയ യഥാർത്ഥ വിവരങ്ങൾ"
+        },
+        "p3.gen.label": {
+          "en": "Your Daily Solar Generation",
+          "ml": "പ്രതിദിന ഉൽപ്പാദനം"
+        },
+        "p3.gen.units": {
+          "en": "units",
+          "ml": "units"
+        },
+        "p3.gen.note": {
+          "en": "Average across all seasons",
+          "ml": "എല്ലാ സീസണുകളിലെയും ശരാശരി ഉൽപ്പാദനം"
+        },
+        "p3.value.label": {
+          "en": "Monthly Value at KSEB Rate",
+          "ml": "നിലവിലെ KSEB നിരക്കിൽ മാസത്തിലെ മൂല്യം"
+        },
+        "p3.value.note": {
+          "en": "Worth of free electricity every month",
+          "ml": "ഓരോ മാസവും ലഭിക്കുന്ന സൗജന്യ വൈദ്യുതിയുടെ മൂല്യം"
+        },
+        "p3.table.title": {
+          "en": "Your Daily Appliance Usage",
+          "ml": "നിങ്ങളുടെ വീടിന്റെ പ്രതിദിന വൈദ്യുതി ഉപയോഗം"
+        },
+        "p3.th.appliance": {
+          "en": "Appliance",
+          "ml": "ഉപകരണം"
+        },
+        "p3.th.qty": {
+          "en": "Quantity",
+          "ml": "എണ്ണം"
+        },
+        "p3.th.hours": {
+          "en": "Hours/Day",
+          "ml": "ദിവസേന"
+        },
+        "p3.th.units": {
+          "en": "Units/Day",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.hrs": {
+          "en": "hrs",
+          "ml": "മണിക്കൂർ"
+        },
+        "p3.hr": {
+          "en": "hr",
+          "ml": "മണിക്കൂർ"
+        },
+        "p3.units": {
+          "en": "units",
+          "ml": "യൂണിറ്റ്"
+        },
+        "p3.total": {
+          "en": "Total Daily Usage:",
+          "ml": "ആകെ പ്രതിദിന ഉപയോഗം:"
+        },
+        "p3.card.gen": {
+          "en": "Solar Generates",
+          "ml": "Solar ഉൽപ്പാദിപ്പിക്കുന്നത്"
+        },
+        "p3.card.use": {
+          "en": "Your Home Uses",
+          "ml": "നിങ്ങളുടെ വീടിന്റെ ഉപയോഗം"
+        },
+        "p3.card.surplus": {
+          "en": "Surplus Exported",
+          "ml": "അധിക വൈദ്യുതി KSEB-ലേക്ക്"
+        },
+        "p3.card.gen.note": {
+          "en": "units/day (average)",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.card.use.note": {
+          "en": "units/day (all appliances)",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.card.surplus.note": {
+          "en": "units/day → KSEB credits",
+          "ml": "യൂണിറ്റ് / ദിവസം"
+        },
+        "p3.lifeNow": {
+          "en": "Your Life Now",
+          "ml": "ഇപ്പോഴത്തെ അവസ്ഥ"
+        },
+        "p3.lifeSolar": {
+          "en": "Your Life with Solar",
+          "ml": "Solar-നൊപ്പം നിങ്ങളുടെ ജീവിതം"
+        },
+        "p9.title": {
+          "en": "From Booking to Savings — Step by Step",
+          "ml": "ബുക്കിംഗ് മുതൽ ലാഭം വരെ — ഓരോ ഘട്ടവും വ്യക്തമായി"
+        },
+        "p9.days": {
+          "en": "DAYS",
+          "ml": "ദിവസം"
+        },
+        "p9.refund.title": {
+          "en": "REFUND FROM KSEB",
+          "ml": "KSEB-യിൽ നിന്ന് ലഭിക്കുന്ന റീഫണ്ട്"
+        },
+        "p9.refund.body": {
+          "en": "80% of the pre-tax value of the registration fee is refunded by KSEB (₹1,000 per kW + 18% GST basis).",
+          "ml": "രജിസ്ട്രേഷൻ ഫീസിന്റെ Pre-Tax തുകയുടെ 80% വരെ KSEB-യിൽ നിന്ന് തിരികെ ലഭിക്കും. (₹1,000 per kW + 18% GST അടിസ്ഥാനത്തിൽ)"
+        },
+        "p9.refund.line": {
+          "en": "{kw} kW system — approx. ₹{amount} refund",
+          "ml": "{kw} kW സിസ്റ്റത്തിന് ഏകദേശം ₹{amount} വരെ റീഫണ്ട്"
+        },
+        "p9.weHandle": {
+          "en": "WHAT WE HANDLE",
+          "ml": "ഞങ്ങൾ കൈകാര്യം ചെയ്യുന്നത്"
+        },
+        "p9.customerScope": {
+          "en": "WHAT YOU NEED TO DO",
+          "ml": "നിങ്ങൾ ചെയ്യേണ്ടത് (CUSTOMER SCOPE)"
+        },
+        "p10.title": {
+          "en": "Terms and Conditions",
+          "ml": "നിബന്ധനകളും വ്യവസ്ഥകളും"
+        },
+        "p8.docs.title": {
+          "en": "Required Documents:",
+          "ml": "ആവശ്യമായ രേഖകൾ"
+        },
+        "p8.structure.label": {
+          "en": "Additional Structure Cost (if required)",
+          "ml": "അധിക Structure Cost (ആവശ്യമെങ്കിൽ)"
+        }
+      },
+      "terms": [
+        {
+          "title": {
+            "en": "Warranty",
+            "ml": "വാറന്റി"
+          },
+          "body": {
+            "en": "Golden Ray Renewable Energy provides a five (5) year warranty for the complete solar power system against manufacturing and technical defects, subject to the terms and conditions mentioned herein. Solar panels, inverters, and other OEM products shall carry warranty coverage as provided by their respective manufacturers.",
+            "ml": "Golden Ray Renewable Energy നൽകുന്ന മുഴുവൻ Solar System-നും നിർമ്മാണപരമായും സാങ്കേതികപരമായും ഉണ്ടാവാവുന്ന തകരാറുകൾക്കെതിരെ 5 വർഷത്തെ വാറന്റി ലഭിക്കും. പാനൽ, ഇൻവെർട്ടർ, മറ്റ് ഉപകരണങ്ങൾ എന്നിവയ്ക്ക് അതത് നിർമ്മാതാക്കൾ നൽകുന്ന വാറന്റി ബാധകമായിരിക്കും."
+          }
+        },
+        {
+          "title": {
+            "en": "Warranty Exclusions",
+            "ml": "വാറന്റിയിൽ ഉൾപ്പെടാത്തവ"
+          },
+          "body": {
+            "en": "The warranty shall not apply to defects or damages resulting from misuse, negligence, unauthorized modifications, third-party interference, improper operation, storage, or maintenance. Warranty coverage also excludes damage caused by accidents, natural calamities, lightning, flooding, landslides, external grid surges, or any other Force Majeure events.",
+            "ml": "തെറ്റായ ഉപയോഗം, അശ്രദ്ധ, അനധികൃത മാറ്റങ്ങൾ, മൂന്നാം കക്ഷികളുടെ ഇടപെടൽ, തെറ്റായ പരിപാലനം, അപകടങ്ങൾ, മിന്നൽ, വെള്ളപ്പൊക്കം, ഉരുൾപൊട്ടൽ, പ്രകൃതി ദുരന്തങ്ങൾ, വൈദ്യുതി ലൈൻ സർജുകൾ എന്നിവ മൂലമുള്ള കേടുപാടുകൾ വാറന്റിയിൽ ഉൾപ്പെടുന്നതല്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Consumables",
+            "ml": "ഉപഭോഗ വസ്തുക്കൾ (Consumables)"
+          },
+          "body": {
+            "en": "Consumable and protective components such as Fuses, Surge Protection Devices (SPDs), connectors, and similar accessories are not covered under warranty and may require periodic replacement as part of normal maintenance.",
+            "ml": "Fuse, SPD (Surge Protection Device), Connectors എന്നിവയുൾപ്പെടെയുള്ള ഉപഭോഗ വസ്തുക്കൾ വാറന്റിയിൽ ഉൾപ്പെടില്ല. സാധാരണ പരിപാലനത്തിന്റെ ഭാഗമായി ഇവ ആവശ്യാനുസരണം മാറ്റിസ്ഥാപിക്കേണ്ടതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Customer Responsibilities",
+            "ml": "ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്തങ്ങൾ"
+          },
+          "body": {
+            "en": "The customer shall provide a shade-free area suitable for solar panel installation along with adequate space for inverters, meters, and associated equipment. Water access for panel cleaning, site accessibility, internet connectivity for monitoring systems, and any loading or unloading arrangements at site shall be arranged by the customer. If vehicle access to the installation site is restricted or unavailable, the customer shall arrange the necessary manpower or alternate transportation required for material movement, installation, servicing, or maintenance activities. Any additional costs arising due to restricted site access shall be borne by the customer.",
+            "ml": "Solar Panel സ്ഥാപിക്കുന്ന നിഴൽ തടസ്സമില്ലാത്ത സ്ഥലം, ഇൻവെർട്ടറിനും മറ്റ് ഉപകരണങ്ങൾക്കും ആവശ്യമായ ഇടം എന്നിവ ഉപഭോക്താവ് ഒരുക്കണം. വെള്ളം, ഇന്റർനെറ്റ്, സൈറ്റ് ആക്സ സ്, ലോഡിംഗ്/അൺലോഡിംഗ് സൗകര്യങ്ങൾ എന്നിവയും ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്തമാണ്. വാഹന പ്രവേശനം ലഭ്യമല്ലെങ്കിൽ ആവശ്യമായ ആളുകളെയോ മറ്റ് സൗകര്യങ്ങളെയോ ഉപഭോക്താവ് ഒരുക്കണം."
+          }
+        },
+        {
+          "title": {
+            "en": "Service & Training",
+            "ml": "സേവനവും പരിശീലനവും"
+          },
+          "body": {
+            "en": "Basic service and maintenance training shall be provided to the customer at the time of commissioning. Standby inverter support may be provided during inverter repair periods, subject to availability.",
+            "ml": "സിസ്റ്റം പ്രവർത്തനം ആരംഭിക്കുന്ന സമയത്ത് അടിസ്ഥാന സേവന-പരിപാലന പരിശീലനം നൽകും. ഇൻവെർട്ടർ അറ്റകുറ്റപ്പണി നടക്കുന്ന സമയത്ത്, ലഭ്യതയ്ക്ക് വിധേയമായി Standby Inverter Support നൽകാവുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Payment Terms",
+            "ml": "പണമടയ്ക്കൽ നിബന്ധനകൾ"
+          },
+          "body": {
+            "en": "Payments shall be made as per the payment schedule agreed in the quotation and are due immediately upon completion of each project stage. In case the project duration is extended, invoices for completed work, supplied materials, or specially ordered materials may be raised periodically and shall be payable upon receipt. Any additional charges arising from scope changes, statutory requirements, material variations, or customer-requested modifications shall be paid before the related work is undertaken. The agreed project price shall be considered final upon acceptance of the quotation and requests for price reductions, discounts, or renegotiation after order confirmation shall not be entertained. Payments shall be made only to the official bank account of Golden Ray Renewable Energy, and the Company shall not be responsible for payments made to employee or third-party accounts. Eligible refunds shall be processed within seven (7) working days, subject to banking procedures.",
+            "ml": "Quotation-ൽ വ്യക്തമാക്കിയിരിക്കുന്ന Payment Schedule അനുസരിച്ച് ഓരോ ഘട്ടവും പൂർത്തിയാകുമ്പോൾ പണമടയ്ക്കണം. Scope മാറ്റങ്ങൾ, അധിക ജോലികൾ, മെറ്റീരിയൽ വ്യത്യാസങ്ങൾ എന്നിവ മൂലമുള്ള അധിക തുക ബന്ധപ്പെട്ട ജോലി ആരംഭിക്കുന്നതിന് മുമ്പ് അടയ്ക്കേണ്ടതാണ്. Quotation അംഗീകരിച്ചതിന് ശേഷം വില അന്തിമമായി കണക്കാക്കും. പിന്നീട് വിലക്കുറവ്, ഡിസ്കൗ ണ്ട്, പുനഃചർച്ച എന്നിവ അനുവദിക്കില്ല. പണമടയ്ക്കൽ കമ്പനിയുടെ ഔദ്യോഗിക ബാങ്ക് അക്കൗണ്ടിലേക്ക് മാത്രമേ നടത്താവൂ. അർഹമായ Refund-കൾ 7 പ്രവൃത്തി ദിവസത്തിനുള്ളിൽ നൽകുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Price Variations",
+            "ml": "വില വ്യത്യാസങ്ങൾ"
+          },
+          "body": {
+            "en": "If payments are not made as agreed, any increase in labour costs, material costs, taxes, duties, or statutory charges occurring after the quotation date may be charged additionally to the customer. Such revisions shall be reflected in the final invoice.",
+            "ml": "കരാറനുസരിച്ചുള്ള പണമടയ്ക്കൽ വൈകുകയാണെങ്കിൽ, തൊഴിൽ ചെലവ്, മെറ്റീരിയൽ വില, നികുതി, സർക്കാർ ഫീസ് എന്നിവയിലെ വർധനവ് ഉപഭോക്താവിൽ നിന്ന് ഈടാക്കും."
+          }
+        },
+        {
+          "title": {
+            "en": "GST & Tax Changes",
+            "ml": "GST & നികുതി മാറ്റങ്ങൾ"
+          },
+          "body": {
+            "en": "Prices quoted are inclusive of applicable GST and taxes prevailing on the date of quotation. Any revision in GST, government levies, duties, or statutory charges shall be reflected in the final invoice.",
+            "ml": "Quotation നൽകുന്ന സമയത്തെ GSTയും മറ്റ് നികുതികളും ഉൾപ്പെടുത്തിയതാണ് വില. പിന്നീട് സർക്കാർ നികുതികളിൽ മാറ്റമുണ്ടായാൽ അത് അന്തിമ ബില്ലിൽ ഉൾപ്പെടുത്തും."
+          }
+        },
+        {
+          "title": {
+            "en": "System Capacity & Product Confirmation",
+            "ml": "സിസ്റ്റം സ്ഥിരീകരണം"
+          },
+          "body": {
+            "en": "Once the customer confirms the system capacity, panel make/model, inverter make/model, and quotation, subsequent changes may not be possible. Any changes requested thereafter may result in revised pricing, additional charges, material replacement costs, or project delays.",
+            "ml": "സിസ്റ്റം ശേഷി, പാനൽ മോഡൽ, ഇൻവെർട്ടർ മോഡൽ, Quotation എന്നിവ ഉപഭോക്താവ് അംഗീകരിച്ച ശേഷം മാറ്റങ്ങൾ വരുത്തുന്നത് അധിക ചെലവിനും കാലതാമസത്തിനും കാരണമായേക്കാം."
+          }
+        },
+        {
+          "title": {
+            "en": "Project Completion Timeline",
+            "ml": "പദ്ധതി പൂർത്തീകരണ സമയം"
+          },
+          "body": {
+            "en": "The Company shall endeavour to complete the project within the timeline specified in the quotation or within a reasonable period where no timeline is specified. However, the Company shall not be responsible for delays caused by approvals, shipment delays, transportation issues, weather conditions, or other factors beyond its reasonable control.",
+            "ml": "Quotation-ൽ പറഞ്ഞ സമയപരിധിക്കുള്ളിൽ പദ്ധതി പൂർത്തിയാക്കാൻ ഞങ്ങൾ ശ്രമിക്കും. എന്നാൽ സർക്കാർ അനുമതികൾ, കാലാവസ്ഥ, ഗതാഗത പ്രശ്നങ്ങൾ, ഷിപ്പിംഗ് വൈകൽ തുടങ്ങിയ നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ ഉണ്ടാകുന്ന കാലതാമസത്തിൽ കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Statutory & KSEB Related Scope",
+            "ml": "KSEB & നിയമപരമായ നടപടികൾ"
+          },
+          "body": {
+            "en": "Golden Ray Renewable Energy shall assist with statutory approvals and KSEB-related procedures as applicable. Any charges, deposits, penalties, load enhancement costs, tariff changes, name changes, ownership transfers, meter shifting, or similar modifications shall be borne by the customer.",
+            "ml": "KSEB-യുമായി ബന്ധപ്പെട്ട അപേക്ഷകൾക്കും നടപടികൾക്കും കമ്പനി സഹായം നൽകും. എന്നാൽ Load Enhancement, Tariff Change, Name Change, Ownership Transfer, Meter Shifting തുടങ്ങിയവയുമായി ബന്ധപ്പെട്ട എല്ലാ ചെലവുകളും ഉപഭോക്താവാണ് വഹിക്കേണ്ടത്."
+          }
+        },
+        {
+          "title": {
+            "en": "Government Subsidy Disclaimer",
+            "ml": "സർക്കാർ സബ്സിഡി"
+          },
+          "body": {
+            "en": "Government subsidy schemes, eligibility criteria, approval procedures, and reimbursement timelines are governed by the respective authorities and may change without prior notice. The Company shall not be responsible for delays, rejections, policy changes, reduction in subsidy amount, or subsidy disbursement timelines.",
+            "ml": "സബ്സിഡി പദ്ധതികൾ, അർഹതാ മാനദണ്ഡങ്ങൾ, അംഗീകാര നടപടികൾ, പണമടയ്ക്കൽ സമയം എന്നിവ സർക്കാർ നയങ്ങൾക്ക് വിധേയമാണ്. സബ്സിഡി വൈകുക, കുറയുക, നിരസിക്കപ്പെടുക തുടങ്ങിയ കാര്യങ്ങൾക്ക് കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Data Privacy",
+            "ml": "ഡാറ്റാ സ്വകാര്യത"
+          },
+          "body": {
+            "en": "The Company reserves the right to monitor, record, and utilize customer information and solar production data obtained directly from the system or through remote monitoring platforms. Such information may be shared with vendors, technical support teams, regulatory authorities, and other relevant agencies for warranty support, compliance requirements, research, service improvement, and promotional activities.",
+            "ml": "സിസ്റ്റത്തിൽ നിന്നോ Remote Monitoring Platform-കളിൽ നിന്നോ ലഭിക്കുന്ന ഉപഭോക്തൃ വിവരങ്ങളും ഉൽപ്പാദന വിവരങ്ങളും കമ്പനി നിരീക്ഷിക്കാനും രേഖപ്പെടുത്താനും ഉപയോഗിക്കാനും അധികാരമുള്ളതാണ്. Warranty, Service Support, ഗവേഷണം, സേവന മെച്ചപ്പെടുത്തൽ, പ്രചാരണ പ്രവർത്തനങ്ങൾ എന്നിവയ്ക്കായി ബന്ധപ്പെട്ട സ്ഥാപനങ്ങളുമായി ഈ വിവരങ്ങൾ പങ്കിടാവുന്നതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Additional Expenses & Civil Works",
+            "ml": "അധിക ചെലവുകളും സിവിൽ ജോലികളും"
+          },
+          "body": {
+            "en": "Unless specifically included in the quotation, charges relating to KSEB applications, registration, documentation, testing, agreements, net meter connections, additional structures, extended cable runs, site-specific modifications, and any civil work including foundation work, roof repairs, waterproofing, structural modifications, masonry work, painting, trenching, cutting, restoration work, or related activities shall be borne by the customer.",
+            "ml": "Quotation-ൽ പ്രത്യേകം ഉൾപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ KSEB Fees, Registration, Documentation, Net Meter Charges, അധിക Structure, Cable Extension, Foundation Work, Roof Repair, Waterproofing, Painting, Trenching, Masonry Work തുടങ്ങിയ ചെലവുകൾ ഉപഭോക്താവ് വഹിക്കേണ്ടതാണ്."
+          }
+        },
+        {
+          "title": {
+            "en": "Retention of Title",
+            "ml": "ഉടമസ്ഥാവകാശം"
+          },
+          "body": {
+            "en": "All materials, equipment, and goods supplied by the Company shall remain its property until full payment has been received and all outstanding dues have been cleared. Ownership shall transfer to the customer only upon complete settlement of outstanding dues.",
+            "ml": "കമ്പനി നൽകുന്ന എല്ലാ മെറ്റീരിയലുകളും ഉപകരണങ്ങളും പൂർണ്ണമായും പണമടയ്ക്കുന്നതുവരെ കമ്പനിയുടെ ഉടമസ്ഥതയിൽ തുടരും. എല്ലാ കുടിശ്ശികയും തീർത്തതിന് ശേഷം ഉടമസ്ഥാവകാശം ഉപഭോക്താവിലേക്ക് മാറ്റപ്പെടും."
+          }
+        },
+        {
+          "title": {
+            "en": "Liability",
+            "ml": "ബാധ്യതാ പരിമിതി"
+          },
+          "body": {
+            "en": "The Company shall not be liable for business interruption, loss of profit, loss of savings, or any indirect or consequential damages arising from the use or performance of the solar power system. Claims arising from non- compliance with operating, maintenance, or installation instructions shall also be excluded.",
+            "ml": "Solar System ഉപയോഗിക്കുന്നതിലൂടെ ഉണ്ടാകുന്ന ലാഭനഷ്ടം, വരുമാന നഷ്ടം, പരോക്ഷ നഷ്ടങ്ങൾ തുടങ്ങിയവയ്ക്ക് കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല. പ്രവർത്തന നിർദേശങ്ങൾ പാലിക്കാത്തതിൽ നിന്നുള്ള പ്രശ്നങ്ങൾ ഇതിൽ ഉൾപ്പെടുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Force Majeure",
+            "ml": "നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ (Force Majeure)"
+          },
+          "body": {
+            "en": "The Company shall not be liable for delays or failure to perform its obligations due to circumstances beyond its reasonable control. Such circumstances include natural disasters, strikes, transportation disruptions, utility delays, government actions, regulatory changes, or other Force Majeure events.",
+            "ml": "പ്രകൃതി ദുരന്തങ്ങൾ, പണിമുടക്ക്, ഗതാഗത തടസ്സങ്ങൾ, സർക്കാർ ഉത്തരവുകൾ, നിയമപരമായ മാറ്റങ്ങൾ തുടങ്ങിയ നിയന്ത്രണാതീത സാഹചര്യങ്ങൾ മൂലമുള്ള കാലതാമസത്തിനും പ്രവർത്തന തടസ്സങ്ങൾക്കും കമ്പനി ഉത്തരവാദിയായിരിക്കില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Confidentiality",
+            "ml": "രഹസ്യാത്മകത"
+          },
+          "body": {
+            "en": "Both parties shall treat all non-public commercial and technical information exchanged during the course of the project as confidential. Such information shall not be disclosed to any third party without prior written consent, except where required by law.",
+            "ml": "പദ്ധതിയുമായി ബന്ധപ്പെട്ട വാണിജ്യ-സാങ്കേതിക വിവരങ്ങൾ ഇരുകൂട്ടരും രഹസ്യമായി സൂക്ഷിക്കണം. നിയമപരമായി ആവശ്യമായ സാഹചര്യങ്ങൾ ഒഴികെ മൂന്നാം കക്ഷികളുമായി വിവരങ്ങൾ പങ്കിടാൻ പാടില്ല."
+          }
+        },
+        {
+          "title": {
+            "en": "Jurisdiction",
+            "ml": "നിയമപരമായ അധികാരപരിധി"
+          },
+          "body": {
+            "en": "This quotation and all related agreements shall be governed by the laws of India. Any disputes arising out of or in connection with this agreement shall be subject to the jurisdiction of the courts of Kerala.",
+            "ml": "ഈ Quotation-നും അതുമായി ബന്ധപ്പെട്ട എല്ലാ കരാറുകൾക്കും ഇന്ത്യൻ നിയമങ്ങൾ ബാധകമാണ്. തർക്കങ്ങൾ ഉണ്ടാകുമ്പോൾ കേരളത്തിലെ കോടതികളുടെ അധികാരപരിധിയിലായിരിക്കും അവ പരിഗണിക്കുക."
+          }
+        }
+      ],
+      "timeline": [
+        {
+          "days": {
+            "en": "1",
+            "ml": "1"
+          },
+          "title": {
+            "en": "Pay ₹5,000 — Slot Locked",
+            "ml": "₹5,000 നൽകി നിങ്ങളുടെ സ്ലോട്ട് ഉറപ്പാക്കൂ"
+          },
+          "body": {
+            "en": "Lock your installation slot with a small booking fee and we'll begin the technical assessment right away.",
+            "ml": "ഒരു ചെറിയ ബുക്കിംഗ് തുക നൽകി ഇൻസ്റ്റലേഷൻ സ്ലോട്ട് ഉറപ്പാക്കുകയും, സാങ്കേതിക പരിശോധന ആരംഭിക്കുകയും ചെയ്യും."
+          }
+        },
+        {
+          "days": {
+            "en": "3-4",
+            "ml": "3-4"
+          },
+          "title": {
+            "en": "Site Inspection & Documentation",
+            "ml": "സൈറ്റ് പരിശോധനയും ഡോക്യുമെന്റേഷൻ നടപടികളും"
+          },
+          "body": {
+            "en": "Our team visits your site to evaluate roof, wiring, and shading. All measurements and documentation are managed by us.",
+            "ml": "ഞങ്ങളുടെ ടീം നിങ്ങളുടെ വീടും മേൽക്കൂരയും പരിശോധിക്കും. ആവശ്യമായ അളവുകളും രേഖകളും ഞങ്ങൾ കൈകാര്യം ചെയ്യും."
+          }
+        },
+        {
+          "days": {
+            "en": "5-7",
+            "ml": "5-7"
+          },
+          "title": {
+            "en": "Payment and Material Delivery",
+            "ml": "പേയ്‌മെന്റും മെറ്റീരിയൽ ഡെലിവറിയും"
+          },
+          "body": {
+            "en": "Solar panels, inverters and structures are delivered to site; the installation-stage payment (80% / loan amount) follows.",
+            "ml": "സോളാർ പാനൽ, ഇൻവെർട്ടർ, സ്ട്രക്ചർ എന്നിവ സൈറ്റിലെത്തിക്കും. തുടർന്ന് ഇൻസ്റ്റലേഷൻ ഘട്ടത്തിലെ പേയ്‌മെന്റ് പൂർത്തിയാക്കാം."
+          }
+        },
+        {
+          "days": {
+            "en": "9-13",
+            "ml": "9-13"
+          },
+          "title": {
+            "en": "Installation",
+            "ml": "ഇൻസ്റ്റലേഷൻ"
+          },
+          "body": {
+            "en": "We handle the full installation and system integration. Once complete, your solar system is ready to produce clean energy.",
+            "ml": "സിസ്റ്റത്തിന്റെ മുഴുവൻ ഇൻസ്റ്റലേഷനും ഞങ്ങൾ നിർവഹിക്കും. ഇൻസ്റ്റലേഷൻ പൂർത്തിയായാൽ നിങ്ങളുടെ Solar System ഉൽപ്പാദിപ്പിക്കാൻ തുടങ്ങും."
+          }
+        },
+        {
+          "days": {
+            "en": "14",
+            "ml": "14"
+          },
+          "title": {
+            "en": "Commissioning and Customer Orientation",
+            "ml": "കമ്മീഷനിംഗും ഉപഭോക്തൃ പരിശീലനവും"
+          },
+          "body": {
+            "en": "We commission the system and walk you through operation, safety and maintenance.",
+            "ml": "സിസ്റ്റം പ്രവർത്തനക്ഷമമാക്കി ഉപയോഗ രീതികൾ, സുരക്ഷാ നിർദേശങ്ങൾ, അറ്റകുറ്റപ്പണികൾ എന്നിവ വിശദീകരിക്കും."
+          }
+        },
+        {
+          "days": {
+            "en": "15-17",
+            "ml": "15-17"
+          },
+          "title": {
+            "en": "Net Meter Installation and Activation",
+            "ml": "Net Meter ഇൻസ്റ്റലേഷനും ആക്ടിവേഷനും"
+          },
+          "body": {
+            "en": "The net meter is installed and the system connected to the grid — you start using solar power.",
+            "ml": "Net Meter സ്ഥാപിച്ച് Grid-ലേക്ക് കണക്ട് ചെയ്യും. തുടർന്ന് Solar വഴി വൈദ്യുതി ഉപയോഗം ആരംഭിക്കാം."
+          }
+        }
+      ],
+      "weHandle": [
+        {
+          "en": "Design the panels according to site-specific requirements",
+          "ml": "നിങ്ങളുടെ വീടിന് അനുയോജ്യമായ Solar System ഡിസൈനിംഗ്"
+        },
+        {
+          "en": "Analyze the site for shading and optimize panel placement",
+          "ml": "നിഴൽ പരിശോധനയും പാനൽ സ്ഥാപിക്കാനുള്ള മികച്ച സ്ഥാനം കണ്ടെത്തലും"
+        },
+        {
+          "en": "Procure Solar Panels, Inverter, Structure and BOQ according to project requirements",
+          "ml": "Solar Panel, Inverter, Structure, BOQ എന്നിവയുടെ ക്രമീകരണം"
+        },
+        {
+          "en": "Install all required components, fittings, and equipment",
+          "ml": "ആവശ്യമായ എല്ലാ ഉപകരണങ്ങളുടെയും ഇൻസ്റ്റലേഷൻ"
+        },
+        {
+          "en": "Test and commission the solar power plant; invite authorities for final approval before commissioning",
+          "ml": "സിസ്റ്റം പരിശോധന, കമ്മീഷനിംഗ്, ആവശ്യമായ അനുമതി നടപടികൾ"
+        },
+        {
+          "en": "Installation scope is limited to the DC side; solar meter installation is included",
+          "ml": "Solar Meter ഇൻസ്റ്റലേഷൻ ഉൾപ്പെടെയുള്ള DC Side ജോലികൾ"
+        },
+        {
+          "en": "Train the client's personnel on system operation, safety, and maintenance",
+          "ml": "സിസ്റ്റത്തിന്റെ ഉപയോഗം, സുരക്ഷ, പരിപാലനം എന്നിവയെക്കുറിച്ചുള്ള പരിശീലനം"
+        }
+      ],
+      "customerScope": [
+        {
+          "en": "Provide a shade-free roof area and a safe, weather-protected space for the inverter.",
+          "ml": "നിഴൽ ഇല്ലാത്ത മേൽക്കൂരയും ഇൻവെർട്ടറിനായി സുരക്ഷിതമായ സ്ഥലവും ഒരുക്കുക"
+        },
+        {
+          "en": "Arrange basic installation support, including water, electricity, storage space, and site access.",
+          "ml": "വെള്ളം, വൈദ്യുതി, സ്റ്റോറേജ് സൗകര്യം, സൈറ്റ് ആക്‌സസ് എന്നിവ ലഭ്യമാക്കുക"
+        },
+        {
+          "en": "Provide necessary technical provisions such as internet connectivity, termination points, CT/AC components, and upgrades required for HT or generator setups.",
+          "ml": "Internet Connection, CT/AC Components തുടങ്ങിയ ആവശ്യമായ സാങ്കേതിക സൗകര്യങ്ങൾ ഒരുക്കുക (ആവശ്യമെങ്കിൽ)"
+        },
+        {
+          "en": "Complete any KSEB-related requirements, including net metering formalities, load enhancement, consumer name change, ownership transfer, or other utility-related modifications, if applicable.",
+          "ml": "Net Metering, Load Enhancement, Name Change, Ownership Transfer തുടങ്ങിയ KSEB നടപടികൾ പൂർത്തിയാക്കുക (ബാധകമെങ്കിൽ)"
+        },
+        {
+          "en": "Pay applicable statutory fees, deposits, registration charges, and other charges imposed by KSEB or relevant authorities.",
+          "ml": "KSEB അല്ലെങ്കിൽ മറ്റ് അധികാരികൾ ഈടാക്കുന്ന ഫീസ്, ഡെപ്പോസിറ്റ്, രജിസ്ട്രേഷൻ ചാർജുകൾ എന്നിവ അടക്കുക"
+        },
+        {
+          "en": "Any civil work, roof repairs, waterproofing, structural modifications, trenching, masonry work, painting, restoration work, or additional structural work required for installation shall be under the customer's scope unless specifically included in the quotation.",
+          "ml": "Civil Work, Roof Repair, Waterproofing, Structural Modification, Trenching, Masonry Work തുടങ്ങിയ ജോലികൾ ക്വട്ടേഷനിൽ ഉൾപ്പെടുത്തിയിട്ടില്ലെങ്കിൽ ഉപഭോക്താവിന്റെ ഉത്തരവാദിത്വമായിരിക്കും."
+        }
+      ],
+      "requiredDocuments": [
+        {
+          "en": "Bank Account details",
+          "ml": "ബാങ്ക് അക്കൗണ്ട് വിവരങ്ങൾ"
+        },
+        {
+          "en": "Aadhaar Card & PAN Card",
+          "ml": "ആധാർ കാർഡും PAN കാർഡും"
+        },
+        {
+          "en": "Address Proof",
+          "ml": "അഡ്രസ് പ്രൂഫ് (Address Proof)"
+        },
+        {
+          "en": "Salary slips / Bank statements (loan above ₹2 lakh)",
+          "ml": "ശമ്പള സ്ലിപ്പ് / ബാങ്ക് സ്റ്റേറ്റ്മെന്റ് (ലോൺ ₹2 ലക്ഷത്തിന് മുകളിൽ ആണെങ്കിൽ)"
+        },
+        {
+          "en": "Land tax / Building tax receipt",
+          "ml": "ഭൂനികുതി / കെട്ടിട നികുതി രസീത്"
+        },
+        {
+          "en": "Latest KSEB bill (2 months)",
+          "ml": "ഏറ്റവും പുതിയ 2 മാസത്തെ KSEB ബിൽ"
+        },
+        {
+          "en": "KSEB Feasibility Report",
+          "ml": "KSEB ഫീസിബിലിറ്റി റിപ്പോർട്ട്"
+        },
+        {
+          "en": "ITR (loan above ₹2 lakh)",
+          "ml": "ITR (ലോൺ ₹2 ലക്ഷത്തിന് മുകളിൽ ആണെങ്കിൽ)"
+        }
+      ],
+      "lifeNow": [
+        {
+          "title": {
+            "en": "Limiting AC Usage",
+            "ml": "AC ഉപയോഗത്തിൽ നിയന്ത്രണം"
+          },
+          "body": {
+            "en": "Constantly adjusting temperature, turning off rooms, compromising comfort",
+            "ml": "വൈദ്യുതി ബിൽ കൂടുമോ എന്ന ആശങ്ക കാരണം AC ഉപയോഗം പരിമിതപ്പെടുത്തേണ്ടി വരുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Electricity Anxiety",
+            "ml": "ഇന്ധനച്ചെലവിനെ ആശ്രയിക്കൽ"
+          },
+          "body": {
+            "en": "Constant worry about power cuts, generator costs, UPS limitations",
+            "ml": "പെട്രോൾ, ഡീസൽ വില വർധിക്കുന്നത് കുടുംബ ബജറ്റിനെ ബാധിക്കുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Gas & Fuel Expenses",
+            "ml": "ഗ്യാസ്, ഇന്ധന ചെലവുകൾ"
+          },
+          "body": {
+            "en": "Monthly LPG refills and rising fuel costs add to your household expenses",
+            "ml": "എൽ.പി.ജി. ഗ്യാസ് നിറയ്ക്കുന്നതിനും ഇന്ധന വില വർധനവിനും ഓരോ മാസവും അധിക ചെലവ് വരുന്നു."
+          }
+        }
+      ],
+      "lifeSolar": [
+        {
+          "title": {
+            "en": "Comfort Without Guilt",
+            "ml": "ആശങ്കകളില്ലാത്ത സൗകര്യം"
+          },
+          "body": {
+            "en": "Use AC freely, perfect temperature always, no compromises needed",
+            "ml": "ബിൽ കൂടുമെന്ന ഭയം കൂടാതെ ACയും മറ്റ് ഉപകരണങ്ങളും കൂടുതൽ സ്വതന്ത്രമായി ഉപയോഗിക്കാം."
+          }
+        },
+        {
+          "title": {
+            "en": "Complete Confidence",
+            "ml": "സ്വന്തം വൈദ്യുതി ഉൽപ്പാദനം"
+          },
+          "body": {
+            "en": "Peace of mind, future-ready home, smart investment that pays daily",
+            "ml": "നിങ്ങളുടെ വീട് തന്നെ ഒരു ചെറിയ പവർ സ്റ്റേഷനായി മാറുന്നു. Grid-നെ ആശ്രയിക്കുന്നത് കുറയുന്നു."
+          }
+        },
+        {
+          "title": {
+            "en": "Reduced Energy Expenses",
+            "ml": "ഊർജ്ജ ചെലവ് കുറയും"
+          },
+          "body": {
+            "en": "Lower monthly spending on electricity and household energy.",
+            "ml": "വൈദ്യുതിക്കും മറ്റ് ഊർജ്ജ ആവശ്യങ്ങൾക്കും വരുന്ന മാസച്ചെലവ് കുറയും."
+          }
+        }
+      ],
+      "extraStructureCost": {
+        "label": {
+          "en": "Additional Structure Cost (if required)",
+          "ml": "അധിക Structure Cost (ആവശ്യമെങ്കിൽ)"
+        },
+        "value": "₹4,500/kW"
+      },
+      "appliances": {
+        "master": [
+          {
+            "id": "lights_fans",
+            "name": {
+              "en": "Lights + Fans",
+              "ml": "Lights + Fans"
+            },
+            "icon": "💡",
+            "watts": 25,
+            "defaultHours": 5
+          },
+          {
+            "id": "refrigerator",
+            "name": {
+              "en": "Refrigerator",
+              "ml": "Refrigerator"
+            },
+            "icon": "🧊",
+            "watts": 60,
+            "defaultHours": 24
+          },
+          {
+            "id": "induction",
+            "name": {
+              "en": "Induction Stove",
+              "ml": "Induction Stove"
+            },
+            "icon": "🍳",
+            "watts": 1200,
+            "defaultHours": 1
+          },
+          {
+            "id": "washing_machine",
+            "name": {
+              "en": "Washing Machine",
+              "ml": "Washing Machine"
+            },
+            "icon": "🪣",
+            "watts": 500,
+            "defaultHours": 1
+          },
+          {
+            "id": "tv_ott",
+            "name": {
+              "en": "TV + OTT",
+              "ml": "TV + OTT"
+            },
+            "icon": "📺",
+            "watts": 100,
+            "defaultHours": 5
+          },
+          {
+            "id": "ac",
+            "name": {
+              "en": "Air Conditioner",
+              "ml": "Air Conditioner"
+            },
+            "icon": "❄️",
+            "watts": 1200,
+            "defaultHours": 5
+          },
+          {
+            "id": "inverter_chargers",
+            "name": {
+              "en": "Inverter + Chargers",
+              "ml": "Inverter + Chargers"
+            },
+            "icon": "🔌",
+            "watts": 20,
+            "defaultHours": 24
+          },
+          {
+            "id": "water_pump",
+            "name": {
+              "en": "Water Pump",
+              "ml": "Water Pump"
+            },
+            "icon": "🚰",
+            "watts": 750,
+            "defaultHours": 1,
+            "optional": true
+          },
+          {
+            "id": "water_heater",
+            "name": {
+              "en": "Water Heater",
+              "ml": "Water Heater"
+            },
+            "icon": "♨️",
+            "watts": 2000,
+            "defaultHours": 0.5,
+            "optional": true
+          },
+          {
+            "id": "ev_2w",
+            "name": {
+              "en": "EV Charging (2-wheeler)",
+              "ml": "EV Charging (2-wheeler)"
+            },
+            "icon": "🛵",
+            "watts": 1000,
+            "defaultHours": 1,
+            "optional": true
+          },
+          {
+            "id": "ev_car",
+            "name": {
+              "en": "EV Charging (car)",
+              "ml": "EV Charging (car)"
+            },
+            "icon": "🚗",
+            "watts": 3300,
+            "defaultHours": 1,
+            "optional": true
+          }
+        ],
+        "profiles": {
+          "3": [
+            {
+              "id": "lights_fans",
+              "qty": 10,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "inverter_chargers",
+              "qty": 1,
+              "hours": 24
+            }
+          ],
+          "5": [
+            {
+              "id": "lights_fans",
+              "qty": 15,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 1,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "inverter_chargers",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            }
+          ],
+          "8": [
+            {
+              "id": "lights_fans",
+              "qty": 20,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 1,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1.25
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 3,
+              "hours": 5
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "water_heater",
+              "qty": 1,
+              "hours": 0.5
+            },
+            {
+              "id": "ev_2w",
+              "qty": 1,
+              "hours": 1
+            }
+          ],
+          "10": [
+            {
+              "id": "lights_fans",
+              "qty": 25,
+              "hours": 5
+            },
+            {
+              "id": "refrigerator",
+              "qty": 2,
+              "hours": 24
+            },
+            {
+              "id": "induction",
+              "qty": 1,
+              "hours": 1.25
+            },
+            {
+              "id": "washing_machine",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "tv_ott",
+              "qty": 2,
+              "hours": 5
+            },
+            {
+              "id": "ac",
+              "qty": 4,
+              "hours": 5
+            },
+            {
+              "id": "water_pump",
+              "qty": 1,
+              "hours": 1
+            },
+            {
+              "id": "water_heater",
+              "qty": 1,
+              "hours": 0.5
+            },
+            {
+              "id": "ev_car",
+              "qty": 1,
+              "hours": 0.75
+            }
+          ]
+        }
+      }
+    }
+  }
+}
