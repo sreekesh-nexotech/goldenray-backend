@@ -1,0 +1,80 @@
+[
+ {
+  "id": 1,
+  "key": "hero_title",
+  "label": "Hero headline",
+  "kind": "short_text",
+  "guidance": "One line; keep it under ~70 characters so it stays on two lines on phones.",
+  "value": "Build Kerala's solar future with us",
+  "max_length": 90,
+  "order": 0,
+  "updated_at": "2026-09-28T21:13:49.022463+00:00",
+  "page_id": 22,
+  "updated_by_id": 1
+ },
+ {
+  "id": 2,
+  "key": "hero_subtitle",
+  "label": "Hero sub-headline",
+  "kind": "long_text",
+  "guidance": "One or two short sentences under the headline.",
+  "value": "",
+  "max_length": 220,
+  "order": 1,
+  "updated_at": "2026-09-28T17:40:01.093741+00:00",
+  "page_id": 22,
+  "updated_by_id": null
+ },
+ {
+  "id": 3,
+  "key": "cta_phone",
+  "label": "Call-to-action phone",
+  "kind": "phone",
+  "guidance": "",
+  "value": "+91 62829 22988",
+  "max_length": 20,
+  "order": 0,
+  "updated_at": "2026-09-28T21:13:49.031296+00:00",
+  "page_id": 1,
+  "updated_by_id": null
+ },
+ {
+  "id": 4,
+  "key": "cta_email",
+  "label": "Call-to-action e-mail",
+  "kind": "email",
+  "guidance": "",
+  "value": "hello@flarize.com",
+  "max_length": null,
+  "order": 1,
+  "updated_at": "2026-09-28T21:13:49.034685+00:00",
+  "page_id": 1,
+  "updated_by_id": null
+ },
+ {
+  "id": 5,
+  "key": "offer_url",
+  "label": "Offer link",
+  "kind": "url",
+  "guidance": "",
+  "value": "https://flarize.com/subsidy",
+  "max_length": null,
+  "order": 2,
+  "updated_at": "2026-09-28T21:13:49.036358+00:00",
+  "page_id": 1,
+  "updated_by_id": null
+ },
+ {
+  "id": 6,
+  "key": "hero_note",
+  "label": "Hero note",
+  "kind": "long_text",
+  "guidance": "",
+  "value": "Subsidy up to ₹78,000 — we file it for you.",
+  "max_length": 120,
+  "order": 3,
+  "updated_at": "2026-09-28T21:13:49.037517+00:00",
+  "page_id": 1,
+  "updated_by_id": null
+ }
+]

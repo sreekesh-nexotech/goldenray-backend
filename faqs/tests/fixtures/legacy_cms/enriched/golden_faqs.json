@@ -1,0 +1,4123 @@
+[
+ {
+  "query": {
+   "page": "/"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 1,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 2,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 3,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 4,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 5,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 6,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 7,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 8,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Home",
+     "route": "/"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solutions"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 9,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 10,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 11,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 12,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 13,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 14,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 15,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 16,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solutions",
+     "route": "/solutions"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solutions"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/quote-analyser"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 17,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 18,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 19,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 20,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 21,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 22,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 23,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 24,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Quote Analyser",
+     "route": "/quote-analyser"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/quote-analyser"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/subsidy"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 25,
+     "question": "Will panels work during Kerala monsoon?",
+     "answer": "Yes. Solar panels are designed to withstand heavy rain and wind. They are waterproof and have a robust build, ensuring they function efficiently even during the monsoon season.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 0
+    },
+    {
+     "id": 26,
+     "question": "Is our roof strong enough?",
+     "answer": "Most residential roofs in Kerala are suitable for solar panel installation. Our team conducts a structural assessment to ensure your roof can support the panels and mounting equipment safely.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 1
+    },
+    {
+     "id": 27,
+     "question": "Do group members have to be neighbours?",
+     "answer": "No. While it's ideal for group members to be in the same locality for logistical efficiency, they can be from different areas. The key is that the group reaches the minimum number of families required for a confirmed installation.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 2
+    },
+    {
+     "id": 28,
+     "question": "Do we need ITR for the loan?",
+     "answer": "Income Tax Returns (ITR) are typically required for loan applications to verify income and financial stability. However, specific requirements may vary based on the lender's policies. Our team can guide you through the documentation needed for your loan application.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 29,
+     "question": "What about KSEB paperwork and subsidy?",
+     "answer": "Our team handles all KSEB documentation and subsidy applications on your behalf. We ensure that all necessary forms are completed accurately and submitted in a timely manner, maximizing your chances of receiving the subsidy without any hassle.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 30,
+     "question": "Can anyone earn referral rewards?",
+     "answer": "Yes, anyone who refers a friend or family member to the group purchase program can earn referral rewards. The specific rewards and terms will be communicated to you by our team.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 31,
+     "question": "What happens during a power outage?",
+     "answer": "During a power outage, your solar system will automatically shut down for safety reasons. However, if you have a battery storage system installed, it can provide backup power to your home during outages, depending on the capacity of the battery.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Subsidy",
+     "route": "/subsidy"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "Will panels work during Kerala monsoon?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Solar panels are designed to withstand heavy rain and wind. They are waterproof and have a robust build, ensuring they function efficiently even during the monsoon season."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is our roof strong enough?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most residential roofs in Kerala are suitable for solar panel installation. Our team conducts a structural assessment to ensure your roof can support the panels and mounting equipment safely."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do group members have to be neighbours?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. While it's ideal for group members to be in the same locality for logistical efficiency, they can be from different areas. The key is that the group reaches the minimum number of families required for a confirmed installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do we need ITR for the loan?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Income Tax Returns (ITR) are typically required for loan applications to verify income and financial stability. However, specific requirements may vary based on the lender's policies. Our team can guide you through the documentation needed for your loan application."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What about KSEB paperwork and subsidy?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our team handles all KSEB documentation and subsidy applications on your behalf. We ensure that all necessary forms are completed accurately and submitted in a timely manner, maximizing your chances of receiving the subsidy without any hassle."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can anyone earn referral rewards?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, anyone who refers a friend or family member to the group purchase program can earn referral rewards. The specific rewards and terms will be communicated to you by our team."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "During a power outage, your solar system will automatically shut down for safety reasons. However, if you have a battery storage system installed, it can provide backup power to your home during outages, depending on the capacity of the battery."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/subsidy"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/how-flarize-works"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 32,
+     "question": "How does solar installation work in Kerala?",
+     "answer": "You send your KSEB bill, we visit your roof, and you get 3 checked options. Pick one, and we handle the install, the KSEB paperwork, and your subsidy.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 33,
+     "question": "How long does installation take?",
+     "answer": "Once your option is approved, the install takes 7 to 12 days. We use pre-packed kits and a local team, so there's no long wait for parts.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 34,
+     "question": "How does Flarize differ from other companies?",
+     "answer": "We check every installer before you meet them, your payment follows real progress, and our engineer inspects the finished job. You deal with one team for 25 years.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 35,
+     "question": "Does Flarize handle KSEB net metering?",
+     "answer": "Yes. We file your application and follow it through approval. You don't deal with KSEB yourself.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 36,
+     "question": "What happens after installation?",
+     "answer": "You stay with Flarize. App monitoring, service visits, and a written energy-loss guarantee, for 25 years. One number to call.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 37,
+     "question": "Is solar a better choice than a fixed deposit?",
+     "answer": "For most Kerala homes with a high bill, the monthly saving beats FD interest, and it lasts for decades. We'll show you the real numbers for your home.",
+     "section": "",
+     "category": null,
+     "order": 5
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "How Flarize Works",
+     "route": "/how-flarize-works"
+    },
+    "count": 6,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How does solar installation work in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You send your KSEB bill, we visit your roof, and you get 3 checked options. Pick one, and we handle the install, the KSEB paperwork, and your subsidy."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does installation take?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once your option is approved, the install takes 7 to 12 days. We use pre-packed kits and a local team, so there's no long wait for parts."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Flarize differ from other companies?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We check every installer before you meet them, your payment follows real progress, and our engineer inspects the finished job. You deal with one team for 25 years."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does Flarize handle KSEB net metering?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We file your application and follow it through approval. You don't deal with KSEB yourself."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens after installation?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You stay with Flarize. App monitoring, service visits, and a written energy-loss guarantee, for 25 years. One number to call."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is solar a better choice than a fixed deposit?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For most Kerala homes with a high bill, the monthly saving beats FD interest, and it lasts for decades. We'll show you the real numbers for your home."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/how-flarize-works"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/inverter-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 38,
+     "question": "What is the best solar inverter for Kerala?",
+     "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 39,
+     "question": "String inverter vs microinverter — which is better for Kerala?",
+     "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 40,
+     "question": "Do I need a hybrid inverter for my Kerala home?",
+     "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 41,
+     "question": "How does Kerala's climate affect inverter performance?",
+     "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 42,
+     "question": "What inverter size do I need for my home?",
+     "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Inverter Comparison",
+     "route": "/inverter-comparison"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar inverter for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "String inverter vs microinverter — which is better for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a hybrid inverter for my Kerala home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Kerala's climate affect inverter performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What inverter size do I need for my home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/inverter-comparison"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/inverter-comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 43,
+     "question": "What is the best solar inverter for Kerala?",
+     "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 44,
+     "question": "String inverter vs microinverter — which is better for Kerala?",
+     "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 45,
+     "question": "Do I need a hybrid inverter for my Kerala home?",
+     "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 46,
+     "question": "How does Kerala's climate affect inverter performance?",
+     "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 47,
+     "question": "What inverter size do I need for my home?",
+     "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Inverter Comparison Table",
+     "route": "/inverter-comparison-table"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar inverter for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "String inverter vs microinverter — which is better for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a hybrid inverter for my Kerala home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Kerala's climate affect inverter performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What inverter size do I need for my home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/inverter-comparison-table"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-referral-program"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 48,
+     "question": "I already installed solar with Flarize — can I earn?",
+     "answer": "Yes — you're our most valued partner. Existing Flarize owners join as Advisor Partners, refer neighbours and friends, and earn rewards for every home that goes solar on your word.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 49,
+     "question": "How do I earn?",
+     "answer": "You introduce a homeowner or business to Flarize. We handle consultation, design, paperwork, KSEB and installation. When the system is installed successfully, a fixed commission is credited to your partner account.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 50,
+     "question": "When do I get paid?",
+     "answer": "Commission is credited after the installation is completed and verified. Your dashboard shows the exact status and next payout date for every referral.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 51,
+     "question": "How are referrals tracked?",
+     "answer": "You get a unique tracking link, and referrals shared directly with your partner manager are also logged. Every lead is timestamped through submission, site visit, installation and payout — visible to you in real time.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 52,
+     "question": "What happens if a customer cancels?",
+     "answer": "You only earn on completed installations, so a cancellation simply means no commission for that lead — no penalty, no clawback. Your other referrals are unaffected.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 53,
+     "question": "Do I need any solar knowledge?",
+     "answer": "None. Our team handles every technical conversation, quote and approval. Your only job is the introduction and the trust you already have with your network.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 54,
+     "question": "Can influencers and creators join?",
+     "answer": "Yes. Creator partners get a tracking link and ready-to-use content. You earn on completed installations from your audience — not on clicks, views or impressions.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 55,
+     "question": "Can electricians, builders and agents join?",
+     "answer": "Absolutely — they're core partners. Solar fits naturally into electrical work, property handovers and design conversations, and you earn without changing your workflow.",
+     "section": "",
+     "category": null,
+     "order": 7
+    },
+    {
+     "id": 56,
+     "question": "Is there a minimum target?",
+     "answer": "No. There's no quota and no pressure. Refer one home a year or ten a month — you earn the same fixed rate on each successful installation.",
+     "section": "",
+     "category": null,
+     "order": 8
+    },
+    {
+     "id": 57,
+     "question": "Can I refer customers outside my district?",
+     "answer": "Yes. Flarize installs across all 14 Kerala districts, so any qualified referral within Kerala can convert regardless of where you or the homeowner are based.",
+     "section": "",
+     "category": null,
+     "order": 9
+    },
+    {
+     "id": 58,
+     "question": "How does Flarize support partners?",
+     "answer": "Every partner gets a dedicated relationship manager, a live tracking dashboard, ready-made referral content, and full handling of consultation, paperwork, KSEB, warranty and after-sales — so the customer experience reflects well on you.",
+     "section": "",
+     "category": null,
+     "order": 10
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Referral Programme",
+     "route": "/solar-referral-program"
+    },
+    "count": 11,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "I already installed solar with Flarize — can I earn?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — you're our most valued partner. Existing Flarize owners join as Advisor Partners, refer neighbours and friends, and earn rewards for every home that goes solar on your word."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How do I earn?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You introduce a homeowner or business to Flarize. We handle consultation, design, paperwork, KSEB and installation. When the system is installed successfully, a fixed commission is credited to your partner account."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "When do I get paid?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Commission is credited after the installation is completed and verified. Your dashboard shows the exact status and next payout date for every referral."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How are referrals tracked?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You get a unique tracking link, and referrals shared directly with your partner manager are also logged. Every lead is timestamped through submission, site visit, installation and payout — visible to you in real time."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens if a customer cancels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You only earn on completed installations, so a cancellation simply means no commission for that lead — no penalty, no clawback. Your other referrals are unaffected."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need any solar knowledge?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "None. Our team handles every technical conversation, quote and approval. Your only job is the introduction and the trust you already have with your network."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can influencers and creators join?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Creator partners get a tracking link and ready-to-use content. You earn on completed installations from your audience — not on clicks, views or impressions."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can electricians, builders and agents join?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely — they're core partners. Solar fits naturally into electrical work, property handovers and design conversations, and you earn without changing your workflow."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is there a minimum target?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There's no quota and no pressure. Refer one home a year or ten a month — you earn the same fixed rate on each successful installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I refer customers outside my district?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Flarize installs across all 14 Kerala districts, so any qualified referral within Kerala can convert regardless of where you or the homeowner are based."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Flarize support partners?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every partner gets a dedicated relationship manager, a live tracking dashboard, ready-made referral content, and full handling of consultation, paperwork, KSEB, warranty and after-sales — so the customer experience reflects well on you."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-referral-program"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/residential"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 59,
+     "question": "How much do solar panels cost for a home in Kerala?",
+     "answer": "A 3kW on-grid system costs ₹2–2.30 lakh, a 5kW system ₹3–3.30 lakh and a 10kW system ₹5–6 lakh before the ₹78,000 PM Surya Ghar subsidy. The range exists because a flat concrete roof is cheaper to work on than a tiled roof needing a raised frame, taller buildings need more cable and scaffolding, and panel and inverter brands differ in price. After the free site assessment your proposal shows one fixed, item-by-item price that does not change once work starts.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 60,
+     "question": "Is the ₹78,000 solar subsidy real, and how do I get it?",
+     "answer": "Yes. It is paid under the central PM Surya Ghar Muft Bijli Yojana and credited directly to your bank account after installation and inspection. Flarize files the national portal application, the KSEB paperwork and the subsidy claim on your behalf, so you are not chasing forms yourself.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 61,
+     "question": "How does KSEB net metering work?",
+     "answer": "A bidirectional KSEB meter records the units your roof exports during the day and the units you draw at night. You are billed only on the net difference, so daytime generation offsets night-time consumption. Flarize handles the net-metering application, feasibility approval and meter installation with KSEB.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 62,
+     "question": "Will solar panels work during the Kerala monsoon?",
+     "answer": "Yes, at reduced output. Panels run on daylight rather than direct sun, so they keep generating on overcast monsoon days, typically at a lower percentage of rated output. Systems are sized against your full-year consumption, so strong generation from January to May covers the monsoon dip — and rain also washes dust off the panels.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 63,
+     "question": "Is the site assessment free?",
+     "answer": "Yes. A Flarize engineer visits your home, measures usable shadow-free roof area, checks orientation and shading between 9 AM and 4 PM, reviews your KSEB bill and returns three tailored proposals. There is no cost and no obligation to proceed.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 64,
+     "question": "Do I need a battery with my solar system?",
+     "answer": "Most Kerala homes do not. An on-grid system is cheapest and pays back fastest, but shuts down during a power cut as a KSEB safety rule. Choose a hybrid system with a battery if outages are frequent in your area, or you need fans, lights, Wi-Fi and the fridge to keep running at night.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 65,
+     "question": "Can I add more panels later or charge an EV?",
+     "answer": "Yes, if the system is planned for it. Sizing the inverter with headroom and leaving spare roof area lets you add panels later, and an EV charger can be added to a suitably sized system. Tell the engineer at the assessment so the design allows for future load.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Residential",
+     "route": "/residential"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How much do solar panels cost for a home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW on-grid system costs ₹2–2.30 lakh, a 5kW system ₹3–3.30 lakh and a 10kW system ₹5–6 lakh before the ₹78,000 PM Surya Ghar subsidy. The range exists because a flat concrete roof is cheaper to work on than a tiled roof needing a raised frame, taller buildings need more cable and scaffolding, and panel and inverter brands differ in price. After the free site assessment your proposal shows one fixed, item-by-item price that does not change once work starts."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 solar subsidy real, and how do I get it?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It is paid under the central PM Surya Ghar Muft Bijli Yojana and credited directly to your bank account after installation and inspection. Flarize files the national portal application, the KSEB paperwork and the subsidy claim on your behalf, so you are not chasing forms yourself."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does KSEB net metering work?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A bidirectional KSEB meter records the units your roof exports during the day and the units you draw at night. You are billed only on the net difference, so daytime generation offsets night-time consumption. Flarize handles the net-metering application, feasibility approval and meter installation with KSEB."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Will solar panels work during the Kerala monsoon?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, at reduced output. Panels run on daylight rather than direct sun, so they keep generating on overcast monsoon days, typically at a lower percentage of rated output. Systems are sized against your full-year consumption, so strong generation from January to May covers the monsoon dip — and rain also washes dust off the panels."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the site assessment free?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A Flarize engineer visits your home, measures usable shadow-free roof area, checks orientation and shading between 9 AM and 4 PM, reviews your KSEB bill and returns three tailored proposals. There is no cost and no obligation to proceed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a battery with my solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most Kerala homes do not. An on-grid system is cheapest and pays back fastest, but shuts down during a power cut as a KSEB safety rule. Choose a hybrid system with a battery if outages are frequent in your area, or you need fans, lights, Wi-Fi and the fridge to keep running at night."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I add more panels later or charge an EV?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if the system is planned for it. Sizing the inverter with headroom and leaving spare roof area lets you add panels later, and an EV charger can be added to a suitably sized system. Tell the engineer at the assessment so the design allows for future load."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/residential"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-warranty"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 66,
+     "question": "What is PM Surya Ghar subsidy? How much can I get?",
+     "answer": "PM Surya Ghar gives ₹78,000 subsidy for 3kW residential systems in Kerala (₹26,000/kW). Flarize handles full documentation & KSEB approval. Net cost: ₹78,000–₹1,27,000 (after subsidy). Eligibility: own home roof, KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 67,
+     "question": "What exactly is included in the \"Full Flarize Guarantee\"?",
+     "answer": "Covers: installation quality defects (5yr), panel performance (25yr on some), inverter warranty (5–10yr per brand), and Energy Loss Guarantee — if system down >3 days, Flarize pays for lost generation. Post-install: WhatsApp support + 3-layer technician backup.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 68,
+     "question": "What does a Solar Care Plan cost? What's included?",
+     "answer": "Optional paid plans (price not listed, call for quote). Covers: bi-annual cleaning, health checkups, pest/rodent inspections, priority technician dispatch, performance reporting. Prevents 10–15% efficiency loss from dust/debris.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 69,
+     "question": "How much will I save per year? When is payback?",
+     "answer": "Depends on system size & roof space. Example 3kW system: saves ₹12,000–₹18,000/yr (₹1,000–₹1,500/month). Payback: 6–8 years (after subsidy). Then 17+ years of near-free power. Use free estimate calculator on site.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 70,
+     "question": "Does Flarize get KSEB approval or do I do it?",
+     "answer": "Flarize handles 100% — application, inspection coordination, net metering approval. You sign an approval letter only. Flarize tracks status & pushes KSEB (typically 15–30 days post-install).",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 71,
+     "question": "What if my electricity consumption is very low?",
+     "answer": "System undersized. Flarize analyzes your bill (Step 1) and avoids over-sizing. If consumption <100 kWh/month, 1–1.5kW system is better. Subsidy applies to 1kW too (₹26,000). Discuss in free site visit.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 72,
+     "question": "Can I upgrade the system size after 1 year?",
+     "answer": "Yes. Add panels/inverter capacity. But KSEB needs new net metering (15–30 day wait). Cost varies. Contact Flarize service team post-install.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Warranty",
+     "route": "/solar-warranty"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is PM Surya Ghar subsidy? How much can I get?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PM Surya Ghar gives ₹78,000 subsidy for 3kW residential systems in Kerala (₹26,000/kW). Flarize handles full documentation & KSEB approval. Net cost: ₹78,000–₹1,27,000 (after subsidy). Eligibility: own home roof, KSEB connection."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What exactly is included in the \"Full Flarize Guarantee\"?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Covers: installation quality defects (5yr), panel performance (25yr on some), inverter warranty (5–10yr per brand), and Energy Loss Guarantee — if system down >3 days, Flarize pays for lost generation. Post-install: WhatsApp support + 3-layer technician backup."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What does a Solar Care Plan cost? What's included?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Optional paid plans (price not listed, call for quote). Covers: bi-annual cleaning, health checkups, pest/rodent inspections, priority technician dispatch, performance reporting. Prevents 10–15% efficiency loss from dust/debris."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much will I save per year? When is payback?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depends on system size & roof space. Example 3kW system: saves ₹12,000–₹18,000/yr (₹1,000–₹1,500/month). Payback: 6–8 years (after subsidy). Then 17+ years of near-free power. Use free estimate calculator on site."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does Flarize get KSEB approval or do I do it?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flarize handles 100% — application, inspection coordination, net metering approval. You sign an approval letter only. Flarize tracks status & pushes KSEB (typically 15–30 days post-install)."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What if my electricity consumption is very low?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "System undersized. Flarize analyzes your bill (Step 1) and avoids over-sizing. If consumption <100 kWh/month, 1–1.5kW system is better. Subsidy applies to 1kW too (₹26,000). Discuss in free site visit."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I upgrade the system size after 1 year?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Add panels/inverter capacity. But KSEB needs new net metering (15–30 day wait). Cost varies. Contact Flarize service team post-install."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-warranty"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/emi-calculator"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 73,
+     "question": "How does the PM Surya Ghar subsidy reduce my solar loan EMI?",
+     "answer": "<p>Yes — <em>0%</em> processing fee on partner banks.</p><ul><li>SBI</li><li>Federal Bank</li></ul>",
+     "section": "",
+     "category": "Financing",
+     "order": 0
+    },
+    {
+     "id": 74,
+     "question": "What is the minimum CIBIL score for a solar loan in Kerala?",
+     "answer": "Minimum CIBIL score of 650 is required.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 75,
+     "question": "What is the EMI for a 3kW solar system in Kerala?",
+     "answer": "For a 3kW system in Kerala, EMI starts at ₹2,500/month through Flarize's SBI partnership at 5.75% over 5 years.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 76,
+     "question": "What is Flarize's 5.75% rate and how is it different from SBI's standard rate?",
+     "answer": "Flarize is an MNRE-empanelled vendor on India's national PM Surya Ghar portal. This enables a direct SBI channel partnership that gives Flarize customers 5.75% — lower than SBI's published rate of 7%.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 77,
+     "question": "How long does solar loan approval take through Flarize?",
+     "answer": "Our documentation process takes up to one week, while bank procedures vary depending on the partner bank.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 78,
+     "question": "How much will I save over 25 years with a solar loan in Kerala?",
+     "answer": "For a 3kW system at 5.75% over 5 years, your total investment is approximately ₹1,22,000 after subsidy. Over 25 years at a conservative 5% annual KSEB tariff increase, cumulative savings exceed ₹11 lakh. After year 5, invest ₹2,500/month at 12% SIP returns — that's ₹30 lakh in wealth.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 79,
+     "question": "What documents do I need for a solar loan in Kerala?",
+     "answer": "Aadhaar card, PAN card, passbook/ bank statements, latest KSEB electricity bill, property ownership proof. For loans above ₹2L: income proof. For 3kW systems: no income proof required. Flarize collects and submits all documents on your behalf.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "EMI Calculator",
+     "route": "/emi-calculator"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How does the PM Surya Ghar subsidy reduce my solar loan EMI?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<p>Yes — <em>0%</em> processing fee on partner banks.</p><ul><li>SBI</li><li>Federal Bank</li></ul>"
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the minimum CIBIL score for a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimum CIBIL score of 650 is required."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the EMI for a 3kW solar system in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a 3kW system in Kerala, EMI starts at ₹2,500/month through Flarize's SBI partnership at 5.75% over 5 years."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is Flarize's 5.75% rate and how is it different from SBI's standard rate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flarize is an MNRE-empanelled vendor on India's national PM Surya Ghar portal. This enables a direct SBI channel partnership that gives Flarize customers 5.75% — lower than SBI's published rate of 7%."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does solar loan approval take through Flarize?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our documentation process takes up to one week, while bank procedures vary depending on the partner bank."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much will I save over 25 years with a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a 3kW system at 5.75% over 5 years, your total investment is approximately ₹1,22,000 after subsidy. Over 25 years at a conservative 5% annual KSEB tariff increase, cumulative savings exceed ₹11 lakh. After year 5, invest ₹2,500/month at 12% SIP returns — that's ₹30 lakh in wealth."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What documents do I need for a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aadhaar card, PAN card, passbook/ bank statements, latest KSEB electricity bill, property ownership proof. For loans above ₹2L: income proof. For 3kW systems: no income proof required. Flarize collects and submits all documents on your behalf."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/emi-calculator"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/group-purchase"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 81,
+     "question": "What is a group solar purchase?",
+     "answer": "A group solar purchase allows nearby homeowners to install solar together. By combining multiple installations in the same area, costs are reduced and installation becomes more efficient.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 82,
+     "question": "How many families are required to form a group?",
+     "answer": "A group is confirmed when at least 5 families in the same area complete their booking. Once confirmed, installations are scheduled together.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 83,
+     "question": "What happens to my ₹1,000 booking amount?",
+     "answer": "Your ₹1,000 booking amount reserves your spot in the group and is fully adjusted against your final solar system cost.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 84,
+     "question": "What if the group does not form?",
+     "answer": "If the required number of families is not reached within the specified period, you can either receive a full refund, or continue with an individual installation while retaining your locked pricing (if applicable).",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 85,
+     "question": "Is the solar system quality different from individual bookings?",
+     "answer": "No. Group purchase customers receive the same panels, inverter brands, installation standards, warranty coverage, and service support as individual customers.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 86,
+     "question": "How much can I save through a group purchase?",
+     "answer": "Savings vary based on system size and location, but most homeowners can save up to ₹10,000 compared to standard individual pricing.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 87,
+     "question": "How long does installation take after a group is confirmed?",
+     "answer": "Once a group is confirmed, installations are typically completed within the scheduled group installation week, usually faster than individual installations.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 88,
+     "question": "Can I join if I already have a solar quotation?",
+     "answer": "Yes. You can still join the group purchase program. Our team can review your existing quotation and help you compare costs, specifications, and potential savings.",
+     "section": "",
+     "category": null,
+     "order": 7
+    },
+    {
+     "id": 89,
+     "question": "How do I know the status of my group?",
+     "answer": "After booking, you'll receive updates via WhatsApp, SMS, or phone regarding the number of families joined, group formation progress, installation schedule, and next steps.",
+     "section": "",
+     "category": null,
+     "order": 8
+    },
+    {
+     "id": 90,
+     "question": "Why is group solar cheaper?",
+     "answer": "Group installations reduce logistics, survey, transportation, and crew mobilization costs by serving multiple nearby homes during the same installation period. These savings are passed directly to homeowners without compromising quality.",
+     "section": "",
+     "category": null,
+     "order": 9
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Group Purchase",
+     "route": "/group-purchase"
+    },
+    "count": 10,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is a group solar purchase?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A group solar purchase allows nearby homeowners to install solar together. By combining multiple installations in the same area, costs are reduced and installation becomes more efficient."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many families are required to form a group?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A group is confirmed when at least 5 families in the same area complete their booking. Once confirmed, installations are scheduled together."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens to my ₹1,000 booking amount?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your ₹1,000 booking amount reserves your spot in the group and is fully adjusted against your final solar system cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What if the group does not form?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If the required number of families is not reached within the specified period, you can either receive a full refund, or continue with an individual installation while retaining your locked pricing (if applicable)."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the solar system quality different from individual bookings?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Group purchase customers receive the same panels, inverter brands, installation standards, warranty coverage, and service support as individual customers."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save through a group purchase?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Savings vary based on system size and location, but most homeowners can save up to ₹10,000 compared to standard individual pricing."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does installation take after a group is confirmed?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once a group is confirmed, installations are typically completed within the scheduled group installation week, usually faster than individual installations."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I join if I already have a solar quotation?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can still join the group purchase program. Our team can review your existing quotation and help you compare costs, specifications, and potential savings."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How do I know the status of my group?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "After booking, you'll receive updates via WhatsApp, SMS, or phone regarding the number of families joined, group formation progress, installation schedule, and next steps."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Why is group solar cheaper?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Group installations reduce logistics, survey, transportation, and crew mobilization costs by serving multiple nearby homes during the same installation period. These savings are passed directly to homeowners without compromising quality."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/group-purchase"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 94,
+     "question": "What does a 25-year solar panel warranty actually cover?",
+     "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+     "section": "inverters",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 95,
+     "question": "How many solar panels do I need for my home in Kerala?",
+     "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+     "section": "inverters",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 91,
+     "question": "What is the best solar panel for Kerala's climate?",
+     "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+     "section": "panels",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 92,
+     "question": "How important is temperature coefficient for solar panels in Kerala?",
+     "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+     "section": "panels",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 93,
+     "question": "Does high humidity affect solar panel performance?",
+     "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+     "section": "panels",
+     "category": null,
+     "order": 2
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Comparison",
+     "route": "/solar-comparison"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What does a 25-year solar panel warranty actually cover?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many solar panels do I need for my home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the best solar panel for Kerala's climate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How important is temperature coefficient for solar panels in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does high humidity affect solar panel performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-comparison"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 96,
+     "question": "What is the best solar panel for Kerala's climate?",
+     "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 97,
+     "question": "How important is temperature coefficient for solar panels in Kerala?",
+     "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 98,
+     "question": "Does high humidity affect solar panel performance?",
+     "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 99,
+     "question": "What does a 25-year solar panel warranty actually cover?",
+     "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 100,
+     "question": "How many solar panels do I need for my home in Kerala?",
+     "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Comparison Table",
+     "route": "/comparison-table"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar panel for Kerala's climate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How important is temperature coefficient for solar panels in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does high humidity affect solar panel performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What does a 25-year solar panel warranty actually cover?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many solar panels do I need for my home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/comparison-table"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/faq"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 103,
+     "question": "What does Flarize do?",
+     "answer": "We design and install rooftop solar in Kerala.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 0
+    },
+    {
+     "id": 105,
+     "question": "Blank question answer pair",
+     "answer": "   ",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 104,
+     "question": "Where do you work?",
+     "answer": "Across Kerala.",
+     "section": "coverage",
+     "category": null,
+     "order": 0
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "FAQ hub",
+     "route": "/faq"
+    },
+    "count": 3,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What does Flarize do?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We design and install rooftop solar in Kerala."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Where do you work?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Across Kerala."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/faq"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/resources"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 106,
+     "question": "Where are the guides?",
+     "answer": "In the resources section.",
+     "section": "",
+     "category": null,
+     "order": 0
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Resources",
+     "route": "/resources"
+    },
+    "count": 1,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "Where are the guides?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In the resources section."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/resources"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 1,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 2,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 3,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 4,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 5,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 6,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 7,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 8,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Home",
+     "route": "/"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solutions",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 9,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 10,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 11,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 12,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 13,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 14,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 15,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 16,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solutions",
+     "route": "/solutions"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solutions"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/quote-analyser",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 17,
+     "question": "What maintenance is required for solar panels?",
+     "answer": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 18,
+     "question": "Can I run my home completely on solar power?",
+     "answer": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 19,
+     "question": "What is the lifespan of solar panels?",
+     "answer": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 20,
+     "question": "How long does it take to install a solar system?",
+     "answer": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 21,
+     "question": "What is the cost of installing solar panels at home?",
+     "answer": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 22,
+     "question": "How much can I save by switching to solar?",
+     "answer": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 23,
+     "question": "What happens during a power outage?",
+     "answer": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 24,
+     "question": "Is the ₹78,000 subsidy available for commercial solar?",
+     "answer": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy.",
+     "section": "",
+     "category": null,
+     "order": 7
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Quote Analyser",
+     "route": "/quote-analyser"
+    },
+    "count": 8,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What maintenance is required for solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimal. Cleaning every 3–6 months and one annual check-up. Kerala's humidity and monsoon dust can reduce output, so regular cleaning matters — but it's not a big job. Flarize provides scheduled solar panel maintenance in Kerala, performance monitoring, and fast repairs."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I run my home completely on solar power?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With the right system size and a hybrid or battery-backed setup, yes. Standard on-grid systems generate during daylight and offset nighttime usage via net metering. For full independence including power outages, you'd need battery storage. We assess your needs during the free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the lifespan of solar panels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "25+ years. Most quality panels retain 80–85% efficiency at year 25. Inverters typically last 10–15 years. Flarize installations use ALMM-approved panels and come with a 10-year comprehensive warranty covering panels, inverters, and workmanship."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does it take to install a solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "2–6 days for most residential systems. Golden Ray's team has done 300+ installations — the process is streamlined. Design, mounting, wiring, safety checks, and handover. We handle KSEB approval and net metering setup after installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the cost of installing solar panels at home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW system: ₹1.85–₹2.15 lakh before subsidy. After the ₹78,000 MNRE subsidy under PM Surya Ghar Yojana, net cost is approximately ₹1.1–₹1.4 lakh. Price varies by panel brand, inverter type, and roof type. Solar EMI options from ₹2,000/month."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save by switching to solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60–85% reduction on your KSEB bill. For a 3kW system, expect bimonthly savings of ₹2,200–₹2,700. Kerala's telescopic tariff means cutting units with solar drops you into a lower rate slab — so you save twice."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Standard on-grid systems shut down during outages — that's a safety requirement so linesmen aren't endangered. For uninterrupted power, a hybrid system with battery storage keeps essential loads running. We recommend the right setup during your free consultation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 subsidy available for commercial solar?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PM Surya Ghar Yojana subsidy applies to on-grid residential systems only. Commercial and industrial installations don't qualify. However, businesses benefit from accelerated depreciation (40% in year one) and tax deductions that often deliver faster ROI than the residential subsidy."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/quote-analyser"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/subsidy",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 25,
+     "question": "Will panels work during Kerala monsoon?",
+     "answer": "Yes. Solar panels are designed to withstand heavy rain and wind. They are waterproof and have a robust build, ensuring they function efficiently even during the monsoon season.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 0
+    },
+    {
+     "id": 26,
+     "question": "Is our roof strong enough?",
+     "answer": "Most residential roofs in Kerala are suitable for solar panel installation. Our team conducts a structural assessment to ensure your roof can support the panels and mounting equipment safely.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 1
+    },
+    {
+     "id": 27,
+     "question": "Do group members have to be neighbours?",
+     "answer": "No. While it's ideal for group members to be in the same locality for logistical efficiency, they can be from different areas. The key is that the group reaches the minimum number of families required for a confirmed installation.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 2
+    },
+    {
+     "id": 28,
+     "question": "Do we need ITR for the loan?",
+     "answer": "Income Tax Returns (ITR) are typically required for loan applications to verify income and financial stability. However, specific requirements may vary based on the lender's policies. Our team can guide you through the documentation needed for your loan application.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 29,
+     "question": "What about KSEB paperwork and subsidy?",
+     "answer": "Our team handles all KSEB documentation and subsidy applications on your behalf. We ensure that all necessary forms are completed accurately and submitted in a timely manner, maximizing your chances of receiving the subsidy without any hassle.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 30,
+     "question": "Can anyone earn referral rewards?",
+     "answer": "Yes, anyone who refers a friend or family member to the group purchase program can earn referral rewards. The specific rewards and terms will be communicated to you by our team.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 31,
+     "question": "What happens during a power outage?",
+     "answer": "During a power outage, your solar system will automatically shut down for safety reasons. However, if you have a battery storage system installed, it can provide backup power to your home during outages, depending on the capacity of the battery.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Subsidy",
+     "route": "/subsidy"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "Will panels work during Kerala monsoon?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Solar panels are designed to withstand heavy rain and wind. They are waterproof and have a robust build, ensuring they function efficiently even during the monsoon season."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is our roof strong enough?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most residential roofs in Kerala are suitable for solar panel installation. Our team conducts a structural assessment to ensure your roof can support the panels and mounting equipment safely."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do group members have to be neighbours?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. While it's ideal for group members to be in the same locality for logistical efficiency, they can be from different areas. The key is that the group reaches the minimum number of families required for a confirmed installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do we need ITR for the loan?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Income Tax Returns (ITR) are typically required for loan applications to verify income and financial stability. However, specific requirements may vary based on the lender's policies. Our team can guide you through the documentation needed for your loan application."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What about KSEB paperwork and subsidy?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our team handles all KSEB documentation and subsidy applications on your behalf. We ensure that all necessary forms are completed accurately and submitted in a timely manner, maximizing your chances of receiving the subsidy without any hassle."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can anyone earn referral rewards?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, anyone who refers a friend or family member to the group purchase program can earn referral rewards. The specific rewards and terms will be communicated to you by our team."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens during a power outage?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "During a power outage, your solar system will automatically shut down for safety reasons. However, if you have a battery storage system installed, it can provide backup power to your home during outages, depending on the capacity of the battery."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/subsidy"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/how-flarize-works",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 32,
+     "question": "How does solar installation work in Kerala?",
+     "answer": "You send your KSEB bill, we visit your roof, and you get 3 checked options. Pick one, and we handle the install, the KSEB paperwork, and your subsidy.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 33,
+     "question": "How long does installation take?",
+     "answer": "Once your option is approved, the install takes 7 to 12 days. We use pre-packed kits and a local team, so there's no long wait for parts.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 34,
+     "question": "How does Flarize differ from other companies?",
+     "answer": "We check every installer before you meet them, your payment follows real progress, and our engineer inspects the finished job. You deal with one team for 25 years.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 35,
+     "question": "Does Flarize handle KSEB net metering?",
+     "answer": "Yes. We file your application and follow it through approval. You don't deal with KSEB yourself.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 36,
+     "question": "What happens after installation?",
+     "answer": "You stay with Flarize. App monitoring, service visits, and a written energy-loss guarantee, for 25 years. One number to call.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 37,
+     "question": "Is solar a better choice than a fixed deposit?",
+     "answer": "For most Kerala homes with a high bill, the monthly saving beats FD interest, and it lasts for decades. We'll show you the real numbers for your home.",
+     "section": "",
+     "category": null,
+     "order": 5
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "How Flarize Works",
+     "route": "/how-flarize-works"
+    },
+    "count": 6,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How does solar installation work in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You send your KSEB bill, we visit your roof, and you get 3 checked options. Pick one, and we handle the install, the KSEB paperwork, and your subsidy."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does installation take?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once your option is approved, the install takes 7 to 12 days. We use pre-packed kits and a local team, so there's no long wait for parts."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Flarize differ from other companies?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We check every installer before you meet them, your payment follows real progress, and our engineer inspects the finished job. You deal with one team for 25 years."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does Flarize handle KSEB net metering?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We file your application and follow it through approval. You don't deal with KSEB yourself."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens after installation?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You stay with Flarize. App monitoring, service visits, and a written energy-loss guarantee, for 25 years. One number to call."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is solar a better choice than a fixed deposit?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For most Kerala homes with a high bill, the monthly saving beats FD interest, and it lasts for decades. We'll show you the real numbers for your home."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/how-flarize-works"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/inverter-comparison",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 38,
+     "question": "What is the best solar inverter for Kerala?",
+     "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 39,
+     "question": "String inverter vs microinverter — which is better for Kerala?",
+     "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 40,
+     "question": "Do I need a hybrid inverter for my Kerala home?",
+     "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 41,
+     "question": "How does Kerala's climate affect inverter performance?",
+     "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 42,
+     "question": "What inverter size do I need for my home?",
+     "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Inverter Comparison",
+     "route": "/inverter-comparison"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar inverter for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "String inverter vs microinverter — which is better for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a hybrid inverter for my Kerala home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Kerala's climate affect inverter performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What inverter size do I need for my home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/inverter-comparison"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/inverter-comparison-table",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 43,
+     "question": "What is the best solar inverter for Kerala?",
+     "answer": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 44,
+     "question": "String inverter vs microinverter — which is better for Kerala?",
+     "answer": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 45,
+     "question": "Do I need a hybrid inverter for my Kerala home?",
+     "answer": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 46,
+     "question": "How does Kerala's climate affect inverter performance?",
+     "answer": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 47,
+     "question": "What inverter size do I need for my home?",
+     "answer": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Inverter Comparison Table",
+     "route": "/inverter-comparison-table"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar inverter for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on your priorities. For shaded roofs or complex layouts, Enphase microinverters give you the best per-panel optimization. For maximum efficiency, SolarEdge's 99% HD-Wave is unmatched. For the best value-to-quality ratio, Sungrow SG5.0RS offers world-class reliability at mid-range pricing. For budget installs, Growatt delivers strong efficiency at the lowest cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "String inverter vs microinverter — which is better for Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "String inverters are more affordable and work well on unshaded, uniform roofs — which covers most Kerala homes. Microinverters are better for partially shaded roofs, multi-directional layouts, or when you want panel-level monitoring. If your roof has no shading issues and faces a consistent direction, a quality string inverter gives you the best ROI."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a hybrid inverter for my Kerala home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you plan to add battery storage within the next 2-3 years. A hybrid inverter like Fronius GEN24 lets you connect a battery later without replacing the inverter. But if you're doing standard grid-tie solar with KSEB net metering — which is what most Kerala homes opt for — a regular string inverter is more cost-effective. Don't pay for hybrid capability you may never use."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Kerala's climate affect inverter performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Kerala's high humidity (often above 80%) and ambient temperatures exceeding 35°C stress inverters significantly. Humidity can cause internal corrosion if the IP rating isn't adequate. Heat causes derating — the inverter reduces output to protect itself. Look for IP65+ protection, C5 corrosion rating for coastal areas, and derating curves that maintain full output up to at least 45°C."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What inverter size do I need for my home?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your inverter size should match your panel system size. A 3kW panel system needs a 3kW inverter. A 5kW system needs a 5kW inverter. For microinverters, you need one per panel — so a 5kW system with 9 panels needs 9 microinverters. All the 5kW inverters on this page work with systems between 3kW and 7kW depending on DC oversizing capabilities. Your installer will help size it correctly based on your roof and KSEB connection."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/inverter-comparison-table"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-referral-program",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 48,
+     "question": "I already installed solar with Flarize — can I earn?",
+     "answer": "Yes — you're our most valued partner. Existing Flarize owners join as Advisor Partners, refer neighbours and friends, and earn rewards for every home that goes solar on your word.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 49,
+     "question": "How do I earn?",
+     "answer": "You introduce a homeowner or business to Flarize. We handle consultation, design, paperwork, KSEB and installation. When the system is installed successfully, a fixed commission is credited to your partner account.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 50,
+     "question": "When do I get paid?",
+     "answer": "Commission is credited after the installation is completed and verified. Your dashboard shows the exact status and next payout date for every referral.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 51,
+     "question": "How are referrals tracked?",
+     "answer": "You get a unique tracking link, and referrals shared directly with your partner manager are also logged. Every lead is timestamped through submission, site visit, installation and payout — visible to you in real time.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 52,
+     "question": "What happens if a customer cancels?",
+     "answer": "You only earn on completed installations, so a cancellation simply means no commission for that lead — no penalty, no clawback. Your other referrals are unaffected.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 53,
+     "question": "Do I need any solar knowledge?",
+     "answer": "None. Our team handles every technical conversation, quote and approval. Your only job is the introduction and the trust you already have with your network.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 54,
+     "question": "Can influencers and creators join?",
+     "answer": "Yes. Creator partners get a tracking link and ready-to-use content. You earn on completed installations from your audience — not on clicks, views or impressions.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 55,
+     "question": "Can electricians, builders and agents join?",
+     "answer": "Absolutely — they're core partners. Solar fits naturally into electrical work, property handovers and design conversations, and you earn without changing your workflow.",
+     "section": "",
+     "category": null,
+     "order": 7
+    },
+    {
+     "id": 56,
+     "question": "Is there a minimum target?",
+     "answer": "No. There's no quota and no pressure. Refer one home a year or ten a month — you earn the same fixed rate on each successful installation.",
+     "section": "",
+     "category": null,
+     "order": 8
+    },
+    {
+     "id": 57,
+     "question": "Can I refer customers outside my district?",
+     "answer": "Yes. Flarize installs across all 14 Kerala districts, so any qualified referral within Kerala can convert regardless of where you or the homeowner are based.",
+     "section": "",
+     "category": null,
+     "order": 9
+    },
+    {
+     "id": 58,
+     "question": "How does Flarize support partners?",
+     "answer": "Every partner gets a dedicated relationship manager, a live tracking dashboard, ready-made referral content, and full handling of consultation, paperwork, KSEB, warranty and after-sales — so the customer experience reflects well on you.",
+     "section": "",
+     "category": null,
+     "order": 10
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Referral Programme",
+     "route": "/solar-referral-program"
+    },
+    "count": 11,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "I already installed solar with Flarize — can I earn?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — you're our most valued partner. Existing Flarize owners join as Advisor Partners, refer neighbours and friends, and earn rewards for every home that goes solar on your word."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How do I earn?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You introduce a homeowner or business to Flarize. We handle consultation, design, paperwork, KSEB and installation. When the system is installed successfully, a fixed commission is credited to your partner account."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "When do I get paid?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Commission is credited after the installation is completed and verified. Your dashboard shows the exact status and next payout date for every referral."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How are referrals tracked?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You get a unique tracking link, and referrals shared directly with your partner manager are also logged. Every lead is timestamped through submission, site visit, installation and payout — visible to you in real time."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens if a customer cancels?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You only earn on completed installations, so a cancellation simply means no commission for that lead — no penalty, no clawback. Your other referrals are unaffected."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need any solar knowledge?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "None. Our team handles every technical conversation, quote and approval. Your only job is the introduction and the trust you already have with your network."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can influencers and creators join?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Creator partners get a tracking link and ready-to-use content. You earn on completed installations from your audience — not on clicks, views or impressions."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can electricians, builders and agents join?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely — they're core partners. Solar fits naturally into electrical work, property handovers and design conversations, and you earn without changing your workflow."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is there a minimum target?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There's no quota and no pressure. Refer one home a year or ten a month — you earn the same fixed rate on each successful installation."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I refer customers outside my district?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Flarize installs across all 14 Kerala districts, so any qualified referral within Kerala can convert regardless of where you or the homeowner are based."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does Flarize support partners?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every partner gets a dedicated relationship manager, a live tracking dashboard, ready-made referral content, and full handling of consultation, paperwork, KSEB, warranty and after-sales — so the customer experience reflects well on you."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-referral-program"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/residential",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 59,
+     "question": "How much do solar panels cost for a home in Kerala?",
+     "answer": "A 3kW on-grid system costs ₹2–2.30 lakh, a 5kW system ₹3–3.30 lakh and a 10kW system ₹5–6 lakh before the ₹78,000 PM Surya Ghar subsidy. The range exists because a flat concrete roof is cheaper to work on than a tiled roof needing a raised frame, taller buildings need more cable and scaffolding, and panel and inverter brands differ in price. After the free site assessment your proposal shows one fixed, item-by-item price that does not change once work starts.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 60,
+     "question": "Is the ₹78,000 solar subsidy real, and how do I get it?",
+     "answer": "Yes. It is paid under the central PM Surya Ghar Muft Bijli Yojana and credited directly to your bank account after installation and inspection. Flarize files the national portal application, the KSEB paperwork and the subsidy claim on your behalf, so you are not chasing forms yourself.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 61,
+     "question": "How does KSEB net metering work?",
+     "answer": "A bidirectional KSEB meter records the units your roof exports during the day and the units you draw at night. You are billed only on the net difference, so daytime generation offsets night-time consumption. Flarize handles the net-metering application, feasibility approval and meter installation with KSEB.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 62,
+     "question": "Will solar panels work during the Kerala monsoon?",
+     "answer": "Yes, at reduced output. Panels run on daylight rather than direct sun, so they keep generating on overcast monsoon days, typically at a lower percentage of rated output. Systems are sized against your full-year consumption, so strong generation from January to May covers the monsoon dip — and rain also washes dust off the panels.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 63,
+     "question": "Is the site assessment free?",
+     "answer": "Yes. A Flarize engineer visits your home, measures usable shadow-free roof area, checks orientation and shading between 9 AM and 4 PM, reviews your KSEB bill and returns three tailored proposals. There is no cost and no obligation to proceed.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 64,
+     "question": "Do I need a battery with my solar system?",
+     "answer": "Most Kerala homes do not. An on-grid system is cheapest and pays back fastest, but shuts down during a power cut as a KSEB safety rule. Choose a hybrid system with a battery if outages are frequent in your area, or you need fans, lights, Wi-Fi and the fridge to keep running at night.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 65,
+     "question": "Can I add more panels later or charge an EV?",
+     "answer": "Yes, if the system is planned for it. Sizing the inverter with headroom and leaving spare roof area lets you add panels later, and an EV charger can be added to a suitably sized system. Tell the engineer at the assessment so the design allows for future load.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Residential",
+     "route": "/residential"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How much do solar panels cost for a home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A 3kW on-grid system costs ₹2–2.30 lakh, a 5kW system ₹3–3.30 lakh and a 10kW system ₹5–6 lakh before the ₹78,000 PM Surya Ghar subsidy. The range exists because a flat concrete roof is cheaper to work on than a tiled roof needing a raised frame, taller buildings need more cable and scaffolding, and panel and inverter brands differ in price. After the free site assessment your proposal shows one fixed, item-by-item price that does not change once work starts."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the ₹78,000 solar subsidy real, and how do I get it?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It is paid under the central PM Surya Ghar Muft Bijli Yojana and credited directly to your bank account after installation and inspection. Flarize files the national portal application, the KSEB paperwork and the subsidy claim on your behalf, so you are not chasing forms yourself."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How does KSEB net metering work?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A bidirectional KSEB meter records the units your roof exports during the day and the units you draw at night. You are billed only on the net difference, so daytime generation offsets night-time consumption. Flarize handles the net-metering application, feasibility approval and meter installation with KSEB."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Will solar panels work during the Kerala monsoon?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, at reduced output. Panels run on daylight rather than direct sun, so they keep generating on overcast monsoon days, typically at a lower percentage of rated output. Systems are sized against your full-year consumption, so strong generation from January to May covers the monsoon dip — and rain also washes dust off the panels."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the site assessment free?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. A Flarize engineer visits your home, measures usable shadow-free roof area, checks orientation and shading between 9 AM and 4 PM, reviews your KSEB bill and returns three tailored proposals. There is no cost and no obligation to proceed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Do I need a battery with my solar system?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most Kerala homes do not. An on-grid system is cheapest and pays back fastest, but shuts down during a power cut as a KSEB safety rule. Choose a hybrid system with a battery if outages are frequent in your area, or you need fans, lights, Wi-Fi and the fridge to keep running at night."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I add more panels later or charge an EV?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if the system is planned for it. Sizing the inverter with headroom and leaving spare roof area lets you add panels later, and an EV charger can be added to a suitably sized system. Tell the engineer at the assessment so the design allows for future load."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/residential"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-warranty",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 66,
+     "question": "What is PM Surya Ghar subsidy? How much can I get?",
+     "answer": "PM Surya Ghar gives ₹78,000 subsidy for 3kW residential systems in Kerala (₹26,000/kW). Flarize handles full documentation & KSEB approval. Net cost: ₹78,000–₹1,27,000 (after subsidy). Eligibility: own home roof, KSEB connection.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 67,
+     "question": "What exactly is included in the \"Full Flarize Guarantee\"?",
+     "answer": "Covers: installation quality defects (5yr), panel performance (25yr on some), inverter warranty (5–10yr per brand), and Energy Loss Guarantee — if system down >3 days, Flarize pays for lost generation. Post-install: WhatsApp support + 3-layer technician backup.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 68,
+     "question": "What does a Solar Care Plan cost? What's included?",
+     "answer": "Optional paid plans (price not listed, call for quote). Covers: bi-annual cleaning, health checkups, pest/rodent inspections, priority technician dispatch, performance reporting. Prevents 10–15% efficiency loss from dust/debris.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 69,
+     "question": "How much will I save per year? When is payback?",
+     "answer": "Depends on system size & roof space. Example 3kW system: saves ₹12,000–₹18,000/yr (₹1,000–₹1,500/month). Payback: 6–8 years (after subsidy). Then 17+ years of near-free power. Use free estimate calculator on site.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 70,
+     "question": "Does Flarize get KSEB approval or do I do it?",
+     "answer": "Flarize handles 100% — application, inspection coordination, net metering approval. You sign an approval letter only. Flarize tracks status & pushes KSEB (typically 15–30 days post-install).",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 71,
+     "question": "What if my electricity consumption is very low?",
+     "answer": "System undersized. Flarize analyzes your bill (Step 1) and avoids over-sizing. If consumption <100 kWh/month, 1–1.5kW system is better. Subsidy applies to 1kW too (₹26,000). Discuss in free site visit.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 72,
+     "question": "Can I upgrade the system size after 1 year?",
+     "answer": "Yes. Add panels/inverter capacity. But KSEB needs new net metering (15–30 day wait). Cost varies. Contact Flarize service team post-install.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Warranty",
+     "route": "/solar-warranty"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is PM Surya Ghar subsidy? How much can I get?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PM Surya Ghar gives ₹78,000 subsidy for 3kW residential systems in Kerala (₹26,000/kW). Flarize handles full documentation & KSEB approval. Net cost: ₹78,000–₹1,27,000 (after subsidy). Eligibility: own home roof, KSEB connection."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What exactly is included in the \"Full Flarize Guarantee\"?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Covers: installation quality defects (5yr), panel performance (25yr on some), inverter warranty (5–10yr per brand), and Energy Loss Guarantee — if system down >3 days, Flarize pays for lost generation. Post-install: WhatsApp support + 3-layer technician backup."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What does a Solar Care Plan cost? What's included?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Optional paid plans (price not listed, call for quote). Covers: bi-annual cleaning, health checkups, pest/rodent inspections, priority technician dispatch, performance reporting. Prevents 10–15% efficiency loss from dust/debris."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much will I save per year? When is payback?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depends on system size & roof space. Example 3kW system: saves ₹12,000–₹18,000/yr (₹1,000–₹1,500/month). Payback: 6–8 years (after subsidy). Then 17+ years of near-free power. Use free estimate calculator on site."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does Flarize get KSEB approval or do I do it?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flarize handles 100% — application, inspection coordination, net metering approval. You sign an approval letter only. Flarize tracks status & pushes KSEB (typically 15–30 days post-install)."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What if my electricity consumption is very low?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "System undersized. Flarize analyzes your bill (Step 1) and avoids over-sizing. If consumption <100 kWh/month, 1–1.5kW system is better. Subsidy applies to 1kW too (₹26,000). Discuss in free site visit."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I upgrade the system size after 1 year?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Add panels/inverter capacity. But KSEB needs new net metering (15–30 day wait). Cost varies. Contact Flarize service team post-install."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-warranty"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/emi-calculator",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 73,
+     "question": "How does the PM Surya Ghar subsidy reduce my solar loan EMI?",
+     "answer": "<p>Yes — <em>0%</em> processing fee on partner banks.</p><ul><li>SBI</li><li>Federal Bank</li></ul>",
+     "section": "",
+     "category": "Financing",
+     "order": 0
+    },
+    {
+     "id": 74,
+     "question": "What is the minimum CIBIL score for a solar loan in Kerala?",
+     "answer": "Minimum CIBIL score of 650 is required.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 75,
+     "question": "What is the EMI for a 3kW solar system in Kerala?",
+     "answer": "For a 3kW system in Kerala, EMI starts at ₹2,500/month through Flarize's SBI partnership at 5.75% over 5 years.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 76,
+     "question": "What is Flarize's 5.75% rate and how is it different from SBI's standard rate?",
+     "answer": "Flarize is an MNRE-empanelled vendor on India's national PM Surya Ghar portal. This enables a direct SBI channel partnership that gives Flarize customers 5.75% — lower than SBI's published rate of 7%.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 77,
+     "question": "How long does solar loan approval take through Flarize?",
+     "answer": "Our documentation process takes up to one week, while bank procedures vary depending on the partner bank.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 78,
+     "question": "How much will I save over 25 years with a solar loan in Kerala?",
+     "answer": "For a 3kW system at 5.75% over 5 years, your total investment is approximately ₹1,22,000 after subsidy. Over 25 years at a conservative 5% annual KSEB tariff increase, cumulative savings exceed ₹11 lakh. After year 5, invest ₹2,500/month at 12% SIP returns — that's ₹30 lakh in wealth.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 79,
+     "question": "What documents do I need for a solar loan in Kerala?",
+     "answer": "Aadhaar card, PAN card, passbook/ bank statements, latest KSEB electricity bill, property ownership proof. For loans above ₹2L: income proof. For 3kW systems: no income proof required. Flarize collects and submits all documents on your behalf.",
+     "section": "",
+     "category": null,
+     "order": 6
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "EMI Calculator",
+     "route": "/emi-calculator"
+    },
+    "count": 7,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "How does the PM Surya Ghar subsidy reduce my solar loan EMI?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "<p>Yes — <em>0%</em> processing fee on partner banks.</p><ul><li>SBI</li><li>Federal Bank</li></ul>"
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the minimum CIBIL score for a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Minimum CIBIL score of 650 is required."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is the EMI for a 3kW solar system in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a 3kW system in Kerala, EMI starts at ₹2,500/month through Flarize's SBI partnership at 5.75% over 5 years."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What is Flarize's 5.75% rate and how is it different from SBI's standard rate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Flarize is an MNRE-empanelled vendor on India's national PM Surya Ghar portal. This enables a direct SBI channel partnership that gives Flarize customers 5.75% — lower than SBI's published rate of 7%."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does solar loan approval take through Flarize?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our documentation process takes up to one week, while bank procedures vary depending on the partner bank."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much will I save over 25 years with a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a 3kW system at 5.75% over 5 years, your total investment is approximately ₹1,22,000 after subsidy. Over 25 years at a conservative 5% annual KSEB tariff increase, cumulative savings exceed ₹11 lakh. After year 5, invest ₹2,500/month at 12% SIP returns — that's ₹30 lakh in wealth."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What documents do I need for a solar loan in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aadhaar card, PAN card, passbook/ bank statements, latest KSEB electricity bill, property ownership proof. For loans above ₹2L: income proof. For 3kW systems: no income proof required. Flarize collects and submits all documents on your behalf."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/emi-calculator"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/group-purchase",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 81,
+     "question": "What is a group solar purchase?",
+     "answer": "A group solar purchase allows nearby homeowners to install solar together. By combining multiple installations in the same area, costs are reduced and installation becomes more efficient.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 82,
+     "question": "How many families are required to form a group?",
+     "answer": "A group is confirmed when at least 5 families in the same area complete their booking. Once confirmed, installations are scheduled together.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 83,
+     "question": "What happens to my ₹1,000 booking amount?",
+     "answer": "Your ₹1,000 booking amount reserves your spot in the group and is fully adjusted against your final solar system cost.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 84,
+     "question": "What if the group does not form?",
+     "answer": "If the required number of families is not reached within the specified period, you can either receive a full refund, or continue with an individual installation while retaining your locked pricing (if applicable).",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 85,
+     "question": "Is the solar system quality different from individual bookings?",
+     "answer": "No. Group purchase customers receive the same panels, inverter brands, installation standards, warranty coverage, and service support as individual customers.",
+     "section": "",
+     "category": null,
+     "order": 4
+    },
+    {
+     "id": 86,
+     "question": "How much can I save through a group purchase?",
+     "answer": "Savings vary based on system size and location, but most homeowners can save up to ₹10,000 compared to standard individual pricing.",
+     "section": "",
+     "category": null,
+     "order": 5
+    },
+    {
+     "id": 87,
+     "question": "How long does installation take after a group is confirmed?",
+     "answer": "Once a group is confirmed, installations are typically completed within the scheduled group installation week, usually faster than individual installations.",
+     "section": "",
+     "category": null,
+     "order": 6
+    },
+    {
+     "id": 88,
+     "question": "Can I join if I already have a solar quotation?",
+     "answer": "Yes. You can still join the group purchase program. Our team can review your existing quotation and help you compare costs, specifications, and potential savings.",
+     "section": "",
+     "category": null,
+     "order": 7
+    },
+    {
+     "id": 89,
+     "question": "How do I know the status of my group?",
+     "answer": "After booking, you'll receive updates via WhatsApp, SMS, or phone regarding the number of families joined, group formation progress, installation schedule, and next steps.",
+     "section": "",
+     "category": null,
+     "order": 8
+    },
+    {
+     "id": 90,
+     "question": "Why is group solar cheaper?",
+     "answer": "Group installations reduce logistics, survey, transportation, and crew mobilization costs by serving multiple nearby homes during the same installation period. These savings are passed directly to homeowners without compromising quality.",
+     "section": "",
+     "category": null,
+     "order": 9
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Group Purchase",
+     "route": "/group-purchase"
+    },
+    "count": 10,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is a group solar purchase?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A group solar purchase allows nearby homeowners to install solar together. By combining multiple installations in the same area, costs are reduced and installation becomes more efficient."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many families are required to form a group?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A group is confirmed when at least 5 families in the same area complete their booking. Once confirmed, installations are scheduled together."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What happens to my ₹1,000 booking amount?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your ₹1,000 booking amount reserves your spot in the group and is fully adjusted against your final solar system cost."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What if the group does not form?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If the required number of families is not reached within the specified period, you can either receive a full refund, or continue with an individual installation while retaining your locked pricing (if applicable)."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Is the solar system quality different from individual bookings?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Group purchase customers receive the same panels, inverter brands, installation standards, warranty coverage, and service support as individual customers."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much can I save through a group purchase?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Savings vary based on system size and location, but most homeowners can save up to ₹10,000 compared to standard individual pricing."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How long does installation take after a group is confirmed?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once a group is confirmed, installations are typically completed within the scheduled group installation week, usually faster than individual installations."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I join if I already have a solar quotation?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can still join the group purchase program. Our team can review your existing quotation and help you compare costs, specifications, and potential savings."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How do I know the status of my group?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "After booking, you'll receive updates via WhatsApp, SMS, or phone regarding the number of families joined, group formation progress, installation schedule, and next steps."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Why is group solar cheaper?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Group installations reduce logistics, survey, transportation, and crew mobilization costs by serving multiple nearby homes during the same installation period. These savings are passed directly to homeowners without compromising quality."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/group-purchase"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-comparison",
+   "section": "inverters"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 94,
+     "question": "What does a 25-year solar panel warranty actually cover?",
+     "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+     "section": "inverters",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 95,
+     "question": "How many solar panels do I need for my home in Kerala?",
+     "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+     "section": "inverters",
+     "category": null,
+     "order": 0
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Comparison",
+     "route": "/solar-comparison"
+    },
+    "count": 2,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What does a 25-year solar panel warranty actually cover?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many solar panels do I need for my home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-comparison"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/solar-comparison",
+   "section": "panels"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 91,
+     "question": "What is the best solar panel for Kerala's climate?",
+     "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+     "section": "panels",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 92,
+     "question": "How important is temperature coefficient for solar panels in Kerala?",
+     "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+     "section": "panels",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 93,
+     "question": "Does high humidity affect solar panel performance?",
+     "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+     "section": "panels",
+     "category": null,
+     "order": 2
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Comparison",
+     "route": "/solar-comparison"
+    },
+    "count": 3,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar panel for Kerala's climate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How important is temperature coefficient for solar panels in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does high humidity affect solar panel performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/solar-comparison"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/comparison-table",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 96,
+     "question": "What is the best solar panel for Kerala's climate?",
+     "answer": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records.",
+     "section": "",
+     "category": null,
+     "order": 0
+    },
+    {
+     "id": 97,
+     "question": "How important is temperature coefficient for solar panels in Kerala?",
+     "answer": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment.",
+     "section": "",
+     "category": null,
+     "order": 1
+    },
+    {
+     "id": 98,
+     "question": "Does high humidity affect solar panel performance?",
+     "answer": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score.",
+     "section": "",
+     "category": null,
+     "order": 2
+    },
+    {
+     "id": 99,
+     "question": "What does a 25-year solar panel warranty actually cover?",
+     "answer": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed.",
+     "section": "",
+     "category": null,
+     "order": 3
+    },
+    {
+     "id": 100,
+     "question": "How many solar panels do I need for my home in Kerala?",
+     "answer": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number.",
+     "section": "",
+     "category": null,
+     "order": 4
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Solar Comparison Table",
+     "route": "/comparison-table"
+    },
+    "count": 5,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What is the best solar panel for Kerala's climate?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The best panel depends on your roof space, budget, and energy needs. For Kerala, prioritize panels with a low temperature coefficient (below -0.35%/°C), IP68-rated junction boxes for humidity resistance, and proven tropical degradation rates. N-type TOPCon panels from Adani and Saatvik currently score highest in our Kerala Climate Rating due to superior heat tolerance and lower degradation. Waaree and Vikram Solar's bifacial models are also strong contenders with proven Kerala track records."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How important is temperature coefficient for solar panels in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Very important. Kerala regularly sees ambient temps above 35°C, pushing panel surfaces to 55-65°C. A panel rated -0.30%/°C loses about 12% output at 65°C, while one at -0.40%/°C loses about 16%. That 4% daily difference over 25 years compounds to a significant gap in total generation and returns on your investment."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Does high humidity affect solar panel performance?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Kerala's humidity (often above 80%) accelerates potential-induced degradation (PID), corrodes poorly sealed junction boxes, and causes micro-cracks in lower-quality cells. Panels with IP68-rated junction boxes, anti-PID certification, and tropical-grade encapsulants perform significantly better over their 25-year lifespan. This is why we weight humidity resistance heavily in our Kerala Climate Score."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What does a 25-year solar panel warranty actually cover?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most panels have two separate warranties. The product warranty (typically 12 years) covers manufacturing defects — cell cracking, delamination, junction box failure. The performance warranty (25-30 years) guarantees minimum output, usually 80-87% at term end. In Kerala, the product warranty matters more because humidity and heat stress-test build quality early. Always confirm the warranty is manufacturer-backed, not just installer-backed."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How many solar panels do I need for my home in Kerala?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide your monthly KSEB bill by ₹1,000 for approximate system size in kW. A 3kW system needs 5-6 panels (550W each) for bills up to ₹3,000/month. A 5kW system needs 9-10 panels for bills up to ₹5,000/month. Your actual requirement depends on roof direction, shading, and whether you plan to add high-consumption appliances like an EV charger in the coming years. A site visit gives the most accurate number."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/comparison-table"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/faq",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 103,
+     "question": "What does Flarize do?",
+     "answer": "We design and install rooftop solar in Kerala.",
+     "section": "",
+     "category": "Subsidy",
+     "order": 0
+    },
+    {
+     "id": 105,
+     "question": "Blank question answer pair",
+     "answer": "   ",
+     "section": "",
+     "category": null,
+     "order": 1
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "FAQ hub",
+     "route": "/faq"
+    },
+    "count": 2,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What does Flarize do?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We design and install rooftop solar in Kerala."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/faq"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/faq",
+   "section": "coverage"
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 104,
+     "question": "Where do you work?",
+     "answer": "Across Kerala.",
+     "section": "coverage",
+     "category": null,
+     "order": 0
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "FAQ hub",
+     "route": "/faq"
+    },
+    "count": 1,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "Where do you work?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Across Kerala."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/faq"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/resources",
+   "section": ""
+  },
+  "status": 200,
+  "body": {
+   "data": [
+    {
+     "id": 106,
+     "question": "Where are the guides?",
+     "answer": "In the resources section.",
+     "section": "",
+     "category": null,
+     "order": 0
+    }
+   ],
+   "meta": {
+    "page": {
+     "name": "Resources",
+     "route": "/resources"
+    },
+    "count": 1,
+    "schema": {
+     "@context": "https://schema.org",
+     "@type": "FAQPage",
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "Where are the guides?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In the resources section."
+       }
+      }
+     ],
+     "url": "http://localhost:3000/resources"
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "page": "/no-such-page"
+  },
+  "status": 404,
+  "body": null
+ }
+]

@@ -1,1 +1,29 @@
-"""FAQs serializers (HTTP shape only)."""
+from faqs.serializers.faqs import (
+    FaqActionSerializer,
+    FaqCategoryCreateSerializer,
+    FaqCategorySerializer,
+    FaqCategoryUpdateSerializer,
+    FaqCreateSerializer,
+    FaqListSerializer,
+    FaqPreviewSerializer,
+    FaqReorderSerializer,
+    FaqSerializer,
+    FaqUpdateSerializer,
+    PublicFaqListSerializer,
+    PublicFaqQuerySerializer,
+)
+
+__all__ = [
+    "FaqActionSerializer",
+    "FaqCategoryCreateSerializer",
+    "FaqCategorySerializer",
+    "FaqCategoryUpdateSerializer",
+    "FaqCreateSerializer",
+    "FaqListSerializer",
+    "FaqPreviewSerializer",
+    "FaqReorderSerializer",
+    "FaqSerializer",
+    "FaqUpdateSerializer",
+    "PublicFaqListSerializer",
+    "PublicFaqQuerySerializer",
+]

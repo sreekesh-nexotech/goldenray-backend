@@ -1,0 +1,416 @@
+[
+ {
+  "query": {
+   "route": "/"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/",
+    "name": "Home",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solutions"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solutions",
+    "name": "Solutions",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/quote-analyser"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/quote-analyser",
+    "name": "Quote Analyser",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/subsidy"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/subsidy",
+    "name": "Subsidy",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/how-flarize-works"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/how-flarize-works",
+    "name": "How Flarize Works",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/inverter-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/inverter-comparison",
+    "name": "Inverter Comparison",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/inverter-comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/inverter-comparison-table",
+    "name": "Inverter Comparison Table",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-referral-program"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-referral-program",
+    "name": "Referral Programme",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/residential"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/residential",
+    "name": "Residential",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-warranty"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-warranty",
+    "name": "Solar Warranty",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/emi-calculator"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/emi-calculator",
+    "name": "EMI Calculator",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/group-purchase"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/group-purchase",
+    "name": "Group Purchase",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-comparison",
+    "name": "Solar Comparison",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/comparison-table",
+    "name": "Solar Comparison Table",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/about"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/about",
+    "name": "About",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/contactus"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/contactus",
+    "name": "Contact",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/faq"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/faq",
+    "name": "FAQ hub",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/commercial"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/commercial",
+    "name": "Commercial",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/industrial"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/industrial",
+    "name": "Industrial",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/service-area"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/service-area",
+    "name": "Service Areas",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/advanced-calculator"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/advanced-calculator",
+    "name": "Advanced Calculator",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/career"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/career",
+    "name": "Careers",
+    "images": {
+     "hero_background": null
+    },
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/projects"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/projects",
+    "name": "Projects",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/resources"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/resources",
+    "name": "Resources",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/blog"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/blog",
+    "name": "Blog",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/privacy"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/privacy",
+    "name": "Privacy Policy",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/terms"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/terms",
+    "name": "Terms",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/no-such-page"
+  },
+  "status": 404,
+  "body": null
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "id": 1,
+  "key": "hero_background",
+  "label": "Hero background",
+  "guidance": "Full-width photo behind the headline; landscape, at least 1920×1080.",
+  "alt_text": "",
+  "order": 0,
+  "updated_at": "2026-09-28T17:40:01.087754+00:00",
+  "asset_id": null,
+  "page_id": 22,
+  "updated_by_id": null
+ }
+]

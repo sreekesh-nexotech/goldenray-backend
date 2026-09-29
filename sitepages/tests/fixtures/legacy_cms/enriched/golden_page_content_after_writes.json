@@ -1,0 +1,493 @@
+[
+ {
+  "query": {
+   "route": "/"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/",
+    "name": "Home",
+    "images": {
+     "hero_image": {
+      "url": "https://golden-ray.b-cdn.net/cms/general/home-hero.webp",
+      "alt": "",
+      "width": 1600,
+      "height": 900
+     },
+     "promo_banner": {
+      "url": "https://golden-ray.b-cdn.net/cms/general/career-og.webp",
+      "alt": "Careers at Flarize",
+      "width": 1200,
+      "height": 630
+     }
+    },
+    "text": {
+     "cta_phone": "+91 62829 22988",
+     "cta_email": "hello@flarize.com",
+     "offer_url": "https://flarize.com/subsidy",
+     "hero_note": "Subsidy up to ₹78,000 — we file it for you."
+    },
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solutions"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solutions",
+    "name": "Solutions",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/quote-analyser"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/quote-analyser",
+    "name": "Quote Analyser",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/subsidy"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/subsidy",
+    "name": "Subsidy",
+    "images": {},
+    "text": {},
+    "seo": {
+     "title": "PM Surya Ghar subsidy",
+     "description": "Get up to ₹78,000 under PM Surya Ghar — we handle the paperwork.",
+     "canonical_url": "",
+     "noindex": true,
+     "og_image": null,
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "PM Surya Ghar subsidy",
+      "description": "Get up to ₹78,000 under PM Surya Ghar — we handle the paperwork.",
+      "url": "http://localhost:3000/subsidy",
+      "isPartOf": {
+       "@type": "WebSite",
+       "name": "Flarize",
+       "url": "http://localhost:3000"
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/how-flarize-works"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/how-flarize-works",
+    "name": "How Flarize Works",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/inverter-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/inverter-comparison",
+    "name": "Inverter Comparison",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/inverter-comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/inverter-comparison-table",
+    "name": "Inverter Comparison Table",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-referral-program"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-referral-program",
+    "name": "Referral Programme",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/residential"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/residential",
+    "name": "Residential",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-warranty"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-warranty",
+    "name": "Solar Warranty",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/emi-calculator"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/emi-calculator",
+    "name": "EMI Calculator",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/group-purchase"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/group-purchase",
+    "name": "Group Purchase",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/solar-comparison"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/solar-comparison",
+    "name": "Solar Comparison",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/comparison-table"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/comparison-table",
+    "name": "Solar Comparison Table",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/about"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/about",
+    "name": "About",
+    "images": {},
+    "text": {},
+    "seo": {
+     "title": "",
+     "description": "About Flarize.",
+     "canonical_url": "",
+     "noindex": false,
+     "og_image": {
+      "url": "https://golden-ray.b-cdn.net/cms/general/home-hero.webp",
+      "alt": "",
+      "width": 1600,
+      "height": 900
+     },
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "About",
+      "description": "About Flarize.",
+      "url": "http://localhost:3000/about",
+      "isPartOf": {
+       "@type": "WebSite",
+       "name": "Flarize",
+       "url": "http://localhost:3000"
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/contactus"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/contactus",
+    "name": "Contact",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/faq"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/faq",
+    "name": "FAQ hub",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/commercial"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/commercial",
+    "name": "Commercial",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/industrial"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/industrial",
+    "name": "Industrial",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/service-area"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/service-area",
+    "name": "Service Areas",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/advanced-calculator"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/advanced-calculator",
+    "name": "Advanced Calculator",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/career"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/career",
+    "name": "Careers",
+    "images": {
+     "hero_background": null
+    },
+    "text": {
+     "hero_title": "Build Kerala's solar future with us",
+     "hero_subtitle": "Join a team that installs 200 rooftops a month."
+    },
+    "seo": {
+     "title": "Careers at Flarize — solar jobs in Kerala",
+     "description": "Open roles in installation, sales and engineering at Flarize, Kerala's rooftop solar company.",
+     "canonical_url": "https://flarize.com/career",
+     "noindex": false,
+     "og_image": {
+      "url": "https://golden-ray.b-cdn.net/cms/general/career-og.webp",
+      "alt": "Careers at Flarize",
+      "width": 1200,
+      "height": 630
+     },
+     "schema": {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Careers at Flarize — solar jobs in Kerala",
+      "description": "Open roles in installation, sales and engineering at Flarize, Kerala's rooftop solar company.",
+      "url": "http://localhost:3000/career",
+      "isPartOf": {
+       "@type": "WebSite",
+       "name": "Flarize",
+       "url": "http://localhost:3000"
+      },
+      "inLanguage": "en-IN"
+     }
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/projects"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/projects",
+    "name": "Projects",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/resources"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/resources",
+    "name": "Resources",
+    "images": {},
+    "text": {},
+    "seo": null
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/blog"
+  },
+  "status": 404,
+  "body": null
+ },
+ {
+  "query": {
+   "route": "/privacy"
+  },
+  "status": 200,
+  "body": {
+   "data": {
+    "route": "/privacy",
+    "name": "Privacy Policy",
+    "images": {},
+    "text": {},
+    "seo": {
+     "title": "Privacy",
+     "description": "",
+     "canonical_url": "",
+     "noindex": false,
+     "og_image": null,
+     "schema": null
+    }
+   }
+  }
+ },
+ {
+  "query": {
+   "route": "/terms"
+  },
+  "status": 404,
+  "body": null
+ },
+ {
+  "query": {
+   "route": "/no-such-page"
+  },
+  "status": 404,
+  "body": null
+ }
+]

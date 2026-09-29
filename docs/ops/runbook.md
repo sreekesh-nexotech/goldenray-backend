@@ -30,7 +30,7 @@ Networks: compose network `172.28.0.0/16` → set `TRUSTED_PROXIES=172.28.0.0/16
    `http://127.0.0.1:8000/healthz`), `TRUSTED_PROXIES`, `JWT_*_PATH=/run/flarize-keys/…`, `FERNET_KEYS`,
    `DB_NAME/DB_USER/DB_PASSWORD`, `DB_APP_ROLE`, `EMAIL_*`, `PASSWORD_RESET_URL`, `CORS_ALLOWED_ORIGINS`,
    `BUNNY_*` (until the Bunny integration is stored in Studio), `DOCUMENTS_ALLOWED_ASSET_HOSTS=<cdn host>`,
-   `OPS_EMAILS`. `prod.py` refuses to start on anything unsafe and names each problem.
+   `OPS_EMAILS`, `FRONTEND_BASE_URL` (https origin of the website). `prod.py` refuses to start on anything unsafe and names each problem.
 2. `cp deploy/nginx/legacy/switch.conf /srv/flarize/nginx/legacy-switch.conf` and set
    `LEGACY_SWITCH_FILE=/srv/flarize/nginx/legacy-switch.conf` in the shell profile used for `dc`.
 3. TLS: `dc run --rm certbot certonly --webroot -w /var/www/certbot -d flarize.com -d www.flarize.com` (nginx must
@@ -42,7 +42,7 @@ Networks: compose network `172.28.0.0/16` → set `TRUSTED_PROXIES=172.28.0.0/16
 
 ## 3. Deploying (PLAN §5.5)
 
-`deploy/release.sh <git-sha>` — pulls the CI images for that SHA, runs `migrate` + `ensure_audit_partitions` as the
+`deploy/release.sh <git-sha>` — pulls the CI images for that SHA, runs `migrate` + `ensure_audit_partitions` + `seed_pages` as the
 owner role, recreates `api-a` then waits for it to be healthy, then `api-b`, restarts workers and beat (warm
 shutdown, up to 130 s for running tasks), runs the smoke tests (`/healthz`, `GET /api/public/v1/company/`, login →
 `GET /api/v1/auth/me/` → logout) and records the SHA. On any failure it stops and prints the rollback command.

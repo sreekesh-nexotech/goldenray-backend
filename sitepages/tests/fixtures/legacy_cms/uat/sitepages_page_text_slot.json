@@ -1,0 +1,28 @@
+[
+ {
+  "id": 1,
+  "key": "hero_title",
+  "label": "Hero headline",
+  "kind": "short_text",
+  "guidance": "One line; keep it under ~70 characters so it stays on two lines on phones.",
+  "value": "",
+  "max_length": 90,
+  "order": 0,
+  "updated_at": "2026-09-28T17:40:01.091165+00:00",
+  "page_id": 22,
+  "updated_by_id": null
+ },
+ {
+  "id": 2,
+  "key": "hero_subtitle",
+  "label": "Hero sub-headline",
+  "kind": "long_text",
+  "guidance": "One or two short sentences under the headline.",
+  "value": "",
+  "max_length": 220,
+  "order": 1,
+  "updated_at": "2026-09-28T17:40:01.093741+00:00",
+  "page_id": 22,
+  "updated_by_id": null
+ }
+]

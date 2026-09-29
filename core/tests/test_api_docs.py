@@ -102,6 +102,7 @@ def test_prod_docs_are_usable_from_the_allow_listed_network(tmp_path):
             "FERNET_KEYS": Fernet.generate_key().decode(),
             "TRUSTED_PROXIES": "172.28.0.0/16",
             "PASSWORD_RESET_URL": "https://flarize.com/studio/reset-password",
+            "FRONTEND_BASE_URL": "https://flarize.com",
             "EMAIL_BACKEND": "django.core.mail.backends.smtp.EmailBackend",
             "MEDIA_PUBLIC_BACKEND": "bunny",
             "DOCUMENTS_RENDERER": "playwright",

@@ -1,0 +1,38 @@
+[
+ {
+  "id": 1,
+  "key": "hero_background",
+  "label": "Hero background",
+  "guidance": "Full-width photo behind the headline; landscape, at least 1920×1080.",
+  "alt_text": "Our team at work",
+  "order": 0,
+  "updated_at": "2026-09-28T21:13:49.019095+00:00",
+  "asset_id": 1,
+  "page_id": 22,
+  "updated_by_id": 1
+ },
+ {
+  "id": 2,
+  "key": "hero_image",
+  "label": "Hero image",
+  "guidance": "Landscape",
+  "alt_text": "",
+  "order": 0,
+  "updated_at": "2026-09-28T21:13:49.027675+00:00",
+  "asset_id": 3,
+  "page_id": 1,
+  "updated_by_id": null
+ },
+ {
+  "id": 3,
+  "key": "promo_banner",
+  "label": "Promo banner",
+  "guidance": "",
+  "alt_text": "",
+  "order": 1,
+  "updated_at": "2026-09-28T21:13:49.029519+00:00",
+  "asset_id": null,
+  "page_id": 1,
+  "updated_by_id": null
+ }
+]

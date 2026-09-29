@@ -1,6 +1,6 @@
 """Public profile shapes: staff (``catalog/public-profiles/``) and website (``products/…``)."""
 
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
 from rest_framework import serializers
 
 from catalog.models import RATING_KEYS, Component, ComponentPublicProfile
@@ -29,6 +29,8 @@ class RatingsSerializer(serializers.Serializer):
         return super().to_internal_value(data)
 
 
+# A question/answer pair of a public profile; the component name leaves ``Faq`` to the faqs app's FAQ resource.
+@extend_schema_serializer(component_name="CatalogProfileFaq")
 class FaqSerializer(serializers.Serializer):
     question = serializers.CharField(max_length=500)
     answer = serializers.CharField(max_length=5000)

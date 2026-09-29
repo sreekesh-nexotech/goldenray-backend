@@ -216,6 +216,9 @@ CACHE_VERSION_TTL_SECONDS = 7 * 24 * 60 * 60
 PUBLIC_CACHE_TTL_SECONDS = 60
 # HTTP Cache-Control max-age budget for public GETs (PLAN §3.1): browsers and CDNs cannot be invalidated by bump().
 PUBLIC_CACHE_MAX_AGE_SECONDS = 60
+# Origin of the public website (Next.js), no trailing slash: absolute URLs in JSON-LD, previews and sitemap entries.
+# Same name and default as the legacy CMS setting, so generated documents stay identical across the cutover.
+FRONTEND_BASE_URL = config("FRONTEND_BASE_URL", default="http://localhost:3000").rstrip("/")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Client IP / proxies
@@ -364,6 +367,8 @@ SPECTACULAR_SETTINGS = {
         "CatalogUnitEnum": "catalog.models.category.Unit",
         "BlogEntryStatusEnum": "blog.models.entry.Entry.Status",
         "BlogContentBlockKindEnum": "blog.models.entry.ContentBlock.Kind",
+        # DRAFT / PUBLISHED / ARCHIVED — shared by sitepages.Page.Status and faqs.Faq.Status.
+        "ContentStatusEnum": "sitepages.models.page.Page.Status",
     },
 }
 
