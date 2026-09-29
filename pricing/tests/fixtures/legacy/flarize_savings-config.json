@@ -1,0 +1,13 @@
+{
+ "configVersion": "1.0.0",
+ "selfConsumptionModel": "FULL_OFFSET",
+ "lifetimeYears": 25,
+ "degradationRatePerYear": null,
+ "tariffEscalationLow": null,
+ "tariffEscalationHigh": null,
+ "notes": {
+  "selfConsumptionModel": "FULL_OFFSET: all generation offsets grid purchase at effective tariff rate",
+  "degradationRatePerYear": "NOT APPROVED — pending business decision",
+  "tariffEscalation": "NOT APPROVED — pending business decision"
+ }
+}

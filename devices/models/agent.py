@@ -2,7 +2,7 @@
 
 The agent reads the terminals on its LAN (pyzk) and uploads over ``/api/agent/<version>/``. Its token is a platform
 service credential (sha256, prefix lookup, shown once) — never stored here. ``agent_version`` is the software version
-the agent reports (the PLAN's ``version`` column: that name is the optimistic-locking column of every table, DV-62).
+the agent reports (the PLAN's ``version`` column: that name is the optimistic-locking column of every table, DV-74).
 
 Health is derived from timestamps, never stored: see :mod:`devices.services.health`.
 """

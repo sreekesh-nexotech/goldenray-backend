@@ -54,7 +54,7 @@ class AdmsRequest(models.Model):
     headers = models.JSONField(default=dict, blank=True)
     content_type = models.CharField(max_length=160, blank=True, default="")
     device_serial = models.CharField(max_length=80, blank=True, default="", help_text="The serial the request claimed (SN).")
-    # Evidence of which registered device it resolved to. No database FK (DV-64: the append-only partitioned log must
+    # Evidence of which registered device it resolved to. No database FK (DV-76: the append-only partitioned log must
     # not block flushing or dropping devices and partitions); devices are only soft-deleted, so the id stays resolvable.
     device = models.ForeignKey("devices.Device", null=True, blank=True, on_delete=models.SET_NULL, related_name="+", db_constraint=False)
     request_kind = models.CharField(max_length=30, choices=Kind.choices, default=Kind.UNKNOWN)

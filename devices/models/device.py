@@ -70,7 +70,7 @@ class Device(BaseModel):
     adms_source_ip = models.GenericIPAddressField(null=True, blank=True)
     adms_request_count = models.PositiveIntegerField(default=0)
     adms_options = models.JSONField(default=dict, blank=True, help_text="What the terminal volunteered at its last handshake.")
-    # What the terminal's own screen shows as its push server (an observation, never written to the device; DV-62).
+    # What the terminal's own screen shows as its push server (an observation, never written to the device; DV-75).
     adms_server = models.CharField(max_length=120, blank=True, default="")
     adms_port = models.PositiveIntegerField(null=True, blank=True)
 
@@ -88,7 +88,7 @@ class Device(BaseModel):
     user_count = models.PositiveIntegerField(default=0)
     attendance_count = models.PositiveIntegerField(default=0)
     device_info = models.JSONField(default=dict, blank=True)
-    # A staff request that the agent re-read the terminal's user table on its next cycle (devices.sync; DV-62).
+    # A staff request that the agent re-read the terminal's user table on its next cycle (devices.sync; DV-75).
     users_read_requested_at = models.DateTimeField(null=True, blank=True)
     notes = models.TextField(blank=True, default="")
     is_active = models.BooleanField(default=True)

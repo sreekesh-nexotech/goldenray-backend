@@ -397,6 +397,21 @@ SPECTACULAR_SETTINGS = {
         "WarrantyIssueTypeEnum": "leads.models.forms.IssueType",
         "InstallationStatusEnum": "leads.models.installation.CustomerInstallation.Status",
         "InstallationSystemTypeEnum": "leads.models.installation.CustomerInstallation.SystemType",
+        # The blog attribute-slot type keeps its name now that pricing_offer.type is a second "type" enum.
+        "TypeEnum": "blog.models.schema.TemplateAttributeSlot.Type",
+        # BASE / VALUE / PREMIUM — shared by catalog component tiers and pricing market rates / swap deltas.
+        "TierEnum": "catalog.models.component.Tier",
+        "PriceKindEnum": "pricing.models.choices.PriceKind",
+        "PriceSourceEnum": "pricing.models.choices.PriceSource",
+        "PricingSystemTypeEnum": "pricing.models.choices.SystemType",
+        "StatutoryFeeKindEnum": "pricing.models.choices.StatutoryFeeKind",
+        "OfferTypeEnum": "pricing.models.choices.OfferType",
+        "PriceReleaseStatusEnum": "pricing.models.choices.ReleaseStatus",
+        "ValidityWindowStatusEnum": "pricing.models.choices.ValidityWindowStatus",
+        "ProcurementBatchStatusEnum": "procurement.models.batch.BatchStatus",
+        "ProcurementChargeKindEnum": "procurement.models.batch.ChargeKind",
+        "InventoryMovementDirectionEnum": "inventory.models.movement.Direction",
+        "InventoryMovementReasonEnum": "inventory.models.movement.Reason",
         "DeviceHealthStatusEnum": "devices.services.health.DEVICE_STATUSES",
         "DeviceAgentStatusEnum": "devices.services.health.AGENT_STATUSES",
         "DeviceSyncLogStatusEnum": "devices.models.logs.SyncLog.Status",
@@ -441,6 +456,8 @@ CELERY_BEAT_SCHEDULE = {
     "core.send_ops_report": {"task": "core.tasks.send_ops_report", "schedule": crontab(day_of_week="mon", hour=8, minute=5)},
     # Scheduled blog publications (blog.services.workflow.publish_due_entries).
     "blog.publish_due_entries": {"task": "blog.tasks.publish_due_entries", "schedule": crontab(minute="*")},
+    # Offers whose ends_on has passed become EXPIRED (pricing.services.offers.expire_due_offers).
+    "pricing.expire_offers": {"task": "pricing.tasks.expire_offers", "schedule": crontab(hour=0, minute=11)},
     # Daily: next months' devices_adms_request partitions (when the worker owns the table) and the 30-day ADMS evidence purge.
     "devices.purge_adms_evidence": {"task": "devices.tasks.purge_adms_evidence", "schedule": crontab(hour=3, minute=41)},
 }
@@ -472,6 +489,9 @@ FEATURE_FLAG_DEFAULTS = {
     "LEGACY_API_SHIM": False,
     "INVENTORY_STOCK": False,
 }
+# Inventory (behind INVENTORY_STOCK): code of the location that receives committed procurement batches as PURCHASE
+# movements (outbox procurement.batch_committed). Blank = off (the default).
+INVENTORY_RECEIVING_LOCATION = config("INVENTORY_RECEIVING_LOCATION", default="")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Idempotency-Key replay store
