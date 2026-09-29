@@ -1,0 +1,86 @@
+{% load agreement_document %}{% agreement_labels language as L %}{% inverter_label payload.equipment.inverter_type language as ivt %}
+{% with a=payload.agreement c=payload.customer s=payload.system e=payload.equipment p=payload.prices co=payload.company %}
+<div class="a4">
+  <div class="band"></div>
+  <header class="letterhead">
+    <div class="logo">{% if co.logo_url %}<img src="{{ co.logo_url }}" alt="{{ co.name }}">{% endif %}</div>
+    <div class="contact">
+      <div class="company">{{ co.name }}</div>
+      {% if co.phone %}<div>{{ co.phone }}</div>{% endif %}
+      {% if co.email %}<div>{{ co.email }}</div>{% endif %}
+      {% if co.address %}<div>{{ co.address }}</div>{% endif %}
+      {% if co.website %}<div>{{ co.website }}</div>{% endif %}
+    </div>
+  </header>
+  <div class="rule"></div>
+  <div class="meta platform-extra">{% if a.number %}{{ L.agreement_no }}: {{ a.number }}{% endif %}{% if a.issued_on %} · {{ L.issued_on }}: {{ a.issued_on }}{% elif a.issued_at %} · {{ L.issued_on }}: {{ a.issued_at|slice:":10" }}{% endif %}</div>
+  <main class="body lang-{{ language }}">
+{% if a.kind == "PURCHASE_AGREEMENT" %}
+    <div class="title">{{ L.title }}</div>
+    <table class="rows">
+      {% if payload.quotation.number %}<tr><td class="lbl">{{ L.quotation_no }}</td><td class="sep">:</td><td class="val">{{ payload.quotation.number }}</td></tr>{% endif %}
+      <tr><td class="lbl">{{ L.name }}</td><td class="sep">:</td><td class="val">{{ c.name|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.address }}</td><td class="sep">:</td><td class="val">{{ c.address|linebreaksbr|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.phone }}</td><td class="sep">:</td><td class="val">{{ c.phone|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.size }}</td><td class="sep">:</td><td class="val">{{ s.size_label|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.phase }}</td><td class="sep">:</td><td class="val">{{ s.phase_label|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.panel }}</td><td class="sep">:</td><td class="val">{{ e.panel|default:"—" }}</td></tr>
+      {% if e.panel_capacity %}<tr><td class="lbl">{{ L.panel_capacity }}</td><td class="sep">:</td><td class="val">{{ e.panel_capacity }}</td></tr>{% endif %}
+      <tr><td class="lbl">{{ L.inverter_brand }}</td><td class="sep">:</td><td class="val">{{ e.inverter_brand|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.inverter_type }}</td><td class="sep">:</td><td class="val">{{ ivt }}</td></tr>
+      <tr><td class="lbl">{{ L.battery }}</td><td class="sep">:</td><td class="val">{{ e.battery|default:"None" }}</td></tr>
+      <tr><td class="lbl">{{ L.structure }}</td><td class="sep">:</td><td class="val">{{ e.structure_material|default:"—" }}</td></tr>
+      <tr><td class="lbl">{{ L.extra_structure }}</td><td class="sep">:</td><td class="val">{{ e.extra_structure }}</td></tr>
+      <tr><td class="lbl">{{ L.walkway }}</td><td class="sep">:</td><td class="val">{{ e.walkway }}</td></tr>
+      <tr><td class="lbl">{{ L.ladder }}</td><td class="sep">:</td><td class="val">{{ e.ladder }}</td></tr>
+      {% if p.original_price or p.discount %}
+      <tr><td class="lbl">{{ L.orig }}</td><td class="sep">:</td><td class="val">{% if p.original_price %}₹ {{ p.original_price|inr }}/–{% else %}—{% endif %}</td></tr>
+      {% if p.extra_cost %}<tr><td class="lbl">{{ L.extra }}</td><td class="sep">:</td><td class="val">₹ {{ p.extra_cost|inr }}/–</td></tr>{% endif %}
+      <tr><td class="lbl">{{ L.disc }}</td><td class="sep">:</td><td class="val">{% if p.discount %}₹ {{ p.discount|inr }}/–{% else %}—{% endif %}</td></tr>
+      <tr><td class="lbl">{{ L.fin }}</td><td class="sep">:</td><td class="val">{% if p.final_price %}₹ {{ p.final_price|inr }}/–{% if s.variant_label %} ({{ s.variant_label }}){% endif %}{% else %}—{% endif %}</td></tr>
+      {% else %}
+      {% if p.extra_cost %}<tr><td class="lbl">{{ L.extra }}</td><td class="sep">:</td><td class="val">₹ {{ p.extra_cost|inr }}/–</td></tr>{% endif %}
+      <tr><td class="lbl">{{ L.tot }}</td><td class="sep">:</td><td class="val">{% if p.final_price %}₹ {{ p.final_price|inr }}/–{% if s.variant_label %} ({{ s.variant_label }}){% endif %}{% else %}—{% endif %}</td></tr>
+      {% endif %}
+    </table>
+    {% include "documents/agreement/_kseb.html" %}
+    {% if p.add_on_offer %}<div class="offer"><div class="offer-head">{{ L.offer }}</div><div class="offer-body">{{ p.add_on_offer|linebreaksbr }}</div></div>{% endif %}
+{% else %}
+    <div class="{% if language == 'en' %}title{% else %}subtitle{% endif %}">{{ L.title }}</div>
+    {% include "documents/agreement/_paragraph.html" %}
+    {% if a.kind == "SALE_ORDER" %}
+    {% if p.extra_cost or p.extra_description or e.extra_structure == "YES" %}
+    <div class="extras"><div class="extras-head">{{ L.extras_head }}</div>
+      <table><tr><td class="extras-lbl">{{ L.extras_extra }}</td><td>:&nbsp; {% if p.extra_description %}{{ p.extra_description }}{% endif %}{% if p.extra_cost %}{% if p.extra_description %} — {% endif %}₹ {{ p.extra_cost|inr }}/–{% endif %}{% if not p.extra_description and not p.extra_cost %}Yes{% endif %}</td></tr></table>
+    </div>
+    {% endif %}
+    {% include "documents/agreement/_kseb.html" %}
+    {% else %}
+    {% if p.lines %}
+    <div class="lines platform-extra"><div class="extras-head">{{ L.lines_head }}</div>
+      <table><tr><th>{{ L.line_description }}</th><th>{{ L.line_quantity }}</th><th>{{ L.line_rate }}</th><th>{{ L.line_amount }}</th></tr>
+      {% for line in p.lines %}<tr><td>{{ line.description }}</td><td>{{ line.quantity|quantity }} {{ line.unit }}</td><td>₹ {{ line.unit_price|inr }}</td><td>₹ {{ line.amount|inr }}</td></tr>{% endfor %}
+      </table>
+    </div>
+    {% endif %}
+    {% endif %}
+{% endif %}
+    {% if co.bank or co.payee %}
+    <div class="payment platform-extra"><div class="extras-head">{{ L.payment }}</div>
+      <table>
+        {% if co.payee %}<tr><td class="extras-lbl">{{ L.account_name }}</td><td>:&nbsp; {% if co.bank.account_name %}{{ co.bank.account_name }}{% else %}{{ co.payee }}{% endif %}</td></tr>{% endif %}
+        {% if co.bank %}
+        <tr><td class="extras-lbl">{{ L.bank }}</td><td>:&nbsp; {{ co.bank.bank }}{% if co.bank.branch %}, {{ co.bank.branch }}{% endif %}</td></tr>
+        <tr><td class="extras-lbl">{{ L.account_number }}</td><td>:&nbsp; {{ co.bank.account_number }}</td></tr>
+        <tr><td class="extras-lbl">{{ L.ifsc }}</td><td>:&nbsp; {{ co.bank.ifsc }}</td></tr>
+        {% if co.bank.upi_id %}<tr><td class="extras-lbl">{{ L.upi }}</td><td>:&nbsp; {{ co.bank.upi_id }}</td></tr>{% endif %}
+        {% endif %}
+      </table>
+    </div>
+    {% endif %}
+    <div class="note"><b>NOTE:</b> {{ L.note }}</div>
+    <div class="sign">{{ L.date }}: _____________<br>{{ L.place }}: _____________<br><br>{{ L.signature }}</div>
+  </main>
+  <div class="band bottom"></div>
+</div>
+{% endwith %}

@@ -467,6 +467,12 @@ SPECTACULAR_SETTINGS = {
         "QuotationRoofTypeEnum": "quotations.models.choices.RoofType",
         "ProjectStatusEnum": "projects.models.project.ProjectStatus",
         "ProjectSystemTypeEnum": "projects.models.project.SystemType",
+        "AgreementStatusEnum": "agreements.models.choices.AgreementStatus",
+        "AgreementKindEnum": "agreements.models.choices.AgreementKind",
+        "AgreementBlankKindEnum": "agreements.serializers.agreements.BLANK_KINDS",
+        "AgreementFromQuotationKindEnum": "agreements.serializers.agreements.FROM_QUOTATION_KINDS",
+        "AgreementLanguageEnum": "agreements.models.choices.Language",
+        "AgreementSystemTypeEnum": "agreements.models.choices.SystemType",
     },
 }
 
