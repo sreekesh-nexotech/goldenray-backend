@@ -55,7 +55,9 @@ scope `all`, Engineering `projects.view`. The base views apply it.
    finding has no acknowledgement (engineering waives it with `engineering.approve` under
    `engineering/findings/<uid>/acknowledge/` — Flarize simply refused BLOCKED BOMs; the platform's waiver path is DV-101) or
    a WARN finding whose rule `requiresAcknowledgement` has neither an acknowledgement in the request nor one carried from
-   an earlier run of the project (same identity). The request's acknowledgements become `engineering_acknowledgement`
+   an earlier run of the project (same identity **and** same message: the engineering identity
+   `rule|components` is shared by every component-less finding of a rule — `|PBC-K-001|` is every missing role — so a
+   waiver for "STRUCTURE missing" must not let a BOM missing its INVERTER lock). The request's acknowledgements become `engineering_acknowledgement`
    rows, so they carry over. Error `bom_lock_refused` lists `errors.blocked`, `errors.missing_acknowledgements` (with
    finding uids) and `errors.engineering_run`.
 4. **Snapshot** (`bom_lock`, schema `projects.bom_lock/1`): `status`, `locked_at`, `locked_by` (user uid),
@@ -111,7 +113,7 @@ rows, never duplicates; the import never rewinds a project the platform moved on
 |---|---|
 | `projectId` | legacy map; a new `number` (`PROJ-<n>`) |
 | project without `lock` (`bom.status` DRAFT) | not migrated — `open_workspace_not_migrated` (PLAN §7.4 "open workspaces … report") |
-| `customer.customerId` | `customer` via `FLARIZE/customers`, else `customers_customer.code`; else `customer.phone` (E.164) — none → `customer_not_found`, skipped |
+| `customer.customerId` | `customer` via `FLARIZE/customers`, a merged customer followed to the survivor; else `customers_customer.code`; else `customer.phone` (E.164) — none → `customer_not_found`, skipped |
 | `sysType` ongrid / hybrid | `system_type` ON_GRID / HYBRID (else UNDECIDED, `unknown_system_type`) |
 | `tier`, `sizeKw`, `phase` | `tier` (upper case), `size_kw`, `phase` (`unknown_phase`, `invalid_size`) |
 | `packageId` | `title` |
@@ -120,7 +122,7 @@ rows, never duplicates; the import never rewinds a project the platform moved on
 | `lock.engineeringStatus` VALID/WARNING/BLOCKED, `rulesVersion`, `lastValidation.counts` | `bom_lock.engineering {result PASS/WARN/FAIL, rules_version, counts, run_uid null}` |
 | `lock.acknowledgements[]` `{ruleId, acknowledgedBy, acknowledgedAt, reason}` | `bom_lock.acknowledgements[]` (`legacy_actor` keeps the Flarize id) |
 | `lock.packageId`, `dataVersion`, `lockedBy` | `bom_lock.source` |
-| `costInputs` | `cost_inputs` (snake_case keys) |
+| `costInputs` | `cost_inputs` (snake_case keys; `installationType` upper-cased — 6 locked projects say `flat`) |
 | status | IN_PROGRESS (locked BOM) |
 | `createdAt`, `createdBy` | `created_at`, `created_by` |
 | `bom.packageLines/overrides/removedRoles/history`, `lastValidation.findings`, `history`, `discount`, `lastCost`, `lastPricing` | not migrated (the lock snapshot is the record; discounts belong to quotations) |
@@ -158,3 +160,14 @@ BOM. `report_flarize_bom_state` reports it as `ui_state_not_migrated`; nothing i
   projects can consume; a quotation's locked BOM can be passed as `lock-bom/` lines.
 * **migrations_tools**: after users, catalog and customers: `import_flarize_workspace_projects(list(state["projects"].values()))`
   and `report_flarize_bom_state(bom_state)`; print the reports.
+
+## Review (adversarial pass)
+
+* **Waiver scope (fixed).** Carried acknowledgements matched on the engineering identity alone; component-less findings
+  share it, so one waiver of PBC-K-001 "STRUCTURE missing" let a BOM with no INVERTER lock. Carry-over now needs the same
+  identity and message (`projects/services/bom_lock.py::_key`); `TestWaiverScope`.
+* **Lock gate parity.** All 186 Flarize lock records re-checked with the platform's checker call shape (architecture,
+  phase, sysType, lines) over the Flarize catalog and battery master: 186/186 give the recorded `engineeringStatus` and
+  exactly the recorded acknowledged rule set.
+* **Import (fixed).** `installationType` `flat` → `FLAT`; a customer merged after the first import is followed to the
+  survivor on a re-run.

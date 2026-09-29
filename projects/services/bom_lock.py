@@ -7,7 +7,8 @@
    lock succeeds**, so engineering can review and waive BLOCK findings under ``engineering/findings/<uid>/acknowledge/``;
 3. the lock is refused (409 ``bom_lock_refused``) while a BLOCK finding has no waiver, or a WARN finding whose rule
    requires an acknowledgement (PBC-D-001, PBC-D-003, PBC-F-002, PBC-G-002, PBC-N-001, PBC-R-002 in ``phase1e.1``) has
-   neither an acknowledgement in the request (``{rule_code, reason}``) nor one carried from an earlier run;
+   neither an acknowledgement in the request (``{rule_code, reason}``) nor one carried from an earlier run (same
+   identity **and** message — see :func:`_key`);
 4. otherwise the request's acknowledgements are recorded as ``engineering_acknowledgement`` rows (they then carry over
    to later runs), the snapshot is frozen into ``bom_lock`` — lines with the PriceRelease list price and landed cost,
    the engineering verdict and every acknowledgement — and the project moves PLANNED → IN_PROGRESS.
@@ -92,6 +93,19 @@ def _prices(context, sku: str) -> tuple[str | None, str | None]:
     return item.get("list_price"), item.get("landed_cost")
 
 
+def _key(finding: Finding) -> tuple[str, str]:
+    """What an earlier acknowledgement must match to carry over: the identity (rule + components) **and** the message.
+
+    The identity alone is too coarse for a lock gate: component-less findings share it (``|PBC-K-001|`` is every missing
+    role), so a waiver for one missing role would otherwise let a BOM missing a different role lock.
+    """
+    return finding.identity, finding.message
+
+
+def _acknowledged(project_uid):
+    return Finding.objects.filter(run__subject_type=SubjectType.PROJECT_BOM, run__subject_uid=project_uid, deleted_at__isnull=True, acknowledgements__isnull=False)
+
+
 def _finding_row(finding: Finding) -> dict:
     return {"finding_uid": str(finding.uid), "rule_code": finding.rule_code, "severity": finding.severity, "message": finding.message, "identity": finding.identity}
 
@@ -127,14 +141,14 @@ def _apply(project: Project, run: Run, lines: list[Line], *, engine_rules, conte
     check_version(locked, expected_version)
     if locked.bom_lock is not None or locked.status != ProjectStatus.PLANNED:
         raise Conflict("bom_already_locked", "The BOM of this project is already locked.")
-    carried = runs.acknowledged_identities(SubjectType.PROJECT_BOM, locked.uid)
+    carried = set(_acknowledged(locked.uid).values_list("identity", "message"))
     given = {}
     for item in acknowledgements:
         given.setdefault(item["rule_code"], item["reason"].strip())
     findings = list(Finding.objects.filter(run=run).order_by("sort_order", "id"))
     blocked, missing, to_acknowledge = [], [], []
     for finding in findings:
-        if finding.identity in carried:
+        if _key(finding) in carried:
             continue
         if finding.severity == "BLOCK":
             blocked.append(_finding_row(finding))
@@ -154,18 +168,13 @@ def _apply(project: Project, run: Run, lines: list[Line], *, engine_rules, conte
     for finding in to_acknowledge:
         runs.acknowledge(finding, user=user, reason=given[finding.rule_code])
     now = timezone.now()
-    acknowledged = (
-        Finding.objects.filter(run__subject_type=SubjectType.PROJECT_BOM, run__subject_uid=locked.uid, acknowledgements__isnull=False)
-        .select_related("run")
-        .prefetch_related("acknowledgements__acknowledged_by")
-        .order_by("run__created_at", "sort_order", "id")
-    )
-    current = {finding.identity for finding in findings}
+    acknowledged = _acknowledged(locked.uid).select_related("run").prefetch_related("acknowledgements__acknowledged_by").order_by("run__created_at", "sort_order", "id")
+    current = {_key(finding) for finding in findings}
     ack_rows, seen = [], set()
     for finding in acknowledged:
-        if finding.identity not in current or finding.identity in seen:
+        if _key(finding) not in current or _key(finding) in seen:
             continue
-        seen.add(finding.identity)
+        seen.add(_key(finding))
         ack = finding.acknowledgements.all()[0]
         ack_rows.append(
             {

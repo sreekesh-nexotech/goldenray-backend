@@ -89,3 +89,19 @@ def test_bom_state_is_reported_not_migrated():
     report = report_flarize_bom_state(state)
     assert report["created"] == 0 and report["skipped"] == 1 and report["violations"][0]["code"] == "ui_state_not_migrated"
     assert report_flarize_bom_state(None)["violations"] == []
+
+
+def test_installation_type_upper_cased_and_merged_customer_followed(sources):
+    """Flarize kept some ``installationType`` values in lower case (6 of the 186 locked projects: ``flat``); the platform
+    stores the ``InstallationType`` value the API validates. A customer merged after the first import is followed to the
+    survivor on a re-run instead of losing the mapping."""
+    rows = _rows()
+    rows[0]["costInputs"]["installationType"] = "flat"
+    import_flarize_workspace_projects(rows)
+    alt = Project.objects.get(pk=LegacyMap.objects.get(source_table="workspace_projects", source_id=ALT).target_id)
+    assert alt.cost_inputs["installation_type"] == "FLAT"
+    survivor = CustomerFactory()
+    Customer.objects.filter(pk=sources["imported"].pk).update(merged_into=survivor, deleted_at=survivor.created_at)
+    again = import_flarize_workspace_projects(rows)
+    alt.refresh_from_db()
+    assert alt.customer == survivor and "customer_not_found" not in {v["code"] for v in again["violations"] if v["source_id"] == ALT}

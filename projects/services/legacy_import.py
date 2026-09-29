@@ -8,7 +8,8 @@ Rules (:func:`import_flarize_workspace_projects`, rows = ``workspace-state.json`
 
 * only projects whose BOM is **LOCKED** (``lock`` present) become ``projects_project`` rows; an open (DRAFT) workspace is
   not migrated and is reported (``open_workspace_not_migrated``, counted as skipped);
-* customer: ``customer.customerId`` through the imported customers (``FLARIZE`` / ``customers``), else the customer with
+* customer: ``customer.customerId`` through the imported customers (``FLARIZE`` / ``customers``; a merged customer is
+  followed to the survivor), else the customer with
   that ``code``, else the live customer with the E.164 ``customer.phone``; none → ``customer_not_found`` (skipped);
 * ``sysType`` ongrid/hybrid → ``ON_GRID``/``HYBRID`` (anything else ``UNDECIDED``, ``unknown_system_type``), ``tier`` →
   upper case, ``sizeKw`` → ``size_kw``, ``phase`` kept, ``packageId`` → ``title``;
@@ -19,7 +20,7 @@ Rules (:func:`import_flarize_workspace_projects`, rows = ``workspace-state.json`
   ``unitPurchaseCost`` → ``unit_list_price`` / ``unit_landed_cost``; the engineering verdict (``engineeringStatus``
   VALID/WARNING/BLOCKED → PASS/WARN/FAIL, ``rulesVersion``, ``lastValidation.counts``) and the acknowledgements are kept
   (no ``engineering_run`` row is created: the historic verdict lives in the snapshot, ``run_uid`` null);
-* ``costInputs`` → ``cost_inputs`` (snake_case keys); ``createdAt``/``createdBy`` preserved.
+* ``costInputs`` → ``cost_inputs`` (snake_case keys, ``installationType`` upper-cased); ``createdAt``/``createdBy`` preserved.
 
 :func:`report_flarize_bom_state` — ``bom-state.json`` is the legacy React BOM tool's UI state (not a project): it is not
 migrated; the report says so.
@@ -70,12 +71,21 @@ def _user(run: ImportRun, row_id: str, legacy_user, column: str) -> User | None:
     return User.objects.filter(pk=target).first()
 
 
+def _survivor(pk) -> Customer | None:
+    """The live customer ``pk`` is, or was merged into (a merge soft-deletes the loser and records ``merged_into``)."""
+    found = Customer.all_objects.filter(pk=pk).first() if pk is not None else None
+    for _ in range(10):
+        if found is None or found.deleted_at is None or found.merged_into_id is None:
+            break
+        found = Customer.all_objects.filter(pk=found.merged_into_id).first()
+    return found if found is not None and found.deleted_at is None else None
+
+
 def _customer(row: dict) -> Customer | None:
     source = row.get("customer") or {}
     legacy_id = _text(source.get("customerId"), 128)
     if legacy_id:
-        pk = mapped_id(FLARIZE, "customers", legacy_id)
-        found = Customer.objects.filter(pk=pk).first() if pk is not None else None
+        found = _survivor(mapped_id(FLARIZE, "customers", legacy_id))
         found = found or Customer.objects.filter(code=legacy_id[:24]).first()
         if found is not None:
             return found
@@ -150,7 +160,12 @@ def _snapshot(run: ImportRun, row_id: str, row: dict, lock: dict) -> dict:
 
 
 def _cost_inputs(raw) -> dict:
-    return {COST_KEYS.get(key, key): value for key, value in (raw or {}).items()} if isinstance(raw, dict) else {}
+    if not isinstance(raw, dict):
+        return {}
+    inputs = {COST_KEYS.get(key, key): value for key, value in raw.items()}
+    if isinstance(inputs.get("installation_type"), str):  # Flarize also stored "flat"; the platform value is FLAT
+        inputs["installation_type"] = inputs["installation_type"].strip().upper()
+    return inputs
 
 
 def _import_project(run: ImportRun, row: dict) -> None:

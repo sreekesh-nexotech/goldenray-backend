@@ -157,8 +157,8 @@ class TestLockBom:
         assert locked.status_code == 200, locked.json()
         snapshot = locked.json()["bom_lock"]
         assert locked.json()["status"] == "IN_PROGRESS"
-        # PBC-K-001 fires twice with one identity (no components): one waiver per identity.
-        assert sum(ack["waiver"] for ack in snapshot["acknowledgements"]) == 2 and len(snapshot["acknowledgements"]) == 5
+        # PBC-K-001 fires twice with one identity (no components) but two messages: each waived finding is listed.
+        assert sum(ack["waiver"] for ack in snapshot["acknowledgements"]) == 3 and len(snapshot["acknowledgements"]) == 6
 
     def test_missing_acknowledgements_then_locked(self, head, checker, full_lines, components):
         project = ProjectFactory()
@@ -262,3 +262,23 @@ class TestLifecycle:
         response = head.post(f"{BASE}{project.uid}/cancel/", {"reason": "Customer withdrew"}, format="json")
         assert response.status_code == 200 and response.json()["status"] == "CANCELLED" and response.json()["cancel_reason"] == "Customer withdrew"
         assert head.delete(f"{BASE}{project.uid}/").status_code == 204
+
+
+class TestWaiverScope:
+    """A waiver covers the finding engineering reviewed, not every later finding that shares its rule and components."""
+
+    def test_waiver_of_one_missing_role_does_not_cover_another(self, head, checker, full_lines):
+        project = ProjectFactory()
+        no_structure = [line for line in full_lines if line["role"] != "STRUCTURE"]
+        refused = _lock(head, project, no_structure, ACKS)
+        assert refused.status_code == 409 and any("STRUCTURE" in item for item in refused.json()["errors"]["blocked"])
+        run = Run.objects.get(uid=refused.json()["errors"]["engineering_run"][0])
+        for finding in Finding.objects.filter(run=run, severity="BLOCK"):
+            runs.acknowledge(finding, user=None, reason="Structure supplied by the customer")
+        no_inverter = [line for line in full_lines if line["role"] != "INVERTER"]
+        response = _lock(head, project, no_inverter, ACKS)
+        assert response.status_code == 409, response.json()
+        assert any("Required role INVERTER is missing" in item for item in response.json()["errors"]["blocked"])
+        project.refresh_from_db()
+        assert project.status == "PLANNED" and project.bom_lock is None
+        assert _lock(head, project, no_structure, ACKS).status_code == 200  # the reviewed BOM still locks
