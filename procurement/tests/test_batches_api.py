@@ -164,7 +164,11 @@ class TestPreviewAndCommit:
         assert old.effective_to == timezone.localdate()
         line = BatchLine.objects.get(batch=batch, component=a)
         assert line.price_row == rows[("a1", "PURCHASE")] and line.landed_row == rows[("a1", "LANDED")] and line.allocated_charges == Decimal("3500.00")
-        assert OutboxEvent.objects.get(event_type="procurement.batch_committed").payload["lines"] == 3
+        payload = OutboxEvent.objects.get(event_type="procurement.batch_committed").payload
+        # The contract inventory books received stock from (docs/decisions/inventory.md), reconciled at wave-2a.
+        assert len(payload["lines"]) == 3 and payload["imported"] is False and payload["committed_by_uid"] == str(procurement_user.uid)
+        assert payload["batch_uid"] == str(batch.uid) and payload["number"] == batch.number and payload["committed_at"]
+        assert {"line_uid": str(line.uid), "component_uid": str(a.uid), "qty": "10.000"} in payload["lines"]
         assert AuditLog.objects.get(action="procurement.batch_committed").actor == procurement_user
         immutable = client.put(detail(batch, "lines/"), {"lines": []}, format="json")
         assert immutable.status_code == 409 and immutable.json()["code"] == "batch_not_draft"

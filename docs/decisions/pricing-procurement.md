@@ -114,7 +114,9 @@ edits it) and is not in the schema. The enum components the two apps add are nam
     present `effective_from`. Per line: PURCHASE = unit purchase price, LANDED = `landedUnitCost` (whole rupees, the
     Flarize rule), `version_key` `<number>::<sku>` (Flarize `versionIdFor`), note `Landed = <formula>`, the supplier on
     both rows; the line keeps `landed_unit_cost`, `allocated_charges`, `allocation_pct` and links both rows.
-    `procurement.batch_committed` is emitted.
+    `procurement.batch_committed` is emitted in the shape inventory books stock from (`{batch_uid, number,
+    supplier_uid, effective_from, committed_at, committed_by_uid, imported: false, lines: [{line_uid, component_uid,
+    qty}]}`, docs/decisions/inventory.md; reconciled at the wave-2a integration — `lines` was a count before).
 14. **Reversal** (PLAN "corrections are a reversing batch"; the engine cannot allocate negative quantities): a new batch
     (COMMITTED at once, `reverses` → the original; one reversal per batch — partial unique index) mirrors lines and
     charges with negative quantities/amounts. Where the original's PURCHASE/LANDED row is still current it is replaced
@@ -258,7 +260,8 @@ Flarize replaces stays in history (closed row); the current state is the same in
 * **quotations / calculators**: `pricing.services.offers.applicable_offer(system_type=…, tier=…, size_key=…, on=…)` +
   `offer_amount(offer, list_price)`; `pricing.services.validity.resolve(at)` freezes the validity days.
 * **blog/website revalidation**: `pricing.release_published` should revalidate `/solar-comparison` and
-  `/emi-calculator` (PLAN §3.5) — the blog package owns that handler.
+  `/emi-calculator` (PLAN §3.5) — the blog package owns that handler. *Done at the wave-2a integration*
+  (`blog.events.FIXED_PATH_EVENTS`).
 * **migrations_tools**: call, in this order after the catalog import, `import_prices(catalog result prices)` (every
   catalog import), `import_bom_global_costs`, `import_bom_market_rates`, `import_bom_offers`, `import_flarize_pricing`,
   `import_flarize_documents`, `import_pa_kseb_fees`, then `procurement.services.legacy_import.import_flarize_procurement`

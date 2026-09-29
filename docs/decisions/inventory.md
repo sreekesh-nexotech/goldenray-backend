@@ -136,7 +136,8 @@ REVOKE under `SET ROLE`, migration step, command, deploy step), `test_dashboard.
 ## Hand-over notes
 
 * **procurement**: emit `procurement.batch_committed` with the payload above inside the commit transaction
-  (`dedup_key` = batch uid); mark importer-written batches `imported: true`.
+  (`dedup_key` = batch uid); mark importer-written batches `imported: true`. *Done at the wave-2a integration:*
+  `procurement.services.allocation.committed_payload` (the importer emits no event, so `imported` is always false).
 * **projects**: issue stock with `POST inventory/movements/` (`reason=ISSUE_TO_PROJECT`, `ref_type=projects.project`,
   `ref_uid=<project uid>`) or follow `inventory.movement_recorded`; never import inventory services.
 * **ops**: set `INVENTORY_RECEIVING_LOCATION` (listed in `.env.example`) only after creating that location; while it
@@ -155,8 +156,9 @@ REVOKE under `SET ROLE`, migration step, command, deploy step), `test_dashboard.
 | 6 | The movement list's N+1 test had `by = NULL` on every row, so dropping `select_related("by")` still passed | a query-count test with a distinct component, category, location and recorder per row (fails when any join is dropped) | `test_movements_api.py::TestList::test_the_query_count_does_not_grow_with_the_rows` |
 | 7 | `privileges.py` and this file claimed the `SET_NULL` of `by`/`created_by` "runs with the owner's rights"; Django emulates it with an `UPDATE` from the app connection | text corrected (a user hard delete is refused by the REVOKE; users are only soft-deleted) | — |
 
-Still open for integration: the procurement package's current `procurement.batch_committed` payload (in its worktree
-at review time) carries `lines` as a **count** and no `committed_at` / `committed_by_uid` / `imported` / line objects;
-with the flag on and a receiving location set, every committed batch would raise `ReceiptError` and park until the two
-packages agree on the contract above. `procurement.batch_reversed` is not consumed (reversed stock stays booked; staff
-book the RETURN/ADJUST).
+Reconciled at the wave-2a integration (`docs/decisions/integration-wave2a.md`): the procurement package's payload
+carried `lines` as a **count** and no `committed_at` / `committed_by_uid` / `imported` / line objects; procurement now
+emits the contract above (plus its own `supplier_uid` and `effective_from`), proven end to end by
+`inventory/tests/test_procurement_contract.py` (a batch committed through the real service is booked line by line).
+`procurement.batch_reversed` is still not consumed (reversed stock stays booked; staff book the RETURN/ADJUST) — an
+open business decision.

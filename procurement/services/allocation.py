@@ -10,7 +10,8 @@ an engine refusal, an unreconciled allocation, retired components. Nothing is wr
 reason; per line a PURCHASE row (the unit purchase price) and a LANDED row (the landed unit cost) are appended to
 ``pricing_price`` with ``version_key`` ``<number>::<sku>`` (closing the previous open rows), the line keeps the
 allocation and links both rows, the batch becomes COMMITTED (immutable), an audit row and
-``procurement.batch_committed`` are written.
+``procurement.batch_committed`` are written (payload: :func:`committed_payload`, the contract inventory books the
+received stock from).
 
 ``reverse(batch)`` — a COMMITTED batch is corrected by a reversing batch (COMMITTED at once, ``reverses`` → the
 original): lines and charges mirror the original with negative quantities/amounts, and wherever the original's
@@ -117,6 +118,24 @@ def preview(batch: Batch) -> dict:
     }
 
 
+def committed_payload(batch: Batch, lines) -> dict:
+    """The ``procurement.batch_committed`` payload (the contract inventory books stock from, docs/decisions/inventory.md).
+
+    ``imported`` is always false here: only :func:`commit` emits the event, and the Flarize importer writes historic
+    batches without it. ``lines`` lists every committed line (uid, component uid, quantity as a decimal string).
+    """
+    return {
+        "batch_uid": str(batch.uid),
+        "number": batch.number,
+        "supplier_uid": str(batch.supplier.uid),
+        "effective_from": str(batch.effective_from),
+        "committed_at": batch.committed_at.isoformat(),
+        "committed_by_uid": str(batch.committed_by.uid) if batch.committed_by_id else None,
+        "imported": False,
+        "lines": [{"line_uid": str(line.uid), "component_uid": str(line.component.uid), "qty": str(line.qty)} for line in lines],
+    }
+
+
 def _price_note(formula: str) -> str:
     return f"Landed = {formula}"
 
@@ -169,7 +188,7 @@ def commit(instance: Batch, *, user, reason: str, effective_from=None, expected_
     )
     emit(
         "procurement.batch_committed",
-        {"batch_uid": str(batch.uid), "number": batch.number, "supplier_uid": str(supplier.uid), "lines": len(result["lines"]), "effective_from": str(effective_from)},
+        committed_payload(batch, [item["line"] for item in result["lines"]]),
         aggregate_type="procurement.batch",
         aggregate_uid=batch.uid,
         dedup_key=f"procurement.batch_committed:{batch.uid}",
