@@ -212,12 +212,18 @@ OLD_URLS = [
     ("/api/room-sizes/", "reference"),
     ("/api/ev-cars/", "reference"),
     ("/api/ev-scooters/", "reference"),
-    ("/api/customer-installations/", "installations"),
+    ("/api/customer-installations/", "backend_other"),  # Studio-only in the legacy (401 anonymous): not shimmed
+    ("/api/installation-stats", "installations"),
+    ("/api/solar-panels/3/", "backend_other"),  # detail/Studio routes are not shimmed
+    ("/api/job-applications/7/status/", "backend_other"),
+    ("/api/emi-calculator/config", "calculators"),
+    ("/studio-api/api/faqs/", "cms_other"),
+    ("/studio-api/api/articles/", "cms_content"),
     ("/api/installation-stats/", "installations"),
     ("/api/affiliate-applications/", "forms"),
     ("/api/warranty-service-requests/", "forms"),
     ("/api/metadata/", "seo"),
-    ("/bom/api/quotation-testimonials/", "bom_public"),
+    ("/bom/api/quotation-testimonials/", "bom_other"),  # joins bom_public when the quotations shim is wired
     ("/bom/api/quotation-settings/", "bom_public"),
     ("/bom/api/calculate/", "bom_calculate"),
     ("/bom/login/", "bom_other"),

@@ -29,7 +29,7 @@ def test_app_layout(label):
 
 def test_surface_specific_lists():
     assert isinstance(importlib.import_module("devices.urls").iclock_urlpatterns, list)  # the ADMS receiver (devices WP)
-    assert importlib.import_module("legacy.urls").legacy_urlpatterns == []
+    assert isinstance(importlib.import_module("legacy.urls").legacy_urlpatterns, list)  # the old contracts (legacy-shim WP)
 
 
 def test_installed_apps_order_and_no_admin():

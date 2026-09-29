@@ -1,4 +1,5 @@
-"""``POST bom/build/`` (staff, ``bom.view``) and ``POST /api/public/v1/bom/quote/`` (website, ``public_write``)."""
+"""``POST bom/build/`` (staff, ``bom.view``) and ``POST /api/public/v1/bom/quote/`` (website, ``public_write``; without the
+internal ``cost_breakdown`` and ``totals``, business default B-1)."""
 
 from __future__ import annotations
 
@@ -6,7 +7,7 @@ from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 
-from bom.serializers.quote import BomBuildRequestSerializer, BomBuildSerializer, BomQuoteRequestSerializer, BomQuoteSerializer
+from bom.serializers.quote import BomBuildRequestSerializer, BomBuildSerializer, BomQuotePublicSerializer, BomQuoteRequestSerializer
 from bom.services import build as build_service
 from bom.services import website_quote
 from bom.views.masters import TAGS, WRITE_ERRORS
@@ -35,16 +36,17 @@ class QuoteView(PublicAPIView):
     @extend_schema(
         operation_id="public_bom_quote",
         request=BomQuoteRequestSerializer,
-        responses={200: BomQuoteSerializer, 400: ErrorSerializer, 429: ErrorSerializer, 503: ErrorSerializer},
+        responses={200: BomQuotePublicSerializer, 400: ErrorSerializer, 429: ErrorSerializer, 503: ErrorSerializer},
         tags=TAGS,
         auth=[],
         description=(
-            "The website quotation calculator (the legacy /bom/api/calculate/ contract): BOM lines, cost breakdown, totals, pricing (market rate, "
-            "offers, subsidy) and meta. Invalid input → 400 `validation_error` (the legacy messages in `message`, per field in `errors`)."
+            "The website quotation calculator (the legacy /bom/api/calculate/ contract): BOM lines, pricing (market rate, offers, subsidy), meta "
+            "and available offers. The internal cost breakdown and totals (cost and margin) are never public (business default B-1). "
+            "Invalid input → 400 `validation_error` (the legacy messages in `message`, per field in `errors`)."
         ),
     )
     def post(self, request, *args, **kwargs):
         result = website_quote.quote(request.data, today=timezone.localdate())
-        response = Response(result)
+        response = Response(website_quote.public_body(result))
         response["Cache-Control"] = "no-store"
         return response

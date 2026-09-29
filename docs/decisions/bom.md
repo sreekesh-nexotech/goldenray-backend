@@ -191,5 +191,6 @@ UAT dump during the review: every 200 and 400 body is identical; the remaining 2
   engine's catalog shape) or the tables; listen to `bom.configuration_changed` to mark drafts stale.
 * **migrations_tools**: after the catalog and pricing imports call `import_goldenray_bom(...)` with the six tables'
   rows (JSON columns as parsed JSON) and `import_flarize_bom(catalog_json)`; print counts + violations.
-* The public quote response still carries `cost_breakdown` and `totals.margin` as the legacy one did (the website
-  reads them); dropping them is a frontend decision (PLAN §6.5).
+* ~~The public quote response still carries `cost_breakdown` and `totals.margin` as the legacy one did~~ —
+  superseded by business default B-1 (legacy-shim package, DV-120): the public quote and the `/legacy/` shim omit
+  `cost_breakdown` and `totals` (`website_quote.public_body`); `quote()` keeps the full body.
