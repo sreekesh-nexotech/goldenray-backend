@@ -33,6 +33,12 @@ wins the value-tier panel slot of the public quote), O-3 (UAT-environment limits
 | Browser | Playwright 1.56 (global) + preinstalled Chromium, headless, 1366×900 |
 | Test numbers | synthetic `90xxxxxxxx` numbers, distinct per side and run; the platform used the fake OTP client (code `000000`); no SMS could be sent by either side |
 
+After merging the final review (cfc3488) every page was captured again, one website copy at a time (platform, then
+legacy), and the OTP, quote and form flows were re-run on the platform: the same differences as below, nothing new.
+One transient observation, not backend-related: after a restart of `next start`, `/career/design-engineer-draft` (a
+404) carries the generic "Page not found | Flarize" title instead of "Position Not Found | Careers at Flarize" — on
+**both** copies alike (Next.js not-found metadata vs. warm cache), while the old URL answers 404 identically on both.
+
 Build-time data (blog `generateStaticParams`, career postings, sitemap) was fetched through each side's nginx during
 `next build`; both builds produced the same 76 prerendered pages.
 
