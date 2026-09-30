@@ -63,6 +63,10 @@ def validate_production_settings(settings: Mapping) -> None:
         problems.append("LEADS_OTP_BACKEND must be 'twilio' (the fake backend accepts the code 000000 for any number)")
     if settings.get("DOCUMENTS_RENDERER") != "playwright":
         problems.append("DOCUMENTS_RENDERER must be 'playwright' (the stub renderer produces placeholder PDFs)")
+    # Without the app role the release's REVOKE steps (audit_log, inventory_movement, attendance_raw_punch) log "left
+    # unchanged" and exit 0, so the append-only ledgers would silently accept UPDATE/DELETE (docs/ops/audit-log.md).
+    if not str(settings.get("DB_APP_ROLE", "") or "").strip():
+        problems.append("DB_APP_ROLE must name the application's database role (the append-only ledgers are enforced by REVOKE from it)")
     private_root = str(settings.get("PRIVATE_MEDIA_ROOT", ""))
     public_root = str(settings.get("PUBLIC_MEDIA_ROOT", ""))
     if not private_root or (public_root and (private_root == public_root or private_root.startswith(public_root.rstrip("/") + "/"))):

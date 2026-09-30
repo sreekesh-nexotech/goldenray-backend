@@ -21,5 +21,12 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
 
+# `check --deploy` must be clean (final review). Two checks do not apply:
+# * security.W003 (no CsrfViewMiddleware): nothing authenticates by cookie — no session middleware, every API reads a
+#   bearer token (JWT, service token, signed link) from the request, so there is no ambient credential to forge with;
+# * security.W021 (HSTS preload): submitting the domain to the browsers' preload list is an owner decision
+#   (docs/reviews/final-review.md "Decisions for the owner"); SECURE_HSTS_PRELOAD stays False until then.
+SILENCED_SYSTEM_CHECKS = [*SILENCED_SYSTEM_CHECKS, "security.W003", "security.W021"]  # noqa: F405
+
 
 validate_production_settings(globals())

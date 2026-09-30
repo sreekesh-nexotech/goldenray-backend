@@ -14,7 +14,7 @@ from django.core.exceptions import ImproperlyConfigured
 from rest_framework import throttling
 
 from customers.services.phones import try_normalise
-from flarize.throttles import ScopedRateThrottle
+from flarize.throttles import CacheUnavailable, ScopedRateThrottle
 
 logger = logging.getLogger("flarize.throttles")
 
@@ -32,7 +32,7 @@ class FixedScopeThrottle(ScopedRateThrottle):
         self.num_requests, self.duration = self.parse_rate(self.rate)
         try:
             return throttling.SimpleRateThrottle.allow_request(self, request, view)
-        except Exception:  # noqa: BLE001 - cache outage: fail open (flarize.throttles)
+        except CacheUnavailable:  # cache outage: fail open (flarize.throttles)
             logger.warning("throttle cache unavailable; allowing request", extra={"scope": self.scope}, exc_info=True)
             return True
 

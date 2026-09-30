@@ -123,3 +123,47 @@ def test_scope_without_a_rate_is_a_configuration_error(api_client):
             view = EchoVersionView()
             view.throttle_scope = "public_read"
             ScopedRateThrottle().allow_request(APIRequestFactory().get("/"), view)
+
+
+class _BrokenCache:
+    def get(self, *args, **kwargs):
+        raise ConnectionError("redis is down")
+
+    def set(self, *args, **kwargs):
+        raise ConnectionError("redis is down")
+
+
+def test_a_cache_outage_fails_open(api_client, monkeypatch, caplog):
+    from flarize import throttles
+
+    monkeypatch.setattr(throttles, "default_cache", _BrokenCache())
+    with _rates(public_read="1/min"):
+        assert [api_client.get("/api/public/v1/_t/echo/").status_code for _ in range(3)] == [200, 200, 200]
+    assert "throttle cache unavailable" in caplog.text
+
+
+@pytest.mark.django_db
+def test_a_throttle_defect_is_not_mistaken_for_a_cache_outage(api_client, monkeypatch):
+    """Final review: the fail-open used to swallow *every* exception, so a bug inside the throttle (seen as a TypeError
+    from a timer captured under freezegun) silently switched rate limiting off for the whole process."""
+    from flarize import throttles
+
+    def broken_timer(self):
+        raise TypeError("defect")
+
+    monkeypatch.setattr(throttles.ScopedRateThrottle, "timer", broken_timer)
+    with _rates(public_read="1/min"):
+        assert api_client.get("/api/public/v1/_t/echo/").status_code == 500
+
+
+def test_the_timer_reads_the_clock_at_call_time():
+    """``time.time`` is looked up per call, so a module first imported under freezegun keeps a working clock."""
+    import datetime as dt
+
+    from freezegun import freeze_time
+
+    from flarize.throttles import ScopedRateThrottle
+
+    with freeze_time("2026-01-01 00:00:00"):
+        assert ScopedRateThrottle().timer() == dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc).timestamp()
+    assert ScopedRateThrottle().timer() > dt.datetime(2026, 1, 2, tzinfo=dt.timezone.utc).timestamp()

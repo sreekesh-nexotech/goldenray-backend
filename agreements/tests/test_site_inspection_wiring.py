@@ -142,3 +142,18 @@ def test_legacy_pa_agreements_take_the_site_inspection_link_uid(world, company):
     result = import_pa_agreements([{**record, "data": {**record["data"], "name": "Ravi K"}}], profile="admin")
     assert [violation["code"] for violation in result["violations"] if violation["code"] == "duplicate_record_id"] == ["duplicate_record_id"]
     assert Agreement.objects.get(legacy_ref="admin/lx9k2").uid != imported.uid
+
+
+@pytest.mark.django_db
+def test_an_extra_structure_agreement_of_another_customer_is_refused():
+    """Final review: an EXTRA_STRUCTURE agreement whose ``source_uid`` names the inspection but which was raised for
+    another customer must not move that inspection's additional work to COST_CALCULATED (the extra work would be
+    priced and billed to the wrong customer). A customer merge repoints both records, so they stay equal."""
+    from customers.tests.factories import CustomerFactory
+    from site_inspections.tests.factories import InspectionFactory, issued_extra_structure
+
+    inspection = InspectionFactory()
+    agreement = issued_extra_structure(inspection)
+    assert extra_structure_problem(agreement.uid, inspection) is None
+    Agreement.objects.filter(pk=agreement.pk).update(customer=CustomerFactory())
+    assert extra_structure_problem(agreement.uid, inspection) == "The EXTRA_STRUCTURE agreement belongs to another customer."

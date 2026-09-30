@@ -1,6 +1,8 @@
 """One-time codes for website forms (PLAN §3.3 ``otp/send``, ``otp/verify``) and the verification token.
 
-* :func:`send_code` — Indian mobile numbers only (the caller normalises to E.164). Besides the ``otp`` (per phone)
+* :func:`send_code` — Indian mobile numbers only (the caller normalises to E.164; anything else — a foreign or a
+  landline number, whichever caller chose it — is refused with 400 ``otp_phone_unsupported`` before the provider is
+  called: SMS pumping / toll fraud). Besides the ``otp`` (per phone)
   and ``otp_ip`` (per client IP) throttles, a database cap of ``LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY`` sends per
   number per 24 h holds even when the cache is down (throttles fail open). The provider call runs *outside* any
   database transaction (no row locks held during network I/O); the ``leads_otp_request`` row is written after Twilio
@@ -31,6 +33,7 @@ from django.utils import timezone
 
 from audit.services import record
 from core.errors import DomainError
+from customers.services.phones import INDIA, try_normalise
 from leads.models import OtpRequest
 from leads.services import twilio_verify
 from leads.services.twilio_verify import ProviderRejected, ProviderUnavailable, VerificationNotFound
@@ -58,7 +61,14 @@ def _limit() -> DomainError:
     return DomainError("otp_limit_reached", "Too many codes were requested for this number. Please try again later.", status=429)
 
 
+def is_indian_mobile(phone_e164: str) -> bool:
+    """``phone_e164`` is an E.164 Indian mobile number — the only kind a one-time code is ever sent to."""
+    return bool(phone_e164) and try_normalise(phone_e164, mobile_only=True, regions=INDIA) == phone_e164
+
+
 def send_code(*, phone_e164: str, purpose: str = OtpRequest.Purpose.LEAD, ip: str | None = None) -> OtpRequest:
+    if not is_indian_mobile(phone_e164):
+        raise DomainError("otp_phone_unsupported", "One-time codes can only be sent to Indian mobile numbers.", errors={"phone": ["Use an Indian mobile number."]})
     now = timezone.now()
     if OtpRequest.objects.filter(phone_e164=phone_e164, created_at__gte=now - timedelta(days=1)).count() >= settings.LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY:
         raise _limit()

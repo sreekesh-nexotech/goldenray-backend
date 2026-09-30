@@ -8,14 +8,18 @@ Differences from DRF's ``ScopedRateThrottle``:
 * a view may choose its scope per request (``get_throttle_scope(request)``, e.g. public read vs write) and may key a
   scope on something other than the caller (``get_throttle_ident(request)``, e.g. the phone number for OTP);
 * a cache outage fails **open** (logged): nginx ``limit_req`` is the backstop and the login lockout is DB-backed, so
-  a Redis failure degrades rate limiting instead of taking the API down.
+  a Redis failure degrades rate limiting instead of taking the API down. Only errors raised by the cache itself fail
+  open; a defect in the throttle is raised, never mistaken for an outage (it would switch rate limiting off);
+* the clock is read through ``time.time`` on every call (DRF stores the function on the class at import time).
 """
 
 from __future__ import annotations
 
 import logging
 import re
+import time
 
+from django.core.cache import cache as default_cache
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import throttling
 from rest_framework.settings import api_settings
@@ -53,8 +57,33 @@ def parse_rate(rate: str | None) -> tuple[int | None, int | None]:
     return count, multiplier * _UNIT_SECONDS[match.group("unit")]
 
 
+class CacheUnavailable(Exception):
+    """The throttle's cache raised: the request is allowed (fail open, logged)."""
+
+
+class _GuardedCache:
+    """The two cache calls DRF's throttle makes, with any cache error turned into :class:`CacheUnavailable`."""
+
+    def get(self, *args, **kwargs):
+        try:
+            return default_cache.get(*args, **kwargs)
+        except Exception as exc:  # noqa: BLE001 - whatever the cache backend raises is an outage
+            raise CacheUnavailable(str(exc)) from exc
+
+    def set(self, *args, **kwargs):
+        try:
+            return default_cache.set(*args, **kwargs)
+        except Exception as exc:  # noqa: BLE001 - whatever the cache backend raises is an outage
+            raise CacheUnavailable(str(exc)) from exc
+
+
 class ScopedRateThrottle(throttling.ScopedRateThrottle):
     """Default throttle for every DRF view; only views that declare a scope are limited."""
+
+    cache = _GuardedCache()
+
+    def timer(self):
+        return time.time()
 
     @property
     def THROTTLE_RATES(self):  # noqa: N802 - DRF attribute name
@@ -77,7 +106,7 @@ class ScopedRateThrottle(throttling.ScopedRateThrottle):
         self.num_requests, self.duration = self.parse_rate(self.rate)
         try:
             return throttling.SimpleRateThrottle.allow_request(self, request, view)
-        except Exception:  # noqa: BLE001 - cache outage: fail open (see module docstring)
+        except CacheUnavailable:  # cache outage: fail open (see module docstring)
             logger.warning("throttle cache unavailable; allowing request", extra={"scope": self.scope}, exc_info=True)
             return True
 

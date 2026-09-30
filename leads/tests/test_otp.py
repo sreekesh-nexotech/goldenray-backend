@@ -214,3 +214,13 @@ def test_fake_backend_rejects_unknown_numbers():
 def test_unknown_backend_is_unavailable(api_client):
     response = _send(api_client)
     assert response.status_code == 503 and response.json()["code"] == "otp_unavailable"
+
+
+@pytest.mark.parametrize("phone", ["+14155552671", "+447911123456", "+914842000000"])
+def test_send_code_never_texts_a_number_that_is_not_an_indian_mobile(phone):
+    """The one SMS choke point refuses foreign and landline numbers whichever caller chose them (lead form, legacy
+    form, site-inspection approval link) — final review."""
+    with pytest.raises(DomainError) as caught:
+        otp.send_code(phone_e164=phone)
+    assert caught.value.code == "otp_phone_unsupported" and caught.value.status == 400
+    assert twilio_verify.SENT == [] and not OtpRequest.objects.exists()
