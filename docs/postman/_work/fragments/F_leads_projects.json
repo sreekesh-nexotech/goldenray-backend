@@ -1,0 +1,6500 @@
+[
+ {
+  "id": "POST /api/public/v1/affiliate-applications/",
+  "method": "POST",
+  "path": "/api/public/v1/affiliate-applications/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.AffiliateSubmitView",
+  "action": "post",
+  "source_file": "leads/views/public.py:109",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Submit an affiliate partner application",
+  "description": "The website's referral-partner form. All fields required; `phone` must be an Indian mobile number (no OTP). `profession` and `district` (a Kerala district) accept the code or the legacy label in any letter case (e.g. `Real Estate Agent`). `website` is a honeypot and must stay empty. Creates a NEW application for the Studio inbox.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (`AllowAny`, no authentication classes). Throttle `public_write` 20/min per client IP. Honours `Idempotency-Key`."
+  },
+  "headers": [
+   {
+    "key": "Idempotency-Key",
+    "value": "{{$guid}}",
+    "description": "Optional, 8–128 chars of letters/digits/`-_:.`. A retry with the same key and body replays the first response for 24 h (`Idempotent-Replayed: true`); same key + different body → 422 `idempotency_key_reused`; concurrent duplicate → 409 `idempotency_in_progress`."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "full_name": "Suresh Kumar",
+    "phone": "+919895123456",
+    "email": "suresh.kumar@realtykerala.in",
+    "profession": "REAL_ESTATE_AGENT",
+    "district": "Thrissur",
+    "website": ""
+   },
+   "fields": [
+    {
+     "name": "full_name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": true
+    },
+    {
+     "name": "profession",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "REAL_ESTATE_AGENT",
+      "BUILDER_DEVELOPER",
+      "INFLUENCER",
+      "FINANCIAL_ADVISOR",
+      "FREELANCER",
+      "SOCIETY_RWA",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "Thiruvananthapuram",
+      "Kollam",
+      "Pathanamthitta",
+      "Alappuzha",
+      "Kottayam",
+      "Idukki",
+      "Ernakulam",
+      "Thrissur",
+      "Palakkad",
+      "Malappuram",
+      "Kozhikode",
+      "Wayanad",
+      "Kannur",
+      "Kasaragod"
+     ]
+    },
+    {
+     "name": "website",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+     "full_name": "Suresh Kumar",
+     "profession": "REAL_ESTATE_AGENT",
+     "district": "Thrissur",
+     "status": "NEW",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "message": "Message sent!"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (fields or honeypot `Invalid submission.`)."
+   },
+   {
+    "status": 409,
+    "description": "`idempotency_in_progress`: a request with this Idempotency-Key is still being processed."
+   },
+   {
+    "status": 422,
+    "description": "`idempotency_key_reused`: the Idempotency-Key was used with a different body."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (public_write)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.affiliate_application_received` (actor kind CUSTOMER)",
+   "Cache bump `leads`"
+  ],
+  "capture": [
+   {
+    "var": "public_affiliate_applications_uid",
+    "from": "uid"
+   },
+   {
+    "var": "leads_affiliate_applications_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_affiliate_applications_create"
+ },
+ {
+  "id": "GET /api/public/v1/installations/",
+  "method": "GET",
+  "path": "/api/public/v1/installations/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.PublicInstallationViewSet",
+  "action": "list",
+  "source_file": "leads/views/public.py:149",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "List showcase installations",
+  "description": "The website's installation map: live, COMPLETED installations flagged `is_showcase`, newest `installed_on` first — never the customer's name, phone or address. `photo` is null unless the media asset is public with a CDN URL. Cached (namespaces `leads:installations`, `media`): `ETag` + `If-None-Match` → 304, `Cache-Control: public, max-age=60`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (`AllowAny`, no authentication classes). Throttle `public_read` 600/min per client IP."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "pincode",
+    "value": "686001",
+    "description": "Exact pincode.",
+    "required": false
+   },
+   {
+    "key": "district",
+    "value": "Kottayam",
+    "description": "District (any letter case).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "d63e8a4c-1f5b-4c3d-8a9e-7f8a9b0c1d2e",
+       "pincode": "686001",
+       "district": "Kottayam",
+       "capacity_kw": "5.000",
+       "system_type": "ON_GRID",
+       "installed_on": "2026-09-18",
+       "photo": {
+        "url": "https://cdn.goldenray.in/media/installations/kottayam-5kw.webp",
+        "alternative_text": "5 kW rooftop system in Kottayam",
+        "width": 1600,
+        "height": 1067
+       }
+      }
+     ]
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: pincode longer than 12 or district longer than 100 characters."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (public_read)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_installations_list"
+ },
+ {
+  "id": "GET /api/public/v1/installations/stats/",
+  "method": "GET",
+  "path": "/api/public/v1/installations/stats/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.InstallationStatsView",
+  "action": "get",
+  "source_file": "leads/views/public.py:160",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "Get installation counts for a pincode",
+  "description": "The legacy `installation-stats`: COMPLETED installations in the pincode, in its district and in that district this (Asia/Kolkata) year. The district comes from the reference pincode list, else a legacy 3-digit prefix map (e.g. `682` → Ernakulam), else `Kerala`. `pincode` is required (400 `Pincode parameter is required`) and taken as typed. Cached 300 s server-side (namespaces `leads:installations` + pincode directory); `Cache-Control: public, max-age=60`, ETag/304.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (`AllowAny`, no authentication classes). Throttle `public_read` 600/min per client IP."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "pincode",
+    "value": "686001",
+    "description": "The pincode as typed (required).",
+    "required": true
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "pincode": "686001",
+     "district": "Kottayam",
+     "pincode_installations": 12,
+     "district_installations": 184,
+     "current_year_installations": 47,
+     "year": 2026
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `pincode` missing or blank."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (public_read)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_installations_stats"
+ },
+ {
+  "id": "POST /api/public/v1/leads/",
+  "method": "POST",
+  "path": "/api/public/v1/leads/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.LeadSubmitView",
+  "action": "post",
+  "source_file": "leads/views/public.py:86",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Submit a website lead form",
+  "description": "Every website enquiry form. `kind` and `form` complete each other (either may be omitted; a mismatching pair is 400; `STUDIO` is refused). A phone is required for every kind but `CONTACT` (which may give only an e-mail); **a submission with a phone needs `verification_token` from `otp/verify` for that same number** (400 `verification_required` / `verification_invalid` / `verification_expired` / `verification_mismatch`) — run OTP send → verify first. `website` is a honeypot and must stay empty. `details` = flat object of ≤ 30 scalars; `calculator` ≤ 8 KB; `utm` only utm_source/medium/campaign/term/content, gclid, fbclid, referrer. A phone matching a live customer links the lead to it (and assigns the customer's owner). Every submission creates a new lead (`L-<n>`).",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (`AllowAny`, no authentication classes). Throttle `public_write` 20/min per client IP. Honours `Idempotency-Key`."
+  },
+  "headers": [
+   {
+    "key": "Idempotency-Key",
+    "value": "{{$guid}}",
+    "description": "Optional, 8–128 chars of letters/digits/`-_:.`. A retry with the same key and body replays the first response for 24 h (`Idempotent-Replayed: true`); same key + different body → 422 `idempotency_key_reused`; concurrent duplicate → 409 `idempotency_in_progress`."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "form": "HOME_BOOKING",
+    "kind": "HOME_ENQUIRY",
+    "name": "Rahul Nair",
+    "phone": "+919847012345",
+    "email": "rahul.nair@gmail.com",
+    "pincode": "682024",
+    "district": "Ernakulam",
+    "message": "Interested in a 5 kW on-grid system for my home in Kakkanad.",
+    "page": "/book-consultation",
+    "details": {
+     "Monthly bill": "4500",
+     "Roof type": "Concrete"
+    },
+    "utm": {
+     "utm_source": "google",
+     "utm_medium": "cpc",
+     "utm_campaign": "kerala-rooftop-solar"
+    },
+    "verification_token": "{{public_otp_verification_token}}",
+    "website": ""
+   },
+   "fields": [
+    {
+     "name": "kind",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "HOME_ENQUIRY",
+      "ADVANCED_CALC",
+      "GROUP_PURCHASE",
+      "CONTACT",
+      "REFERRAL",
+      "QUOTE_REQUEST"
+     ]
+    },
+    {
+     "name": "form",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "FOOTER",
+      "HOME_BOOKING",
+      "CONTACT_PAGE",
+      "GROUP_PURCHASE",
+      "QUOTATION",
+      "QUOTE_REQUEST",
+      "REFERRAL_PARTNER",
+      "WARRANTY_SERVICE",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "message",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "page",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "details",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "calculator",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "utm",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "verification_token",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "website",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1043",
+     "kind": "HOME_ENQUIRY",
+     "form": "HOME_BOOKING",
+     "status": "NEW",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "message": "Thank you! We'll be in touch shortly."
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (fields, honeypot `Invalid submission.`, kind/form mismatch, missing phone/e-mail) or `verification_required` / `verification_invalid` / `verification_expired` / `verification_mismatch`."
+   },
+   {
+    "status": 409,
+    "description": "`idempotency_in_progress`: a request with this Idempotency-Key is still being processed."
+   },
+   {
+    "status": 422,
+    "description": "`idempotency_key_reused`: the Idempotency-Key was used with a different body."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (public_write)."
+   }
+  ],
+  "side_effects": [
+   "Outbox `leads.created` (channel `website`)",
+   "Lead event CREATED",
+   "Audit row `leads.lead_created` (actor kind CUSTOMER)",
+   "Cache bump `leads`"
+  ],
+  "capture": [
+   {
+    "var": "public_leads_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_leads_create"
+ },
+ {
+  "id": "POST /api/public/v1/otp/send/",
+  "method": "POST",
+  "path": "/api/public/v1/otp/send/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.OtpSendView",
+  "action": "post",
+  "source_file": "leads/views/public.py:48",
+  "group": "F_leads_projects",
+  "folder": [
+   "OTP"
+  ],
+  "summary": "Send a website OTP by SMS",
+  "description": "Sends a one-time code (Twilio Verify) to an **Indian mobile number** (any common spelling; normalised to E.164) for the lead forms. `name` is accepted for legacy forms and not stored. Backend `LEADS_OTP_BACKEND`: `twilio` in staging/prod; `fake` in dev/test (no SMS, the code is always `000000` — the dev default in `flarize/settings/dev.py` and `.env.docker.example`). Non-Indian/landline numbers → 400 `otp_phone_unsupported`; more than 10 sends per number in 24 h (DB cap, `LEADS_OTP_MAX_SENDS_PER_PHONE_PER_DAY`) or a Twilio 429 → 429 `otp_limit_reached`; provider unconfigured/unreachable → 503 `otp_unavailable`; Twilio rejects the number → 400 `otp_send_failed`. The code expires after 600 s.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous. Throttles (replace the default `public_write`): `otp` 5/10min per normalised phone number (falls back to client IP when the body has no valid number) and `otp_ip` 20/10min per client IP; both fail open on a cache outage (the DB cap still holds). Honours `Idempotency-Key`."
+  },
+  "headers": [
+   {
+    "key": "Idempotency-Key",
+    "value": "{{$guid}}",
+    "description": "Optional, 8–128 chars of letters/digits/`-_:.`. A retry with the same key and body replays the first response for 24 h (`Idempotent-Replayed: true`); same key + different body → 422 `idempotency_key_reused`; concurrent duplicate → 409 `idempotency_in_progress`."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "phone": "+919847012345",
+    "name": "Rahul Nair"
+   },
+   "fields": [
+    {
+     "name": "phone",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "A code was sent (fake backend: use 000000).",
+    "content_type": "application/json",
+    "example": {
+     "status": "pending",
+     "phone": "+919847012345",
+     "expires_at": "2026-10-01T10:25:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (bad phone), `otp_phone_unsupported`, `otp_send_failed`."
+   },
+   {
+    "status": 409,
+    "description": "`idempotency_in_progress`: a request with this Idempotency-Key is still being processed."
+   },
+   {
+    "status": 422,
+    "description": "`idempotency_key_reused`: the Idempotency-Key was used with a different body."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (otp / otp_ip) or `otp_limit_reached`."
+   },
+   {
+    "status": 503,
+    "description": "`otp_unavailable`: the SMS provider is not configured or unreachable."
+   }
+  ],
+  "side_effects": [
+   "SMS one-time code via Twilio Verify (fake backend in dev/test: recorded in memory/cache, no SMS)",
+   "Inserts a `leads_otp_request` row (after the provider accepted)",
+   "Audit row `leads.otp_sent` (actor kind CUSTOMER)"
+  ],
+  "capture": [],
+  "order": 1,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_otp_send"
+ },
+ {
+  "id": "POST /api/public/v1/otp/verify/",
+  "method": "POST",
+  "path": "/api/public/v1/otp/verify/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.OtpVerifyView",
+  "action": "post",
+  "source_file": "leads/views/public.py:68",
+  "group": "F_leads_projects",
+  "folder": [
+   "OTP"
+  ],
+  "summary": "Verify a website OTP",
+  "description": "Checks the code for the latest live OTP request of the number and returns a signed `verification_token` (valid 1800 s, only for that number) that `POST /api/public/v1/leads/` needs for any submission with a phone. With the dev/test `fake` backend the code `000000` is approved, anything else is `otp_invalid`. At most 5 checks per sent code (`otp_attempts_exceeded`, 429). 400 `otp_invalid` (wrong code) / `otp_expired` (no live code — send one first); 503 `otp_unavailable`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous. Throttles: `otp` 5/10min per phone in a bucket separate from otp/send (`verify-phone`) and `otp_ip` 20/10min per client IP. Honours `Idempotency-Key`."
+  },
+  "headers": [
+   {
+    "key": "Idempotency-Key",
+    "value": "{{$guid}}",
+    "description": "Optional, 8–128 chars of letters/digits/`-_:.`. A retry with the same key and body replays the first response for 24 h (`Idempotent-Replayed: true`); same key + different body → 422 `idempotency_key_reused`; concurrent duplicate → 409 `idempotency_in_progress`."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "phone": "+919847012345",
+    "code": "000000"
+   },
+   "fields": [
+    {
+     "name": "phone",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "code",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "status": "approved",
+     "verification_token": "eyJwIjoiKzkxOTg0NzAxMjM0NSIsInUiOiJMRUFEIn0:1v9xQk:Zr3c...",
+     "expires_at": "2026-10-01T10:45:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (code must be 4–10 digits), `otp_invalid`, `otp_expired`."
+   },
+   {
+    "status": 409,
+    "description": "`idempotency_in_progress`: a request with this Idempotency-Key is still being processed."
+   },
+   {
+    "status": 422,
+    "description": "`idempotency_key_reused`: the Idempotency-Key was used with a different body."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` or `otp_attempts_exceeded` (5 wrong codes — request a new one)."
+   },
+   {
+    "status": 503,
+    "description": "`otp_unavailable`."
+   }
+  ],
+  "side_effects": [
+   "Twilio Verify check (fake backend in dev/test)",
+   "Marks the `leads_otp_request` row verified; attempts counted per check",
+   "Audit row `leads.otp_verified` (actor kind CUSTOMER)"
+  ],
+  "capture": [
+   {
+    "var": "public_otp_verification_token",
+    "from": "verification_token"
+   }
+  ],
+  "order": 2,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_otp_verify"
+ },
+ {
+  "id": "POST /api/public/v1/warranty-requests/",
+  "method": "POST",
+  "path": "/api/public/v1/warranty-requests/",
+  "app": "leads",
+  "surface": "public",
+  "view": "leads.views.public.WarrantySubmitView",
+  "action": "post",
+  "source_file": "leads/views/public.py:126",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Submit a warranty service request",
+  "description": "The website's warranty/service form. `phone` must be an Indian mobile number (no OTP); `issue_type` accepts the code or the legacy label (e.g. `Inverter Fault`). `system_details` is an optional JSON object ≤ 4 KB, ≤ 3 levels deep. A phone matching a live customer links the request to that customer. `website` is a honeypot.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (`AllowAny`, no authentication classes). Throttle `public_write` 20/min per client IP. Honours `Idempotency-Key`."
+  },
+  "headers": [
+   {
+    "key": "Idempotency-Key",
+    "value": "{{$guid}}",
+    "description": "Optional, 8–128 chars of letters/digits/`-_:.`. A retry with the same key and body replays the first response for 24 h (`Idempotent-Replayed: true`); same key + different body → 422 `idempotency_key_reused`; concurrent duplicate → 409 `idempotency_in_progress`."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "full_name": "Lakshmi Pillai",
+    "phone": "+919746234567",
+    "issue_type": "INVERTER_FAULT",
+    "description": "Inverter shows grid fault error since yesterday; no generation today.",
+    "system_details": {
+     "capacity_kw": 5,
+     "inverter": "Deye SUN-5K",
+     "installed_on": "2024-03-12"
+    },
+    "website": ""
+   },
+   "fields": [
+    {
+     "name": "full_name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "issue_type",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "LOW_GENERATION",
+      "INVERTER_FAULT",
+      "PANEL_DAMAGE",
+      "NET_METERING",
+      "WARRANTY_CLAIM",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "system_details",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "website",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+     "full_name": "Lakshmi Pillai",
+     "issue_type": "INVERTER_FAULT",
+     "status": "NEW",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "message": "Service request received. Our team will contact you shortly."
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (fields, system_details too big/deep, honeypot)."
+   },
+   {
+    "status": 409,
+    "description": "`idempotency_in_progress`: a request with this Idempotency-Key is still being processed."
+   },
+   {
+    "status": 422,
+    "description": "`idempotency_key_reused`: the Idempotency-Key was used with a different body."
+   },
+   {
+    "status": 429,
+    "description": "`throttled` (public_write)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.warranty_request_received` (actor kind CUSTOMER)",
+   "Cache bump `leads`"
+  ],
+  "capture": [
+   {
+    "var": "public_warranty_requests_uid",
+    "from": "uid"
+   },
+   {
+    "var": "leads_warranty_requests_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_warranty_requests_create"
+ },
+ {
+  "id": "GET /api/v1/leads/",
+  "method": "GET",
+  "path": "/api/v1/leads/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "List leads",
+  "description": "Paginated leads, newest first. Filters may also be written `?filter[field]=`; `status`, `kind` and `form` accept repeated values. Search covers number, name, phone (E.164) and e-mail.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "NEW",
+    "description": "Repeatable: NEW / CONTACTED / QUALIFIED / CONVERTED / LOST / SPAM.",
+    "required": false
+   },
+   {
+    "key": "kind",
+    "value": "HOME_ENQUIRY",
+    "description": "Repeatable: HOME_ENQUIRY / ADVANCED_CALC / GROUP_PURCHASE / CONTACT / REFERRAL / QUOTE_REQUEST.",
+    "required": false
+   },
+   {
+    "key": "form",
+    "value": "HOME_BOOKING",
+    "description": "Repeatable: FOOTER / HOME_BOOKING / CONTACT_PAGE / GROUP_PURCHASE / QUOTATION / QUOTE_REQUEST / REFERRAL_PARTNER / WARRANTY_SERVICE / OTHER / STUDIO.",
+    "required": false
+   },
+   {
+    "key": "assignee",
+    "value": "{{users_uid}}",
+    "description": "Assignee (user) uid.",
+    "required": false
+   },
+   {
+    "key": "unassigned",
+    "value": "true",
+    "description": "true: nobody is assigned.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "Created at or after (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "Created at or before (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "customer",
+    "value": "{{customers_uid}}",
+    "description": "Customer uid.",
+    "required": false
+   },
+   {
+    "key": "verified",
+    "value": "true",
+    "description": "true: the phone was OTP-verified; false: not verified.",
+    "required": false
+   },
+   {
+    "key": "pincode",
+    "value": "682024",
+    "description": "Exact pincode.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Nair",
+    "description": "Searches number, name, phone_e164, email.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "created_at, updated_at, status, number (prefix `-` for descending). Default -created_at.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+       "number": "L-1042",
+       "kind": "HOME_ENQUIRY",
+       "form": "STUDIO",
+       "status": "NEW",
+       "name": "Rahul Nair",
+       "phone": "+919847012345",
+       "email": "rahul.nair@gmail.com",
+       "pincode": "682024",
+       "district": "Ernakulam",
+       "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+       "payload": {
+        "details": {
+         "Monthly bill": "4500",
+         "Roof type": "Concrete"
+        }
+       },
+       "page": "",
+       "otp_verified_at": null,
+       "assignee": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "customer": null,
+       "lost_reason": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_list"
+ },
+ {
+  "id": "POST /api/v1/leads/",
+  "method": "POST",
+  "path": "/api/v1/leads/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Create a lead in Studio",
+  "description": "A lead entered in Studio (`form` STUDIO, no OTP). Needs a phone or an e-mail. Assigned to you unless `assignee_uid` names someone else or null (that needs `leads.manage`, else 403 `assign_forbidden`). A phone matching a live customer links the lead to that customer. `details` = flat object of ≤ 30 scalars.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.create",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "kind": "HOME_ENQUIRY",
+    "name": "Rahul Nair",
+    "phone": "+919847012345",
+    "email": "rahul.nair@gmail.com",
+    "pincode": "682024",
+    "district": "Ernakulam",
+    "message": "Walk-in at the Kochi office; wants a 5 kW on-grid system.",
+    "details": {
+     "Monthly bill": "4500",
+     "Roof type": "Concrete"
+    },
+    "assignee_uid": "{{users_uid}}"
+   },
+   "fields": [
+    {
+     "name": "kind",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "HOME_ENQUIRY",
+      "ADVANCED_CALC",
+      "GROUP_PURCHASE",
+      "CONTACT",
+      "REFERRAL",
+      "QUOTE_REQUEST"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "message",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "details",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "NEW",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` (no `leads.create`) or `assign_forbidden` (assigning to someone else/nobody without `leads.manage`)."
+   }
+  ],
+  "side_effects": [
+   "Outbox `leads.created` (channel `studio`)",
+   "Lead event CREATED",
+   "Audit row `leads.lead_created`",
+   "Cache bump `leads`"
+  ],
+  "capture": [
+   {
+    "var": "leads_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_create"
+ },
+ {
+  "id": "GET /api/v1/leads/affiliate-applications/",
+  "method": "GET",
+  "path": "/api/v1/leads/affiliate-applications/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "List affiliate applications",
+  "description": "Paginated affiliate applications, newest first (records come only from the website form). Search covers full_name, phone_e164, email. Filters may also be written `?filter[field]=`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "NEW",
+    "description": "Repeatable: NEW / CONTACTED / APPROVED / REJECTED.",
+    "required": false
+   },
+   {
+    "key": "profession",
+    "value": "REAL_ESTATE_AGENT",
+    "description": "REAL_ESTATE_AGENT / BUILDER_DEVELOPER / INFLUENCER / FINANCIAL_ADVISOR / FREELANCER / SOCIETY_RWA / OTHER.",
+    "required": false
+   },
+   {
+    "key": "district",
+    "value": "Thrissur",
+    "description": "Kerala district (exact code).",
+    "required": false
+   },
+   {
+    "key": "assignee",
+    "value": "{{users_uid}}",
+    "description": "Assignee (user) uid.",
+    "required": false
+   },
+   {
+    "key": "unassigned",
+    "value": "true",
+    "description": "true: nobody is assigned.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "Created at or after (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "Created at or before (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Kumar",
+    "description": "Searches full_name, phone_e164, email.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "created_at, updated_at, status (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+       "full_name": "Suresh Kumar",
+       "phone": "+919895123456",
+       "email": "suresh.kumar@realtykerala.in",
+       "profession": "REAL_ESTATE_AGENT",
+       "district": "Thrissur",
+       "status": "NEW",
+       "assignee": null,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "leads_affiliate_applications_uid",
+    "from": "results.0.uid"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_list"
+ },
+ {
+  "id": "GET /api/v1/leads/affiliate-applications/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Get a affiliate application",
+  "description": "One affiliate application.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Affiliate application uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+     "full_name": "Suresh Kumar",
+     "phone": "+919895123456",
+     "email": "suresh.kumar@realtykerala.in",
+     "profession": "REAL_ESTATE_AGENT",
+     "district": "Thrissur",
+     "status": "NEW",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live affiliate application with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/leads/affiliate-applications/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "F_leads_projects",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/leads/affiliate-applications/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Update a affiliate application",
+  "description": "Edits the submitted fields (labels or codes accepted for choices). No-op when nothing changes. 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Affiliate application uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "expected_version": 1,
+    "email": "suresh@realtykerala.in",
+    "district": "Ernakulam"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "full_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "profession",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "REAL_ESTATE_AGENT",
+      "BUILDER_DEVELOPER",
+      "INFLUENCER",
+      "FINANCIAL_ADVISOR",
+      "FREELANCER",
+      "SOCIETY_RWA",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "Thiruvananthapuram",
+      "Kollam",
+      "Pathanamthitta",
+      "Alappuzha",
+      "Kottayam",
+      "Idukki",
+      "Ernakulam",
+      "Thrissur",
+      "Palakkad",
+      "Malappuram",
+      "Kozhikode",
+      "Wayanad",
+      "Kannur",
+      "Kasaragod"
+     ]
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+     "full_name": "Suresh Kumar",
+     "phone": "+919895123456",
+     "email": "suresh@realtykerala.in",
+     "profession": "REAL_ESTATE_AGENT",
+     "district": "Ernakulam",
+     "status": "NEW",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T11:40:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: affiliate application not in scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.affiliate_application_updated`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_update"
+ },
+ {
+  "id": "DELETE /api/v1/leads/affiliate-applications/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Archive a affiliate application",
+  "description": "Soft-deletes the affiliate application. Optional `expected_version` (query or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.archive",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Affiliate application uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (also accepted in a body); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Archived (soft delete)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live affiliate application with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.affiliate_application_deleted`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_delete"
+ },
+ {
+  "id": "POST /api/v1/leads/affiliate-applications/{uid}/assign/",
+  "method": "POST",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/assign/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "assign",
+  "source_file": "leads/views/forms.py:96",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Assign a affiliate application",
+  "description": "Sets the assignee (an active user); `assignee_uid: null` unassigns. No-op when unchanged. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.manage",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Affiliate application uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "assignee_uid": "{{users_uid}}"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": true,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+     "full_name": "Suresh Kumar",
+     "phone": "+919895123456",
+     "email": "suresh.kumar@realtykerala.in",
+     "profession": "REAL_ESTATE_AGENT",
+     "district": "Thrissur",
+     "status": "NEW",
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (unknown or inactive user)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.manage`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live affiliate application with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.affiliate_application_assigned`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_assign"
+ },
+ {
+  "id": "POST /api/v1/leads/affiliate-applications/{uid}/transition/",
+  "method": "POST",
+  "path": "/api/v1/leads/affiliate-applications/{uid}/transition/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.AffiliateApplicationViewSet",
+  "action": "transition",
+  "source_file": "leads/views/forms.py:85",
+  "group": "F_leads_projects",
+  "folder": [
+   "Affiliate applications"
+  ],
+  "summary": "Change a affiliate application's status",
+  "description": "NEW → CONTACTED → APPROVED | REJECTED (NEW may go straight to APPROVED/REJECTED); REJECTED → NEW reopens; APPROVED is final. 409 `invalid_transition` (errors list the allowed targets); same status is a no-op. The note goes to the audit row. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_affiliate_applications_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Affiliate application uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "status": "CONTACTED",
+    "note": "Spoke to Suresh; sending the partner agreement."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "status",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "NEW",
+      "CONTACTED",
+      "APPROVED",
+      "REJECTED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b41c6e2a-9d3f-4a1b-8e7c-5d6f7a8b9c0d",
+     "full_name": "Suresh Kumar",
+     "phone": "+919895123456",
+     "email": "suresh.kumar@realtykerala.in",
+     "profession": "REAL_ESTATE_AGENT",
+     "district": "Thrissur",
+     "status": "CONTACTED",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live affiliate application with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.affiliate_application_status_changed`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_affiliate_applications_transition"
+ },
+ {
+  "id": "GET /api/v1/leads/installations/",
+  "method": "GET",
+  "path": "/api/v1/leads/installations/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "List customer installations",
+  "description": "Paginated installations, newest `installed_on` first. Search covers customer_name, phone_e164, pincode, district. Filters may also be written `?filter[field]=`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "COMPLETED",
+    "description": "Repeatable: COMPLETED / IN_PROGRESS / PLANNED.",
+    "required": false
+   },
+   {
+    "key": "pincode",
+    "value": "686001",
+    "description": "Exact pincode.",
+    "required": false
+   },
+   {
+    "key": "district",
+    "value": "Kottayam",
+    "description": "District (any letter case).",
+    "required": false
+   },
+   {
+    "key": "is_showcase",
+    "value": "true",
+    "description": "true: shown on the public map.",
+    "required": false
+   },
+   {
+    "key": "installed_from",
+    "value": "2026-01-01",
+    "description": "Installed on or after (date).",
+    "required": false
+   },
+   {
+    "key": "installed_to",
+    "value": "2026-12-31",
+    "description": "Installed on or before (date).",
+    "required": false
+   },
+   {
+    "key": "assignee",
+    "value": "{{users_uid}}",
+    "description": "Assignee (user) uid.",
+    "required": false
+   },
+   {
+    "key": "unassigned",
+    "value": "true",
+    "description": "true: nobody is assigned.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "Created at or after (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "Created at or before (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Mathew",
+    "description": "Searches customer_name, phone_e164, pincode, district.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-installed_on",
+    "description": "installed_on, created_at, capacity_kw (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "d63e8a4c-1f5b-4c3d-8a9e-7f8a9b0c1d2e",
+       "customer_name": "George Mathew",
+       "phone": "+919447345678",
+       "pincode": "686001",
+       "district": "Kottayam",
+       "address": "Mathew Villa, Collectorate Road, Kottayam",
+       "capacity_kw": "5.000",
+       "system_type": "ON_GRID",
+       "installed_on": "2026-09-18",
+       "status": "COMPLETED",
+       "is_showcase": true,
+       "photo": null,
+       "assignee": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_installations_list"
+ },
+ {
+  "id": "POST /api/v1/leads/installations/",
+  "method": "POST",
+  "path": "/api/v1/leads/installations/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "Create a customer installation",
+  "description": "Records an installation. `district` defaults to the pincode's district from the reference pincode list. `status` defaults to COMPLETED; COMPLETED + `is_showcase` puts it on the public map (`/api/public/v1/installations/`), and every COMPLETED row counts in the public stats. `photo_uid` must be a PUBLIC IMAGE/PHOTO media asset. Assigned to you unless `assignee_uid` names someone else or null (needs `leads.manage`, else 403 `assign_forbidden`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.create",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "customer_name": "George Mathew",
+    "phone": "+919447345678",
+    "pincode": "686001",
+    "district": "Kottayam",
+    "address": "Mathew Villa, Collectorate Road, Kottayam",
+    "capacity_kw": "5.000",
+    "system_type": "ON_GRID",
+    "installed_on": "2026-09-18",
+    "status": "COMPLETED",
+    "is_showcase": true
+   },
+   "fields": [
+    {
+     "name": "customer_name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "address",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "capacity_kw",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "system_type",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "",
+      "ON_GRID",
+      "OFF_GRID",
+      "HYBRID"
+     ]
+    },
+    {
+     "name": "installed_on",
+     "type": "string:date",
+     "required": true
+    },
+    {
+     "name": "status",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "COMPLETED",
+      "IN_PROGRESS",
+      "PLANNED"
+     ]
+    },
+    {
+     "name": "is_showcase",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "photo_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "d63e8a4c-1f5b-4c3d-8a9e-7f8a9b0c1d2e",
+     "customer_name": "George Mathew",
+     "phone": "+919447345678",
+     "pincode": "686001",
+     "district": "Kottayam",
+     "address": "Mathew Villa, Collectorate Road, Kottayam",
+     "capacity_kw": "5.000",
+     "system_type": "ON_GRID",
+     "installed_on": "2026-09-18",
+     "status": "COMPLETED",
+     "is_showcase": true,
+     "photo": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (6-digit pincode, capacity > 0, photo not a public image, inactive user …)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` (no `leads.create`) or `assign_forbidden`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.installation_created`",
+   "Cache bump `leads:installations` (public map/stats)"
+  ],
+  "capture": [
+   {
+    "var": "leads_installations_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_installations_create"
+ },
+ {
+  "id": "GET /api/v1/leads/installations/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/leads/installations/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "Get a customer installation",
+  "description": "One installation; `photo` carries the media asset uid when it is public.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_installations_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Customer installation uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "d63e8a4c-1f5b-4c3d-8a9e-7f8a9b0c1d2e",
+     "customer_name": "George Mathew",
+     "phone": "+919447345678",
+     "pincode": "686001",
+     "district": "Kottayam",
+     "address": "Mathew Villa, Collectorate Road, Kottayam",
+     "capacity_kw": "5.000",
+     "system_type": "ON_GRID",
+     "installed_on": "2026-09-18",
+     "status": "COMPLETED",
+     "is_showcase": true,
+     "photo": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live installation with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_installations_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/leads/installations/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/leads/installations/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "F_leads_projects",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "leads_installations_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/leads/installations/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/leads/installations/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "Update a customer installation",
+  "description": "Partial edit of any create field. A changed pincode without `district` re-derives the district. Changing the assignee to someone else/nobody needs `leads.manage` (403 `assign_forbidden`). 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_installations_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Customer installation uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "expected_version": 1,
+    "capacity_kw": "6.000",
+    "is_showcase": false
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "customer_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "address",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "capacity_kw",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "system_type",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "",
+      "ON_GRID",
+      "OFF_GRID",
+      "HYBRID"
+     ]
+    },
+    {
+     "name": "installed_on",
+     "type": "string:date",
+     "required": false
+    },
+    {
+     "name": "status",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "COMPLETED",
+      "IN_PROGRESS",
+      "PLANNED"
+     ]
+    },
+    {
+     "name": "is_showcase",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "photo_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "d63e8a4c-1f5b-4c3d-8a9e-7f8a9b0c1d2e",
+     "customer_name": "George Mathew",
+     "phone": "+919447345678",
+     "pincode": "686001",
+     "district": "Kottayam",
+     "address": "Mathew Villa, Collectorate Road, Kottayam",
+     "capacity_kw": "6.000",
+     "system_type": "ON_GRID",
+     "installed_on": "2026-09-18",
+     "status": "COMPLETED",
+     "is_showcase": false,
+     "photo": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T11:40:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` (no `leads.edit`) or `assign_forbidden`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live installation with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.installation_updated`",
+   "Cache bump `leads:installations`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_installations_update"
+ },
+ {
+  "id": "DELETE /api/v1/leads/installations/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/leads/installations/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.installations.InstallationViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "F_leads_projects",
+  "folder": [
+   "Installations"
+  ],
+  "summary": "Archive a customer installation",
+  "description": "Soft-deletes the installation (it leaves the public map and stats). Optional `expected_version` (query or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.archive",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_installations_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Customer installation uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (also accepted in a body); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Archived (soft delete)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live installation with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.installation_deleted`",
+   "Cache bump `leads:installations`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_installations_delete"
+ },
+ {
+  "id": "GET /api/v1/leads/warranty-requests/",
+  "method": "GET",
+  "path": "/api/v1/leads/warranty-requests/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "List warranty requests",
+  "description": "Paginated warranty requests, newest first (records come only from the website form). Search covers full_name, phone_e164, description. Filters may also be written `?filter[field]=`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "NEW",
+    "description": "Repeatable: NEW / IN_PROGRESS / RESOLVED / CLOSED / REJECTED.",
+    "required": false
+   },
+   {
+    "key": "issue_type",
+    "value": "INVERTER_FAULT",
+    "description": "LOW_GENERATION / INVERTER_FAULT / PANEL_DAMAGE / NET_METERING / WARRANTY_CLAIM / OTHER.",
+    "required": false
+   },
+   {
+    "key": "customer",
+    "value": "{{customers_uid}}",
+    "description": "Customer uid.",
+    "required": false
+   },
+   {
+    "key": "assignee",
+    "value": "{{users_uid}}",
+    "description": "Assignee (user) uid.",
+    "required": false
+   },
+   {
+    "key": "unassigned",
+    "value": "true",
+    "description": "true: nobody is assigned.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "Created at or after (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "Created at or before (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Pillai",
+    "description": "Searches full_name, phone_e164, description.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "created_at, updated_at, status (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+       "full_name": "Lakshmi Pillai",
+       "phone": "+919746234567",
+       "issue_type": "INVERTER_FAULT",
+       "description": "Inverter shows grid fault error since yesterday; no generation today.",
+       "system_details": {
+        "capacity_kw": 5,
+        "inverter": "Deye SUN-5K",
+        "installed_on": "2024-03-12"
+       },
+       "customer": {
+        "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+        "code": "CUST-000142",
+        "name": "Rahul Nair"
+       },
+       "status": "NEW",
+       "assignee": null,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "leads_warranty_requests_uid",
+    "from": "results.0.uid"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_list"
+ },
+ {
+  "id": "GET /api/v1/leads/warranty-requests/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/leads/warranty-requests/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Get a warranty request",
+  "description": "One warranty request.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Warranty request uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+     "full_name": "Lakshmi Pillai",
+     "phone": "+919746234567",
+     "issue_type": "INVERTER_FAULT",
+     "description": "Inverter shows grid fault error since yesterday; no generation today.",
+     "system_details": {
+      "capacity_kw": 5,
+      "inverter": "Deye SUN-5K",
+      "installed_on": "2024-03-12"
+     },
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "status": "NEW",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live warranty request with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/leads/warranty-requests/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/leads/warranty-requests/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "F_leads_projects",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/leads/warranty-requests/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/leads/warranty-requests/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Update a warranty request",
+  "description": "Edits the submitted fields (labels or codes accepted for choices). No-op when nothing changes. 409 `stale_version`. `customer_uid` links a customer you can see in the `customers` scope (404 otherwise); null unlinks.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Warranty request uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "expected_version": 1,
+    "issue_type": "WARRANTY_CLAIM",
+    "customer_uid": "{{customers_uid}}"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "full_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "issue_type",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "LOW_GENERATION",
+      "INVERTER_FAULT",
+      "PANEL_DAMAGE",
+      "NET_METERING",
+      "WARRANTY_CLAIM",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "system_details",
+     "type": "object",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "customer_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+     "full_name": "Lakshmi Pillai",
+     "phone": "+919746234567",
+     "issue_type": "WARRANTY_CLAIM",
+     "description": "Inverter shows grid fault error since yesterday; no generation today.",
+     "system_details": {
+      "capacity_kw": 5,
+      "inverter": "Deye SUN-5K",
+      "installed_on": "2024-03-12"
+     },
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "status": "NEW",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T11:40:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: warranty request not in scope, or `customer_uid` not visible."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.warranty_request_updated`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_update"
+ },
+ {
+  "id": "DELETE /api/v1/leads/warranty-requests/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/leads/warranty-requests/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Archive a warranty request",
+  "description": "Soft-deletes the warranty request. Optional `expected_version` (query or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.archive",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Warranty request uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (also accepted in a body); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Archived (soft delete)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live warranty request with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.warranty_request_deleted`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_delete"
+ },
+ {
+  "id": "POST /api/v1/leads/warranty-requests/{uid}/assign/",
+  "method": "POST",
+  "path": "/api/v1/leads/warranty-requests/{uid}/assign/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "assign",
+  "source_file": "leads/views/forms.py:140",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Assign a warranty request",
+  "description": "Sets the assignee (an active user); `assignee_uid: null` unassigns. No-op when unchanged. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.manage",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Warranty request uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "assignee_uid": "{{users_uid}}"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": true,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+     "full_name": "Lakshmi Pillai",
+     "phone": "+919746234567",
+     "issue_type": "INVERTER_FAULT",
+     "description": "Inverter shows grid fault error since yesterday; no generation today.",
+     "system_details": {
+      "capacity_kw": 5,
+      "inverter": "Deye SUN-5K",
+      "installed_on": "2024-03-12"
+     },
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "status": "NEW",
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (unknown or inactive user)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.manage`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live warranty request with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.warranty_request_assigned`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_assign"
+ },
+ {
+  "id": "POST /api/v1/leads/warranty-requests/{uid}/transition/",
+  "method": "POST",
+  "path": "/api/v1/leads/warranty-requests/{uid}/transition/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.forms.WarrantyRequestViewSet",
+  "action": "transition",
+  "source_file": "leads/views/forms.py:129",
+  "group": "F_leads_projects",
+  "folder": [
+   "Warranty requests"
+  ],
+  "summary": "Change a warranty request's status",
+  "description": "NEW → IN_PROGRESS → RESOLVED → CLOSED; NEW/IN_PROGRESS → REJECTED; RESOLVED → IN_PROGRESS and REJECTED → NEW reopen; CLOSED is final. 409 `invalid_transition` (errors list the allowed targets); same status is a no-op. The note goes to the audit row. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_warranty_requests_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Warranty request uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "status": "IN_PROGRESS",
+    "note": "Technician scheduled for 3 Oct."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "status",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "NEW",
+      "IN_PROGRESS",
+      "RESOLVED",
+      "CLOSED",
+      "REJECTED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "c52d7f3b-0e4a-4b2c-9f8d-6e7a8b9c0d1e",
+     "full_name": "Lakshmi Pillai",
+     "phone": "+919746234567",
+     "issue_type": "INVERTER_FAULT",
+     "description": "Inverter shows grid fault error since yesterday; no generation today.",
+     "system_details": {
+      "capacity_kw": 5,
+      "inverter": "Deye SUN-5K",
+      "installed_on": "2024-03-12"
+     },
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "status": "IN_PROGRESS",
+     "assignee": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live warranty request with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `leads.warranty_request_status_changed`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_warranty_requests_transition"
+ },
+ {
+  "id": "GET /api/v1/leads/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/leads/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Get a lead",
+  "description": "One lead with its payload (details/calculator/utm), assignee and linked customer.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "NEW",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/leads/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/leads/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "F_leads_projects",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/leads/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/leads/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Update a lead",
+  "description": "Edits kind, name, phone, email, pincode, district, message. Changing the phone clears `otp_verified_at`. No-op when nothing changes. 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "expected_version": 1,
+    "kind": "ADVANCED_CALC",
+    "message": "Upgraded the enquiry to 7 kW hybrid with a 5 kWh battery after the call."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "kind",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "HOME_ENQUIRY",
+      "ADVANCED_CALC",
+      "GROUP_PURCHASE",
+      "CONTACT",
+      "REFERRAL",
+      "QUOTE_REQUEST"
+     ]
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "message",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "ADVANCED_CALC",
+     "form": "STUDIO",
+     "status": "NEW",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Upgraded the enquiry to 7 kW hybrid with a 5 kWh battery after the call.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T11:40:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Lead event UPDATED",
+   "Audit row `leads.lead_updated`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_update"
+ },
+ {
+  "id": "DELETE /api/v1/leads/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/leads/{uid}/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Archive a lead",
+  "description": "Soft-deletes the lead (it disappears from lists). Optional `expected_version` (query or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.archive",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (also accepted in a body); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Archived (soft delete)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Lead event ARCHIVED",
+   "Audit row `leads.lead_deleted`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_delete"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/assign/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/assign/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "assign",
+  "source_file": "leads/views/leads.py:96",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Assign a lead",
+  "description": "Sets the assignee (an active user); `assignee_uid: null` unassigns. No-op when unchanged. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.manage",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "assignee_uid": "{{users_uid}}"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "assignee_uid",
+     "type": "string:uuid",
+     "required": true,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "NEW",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (unknown or inactive user)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.manage`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` when `expected_version` is not the current version."
+   }
+  ],
+  "side_effects": [
+   "Lead event ASSIGNED",
+   "Audit row `leads.lead_assigned`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_assign"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/convert/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/convert/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "convert",
+  "source_file": "leads/views/leads.py:116",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Convert a lead to a customer",
+  "description": "Links the lead to `customer_uid` (a customer you may see, else 404), else to the live customer with the same phone, else creates a customer (needs `customers.create`, else 403 `customer_create_forbidden`) owned by the lead's assignee (or you). Lead → CONVERTED. 409 `lead_already_converted`, `invalid_transition` (spam lead); 400 `phone_required` (no phone and no `customer_uid`). Omit `customer_uid` to match/create by phone. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Creating a customer additionally needs `customers.create`; `customer_uid` is resolved within the `customers` record scope. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "customer_uid": "{{customers_uid}}"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "customer_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "lead": {
+      "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+      "number": "L-1042",
+      "kind": "HOME_ENQUIRY",
+      "form": "STUDIO",
+      "status": "CONVERTED",
+      "name": "Rahul Nair",
+      "phone": "+919847012345",
+      "email": "rahul.nair@gmail.com",
+      "pincode": "682024",
+      "district": "Ernakulam",
+      "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+      "payload": {
+       "details": {
+        "Monthly bill": "4500",
+        "Roof type": "Concrete"
+       }
+      },
+      "page": "",
+      "otp_verified_at": null,
+      "assignee": {
+       "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+       "full_name": "Anjali Menon",
+       "email": "anjali.menon@goldenray.in"
+      },
+      "customer": {
+       "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+       "code": "CUST-000142",
+       "name": "Rahul Nair"
+      },
+      "lost_reason": "",
+      "created_at": "2026-10-01T10:15:00+05:30",
+      "updated_at": "2026-10-01T10:15:00+05:30",
+      "version": 3
+     },
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "customer_created": false
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` or `phone_required`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` (no `leads.edit`) or `customer_create_forbidden`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: lead not in scope, or `customer_uid` unknown/not visible."
+   },
+   {
+    "status": 409,
+    "description": "`lead_already_converted`, `invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `leads.converted` {lead_uid, customer_uid, customer_created}",
+   "May create a customer (audit `customers.customer_created`, cache bump `customers`)",
+   "Lead event CONVERTED",
+   "Audit row `leads.lead_converted`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 65,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_convert"
+ },
+ {
+  "id": "GET /api/v1/leads/{uid}/events/",
+  "method": "GET",
+  "path": "/api/v1/leads/{uid}/events/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "events",
+  "source_file": "leads/views/leads.py:155",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads",
+   "Events"
+  ],
+  "summary": "List a lead's history events",
+  "description": "The append-only timeline (CREATED, IMPORTED, UPDATED, ASSIGNED, STATUS_CHANGED, NOTE_ADDED, CONVERTED, ARCHIVED), newest first. Cursor pagination (50 per page, max 200): follow `next`; no `count`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads` (owned = the lead is assigned to me) applies to the parent lead.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "cursor",
+    "value": "cD0yMDI2LTEwLTAx",
+    "description": "Opaque cursor taken from `next`/`previous`.",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (default 50, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "at": "2026-10-01T11:40:00+05:30",
+       "event": "STATUS_CHANGED",
+       "by": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "data": {
+        "from": "NEW",
+        "to": "CONTACTED",
+        "note": "Called the customer; site visit proposed for Saturday."
+       }
+      },
+      {
+       "at": "2026-10-01T10:15:00+05:30",
+       "event": "CREATED",
+       "by": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "data": {
+        "channel": "studio",
+        "form": "STUDIO"
+       }
+      }
+     ],
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_events_list"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/mark-lost/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/mark-lost/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "mark_lost",
+  "source_file": "leads/views/leads.py:106",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Mark a lead lost",
+  "description": "An open lead (NEW/CONTACTED/QUALIFIED) → LOST with a required reason. 409 `lead_converted`, `invalid_transition` (not open — reopen via status/ first). `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Chose a competitor's quote at ₹2.4 lakh."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "reason",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "LOST",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "Chose a competitor's quote at ₹2.4 lakh.",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 4
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`lead_converted`, `invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Lead event STATUS_CHANGED",
+   "Audit row `leads.lead_status_changed`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 63,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_mark_lost"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/mark-spam/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/mark-spam/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "mark_spam",
+  "source_file": "leads/views/leads.py:111",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Mark a lead as spam",
+  "description": "Any non-converted lead → SPAM (optional note); no-op if already spam. 409 `lead_converted`. A spam lead cannot be converted until reopened (status/ → NEW). `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Test submission from a bot."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "SPAM",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 5
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`lead_converted` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Lead event STATUS_CHANGED",
+   "Audit row `leads.lead_status_changed`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 64,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_mark_spam"
+ },
+ {
+  "id": "GET /api/v1/leads/{uid}/notes/",
+  "method": "GET",
+  "path": "/api/v1/leads/{uid}/notes/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "notes",
+  "source_file": "leads/views/leads.py:140",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads",
+   "Notes"
+  ],
+  "summary": "List a lead's notes",
+  "description": "The lead's notes, newest first (StandardPagination).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.view",
+   "scope": "Record scope `leads` (owned = the lead is assigned to me) applies to the parent lead.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "f85a0c6e-3b7d-4e5f-8c1a-9b0c1d2e3f4a",
+       "body": "Customer prefers a call after 6 pm; KSEB consumer number 1156789012345.",
+       "author": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "created_at": "2026-10-01T11:40:00+05:30"
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_notes_list"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/notes/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/notes/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "add_note",
+  "source_file": "leads/views/leads.py:146",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads",
+   "Notes"
+  ],
+  "summary": "Add a note to a lead",
+  "description": "Appends a note (≤ 10,000 characters). Notes are not versioned and cannot be edited here.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads` (owned = the lead is assigned to me) applies to the parent lead.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "body": "Customer prefers a call after 6 pm; KSEB consumer number 1156789012345."
+   },
+   "fields": [
+    {
+     "name": "body",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f85a0c6e-3b7d-4e5f-8c1a-9b0c1d2e3f4a",
+     "body": "Customer prefers a call after 6 pm; KSEB consumer number 1156789012345.",
+     "author": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "created_at": "2026-10-01T11:40:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   }
+  ],
+  "side_effects": [
+   "Lead event NOTE_ADDED",
+   "Audit row `leads.note_added`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_notes_create"
+ },
+ {
+  "id": "POST /api/v1/leads/{uid}/status/",
+  "method": "POST",
+  "path": "/api/v1/leads/{uid}/status/",
+  "app": "leads",
+  "surface": "staff",
+  "view": "leads.views.leads.LeadViewSet",
+  "action": "status",
+  "source_file": "leads/views/leads.py:101",
+  "group": "F_leads_projects",
+  "folder": [
+   "Leads"
+  ],
+  "summary": "Change a lead's open status",
+  "description": "Moves an open lead among NEW / CONTACTED / QUALIFIED, or reopens a LOST or SPAM lead (only to NEW). `status` choices are the open statuses only; 409 `lead_converted` on a converted lead, 409 `invalid_transition` (e.g. LOST → QUALIFIED). `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "leads.edit",
+   "scope": "Record scope `leads`: `all`, or `owned` = rows assigned to me (`assignee`); out-of-scope rows are 404.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "leads_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Lead uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "status": "CONTACTED",
+    "note": "Called the customer; site visit proposed for Saturday."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "status",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "NEW",
+      "CONTACTED",
+      "QUALIFIED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "number": "L-1042",
+     "kind": "HOME_ENQUIRY",
+     "form": "STUDIO",
+     "status": "CONTACTED",
+     "name": "Rahul Nair",
+     "phone": "+919847012345",
+     "email": "rahul.nair@gmail.com",
+     "pincode": "682024",
+     "district": "Ernakulam",
+     "message": "Wants a 5 kW on-grid system for a two-storey house; monthly bill about ₹4,500.",
+     "payload": {
+      "details": {
+       "Monthly bill": "4500",
+       "Roof type": "Concrete"
+      }
+     },
+     "page": "",
+     "otp_verified_at": null,
+     "assignee": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "customer": null,
+     "lost_reason": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `leads.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live lead with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`lead_converted`, `invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Lead event STATUS_CHANGED",
+   "Audit row `leads.lead_status_changed`",
+   "Cache bump `leads`"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "leads_status"
+ },
+ {
+  "id": "GET /api/v1/projects/",
+  "method": "GET",
+  "path": "/api/v1/projects/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "List projects",
+  "description": "Paginated projects, newest first (list rows omit `bom_lock`/`cost_inputs`). Search covers number, title, customer name and code. Filters may also be written `?filter[field]=`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.view",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "PLANNED",
+    "description": "PLANNED / IN_PROGRESS / COMMISSIONED / CLOSED / CANCELLED.",
+    "required": false
+   },
+   {
+    "key": "system_type",
+    "value": "ON_GRID",
+    "description": "ON_GRID / HYBRID / OFF_GRID / UNDECIDED.",
+    "required": false
+   },
+   {
+    "key": "kseb_status",
+    "value": "APPLIED",
+    "description": "NOT_STARTED / APPLIED / FEASIBILITY_OK / METER_INSTALLED / SYNCHRONISED / REJECTED.",
+    "required": false
+   },
+   {
+    "key": "customer",
+    "value": "{{customers_uid}}",
+    "description": "Customer uid.",
+    "required": false
+   },
+   {
+    "key": "head",
+    "value": "{{users_uid}}",
+    "description": "Project Head (user) uid.",
+    "required": false
+   },
+   {
+    "key": "site_inspection_uid",
+    "value": "{{site_inspections_uid}}",
+    "description": "Site inspection uid.",
+    "required": false
+   },
+   {
+    "key": "bom_locked",
+    "value": "true",
+    "description": "true: the BOM is locked; false: not yet.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "Created at or after (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "Created at or before (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "PROJ-87",
+    "description": "Searches number, title, customer name, customer code.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "number, created_at, updated_at, scheduled_on, status (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+       "number": "PROJ-87",
+       "customer": {
+        "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+        "code": "CUST-000142",
+        "name": "Rahul Nair"
+       },
+       "title": "Nair residence — 5 kW on-grid",
+       "status": "PLANNED",
+       "head": {
+        "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "full_name": "Anjali Menon",
+        "email": "anjali.menon@goldenray.in"
+       },
+       "system_type": "ON_GRID",
+       "tier": "VALUE",
+       "size_kw": "5.00",
+       "phase": "1P",
+       "quotation_version_uid": null,
+       "agreement_uid": null,
+       "site_inspection_uid": null,
+       "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+       "bom_locked": false,
+       "bom_locked_at": null,
+       "bom_locked_by": null,
+       "engineering_run_uid": null,
+       "scheduled_on": "2026-10-20",
+       "commissioned_on": null,
+       "kseb_status": "NOT_STARTED",
+       "closed_at": null,
+       "cancelled_at": null,
+       "cancel_reason": "",
+       "note": "Roof access via the rear staircase.",
+       "version": 1,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30"
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.view`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_list"
+ },
+ {
+  "id": "POST /api/v1/projects/",
+  "method": "POST",
+  "path": "/api/v1/projects/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "create",
+  "source_file": "projects/views/projects.py:93",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Create a project",
+  "description": "A PLANNED project numbered `PROJ-<n>` for a live customer. Link uids (quotation version, agreement, site inspection, lead) are stored as plain uids, not validated. 409 `inspection_has_project` when a live (non-cancelled) project already exists for `site_inspection_uid`. `bom_lock` line `unit_landed_cost` and `cost_inputs` are null without `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.create",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "customer_uid": "{{customers_uid}}",
+    "head_uid": "{{users_uid}}",
+    "title": "Nair residence — 5 kW on-grid",
+    "system_type": "ON_GRID",
+    "tier": "VALUE",
+    "size_kw": "5.00",
+    "phase": "1P",
+    "lead_uid": "{{leads_uid}}",
+    "scheduled_on": "2026-10-20",
+    "kseb_status": "NOT_STARTED",
+    "note": "Roof access via the rear staircase."
+   },
+   "fields": [
+    {
+     "name": "customer_uid",
+     "type": "string:uuid",
+     "required": true
+    },
+    {
+     "name": "head_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "system_type",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "ON_GRID",
+      "HYBRID",
+      "OFF_GRID",
+      "UNDECIDED"
+     ]
+    },
+    {
+     "name": "tier",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "size_kw",
+     "type": "string:decimal",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "phase",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "quotation_version_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "agreement_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "site_inspection_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "lead_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "scheduled_on",
+     "type": "string:date",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "kseb_status",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "NOT_STARTED",
+      "APPLIED",
+      "FEASIBILITY_OK",
+      "METER_INSTALLED",
+      "SYNCHRONISED",
+      "REJECTED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "PLANNED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": false,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 1,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (unknown customer, inactive head, bad choice …)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.create`."
+   },
+   {
+    "status": 409,
+    "description": "`inspection_has_project`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.created` {project_uid, number, customer_uid, status …} (source `staff`)",
+   "Audit row `projects.project_created`",
+   "Cache bump `projects`"
+  ],
+  "capture": [
+   {
+    "var": "projects_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_create"
+ },
+ {
+  "id": "GET /api/v1/projects/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/projects/{uid}/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Get a project",
+  "description": "The project with its locked BOM snapshot and cost inputs. `bom_lock` line `unit_landed_cost` and `cost_inputs` are null without `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.view",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "PLANNED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": false,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 1,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/projects/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/projects/{uid}/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "F_leads_projects",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/projects/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/projects/{uid}/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "partial_update",
+  "source_file": "projects/views/projects.py:99",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Update a project",
+  "description": "Partial edit of the create fields. 409 `project_finished` on a CLOSED/CANCELLED project; 409 `bom_locked` when changing the customer or the system (system_type, tier, size_kw, phase) after the BOM lock; 409 `inspection_has_project`; 409 `stale_version`. No-op when nothing changes.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.edit",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "expected_version": 1,
+    "scheduled_on": "2026-10-22",
+    "kseb_status": "APPLIED"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "customer_uid",
+     "type": "string:uuid",
+     "required": false
+    },
+    {
+     "name": "head_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "system_type",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "ON_GRID",
+      "HYBRID",
+      "OFF_GRID",
+      "UNDECIDED"
+     ]
+    },
+    {
+     "name": "tier",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "size_kw",
+     "type": "string:decimal",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "phase",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "quotation_version_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "agreement_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "site_inspection_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "lead_uid",
+     "type": "string:uuid",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "scheduled_on",
+     "type": "string:date",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "kseb_status",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "NOT_STARTED",
+      "APPLIED",
+      "FEASIBILITY_OK",
+      "METER_INSTALLED",
+      "SYNCHRONISED",
+      "REJECTED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "PLANNED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": false,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-22",
+     "commissioned_on": null,
+     "kseb_status": "APPLIED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 2,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T11:40:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`project_finished`, `bom_locked`, `inspection_has_project` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.updated` {project_uid, number, customer_uid, status …} (+ changed `fields`)",
+   "Audit row `projects.project_updated`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_update"
+ },
+ {
+  "id": "DELETE /api/v1/projects/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/projects/{uid}/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Archive a project",
+  "description": "Soft-deletes a PLANNED or CANCELLED project only (409 `project_not_deletable` otherwise — cancel it first). Optional `expected_version` (query or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.archive",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (also accepted in a body); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Archived (soft delete)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`project_not_deletable` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.deleted` {project_uid, number, customer_uid, status …}",
+   "Audit row `projects.project_deleted`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_delete"
+ },
+ {
+  "id": "POST /api/v1/projects/{uid}/cancel/",
+  "method": "POST",
+  "path": "/api/v1/projects/{uid}/cancel/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "cancel",
+  "source_file": "projects/views/projects.py:148",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Cancel a project",
+  "description": "PLANNED/IN_PROGRESS → CANCELLED with a required reason (409 `invalid_transition` otherwise, e.g. after close/ in a sequential run). A cancelled project may then be archived and frees its site inspection for a new project. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.archive",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Customer postponed the installation to next year."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "reason",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "CANCELLED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": false,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": null,
+     "cancelled_at": "2026-10-01T11:40:00+05:30",
+     "cancel_reason": "Customer postponed the installation to next year.",
+     "note": "Roof access via the rear staircase.",
+     "version": 2,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.archive`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.cancelled` {project_uid, number, customer_uid, status …} (+ reason)",
+   "Audit row `projects.project_cancelled`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 70,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_cancel"
+ },
+ {
+  "id": "POST /api/v1/projects/{uid}/close/",
+  "method": "POST",
+  "path": "/api/v1/projects/{uid}/close/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "close",
+  "source_file": "projects/views/projects.py:141",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Close a project",
+  "description": "COMMISSIONED → CLOSED (409 `invalid_transition` otherwise); an optional note replaces the project note. A closed project can no longer be edited or archived. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.edit",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Handover done; warranty documents shared with the customer."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "CLOSED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": true,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": "2026-10-01T11:40:00+05:30",
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 6,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.closed` {project_uid, number, customer_uid, status …}",
+   "Audit row `projects.project_closed`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 64,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_close"
+ },
+ {
+  "id": "POST /api/v1/projects/{uid}/commission/",
+  "method": "POST",
+  "path": "/api/v1/projects/{uid}/commission/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "commission",
+  "source_file": "projects/views/projects.py:134",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Commission a project",
+  "description": "IN_PROGRESS → COMMISSIONED (409 `invalid_transition` otherwise). `commissioned_on` defaults to today; never in the future nor before the BOM lock (400). Optional `kseb_status` and `note` update the project. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.edit",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "commissioned_on": "2026-10-01",
+    "kseb_status": "METER_INSTALLED",
+    "note": "Net meter installed by KSEB; system synchronised."
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "commissioned_on",
+     "type": "string:date",
+     "required": false
+    },
+    {
+     "name": "kseb_status",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "NOT_STARTED",
+      "APPLIED",
+      "FEASIBILITY_OK",
+      "METER_INSTALLED",
+      "SYNCHRONISED",
+      "REJECTED"
+     ]
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "COMMISSIONED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": true,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": "2026-10-01",
+     "kseb_status": "METER_INSTALLED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 5,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.edit`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.commissioned` {project_uid, number, customer_uid, status …} (+ commissioned_on)",
+   "Audit row `projects.project_commissioned`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 63,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_commission"
+ },
+ {
+  "id": "POST /api/v1/projects/{uid}/cost-inputs/",
+  "method": "POST",
+  "path": "/api/v1/projects/{uid}/cost-inputs/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "cost_inputs",
+  "source_file": "projects/views/projects.py:125",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Set a project's cost inputs",
+  "description": "Replaces the Flarize `costInputs` document (distance, vehicle, roof installation type, structure material cost, special works, rate date, pack size key). Needs `pricing_internal.view` as well (403 `permission_denied`). 409 `project_not_open` once commissioned/closed/cancelled. No-op when identical. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.edit",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Also requires `pricing_internal.view` (checked in the view). Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "distance_km": "42.50",
+    "vehicle_type": "PICKUP",
+    "installation_type": "FLAT",
+    "structure_material_cost": "18500.00",
+    "special_works": [
+     {
+      "label": "Elevated walkway on the terrace",
+      "amount": "6500.00"
+     }
+    ],
+    "rate_effective_at": "2026-10-01",
+    "size_key": "5sp"
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "distance_km",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "vehicle_type",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "installation_type",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "FLAT",
+      "SHEET",
+      "ELEVATED"
+     ]
+    },
+    {
+     "name": "structure_material_cost",
+     "type": "string:decimal",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "special_works",
+     "type": "array",
+     "required": false
+    },
+    {
+     "name": "rate_effective_at",
+     "type": "string:date",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "size_key",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "PLANNED",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": false,
+     "bom_locked_at": null,
+     "bom_locked_by": null,
+     "engineering_run_uid": null,
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 3,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": null,
+     "cost_inputs": {
+      "distance_km": "42.50",
+      "vehicle_type": "PICKUP",
+      "installation_type": "FLAT",
+      "structure_material_cost": "18500.00",
+      "special_works": [
+       {
+        "label": "Elevated walkway on the terrace",
+        "amount": "6500.00"
+       }
+      ],
+      "rate_effective_at": "2026-10-01",
+      "size_key": "5sp"
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` with per-field `errors`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: no `projects.edit` or no `pricing_internal.view`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`project_not_open` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `projects.cost_inputs_set` {project_uid, number, customer_uid, status …}",
+   "Audit row `projects.cost_inputs_set`",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_cost_inputs"
+ },
+ {
+  "id": "POST /api/v1/projects/{uid}/lock-bom/",
+  "method": "POST",
+  "path": "/api/v1/projects/{uid}/lock-bom/",
+  "app": "projects",
+  "surface": "staff",
+  "view": "projects.views.projects.ProjectViewSet",
+  "action": "lock_bom",
+  "source_file": "projects/views/projects.py:111",
+  "group": "F_leads_projects",
+  "folder": [
+   "Projects"
+  ],
+  "summary": "Lock a project's BOM",
+  "description": "Runs the engineering checker (ACTIVE checker rule set, current PriceRelease) on the BOM lines and stores the verdict as an engineering run **whether or not the lock succeeds**. Refused with 409 `bom_lock_refused` (errors: `engineering_run`, `blocked`, `missing_acknowledgements`) while a BLOCK finding is unwaived (engineering waives under `engineering/findings/<uid>/acknowledge/`) or a WARN finding that needs one has no acknowledgement (`{rule_code, reason}`). On success the snapshot (lines with list price/landed cost, verdict, acknowledgements) is frozen into `bom_lock` and the project moves PLANNED → IN_PROGRESS; it is never unlocked. Also 409 `bom_already_locked`, `invalid_transition` (not PLANNED), `no_active_rule_set`; 400 `validation_error` for unknown component uids. `bom_lock` line `unit_landed_cost` and `cost_inputs` are null without `pricing_internal.view`. `expected_version` is optional (409 `stale_version` when outdated).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "projects.lock",
+   "scope": "Module `projects` has no record scopes: every user with the permission sees every project.",
+   "notes": "Throttle scope `staff` (1200/min per user)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "projects_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Project uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "architecture": "GRID_TIED",
+    "lines": [
+     {
+      "component_uid": "{{catalog_components_uid}}",
+      "role": "PANEL",
+      "quantity": "9.000",
+      "selection_method": "PACKAGE_DEFAULT",
+      "reason": ""
+     }
+    ],
+    "acknowledgements": [
+     {
+      "rule_code": "PBC-D-003",
+      "reason": "Customer accepted the lower DC/AC ratio in writing."
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "architecture",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "lines",
+     "type": "array",
+     "required": true
+    },
+    {
+     "name": "acknowledgements",
+     "type": "array",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "e74f9b5d-2a6c-4d4e-9b0f-8a9b0c1d2e3f",
+     "number": "PROJ-87",
+     "customer": {
+      "uid": "8d2e4f60-7a1b-4c3d-9e5f-0a1b2c3d4e5f",
+      "code": "CUST-000142",
+      "name": "Rahul Nair"
+     },
+     "title": "Nair residence — 5 kW on-grid",
+     "status": "IN_PROGRESS",
+     "head": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "system_type": "ON_GRID",
+     "tier": "VALUE",
+     "size_kw": "5.00",
+     "phase": "1P",
+     "quotation_version_uid": null,
+     "agreement_uid": null,
+     "site_inspection_uid": null,
+     "lead_uid": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+     "bom_locked": true,
+     "bom_locked_at": "2026-10-01T11:40:00+05:30",
+     "bom_locked_by": {
+      "uid": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "full_name": "Anjali Menon",
+      "email": "anjali.menon@goldenray.in"
+     },
+     "engineering_run_uid": "0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d",
+     "scheduled_on": "2026-10-20",
+     "commissioned_on": null,
+     "kseb_status": "NOT_STARTED",
+     "closed_at": null,
+     "cancelled_at": null,
+     "cancel_reason": "",
+     "note": "Roof access via the rear staircase.",
+     "version": 4,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "bom_lock": {
+      "schema": "projects.bom_lock/1",
+      "status": "LOCKED",
+      "locked_at": "2026-10-01T11:40:00+05:30",
+      "locked_by": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+      "architecture": "GRID_TIED",
+      "system_type": "ON_GRID",
+      "phase": "1P",
+      "price_release_number": 12,
+      "engineering": {
+       "run_uid": "0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d",
+       "result": "WARN",
+       "rules_version": "phase1e.1",
+       "counts": {
+        "blocked": 0,
+        "warning": 1,
+        "info": 2,
+        "checksRun": 48
+       }
+      },
+      "lines": [
+       {
+        "component_uid": "9b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d",
+        "sku": "PNL-WAAREE-550-BF",
+        "name": "Waaree 550 Wp bifacial",
+        "role": "PANEL",
+        "quantity": "9.000",
+        "selection_method": "PACKAGE_DEFAULT",
+        "reason": "",
+        "unit_list_price": "14250.00",
+        "unit_landed_cost": "11800.00"
+       }
+      ],
+      "acknowledgements": [
+       {
+        "rule_code": "PBC-D-003",
+        "severity": "WARN",
+        "identity": "dc-ac-ratio",
+        "reason": "Customer accepted the lower DC/AC ratio in writing.",
+        "acknowledged_by": "6f1c2a9e-3b4d-4e5f-8a7b-1c2d3e4f5a6b",
+        "acknowledged_at": "2026-10-01T11:40:00+05:30",
+        "waiver": false
+       }
+      ],
+      "legacy": false
+     },
+     "cost_inputs": null
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (bad architecture/role/quantity, unknown component uids)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid JWT (`not_authenticated` / `authentication_failed`)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`: the role lacks `projects.lock`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: no live project with this uid in your record scope."
+   },
+   {
+    "status": 409,
+    "description": "`bom_lock_refused`, `bom_already_locked`, `invalid_transition`, `no_active_rule_set` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Engineering run recorded (subject PROJECT_BOM) even when refused",
+   "Engineering acknowledgement rows for the given acknowledgements",
+   "Outbox `projects.bom_locked` {project_uid, number, customer_uid, status …} (+ engineering_run_uid, engineering_result)",
+   "Audit row `projects.bom_locked` (or `projects.bom_lock_refused`)",
+   "Cache bump `projects`"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "projects_lock_bom"
+ }
+]

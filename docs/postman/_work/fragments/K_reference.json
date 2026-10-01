@@ -1,0 +1,5562 @@
+[
+ {
+  "id": "GET /api/public/v1/reference/appliances/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/appliances/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicApplianceListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "List appliances",
+  "description": "Active appliances for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:appliances`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "5f6a7b8c-9d0e-4f1a-8b2c-3d4e5f6a7b8c",
+       "code": "lights_fans",
+       "name": "Lights & Fans",
+       "name_ml": "ലൈറ്റുകളും ഫാനുകളും",
+       "icon": "💡",
+       "watts": 300,
+       "default_hours": "8.00",
+       "is_optional": false
+      },
+      {
+       "uid": "6a7b8c9d-0e1f-4a2b-9c3d-4e5f6a7b8c9d",
+       "code": "water_pump",
+       "name": "Water Pump",
+       "name_ml": "വാട്ടർ പമ്പ്",
+       "icon": "🚰",
+       "watts": 750,
+       "default_hours": "1.00",
+       "is_optional": true
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_appliances_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/device-types/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/device-types/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicDeviceTypeListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "List device types",
+  "description": "Active device types for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:device-types`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "a1c4e7b2-5d8f-4a3c-9e6b-1f2d4a7c8e05",
+       "name": "AC 1 ton",
+       "show_in_ui": true,
+       "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/ac.svg",
+       "watts": 1200
+      },
+      {
+       "uid": "b3d6f9a2-7c1e-4b5d-8a0f-2e4c6b8d1a37",
+       "name": "Washing Machine",
+       "show_in_ui": true,
+       "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/washing-machine.svg",
+       "watts": 500
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_device_types_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/ev-cars/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/ev-cars/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicEvCarListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "List EV cars",
+  "description": "Active EV cars for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:ev-cars`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "52cbc07e-3fce-4620-bd23-0273325ba0d2",
+       "model": "Tata Nexon EV",
+       "battery_capacity": 30.2,
+       "claimed_range": 312,
+       "adjusted_real_world_range": 212,
+       "ex_showroom_price": "1249000.00",
+       "energy_consumption": 0.152
+      },
+      {
+       "uid": "78259ea2-40f8-4129-9401-cf252309fdbb",
+       "model": "Tata Tigor EV",
+       "battery_capacity": 26.0,
+       "claimed_range": 250,
+       "adjusted_real_world_range": 150,
+       "ex_showroom_price": "1199000.00",
+       "energy_consumption": 0.13
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_ev_cars_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/ev-scooters/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/ev-scooters/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicEvScooterListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "List EV scooters",
+  "description": "Active EV scooters for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:ev-scooters`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3d4e5f6a-7b8c-4d9e-8f0a-1b2c3d4e5f6a",
+       "model": "Ola S1 Pro",
+       "battery_capacity": 4.0,
+       "claimed_range": 181,
+       "adjusted_real_world_range": 81,
+       "ex_showroom_price": "130000.00",
+       "energy_consumption": 0.039
+      },
+      {
+       "uid": "4e5f6a7b-8c9d-4e0f-9a1b-2c3d4e5f6a7b",
+       "model": "Ather 450X",
+       "battery_capacity": 3.7,
+       "claimed_range": 100,
+       "adjusted_real_world_range": 80,
+       "ex_showroom_price": "135000.00",
+       "energy_consumption": 0.028
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_ev_scooters_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/pincodes/{pincode}/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/pincodes/{pincode}/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicPincodeView",
+  "action": "get",
+  "source_file": "reference/views/public.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "Look up a pincode",
+  "description": "Returns one live, **active** pincode with its district, state, serviceability, distance from the office and its live post offices (in legacy order). Pincodes are never listed. A malformed code (not 6 digits), an unknown pincode or an inactive one is 404 `not_found`; a non-serviceable pincode is still returned (`serviceable: false`). Cached 24 h server-side under `reference:pincodes` (bumped by every staff pincode write). The example `682001` is a seeded Kerala pincode (Kochi HO).",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [
+   {
+    "name": "pincode",
+    "type": "str",
+    "variable": "public_reference_pincodes_pincode",
+    "example": "682001",
+    "description": "6-digit Indian pincode, e.g. `682001` (Kochi). Malformed, unknown or inactive → 404."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The pincode and its post offices.",
+    "content_type": "application/json",
+    "example": {
+     "pincode": "682001",
+     "district": "ERNAKULAM",
+     "state": "KERALA",
+     "serviceable": true,
+     "distance_km_from_office": null,
+     "offices": [
+      {
+       "office_name": "Kochi HO",
+       "district": "ERNAKULAM",
+       "state": "KERALA",
+       "region": "Kochi Region",
+       "division": "Ernakulam Division"
+      }
+     ]
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — \"Unknown pincode.\" (malformed, unknown, inactive or deleted)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_pincode_retrieve"
+ },
+ {
+  "id": "GET /api/public/v1/reference/room-sizes/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/room-sizes/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicRoomSizeListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "List room sizes",
+  "description": "Active room sizes for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:room-sizes`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "1b2c3d4e-5f6a-4b7c-8d9e-0f1a2b3c4d5e",
+       "bhk_type": 1,
+       "size": 800,
+       "units": 130
+      },
+      {
+       "uid": "2c3d4e5f-6a7b-4c8d-9e0f-1a2b3c4d5e6f",
+       "bhk_type": 2,
+       "size": 1200,
+       "units": 180
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_room_sizes_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/tariffs/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/tariffs/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicKsebTariffListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "List KSEB tariff slabs in force",
+  "description": "The KSEB slab schedule in force **today** (IST): live, active slabs grouped by `phase` (null = every phase, listed first); in each group the schedule with the latest `effective_from` not after today wins, ordered by `slab_from_units`. Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200`. No filters. Cached 24 h under `reference:tariffs`, with the date in the key so a new schedule takes over at midnight.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "c2b7e0a4-1d3f-4e8a-9b6c-7f5e2d1a0c34",
+       "slab_from_units": 0,
+       "slab_to_units": 300,
+       "phase": null,
+       "rate_per_unit": "6.7500",
+       "fixed_charge": "0.00",
+       "effective_from": null
+      },
+      {
+       "uid": "d4e9a1b7-3c5f-4a2e-8d0b-6e1f7a9c2b58",
+       "slab_from_units": 301,
+       "slab_to_units": 350,
+       "phase": null,
+       "rate_per_unit": "7.6000",
+       "fixed_charge": "0.00",
+       "effective_from": null
+      },
+      {
+       "uid": "e7a3c5d9-2b4e-4f6a-9c1d-8b0e3f5a7d61",
+       "slab_from_units": 501,
+       "slab_to_units": null,
+       "phase": null,
+       "rate_per_unit": "9.2000",
+       "fixed_charge": "0.00",
+       "effective_from": null
+      }
+     ],
+     "count": 3,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_tariffs_list"
+ },
+ {
+  "id": "GET /api/public/v1/reference/wattages/",
+  "method": "GET",
+  "path": "/api/public/v1/reference/wattages/",
+  "app": "reference",
+  "surface": "public",
+  "view": "reference.views.public.PublicWattageListView",
+  "action": "get",
+  "source_file": "reference/views/public.py:69",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "List wattages",
+  "description": "Active wattages for the website (live rows with `is_active=true`), in display order (`sort_order`, then the natural key). Paginated (`StandardPagination`, 25 per page, max 200): the website passes `page_size=200` and reads one page. No filters or search. Cached 24 h under `reference:wattages`, invalidated by every staff write to the list.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (no authentication); throttle scope `public_read` (600/min). Server-side cache 24 h, invalidated by every staff write; `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "\"<etag from a previous response>\"",
+    "description": "Optional: the `ETag` of a previous response; an unchanged body answers 304 Not Modified.",
+    "required": false
+   }
+  ],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200; the website asks for 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "f1a2b3c4-d5e6-4f70-8a91-b2c3d4e5f607",
+       "value": 10,
+       "show_in_ui": true
+      },
+      {
+       "uid": "0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d",
+       "value": 24,
+       "show_in_ui": true
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 304,
+    "description": "Not Modified (matching `If-None-Match`)."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: `page` beyond the last page."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_reference_wattages_list"
+ },
+ {
+  "id": "GET /api/v1/reference/appliances/",
+  "method": "GET",
+  "path": "/api/v1/reference/appliances/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "List appliances",
+  "description": "Every live appliance row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `name`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "pump",
+    "description": "Case-insensitive contains on `code`, `name`, `name_ml`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `code` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "code": "water_pump",
+       "name": "Water Pump",
+       "name_ml": "വാട്ടർ പമ്പ്",
+       "icon": "🚰",
+       "watts": 750,
+       "default_hours": "1.00",
+       "is_optional": true,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_appliances_list"
+ },
+ {
+  "id": "POST /api/v1/reference/appliances/",
+  "method": "POST",
+  "path": "/api/v1/reference/appliances/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "Create an appliance",
+  "description": "Adds a appliance. `code` is the stable Flarize id referenced by quotation appliance rows: unique among live rows and must match `^[a-z0-9_]{2,32}$` (a DB check: a bad code is 400 `validation_error` on `non_field_errors`). `default_hours` is 0–24; `is_optional` marks add-on rows (water pump, EV charging). Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `appliance_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "code": "water_pump",
+    "name": "Water Pump",
+    "name_ml": "വാട്ടർ പമ്പ്",
+    "icon": "🚰",
+    "watts": 750,
+    "default_hours": "1.00",
+    "is_optional": true,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "code",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "name_ml",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "watts",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "default_hours",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "is_optional",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created appliance.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "code": "water_pump",
+     "name": "Water Pump",
+     "name_ml": "വാട്ടർ പമ്പ്",
+     "icon": "🚰",
+     "watts": 750,
+     "default_hours": "1.00",
+     "is_optional": true,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`appliance_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.appliance_created`.",
+   "Cache bump `reference:appliances` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_appliances_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_appliances_create"
+ },
+ {
+  "id": "GET /api/v1/reference/appliances/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/appliances/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "Get an appliance",
+  "description": "One live appliance by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_appliances_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the appliance (captured by *Create appliance*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The appliance.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "code": "water_pump",
+     "name": "Water Pump",
+     "name_ml": "വാട്ടർ പമ്പ്",
+     "icon": "🚰",
+     "watts": 750,
+     "default_hours": "1.00",
+     "is_optional": true,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_appliances_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/appliances/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/appliances/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_appliances_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/appliances/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/appliances/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "Update an appliance",
+  "description": "Partial update; send only the fields to change. `code` is the stable Flarize id referenced by quotation appliance rows: unique among live rows and must match `^[a-z0-9_]{2,32}$` (a DB check: a bad code is 400 `validation_error` on `non_field_errors`). `default_hours` is 0–24; `is_optional` marks add-on rows (water pump, EV charging). `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_appliances_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the appliance (captured by *Create appliance*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "default_hours": "1.50",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "code",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "name_ml",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "icon",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "watts",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "default_hours",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "is_optional",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated appliance.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "code": "water_pump",
+     "name": "Water Pump",
+     "name_ml": "വാട്ടർ പമ്പ്",
+     "icon": "🚰",
+     "watts": 750,
+     "default_hours": "1.50",
+     "is_optional": true,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`appliance_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.appliance_updated` (changed fields only).",
+   "Cache bump `reference:appliances`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_appliances_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/appliances/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/appliances/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.ApplianceViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "Appliances"
+  ],
+  "summary": "Delete an appliance",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_appliances_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the appliance (captured by *Create appliance*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.appliance_deleted`.",
+   "Cache bump `reference:appliances`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_appliances_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/device-types/",
+  "method": "GET",
+  "path": "/api/v1/reference/device-types/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "List device types",
+  "description": "Every live device type row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `name`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "AC",
+    "description": "Case-insensitive contains on `name`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `name` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "name": "Induction Cooktop",
+       "show_in_ui": true,
+       "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+       "watts": 2000,
+       "k_value": 0.5,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_device_types_list"
+ },
+ {
+  "id": "POST /api/v1/reference/device-types/",
+  "method": "POST",
+  "path": "/api/v1/reference/device-types/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "Create a device type",
+  "description": "Adds a device type. `name` is unique case-insensitively among live rows (the advanced calculator looks devices up by name); `watts` and `k_value` (usage factor, ≥ 0) are optional; `url` is the icon URL. Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `device_type_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "name": "Induction Cooktop",
+    "show_in_ui": true,
+    "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+    "watts": 2000,
+    "k_value": 0.5,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "show_in_ui",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "url",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "watts",
+     "type": "integer",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created device type.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "name": "Induction Cooktop",
+     "show_in_ui": true,
+     "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+     "watts": 2000,
+     "k_value": 0.5,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`device_type_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.device_type_created`.",
+   "Cache bump `reference:device-types` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_device_types_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_device_types_create"
+ },
+ {
+  "id": "GET /api/v1/reference/device-types/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/device-types/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "Get a device type",
+  "description": "One live device type by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_device_types_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the device type (captured by *Create device type*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The device type.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "name": "Induction Cooktop",
+     "show_in_ui": true,
+     "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+     "watts": 2000,
+     "k_value": 0.5,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_device_types_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/device-types/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/device-types/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_device_types_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/device-types/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/device-types/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "Update a device type",
+  "description": "Partial update; send only the fields to change. `name` is unique case-insensitively among live rows (the advanced calculator looks devices up by name); `watts` and `k_value` (usage factor, ≥ 0) are optional; `url` is the icon URL. `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_device_types_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the device type (captured by *Create device type*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "watts": 1800,
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "show_in_ui",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "url",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "watts",
+     "type": "integer",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated device type.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "name": "Induction Cooktop",
+     "show_in_ui": true,
+     "url": "https://gym-manager-pull.b-cdn.net/golden_ray/icons/common-device.svg",
+     "watts": 1800,
+     "k_value": 0.5,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`device_type_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.device_type_updated` (changed fields only).",
+   "Cache bump `reference:device-types`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_device_types_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/device-types/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/device-types/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.DeviceTypeViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "Device types"
+  ],
+  "summary": "Delete a device type",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_device_types_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the device type (captured by *Create device type*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.device_type_deleted`.",
+   "Cache bump `reference:device-types`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_device_types_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/ev-cars/",
+  "method": "GET",
+  "path": "/api/v1/reference/ev-cars/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "List EV cars",
+  "description": "Every live EV car row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `model`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Tata",
+    "description": "Case-insensitive contains on `model`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `model` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "model": "Kia EV6",
+       "battery_capacity": 77.4,
+       "claimed_range": 708,
+       "adjusted_real_world_range": 500,
+       "ex_showroom_price": "6595000.00",
+       "energy_consumption": 0.155,
+       "k_value": 1.0,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_cars_list"
+ },
+ {
+  "id": "POST /api/v1/reference/ev-cars/",
+  "method": "POST",
+  "path": "/api/v1/reference/ev-cars/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "Create an EV car",
+  "description": "Adds a EV car. `model` is unique case-insensitively among live rows (the advanced calculator looks vehicles up by model). `battery_capacity` (kWh), `ex_showroom_price`, `energy_consumption` (kWh/km) and `k_value` must be ≥ 0. Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `ev_car_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "model": "Kia EV6",
+    "battery_capacity": 77.4,
+    "claimed_range": 708,
+    "adjusted_real_world_range": 500,
+    "ex_showroom_price": "6595000.00",
+    "energy_consumption": 0.155,
+    "k_value": 1.0,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "model",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "battery_capacity",
+     "type": "number:double",
+     "required": true
+    },
+    {
+     "name": "claimed_range",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "adjusted_real_world_range",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "ex_showroom_price",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "energy_consumption",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created EV car.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Kia EV6",
+     "battery_capacity": 77.4,
+     "claimed_range": 708,
+     "adjusted_real_world_range": 500,
+     "ex_showroom_price": "6595000.00",
+     "energy_consumption": 0.155,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`ev_car_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_car_created`.",
+   "Cache bump `reference:ev-cars` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_ev_cars_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_cars_create"
+ },
+ {
+  "id": "GET /api/v1/reference/ev-cars/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/ev-cars/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "Get an EV car",
+  "description": "One live EV car by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_cars_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV car (captured by *Create EV car*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The EV car.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Kia EV6",
+     "battery_capacity": 77.4,
+     "claimed_range": 708,
+     "adjusted_real_world_range": 500,
+     "ex_showroom_price": "6595000.00",
+     "energy_consumption": 0.155,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_cars_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/ev-cars/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/ev-cars/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_ev_cars_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/ev-cars/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/ev-cars/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "Update an EV car",
+  "description": "Partial update; send only the fields to change. `model` is unique case-insensitively among live rows (the advanced calculator looks vehicles up by model). `battery_capacity` (kWh), `ex_showroom_price`, `energy_consumption` (kWh/km) and `k_value` must be ≥ 0. `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_cars_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV car (captured by *Create EV car*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "ex_showroom_price": "6290000.00",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "model",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "battery_capacity",
+     "type": "number:double",
+     "required": false
+    },
+    {
+     "name": "claimed_range",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "adjusted_real_world_range",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "ex_showroom_price",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "energy_consumption",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated EV car.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Kia EV6",
+     "battery_capacity": 77.4,
+     "claimed_range": 708,
+     "adjusted_real_world_range": 500,
+     "ex_showroom_price": "6290000.00",
+     "energy_consumption": 0.155,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`ev_car_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_car_updated` (changed fields only).",
+   "Cache bump `reference:ev-cars`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_cars_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/ev-cars/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/ev-cars/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvCarViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "EV cars"
+  ],
+  "summary": "Delete an EV car",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_cars_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV car (captured by *Create EV car*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_car_deleted`.",
+   "Cache bump `reference:ev-cars`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_cars_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/ev-scooters/",
+  "method": "GET",
+  "path": "/api/v1/reference/ev-scooters/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "List EV scooters",
+  "description": "Every live EV scooter row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `model`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "Ather",
+    "description": "Case-insensitive contains on `model`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `model` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "model": "Ather 450 Apex",
+       "battery_capacity": 3.7,
+       "claimed_range": 157,
+       "adjusted_real_world_range": 110,
+       "ex_showroom_price": "189000.00",
+       "energy_consumption": 0.026,
+       "k_value": 1.0,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_scooters_list"
+ },
+ {
+  "id": "POST /api/v1/reference/ev-scooters/",
+  "method": "POST",
+  "path": "/api/v1/reference/ev-scooters/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "Create an EV scooter",
+  "description": "Adds a EV scooter. `model` is unique case-insensitively among live rows (the advanced calculator looks vehicles up by model). `battery_capacity` (kWh), `ex_showroom_price`, `energy_consumption` (kWh/km) and `k_value` must be ≥ 0. Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `ev_scooter_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "model": "Ather 450 Apex",
+    "battery_capacity": 3.7,
+    "claimed_range": 157,
+    "adjusted_real_world_range": 110,
+    "ex_showroom_price": "189000.00",
+    "energy_consumption": 0.026,
+    "k_value": 1.0,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "model",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "battery_capacity",
+     "type": "number:double",
+     "required": true
+    },
+    {
+     "name": "claimed_range",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "adjusted_real_world_range",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "ex_showroom_price",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "energy_consumption",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created EV scooter.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Ather 450 Apex",
+     "battery_capacity": 3.7,
+     "claimed_range": 157,
+     "adjusted_real_world_range": 110,
+     "ex_showroom_price": "189000.00",
+     "energy_consumption": 0.026,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`ev_scooter_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_scooter_created`.",
+   "Cache bump `reference:ev-scooters` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_ev_scooters_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_scooters_create"
+ },
+ {
+  "id": "GET /api/v1/reference/ev-scooters/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/ev-scooters/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "Get an EV scooter",
+  "description": "One live EV scooter by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_scooters_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV scooter (captured by *Create EV scooter*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The EV scooter.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Ather 450 Apex",
+     "battery_capacity": 3.7,
+     "claimed_range": 157,
+     "adjusted_real_world_range": 110,
+     "ex_showroom_price": "189000.00",
+     "energy_consumption": 0.026,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_scooters_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/ev-scooters/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/ev-scooters/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_ev_scooters_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/ev-scooters/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/ev-scooters/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "Update an EV scooter",
+  "description": "Partial update; send only the fields to change. `model` is unique case-insensitively among live rows (the advanced calculator looks vehicles up by model). `battery_capacity` (kWh), `ex_showroom_price`, `energy_consumption` (kWh/km) and `k_value` must be ≥ 0. `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_scooters_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV scooter (captured by *Create EV scooter*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "ex_showroom_price": "185000.00",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "model",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "battery_capacity",
+     "type": "number:double",
+     "required": false
+    },
+    {
+     "name": "claimed_range",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "adjusted_real_world_range",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "ex_showroom_price",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "energy_consumption",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "k_value",
+     "type": "number:double",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated EV scooter.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "model": "Ather 450 Apex",
+     "battery_capacity": 3.7,
+     "claimed_range": 157,
+     "adjusted_real_world_range": 110,
+     "ex_showroom_price": "185000.00",
+     "energy_consumption": 0.026,
+     "k_value": 1.0,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`ev_scooter_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_scooter_updated` (changed fields only).",
+   "Cache bump `reference:ev-scooters`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_scooters_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/ev-scooters/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/ev-scooters/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.EvScooterViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "EV scooters"
+  ],
+  "summary": "Delete an EV scooter",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_ev_scooters_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the EV scooter (captured by *Create EV scooter*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.ev_scooter_deleted`.",
+   "Cache bump `reference:ev-scooters`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_ev_scooters_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/pincodes/",
+  "method": "GET",
+  "path": "/api/v1/reference/pincodes/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "List pincodes",
+  "description": "Every live pincode row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `pincode`. Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "serviceable",
+    "value": "true",
+    "description": "Filter on serviceability (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "district",
+    "value": "ERNAKULAM",
+    "description": "Exact district, case-insensitive.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "kochi",
+    "description": "Case-insensitive contains on `pincode`, `district` and post-office `office_name`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "One of `pincode`, `district`, `created_at` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "pincode": "682319",
+       "district": "ERNAKULAM",
+       "state": "KERALA",
+       "serviceable": true,
+       "distance_km_from_office": "28.50",
+       "is_active": true,
+       "sort_order": 0,
+       "offices": [
+        {
+         "uid": "b81e4d2c-6a3f-4f15-9c7e-2d4a8b6f1e93",
+         "office_name": "Kanjiramattom BO",
+         "district": "ERNAKULAM",
+         "state": "KERALA",
+         "region": "Kochi Region",
+         "division": "Ernakulam Division",
+         "sort_order": 0
+        }
+       ],
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_pincodes_list"
+ },
+ {
+  "id": "POST /api/v1/reference/pincodes/",
+  "method": "POST",
+  "path": "/api/v1/reference/pincodes/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "Create a pincode",
+  "description": "Adds a pincode. `pincode` must be a 6-digit Indian pincode (`^[1-9][0-9]{5}$`) and is unique among live pincodes. `offices` is a nested list: items with a `uid` update that office of this pincode (an unknown/foreign uid is 400 on `offices`), items without one are added, and live offices missing from the list are soft-deleted. `district`/`state` default to the first office's values. `sort_order` defaults to 0. Conflicts are 409 `pincode_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "pincode": "682319",
+    "serviceable": true,
+    "distance_km_from_office": "28.50",
+    "is_active": true,
+    "offices": [
+     {
+      "office_name": "Kanjiramattom BO",
+      "district": "ERNAKULAM",
+      "state": "KERALA",
+      "region": "Kochi Region",
+      "division": "Ernakulam Division"
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "state",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "serviceable",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "distance_km_from_office",
+     "type": "string:decimal",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "offices",
+     "type": "array",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created pincode.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "pincode": "682319",
+     "district": "ERNAKULAM",
+     "state": "KERALA",
+     "serviceable": true,
+     "distance_km_from_office": "28.50",
+     "is_active": true,
+     "sort_order": 0,
+     "offices": [
+      {
+       "uid": "b81e4d2c-6a3f-4f15-9c7e-2d4a8b6f1e93",
+       "office_name": "Kanjiramattom BO",
+       "district": "ERNAKULAM",
+       "state": "KERALA",
+       "region": "Kochi Region",
+       "division": "Ernakulam Division",
+       "sort_order": 0
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`pincode_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.pincode_created`.",
+   "Cache bump `reference:pincodes` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_pincodes_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_pincodes_create"
+ },
+ {
+  "id": "GET /api/v1/reference/pincodes/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/pincodes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "Get a pincode",
+  "description": "One live pincode by `uid` (inactive rows included; soft-deleted → 404). Includes its live post offices. Captures `pincode` for the public *Look up a pincode* request.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_pincodes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the pincode (captured by *Create pincode*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The pincode.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "pincode": "682319",
+     "district": "ERNAKULAM",
+     "state": "KERALA",
+     "serviceable": true,
+     "distance_km_from_office": "28.50",
+     "is_active": true,
+     "sort_order": 0,
+     "offices": [
+      {
+       "uid": "b81e4d2c-6a3f-4f15-9c7e-2d4a8b6f1e93",
+       "office_name": "Kanjiramattom BO",
+       "district": "ERNAKULAM",
+       "state": "KERALA",
+       "region": "Kochi Region",
+       "division": "Ernakulam Division",
+       "sort_order": 0
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "public_reference_pincodes_pincode",
+    "from": "pincode"
+   }
+  ],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_pincodes_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/pincodes/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/pincodes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_pincodes_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/pincodes/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/pincodes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "Update a pincode",
+  "description": "Partial update; send only the fields to change. `pincode` must be a 6-digit Indian pincode (`^[1-9][0-9]{5}$`) and is unique among live pincodes. `offices` is a nested list: items with a `uid` update that office of this pincode (an unknown/foreign uid is 400 on `offices`), items without one are added, and live offices missing from the list are soft-deleted. `district`/`state` default to the first office's values. Omitting `offices` leaves them alone; any office change bumps the pincode's `version`. `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_pincodes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the pincode (captured by *Create pincode*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "serviceable": false,
+    "distance_km_from_office": "30.00",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "pincode",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "district",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "state",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "serviceable",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "distance_km_from_office",
+     "type": "string:decimal",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "offices",
+     "type": "array",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated pincode.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "pincode": "682319",
+     "district": "ERNAKULAM",
+     "state": "KERALA",
+     "serviceable": false,
+     "distance_km_from_office": "30.00",
+     "is_active": true,
+     "sort_order": 0,
+     "offices": [
+      {
+       "uid": "b81e4d2c-6a3f-4f15-9c7e-2d4a8b6f1e93",
+       "office_name": "Kanjiramattom BO",
+       "district": "ERNAKULAM",
+       "state": "KERALA",
+       "region": "Kochi Region",
+       "division": "Ernakulam Division",
+       "sort_order": 0
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`pincode_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.pincode_updated` (changed fields only).",
+   "Cache bump `reference:pincodes`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_pincodes_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/pincodes/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/pincodes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.PincodeViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "Pincodes"
+  ],
+  "summary": "Delete a pincode",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_pincodes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the pincode (captured by *Create pincode*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.pincode_deleted`.",
+   "Cache bump `reference:pincodes`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_pincodes_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/room-sizes/",
+  "method": "GET",
+  "path": "/api/v1/reference/room-sizes/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "List room sizes",
+  "description": "Every live room size row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `bhk_type`, `size`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `bhk_type` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "bhk_type": 5,
+       "size": 5000,
+       "units": 550,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_room_sizes_list"
+ },
+ {
+  "id": "POST /api/v1/reference/room-sizes/",
+  "method": "POST",
+  "path": "/api/v1/reference/room-sizes/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "Create a room size",
+  "description": "Adds a room size. `bhk_type` ≥ 1, `size` (sq.ft) ≥ 1, `units` = typical monthly kWh. (`bhk_type`, `size`) is unique among live rows (the 409 reports it on `size`). Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `room_size_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "bhk_type": 5,
+    "size": 5000,
+    "units": 550,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "bhk_type",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "size",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "units",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created room size.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "bhk_type": 5,
+     "size": 5000,
+     "units": 550,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`room_size_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.room_size_created`.",
+   "Cache bump `reference:room-sizes` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_room_sizes_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_room_sizes_create"
+ },
+ {
+  "id": "GET /api/v1/reference/room-sizes/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/room-sizes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "Get a room size",
+  "description": "One live room size by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_room_sizes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the room size (captured by *Create room size*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The room size.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "bhk_type": 5,
+     "size": 5000,
+     "units": 550,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_room_sizes_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/room-sizes/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/room-sizes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_room_sizes_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/room-sizes/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/room-sizes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "Update a room size",
+  "description": "Partial update; send only the fields to change. `bhk_type` ≥ 1, `size` (sq.ft) ≥ 1, `units` = typical monthly kWh. (`bhk_type`, `size`) is unique among live rows (the 409 reports it on `size`). `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_room_sizes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the room size (captured by *Create room size*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "units": 520,
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "bhk_type",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "size",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "units",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated room size.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "bhk_type": 5,
+     "size": 5000,
+     "units": 520,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`room_size_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.room_size_updated` (changed fields only).",
+   "Cache bump `reference:room-sizes`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_room_sizes_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/room-sizes/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/room-sizes/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.RoomSizeViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "Room sizes"
+  ],
+  "summary": "Delete a room size",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_room_sizes_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the room size (captured by *Create room size*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.room_size_deleted`.",
+   "Cache bump `reference:room-sizes`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_room_sizes_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/tariffs/",
+  "method": "GET",
+  "path": "/api/v1/reference/tariffs/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "List KSEB tariff slabs",
+  "description": "Every live KSEB tariff slab row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `phase`, `effective_from`, `slab_from_units`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `slab_from_units` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "slab_from_units": 0,
+       "slab_to_units": 250,
+       "phase": "1P",
+       "rate_per_unit": "6.9500",
+       "fixed_charge": "50.00",
+       "effective_from": "2027-04-01",
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_tariffs_list"
+ },
+ {
+  "id": "POST /api/v1/reference/tariffs/",
+  "method": "POST",
+  "path": "/api/v1/reference/tariffs/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "Create a KSEB tariff slab",
+  "description": "Adds a KSEB tariff slab. `phase` is `1P`, `3P` or null (= every phase; blank is refused); `slab_to_units` null = open-ended and must be ≥ `slab_from_units` (400 `validation_error`); `effective_from` null = in force since before the platform. A live slab is unique per (`phase`, `effective_from`, `slab_from_units`). Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `kseb_tariff_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "slab_from_units": 0,
+    "slab_to_units": 250,
+    "phase": "1P",
+    "rate_per_unit": "6.9500",
+    "fixed_charge": "50.00",
+    "effective_from": "2027-04-01",
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "slab_from_units",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "slab_to_units",
+     "type": "integer",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "phase",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "rate_per_unit",
+     "type": "string:decimal",
+     "required": true
+    },
+    {
+     "name": "fixed_charge",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "effective_from",
+     "type": "string:date",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created KSEB tariff slab.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "slab_from_units": 0,
+     "slab_to_units": 250,
+     "phase": "1P",
+     "rate_per_unit": "6.9500",
+     "fixed_charge": "50.00",
+     "effective_from": "2027-04-01",
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`kseb_tariff_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.kseb_tariff_created`.",
+   "Cache bump `reference:tariffs` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_tariffs_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_tariffs_create"
+ },
+ {
+  "id": "GET /api/v1/reference/tariffs/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/tariffs/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "Get a KSEB tariff slab",
+  "description": "One live KSEB tariff slab by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_tariffs_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the KSEB tariff slab (captured by *Create KSEB tariff slab*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The KSEB tariff slab.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "slab_from_units": 0,
+     "slab_to_units": 250,
+     "phase": "1P",
+     "rate_per_unit": "6.9500",
+     "fixed_charge": "50.00",
+     "effective_from": "2027-04-01",
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_tariffs_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/tariffs/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/tariffs/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_tariffs_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/tariffs/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/tariffs/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "Update a KSEB tariff slab",
+  "description": "Partial update; send only the fields to change. `phase` is `1P`, `3P` or null (= every phase; blank is refused); `slab_to_units` null = open-ended and must be ≥ `slab_from_units` (400 `validation_error`); `effective_from` null = in force since before the platform. A live slab is unique per (`phase`, `effective_from`, `slab_from_units`). `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_tariffs_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the KSEB tariff slab (captured by *Create KSEB tariff slab*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "rate_per_unit": "7.1000",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "slab_from_units",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "slab_to_units",
+     "type": "integer",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "phase",
+     "type": "string",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "rate_per_unit",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "fixed_charge",
+     "type": "string:decimal",
+     "required": false
+    },
+    {
+     "name": "effective_from",
+     "type": "string:date",
+     "required": false,
+     "nullable": true
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated KSEB tariff slab.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "slab_from_units": 0,
+     "slab_to_units": 250,
+     "phase": "1P",
+     "rate_per_unit": "7.1000",
+     "fixed_charge": "50.00",
+     "effective_from": "2027-04-01",
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`kseb_tariff_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.kseb_tariff_updated` (changed fields only).",
+   "Cache bump `reference:tariffs`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_tariffs_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/tariffs/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/tariffs/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.KsebTariffViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "KSEB tariffs"
+  ],
+  "summary": "Delete a KSEB tariff slab",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_tariffs_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the KSEB tariff slab (captured by *Create KSEB tariff slab*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.kseb_tariff_deleted`.",
+   "Cache bump `reference:tariffs`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_tariffs_delete"
+ },
+ {
+  "id": "GET /api/v1/reference/wattages/",
+  "method": "GET",
+  "path": "/api/v1/reference/wattages/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "List wattages",
+  "description": "Every live panel wattage row (active and inactive) for Studio, paginated (`StandardPagination`: 25 per page, max 200). Default order: `sort_order`, `value`, `id` (model `Meta.ordering`). Filters also accept the `filter[<name>]=` form.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter on the active flag (`true`/`false`).",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "sort_order",
+    "description": "One of `sort_order`, `created_at`, `value` (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (default 1).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "200",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "One page of rows.",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+       "value": 550,
+       "show_in_ui": true,
+       "is_active": true,
+       "sort_order": 26,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_wattages_list"
+ },
+ {
+  "id": "POST /api/v1/reference/wattages/",
+  "method": "POST",
+  "path": "/api/v1/reference/wattages/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "Create a panel wattage",
+  "description": "Adds a panel wattage. `value` (watts, ≥ 1) is unique among live rows. Without `sort_order` the row goes to the end of the list (max + 1). Conflicts are 409 `wattage_exists`. Audited and invalidates the public cache.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.create",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "value": 550,
+    "show_in_ui": true,
+    "is_active": true
+   },
+   "fields": [
+    {
+     "name": "value",
+     "type": "integer",
+     "required": true
+    },
+    {
+     "name": "show_in_ui",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "The created panel wattage.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "value": 550,
+     "show_in_ui": true,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 409,
+    "description": "`wattage_exists`: another live row already has this value (reported on the unique field)."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.wattage_created`.",
+   "Cache bump `reference:wattages` (public list/lookup re-read)."
+  ],
+  "capture": [
+   {
+    "var": "reference_wattages_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_wattages_create"
+ },
+ {
+  "id": "GET /api/v1/reference/wattages/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/reference/wattages/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "Get a panel wattage",
+  "description": "One live panel wattage by `uid` (inactive rows included; soft-deleted → 404).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.view",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_wattages_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the panel wattage (captured by *Create panel wattage*)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The panel wattage.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "value": 550,
+     "show_in_ui": true,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_wattages_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/reference/wattages/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/reference/wattages/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "K_reference",
+  "folder": [
+   "refused"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "regex",
+    "variable": "reference_wattages_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/reference/wattages/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/reference/wattages/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "Update a panel wattage",
+  "description": "Partial update; send only the fields to change. `value` (watts, ≥ 1) is unique among live rows. `expected_version` (body or query string) → 409 `stale_version` when outdated. A request that changes nothing returns the row unchanged (no new version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.edit",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_wattages_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the panel wattage (captured by *Create panel wattage*)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "show_in_ui": false,
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "value",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "show_in_ui",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "is_active",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "sort_order",
+     "type": "integer",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The updated panel wattage.",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+     "value": 550,
+     "show_in_ui": false,
+     "is_active": true,
+     "sort_order": 26,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` envelope (field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`wattage_exists`: another live row already has this value (reported on the unique field)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.wattage_updated` (changed fields only).",
+   "Cache bump `reference:wattages`."
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_wattages_update"
+ },
+ {
+  "id": "DELETE /api/v1/reference/wattages/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/reference/wattages/{uid}/",
+  "app": "reference",
+  "surface": "staff",
+  "view": "reference.views.staff.WattageViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "K_reference",
+  "folder": [
+   "Wattages"
+  ],
+  "summary": "Delete a panel wattage",
+  "description": "Soft delete (sets `deleted_at`; rows are never hard-deleted) — needs `reference_data.archive`. Optional `?expected_version=` → 409 `stale_version` when outdated. The value becomes free for a new live row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "reference_data.archive",
+   "scope": "Record scope `all` (module `reference_data` has no narrower scope).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "reference_wattages_uid",
+    "example": "3f6c2a8e-9b1d-4c47-8e2f-5a7d1c9e4b20",
+    "description": "`uid` of the panel wattage (captured by *Create panel wattage*)."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic-lock check: the `version` you last read.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (no body)."
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`: `expected_version` is not a positive integer."
+   },
+   {
+    "status": 401,
+    "description": "Missing or invalid JWT."
+   },
+   {
+    "status": 403,
+    "description": "Role lacks the `reference_data` permission for this action."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`: unknown or soft-deleted uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` differs from the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit row `reference.wattage_deleted`.",
+   "Cache bump `reference:wattages`."
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "reference_wattages_delete"
+ }
+]

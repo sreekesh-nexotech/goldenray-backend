@@ -1,0 +1,1448 @@
+{
+ "agreements_from_quotation_uid": {
+  "captured_by": [
+   "POST /api/v1/agreements/from-quotation/"
+  ],
+  "used_by": []
+ },
+ "agreements_uid": {
+  "captured_by": [
+   "POST /api/v1/agreements/",
+   "POST /api/v1/agreements/{uid}/supersede/"
+  ],
+  "used_by": [
+   "GET /api/v1/agreements/{uid}/",
+   "PATCH /api/v1/agreements/{uid}/",
+   "POST /api/v1/agreements/{uid}/cancel/",
+   "GET /api/v1/agreements/{uid}/document/",
+   "POST /api/v1/agreements/{uid}/issue/",
+   "POST /api/v1/agreements/{uid}/price-override/",
+   "POST /api/v1/agreements/{uid}/record-acceptance/",
+   "POST /api/v1/agreements/{uid}/render/",
+   "POST /api/v1/agreements/{uid}/supersede/"
+  ]
+ },
+ "attendance_corrections_uid": {
+  "captured_by": [
+   "POST /api/v1/attendance/corrections/"
+  ],
+  "used_by": [
+   "GET /api/v1/attendance/corrections/{uid}/",
+   "POST /api/v1/attendance/corrections/{uid}/revoke/"
+  ]
+ },
+ "attendance_days_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/attendance/days/{uid}/"
+  ]
+ },
+ "attendance_employees_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/attendance/employees/{uid}/timeline/"
+  ]
+ },
+ "auth_sessions_uid": {
+  "captured_by": [],
+  "used_by": [
+   "DELETE /api/v1/auth/sessions/{uid}/"
+  ]
+ },
+ "bom_fixed_items_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/fixed-items/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/fixed-items/{uid}/",
+   "PUT /api/v1/bom/fixed-items/{uid}/",
+   "PATCH /api/v1/bom/fixed-items/{uid}/",
+   "DELETE /api/v1/bom/fixed-items/{uid}/"
+  ]
+ },
+ "bom_package_profiles_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/package-profiles/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/package-profiles/{uid}/",
+   "PUT /api/v1/bom/package-profiles/{uid}/",
+   "PATCH /api/v1/bom/package-profiles/{uid}/",
+   "DELETE /api/v1/bom/package-profiles/{uid}/"
+  ]
+ },
+ "bom_slots_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/slots/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/slots/{uid}/",
+   "PUT /api/v1/bom/slots/{uid}/",
+   "PATCH /api/v1/bom/slots/{uid}/",
+   "DELETE /api/v1/bom/slots/{uid}/"
+  ]
+ },
+ "bom_structure_items_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/structure-items/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/structure-items/{uid}/",
+   "PUT /api/v1/bom/structure-items/{uid}/",
+   "PATCH /api/v1/bom/structure-items/{uid}/",
+   "DELETE /api/v1/bom/structure-items/{uid}/"
+  ]
+ },
+ "bom_structure_templates_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/structure-templates/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/structure-templates/{uid}/",
+   "PUT /api/v1/bom/structure-templates/{uid}/",
+   "PATCH /api/v1/bom/structure-templates/{uid}/",
+   "DELETE /api/v1/bom/structure-templates/{uid}/"
+  ]
+ },
+ "bom_templates_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/templates/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/templates/{uid}/",
+   "PUT /api/v1/bom/templates/{uid}/",
+   "PATCH /api/v1/bom/templates/{uid}/",
+   "DELETE /api/v1/bom/templates/{uid}/"
+  ]
+ },
+ "bom_tube_weights_uid": {
+  "captured_by": [
+   "POST /api/v1/bom/tube-weights/"
+  ],
+  "used_by": [
+   "GET /api/v1/bom/tube-weights/{uid}/",
+   "PUT /api/v1/bom/tube-weights/{uid}/",
+   "PATCH /api/v1/bom/tube-weights/{uid}/",
+   "DELETE /api/v1/bom/tube-weights/{uid}/"
+  ]
+ },
+ "calculators_bill_range_sizes_uid": {
+  "captured_by": [
+   "POST /api/v1/calculators/bill-range-sizes/"
+  ],
+  "used_by": [
+   "GET /api/v1/calculators/bill-range-sizes/{uid}/",
+   "PUT /api/v1/calculators/bill-range-sizes/{uid}/",
+   "PATCH /api/v1/calculators/bill-range-sizes/{uid}/",
+   "DELETE /api/v1/calculators/bill-range-sizes/{uid}/"
+  ]
+ },
+ "calculators_capacity_sizes_uid": {
+  "captured_by": [
+   "POST /api/v1/calculators/capacity-sizes/"
+  ],
+  "used_by": [
+   "GET /api/v1/calculators/capacity-sizes/{uid}/",
+   "PUT /api/v1/calculators/capacity-sizes/{uid}/",
+   "PATCH /api/v1/calculators/capacity-sizes/{uid}/",
+   "DELETE /api/v1/calculators/capacity-sizes/{uid}/"
+  ]
+ },
+ "career_page_image_slots_key": {
+  "captured_by": [],
+  "used_by": [
+   "PATCH /api/v1/career-page/{uid}/image-slots/{key}/"
+  ]
+ },
+ "career_page_text_slots_key": {
+  "captured_by": [],
+  "used_by": [
+   "PATCH /api/v1/career-page/{uid}/text-slots/{key}/"
+  ]
+ },
+ "career_page_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/career-page/{uid}/",
+   "PATCH /api/v1/career-page/{uid}/image-slots/{key}/",
+   "GET /api/v1/career-page/{uid}/preview/",
+   "POST /api/v1/career-page/{uid}/publish/",
+   "GET /api/v1/career-page/{uid}/seo/",
+   "PATCH /api/v1/career-page/{uid}/seo/",
+   "PATCH /api/v1/career-page/{uid}/text-slots/{key}/",
+   "POST /api/v1/career-page/{uid}/unpublish/"
+  ]
+ },
+ "careers_applications_download_kind": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/careers/applications/{uid}/download/{kind}/"
+  ]
+ },
+ "careers_applications_uid": {
+  "captured_by": [
+   "POST /api/v1/careers/applications/{uid}/notes/"
+  ],
+  "used_by": [
+   "GET /api/v1/careers/applications/{uid}/",
+   "DELETE /api/v1/careers/applications/{uid}/",
+   "POST /api/v1/careers/applications/{uid}/assign/",
+   "GET /api/v1/careers/applications/{uid}/download/{kind}/",
+   "GET /api/v1/careers/applications/{uid}/events/",
+   "GET /api/v1/careers/applications/{uid}/notes/",
+   "POST /api/v1/careers/applications/{uid}/notes/",
+   "POST /api/v1/careers/applications/{uid}/restore/",
+   "POST /api/v1/careers/applications/{uid}/status/"
+  ]
+ },
+ "careers_departments_uid": {
+  "captured_by": [
+   "POST /api/v1/careers/departments/"
+  ],
+  "used_by": [
+   "GET /api/v1/careers/departments/{uid}/",
+   "PUT /api/v1/careers/departments/{uid}/",
+   "PATCH /api/v1/careers/departments/{uid}/",
+   "DELETE /api/v1/careers/departments/{uid}/"
+  ]
+ },
+ "careers_positions_uid": {
+  "captured_by": [
+   "POST /api/v1/careers/positions/"
+  ],
+  "used_by": [
+   "GET /api/v1/careers/positions/{uid}/",
+   "PUT /api/v1/careers/positions/{uid}/",
+   "PATCH /api/v1/careers/positions/{uid}/",
+   "DELETE /api/v1/careers/positions/{uid}/",
+   "POST /api/v1/careers/positions/{uid}/archive/",
+   "POST /api/v1/careers/positions/{uid}/close/",
+   "GET /api/v1/careers/positions/{uid}/preview/",
+   "POST /api/v1/careers/positions/{uid}/publish/",
+   "POST /api/v1/careers/positions/{uid}/unpublish/"
+  ]
+ },
+ "catalog_battery_families_uid": {
+  "captured_by": [
+   "POST /api/v1/catalog/battery-families/"
+  ],
+  "used_by": [
+   "GET /api/v1/catalog/battery-families/{uid}/",
+   "PUT /api/v1/catalog/battery-families/{uid}/",
+   "PATCH /api/v1/catalog/battery-families/{uid}/",
+   "DELETE /api/v1/catalog/battery-families/{uid}/"
+  ]
+ },
+ "catalog_brands_uid": {
+  "captured_by": [
+   "POST /api/v1/catalog/brands/"
+  ],
+  "used_by": [
+   "GET /api/v1/catalog/brands/{uid}/",
+   "PUT /api/v1/catalog/brands/{uid}/",
+   "PATCH /api/v1/catalog/brands/{uid}/",
+   "DELETE /api/v1/catalog/brands/{uid}/"
+  ]
+ },
+ "catalog_categories_uid": {
+  "captured_by": [
+   "POST /api/v1/catalog/categories/"
+  ],
+  "used_by": [
+   "GET /api/v1/catalog/categories/{uid}/",
+   "PUT /api/v1/catalog/categories/{uid}/",
+   "PATCH /api/v1/catalog/categories/{uid}/",
+   "DELETE /api/v1/catalog/categories/{uid}/"
+  ]
+ },
+ "catalog_components_uid": {
+  "captured_by": [
+   "POST /api/v1/catalog/components/"
+  ],
+  "used_by": [
+   "GET /api/v1/catalog/components/{uid}/",
+   "PUT /api/v1/catalog/components/{uid}/",
+   "PATCH /api/v1/catalog/components/{uid}/",
+   "DELETE /api/v1/catalog/components/{uid}/",
+   "POST /api/v1/catalog/components/{uid}/activate/",
+   "POST /api/v1/catalog/components/{uid}/deprecate/",
+   "GET /api/v1/catalog/components/{uid}/history/",
+   "POST /api/v1/catalog/components/{uid}/retire/",
+   "GET /api/v1/catalog/components/{uid}/usage/"
+  ]
+ },
+ "catalog_public_profiles_uid": {
+  "captured_by": [
+   "POST /api/v1/catalog/public-profiles/"
+  ],
+  "used_by": [
+   "GET /api/v1/catalog/public-profiles/{uid}/",
+   "PUT /api/v1/catalog/public-profiles/{uid}/",
+   "PATCH /api/v1/catalog/public-profiles/{uid}/",
+   "DELETE /api/v1/catalog/public-profiles/{uid}/",
+   "POST /api/v1/catalog/public-profiles/{uid}/publish/",
+   "POST /api/v1/catalog/public-profiles/{uid}/unpublish/"
+  ]
+ },
+ "company_bank_accounts_uid": {
+  "captured_by": [
+   "POST /api/v1/company/bank-accounts/"
+  ],
+  "used_by": [
+   "GET /api/v1/company/bank-accounts/{uid}/",
+   "PUT /api/v1/company/bank-accounts/{uid}/",
+   "PATCH /api/v1/company/bank-accounts/{uid}/",
+   "DELETE /api/v1/company/bank-accounts/{uid}/",
+   "POST /api/v1/company/bank-accounts/{uid}/make-primary/"
+  ]
+ },
+ "content_authors_uid": {
+  "captured_by": [
+   "POST /api/v1/content/authors/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/authors/{uid}/",
+   "PUT /api/v1/content/authors/{uid}/",
+   "PATCH /api/v1/content/authors/{uid}/",
+   "DELETE /api/v1/content/authors/{uid}/"
+  ]
+ },
+ "content_badges_uid": {
+  "captured_by": [
+   "POST /api/v1/content/badges/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/badges/{uid}/",
+   "PUT /api/v1/content/badges/{uid}/",
+   "PATCH /api/v1/content/badges/{uid}/",
+   "DELETE /api/v1/content/badges/{uid}/"
+  ]
+ },
+ "content_categories_uid": {
+  "captured_by": [
+   "POST /api/v1/content/categories/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/categories/{uid}/",
+   "PUT /api/v1/content/categories/{uid}/",
+   "PATCH /api/v1/content/categories/{uid}/",
+   "DELETE /api/v1/content/categories/{uid}/"
+  ]
+ },
+ "content_collections_uid": {
+  "captured_by": [
+   "POST /api/v1/content/collections/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/collections/{uid}/",
+   "PUT /api/v1/content/collections/{uid}/",
+   "PATCH /api/v1/content/collections/{uid}/",
+   "DELETE /api/v1/content/collections/{uid}/"
+  ]
+ },
+ "content_entries_slug_history_uid": {
+  "captured_by": [],
+  "used_by": [
+   "POST /api/v1/content/entries/{uid}/slug-history/{alias_uid}/deactivate/"
+  ]
+ },
+ "content_entries_uid": {
+  "captured_by": [
+   "POST /api/v1/content/entries/",
+   "POST /api/v1/content/entries/{uid}/duplicate/",
+   "POST /api/v1/content/entries/{uid}/preview/",
+   "POST /api/v1/content/entries/{uid}/slug-history/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/entries/{uid}/",
+   "PUT /api/v1/content/entries/{uid}/",
+   "PATCH /api/v1/content/entries/{uid}/",
+   "DELETE /api/v1/content/entries/{uid}/",
+   "POST /api/v1/content/entries/{uid}/archive/",
+   "POST /api/v1/content/entries/{uid}/duplicate/",
+   "POST /api/v1/content/entries/{uid}/preview/",
+   "POST /api/v1/content/entries/{uid}/publish/",
+   "POST /api/v1/content/entries/{uid}/restore/",
+   "POST /api/v1/content/entries/{uid}/schedule/",
+   "GET /api/v1/content/entries/{uid}/slug-history/",
+   "POST /api/v1/content/entries/{uid}/slug-history/",
+   "POST /api/v1/content/entries/{uid}/slug-history/{alias_uid}/deactivate/",
+   "POST /api/v1/content/entries/{uid}/submit/",
+   "POST /api/v1/content/entries/{uid}/unpublish/",
+   "POST /api/v1/content/entries/{uid}/verify/"
+  ]
+ },
+ "content_tags_uid": {
+  "captured_by": [
+   "POST /api/v1/content/tags/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/tags/{uid}/",
+   "PUT /api/v1/content/tags/{uid}/",
+   "PATCH /api/v1/content/tags/{uid}/",
+   "DELETE /api/v1/content/tags/{uid}/"
+  ]
+ },
+ "content_templates_attribute_slots_uid": {
+  "captured_by": [
+   "POST /api/v1/content/templates/{template_uid}/attribute-slots/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/",
+   "PATCH /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/",
+   "DELETE /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/"
+  ]
+ },
+ "content_templates_image_groups_uid": {
+  "captured_by": [
+   "POST /api/v1/content/templates/{template_uid}/image-groups/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/templates/{template_uid}/image-groups/{uid}/",
+   "PATCH /api/v1/content/templates/{template_uid}/image-groups/{uid}/",
+   "DELETE /api/v1/content/templates/{template_uid}/image-groups/{uid}/"
+  ]
+ },
+ "content_templates_uid": {
+  "captured_by": [
+   "POST /api/v1/content/templates/",
+   "POST /api/v1/content/templates/{uid}/duplicate/"
+  ],
+  "used_by": [
+   "GET /api/v1/content/templates/{template_uid}/attribute-slots/",
+   "POST /api/v1/content/templates/{template_uid}/attribute-slots/",
+   "GET /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/",
+   "PATCH /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/",
+   "DELETE /api/v1/content/templates/{template_uid}/attribute-slots/{uid}/",
+   "GET /api/v1/content/templates/{template_uid}/image-groups/",
+   "POST /api/v1/content/templates/{template_uid}/image-groups/",
+   "GET /api/v1/content/templates/{template_uid}/image-groups/{uid}/",
+   "PATCH /api/v1/content/templates/{template_uid}/image-groups/{uid}/",
+   "DELETE /api/v1/content/templates/{template_uid}/image-groups/{uid}/",
+   "GET /api/v1/content/templates/{uid}/",
+   "PUT /api/v1/content/templates/{uid}/",
+   "PATCH /api/v1/content/templates/{uid}/",
+   "DELETE /api/v1/content/templates/{uid}/",
+   "POST /api/v1/content/templates/{uid}/duplicate/"
+  ]
+ },
+ "customer_inspection_approvals_token": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/customer/v1/inspection-approvals/{token}/",
+   "POST /api/customer/v1/inspection-approvals/{token}/respond/",
+   "POST /api/customer/v1/inspection-approvals/{token}/send-otp/"
+  ]
+ },
+ "customers_notes_uid": {
+  "captured_by": [
+   "POST /api/v1/customers/{customer_uid}/notes/"
+  ],
+  "used_by": [
+   "PATCH /api/v1/customers/{customer_uid}/notes/{note_uid}/",
+   "DELETE /api/v1/customers/{customer_uid}/notes/{note_uid}/"
+  ]
+ },
+ "customers_uid": {
+  "captured_by": [
+   "POST /api/v1/customers/"
+  ],
+  "used_by": [
+   "GET /api/v1/customers/{customer_uid}/notes/",
+   "POST /api/v1/customers/{customer_uid}/notes/",
+   "PATCH /api/v1/customers/{customer_uid}/notes/{note_uid}/",
+   "DELETE /api/v1/customers/{customer_uid}/notes/{note_uid}/",
+   "GET /api/v1/customers/{uid}/",
+   "PUT /api/v1/customers/{uid}/",
+   "PATCH /api/v1/customers/{uid}/",
+   "DELETE /api/v1/customers/{uid}/",
+   "POST /api/v1/customers/{uid}/merge/",
+   "GET /api/v1/customers/{uid}/timeline/"
+  ]
+ },
+ "dev_media_path": {
+  "captured_by": [],
+  "used_by": [
+   "GET /media/public/{path}"
+  ]
+ },
+ "devices_agents_uid": {
+  "captured_by": [
+   "POST /api/v1/devices/agents/"
+  ],
+  "used_by": [
+   "GET /api/v1/devices/agents/{uid}/",
+   "PUT /api/v1/devices/agents/{uid}/",
+   "PATCH /api/v1/devices/agents/{uid}/",
+   "DELETE /api/v1/devices/agents/{uid}/",
+   "GET /api/v1/devices/agents/{uid}/config-download/",
+   "GET /api/v1/devices/agents/{uid}/logs/",
+   "POST /api/v1/devices/agents/{uid}/revoke/",
+   "POST /api/v1/devices/agents/{uid}/rotate-token/"
+  ]
+ },
+ "devices_device_users_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/devices/device-users/{uid}/",
+   "POST /api/v1/devices/device-users/{uid}/link/",
+   "POST /api/v1/devices/device-users/{uid}/resolve/"
+  ]
+ },
+ "devices_protocol_mappings_uid": {
+  "captured_by": [
+   "POST /api/v1/devices/protocol-mappings/"
+  ],
+  "used_by": [
+   "GET /api/v1/devices/protocol-mappings/{uid}/",
+   "PUT /api/v1/devices/protocol-mappings/{uid}/",
+   "PATCH /api/v1/devices/protocol-mappings/{uid}/",
+   "DELETE /api/v1/devices/protocol-mappings/{uid}/"
+  ]
+ },
+ "devices_uid": {
+  "captured_by": [
+   "POST /api/v1/devices/"
+  ],
+  "used_by": [
+   "GET /api/v1/devices/{uid}/",
+   "PUT /api/v1/devices/{uid}/",
+   "PATCH /api/v1/devices/{uid}/",
+   "DELETE /api/v1/devices/{uid}/",
+   "POST /api/v1/devices/{uid}/adms/disable/",
+   "POST /api/v1/devices/{uid}/adms/enable/",
+   "GET /api/v1/devices/{uid}/employee-reconciliation/",
+   "GET /api/v1/devices/{uid}/logs/",
+   "POST /api/v1/devices/{uid}/refresh-employees/",
+   "POST /api/v1/devices/{uid}/rehome/",
+   "GET /api/v1/devices/{uid}/user-reconciliation/"
+  ]
+ },
+ "documents_download_token": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/documents/download/{token}/"
+  ]
+ },
+ "documents_jobs_uid": {
+  "captured_by": [
+   "POST /api/v1/documents/jobs/{uid}/download-url/"
+  ],
+  "used_by": [
+   "GET /api/v1/documents/jobs/{uid}/",
+   "POST /api/v1/documents/jobs/{uid}/download-url/"
+  ]
+ },
+ "emi_banks_uid": {
+  "captured_by": [
+   "POST /api/v1/emi/banks/"
+  ],
+  "used_by": [
+   "GET /api/v1/emi/banks/{uid}/",
+   "PUT /api/v1/emi/banks/{uid}/",
+   "PATCH /api/v1/emi/banks/{uid}/",
+   "DELETE /api/v1/emi/banks/{uid}/"
+  ]
+ },
+ "emi_interest_rules_uid": {
+  "captured_by": [
+   "POST /api/v1/emi/interest-rules/"
+  ],
+  "used_by": [
+   "GET /api/v1/emi/interest-rules/{uid}/",
+   "PUT /api/v1/emi/interest-rules/{uid}/",
+   "PATCH /api/v1/emi/interest-rules/{uid}/",
+   "DELETE /api/v1/emi/interest-rules/{uid}/"
+  ]
+ },
+ "emi_subsidy_rules_uid": {
+  "captured_by": [
+   "POST /api/v1/emi/subsidy-rules/"
+  ],
+  "used_by": [
+   "GET /api/v1/emi/subsidy-rules/{uid}/",
+   "PUT /api/v1/emi/subsidy-rules/{uid}/",
+   "PATCH /api/v1/emi/subsidy-rules/{uid}/",
+   "DELETE /api/v1/emi/subsidy-rules/{uid}/"
+  ]
+ },
+ "emi_system_sizes_uid": {
+  "captured_by": [
+   "POST /api/v1/emi/system-sizes/"
+  ],
+  "used_by": [
+   "GET /api/v1/emi/system-sizes/{uid}/",
+   "PUT /api/v1/emi/system-sizes/{uid}/",
+   "PATCH /api/v1/emi/system-sizes/{uid}/",
+   "DELETE /api/v1/emi/system-sizes/{uid}/"
+  ]
+ },
+ "engineering_findings_uid": {
+  "captured_by": [
+   "POST /api/v1/engineering/findings/{uid}/acknowledge/"
+  ],
+  "used_by": [
+   "POST /api/v1/engineering/findings/{uid}/acknowledge/"
+  ]
+ },
+ "engineering_rule_sets_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/engineering/rule-sets/{uid}/",
+   "POST /api/v1/engineering/rule-sets/{uid}/activate/"
+  ]
+ },
+ "engineering_runs_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/engineering/runs/{uid}/"
+  ]
+ },
+ "faq_categories_uid": {
+  "captured_by": [
+   "POST /api/v1/faq-categories/"
+  ],
+  "used_by": [
+   "GET /api/v1/faq-categories/{uid}/",
+   "PUT /api/v1/faq-categories/{uid}/",
+   "PATCH /api/v1/faq-categories/{uid}/",
+   "DELETE /api/v1/faq-categories/{uid}/"
+  ]
+ },
+ "faqs_uid": {
+  "captured_by": [
+   "POST /api/v1/faqs/"
+  ],
+  "used_by": [
+   "GET /api/v1/faqs/{uid}/",
+   "PUT /api/v1/faqs/{uid}/",
+   "PATCH /api/v1/faqs/{uid}/",
+   "POST /api/v1/faqs/{uid}/archive/",
+   "GET /api/v1/faqs/{uid}/preview/",
+   "POST /api/v1/faqs/{uid}/publish/",
+   "POST /api/v1/faqs/{uid}/restore/",
+   "POST /api/v1/faqs/{uid}/unpublish/",
+   "POST /api/v1/faqs/{uid}/verify/"
+  ]
+ },
+ "hr_attendance_rules_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/attendance-rules/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/attendance-rules/{uid}/",
+   "PUT /api/v1/hr/attendance-rules/{uid}/",
+   "PATCH /api/v1/hr/attendance-rules/{uid}/",
+   "DELETE /api/v1/hr/attendance-rules/{uid}/"
+  ]
+ },
+ "hr_employees_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/employees/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/employees/{uid}/",
+   "PUT /api/v1/hr/employees/{uid}/",
+   "PATCH /api/v1/hr/employees/{uid}/",
+   "DELETE /api/v1/hr/employees/{uid}/",
+   "POST /api/v1/hr/employees/{uid}/activate/",
+   "POST /api/v1/hr/employees/{uid}/deactivate/",
+   "GET /api/v1/hr/employees/{uid}/dependencies/",
+   "GET /api/v1/hr/employees/{uid}/device-mappings/",
+   "POST /api/v1/hr/employees/{uid}/link-user/",
+   "POST /api/v1/hr/employees/{uid}/photo/",
+   "DELETE /api/v1/hr/employees/{uid}/photo/",
+   "POST /api/v1/hr/employees/{uid}/unlink-user/"
+  ]
+ },
+ "hr_holidays_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/holidays/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/holidays/{uid}/",
+   "PUT /api/v1/hr/holidays/{uid}/",
+   "PATCH /api/v1/hr/holidays/{uid}/",
+   "DELETE /api/v1/hr/holidays/{uid}/"
+  ]
+ },
+ "hr_leave_types_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/leave-types/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/leave-types/{uid}/",
+   "PUT /api/v1/hr/leave-types/{uid}/",
+   "PATCH /api/v1/hr/leave-types/{uid}/",
+   "DELETE /api/v1/hr/leave-types/{uid}/"
+  ]
+ },
+ "hr_leave_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/leave/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/leave/{uid}/",
+   "POST /api/v1/hr/leave/{uid}/approve/",
+   "POST /api/v1/hr/leave/{uid}/cancel/",
+   "POST /api/v1/hr/leave/{uid}/reject/"
+  ]
+ },
+ "hr_offices_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/offices/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/offices/{uid}/",
+   "PUT /api/v1/hr/offices/{uid}/",
+   "PATCH /api/v1/hr/offices/{uid}/",
+   "DELETE /api/v1/hr/offices/{uid}/",
+   "GET /api/v1/hr/offices/{uid}/summary/"
+  ]
+ },
+ "hr_shifts_uid": {
+  "captured_by": [
+   "POST /api/v1/hr/shifts/"
+  ],
+  "used_by": [
+   "GET /api/v1/hr/shifts/{uid}/",
+   "PUT /api/v1/hr/shifts/{uid}/",
+   "PATCH /api/v1/hr/shifts/{uid}/",
+   "DELETE /api/v1/hr/shifts/{uid}/"
+  ]
+ },
+ "iclock_device_token": {
+  "captured_by": [],
+  "used_by": [
+   "GET /iclock/{device_token}/{endpoint}",
+   "POST /iclock/{device_token}/{endpoint}",
+   "PUT /iclock/{device_token}/{endpoint}",
+   "DELETE /iclock/{device_token}/{endpoint}",
+   "GET /iclock/{device_token}/{endpoint}/",
+   "POST /iclock/{device_token}/{endpoint}/",
+   "PUT /iclock/{device_token}/{endpoint}/",
+   "DELETE /iclock/{device_token}/{endpoint}/"
+  ]
+ },
+ "iclock_endpoint": {
+  "captured_by": [],
+  "used_by": [
+   "GET /iclock/{device_token}/{endpoint}",
+   "POST /iclock/{device_token}/{endpoint}",
+   "PUT /iclock/{device_token}/{endpoint}",
+   "DELETE /iclock/{device_token}/{endpoint}",
+   "GET /iclock/{device_token}/{endpoint}/",
+   "POST /iclock/{device_token}/{endpoint}/",
+   "PUT /iclock/{device_token}/{endpoint}/",
+   "DELETE /iclock/{device_token}/{endpoint}/"
+  ]
+ },
+ "inventory_locations_uid": {
+  "captured_by": [
+   "POST /api/v1/inventory/locations/"
+  ],
+  "used_by": [
+   "GET /api/v1/inventory/locations/{uid}/",
+   "PUT /api/v1/inventory/locations/{uid}/",
+   "PATCH /api/v1/inventory/locations/{uid}/",
+   "DELETE /api/v1/inventory/locations/{uid}/"
+  ]
+ },
+ "inventory_movements_uid": {
+  "captured_by": [
+   "POST /api/v1/inventory/movements/"
+  ],
+  "used_by": []
+ },
+ "leads_affiliate_applications_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/leads/affiliate-applications/{uid}/",
+   "PUT /api/v1/leads/affiliate-applications/{uid}/",
+   "PATCH /api/v1/leads/affiliate-applications/{uid}/",
+   "DELETE /api/v1/leads/affiliate-applications/{uid}/",
+   "POST /api/v1/leads/affiliate-applications/{uid}/assign/",
+   "POST /api/v1/leads/affiliate-applications/{uid}/transition/"
+  ]
+ },
+ "leads_installations_uid": {
+  "captured_by": [
+   "POST /api/v1/leads/installations/"
+  ],
+  "used_by": [
+   "GET /api/v1/leads/installations/{uid}/",
+   "PUT /api/v1/leads/installations/{uid}/",
+   "PATCH /api/v1/leads/installations/{uid}/",
+   "DELETE /api/v1/leads/installations/{uid}/"
+  ]
+ },
+ "leads_uid": {
+  "captured_by": [
+   "POST /api/v1/leads/",
+   "POST /api/v1/leads/{uid}/notes/"
+  ],
+  "used_by": [
+   "GET /api/v1/leads/{uid}/",
+   "PUT /api/v1/leads/{uid}/",
+   "PATCH /api/v1/leads/{uid}/",
+   "DELETE /api/v1/leads/{uid}/",
+   "POST /api/v1/leads/{uid}/assign/",
+   "POST /api/v1/leads/{uid}/convert/",
+   "GET /api/v1/leads/{uid}/events/",
+   "POST /api/v1/leads/{uid}/mark-lost/",
+   "POST /api/v1/leads/{uid}/mark-spam/",
+   "GET /api/v1/leads/{uid}/notes/",
+   "POST /api/v1/leads/{uid}/notes/",
+   "POST /api/v1/leads/{uid}/status/"
+  ]
+ },
+ "leads_warranty_requests_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/leads/warranty-requests/{uid}/",
+   "PUT /api/v1/leads/warranty-requests/{uid}/",
+   "PATCH /api/v1/leads/warranty-requests/{uid}/",
+   "DELETE /api/v1/leads/warranty-requests/{uid}/",
+   "POST /api/v1/leads/warranty-requests/{uid}/assign/",
+   "POST /api/v1/leads/warranty-requests/{uid}/transition/"
+  ]
+ },
+ "legacy_studio_api_api_job_positions_slug": {
+  "captured_by": [],
+  "used_by": [
+   "GET /legacy/studio-api/api/job-positions/{slug}"
+  ]
+ },
+ "legacy_studio_api_api_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /legacy/studio-api/api/{api_uid}",
+   "GET /legacy/studio-api/api/{api_uid}/"
+  ]
+ },
+ "media_download_token": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/media/download/{token}/"
+  ]
+ },
+ "media_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/media/{uid}/",
+   "PUT /api/v1/media/{uid}/",
+   "PATCH /api/v1/media/{uid}/",
+   "DELETE /api/v1/media/{uid}/",
+   "GET /api/v1/media/{uid}/signed-url/"
+  ]
+ },
+ "media_upload_uid": {
+  "captured_by": [
+   "POST /api/v1/media/upload/"
+  ],
+  "used_by": []
+ },
+ "packs_config_versions_packs_key": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/packs/config-versions/{uid}/packs/{key}/",
+   "PUT /api/v1/packs/config-versions/{uid}/packs/{key}/"
+  ]
+ },
+ "packs_config_versions_uid": {
+  "captured_by": [
+   "POST /api/v1/packs/config-versions/",
+   "POST /api/v1/packs/config-versions/{uid}/run-checker/"
+  ],
+  "used_by": [
+   "GET /api/v1/packs/config-versions/{uid}/",
+   "PATCH /api/v1/packs/config-versions/{uid}/",
+   "POST /api/v1/packs/config-versions/{uid}/approve/",
+   "GET /api/v1/packs/config-versions/{uid}/packs/",
+   "GET /api/v1/packs/config-versions/{uid}/packs/{key}/",
+   "PUT /api/v1/packs/config-versions/{uid}/packs/{key}/",
+   "POST /api/v1/packs/config-versions/{uid}/reject/",
+   "POST /api/v1/packs/config-versions/{uid}/run-checker/",
+   "POST /api/v1/packs/config-versions/{uid}/submit/"
+  ]
+ },
+ "packs_releases_number": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/packs/releases/{number}/",
+   "GET /api/v1/packs/releases/{number}/packs/"
+  ]
+ },
+ "packs_releases_uid": {
+  "captured_by": [
+   "POST /api/v1/packs/releases/"
+  ],
+  "used_by": []
+ },
+ "pages_image_slots_key": {
+  "captured_by": [],
+  "used_by": [
+   "PATCH /api/v1/pages/{uid}/image-slots/{key}/"
+  ]
+ },
+ "pages_text_slots_key": {
+  "captured_by": [],
+  "used_by": [
+   "PATCH /api/v1/pages/{uid}/text-slots/{key}/"
+  ]
+ },
+ "pages_uid": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/pages/{uid}/",
+   "PUT /api/v1/pages/{uid}/",
+   "PATCH /api/v1/pages/{uid}/",
+   "POST /api/v1/pages/{uid}/archive/",
+   "PATCH /api/v1/pages/{uid}/image-slots/{key}/",
+   "GET /api/v1/pages/{uid}/preview/",
+   "POST /api/v1/pages/{uid}/publish/",
+   "POST /api/v1/pages/{uid}/restore/",
+   "GET /api/v1/pages/{uid}/seo/",
+   "PATCH /api/v1/pages/{uid}/seo/",
+   "PATCH /api/v1/pages/{uid}/text-slots/{key}/",
+   "POST /api/v1/pages/{uid}/unpublish/",
+   "POST /api/v1/pages/{uid}/verify/"
+  ]
+ },
+ "pricing_installation_matrix_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/installation-matrix/"
+  ],
+  "used_by": [
+   "GET /api/v1/pricing/installation-matrix/{uid}/",
+   "PUT /api/v1/pricing/installation-matrix/{uid}/",
+   "PATCH /api/v1/pricing/installation-matrix/{uid}/",
+   "DELETE /api/v1/pricing/installation-matrix/{uid}/"
+  ]
+ },
+ "pricing_market_rate_sets_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/market-rate-sets/"
+  ],
+  "used_by": [
+   "GET /api/v1/pricing/market-rate-sets/{uid}/",
+   "PUT /api/v1/pricing/market-rate-sets/{uid}/",
+   "PATCH /api/v1/pricing/market-rate-sets/{uid}/",
+   "DELETE /api/v1/pricing/market-rate-sets/{uid}/",
+   "POST /api/v1/pricing/market-rate-sets/{uid}/activate/",
+   "GET /api/v1/pricing/market-rate-sets/{uid}/rates/",
+   "PUT /api/v1/pricing/market-rate-sets/{uid}/rates/",
+   "GET /api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+   "PUT /api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+   "GET /api/v1/pricing/market-rate-sets/{uid}/swap-deltas/",
+   "PUT /api/v1/pricing/market-rate-sets/{uid}/swap-deltas/"
+  ]
+ },
+ "pricing_offers_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/offers/"
+  ],
+  "used_by": [
+   "GET /api/v1/pricing/offers/{uid}/",
+   "PUT /api/v1/pricing/offers/{uid}/",
+   "PATCH /api/v1/pricing/offers/{uid}/",
+   "DELETE /api/v1/pricing/offers/{uid}/",
+   "POST /api/v1/pricing/offers/{uid}/activate/",
+   "POST /api/v1/pricing/offers/{uid}/approve/",
+   "POST /api/v1/pricing/offers/{uid}/archive/",
+   "POST /api/v1/pricing/offers/{uid}/pause/"
+  ]
+ },
+ "pricing_prices_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/prices/"
+  ],
+  "used_by": [
+   "GET /api/v1/pricing/prices/{uid}/"
+  ]
+ },
+ "pricing_releases_number": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/pricing/releases/{number}/"
+  ]
+ },
+ "pricing_releases_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/releases/"
+  ],
+  "used_by": []
+ },
+ "pricing_statutory_fees_uid": {
+  "captured_by": [
+   "POST /api/v1/pricing/statutory-fees/"
+  ],
+  "used_by": [
+   "GET /api/v1/pricing/statutory-fees/{uid}/",
+   "PUT /api/v1/pricing/statutory-fees/{uid}/",
+   "PATCH /api/v1/pricing/statutory-fees/{uid}/",
+   "DELETE /api/v1/pricing/statutory-fees/{uid}/"
+  ]
+ },
+ "procurement_batches_uid": {
+  "captured_by": [
+   "POST /api/v1/procurement/batches/",
+   "POST /api/v1/procurement/batches/{uid}/reverse/"
+  ],
+  "used_by": [
+   "GET /api/v1/procurement/batches/{uid}/",
+   "PUT /api/v1/procurement/batches/{uid}/",
+   "PATCH /api/v1/procurement/batches/{uid}/",
+   "DELETE /api/v1/procurement/batches/{uid}/",
+   "GET /api/v1/procurement/batches/{uid}/charges/",
+   "PUT /api/v1/procurement/batches/{uid}/charges/",
+   "POST /api/v1/procurement/batches/{uid}/commit/",
+   "GET /api/v1/procurement/batches/{uid}/lines/",
+   "PUT /api/v1/procurement/batches/{uid}/lines/",
+   "POST /api/v1/procurement/batches/{uid}/preview-allocation/",
+   "POST /api/v1/procurement/batches/{uid}/reverse/"
+  ]
+ },
+ "procurement_suppliers_uid": {
+  "captured_by": [
+   "POST /api/v1/procurement/suppliers/"
+  ],
+  "used_by": [
+   "GET /api/v1/procurement/suppliers/{uid}/",
+   "PUT /api/v1/procurement/suppliers/{uid}/",
+   "PATCH /api/v1/procurement/suppliers/{uid}/",
+   "DELETE /api/v1/procurement/suppliers/{uid}/"
+  ]
+ },
+ "projects_uid": {
+  "captured_by": [
+   "POST /api/v1/projects/"
+  ],
+  "used_by": [
+   "GET /api/v1/projects/{uid}/",
+   "PUT /api/v1/projects/{uid}/",
+   "PATCH /api/v1/projects/{uid}/",
+   "DELETE /api/v1/projects/{uid}/",
+   "POST /api/v1/projects/{uid}/cancel/",
+   "POST /api/v1/projects/{uid}/close/",
+   "POST /api/v1/projects/{uid}/commission/",
+   "POST /api/v1/projects/{uid}/cost-inputs/",
+   "POST /api/v1/projects/{uid}/lock-bom/"
+  ]
+ },
+ "public_affiliate_applications_uid": {
+  "captured_by": [
+   "POST /api/public/v1/affiliate-applications/"
+  ],
+  "used_by": []
+ },
+ "public_content_collection": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/content/{collection}/",
+   "GET /api/public/v1/content/{collection}/{slug}/"
+  ]
+ },
+ "public_content_preview_token": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/content/preview/{token}/"
+  ]
+ },
+ "public_content_slug": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/content/{collection}/{slug}/"
+  ]
+ },
+ "public_job_applications_uid": {
+  "captured_by": [
+   "POST /api/public/v1/job-applications/"
+  ],
+  "used_by": []
+ },
+ "public_job_positions_slug": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/job-positions/{slug}/"
+  ]
+ },
+ "public_leads_uid": {
+  "captured_by": [
+   "POST /api/public/v1/leads/"
+  ],
+  "used_by": []
+ },
+ "public_packs_size_kw": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/packs/{system_type}/{tier}/{size_kw}/"
+  ]
+ },
+ "public_packs_system_type": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/packs/{system_type}/{tier}/{size_kw}/"
+  ]
+ },
+ "public_packs_tier": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/packs/{system_type}/{tier}/{size_kw}/"
+  ]
+ },
+ "public_pages_slug": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/pages/{slug}/"
+  ]
+ },
+ "public_products_category": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/products/{category}/{slug}/"
+  ]
+ },
+ "public_products_slug": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/products/{category}/{slug}/"
+  ]
+ },
+ "public_reference_pincodes_pincode": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/reference/pincodes/{pincode}/"
+  ]
+ },
+ "public_seo_metadata_page": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/public/v1/seo/metadata/{page}/"
+  ]
+ },
+ "public_warranty_requests_uid": {
+  "captured_by": [
+   "POST /api/public/v1/warranty-requests/"
+  ],
+  "used_by": []
+ },
+ "quotation_content_campaigns_uid": {
+  "captured_by": [
+   "POST /api/v1/quotation-content/campaigns/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotation-content/campaigns/{uid}/",
+   "PUT /api/v1/quotation-content/campaigns/{uid}/",
+   "PATCH /api/v1/quotation-content/campaigns/{uid}/",
+   "DELETE /api/v1/quotation-content/campaigns/{uid}/"
+  ]
+ },
+ "quotation_content_inclusions_uid": {
+  "captured_by": [
+   "POST /api/v1/quotation-content/inclusions/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotation-content/inclusions/{uid}/",
+   "PUT /api/v1/quotation-content/inclusions/{uid}/",
+   "PATCH /api/v1/quotation-content/inclusions/{uid}/",
+   "DELETE /api/v1/quotation-content/inclusions/{uid}/"
+  ]
+ },
+ "quotation_content_testimonials_uid": {
+  "captured_by": [
+   "POST /api/v1/quotation-content/testimonials/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotation-content/testimonials/{uid}/",
+   "PUT /api/v1/quotation-content/testimonials/{uid}/",
+   "PATCH /api/v1/quotation-content/testimonials/{uid}/",
+   "DELETE /api/v1/quotation-content/testimonials/{uid}/"
+  ]
+ },
+ "quotation_content_tier_names_uid": {
+  "captured_by": [
+   "POST /api/v1/quotation-content/tier-names/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotation-content/tier-names/{uid}/",
+   "PUT /api/v1/quotation-content/tier-names/{uid}/",
+   "PATCH /api/v1/quotation-content/tier-names/{uid}/",
+   "DELETE /api/v1/quotation-content/tier-names/{uid}/"
+  ]
+ },
+ "quotation_content_versions_uid": {
+  "captured_by": [
+   "POST /api/v1/quotation-content/versions/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotation-content/versions/{uid}/",
+   "PATCH /api/v1/quotation-content/versions/{uid}/",
+   "POST /api/v1/quotation-content/versions/{uid}/fit-check/",
+   "POST /api/v1/quotation-content/versions/{uid}/publish/"
+  ]
+ },
+ "quotations_discount_requests_uid": {
+  "captured_by": [],
+  "used_by": [
+   "POST /api/v1/quotations/{uid}/discount-requests/{request_uid}/approve/",
+   "POST /api/v1/quotations/{uid}/discount-requests/{request_uid}/reject/"
+  ]
+ },
+ "quotations_uid": {
+  "captured_by": [
+   "POST /api/v1/quotations/",
+   "POST /api/v1/quotations/{uid}/discount-requests/",
+   "POST /api/v1/quotations/{uid}/revise/"
+  ],
+  "used_by": [
+   "GET /api/v1/quotations/{uid}/",
+   "POST /api/v1/quotations/{uid}/accept/",
+   "POST /api/v1/quotations/{uid}/cancel/",
+   "GET /api/v1/quotations/{uid}/discount-requests/",
+   "POST /api/v1/quotations/{uid}/discount-requests/",
+   "POST /api/v1/quotations/{uid}/discount-requests/{request_uid}/approve/",
+   "POST /api/v1/quotations/{uid}/discount-requests/{request_uid}/reject/",
+   "GET /api/v1/quotations/{uid}/history/",
+   "POST /api/v1/quotations/{uid}/revise/",
+   "GET /api/v1/quotations/{uid}/versions/{number}/",
+   "PATCH /api/v1/quotations/{uid}/versions/{number}/",
+   "GET /api/v1/quotations/{uid}/versions/{number}/document/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/issue/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/preview/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/render/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/send/"
+  ]
+ },
+ "quotations_versions_number": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/quotations/{uid}/versions/{number}/",
+   "PATCH /api/v1/quotations/{uid}/versions/{number}/",
+   "GET /api/v1/quotations/{uid}/versions/{number}/document/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/issue/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/preview/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/render/",
+   "POST /api/v1/quotations/{uid}/versions/{number}/send/"
+  ]
+ },
+ "reference_appliances_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/appliances/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/appliances/{uid}/",
+   "PUT /api/v1/reference/appliances/{uid}/",
+   "PATCH /api/v1/reference/appliances/{uid}/",
+   "DELETE /api/v1/reference/appliances/{uid}/"
+  ]
+ },
+ "reference_device_types_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/device-types/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/device-types/{uid}/",
+   "PUT /api/v1/reference/device-types/{uid}/",
+   "PATCH /api/v1/reference/device-types/{uid}/",
+   "DELETE /api/v1/reference/device-types/{uid}/"
+  ]
+ },
+ "reference_ev_cars_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/ev-cars/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/ev-cars/{uid}/",
+   "PUT /api/v1/reference/ev-cars/{uid}/",
+   "PATCH /api/v1/reference/ev-cars/{uid}/",
+   "DELETE /api/v1/reference/ev-cars/{uid}/"
+  ]
+ },
+ "reference_ev_scooters_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/ev-scooters/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/ev-scooters/{uid}/",
+   "PUT /api/v1/reference/ev-scooters/{uid}/",
+   "PATCH /api/v1/reference/ev-scooters/{uid}/",
+   "DELETE /api/v1/reference/ev-scooters/{uid}/"
+  ]
+ },
+ "reference_pincodes_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/pincodes/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/pincodes/{uid}/",
+   "PUT /api/v1/reference/pincodes/{uid}/",
+   "PATCH /api/v1/reference/pincodes/{uid}/",
+   "DELETE /api/v1/reference/pincodes/{uid}/"
+  ]
+ },
+ "reference_room_sizes_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/room-sizes/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/room-sizes/{uid}/",
+   "PUT /api/v1/reference/room-sizes/{uid}/",
+   "PATCH /api/v1/reference/room-sizes/{uid}/",
+   "DELETE /api/v1/reference/room-sizes/{uid}/"
+  ]
+ },
+ "reference_tariffs_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/tariffs/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/tariffs/{uid}/",
+   "PUT /api/v1/reference/tariffs/{uid}/",
+   "PATCH /api/v1/reference/tariffs/{uid}/",
+   "DELETE /api/v1/reference/tariffs/{uid}/"
+  ]
+ },
+ "reference_wattages_uid": {
+  "captured_by": [
+   "POST /api/v1/reference/wattages/"
+  ],
+  "used_by": [
+   "GET /api/v1/reference/wattages/{uid}/",
+   "PUT /api/v1/reference/wattages/{uid}/",
+   "PATCH /api/v1/reference/wattages/{uid}/",
+   "DELETE /api/v1/reference/wattages/{uid}/"
+  ]
+ },
+ "roles_uid": {
+  "captured_by": [
+   "POST /api/v1/roles/"
+  ],
+  "used_by": [
+   "GET /api/v1/roles/{uid}/",
+   "PUT /api/v1/roles/{uid}/",
+   "PATCH /api/v1/roles/{uid}/",
+   "DELETE /api/v1/roles/{uid}/"
+  ]
+ },
+ "seo_metadata_uid": {
+  "captured_by": [
+   "POST /api/v1/seo/metadata/"
+  ],
+  "used_by": [
+   "GET /api/v1/seo/metadata/{uid}/",
+   "PUT /api/v1/seo/metadata/{uid}/",
+   "PATCH /api/v1/seo/metadata/{uid}/",
+   "DELETE /api/v1/seo/metadata/{uid}/"
+  ]
+ },
+ "seo_redirects_uid": {
+  "captured_by": [
+   "POST /api/v1/seo/redirects/"
+  ],
+  "used_by": [
+   "GET /api/v1/seo/redirects/{uid}/",
+   "PUT /api/v1/seo/redirects/{uid}/",
+   "PATCH /api/v1/seo/redirects/{uid}/",
+   "DELETE /api/v1/seo/redirects/{uid}/"
+  ]
+ },
+ "site_inspections_additional_work_uid": {
+  "captured_by": [],
+  "used_by": [
+   "PATCH /api/v1/site-inspections/{uid}/additional-work/{item_uid}/",
+   "DELETE /api/v1/site-inspections/{uid}/additional-work/{item_uid}/",
+   "POST /api/v1/site-inspections/{uid}/additional-work/{item_uid}/transition/"
+  ]
+ },
+ "site_inspections_equipment_equipment_type": {
+  "captured_by": [],
+  "used_by": [
+   "GET /api/v1/site-inspections/{uid}/equipment/{equipment_type}/",
+   "PUT /api/v1/site-inspections/{uid}/equipment/{equipment_type}/",
+   "POST /api/v1/site-inspections/{uid}/equipment/{equipment_type}/review/"
+  ]
+ },
+ "site_inspections_photos_uid": {
+  "captured_by": [],
+  "used_by": [
+   "DELETE /api/v1/site-inspections/{uid}/photos/{photo_uid}/"
+  ]
+ },
+ "site_inspections_reviews_uid": {
+  "captured_by": [],
+  "used_by": [
+   "POST /api/v1/site-inspections/{uid}/reviews/{review_uid}/decide/"
+  ]
+ },
+ "site_inspections_uid": {
+  "captured_by": [
+   "POST /api/v1/site-inspections/",
+   "POST /api/v1/site-inspections/{uid}/additional-work/",
+   "POST /api/v1/site-inspections/{uid}/annotations/",
+   "POST /api/v1/site-inspections/{uid}/approval/request/",
+   "POST /api/v1/site-inspections/{uid}/observations/",
+   "POST /api/v1/site-inspections/{uid}/photos/",
+   "POST /api/v1/site-inspections/{uid}/reviews/"
+  ],
+  "used_by": [
+   "GET /api/v1/site-inspections/{uid}/",
+   "DELETE /api/v1/site-inspections/{uid}/",
+   "GET /api/v1/site-inspections/{uid}/activity/",
+   "GET /api/v1/site-inspections/{uid}/additional-work/",
+   "POST /api/v1/site-inspections/{uid}/additional-work/",
+   "PATCH /api/v1/site-inspections/{uid}/additional-work/{item_uid}/",
+   "DELETE /api/v1/site-inspections/{uid}/additional-work/{item_uid}/",
+   "POST /api/v1/site-inspections/{uid}/additional-work/{item_uid}/transition/",
+   "GET /api/v1/site-inspections/{uid}/annotations/",
+   "POST /api/v1/site-inspections/{uid}/annotations/",
+   "POST /api/v1/site-inspections/{uid}/approval/paper/",
+   "POST /api/v1/site-inspections/{uid}/approval/request/",
+   "GET /api/v1/site-inspections/{uid}/approvals/",
+   "POST /api/v1/site-inspections/{uid}/assign/",
+   "GET /api/v1/site-inspections/{uid}/equipment/",
+   "GET /api/v1/site-inspections/{uid}/equipment/{equipment_type}/",
+   "PUT /api/v1/site-inspections/{uid}/equipment/{equipment_type}/",
+   "POST /api/v1/site-inspections/{uid}/equipment/{equipment_type}/review/",
+   "POST /api/v1/site-inspections/{uid}/hold/",
+   "GET /api/v1/site-inspections/{uid}/observations/",
+   "POST /api/v1/site-inspections/{uid}/observations/",
+   "GET /api/v1/site-inspections/{uid}/photos/",
+   "POST /api/v1/site-inspections/{uid}/photos/",
+   "DELETE /api/v1/site-inspections/{uid}/photos/{photo_uid}/",
+   "GET /api/v1/site-inspections/{uid}/readiness/",
+   "POST /api/v1/site-inspections/{uid}/release/",
+   "GET /api/v1/site-inspections/{uid}/report/",
+   "POST /api/v1/site-inspections/{uid}/resume/",
+   "GET /api/v1/site-inspections/{uid}/reviews/",
+   "POST /api/v1/site-inspections/{uid}/reviews/",
+   "POST /api/v1/site-inspections/{uid}/reviews/{review_uid}/decide/",
+   "POST /api/v1/site-inspections/{uid}/revision/",
+   "GET /api/v1/site-inspections/{uid}/snapshots/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/additional-work/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/cable-routing/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/electrical/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/engineering-review/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/roof-structure/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/shading/",
+   "PATCH /api/v1/site-inspections/{uid}/stages/site-access/",
+   "POST /api/v1/site-inspections/{uid}/start/",
+   "POST /api/v1/site-inspections/{uid}/submit/",
+   "POST /api/v1/site-inspections/{uid}/system-type/"
+  ]
+ },
+ "users_uid": {
+  "captured_by": [
+   "POST /api/v1/users/"
+  ],
+  "used_by": [
+   "GET /api/v1/users/{uid}/",
+   "PUT /api/v1/users/{uid}/",
+   "PATCH /api/v1/users/{uid}/",
+   "DELETE /api/v1/users/{uid}/",
+   "POST /api/v1/users/{uid}/deactivate/",
+   "POST /api/v1/users/{uid}/force-reset/",
+   "POST /api/v1/users/{uid}/reactivate/"
+  ]
+ }
+}

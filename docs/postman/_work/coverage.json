@@ -1,0 +1,198 @@
+{
+ "inventory_total": 985,
+ "collection_requests": 1002,
+ "covered": 985,
+ "missing": [],
+ "extras": [],
+ "misroutes": [],
+ "unresolvable_by_default_values": 2,
+ "per_app": {
+  "accounts": {
+   "inventory": 25,
+   "covered": 25
+  },
+  "agreements": {
+   "inventory": 12,
+   "covered": 12
+  },
+  "attendance": {
+   "inventory": 25,
+   "covered": 25
+  },
+  "audit": {
+   "inventory": 1,
+   "covered": 1
+  },
+  "blog": {
+   "inventory": 69,
+   "covered": 69
+  },
+  "bom": {
+   "inventory": 44,
+   "covered": 44
+  },
+  "calculators": {
+   "inventory": 15,
+   "covered": 15
+  },
+  "careers": {
+   "inventory": 31,
+   "covered": 31
+  },
+  "catalog": {
+   "inventory": 43,
+   "covered": 43
+  },
+  "company": {
+   "inventory": 12,
+   "covered": 12
+  },
+  "core": {
+   "inventory": 6,
+   "covered": 6
+  },
+  "customers": {
+   "inventory": 12,
+   "covered": 12
+  },
+  "devices": {
+   "inventory": 57,
+   "covered": 57
+  },
+  "django": {
+   "inventory": 1,
+   "covered": 1
+  },
+  "documents": {
+   "inventory": 3,
+   "covered": 3
+  },
+  "emi": {
+   "inventory": 29,
+   "covered": 29
+  },
+  "engineering": {
+   "inventory": 6,
+   "covered": 6
+  },
+  "faqs": {
+   "inventory": 19,
+   "covered": 19
+  },
+  "hr": {
+   "inventory": 52,
+   "covered": 52
+  },
+  "inventory": {
+   "inventory": 9,
+   "covered": 9
+  },
+  "leads": {
+   "inventory": 41,
+   "covered": 41
+  },
+  "legacy": {
+   "inventory": 168,
+   "covered": 168
+  },
+  "media": {
+   "inventory": 8,
+   "covered": 8
+  },
+  "packs": {
+   "inventory": 20,
+   "covered": 20
+  },
+  "pricing": {
+   "inventory": 50,
+   "covered": 50
+  },
+  "procurement": {
+   "inventory": 20,
+   "covered": 20
+  },
+  "projects": {
+   "inventory": 11,
+   "covered": 11
+  },
+  "quotations": {
+   "inventory": 50,
+   "covered": 50
+  },
+  "reference": {
+   "inventory": 56,
+   "covered": 56
+  },
+  "seo": {
+   "inventory": 16,
+   "covered": 16
+  },
+  "site_inspections": {
+   "inventory": 49,
+   "covered": 49
+  },
+  "sitepages": {
+   "inventory": 25,
+   "covered": 25
+  }
+ },
+ "per_surface": {
+  "agent": 8,
+  "customer": 3,
+  "dev-media": 1,
+  "iclock": 8,
+  "legacy": 168,
+  "ops": 3,
+  "public": 42,
+  "staff": 752
+ },
+ "multi_covered": {
+  "POST /api/v1/media/upload/": [
+   "POST /api/v1/media/upload/ - Upload a media file",
+   "POST /api/v1/media/upload/ - private PDF document"
+  ],
+  "GET /api/v1/media/{uid}/signed-url/": [
+   "GET /api/v1/media/{uid}/signed-url/ - Get a download URL for an asset",
+   "GET /api/v1/media/{uid}/signed-url/ - private asset (signed token)"
+  ],
+  "POST /api/v1/packs/config-versions/": [
+   "POST /api/v1/packs/config-versions/ - Create a draft config version",
+   "POST /api/v1/packs/config-versions/ - first draft (no approved version yet: send a whole config)"
+  ],
+  "POST /api/v1/content/entries/{uid}/publish/": [
+   "POST /api/v1/content/entries/{uid}/publish/ - Publish an entry",
+   "POST /api/v1/content/entries/{uid}/publish/ - duplicated copy"
+  ],
+  "GET /iclock/{device_token}/{endpoint}/": [
+   "GET /iclock/{device_token}/{endpoint}/ - Terminal handshake / poll (GET)",
+   "GET /iclock/{device_token}/{endpoint}/ - Handshake (GET cdata, options=all)",
+   "GET /iclock/{device_token}/{endpoint}/ - Command poll (GET getrequest)",
+   "GET /iclock/{device_token}/{endpoint}/ - Ping (GET ping)",
+   "GET /iclock/{device_token}/{endpoint}/ - Handshake via .aspx (GET cdata.aspx)"
+  ],
+  "POST /iclock/{device_token}/{endpoint}/": [
+   "POST /iclock/{device_token}/{endpoint}/ - Terminal data push (POST)",
+   "POST /iclock/{device_token}/{endpoint}/ - Push attendance (POST cdata, table=ATTLOG)",
+   "POST /iclock/{device_token}/{endpoint}/ - Push operation log (POST cdata, table=OPERLOG)",
+   "POST /iclock/{device_token}/{endpoint}/ - Push user info (POST cdata, table=USERINFO)",
+   "POST /iclock/{device_token}/{endpoint}/ - Command result (POST devicecmd)",
+   "POST /iclock/{device_token}/{endpoint}/ - Registry (POST registry)"
+  ],
+  "GET /iclock/{device_token}/{endpoint}": [
+   "GET /iclock/{device_token}/{endpoint} - Unknown terminal endpoint (GET)",
+   "GET /iclock/{device_token}/{endpoint} - Unknown endpoint (GET querydata)"
+  ],
+  "POST /iclock/{device_token}/{endpoint}": [
+   "POST /iclock/{device_token}/{endpoint} - Unknown terminal endpoint (POST)",
+   "POST /iclock/{device_token}/{endpoint} - Unknown endpoint (POST rtdata)"
+  ],
+  "DELETE /api/v1/content/entries/{uid}/": [
+   "DELETE /api/v1/content/entries/{uid}/ - Delete a content entry",
+   "DELETE /api/v1/content/entries/{uid}/ - duplicated copy"
+  ],
+  "DELETE /api/v1/content/templates/{uid}/": [
+   "DELETE /api/v1/content/templates/{uid}/ - Delete a content template",
+   "DELETE /api/v1/content/templates/{uid}/ - duplicated copy"
+  ]
+ }
+}
