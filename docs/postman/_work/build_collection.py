@@ -327,7 +327,7 @@ def request_item(frag: dict, name: str | None = None, path_values=None, query_pa
         "request": request,
         "response": [],
     }
-    for r in responses if responses is not None else frag["responses"]:
+    for index, r in enumerate(responses if responses is not None else frag["responses"]):
         code = r.get("status")
         if not isinstance(code, int):
             continue
@@ -337,7 +337,7 @@ def request_item(frag: dict, name: str | None = None, path_values=None, query_pa
         is_text = isinstance(example, str)
         item["response"].append(
             {
-                "id": pid(frag["id"], key_suffix, "resp", str(code)),
+                "id": pid(frag["id"], key_suffix, "resp", str(index), str(code)),  # two examples may share a code
                 "name": f"{code} {r.get('description') or STATUS_TEXT.get(code, '')}".strip()[:120],
                 "originalRequest": {k: v for k, v in request.items() if k != "description"},
                 "status": STATUS_TEXT.get(code, ""),
@@ -415,7 +415,7 @@ def build():
         orders = [f.get("order", 60) for f in node["__items__"]] + [min_order(c) for c in node["__children__"].values()]
         return min(orders) if orders else 999
 
-    def render(name: str, node: dict, depth: int, top: str) -> dict:
+    def render(name: str, node: dict, depth: int, top: str, trail: tuple = ()) -> dict:
         children = list(node["__children__"].items())
         if depth == 0:
             children.sort(key=lambda kv: folder_sort_key(kv[0]))
@@ -454,10 +454,11 @@ def build():
                         ),
                     )
                 )
-        rendered_children = [render(child_name, child, depth + 1, top or child_name) for child_name, child in children]
+        rendered_children = [render(child_name, child, depth + 1, top or child_name, trail + (child_name,)) for child_name, child in children]
         # In Cleanup, nested resources (e.g. Templates › Slots) are deleted before their parent's own DELETE.
         out = rendered_children + out if top == CLEANUP_FOLDER else out + rendered_children
-        return {"id": pid("folder", top, name, str(depth)), "name": name, "item": out} if depth else {"item": out}
+        # folder ids hash the full folder path: same-named folders (e.g. "Notes") live under different parents
+        return {"id": pid("folder", *trail), "name": name, "item": out} if depth else {"item": out}
 
     rendered = render("", root, 0, "")
 
