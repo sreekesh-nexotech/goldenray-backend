@@ -1,6 +1,6 @@
 {
  "inventory_total": 985,
- "collection_requests": 1002,
+ "collection_requests": 1005,
  "covered": 985,
  "missing": [],
  "extras": [],
@@ -147,6 +147,12 @@
   "staff": 752
  },
  "multi_covered": {
+  "PATCH /api/v1/settings/flags/": [
+   "PATCH /api/v1/settings/flags/ - Turn a feature flag on or off",
+   "PATCH /api/v1/settings/flags/ - Turn INVENTORY_STOCK on (run this first)",
+   "PATCH /api/v1/settings/flags/ - Turn ADMS_RECEIVER on (run this first)",
+   "PATCH /api/v1/settings/flags/ - Turn LEGACY_API_SHIM on (run this first)"
+  ],
   "POST /api/v1/media/upload/": [
    "POST /api/v1/media/upload/ - Upload a media file",
    "POST /api/v1/media/upload/ - private PDF document"

@@ -1,6 +1,6 @@
 # Flarize Platform API: Postman collection
 
-This collection covers **every HTTP endpoint** of the backend: 985 (method, path) pairs, as 1002 requests. `COVERAGE_REPORT.md` shows how completeness is proven.
+This collection covers **every HTTP endpoint** of the backend: 985 (method, path) pairs. `COVERAGE_REPORT.md` gives the current request count and shows how completeness is proven.
 
 It is **generated from the code. Never edit the JSON by hand.** To change it, regenerate it (see the last section).
 
@@ -50,7 +50,7 @@ Folders are ordered to run top to bottom on a fresh database:
 | `98 Cleanup` | Every staff DELETE, in reverse dependency order, with nested resources before their parents. |
 | `99 Sign out` | Logout. |
 
-Turn flags on with **01 Platform › Core › Turn a feature flag on or off** (`PATCH /api/v1/settings/flags/`, body `{"key": "ADMS_RECEIVER", "enabled": true}`; needs `settings.edit`). The inventory routes need `INVENTORY_STOCK`, and the agreement price override needs `AGREEMENTS_PRICE_OVERRIDE`.
+**Feature flags.** The *10 iclock*, *11 Legacy shim* and *02 Product master › Inventory* folders each **start with a "Turn <FLAG> on (run this first)" request**: while a flag is off, every request behind it answers a plain 404, and its test then names the flag. You can also turn flags on with **01 Platform › Core › Turn a feature flag on or off** (`PATCH /api/v1/settings/flags/`, body `{"key": "ADMS_RECEIVER", "enabled": true}`; needs `settings.edit`). The inventory routes need `INVENTORY_STOCK`, and the agreement price override needs `AGREEMENTS_PRICE_OVERRIDE`.
 
 Every request asserts its success status and the JSON shape: `count` and `results[]` for paginated lists, otherwise the key fields. Its description gives:
 - the permission (`module.action`) and record scope;

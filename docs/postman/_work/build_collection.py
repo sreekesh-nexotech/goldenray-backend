@@ -224,6 +224,13 @@ def success_example(frag: dict):
 def test_script(frag: dict, captures: list | None = None) -> list[str]:
     statuses = expected_statuses(frag)
     lines = [STORE_FN, GET_FN]
+    flag = frag.get("flag") or ""
+    if re.fullmatch(r"[A-Z_]+", flag) and 404 not in statuses:
+        # a feature flag that is off answers a plain 404: say so instead of a bare "status is N" failure
+        lines.append(
+            f"if (pm.response.code === 404) pm.test('feature flag {flag} is on (404 here usually means it is off: run the "
+            f"\"Turn {flag} on\" request first)', () => pm.expect.fail('404: flag {flag} off, or the record does not exist'));"
+        )
     if len(statuses) == 1:
         lines.append(f"pm.test('status is {statuses[0]}', () => pm.response.to.have.status({statuses[0]}));")
     else:
@@ -387,6 +394,42 @@ def folder_sort_key(name: str) -> tuple:
     return (int(m.group(1)) if m else 50, name)
 
 
+# Folders whose requests answer 404 until a feature flag is on: each gets a description and, first, a request that turns
+# the flag on (the documented PATCH /api/v1/settings/flags/ with the key pre-filled).
+FLAG_FOLDERS = {
+    "LEGACY_API_SHIM": [SURFACE_FOLDERS["legacy"]],
+    "ADMS_RECEIVER": [SURFACE_FOLDERS["iclock"]],
+    "INVENTORY_STOCK": ["02 Product master", "Inventory"],
+}
+FLAGS_ENDPOINT = "PATCH /api/v1/settings/flags/"
+
+
+def add_flag_switches(rendered: dict, frags_by_id: dict) -> None:
+    switch = frags_by_id.get(FLAGS_ENDPOINT)
+    if switch is None:
+        return
+    for flag, path in FLAG_FOLDERS.items():
+        node = rendered
+        for name in path:
+            node = next((i for i in node["item"] if i.get("name") == name and "item" in i), None)
+            if node is None:
+                break
+        if node is None:
+            continue
+        body = {"mode": "raw", "content_type": "application/json", "raw": {"key": flag, "enabled": True, "note": "Enabled from the Postman collection to exercise these endpoints."}}
+        item = request_item(switch, name=f"{FLAGS_ENDPOINT} - Turn {flag} on (run this first)", body=body, captures=[], key_suffix=f"enable-{flag}")
+        item["request"]["description"] = (
+            f"Turns the `{flag}` feature flag on. Every request in this folder answers a plain 404 while it is off. Needs "
+            f'`settings.edit`. Switch it off again with the same request and `"enabled": false`. Don\'t turn it on in a shared '
+            "environment unless you mean to.\n\n" + item["request"]["description"]
+        )
+        node["item"].insert(0, item)
+        node["description"] = (
+            f"**Feature flag `{flag}`:** these endpoints answer 404 until the flag is on. Run the first request in this folder "
+            "(`PATCH /api/v1/settings/flags/`, signed in via 00 Auth with `settings.edit`) to turn it on."
+        )
+
+
 def build():
     frags = load_fragments()
     placed = []
@@ -461,6 +504,7 @@ def build():
         return {"id": pid("folder", *trail), "name": name, "item": out} if depth else {"item": out}
 
     rendered = render("", root, 0, "")
+    add_flag_switches(rendered, {f["id"]: f for f in frags})
 
     # Collection variables: every {{var}} used anywhere, with defaults from path-param examples.
     defaults = OrderedDict(
