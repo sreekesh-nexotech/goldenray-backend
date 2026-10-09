@@ -9,6 +9,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from celery.schedules import crontab
+from corsheaders.defaults import default_headers
 from decouple import Csv, config
 from kombu import Queue
 
@@ -579,6 +580,8 @@ CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="", cast=Csv())
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS = False
 CORS_EXPOSE_HEADERS = ["ETag", "Retry-After", "X-Request-ID"]
+# Request headers the API reads beyond the defaults: Idempotency-Key on website POSTs (leads, OTP, careers), X-Request-ID tracing.
+CORS_ALLOW_HEADERS = (*default_headers, "idempotency-key", "x-request-id")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Leads: website OTP (Twilio Verify) and the verification token POST leads requires

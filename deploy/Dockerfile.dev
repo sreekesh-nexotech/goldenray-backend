@@ -1,0 +1,40 @@
+# syntax=docker/dockerfile:1.7
+# Local development / test image (deploy/docker-compose.dev.yml). Not for staging or prod: those use deploy/Dockerfile.
+#
+#   docker compose -f deploy/docker-compose.dev.yml build
+#
+# One image for api (runserver), workers, beat and pytest: runtime + dev requirements (pytest, black, flake8, …).
+# The source is bind-mounted at /app by compose, so code changes reload without a rebuild; only requirements changes
+# need `build`. Containers run as the host user (LOCAL_UID/LOCAL_GID) so var/ (dev keys, media) stays owned by you.
+# WITH_CHROMIUM=1 adds Playwright's headless Chromium + Noto fonts for real PDF rendering (DOCUMENTS_RENDERER=playwright).
+
+ARG PYTHON_IMAGE=python:3.12-slim-bookworm
+FROM ${PYTHON_IMAGE}
+
+ARG WITH_CHROMIUM=0
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    DJANGO_SETTINGS_MODULE=flarize.settings.dev \
+    PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers \
+    HOME=/tmp
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements/ requirements/
+RUN pip install -r requirements/dev.txt
+
+RUN if [ "$WITH_CHROMIUM" = "1" ]; then \
+      apt-get update \
+      && apt-get install -y --no-install-recommends fonts-noto-core fonts-noto-ui-core fonts-noto-color-emoji \
+      && python -m playwright install --with-deps --only-shell chromium \
+      && chmod -R a+rX /opt/pw-browsers \
+      && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
