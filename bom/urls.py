@@ -7,7 +7,7 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from bom.views.masters import FixedItemViewSet, PackageProfileViewSet, SlotViewSet, StructureItemViewSet, StructureTemplateViewSet, TemplateViewSet, TubeWeightViewSet
-from bom.views.quote import BuildView, QuoteView
+from bom.views.quote import BuildView, QuoteOptionsView, QuoteView, StaffQuoteView
 
 router = SimpleRouter(trailing_slash=True)
 router.register("bom/templates", TemplateViewSet, basename="bom-templates")
@@ -20,6 +20,8 @@ router.register("bom/package-profiles", PackageProfileViewSet, basename="bom-pac
 
 staff_urlpatterns = [
     path("bom/build/", BuildView.as_view(), name="bom-build"),
+    path("bom/quote/", StaffQuoteView.as_view(), name="bom-quote"),
+    path("bom/quote-options/", QuoteOptionsView.as_view(), name="bom-quote-options"),
     *router.urls,
 ]
 public_urlpatterns = [

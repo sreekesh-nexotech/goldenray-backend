@@ -280,6 +280,10 @@ REST_FRAMEWORK = {
 JWT_PRIVATE_KEY_PATH = config("JWT_PRIVATE_KEY_PATH", default="")
 JWT_PUBLIC_KEY_PATH = config("JWT_PUBLIC_KEY_PATH", default="")
 JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = load_jwt_keys(JWT_PRIVATE_KEY_PATH, JWT_PUBLIC_KEY_PATH)
+# Content Studio single sign-in: the CMS signs its access tokens (HS256) with its DJANGO_SECRET_KEY. Setting that same
+# value here lets the views that opt in (accounts.authentication.StudioTokenAuthentication) accept a Studio token and
+# resolve the platform user by e-mail. Empty = disabled (those views then accept platform tokens only).
+STUDIO_JWT_SIGNING_KEY = config("STUDIO_JWT_SIGNING_KEY", default="")
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "SIGNING_KEY": JWT_PRIVATE_KEY,
