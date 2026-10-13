@@ -10,10 +10,11 @@ from rest_framework.response import Response
 from accounts.authentication import StudioTokenAuthentication
 from accounts.services.authz import can
 from bom.models import Template
-from bom.serializers.quote import QUOTE_STRUCTURE_TYPES, BomBuildRequestSerializer, BomBuildSerializer, BomQuotePublicSerializer, BomQuoteRequestSerializer
+from bom.serializers.quote import QUOTE_STRUCTURE_TYPES, BomBillSizingRequestSerializer, BomBuildRequestSerializer, BomBuildSerializer, BomQuotePublicSerializer, BomQuoteRequestSerializer
 from bom.services import build as build_service
 from bom.services import website_quote
 from bom.views.masters import TAGS, WRITE_ERRORS
+from core.errors import DomainError
 from core.serializers import ErrorSerializer
 from core.views import BaseAPIView, PublicAPIView
 
@@ -54,6 +55,53 @@ class StaffQuoteView(BaseAPIView):
         result = website_quote.quote(request.data, today=timezone.localdate())
         if not can(request.user, "pricing_internal", "view"):
             result = website_quote.public_body(result)
+        response = Response(result)
+        response["Cache-Control"] = "no-store"
+        return response
+
+
+class BillSizingView(BaseAPIView):
+    """``POST bom/bill-sizing/`` — what size this customer's bill suggests."""
+
+    authentication_classes = [StudioTokenAuthentication]
+    module = "bom"
+    action_permissions = {"POST": "view"}
+
+    @extend_schema(
+        operation_id="bom_bill_sizing",
+        request=BomBillSizingRequestSerializer,
+        responses={200: dict, 400: ErrorSerializer, 503: ErrorSerializer},
+        tags=TAGS,
+        description=(
+            "Turns an electricity bill into a recommended system size, through the same KSEB tariff slabs and bisection the BOM "
+            "tool uses (engines.energy, driven by the energy.config cost-config key). Separate from the public "
+            "`calculators/basic-v2/`, which answers from a bill-range lookup table and so gives different numbers — sales staff "
+            "need the figure the BOM tool gives them."
+        ),
+    )
+    def post(self, request, *args, **kwargs):
+        from decimal import Decimal
+
+        from bom.services import bill_sizing
+        from pricing.services.cost_config import current_values
+
+        body = BomBillSizingRequestSerializer(data=request.data)
+        body.is_valid(raise_exception=True)
+        data = body.validated_data
+
+        # Only sizes the chosen system type actually offers may be recommended — hybrid
+        # lists `5` where on-grid lists `5sp` and `5tp`.
+        template = Template.objects.filter(system_type=data["sys_type"].upper(), is_active=True).first()
+        if template is None:
+            raise DomainError("bom_template_missing", f"No BOM template for {data['sys_type']}.", status=400, errors={"sys_type": [data["sys_type"]]})
+
+        result = bill_sizing.recommend(
+            bill=Decimal(str(data["bill"])),
+            frequency=data["frequency"],
+            house_phase=data["house_phase"],
+            sizes=bill_sizing.size_options(template.sizes, template.three_phase_sizes),
+            config=current_values().get("energy.config"),
+        )
         response = Response(result)
         response["Cache-Control"] = "no-store"
         return response

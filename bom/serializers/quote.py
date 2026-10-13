@@ -166,3 +166,22 @@ class BomBuildSerializer(serializers.Serializer):
     engineering = serializers.DictField()
     structure = BomBuildStructureSerializer(allow_null=True)
     warnings = BomBuildWarningSerializer(many=True)
+
+
+class BomBillSizingRequestSerializer(serializers.Serializer):
+    """What a customer pays, and the connection they pay it on."""
+
+    sys_type = serializers.ChoiceField(choices=["ongrid", "hybrid"], default="ongrid", required=False)
+    bill = serializers.DecimalField(max_digits=12, decimal_places=2, min_value=1, help_text="The amount on the bill.")
+    frequency = serializers.ChoiceField(
+        choices=["monthly", "bimonthly"],
+        default="bimonthly",
+        required=False,
+        help_text="What the amount covers. KSEB bills bi-monthly; reading a monthly figure as bi-monthly halves the recommendation.",
+    )
+    house_phase = serializers.ChoiceField(
+        choices=["1P", "3P"],
+        default="1P",
+        required=False,
+        help_text="The existing supply. A single-phase house needing more than 5 kW has to apply to KSEB first.",
+    )
