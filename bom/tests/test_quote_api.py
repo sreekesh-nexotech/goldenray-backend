@@ -201,14 +201,55 @@ class TestCalculator:
         MarketRateFactory(
             set=world_rates(), system_type="UPGRADE", tier="", size_key="5", from_size_key="3", from_size_kw=Decimal("3"), size_kw=Decimal("5"), customer_price_incl_gst=Decimal("90000.00")
         )
-        result = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_from_kw": 3, "upgrade_to_kw": 5}, today=TODAY)
+        # The fixture's only 5 kW inverter is three-phase, so this asks for a three-phase
+        # target. The phase is the sales person's choice and defaults to 1P (App.jsx:695)
+        # -- it is NOT inferred from the target size, since a customer going to 5 kW may
+        # well stay single-phase and would then need a 1P inverter.
+        body = {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_from_kw": 3, "upgrade_to_kw": 5, "upgrade_phase": "3P"}
+        result = quote(body, today=TODAY)
         assert [line["name"] for line in result["bom_lines"]] == ["Panel 540", "Inverter 5", "MC4 Pair"]
         assert result["bom_lines"][0]["qty"] == 4 and result["bom_lines"][2]["qty"] == 3 and result["bom_lines"][2]["section"] == "wiring"
         assert result["meta"] == {"system_type": "upgrade", "size": "3.0→5.0", "tier": "base", "bat_config": "0", "is_three_phase": True, "new_panels": 4}
         assert result["pricing"]["market_rate"] == 90000.0 and result["cost_breakdown"]["service"] == 0
-        hybrid = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_sections": {"panels": False, "hybrid_inv": True, "wiring": False}}, today=TODAY)
-        # hybrid_inv switches the inverter slot on (its own filter still applies); wiring off drops the MC4 row
-        assert [(line["name"], line["section"]) for line in hybrid["bom_lines"]] == [("Inverter 5", "inverter")]
+
+        # Left single-phase, the 3P inverter is not eligible and the line is dropped.
+        single = quote({**body, "upgrade_phase": "1P"}, today=TODAY)
+        assert "Inverter 5" not in [line["name"] for line in single["bom_lines"]]
+        assert single["meta"]["is_three_phase"] is False
+
+        hybrid = quote(
+            {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_phase": "3P", "upgrade_sections": {"panels": False, "hybrid_inv": True, "wiring": False}},
+            today=TODAY,
+        )
+        # hybrid_inv switches the inverter slot on (its own filter still applies); wiring
+        # off drops the MC4 row. The 3P ask is NOT honoured: a 5 kW hybrid is single-phase
+        # only, so the phase is forced back and the 1P inverter is the eligible one.
+        assert [(line["name"], line["section"]) for line in hybrid["bom_lines"]] == [("Inverter 3", "inverter")]
+        assert hybrid["meta"]["is_three_phase"] is False
+
+    def test_hybrid_upgrade_below_5kw_is_forced_single_phase(self, world):
+        """Hybrid inverters up to 5 kW exist only as 1P -- 3P starts at 8 kW (App.jsx:1837).
+
+        A 3P ask there cannot be honoured, so it is forced back rather than quoting a part
+        that does not exist.
+        """
+        upgrade = TemplateFactory(system_type="UPGRADE", name="Upgrade", sizes=[], three_phase_sizes=[])
+        panels = world.slots.get(key="panel").category
+        SlotFactory(template=upgrade, key="panel", category=panels, qty_rule={"type": "new_panels"}, gst_rate=Decimal("0.05"))
+        sections = {"panels": True, "hybrid_inv": True}
+        body = {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_phase": "3P", "upgrade_sections": sections}
+
+        forced = quote({**body, "upgrade_from_kw": 3, "upgrade_to_kw": 5}, today=TODAY)
+        assert forced["meta"]["is_three_phase"] is False, "a 5 kW hybrid has no three-phase inverter to quote"
+        # Above the band the same request is honoured.
+        allowed = quote({**body, "size": "8", "upgrade_from_kw": 5, "upgrade_to_kw": 8}, today=TODAY)
+        assert allowed["meta"]["is_three_phase"] is True
+        # An on-grid upgrade at the same size is never forced -- the rule is about hybrids.
+        ongrid = quote(
+            {**body, "upgrade_from_kw": 3, "upgrade_to_kw": 5, "upgrade_sections": {"panels": True, "inverter": True}},
+            today=TODAY,
+        )
+        assert ongrid["meta"]["is_three_phase"] is True
 
     def test_upgrade_fixed_item_without_gst_falls_back_like_the_legacy(self, world):
         # legacy: ``fi.gst or (cat.gst_default if cat else 18)`` with ``cat`` looked up among the slot categories only

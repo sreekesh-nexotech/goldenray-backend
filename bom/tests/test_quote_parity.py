@@ -19,6 +19,7 @@ a 400 ``validation_error``.
 """
 
 import json
+import re
 from datetime import date
 
 import pytest
@@ -35,9 +36,39 @@ TODAY = date.fromisoformat(GOLDEN_DAY)
 #: charge on the sale) and ``gst_total`` restates the sum of the three buckets.
 ADDED_TOTALS_KEYS = ("gst_total", "pre_gst_subtotal", "gst_on_sale")
 
+#: The legacy engine inferred an upgrade's phase from its target size — ``to_kw >= 5``
+#: meant three-phase — so a customer extending to 5 kW on a single-phase supply was quoted
+#: three-phase parts: a 3P inverter, a 3P ACDB and a longer AC run. Golden-Ray-BOM takes
+#: the phase as the sales person's choice, defaulting to single (App.jsx:695), and the port
+#: follows it.
+#:
+#: All 30 of the golden file's upgrade cases were captured without ever sending a phase, so
+#: every one of them encodes that inference. They are exempt here rather than re-captured:
+#: this file is a historical record, and rewriting it to agree with a fix would destroy the
+#: evidence of what the old engine did.
+#:
+#: The exemption is narrow by design. The 1,029 on-grid and hybrid cases — the ones that
+#: price the public website — stay strict, which is the pin's actual job.
+LEGACY_INFERRED_UPGRADE_PHASE = "upgrade"
+
 
 def _dumped(value) -> str:
     return json.dumps(value, ensure_ascii=False)
+
+
+def _inverters(body: dict) -> int:
+    """How many actual inverters a body quotes.
+
+    The response carries no field saying "this line is the inverter", and the inverter
+    *section* also holds the DCDB and ACDB that go with it. Those two are identifiable by
+    name wherever they appear — every catalog row for them says so — while the inverters
+    themselves span brands, so excluding the boards is the stable way round.
+    """
+    return sum(
+        1
+        for line in body.get("bom_lines", [])
+        if line.get("section") == "inverter" and not re.search(r"\bDCDB\b|\bACDB\b|AJ Box|Meter|Isolator", line["name"], re.IGNORECASE)
+    )
 
 
 def _without_added_keys(body: dict) -> dict:
@@ -63,8 +94,11 @@ def test_every_captured_response_is_identical(legacy_data):
     """Default regime (no ``gst.quote_regime`` row) reproduces every captured body."""
     golden = golden_cases()
     assert golden["captured_on"] == GOLDEN_DAY and len(golden["cases"]) == 1077
-    mismatches, statuses, approved = [], {200: 0, 400: 0}, 0
+    mismatches, statuses, approved, exempt = [], {200: 0, 400: 0}, 0, 0
     for index, case in enumerate(golden["cases"]):
+        if case["request"].get("sys_type") == LEGACY_INFERRED_UPGRADE_PHASE and "upgrade_phase" not in case["request"]:
+            exempt += 1
+            continue
         status, body = _replay(case)
         if case["status"] == 500:
             assert status == 400 and isinstance(case["request"].get("custom_discount"), (int, float)), case["request"]
@@ -74,7 +108,75 @@ def test_every_captured_response_is_identical(legacy_data):
         if status != case["status"] or _dumped(_without_added_keys(body)) != _dumped(case["response"]):
             mismatches.append((index, case["request"]))
     assert not mismatches, f"{len(mismatches)} differing cases, first: {mismatches[:3]}"
-    assert statuses == {200: 1059, 400: 9} and approved == 9
+    # 1,029 on-grid/hybrid + 9 validation errors replayed strictly; 30 upgrade cases and
+    # 9 legacy 500s accounted for. The counts are asserted so the exemption cannot quietly
+    # widen: if it ever covers more than those 30, this fails.
+    assert statuses == {200: 1029, 400: 9} and approved == 9 and exempt == 30
+
+
+def test_the_exempt_upgrade_cases_differ_only_in_understood_ways(legacy_data):
+    """Pin *why* the 30 exempt cases differ, so the exemption cannot hide a new defect.
+
+    Four things changed on the upgrade path, all of them corrections to the legacy engine:
+
+    1. phase is taken as an input rather than inferred from the target size;
+    2. the DCDB is always the 2/2 part on an upgrade (the extra strings need the inputs);
+    3. the two structure tube rows are quoted (the legacy engine skipped them on
+       ``is_tube``, dropping ~₹2,289 of structure from every upgrade);
+    4. a three-phase target adds the meter, meter box and isolator that changing the
+       supply requires.
+
+    Supplying the phase the legacy engine inferred isolates the first, and the rest show
+    up as *added* lines and a *higher* material total — never as missing lines or a lower
+    one, which is what this asserts. A regression that dropped parts would break it.
+    """
+    golden = [case for case in golden_cases()["cases"] if case["status"] == 200 and case["request"].get("sys_type") == "upgrade"]
+    assert len(golden) == 30
+    for case in golden:
+        request = case["request"]
+        to_kw = float(request.get("upgrade_to_kw", 5))
+        inferred = "3P" if to_kw >= 5 else "1P"
+        body = quote({**request, "upgrade_phase": inferred}, today=TODAY)
+
+        # 1. With the inferred phase supplied, the phase agrees again -- unless a hybrid
+        #    inverter is involved at 5 kW or below, where three-phase does not exist and
+        #    the request is forced back. The legacy engine had no such rule and reported
+        #    three-phase there regardless, which is itself one of the corrections.
+        hybrid_forced = (request.get("upgrade_sections") or {}).get("hybrid_inv") and to_kw <= 5
+        if hybrid_forced:
+            assert body["meta"]["is_three_phase"] is False, request
+        else:
+            assert body["meta"]["is_three_phase"] == case["response"]["meta"]["is_three_phase"], request
+
+        was = {line["name"] for line in case["response"]["bom_lines"]}
+        now = {line["name"] for line in body["bom_lines"]}
+
+        hybrid_inv = (request.get("upgrade_sections") or {}).get("hybrid_inv")
+
+        if hybrid_inv:
+            # The legacy engine honoured `inverter` and `hybrid_inv` at once and quoted
+            # BOTH, so these bodies carry two inverters — billing the customer for one
+            # they are having removed. Selecting a hybrid replaces the on-grid inverter
+            # (App.jsx:1842-1850), so the correct answer has exactly one.
+            #
+            # Asserted structurally rather than by name: the golden bodies name thirteen
+            # different inverters across brands (Sungrow, SolarEdge, Growatt, DEYE), so
+            # matching on text would be a guess that silently stops catching things.
+            assert _inverters(body) <= 1, f"{request}: {_inverters(body)} inverters quoted"
+            assert _inverters(case["response"]) >= _inverters(body), request
+        else:
+            # 2/3/4. Nothing the legacy engine quoted has been dropped, except the 1/1
+            # DCDB it should never have chosen for an upgrade and, where a hybrid forced
+            # the phase back to single, the three-phase parts that cannot be fitted.
+            allowed = ["DCDB", "3P"] if hybrid_forced else ["DCDB"]
+            dropped = {name for name in was - now if not re.search("|".join(allowed), name)}
+            assert not dropped, f"{request}: lines disappeared — {sorted(dropped)}"
+
+        # The material total only ever goes up, by the parts the legacy engine omitted —
+        # unless one of the over-quoted parts above has been removed, which makes it
+        # rightly cheaper.
+        if not hybrid_forced and not hybrid_inv:
+            assert body["totals"]["material_ex_gst"] >= case["response"]["totals"]["material_ex_gst"], request
 
 
 def test_the_added_totals_keys_are_present_and_inert_under_per_line(legacy_data):
@@ -142,7 +244,14 @@ def test_the_public_endpoint_serves_the_same_json_without_internal_costs(legacy_
     rates = settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
     settings.REST_FRAMEWORK = {**settings.REST_FRAMEWORK, "DEFAULT_THROTTLE_RATES": {**rates, "public_write": "1000/min"}}
     golden = golden_cases()["cases"]
-    sample = [case for case in golden if case["status"] == 200][::40] + [case for case in golden if case["status"] == 400]
+    # Same exemption as the strict replay above: the 30 upgrade cases encode the legacy
+    # engine's phase inference, which the port deliberately no longer does.
+    strict = [
+        case
+        for case in golden
+        if not (case["request"].get("sys_type") == LEGACY_INFERRED_UPGRADE_PHASE and "upgrade_phase" not in case["request"])
+    ]
+    sample = [case for case in strict if case["status"] == 200][::40] + [case for case in strict if case["status"] == 400]
     with freeze_time(f"{GOLDEN_DAY} 12:00:00"):
         for case in sample:
             response = api_client.post("/api/public/v1/bom/quote/", case["request"], format="json")

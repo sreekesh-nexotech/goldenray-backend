@@ -40,7 +40,7 @@ from django.db.models import Q
 from bom.models import FixedItem, Slot, StructureItemType, StructureTemplate, Template
 from bom.services.common import percent_of
 from bom.services.qty_rules import QtyContext, evaluate, matches, new_panels
-from catalog.models import Component, ComponentStatus
+from catalog.models import Category, Component, ComponentStatus
 from catalog.models.category import BomRole, Unit
 from core.errors import DomainError
 from engines._jscompat import js_round
@@ -53,6 +53,11 @@ VALID_STRUCTURE = ("flatRoof", "elevated", "sheetRoof")
 #: Module content. Decides which panels may be offered and whether PM Surya Ghar applies;
 #: for hybrid it also selects the price list (Flarize quotes DCR and non-DCR apart).
 VALID_MODULE_DCR = ("dcr", "ndcr")
+#: The phase of the system AFTER an upgrade. Chosen, not derived from the target size: a
+#: customer going to 5 kW may stay single-phase or move to three.
+VALID_UPGRADE_PHASE = ("1P", "3P")
+#: Categories an upgrade to three phase needs but the template has no slot for.
+PHASE_CHANGE_CATEGORIES = ("meter", "meter_box", "isolator")
 STRUCTURE_SLUGS = {"flatRoof": "flat_roof", "elevated": "elevated", "sheetRoof": "sheet_roof"}
 DEFAULT_SECTIONS = {"panels": True, "structure": True, "inverter": True, "hybrid_inv": False, "battery": False, "wiring": True}
 MAX_MAGNITUDE = 1e12  # numbers beyond this made the legacy arithmetic overflow or lose every digit
@@ -135,6 +140,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("margin_type", "margin_type must be percent | flat"))
     if not _hashable_in(data.get("module_dcr", "dcr"), VALID_MODULE_DCR):
         messages.append(("module_dcr", "module_dcr must be dcr | ndcr"))
+    if not _hashable_in(data.get("upgrade_phase", "1P"), VALID_UPGRADE_PHASE):
+        messages.append(("upgrade_phase", "upgrade_phase must be 1P | 3P"))
     if not _hashable_in(data.get("structure_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
     for name in ("dist_km", "margin_val"):
@@ -208,6 +215,7 @@ def _coerce(data: dict) -> dict:
         "structure_type": data.get("structure_type", "flatRoof"),
         "subsidy_type": data.get("subsidy_type", "none"),
         "module_dcr": data.get("module_dcr", "dcr"),
+        "upgrade_phase": data.get("upgrade_phase", "1P"),
         "ghs_houses": max(1, ghs_houses),
         "selected_offer_id": offer_id,
         "custom_discount": custom,
@@ -299,6 +307,9 @@ class Snapshot:
     structures: dict[str, list[StructureItemView]]
     market_rates: list[dict]
     offers: list[dict]
+    #: Categories reachable by slug rather than through a slot -- the parts an upgrade to
+    #: three phase needs (:data:`PHASE_CHANGE_CATEGORIES`). Empty for the standard path.
+    categories_by_slug: dict[str, CategoryView] = field(default_factory=dict)
 
 
 def _costs() -> dict:
@@ -400,11 +411,14 @@ def load_snapshot(sys_type: str) -> Snapshot:
         raise DomainError("bom_template_missing", f"No BOM template found for system type '{sys_type}'.", status=400, errors={"sys_type": [f"No BOM template for {sys_type}."]})
     slots = list(Slot.objects.filter(template=template, category__deleted_at__isnull=True).select_related("category").order_by("sort_order", "id"))
     fixed = list(FixedItem.objects.filter(template=template).select_related("category", "component").order_by("sort_order", "id"))
-    category_ids = {slot.category_id for slot in slots}
+    # Moving an upgrade to three phase pulls in parts the template has no slot for -- a 3P
+    # meter, its box and a 4-pole isolator (App.jsx:2078-2080). They have to be in the
+    # snapshot or the branch has nothing to choose from.
+    extra = list(Category.objects.filter(slug__in=PHASE_CHANGE_CATEGORIES, deleted_at__isnull=True)) if sys_type.lower() == "upgrade" else []
+    category_ids = {slot.category_id for slot in slots} | {category.pk for category in extra}
     items_by_category, items_by_id = _items(category_ids, {row.component_id for row in fixed if row.component_id})
     categories: dict[int, CategoryView] = {}
-    for slot in slots:
-        category = slot.category
+    for category in [slot.category for slot in slots] + extra:
         if category.pk not in categories:
             categories[category.pk] = CategoryView(
                 slug=category.slug,
@@ -452,6 +466,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
         structures=_structures() if sys_type != "upgrade" else {},
         market_rates=_market_rates(sys_type),
         offers=_offers(),
+        categories_by_slug={category.slug: categories[category.pk] for category in extra},
     )
 
 
@@ -477,8 +492,17 @@ def _market_rates(sys_type: str) -> list[dict]:
 
     rows = MarketRate.objects.filter(set__status=MarketRateSetStatus.ACTIVE, set__deleted_at__isnull=True, system_type=sys_type.upper(), future_size_key="", variant="").order_by("sort_order", "id")
     return [
-        {"tier": row.tier.lower(), "bat_config": row.battery_config, "size_key": row.size_key, "from_size": row.from_size_key, "value": row.customer_price_incl_gst}
-        for row in rows.only("tier", "battery_config", "size_key", "from_size_key", "customer_price_incl_gst")
+        {
+            "tier": row.tier.lower(),
+            "bat_config": row.battery_config,
+            # Hybrid is quoted separately for DCR and non-DCR modules; on-grid carries a
+            # blank, which matches any request.
+            "dcr": row.dcr,
+            "size_key": row.size_key,
+            "from_size": row.from_size_key,
+            "value": row.customer_price_incl_gst,
+        }
+        for row in rows.only("tier", "battery_config", "dcr", "size_key", "from_size_key", "customer_price_incl_gst")
     ]
 
 
@@ -894,6 +918,11 @@ class Calculator:
             if sys_type == "ongrid" and not row["bat_config"] and not row["from_size"]:
                 return self._rate(row["value"])
             if sys_type == "hybrid" and row["bat_config"] == bat_config:
+                # Hybrid is priced per module content -- the two differ by ₹38k-₹64k, so a
+                # DCR request must not be answered with a non-DCR rate. A blank on the row
+                # means the price list does not distinguish, and matches either way.
+                if row["dcr"] and row["dcr"] != p.get("module_dcr", "dcr"):
+                    continue
                 return self._rate(row["value"])
         return 0
 
@@ -1005,8 +1034,12 @@ class Calculator:
         sections = p.get("upgrade_sections", DEFAULT_SECTIONS)
         panels = new_panels(from_kw, to_kw)
         is_hyb_upgrade = sections.get("hybrid_inv", False)
+        # The finished system's phase is the sales person's choice, not a function of its
+        # size. The one override: hybrid inverters below 5 kW exist only as single-phase
+        # (3P starts at 8 kW), so a 3P pick there is forced back (App.jsx:1837).
+        is_3p = p.get("upgrade_phase", "1P") == "3P" and not (is_hyb_upgrade and to_kw <= 5)
         size_key = str(int(to_kw)) if to_kw == int(to_kw) else str(to_kw)
-        ctx = QtyContext(size_key=size_key, tier=tier, bat_config="0", kw=to_kw, is_three_phase=to_kw >= 5, panels=panels, upgrade=True, upgrade_from_kw=from_kw, upgrade_to_kw=to_kw)
+        ctx = QtyContext(size_key=size_key, tier=tier, bat_config="0", kw=to_kw, is_three_phase=is_3p, panels=panels, upgrade=True, upgrade_from_kw=from_kw, upgrade_to_kw=to_kw)
         lines = []
         pos = 0
         for slot in self.s.slots:
@@ -1017,9 +1050,14 @@ class Calculator:
             if not sections.get(effective_section, False):
                 continue
             qty = evaluate(slot.rule, ctx)
+            # A three-phase upgrade runs more AC cable than a single-phase one -- four
+            # conductors over the same route -- so the template's figure is replaced
+            # rather than scaled (App.jsx:1910-1916). 1P keeps the template's 20 m, and
+            # a hybrid keeps its own 30 m.
+            if cat_slug == "ac_cable" and is_3p and not is_hyb_upgrade:
+                qty = 40
             if not qty:
                 continue
-            is_3p = to_kw >= 5 and cat_slug in ("inverter", "acdb")
             item = self._select_item_upgrade(cat, tier, slot, is_3p, to_kw)
             if not item:
                 continue
@@ -1043,9 +1081,19 @@ class Calculator:
                 }
             )
             pos += 1
+        if is_3p:
+            pos = self._add_phase_change_lines(lines, tier, pos)
         for fi in self.s.fixed_items:
-            if fi.is_tube:
-                continue
+            # `is_tube` is NOT a skip here. The upgrade template's two tube rows are
+            # ordinary fixed items priced from the catalog at a flat rate (₹450 / ₹600),
+            # not by weight through the structure cost -- and the source never tests the
+            # flag when iterating fixed items on either path (App.jsx:2115). Skipping
+            # them dropped ₹2,289 of structure from every upgrade quote.
+            #
+            # The standard path keeps its skip: there, tubes genuinely come through
+            # `_calc_structure_cost`, and quoting them as fixed items too would double
+            # them. Only the upgrade template carries isTube fixed items, so the two
+            # paths cannot collide.
             section = fi.section or UPG_SECTION_MAP.get(fi.category_slug, "panels")
             if not sections.get(section, False):
                 continue
@@ -1130,12 +1178,64 @@ class Calculator:
                 "subsidy_label": self._subsidy_label(to_kw),
                 "price_after_subsidy": price_after_subsidy,
             },
-            "meta": {"system_type": "upgrade", "size": f"{from_kw}→{to_kw}", "tier": tier, "bat_config": "0", "is_three_phase": to_kw >= 5, "new_panels": panels},
+            # The phase actually used, not one inferred from the size -- what the quote
+            # reports has to be what it priced.
+            "meta": {"system_type": "upgrade", "size": f"{from_kw}→{to_kw}", "tier": tier, "bat_config": "0", "is_three_phase": is_3p, "new_panels": panels},
             "available_offers": self._applicable_offers(),
         }
 
+    def _add_phase_change_lines(self, lines: list, tier: str, pos: int) -> int:
+        """Parts a single-to-three-phase upgrade needs beyond the template (App.jsx:2051-2080).
+
+        Moving the connection to three phase means a new 3P meter, a box for it and a
+        4-pole isolator. The template has no slots for them because they are not part of
+        the system being extended — they are the cost of changing the supply — so they are
+        added here, in the inverter section, at 18 % GST.
+        """
+        # (slug, how to pick within the category). The source filters the meter to 3P
+        # exactly, takes any meter box, and allows an isolator that is 3P or unmarked.
+        wanted = (
+            ("meter", lambda item: item.phase == "3P"),
+            ("meter_box", lambda item: True),
+            ("isolator", lambda item: item.phase == "3P" or not item.phase),
+        )
+        for slug, matches_phase in wanted:
+            category = self.s.categories_by_slug.get(slug)
+            if category is None:
+                continue
+            available = [item for item in category.items if tier in item.tiers and matches_phase(item)]
+            if not available:
+                continue
+            item = available[0]
+            unit_price = float(item.price)
+            lines.append(
+                {
+                    "pos": pos,
+                    "name": item.name,
+                    "brand": item.brand,
+                    "qty": 1,
+                    "unit": "nos",
+                    "unit_price": unit_price,
+                    "amount": unit_price,
+                    "gst_pct": 18,
+                    "gst_amt": round(unit_price * 18 / 100),
+                    "section": "inverter",
+                    "is_variable": True,
+                }
+            )
+            pos += 1
+        return pos
+
     @staticmethod
     def _select_item_upgrade(category: CategoryView, tier, slot: SlotView, is_3p: bool, to_kw: float):
+        """Pick the part for an upgrade slot (App.jsx:1925-1989).
+
+        ``is_3p`` is the phase of the finished system, which the sales person chooses — it
+        is NOT derived from the target size, since a customer moving to 5 kW may stay
+        single-phase. The one exception is the DCDB: an upgrade always fits the 2/2 unit
+        regardless of phase, because the extra strings need the inputs ("Normal upgrade
+        DCDB: always 2/2", App.jsx:1948).
+        """
         available = []
         for item in category.items:
             if tier not in item.tiers:
@@ -1147,17 +1247,30 @@ class Calculator:
             elif ft == "ongrid":
                 if item.inverter_type and item.inverter_type != "ongrid":
                     continue
-            if item.phase:
+            if category.slug == "dcdb":
+                # Hybrid DCDB follows the phase; a plain upgrade DCDB is always the
+                # 3P-tagged 2/2 part and never a hybrid one.
+                if slot.filter_phase == "HYB":
+                    if not item.phase or "HYB" not in item.phase:
+                        continue
+                    if ("3P" in item.phase) != is_3p:
+                        continue
+                else:
+                    if item.phase and "HYB" in item.phase:
+                        continue
+                    if not item.phase or "3P" not in item.phase:
+                        continue
+            elif item.phase:
                 if is_3p:
                     if ft == "hybrid":
                         if not ("HYB" in item.phase and "3P" in item.phase):
                             continue
-                    elif "3P" not in item.phase:
+                    elif "3P" not in item.phase or "HYB" in item.phase:
                         continue
                 elif ft == "hybrid":
                     if not ("HYB" in item.phase and "1P" in item.phase):
                         continue
-                elif "3P" in item.phase:
+                elif "3P" in item.phase or "HYB" in item.phase:
                     continue
             available.append(item)
         if not available:

@@ -60,6 +60,7 @@ def upgrade_quote_request(params: dict) -> dict:
         "margin_val": params.get("marginVal", 20),
         "subsidy_type": "none",
         "module_dcr": params.get("moduleDcr", "dcr"),
+        "upgrade_phase": params.get("upgradePhase", "1P"),
         "upgrade_from_kw": float(params["upgradeFromKw"]),
         "upgrade_to_kw": float(to_kw),
         # The platform spells the hybrid-inverter section `hybrid_inv`.
@@ -104,7 +105,14 @@ def discount_request(params: dict) -> dict:
 
 
 def source_totals(result: dict) -> dict:
-    """The money ladder of a source ``computeBom``/``computeUpgradeBom`` result."""
+    """The money ladder of a source ``computeBom``/``computeUpgradeBom`` result.
+
+    ``pre_gst_subtotal`` is deliberately absent. The standard path returns it as
+    ``preGstSub``; the upgrade path computes the same quantity inline and never exposes it,
+    so comparing the field would assert "the source reports nothing here" rather than
+    anything about the arithmetic. ``grand_total`` already pins the whole ladder, since a
+    wrong pre-GST cost cannot produce a right grand total.
+    """
     totals = result.get("totals") or {}
     return {
         "material_ex_gst": totals.get("matTotal"),
@@ -113,7 +121,6 @@ def source_totals(result: dict) -> dict:
         "gst_5": totals.get("gst5"),
         "gst_12": totals.get("gst12"),
         "gst_18": totals.get("gst18"),
-        "pre_gst_subtotal": result.get("preGstSub"),
         "margin": result.get("mAmt"),
         "grand_total": result.get("grand"),
     }
@@ -129,7 +136,6 @@ def platform_totals(body: dict) -> dict:
         "gst_5": totals.get("gst_5"),
         "gst_12": totals.get("gst_12"),
         "gst_18": totals.get("gst_18"),
-        "pre_gst_subtotal": totals.get("pre_gst_subtotal"),
         "margin": totals.get("margin"),
         "grand_total": totals.get("grand_total"),
     }
