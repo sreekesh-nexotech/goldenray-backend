@@ -50,6 +50,9 @@ VALID_TIERS = ("base", "value", "premium")
 VALID_SUBSIDY = ("residential", "ghs", "none")
 VALID_MARGIN = ("percent", "flat")
 VALID_STRUCTURE = ("flatRoof", "elevated", "sheetRoof")
+#: Module content. Decides which panels may be offered and whether PM Surya Ghar applies;
+#: for hybrid it also selects the price list (Flarize quotes DCR and non-DCR apart).
+VALID_MODULE_DCR = ("dcr", "ndcr")
 STRUCTURE_SLUGS = {"flatRoof": "flat_roof", "elevated": "elevated", "sheetRoof": "sheet_roof"}
 DEFAULT_SECTIONS = {"panels": True, "structure": True, "inverter": True, "hybrid_inv": False, "battery": False, "wiring": True}
 MAX_MAGNITUDE = 1e12  # numbers beyond this made the legacy arithmetic overflow or lose every digit
@@ -130,6 +133,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("subsidy_type", "subsidy_type must be residential | ghs | none"))
     if not _hashable_in(data.get("margin_type", "percent"), VALID_MARGIN):
         messages.append(("margin_type", "margin_type must be percent | flat"))
+    if not _hashable_in(data.get("module_dcr", "dcr"), VALID_MODULE_DCR):
+        messages.append(("module_dcr", "module_dcr must be dcr | ndcr"))
     if not _hashable_in(data.get("structure_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
     for name in ("dist_km", "margin_val"):
@@ -202,6 +207,7 @@ def _coerce(data: dict) -> dict:
         "dist_km": max(0, dist_km),
         "structure_type": data.get("structure_type", "flatRoof"),
         "subsidy_type": data.get("subsidy_type", "none"),
+        "module_dcr": data.get("module_dcr", "dcr"),
         "ghs_houses": max(1, ghs_houses),
         "selected_offer_id": offer_id,
         "custom_discount": custom,
@@ -234,6 +240,9 @@ class Item:
     inverter_type: str | None
     kw: Decimal | None
     tiers: frozenset
+    #: Panels only: ``catalog.PanelSpec.is_dcr``. ``None`` for anything that is not a
+    #: panel, and for a panel whose content has never been recorded.
+    dcr: bool | None = None
 
 
 @dataclass
@@ -242,6 +251,7 @@ class CategoryView:
     gst_default: int | float
     unit_m: bool
     is_inverter: bool
+    is_panel: bool = False  # only panels are gated on DCR content
     items: list[Item] = field(default_factory=list)
 
 
@@ -341,6 +351,7 @@ def _gst_regime(values: dict) -> tuple[str, float]:
 
 def _legacy_item(component: Component, price: Decimal) -> Item:
     spec = getattr(component, "inverter_spec", None)
+    panel = getattr(component, "panel_spec", None)
     attributes = component.attributes or {}
     phase = attributes.get("phase") or (spec.phase if spec is not None else None) or None
     if spec is not None:
@@ -355,6 +366,7 @@ def _legacy_item(component: Component, price: Decimal) -> Item:
         inverter_type=inverter_type,
         kw=spec.kw if spec is not None else None,
         tiers=frozenset(tier.tier.lower() for tier in component.tiers.all()),
+        dcr=panel.is_dcr if panel is not None else None,
     )
 
 
@@ -363,7 +375,7 @@ def _items(category_ids: set[int], extra_component_ids: set[int]) -> tuple[dict[
 
     components = list(
         Component.objects.filter(Q(category_id__in=category_ids) | Q(pk__in=extra_component_ids), status__in=QUOTABLE)
-        .select_related("inverter_spec")
+        .select_related("inverter_spec", "panel_spec")
         .prefetch_related("tiers")
         .order_by("created_at", "id")
     )
@@ -399,6 +411,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
                 gst_default=percent_of(category.gst_rate),
                 unit_m=category.unit == Unit.M,
                 is_inverter=category.bom_role == BomRole.MAIN_INVERTER,
+                is_panel=category.bom_role == BomRole.MAIN_PANEL,
                 items=items_by_category.get(category.pk, []),
             )
     slot_views = [
@@ -657,6 +670,18 @@ class Calculator:
 
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
         available = []
+        # Module content gate (App.jsx:1132-1133). Only panels are filtered, and the
+        # non-DCR side is `dcr is not True` rather than `is False`, so a panel whose
+        # content was never recorded counts as non-DCR -- matching the source and erring
+        # towards NOT promising a subsidy the panel may not qualify for.
+        #
+        # Tracked separately from `available` because the gate needs the source's safety
+        # valve: when it empties the list, the line falls back to an ungated item instead
+        # of vanishing. App.jsx:1164 explains why -- "the catalog has no Non-DCR premium
+        # panel, for one" -- and a dropped panel line is far worse than an off-content
+        # one, since the whole quote silently loses its largest cost.
+        want_dcr = self.p.get("module_dcr", "dcr") == "dcr"
+        off_content = []
         for item in category.items:
             if tier not in item.tiers:
                 continue
@@ -681,7 +706,14 @@ class Calculator:
                         continue
                 elif "3P" in item.phase:
                     continue
+            if category.is_panel and (item.dcr is True) != want_dcr:
+                off_content.append(item)
+                continue
             available.append(item)
+        if not available:
+            # Everything else passed but the content gate: quote the off-content panel
+            # rather than dropping the line (App.jsx:1164-1167).
+            available = off_content
         if not available:
             return None
         if category.is_inverter and any(i.kw for i in available):
@@ -883,10 +915,21 @@ class Calculator:
         except ValueError:
             return 3.0
 
+    def _subsidy_eligible(self) -> bool:
+        """PM Surya Ghar requires DCR modules (App.jsx:2411-2415).
+
+        Checked AFTER the slab arithmetic, as the source does: the amount is computed and
+        then forfeited, so a non-DCR quote reports 0 with the reason rather than silently
+        skipping the scheme.
+        """
+        return self.p.get("module_dcr", "dcr") == "dcr"
+
     def _calc_subsidy(self, kw: float) -> float:
         p = self.p
         kind = p["subsidy_type"]
         if kind == "none":
+            return 0
+        if not self._subsidy_eligible():
             return 0
         if kind == "residential":
             if kw <= 2:
@@ -904,6 +947,10 @@ class Calculator:
 
     def _subsidy_label(self, kw: float) -> str:
         kind = self.p["subsidy_type"]
+        if kind == "none":
+            return ""
+        if not self._subsidy_eligible():
+            return "Not eligible — Non-DCR modules"
         if kind == "residential":
             return f"PM Surya Ghar (Residential, {kw}kW)"
         if kind == "ghs":

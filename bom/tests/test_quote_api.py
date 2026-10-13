@@ -122,6 +122,56 @@ class TestCalculator:
         rupees = quote(_body(custom_discount={"type": "flat", "value": 12345}), today=TODAY)["pricing"]
         assert rupees["discount_label"] == "Custom ₹12,345 discount" and rupees["discount_amt"] == 12345
 
+    def test_module_dcr_picks_the_panel_and_gates_the_subsidy(self, world):
+        """Module content chooses which panels may be offered AND whether PM Surya Ghar applies.
+
+        Golden-Ray-BOM gates the panel dropdown on the picked content (App.jsx:1132) and
+        forfeits the subsidy for non-DCR modules (App.jsx:2411), since that choice is what
+        decides eligibility. Both halves matter together: a quote must never offer a
+        non-DCR module while still promising a subsidy.
+        """
+        from catalog.models.specs import PanelSpec
+        from catalog.tests.factories import PanelSpecFactory
+
+        panel_category = SlotFactory._meta.model.objects.get(key="panel").category
+        existing = panel_category.components.get(name="Panel 540")
+
+        # The fixture records no PanelSpec, so content is unknown. The source counts that
+        # as the non-DCR side (`item.dcr !== true`), so a non-DCR quote offers it and
+        # forfeits the subsidy — erring away from promising one the panel may not earn.
+        assert not PanelSpec.objects.filter(component=existing).exists()
+        unknown = quote(_body(subsidy_type="residential", module_dcr="ndcr"), today=TODAY)
+        assert unknown["bom_lines"][0]["name"] == "Panel 540"
+        assert unknown["pricing"]["subsidy_amt"] == 0
+
+        # A DCR quote finds no DCR panel at all. The line must still be quoted — the
+        # source falls back rather than leaving it out (App.jsx:1164), because losing the
+        # panel silently removes the largest cost in the BOM.
+        no_dcr_available = quote(_body(subsidy_type="residential", module_dcr="dcr"), today=TODAY)
+        assert no_dcr_available["bom_lines"][0]["name"] == "Panel 540"
+
+        PanelSpecFactory(component=existing, wattage_w=540, is_dcr=True)
+        ndcr = ComponentFactory(category=panel_category, name="Panel 550 NDCR", status=ComponentStatus.ACTIVE)
+        for tier in ("BASE", "VALUE", "PREMIUM"):
+            ComponentTierFactory(component=ndcr, tier=tier)
+        PriceFactory(component=ndcr, amount=Decimal("13035.00"))
+        PanelSpecFactory(component=ndcr, wattage_w=550, is_dcr=False)
+
+        dcr = quote(_body(subsidy_type="residential", module_dcr="dcr"), today=TODAY)
+        assert dcr["bom_lines"][0]["name"] == "Panel 540"
+        assert dcr["pricing"]["subsidy_amt"] == 78000
+
+        non_dcr = quote(_body(subsidy_type="residential", module_dcr="ndcr"), today=TODAY)
+        assert non_dcr["bom_lines"][0]["name"] == "Panel 550 NDCR"
+        assert non_dcr["pricing"]["subsidy_amt"] == 0
+        assert non_dcr["pricing"]["subsidy_label"] == "Not eligible — Non-DCR modules"
+        assert non_dcr["pricing"]["price_after_subsidy"] == non_dcr["pricing"]["final_price"]
+
+    def test_module_dcr_is_validated(self, world):
+        with pytest.raises(QuoteInvalid) as caught:
+            quote(_body(module_dcr="maybe"), today=TODAY)
+        assert "module_dcr" in caught.value.errors
+
     def test_margin_subsidy_structure_and_distance(self, world):
         result = quote(_body(margin_type="flat", margin_val=15000, subsidy_type="ghs", ghs_houses=3, structure_type="elevated", dist_km=175), today=TODAY)
         costs = result["cost_breakdown"]

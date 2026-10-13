@@ -20,6 +20,12 @@ class BomQuoteRequestSerializer(serializers.Serializer):
     dist_km = serializers.IntegerField(required=False, default=100, min_value=0)
     structure_type = serializers.ChoiceField(choices=QUOTE_STRUCTURE_TYPES, required=False, default="flatRoof")
     subsidy_type = serializers.ChoiceField(choices=["residential", "ghs", "none"], required=False, default="none")
+    module_dcr = serializers.ChoiceField(
+        choices=["dcr", "ndcr"],
+        required=False,
+        default="dcr",
+        help_text="Module content: which panels may be offered, whether PM Surya Ghar applies, and (hybrid) which price list.",
+    )
     ghs_houses = serializers.IntegerField(required=False, default=1, min_value=1)
     selected_offer_id = serializers.CharField(required=False, allow_null=True)
     custom_discount = serializers.JSONField(required=False, allow_null=True, help_text='{"type": "percent" | "flat", "value": <number>} — a bare number is a 400.')

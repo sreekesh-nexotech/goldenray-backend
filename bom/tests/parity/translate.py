@@ -32,6 +32,7 @@ def quote_request(params: dict) -> dict:
         ),
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
+        "module_dcr": params.get("moduleDcr", "dcr"),
         # The source's BOM memo carries no subsidy or offer; those live in discountCalc,
         # which has its own corpus. Pin them off so a standard case compares only the
         # material/cost/margin ladder.
@@ -58,6 +59,7 @@ def upgrade_quote_request(params: dict) -> dict:
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
         "subsidy_type": "none",
+        "module_dcr": params.get("moduleDcr", "dcr"),
         "upgrade_from_kw": float(params["upgradeFromKw"]),
         "upgrade_to_kw": float(to_kw),
         # The platform spells the hybrid-inverter section `hybrid_inv`.
@@ -82,6 +84,7 @@ def discount_request(params: dict) -> dict:
         "bat_config": "0",
         "subsidy_type": params.get("subsidyType", "none"),
         "ghs_houses": params.get("ghsHouses", 1),
+        "module_dcr": params.get("moduleDcr", "dcr"),
     }
     if params.get("selectedOffer"):
         body["selected_offer_id"] = params["selectedOffer"]
