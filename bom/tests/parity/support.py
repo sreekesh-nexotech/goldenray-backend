@@ -20,15 +20,16 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 VARIANT = "source"
 
-#: Corpus files and the engine each one replays.
+#: Corpus files and the source engines each one may replay. ``string`` carries both
+#: string engines, since the upgrade variant is the same feature on the upgrade path.
 CORPORA = {
-    "standard": "computeBom",
-    "standard_fu": "computeBom",
-    "micro": "computeBom",
-    "upgrade": "computeUpgradeBom",
-    "string": "computeStringConfig",
-    "bill": "computeBillCalc",
-    "discount": "computeDiscountCalc",
+    "standard": {"computeBom"},
+    "standard_fu": {"computeBom"},
+    "micro": {"computeBom"},
+    "upgrade": {"computeUpgradeBom"},
+    "string": {"computeStringConfig", "computeUpgradeStringConfig"},
+    "bill": {"computeBillCalc"},
+    "discount": {"computeDiscountCalc"},
 }
 
 #: Differences from the source that are intended, with the reason each is accepted.

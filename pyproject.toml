@@ -35,6 +35,8 @@ addopts = "-q --strict-markers"
 markers = [
   "playwright: needs a Chromium install (documents rendering); deselect with -m 'not playwright'",
   "slow: long-running test",
+  "source_parity: holds the BOM engine to the Golden-Ray-BOM corpus; EXPECTED TO FAIL until the port lands, so deselect with -m 'not source_parity'",
+  "source_parity_summary: prints the parity burn-down; reports, never gates",
 ]
 
 [tool.coverage.run]
