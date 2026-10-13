@@ -56,11 +56,15 @@ def flarize_world(db):
     from pricing.services.market_rates import activate_set
 
     catalog_json = support.catalog()
-    results = {
-        "catalog": catalog_import.import_flarize_catalog(catalog_json, None),
-        "pricing": pricing_import.import_flarize_pricing(catalog_json),
-        "bom": bom_import.import_flarize_bom(catalog_json),
-    }
+    results = {"catalog": catalog_import.import_flarize_catalog(catalog_json, None)}
+    # The catalog importer RETURNS component prices as data; it does not write them.
+    # They have to be handed to the pricing package, which owns `Price` — the same
+    # hand-off bom/tests/legacy_fixtures.py:70 makes. Without it every component is
+    # ACTIVE but unpriced, and `_items()` drops it ("nothing to quote without a current
+    # LIST price"), so every variable slot silently vanishes from the BOM.
+    results["prices"] = pricing_import.import_prices(results["catalog"]["prices"])
+    results["pricing"] = pricing_import.import_flarize_pricing(catalog_json)
+    results["bom"] = bom_import.import_flarize_bom(catalog_json)
     for rate_set in MarketRateSet.objects.exclude(status="ACTIVE"):
         activate_set(rate_set, user=None)
     return results
