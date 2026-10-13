@@ -234,6 +234,35 @@ const SAMPLE_EVERY = 3;
     };
     emit("corpus_standard", "computeBom", "std-addon-all", params, E.computeBom(params));
   }
+
+  // Add-ons ON TOP OF A CONFIGURED RATE. The cases above all sit on the 6 kW value
+  // configuration, which has no market rate, so `customerPrice` falls back to cost-plus
+  // and `addOnTotal` never reaches it -- the path that matters commercially (rate + add-on)
+  // went uncovered. 3 kW base is the cheapest configuration with a real rate on the live
+  // list, so these pin `customerPrice == marketRate + addOnTotal`.
+  {
+    const priced = { ...BOM_DEFAULTS, sysType: "ongrid", size: "3", tier: "base" };
+    for (const [id, over] of [
+      ["struct", { addOns: { ...NO_ADDONS, structure: { enabled: true, type: "sheetRoof" } } }],
+      ["dist", { distKm: 180 }],
+      ["cable", { addOns: { ...NO_ADDONS, extraDcCable: { enabled: true, itemId: catalog.categories.dc_cable.items[0].id, qty: 40 } } }],
+      [
+        "all",
+        {
+          distKm: 180,
+          addOns: {
+            structure: { enabled: true, type: "sheetRoof" },
+            extraDcCable: { enabled: true, itemId: catalog.categories.dc_cable.items[0].id, qty: 40 },
+            extraAcCable: { enabled: true, itemId: catalog.categories.ac_cable.items[0].id, qty: 25 },
+            armouredCable: { enabled: true, itemId: catalog.categories.armoured_cable.items[0].id, qty: 15 },
+          },
+        },
+      ],
+    ]) {
+      const params = { ...priced, ...over };
+      emit("corpus_standard", "computeBom", `std-rated-addon-${id}`, params, E.computeBom(params));
+    }
+  }
 }
 
 // ── corpus_standard_fu: future-upgrade (inverter oversizing) ──────────────────────────

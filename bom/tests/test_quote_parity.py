@@ -71,11 +71,19 @@ def _inverters(body: dict) -> int:
     )
 
 
+#: Top-level keys the port adds. `string_config` is the installer's string/MPPT layout,
+#: which the legacy engine never produced; it only appears under COMPOSITE, so it should
+#: not reach this pin at all — stripping it is belt-and-braces against a regression that
+#: un-gates it.
+ADDED_BODY_KEYS = ("string_config",)
+
+
 def _without_added_keys(body: dict) -> dict:
     """``body`` as the golden capture would have had it, before the port's new keys."""
-    if "totals" not in body:
-        return body
-    return {**body, "totals": {k: v for k, v in body["totals"].items() if k not in ADDED_TOTALS_KEYS}}
+    out = {k: v for k, v in body.items() if k not in ADDED_BODY_KEYS}
+    if "totals" not in out:
+        return out
+    return {**out, "totals": {k: v for k, v in out["totals"].items() if k not in ADDED_TOTALS_KEYS}}
 
 
 @pytest.fixture

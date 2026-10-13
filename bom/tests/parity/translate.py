@@ -33,11 +33,31 @@ def quote_request(params: dict) -> dict:
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
         "module_dcr": params.get("moduleDcr", "dcr"),
+        "micro_brand": params.get("microBrand", "enphase"),
+        "zero_export": params.get("zeroExport", True),
         # The source's BOM memo carries no subsidy or offer; those live in discountCalc,
         # which has its own corpus. Pin them off so a standard case compares only the
         # material/cost/margin ladder.
         "subsidy_type": "none",
     }
+    # The source names each cable add-on after the category it draws from.
+    extra_cable = [
+        {"category": category, "qty": (add_ons.get(key) or {}).get("qty", 0), "component": ""}
+        for key, category in (("extraDcCable", "dc_cable"), ("extraAcCable", "ac_cable"), ("armouredCable", "armoured_cable"))
+        if (add_ons.get(key) or {}).get("enabled")
+    ]
+    if extra_cable:
+        body["extra_cable"] = extra_cable
+    if params.get("futureUpgrade") and params.get("upgradeSize"):
+        body["future_size"] = params["upgradeSize"]
+        # The source names these includeStructure/includeDB/includeCables/includeMeter.
+        opts = params.get("fuOpts") or {}
+        body["future_opts"] = {
+            "structure": opts.get("includeStructure", True),
+            "db": opts.get("includeDB", True),
+            "cables": opts.get("includeCables", True),
+            "meter": opts.get("includeMeter", True),
+        }
     return body
 
 

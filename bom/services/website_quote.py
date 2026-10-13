@@ -31,6 +31,7 @@ Differences from the legacy endpoint (approved, docs/decisions/bom.md): inputs t
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
@@ -56,10 +57,72 @@ VALID_MODULE_DCR = ("dcr", "ndcr")
 #: The phase of the system AFTER an upgrade. Chosen, not derived from the target size: a
 #: customer going to 5 kW may stay single-phase or move to three.
 VALID_UPGRADE_PHASE = ("1P", "3P")
+#: Premium replaces the string inverter with per-panel micro-inverters; the two brands
+#: carry different accessory sets, so the choice is the caller's.
+VALID_MICRO_BRAND = ("enphase", "hoymiles")
 #: Categories an upgrade to three phase needs but the template has no slot for.
 PHASE_CHANGE_CATEGORIES = ("meter", "meter_box", "isolator")
+#: Cable a site can need beyond the standard run, priced at the category's own GST rather
+#: than the composite rate (App.jsx:1321-1322) — the add-on ladder is not the material one.
+EXTRA_CABLE_CATEGORIES = ("dc_cable", "ac_cable", "armoured_cable")
+#: Categories holding micro-inverter accessories. Needed in the snapshot even though no
+#: template slot refers to them — a premium build adds them from the tier, not a slot.
+MICRO_CATEGORIES = ("enphase", "hoymiles", "ug_cable")
+#: The accessories a premium build adds, by SKU.
+#:
+#: The source finds each with ``items.find(i => i.name.includes('IQ8P'))``
+#: (App.jsx:1214), which is brittle twice over: a renamed row drops the part from every
+#: premium quote, and first-match-by-array-order silently decides between near-duplicates.
+#: That second hazard is live — ``System Controller`` matches ``en7`` at ₹110,000 before
+#: ``en_sysctrl`` at ₹25,000, an ₹85,000 difference settled by catalog ordering. Pinning
+#: SKUs preserves the source's actual choice and makes it reviewable instead of accidental.
+ENPHASE_SKUS = {
+    "micro": "en1",  # IQ8P — one per panel
+    "cable": "en2",  # Q Cable — one per panel
+    "envoy": "en3",
+    "relay": "en4",
+    "terminal": "en5",
+    "ct": "en6",
+    "controller": "en7",
+    "battery": "en_flexbat",
+}
+HOYMILES_SKUS = {"hms2000": "hm1", "hms1000": "hm2", "dtu_pro": "hm3", "dtu_lite": "hm4", "end_cap": "hm5", "trunk": "hm6"}
+UG_CABLE_SKUS = {"1P": "ug_2core", "3P": "ug_4core"}
+#: A hybrid premium build runs its own underground cable, at a fixed length.
+UG_CABLE_METRES = 40
 STRUCTURE_SLUGS = {"flatRoof": "flat_roof", "elevated": "elevated", "sheetRoof": "sheet_roof"}
 DEFAULT_SECTIONS = {"panels": True, "structure": True, "inverter": True, "hybrid_inv": False, "battery": False, "wiring": True}
+#: Which parts of a future-upgrade build are sized for the LARGER future system. Anything
+#: switched off is sized for today's panels instead — never omitted (App.jsx:1070-1076).
+DEFAULT_FUTURE_OPTS = {"structure": True, "db": True, "cables": True, "meter": True}
+#: Categories each future-upgrade option downsizes to panel kW when it is switched off.
+FUTURE_DOWNSIZE = {
+    "db": ("dcdb", "acdb"),
+    "cables": ("dc_cable", "ac_cable", "earth_cable", "la_cable", "cb_rod", "isolator"),
+    "meter": ("meter",),
+}
+#: Consumables are classified by NAME on the future-upgrade path, because a legacy fixed
+#: item carries no category of its own (App.jsx:1262-1283). Transcribed verbatim, in the
+#: source's evaluation order. Note that earthing rides on the *cables* option, not a
+#: separate one, and that there is no `db` pattern here — DCDB and ACDB are variable
+#: slots, not fixed items.
+FUTURE_FIXED_PATTERNS = {
+    "structure": re.compile(
+        r"clamp|j bolt|base plate|square plate|anchor|epoxy|primer|thinner|roller|silicon|cotton|cutting|welding|self screw|end cap|corroshield|panel.*earth.*nut",
+        re.IGNORECASE,
+    ),
+    "cables": re.compile(
+        r"pipe|bend|elbow|saddle|gland|cable tie|sleeve|plug$|lug|tape|insulation|mc4|cable tray"
+        r"|earth|lightning|la .*holder|la base|cb rod|10 swg|terminal strip",
+        re.IGNORECASE,
+    ),
+    "meter": re.compile(r"meter box", re.IGNORECASE),
+}
+
+
+def _future_downsizes_fixed_item(fi: FixedView, opts: dict) -> bool:
+    """Whether this consumable is sized for today's panels rather than the future system."""
+    return any(not opts.get(option, True) and pattern.search(fi.name or "") for option, pattern in FUTURE_FIXED_PATTERNS.items())
 MAX_MAGNITUDE = 1e12  # numbers beyond this made the legacy arithmetic overflow or lose every digit
 
 # Category-to-upgrade-section mapping (legacy UPG_SECTION_MAP, mirrors upgSectionMap in App.jsx).
@@ -142,6 +205,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("module_dcr", "module_dcr must be dcr | ndcr"))
     if not _hashable_in(data.get("upgrade_phase", "1P"), VALID_UPGRADE_PHASE):
         messages.append(("upgrade_phase", "upgrade_phase must be 1P | 3P"))
+    if not _hashable_in(data.get("micro_brand") or "enphase", VALID_MICRO_BRAND):
+        messages.append(("micro_brand", "micro_brand must be enphase | hoymiles"))
     if not _hashable_in(data.get("structure_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
     for name in ("dist_km", "margin_val"):
@@ -224,7 +289,45 @@ def _coerce(data: dict) -> dict:
         "upgrade_from_kw": from_kw,
         "upgrade_to_kw": to_kw,
         "upgrade_sections": sections,
+        # Future-upgrade ("upgrade-ready"): panels go in at `size` today while the
+        # inverter and chosen balance-of-system are sized for `future_size`, so the
+        # customer can add panels later without replacing them.
+        "future_size": str(data.get("future_size") or ""),
+        "future_opts": {**DEFAULT_FUTURE_OPTS, **(data.get("future_opts") or {})},
+        # Cable the site needed beyond the standard run, charged over the rate.
+        "extra_cable": _extra_cable(data.get("extra_cable")),
+        # Premium tier only: which micro-inverter brand, and whether the gateway has to
+        # enforce zero export (a KSEB requirement on some connections).
+        "micro_brand": data.get("micro_brand") or "enphase",
+        "zero_export": bool(data.get("zero_export", True)),
     }
+
+
+def _extra_cable(value) -> list[dict]:
+    """``[{"category": "dc_cable", "qty": 40, "component": "<sku>"?}, …]``.
+
+    A long run to the meter, or an armoured length under a driveway, is site-specific: it
+    is not in any template, so it arrives per quote. Rows without a usable category and a
+    positive quantity are dropped rather than rejected — an empty add-on is not an error,
+    it is the normal case.
+    """
+    if not isinstance(value, list):
+        return []
+    rows = []
+    for row in value:
+        if not isinstance(row, dict):
+            continue
+        category = str(row.get("category") or "")
+        if category not in EXTRA_CABLE_CATEGORIES:
+            continue
+        try:
+            qty = float(row.get("qty") or 0)
+        except (TypeError, ValueError):
+            continue
+        if qty <= 0 or qty > MAX_MAGNITUDE:
+            continue
+        rows.append({"category": category, "qty": qty, "component": str(row.get("component") or "")})
+    return rows
 
 
 def parse_request(data) -> dict:
@@ -251,6 +354,11 @@ class Item:
     #: Panels only: ``catalog.PanelSpec.is_dcr``. ``None`` for anything that is not a
     #: panel, and for a panel whose content has never been recorded.
     dcr: bool | None = None
+    #: So a quote can ask for one specific part -- the extra cable a site needed.
+    sku: str = ""
+    #: Engineering values the string/MPPT layout needs, in engines.string_config's field
+    #: names. Empty for anything without a panel or inverter spec.
+    specs: dict | None = None
 
 
 @dataclass
@@ -378,7 +486,41 @@ def _legacy_item(component: Component, price: Decimal) -> Item:
         kw=spec.kw if spec is not None else None,
         tiers=frozenset(tier.tier.lower() for tier in component.tiers.all()),
         dcr=panel.is_dcr if panel is not None else None,
+        sku=component.sku,
+        specs=_specs(panel, spec),
     )
+
+
+def _specs(panel, inverter) -> dict | None:
+    """Panel or inverter engineering values for :mod:`engines.string_config`.
+
+    Returned as plain floats in that engine's vocabulary, so the engine stays free of both
+    Django and the catalog's field naming.
+    """
+    def number(value):
+        return float(value) if value is not None else None
+
+    if panel is not None:
+        return {
+            "voc": number(panel.voc_v),
+            "vmp": number(panel.vmp_v),
+            "isc": number(panel.isc_a),
+            "temp_coeff_voc": number(panel.temperature_coefficient_voc),
+            "watt": panel.wattage_w,
+            "max_sys_voltage": panel.max_system_voltage_v,
+        }
+    if inverter is not None:
+        return {
+            "mppt_count": inverter.mppt_count,
+            "mppt_voltage_min": inverter.mppt_voltage_min_v,
+            "mppt_voltage_max": inverter.mppt_voltage_max_v,
+            "max_input_voltage": inverter.max_pv_voltage_v,
+            "max_input_current": number(inverter.max_isc_a),
+            "max_strings_per_mppt": inverter.max_strings_per_mppt,
+            "is_micro": inverter.topology == "MICRO",
+            "optimizer_based": False,
+        }
+    return None
 
 
 def _items(category_ids: set[int], extra_component_ids: set[int]) -> tuple[dict[int, list[Item]], dict[int, Item]]:
@@ -414,7 +556,8 @@ def load_snapshot(sys_type: str) -> Snapshot:
     # Moving an upgrade to three phase pulls in parts the template has no slot for -- a 3P
     # meter, its box and a 4-pole isolator (App.jsx:2078-2080). They have to be in the
     # snapshot or the branch has nothing to choose from.
-    extra = list(Category.objects.filter(slug__in=PHASE_CHANGE_CATEGORIES, deleted_at__isnull=True)) if sys_type.lower() == "upgrade" else []
+    wanted = EXTRA_CABLE_CATEGORIES + MICRO_CATEGORIES + (PHASE_CHANGE_CATEGORIES if sys_type.lower() == "upgrade" else ())
+    extra = list(Category.objects.filter(slug__in=wanted, deleted_at__isnull=True))
     category_ids = {slot.category_id for slot in slots} | {category.pk for category in extra}
     items_by_category, items_by_id = _items(category_ids, {row.component_id for row in fixed if row.component_id})
     categories: dict[int, CategoryView] = {}
@@ -490,7 +633,11 @@ def _structures() -> dict[str, list[StructureItemView]]:
 def _market_rates(sys_type: str) -> list[dict]:
     from pricing.models import MarketRate, MarketRateSetStatus
 
-    rows = MarketRate.objects.filter(set__status=MarketRateSetStatus.ACTIVE, set__deleted_at__isnull=True, system_type=sys_type.upper(), future_size_key="", variant="").order_by("sort_order", "id")
+    # `variant` rows are excluded: `diffBase` carries a baseline, not a price. Future-size
+    # rows ARE loaded -- an upgrade-ready build is quoted off its own rate
+    # (`ongrid_value_up5sp`), which is higher than the plain one because the inverter and
+    # balance-of-system are built for the larger system.
+    rows = MarketRate.objects.filter(set__status=MarketRateSetStatus.ACTIVE, set__deleted_at__isnull=True, system_type=sys_type.upper(), variant="").order_by("sort_order", "id")
     return [
         {
             "tier": row.tier.lower(),
@@ -498,11 +645,12 @@ def _market_rates(sys_type: str) -> list[dict]:
             # Hybrid is quoted separately for DCR and non-DCR modules; on-grid carries a
             # blank, which matches any request.
             "dcr": row.dcr,
+            "future_size": row.future_size_key,
             "size_key": row.size_key,
             "from_size": row.from_size_key,
             "value": row.customer_price_incl_gst,
         }
-        for row in rows.only("tier", "battery_config", "dcr", "size_key", "from_size_key", "customer_price_incl_gst")
+        for row in rows.only("tier", "battery_config", "dcr", "future_size_key", "size_key", "from_size_key", "customer_price_incl_gst")
     ]
 
 
@@ -546,6 +694,192 @@ class Calculator:
     def _cost(self, name: str) -> float:
         return float(self.costs[name])
 
+    @property
+    def _composite(self) -> bool:
+        """Whether this quote prices the way Golden-Ray-BOM does.
+
+        Every behaviour the BOM port *adds* has to be gated on this, not just the GST
+        arithmetic. ``PER_LINE`` is the legacy engine's behaviour and the public website's
+        live pricing, so a new line item or a new charge over the market rate that fires
+        under it silently re-prices real customer quotes. The parity pin in
+        ``test_quote_parity.py`` catches it, and has twice.
+        """
+        return self.costs["gst_regime"] == "COMPOSITE"
+
+    def _micro_lines(self, tier: str, panels: int, is_three_phase: bool, bat_config: str, next_pos: int) -> list:
+        """Micro-inverter accessories a premium build needs (App.jsx:1211-1259).
+
+        Premium swaps one string inverter for one micro-inverter per panel, which brings a
+        cluster of parts no template slot describes: the micros, a cable per panel, a
+        gateway, a relay, and on three phase the terminals and current transformers the
+        extra phases need. Quantities are per-panel arithmetic, so they follow the panel
+        count the engine actually derived from the chosen module's wattage rather than the
+        nominal system size.
+        """
+        # COMPOSITE only. The legacy engine never added these at all -- its captured
+        # premium bodies carry no enphase or hoymiles line -- so emitting them under
+        # PER_LINE would re-price the public website's premium quotes by the cost of a
+        # whole micro-inverter set. The parity pin caught exactly that.
+        if not self._composite:
+            return []
+        if tier != "premium" or self.p["sys_type"] not in ("ongrid", "hybrid"):
+            return []
+        is_hybrid = self.p["sys_type"] == "hybrid"
+        # Hybrid premium is always Enphase: the battery and system controller are Enphase
+        # parts, so the brand choice does not apply there (App.jsx:1212).
+        brand = "enphase" if is_hybrid else self.p.get("micro_brand", "enphase")
+        lines: list = []
+
+        def add(slug: str, sku: str, qty) -> None:
+            if not qty:
+                return
+            category = self.s.categories_by_slug.get(slug)
+            if category is None:
+                return
+            item = next((i for i in category.items if i.sku == sku), None)
+            if item is None:
+                return
+            unit_price = float(item.price)
+            amount = qty * unit_price
+            gst_pct = category.gst_default
+            lines.append(
+                {
+                    "pos": next_pos + len(lines),
+                    "name": item.name,
+                    "brand": item.brand,
+                    "qty": qty,
+                    "unit": "m" if category.unit_m else "nos",
+                    "unit_price": unit_price,
+                    "amount": amount,
+                    "gst_pct": gst_pct,
+                    "gst_amt": round(amount * gst_pct / 100),
+                    "section": slug,
+                    "is_variable": False,
+                }
+            )
+
+        if brand == "enphase":
+            add("enphase", ENPHASE_SKUS["micro"], panels)
+            add("enphase", ENPHASE_SKUS["cable"], panels)
+            add("enphase", ENPHASE_SKUS["envoy"], 1)
+            add("enphase", ENPHASE_SKUS["relay"], 1)
+            # Three phase needs a terminal per phase, and current transformers a
+            # single-phase install does not use at all.
+            add("enphase", ENPHASE_SKUS["terminal"], 3 if is_three_phase else 1)
+            add("enphase", ENPHASE_SKUS["ct"], 4 if is_three_phase else 0)
+            if is_hybrid:
+                add("enphase", ENPHASE_SKUS["controller"], 1)
+                add("enphase", ENPHASE_SKUS["battery"], int(bat_config) if str(bat_config).isdigit() else 0)
+                # Four cores on three phase, two on single.
+                add("ug_cable", UG_CABLE_SKUS["3P" if is_three_phase else "1P"], UG_CABLE_METRES)
+        else:
+            # Hoymiles packs four panels per HMS 2000; the remainder takes a single
+            # HMS 1000 whatever its size. Two or three leftover panels are therefore
+            # under-provisioned -- the source's commercial choice, not a slip
+            # (App.jsx:1243-1245): a second 2000 for one spare panel costs more than the
+            # output is worth.
+            hms2000 = panels // 4
+            hms1000 = 1 if panels - hms2000 * 4 >= 1 else 0
+            add("hoymiles", HOYMILES_SKUS["hms2000"], hms2000)
+            add("hoymiles", HOYMILES_SKUS["hms1000"], hms1000)
+            # One gateway per 99 panels, and never none.
+            add("hoymiles", HOYMILES_SKUS["dtu_pro" if self.p.get("zero_export", True) else "dtu_lite"], max(1, math.ceil(panels / 99)))
+            add("hoymiles", HOYMILES_SKUS["end_cap"], 1)
+            # One trunk cable per inverter, of either size.
+            add("hoymiles", HOYMILES_SKUS["trunk"], hms2000 + hms1000)
+        return lines
+
+    def _extra_cable_lines(self, next_pos: int) -> list:
+        """Cable the site needed beyond the standard run (App.jsx:1319-1344).
+
+        Priced at the category's own GST rate, not the composite one. That reads like an
+        inconsistency but is deliberate: these lines are charged over the market rate on
+        the add-on ladder, and the composite rate applies to the material ladder that
+        feeds `grand_total`. The source keeps the two apart, so the quote is internally
+        consistent even though the same line appears in both.
+        """
+        if not self._composite:
+            return []
+        lines = []
+        for row in self.p.get("extra_cable") or []:
+            category = self.s.categories_by_slug.get(row["category"])
+            if category is None or not category.items:
+                continue
+            item = next((i for i in category.items if i.sku == row["component"]), None) if row["component"] else None
+            if item is None:
+                if row["component"]:
+                    # A named part that is not in the category is a mistake worth seeing,
+                    # not something to silently substitute: the quote would carry a cable
+                    # nobody chose.
+                    continue
+                # Nothing named: the category's first part, as the source's dropdown
+                # defaults to (App.jsx:3309).
+                item = category.items[0]
+            qty = row["qty"]
+            unit_price = float(item.price)
+            amount = qty * unit_price
+            gst_pct = category.gst_default
+            lines.append(
+                {
+                    "pos": next_pos + len(lines),
+                    "name": f"{item.name} (extra)",
+                    "brand": item.brand,
+                    "qty": qty,
+                    "unit": "m" if category.unit_m else "nos",
+                    "unit_price": unit_price,
+                    "amount": amount,
+                    "gst_pct": gst_pct,
+                    "gst_amt": round(amount * gst_pct / 100),
+                    "section": category.slug,
+                    "is_variable": False,
+                    "is_add_on": True,
+                }
+            )
+        return lines
+
+    def _add_on_total(self, cost_bd: dict, lines: list) -> float:
+        """What is charged over the price-list rate (App.jsx:1491-1496).
+
+        Three summands, and they are deliberately different in kind:
+
+        * the non-flat-roof structure *delta* plus its labour and repair allowance — a
+          sheet roof costs more than the flat roof the rate assumes;
+        * the beyond-base distance surcharge, which is the other half of why
+          `cost_total` must not also contain it (see :meth:`_calc_costs`);
+        * any extra cable the site needed, GST included, since the rate covers a standard
+          run.
+        """
+        structure = cost_bd["structure_extra"] + cost_bd["structure_labor"] + cost_bd["structure_repair"]
+        dist_km = self.p["dist_km"]
+        transport_extra = max(0, dist_km - int(self.costs["default_dist_km"])) * self.costs["extra_km_rate"]
+        extra_cable = sum(line["amount"] + line["gst_amt"] for line in lines if line.get("is_add_on"))
+        return structure + transport_extra + extra_cable
+
+    def _future_size(self) -> str:
+        """The future system size, or ``""`` when this is not a future-upgrade build.
+
+        Only honoured when it is genuinely larger than today's panels: a "future" size at
+        or below the current one is not an upgrade path, and treating it as one would
+        quote a smaller inverter than the panels need.
+        """
+        future = self.p.get("future_size") or ""
+        if not future or future == self.p["size"]:
+            return ""
+        if self._size_to_kw(future) <= self._size_to_kw(self.p["size"]):
+            return ""
+        return future
+
+    def _future_downsized_categories(self) -> frozenset[str]:
+        """Categories left at today's panel size because their option is switched off.
+
+        Switched off means "size for the panels going in now", never "leave it out" — the
+        system still needs a DCDB (App.jsx:1070-1076).
+        """
+        if not self._future_size():
+            return frozenset()
+        opts = self.p.get("future_opts") or DEFAULT_FUTURE_OPTS
+        return frozenset(slug for option, slugs in FUTURE_DOWNSIZE.items() if not opts.get(option, True) for slug in slugs)
+
     # ── standard BOM (ongrid / hybrid) ──
 
     def _compute_standard(self) -> dict:
@@ -553,16 +887,36 @@ class Calculator:
         size = p["size"]
         tier = p["tier"]
         bat_config = p["bat_config"]
-        is_three_phase = size in (self.s.three_phase_sizes or [])
-        kw = self._size_to_kw(size)
-        composite = self.costs["gst_regime"] == "COMPOSITE"
-        bom_lines = self._get_slot_lines(size, tier, bat_config, is_three_phase)
+        three_phase_sizes = self.s.three_phase_sizes or []
+        # Future-upgrade: the panels go in at `size` while the inverter and the chosen
+        # balance-of-system are built for `future_size`, so panels can be added later
+        # without replacing them. An inverter of 6 kW or more needs a three-phase supply,
+        # which drags the meter and ACDB with it (App.jsx:1058-1064).
+        future = self._future_size()
+        bom_size = future or size
+        panel_is_three_phase = size in three_phase_sizes
+        is_three_phase = (bool(future) and self._size_to_kw(future) >= 6) or bom_size in three_phase_sizes
+        kw = self._size_to_kw(bom_size)
+        composite = self._composite
+        bom_lines = self._get_slot_lines(size, tier, bat_config, is_three_phase, panel_is_three_phase=panel_is_three_phase)
+        # Accessory quantities are per-panel, so they take the count the engine actually
+        # derived from the chosen module's wattage: a 3 kW system is 6 panels of 540 W but
+        # 5 of 600 W, and one micro-inverter per panel makes that an ₹8,200 difference.
+        panel_count = next((int(line["qty"]) for line in bom_lines if line["section"] == "panel"), 0)
+        bom_lines += self._micro_lines(tier, panel_count, is_three_phase, bat_config, next_pos=len(bom_lines))
         bom_lines += self._get_fixed_lines(size, tier, bat_config, is_three_phase)
         # Under COMPOSITE the flat-roof structure is quoted as material, as the source
         # does; _calc_costs then leaves structure_base out of cost_total so it is not
         # charged twice.
         if composite:
-            bom_lines += self._get_structure_lines(kw, next_pos=len(bom_lines))
+            # Structure is sized separately: the frame carries whatever panels are
+            # physically mounted, so with `structure` switched off it stays at today's
+            # panel kW rather than the future system's (App.jsx:1361).
+            struct_kw = self._size_to_kw(size) if (future and not (p.get("future_opts") or DEFAULT_FUTURE_OPTS).get("structure", True)) else kw
+            bom_lines += self._get_structure_lines(struct_kw, next_pos=len(bom_lines))
+        # Extra cable last, so it reads as an addition to the standard bill rather than
+        # being lost among the slot lines.
+        bom_lines += self._extra_cable_lines(next_pos=len(bom_lines))
         totals = self._calc_totals(bom_lines)
         cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite)
         if composite:
@@ -582,7 +936,18 @@ class Calculator:
             grand_total = subtotal + margin
             totals = {**totals, "pre_gst_subtotal": None, "gst_on_sale": None}
         market_rate = self._lookup_market_rate()
-        customer_price = market_rate if market_rate > 0 else grand_total
+        # Site add-ons sit ON TOP of the price-list rate (App.jsx:1582): the rate is for a
+        # standard flat-roof install at the included distance, so a sheet roof, a longer
+        # run or extra cable is charged over it. When no rate is configured the quote falls
+        # back to cost-plus, where those costs are already inside `grand_total`.
+        #
+        # COMPOSITE only. The legacy engine charged nothing over the rate -- its captured
+        # bodies read `customer_price == market_rate` even at 175 km with an elevated
+        # structure, because it folded the surcharge into `cost_total` instead. Applying
+        # the add-on ladder under PER_LINE would re-price the public website, which is
+        # exactly what the regime key exists to prevent; the parity pin caught it.
+        add_on_total = self._add_on_total(cost_bd, bom_lines) if composite else 0
+        customer_price = market_rate + add_on_total if market_rate > 0 else grand_total
         subsidy = self._calc_subsidy(kw)
         discount_info = self._calc_discount(customer_price)
         final_price = max(0, discount_info["discount_base"] - discount_info["discount_amt"])
@@ -604,20 +969,67 @@ class Calculator:
             },
             "meta": {"system_type": p["sys_type"], "size": size, "tier": tier, "bat_config": bat_config, "is_three_phase": is_three_phase, "new_panels": None},
             "available_offers": available_offers,
+            # The string/MPPT layout the installer needs. Not in INTERNAL_KEYS: it reveals
+            # no cost, and an installer working from a public quote needs it. COMPOSITE
+            # only, like every other behaviour the port adds (see `_composite`).
+            **({"string_config": self._string_config(bom_lines, panel_count)} if composite else {}),
         }
+
+    def _string_config(self, lines: list, panels: int) -> dict | None:
+        """The layout for the panel and inverter this quote actually selected.
+
+        Looked up from the chosen lines rather than recomputed, so the layout always
+        describes the system being quoted — if the sales person swaps the inverter, the
+        string check follows.
+        """
+        from engines.string_config import string_config
+
+        panel_line = next((line for line in lines if line["section"] == "panel"), None)
+        inverter_line = next((line for line in lines if line["section"] == "inverter"), None)
+        if panel_line is None or inverter_line is None or not panels:
+            return None
+        panel = self._spec_for(panel_line, "panel")
+        inverter = self._spec_for(inverter_line, "inverter")
+        if panel is None or inverter is None:
+            return None
+        return string_config(panel=panel, inverter=inverter, panels=panels, is_three_phase=self.p.get("upgrade_phase") == "3P")
+
+    def _spec_for(self, line: dict, slug: str) -> dict | None:
+        """The engineering specs of the item on ``line``, in the engine's field names."""
+        category = next((slot.category for slot in self.s.slots if slot.category.slug == slug), None)
+        if category is None:
+            return None
+        item = next((i for i in category.items if i.name == line["name"]), None)
+        if item is None:
+            return None
+        return item.specs or None
 
     def _context(self, size, tier, bat_config, is_three_phase) -> QtyContext:
         return QtyContext(size_key=size, tier=tier, bat_config=bat_config, kw=self._size_to_kw(size), is_three_phase=is_three_phase)
 
-    def _get_slot_lines(self, size, tier, bat_config, is_three_phase) -> list:
+    def _get_slot_lines(self, size, tier, bat_config, is_three_phase, *, panel_is_three_phase: bool | None = None) -> list:
+        """One line per filled slot.
+
+        On a future-upgrade build each slot is sized for either today's panels or the
+        larger future system, and takes the phase that goes with its own size — a DCDB
+        left at panel kW must not be picked as three-phase just because the inverter is
+        (App.jsx:1089, 1115-1116).
+        """
         lines = []
-        ctx = self._context(size, tier, bat_config, is_three_phase)
+        future = self._future_size()
+        downsized = self._future_downsized_categories()
+        if panel_is_three_phase is None:
+            panel_is_three_phase = is_three_phase
         for slot in self.s.slots:
-            qty = evaluate(slot.rule, ctx)
+            cat = slot.category
+            # Panels are always today's size; everything else follows the future size
+            # unless its option is switched off.
+            slot_size = size if (cat.is_panel or cat.slug in downsized or not future) else future
+            slot_three_phase = panel_is_three_phase if (cat.slug in downsized and future) else is_three_phase
+            qty = evaluate(slot.rule, self._context(slot_size, tier, bat_config, slot_three_phase))
             if not qty:
                 continue
-            cat = slot.category
-            item = self._select_item(cat, tier, slot, is_three_phase, self._size_to_kw(size))
+            item = self._select_item(cat, tier, slot, slot_three_phase, self._size_to_kw(slot_size))
             if not item:
                 continue
             unit_price = float(item.price)
@@ -645,12 +1057,25 @@ class Calculator:
         lines = []
         pos_offset = 500
         ctx = self._context(size, tier, bat_config, is_three_phase)
+        # On a future-upgrade build, consumables belonging to a switched-off group are
+        # sized for today's panels instead of the larger future system.
+        future = self._future_size()
+        panel_ctx = self._context(size, tier, bat_config, is_three_phase) if future else ctx
+        future_ctx = self._context(future, tier, bat_config, is_three_phase) if future else ctx
+        downsized = self.p.get("future_opts") or DEFAULT_FUTURE_OPTS
         for fi in self.s.fixed_items:
             if fi.is_tube:
                 continue  # tube items are priced through the structure cost, not as BOM lines
-            if not matches(fi.condition, ctx):
+            # The source classifies consumables by NAME, because a fixed item carries no
+            # category of its own in the legacy data (App.jsx:1262-1283). Replicated
+            # verbatim: a "cleaner" category-based rule would silently reclassify any item
+            # whose name disagrees with its category.
+            row_ctx = future_ctx if future else ctx
+            if future and _future_downsizes_fixed_item(fi, downsized):
+                row_ctx = panel_ctx
+            if not matches(fi.condition, row_ctx):
                 continue
-            qty = evaluate(fi.rule, ctx)
+            qty = evaluate(fi.rule, row_ctx)
             if not qty:
                 continue
             price = fi.price if fi.price is not None else (fi.item.price if fi.item else None)
@@ -912,8 +1337,13 @@ class Calculator:
     def _lookup_market_rate(self) -> float:
         p = self.p
         sys_type, tier, bat_config, size = p["sys_type"], p["tier"], p["bat_config"], p["size"]
+        # An upgrade-ready build has its own rate, keyed on the future size as well as
+        # today's -- `ongrid_value_up5sp` is not `ongrid_value`.
+        future = self._future_size()
         for row in self.s.market_rates:
             if row["tier"] != tier or row["size_key"] != size:
+                continue
+            if row.get("future_size", "") != future:
                 continue
             if sys_type == "ongrid" and not row["bat_config"] and not row["from_size"]:
                 return self._rate(row["value"])
@@ -1133,7 +1563,7 @@ class Calculator:
         misc = self._cost("miscellaneous")
         office = self._cost("office")
         cost_total = round(install + transport + misc + office)
-        if self.costs["gst_regime"] == "COMPOSITE":
+        if self._composite:
             pre_gst = totals.pop("_material_ex_gst_exact") + cost_total
             margin = self._calc_margin(pre_gst)
             all_gst = round((pre_gst + margin) * self.costs["gst_rate_pct"] / 100)
