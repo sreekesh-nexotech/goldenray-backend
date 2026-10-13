@@ -55,12 +55,19 @@ def roof_addons_of(rate_set: MarketRateSet):
 
 
 def rate_key(rate: MarketRate) -> str:
-    """The Flarize market-rate key of a row (``ongrid_value``, ``hybrid_base_1_up10``, ``upgrade_3_5``)."""
+    """The Flarize market-rate key of a row.
+
+    ``ongrid_value``, ``hybrid_base_1_up10``, ``hybrid_value_0_dcr_up5_diffBase``,
+    ``upgrade_3_5``. The segment order is the live price list's: tier, battery, module
+    content, future size, then any other variant.
+    """
     if rate.system_type == SystemType.UPGRADE:
         return f"upgrade_{rate.from_size_key}_{rate.size_key}"
     key = f"{rate.system_type.lower()}_{(rate.tier or '').lower()}"
     if rate.system_type == SystemType.HYBRID:
         key += f"_{rate.battery_config or '0'}"
+    if rate.dcr:
+        key += f"_{rate.dcr}"
     if rate.future_size_key:
         key += f"_up{rate.future_size_key}"
     if rate.variant:
@@ -73,6 +80,7 @@ def natural_key(values: dict) -> tuple:
         values["system_type"],
         values.get("tier", ""),
         values.get("battery_config", ""),
+        values.get("dcr", ""),
         values["size_key"],
         values.get("from_size_key", ""),
         values.get("future_size_key", ""),
@@ -207,13 +215,14 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
     from_key = values.get("from_size_key") or ""
     future_key = values.get("future_size_key") or ""
     variant = values.get("variant") or ""
+    dcr = values.get("dcr") or ""
     if size is None:
         errors["size_key"] = [SIZE_KEY_HELP]
     if system == SystemType.UPGRADE:
         if valid_size_key(from_key) is None:
             errors["from_size_key"] = [f"UPGRADE rows need the starting size key ({SIZE_KEY_HELP})"]
-        if battery or future_key or variant:
-            errors["system_type"] = ["UPGRADE rows carry no battery band, future size or variant."]
+        if battery or future_key or variant or dcr:
+            errors["system_type"] = ["UPGRADE rows carry no battery band, future size, variant or module content."]
     else:
         if not tier:
             errors["tier"] = ["Required for ON-GRID and HYBRID rows."]
@@ -223,6 +232,11 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
             errors["battery_config"] = ["HYBRID rows need a battery band (0, 1 or 2)."]
         if system == SystemType.ONGRID and battery:
             errors["battery_config"] = ["ON-GRID rows have no battery band."]
+        # Only hybrid is quoted per module content; on-grid is one price either way.
+        if dcr and system != SystemType.HYBRID:
+            errors["dcr"] = ["Only HYBRID rows are priced per module content."]
+        if dcr not in ("", "dcr", "ndcr"):
+            errors["dcr"] = ["Must be dcr, ndcr or blank."]
     if future_key and valid_size_key(future_key) is None:
         errors["future_size_key"] = [SIZE_KEY_HELP]
     if variant and not VARIANT_RE.match(variant):
@@ -242,6 +256,7 @@ def normalise_rate(values: dict, index: int) -> tuple[dict, dict]:
         "from_size_key": from_key,
         "from_size_kw": valid_size_key(from_key)[0] if from_key else None,
         "future_size_key": future_key,
+        "dcr": dcr,
         "variant": variant,
         "customer_price_incl_gst": Decimal(price).quantize(Decimal("0.01")),
         "sort_order": values.get("sort_order", index),
@@ -285,7 +300,7 @@ def _replace(model, rate_set: MarketRateSet, rows: list[dict], key_of, fields, *
     return outcome
 
 
-RATE_FIELDS = ("system_type", "tier", "battery_config", "size_kw", "size_key", "phase", "from_size_key", "from_size_kw", "future_size_key", "variant", "customer_price_incl_gst", "sort_order")
+RATE_FIELDS = ("system_type", "tier", "battery_config", "dcr", "size_kw", "size_key", "phase", "from_size_key", "from_size_kw", "future_size_key", "variant", "customer_price_incl_gst", "sort_order")
 
 
 def _finish_child_write(rate_set: MarketRateSet, outcome: dict, *, user, action: str) -> None:

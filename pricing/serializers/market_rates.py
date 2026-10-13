@@ -60,6 +60,7 @@ class MarketRateSerializer(serializers.ModelSerializer):
             "size_kw",
             "phase",
             "from_size_key",
+            "dcr",
             "future_size_key",
             "variant",
             "customer_price_incl_gst",
@@ -77,6 +78,13 @@ class MarketRateInputSerializer(serializers.Serializer):
     battery_config = serializers.ChoiceField(choices=MarketRate._meta.get_field("battery_config").choices, required=False, allow_blank=True, default="")
     size_key = serializers.CharField(max_length=8, help_text="3, 5sp (5 kW 1P), 5tp (5 kW 3P), 10 … — for UPGRADE the target size.")
     from_size_key = serializers.CharField(max_length=8, required=False, allow_blank=True, default="", help_text="UPGRADE only: the starting size.")
+    dcr = serializers.ChoiceField(
+        choices=["dcr", "ndcr"],
+        required=False,
+        allow_blank=True,
+        default="",
+        help_text="HYBRID only: the module content this price is for. Blank for on-grid.",
+    )
     future_size_key = serializers.CharField(max_length=8, required=False, allow_blank=True, default="")
     variant = serializers.CharField(max_length=24, required=False, allow_blank=True, default="")
     customer_price_incl_gst = serializers.DecimalField(max_digits=14, decimal_places=2, min_value=0, help_text="0 = not set.")

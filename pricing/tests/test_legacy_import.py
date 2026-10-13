@@ -9,7 +9,7 @@ from audit.models import AuditLog
 from catalog.tests import legacy_fixtures as catalog_fixtures
 from core.models import LegacyMap
 from pricing.models import CostConfig, InstallationMatrix, MarketRate, MarketRateSet, Offer, OfferTransition, Price, PriceKind, StatutoryFee, ValidityKind, ValidityPolicy
-from pricing.services import cost_config, legacy_import, validity
+from pricing.services import cost_config, legacy_import, market_rates, validity
 from pricing.tests.legacy_fixtures import KSEB_FEES, engine_configs, flarize_catalog_pricing, flarize_file, goldenapp
 
 pytestmark = pytest.mark.django_db
@@ -20,7 +20,13 @@ def current_values() -> dict:
 
 
 def cells() -> dict:
-    return {(r.system_type, r.tier, r.battery_config, r.size_key, r.from_size_key, r.future_size_key, r.variant): r.customer_price_incl_gst for r in MarketRate.objects.all()}
+    # Keyed on the row's full uniqueness tuple, `dcr` included: without it a DCR and a
+    # non-DCR price for the same tier/band/size collapse into one entry here, and a
+    # comparison could pass while one of the two was being lost.
+    return {
+        (r.system_type, r.tier, r.battery_config, r.dcr, r.size_key, r.from_size_key, r.future_size_key, r.variant): r.customer_price_incl_gst
+        for r in MarketRate.objects.all()
+    }
 
 
 def codes(result, code) -> list[dict]:
@@ -80,6 +86,67 @@ class TestMarketRates:
         assert cells() == backend_first
         again = legacy_import.import_bom_market_rates(goldenapp("bom_marketrate"))
         assert again["created"] == 0 and again["updated"] == 0
+
+    def test_module_content_keys_import_as_separate_prices(self):
+        """``_dcr`` / ``_ndcr`` keys are their own cells, including alongside ``_up``.
+
+        Hybrid is quoted separately for DCR and non-DCR modules — the two differ by
+        ₹38k–₹64k on the live list — and the key can carry the module content, a future
+        size and a variant at once: ``hybrid_value_0_dcr_up5_diffBase``.
+
+        Before the BOM port added the ``dcr`` column, ``MARKET_KEY_RE`` matched ``variant``
+        only *after* ``_up``, so none of those shapes parsed: 12 of the 34 live keys were
+        reported as ``unknown_market_rate_key`` and skipped, four of them carrying real
+        prices. The import still said it succeeded, which is why it went unnoticed.
+        """
+        rates = {
+            "hybrid_value_0_dcr": {"3": 310000, "5": 394000},
+            "hybrid_value_0_ndcr": {"3": 272000, "5": 336419},
+            "hybrid_value_1_dcr": {"3": 433000},
+            "hybrid_value_1_ndcr": {"3": 392089},
+            "hybrid_value_0_dcr_up5": {"3": 339000},
+            "hybrid_value_0_ndcr_up5": {"3": 300616},
+            "hybrid_value_0_dcr_up5_diffBase": {"3": 0},
+            "ongrid_value": {"3": 245000},
+            "ongrid_value_up5sp": {"3": 290000},
+        }
+        result = legacy_import.import_flarize_pricing({"marketRates": rates})
+        assert not codes(result, "unknown_market_rate_key"), "every key shape must parse"
+
+        # A key names a column of sizes, so one key yields one row per size -- the cell is
+        # (key, size_key), which is why this is keyed on both.
+        by_cell = {(market_rates.rate_key(row), row.size_key): row for row in MarketRate.objects.all()}
+        expected = {(key, size) for key, sizes in rates.items() for size in sizes}
+        assert expected <= set(by_cell), f"missing cells: {sorted(expected - set(by_cell))}"
+
+        # The two module contents are distinct prices, not one overwriting the other.
+        assert by_cell[("hybrid_value_0_dcr", "3")].customer_price_incl_gst == Decimal("310000.00")
+        assert by_cell[("hybrid_value_0_dcr", "5")].customer_price_incl_gst == Decimal("394000.00")
+        assert by_cell[("hybrid_value_0_ndcr", "3")].customer_price_incl_gst == Decimal("272000.00")
+        assert by_cell[("hybrid_value_0_ndcr", "5")].customer_price_incl_gst == Decimal("336419.00")
+        # The ₹38k gap between the two contents at 3 kW is exactly why they cannot share a cell.
+        assert by_cell[("hybrid_value_0_dcr", "3")].dcr == "dcr"
+        assert by_cell[("hybrid_value_0_ndcr", "3")].dcr == "ndcr"
+
+        # Module content, future size and variant coexist on one row.
+        combined = by_cell[("hybrid_value_0_dcr_up5_diffBase", "3")]
+        assert (combined.dcr, combined.future_size_key, combined.variant) == ("dcr", "5", "diffBase")
+
+        # On-grid is one price either way, so it carries no module content.
+        assert by_cell[("ongrid_value", "3")].dcr == ""
+        assert by_cell[("ongrid_value_up5sp", "3")].future_size_key == "5sp"
+
+        # Re-importing changes nothing — the lookup matches on `dcr` too, so the second
+        # pass recognises the rows rather than colliding them.
+        again = legacy_import.import_flarize_pricing({"marketRates": rates})
+        assert again["created"] == 0 and again["updated"] == 0
+
+    def test_module_content_is_rejected_on_non_hybrid_rows(self):
+        """Only hybrid is priced per module content; the DB constraint says so too."""
+        clean, errors = market_rates.normalise_rate(
+            {"system_type": "ONGRID", "tier": "VALUE", "size_key": "3", "dcr": "dcr", "customer_price_incl_gst": Decimal("1")}, 0
+        )
+        assert not clean and "rates[0].dcr" in errors
 
     def test_locked_set_and_bad_rows(self):
         legacy_import.import_bom_market_rates(goldenapp("bom_marketrate"))
