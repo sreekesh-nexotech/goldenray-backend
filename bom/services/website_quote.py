@@ -43,6 +43,7 @@ from bom.services.qty_rules import QtyContext, evaluate, matches, new_panels
 from catalog.models import Component, ComponentStatus
 from catalog.models.category import BomRole, Unit
 from core.errors import DomainError
+from engines._jscompat import js_round
 
 VALID_SYS_TYPES = ("ongrid", "hybrid", "upgrade")
 VALID_TIERS = ("base", "value", "premium")
@@ -93,6 +94,8 @@ COST_KEYS = {
     "structure_repair_pct": "structure_repair_pct",
 }
 LEGACY_EXTRA_KM_RATE = 35
+#: The four cost-config keys engines.money composes into the effective GST rate.
+GST_SPLIT_KEYS = ("gst_goods_share", "gst_services_share", "gst_goods_rate", "gst_services_rate")
 INVERTER_TYPES = {"ONGRID": "ongrid", "HYBRID": "hybrid"}
 QUOTABLE = (ComponentStatus.ACTIVE, ComponentStatus.DEPRECATED)  # never a DRAFT or RETIRED component on a website quote
 
@@ -274,6 +277,7 @@ class StructureItemView:
     weight_kg: Decimal | None
     price: Decimal | None
     rule: dict
+    name: str = ""  # quoted as a material line under COMPOSITE, so the name is part of the BOM
 
 
 @dataclass
@@ -297,7 +301,42 @@ def _costs() -> dict:
     costs = {name: values[key] for name, key in COST_KEYS.items()}
     costs["structure_repair_pct"] = float(Decimal(str(costs["structure_repair_pct"])) * 100)
     costs["extra_km_rate"] = values.get("transport_extra_rate_per_km", LEGACY_EXTRA_KM_RATE)
+    costs["gst_regime"], costs["gst_rate_pct"] = _gst_regime(values)
     return costs
+
+
+def _gst_regime(values: dict) -> tuple[str, float]:
+    """``(mode, effective_rate_pct)`` for this quote, via ``engines.money``.
+
+    ``COMPOSITE`` taxes the selling price once. The rate comes from
+    ``gst.quote_regime.rate_pct`` when stated — Golden Ray invoices solar at a flat 9 %,
+    which the 70/30 split at 5/18 only approximates (8.9 %), and a quote has to show the
+    rate actually charged. Otherwise it is derived from the four ``gst_*`` split keys, the
+    same scheme ``PriceRelease.payload["gst"]`` already stamps.
+
+    Absent key means ``PER_LINE``, so the public website quote
+    (``legacy/services/website.py``) is never re-priced by a deployment — only by an
+    admin deliberately setting the regime.
+    """
+    regime_config = values.get("gst.quote_regime") or {}
+    if regime_config.get("mode") != "COMPOSITE":
+        return "PER_LINE", 0.0
+    from engines.money import GstConfig, GstRegimeCode, resolve_gst_regime
+
+    stated = regime_config.get("rate_pct")
+    if stated is not None:
+        regime = resolve_gst_regime(GstConfig(regime=GstRegimeCode.FLAT, rate_pct=Decimal(str(stated))))
+        return "COMPOSITE", float(regime.effective_rate_pct)
+    missing = [key for key in GST_SPLIT_KEYS if key not in values]
+    if missing:
+        raise DomainError(
+            "quote_not_configured",
+            f'COMPOSITE GST needs gst.quote_regime.rate_pct, or the split keys {", ".join(missing)}.',
+            status=503,
+            errors={"cost_config": missing},
+        )
+    regime = resolve_gst_regime(GstConfig.from_cost_config(**{key: values[key] for key in GST_SPLIT_KEYS}))
+    return "COMPOSITE", float(regime.effective_rate_pct)
 
 
 def _legacy_item(component: Component, price: Decimal) -> Item:
@@ -413,7 +452,10 @@ def _structures() -> dict[str, list[StructureItemView]]:
     result: dict[str, list[StructureItemView]] = {}
     for template in StructureTemplate.objects.prefetch_related("items"):
         items = sorted(template.items.all(), key=lambda item: (item.sort_order, item.pk))
-        result[template.slug] = [StructureItemView(item_type=item.item_type, weight_kg=item.weight_kg, price=item.unit_price, rule=item.qty_rule) for item in items]
+        result[template.slug] = [
+            StructureItemView(item_type=item.item_type, weight_kg=item.weight_kg, price=item.unit_price, rule=item.qty_rule, name=item.name)
+            for item in items
+        ]
     return result
 
 
@@ -475,14 +517,33 @@ class Calculator:
         tier = p["tier"]
         bat_config = p["bat_config"]
         is_three_phase = size in (self.s.three_phase_sizes or [])
+        kw = self._size_to_kw(size)
+        composite = self.costs["gst_regime"] == "COMPOSITE"
         bom_lines = self._get_slot_lines(size, tier, bat_config, is_three_phase)
         bom_lines += self._get_fixed_lines(size, tier, bat_config, is_three_phase)
+        # Under COMPOSITE the flat-roof structure is quoted as material, as the source
+        # does; _calc_costs then leaves structure_base out of cost_total so it is not
+        # charged twice.
+        if composite:
+            bom_lines += self._get_structure_lines(kw, next_pos=len(bom_lines))
         totals = self._calc_totals(bom_lines)
-        kw = self._size_to_kw(size)
-        cost_bd = self._calc_costs(totals["material_with_gst"], kw)
-        subtotal = totals["material_with_gst"] + cost_bd["cost_total"]
-        margin = self._calc_margin(subtotal)
-        grand_total = subtotal + margin
+        cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite)
+        if composite:
+            # Source ladder (App.jsx:1477-1488): margin on PRE-GST cost, then one GST
+            # charge on cost + profit. Taxing a GST-inclusive subtotal, as PER_LINE does,
+            # would tax the tax.
+            pre_gst = totals.pop("_material_ex_gst_exact") + cost_bd["cost_total"]
+            margin = self._calc_margin(pre_gst)
+            all_gst = round((pre_gst + margin) * self.costs["gst_rate_pct"] / 100)
+            subtotal = pre_gst + margin
+            grand_total = subtotal + all_gst
+            totals = {**totals, "pre_gst_subtotal": round(pre_gst), "gst_on_sale": all_gst}
+        else:
+            totals.pop("_material_ex_gst_exact")
+            subtotal = totals["material_with_gst"] + cost_bd["cost_total"]
+            margin = self._calc_margin(subtotal)
+            grand_total = subtotal + margin
+            totals = {**totals, "pre_gst_subtotal": None, "gst_on_sale": None}
         market_rate = self._lookup_market_rate()
         customer_price = market_rate if market_rate > 0 else grand_total
         subsidy = self._calc_subsidy(kw)
@@ -646,7 +707,56 @@ class Calculator:
             total += cost
         return {"total": total}
 
-    def _calc_costs(self, mat_with_gst: float, kw: float) -> dict:
+    def _get_structure_lines(self, kw: float, *, next_pos: int) -> list:
+        """The flat-roof structure as BOM material lines (App.jsx:1365-1385).
+
+        A tube's unit price is its weight at the tier's rate, and its name carries that
+        working so a quote shows why the number is what it is. GST is 18 % per line here
+        even under COMPOSITE: the source writes it and it is what the add-on arithmetic
+        reads, while :meth:`_calc_totals` ignores per-line GST in that regime anyway.
+        """
+        items = self.s.structures.get(STRUCTURE_SLUGS["flatRoof"]) or []
+        tube_rate = self._cost("gp_rate_per_kg") if self.p["tier"] == "base" else self._cost("gi_rate_per_kg")
+        ctx = QtyContext(kw=kw)
+        lines = []
+        for item in items:
+            qty = evaluate(item.rule, ctx)
+            if not qty or qty <= 0:
+                continue
+            if item.item_type == StructureItemType.TUBE:
+                weight_kg = float(item.weight_kg or 0)
+                # js_round, not round: JavaScript's Math.round breaks ties upward while
+                # Python's rounds to even, and this product lands exactly on .5 for the
+                # 2.5x1.5 tube at the base-tier GP rate (15.3kg x 85 = 1300.5) in all
+                # three structure templates. Python gave 1300 against the source's 1301,
+                # which is 3 rupees a quote through qty=3 and then compounds through the
+                # margin. The other 42 round() calls in this module stay as they are:
+                # they reproduce the legacy Python calculator, whose own banker's
+                # rounding the retired golden file encodes.
+                unit_price = js_round(weight_kg * tube_rate)
+                name = f"{item.name} ({_plain(item.weight_kg)}kg × ₹{js_round(tube_rate)}/kg)"
+            else:
+                unit_price = float(item.price or 0)
+                name = item.name
+            amount = js_round(unit_price * qty)
+            lines.append(
+                {
+                    "pos": next_pos + len(lines),
+                    "name": name,
+                    "brand": "",
+                    "qty": qty,
+                    "unit": "nos",
+                    "unit_price": unit_price,
+                    "amount": amount,
+                    "gst_pct": 18,
+                    "gst_amt": round(amount * 18 / 100),
+                    "section": "structure",
+                    "is_variable": False,
+                }
+            )
+        return lines
+
+    def _calc_costs(self, mat_with_gst: float, kw: float, *, structure_as_material: bool = False) -> dict:
         p = self.p
         dist_km = p["dist_km"]
         struct_type = p["structure_type"]
@@ -654,7 +764,13 @@ class Calculator:
         service = self._cost("service_rate_year") * self._cost("service_years")
         transport = dist_km * self._cost("transport_rate")
         extra_km = max(0, dist_km - int(self.costs["default_dist_km"]))
-        transport += extra_km * self.costs["extra_km_rate"]
+        transport_extra = extra_km * self.costs["extra_km_rate"]
+        # The source keeps these on separate ladders: `costCalc.transportation` is the
+        # whole distance at the per-km rate and feeds the internal cost, while the
+        # beyond-base surcharge lives only in `addOnTotal`, which sits on top of the
+        # market rate (App.jsx:1458, 1494). Folding the surcharge into cost_total would
+        # charge the same distance twice on the one number the customer pays.
+        transport += transport_extra
         misc = self._cost("miscellaneous")
         office = self._cost("office")
         structure_base = self._calc_structure_cost("flatRoof", kw)["total"]
@@ -666,7 +782,16 @@ class Calculator:
             structure_extra = max(0, selected["total"] - structure_base)
             structure_labor = self._cost("structure_labor")
             structure_repair = round((structure_extra + structure_labor) * float(self.costs["structure_repair_pct"]) / 100)
-        cost_total = install + service + transport + misc + office + structure_base + structure_extra + structure_labor + structure_repair
+        # The flat roof is either an overhead or a material line, never both. When it has
+        # been quoted as material it is still REPORTED here (a reader wants to see what
+        # the structure came to) but must not be added into cost_total again. Likewise
+        # the extra-km surcharge is reported inside `transport` but belongs to the add-on
+        # ladder, so COMPOSITE leaves it out of the cost.
+        cost_total = install + service + transport + misc + office + structure_extra + structure_labor + structure_repair
+        if structure_as_material:
+            cost_total -= transport_extra
+        else:
+            cost_total += structure_base
         return {
             "install": round(install),
             "service": round(service),
@@ -680,14 +805,42 @@ class Calculator:
             "cost_total": round(cost_total),
         }
 
-    @staticmethod
-    def _calc_totals(lines: list) -> dict:
+    def _calc_totals(self, lines: list) -> dict:
+        """Material totals under the configured GST regime.
+
+        ``PER_LINE`` sums each line's own GST into the 5/12/18 buckets. ``COMPOSITE``
+        taxes the material once at the effective rate and reports the buckets as zero —
+        Golden-Ray-BOM keeps the three fields "for backward compat but zero[s] them", and
+        they stay in the response because the frontend's ``BomTotals``, the quotations
+        snapshots and ``packs`` all read them.
+
+        Under COMPOSITE the buckets are therefore written only by custom items, exactly
+        as in the source.
+        """
         mat_ex_gst = sum(line["amount"] for line in lines)
-        gst_5 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 5)
-        gst_12 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 12)
-        gst_18 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 18)
-        mat_with_gst = mat_ex_gst + gst_5 + gst_12 + gst_18
-        return {"material_ex_gst": round(mat_ex_gst), "gst_5": round(gst_5), "gst_12": round(gst_12), "gst_18": round(gst_18), "material_with_gst": round(mat_with_gst)}
+        if self.costs["gst_regime"] == "COMPOSITE":
+            gst_total = round(mat_ex_gst * self.costs["gst_rate_pct"] / 100)
+            gst_5 = gst_12 = gst_18 = 0
+        else:
+            gst_5 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 5)
+            gst_12 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 12)
+            gst_18 = sum(line["gst_amt"] for line in lines if line["gst_pct"] == 18)
+            gst_total = gst_5 + gst_12 + gst_18
+        return {
+            "material_ex_gst": round(mat_ex_gst),
+            "gst_5": round(gst_5),
+            "gst_12": round(gst_12),
+            "gst_18": round(gst_18),
+            "gst_total": round(gst_total),
+            "material_with_gst": round(mat_ex_gst + gst_total),
+            # The ladder downstream must compound off the UNROUNDED material, as the
+            # source does (App.jsx:1398-1403 sums line amounts and never rounds before
+            # preGstSub). Rounding here first would shift margin and grand_total by the
+            # fraction dropped -- 0.3 on a 3 kW on-grid base. Reported separately rather
+            # than un-rounding material_ex_gst, whose integer shape the response contract
+            # and BomQuoteTotalsSerializer both declare.
+            "_material_ex_gst_exact": mat_ex_gst,
+        }
 
     def _calc_margin(self, subtotal: float) -> float:
         if self.p["margin_type"] == "percent":
@@ -878,14 +1031,26 @@ class Calculator:
             )
             pos += 1
         totals = self._calc_totals(lines)
+        # Installation is charged on the ADDED capacity, and the upgrade path carries no
+        # service line and no extra-km transport (App.jsx:2195-2200).
         install = self._cost("install_rate") * (to_kw - from_kw)
         transport = p["dist_km"] * self._cost("transport_rate")
         misc = self._cost("miscellaneous")
         office = self._cost("office")
         cost_total = round(install + transport + misc + office)
-        subtotal = totals["material_with_gst"] + cost_total
-        margin = self._calc_margin(subtotal)
-        grand_total = subtotal + margin
+        if self.costs["gst_regime"] == "COMPOSITE":
+            pre_gst = totals.pop("_material_ex_gst_exact") + cost_total
+            margin = self._calc_margin(pre_gst)
+            all_gst = round((pre_gst + margin) * self.costs["gst_rate_pct"] / 100)
+            subtotal = pre_gst + margin
+            grand_total = subtotal + all_gst
+            totals = {**totals, "pre_gst_subtotal": round(pre_gst), "gst_on_sale": all_gst}
+        else:
+            totals.pop("_material_ex_gst_exact")
+            subtotal = totals["material_with_gst"] + cost_total
+            margin = self._calc_margin(subtotal)
+            grand_total = subtotal + margin
+            totals = {**totals, "pre_gst_subtotal": None, "gst_on_sale": None}
         market_rate = self._lookup_upgrade_market_rate(from_kw, to_kw)
         customer_price = market_rate if market_rate > 0 else grand_total
         subsidy = self._calc_subsidy(to_kw)

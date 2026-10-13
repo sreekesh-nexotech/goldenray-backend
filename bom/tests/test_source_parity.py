@@ -67,7 +67,24 @@ def flarize_world(db):
     results["bom"] = bom_import.import_flarize_bom(catalog_json)
     for rate_set in MarketRateSet.objects.exclude(status="ACTIVE"):
         activate_set(rate_set, user=None)
+    # Golden-Ray-BOM prices with the composite regime, so the gate has to run the engine
+    # the same way. The key defaults to PER_LINE precisely so a deployment cannot flip
+    # the public website's prices; a test asserting source parity has to opt in.
+    _set_composite_gst()
     return results
+
+
+def _set_composite_gst():
+    """Switch the engine to the composite regime the source prices with, at its rate.
+
+    ``rate_pct: 9`` is stated outright rather than derived from the 70/30 split, which
+    only approximates it (8.9 %). Golden Ray invoices solar at a flat 9 %, so that is the
+    rate a quote must show — and stating it is what lets this gate demand exact parity
+    instead of tolerating a per-case delta.
+    """
+    from pricing.services.cost_config import put_values
+
+    put_values(user=None, entries=[{"key": "gst.quote_regime", "value": {"mode": "COMPOSITE", "rate_pct": 9}}])
 
 
 def _case_ids(cases):

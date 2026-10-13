@@ -147,6 +147,40 @@ def _engine_document(validate: Callable[[object], object]):
     return check
 
 
+#: How a BOM quote applies GST. ``PER_LINE`` taxes each line at its own category rate and
+#: reports the 5/12/18 buckets; ``COMPOSITE`` taxes the selling price once at the effective
+#: rate derived from the four ``gst_*`` split keys, which is what Golden-Ray-BOM does.
+QUOTE_GST_REGIMES = ("PER_LINE", "COMPOSITE")
+
+
+def _quote_gst_regime(value):
+    """``{"mode": "PER_LINE" | "COMPOSITE", "rate_pct"?: <0..100>}``.
+
+    ``rate_pct`` states the composite rate outright instead of deriving it from the four
+    ``gst_*`` split keys. Golden Ray invoices solar at a flat 9 %, which the 70/30 split
+    at 5/18 only approximates (8.9 %), and the quote has to show the rate actually
+    charged — so the explicit rate wins when it is set, and the split remains the
+    fallback for callers that have not stated one.
+    """
+    if not isinstance(value, dict):
+        raise ValueProblem('Must be an object like {"mode": "COMPOSITE", "rate_pct": 9}.')
+    unknown = sorted(set(value) - {"mode", "rate_pct"})
+    if unknown:
+        raise ValueProblem(f"Unknown field(s): {', '.join(unknown)}.")
+    mode = value.get("mode")
+    if mode not in QUOTE_GST_REGIMES:
+        raise ValueProblem(f"mode must be one of {', '.join(QUOTE_GST_REGIMES)}.")
+    regime = {"mode": mode}
+    if value.get("rate_pct") is not None:
+        rate = _number(value["rate_pct"])
+        if not 0 <= rate <= 100:
+            raise ValueProblem("rate_pct must be a percentage between 0 and 100.")
+        if mode != "COMPOSITE":
+            raise ValueProblem("rate_pct applies only to COMPOSITE.")
+        regime["rate_pct"] = json_number(rate)
+    return regime
+
+
 def _energy(value):
     from engines.energy import validate_energy_config
 
@@ -208,6 +242,15 @@ KEYS: dict[str, KeySpec] = dict(
         _spec("gst_services_share", "gst", "fraction", fraction_value, "Share taxed as services (0.30).", required_for_release=True),
         _spec("gst_goods_rate", "gst", "fraction", fraction_value, "GST rate on the goods share (0.05).", required_for_release=True),
         _spec("gst_services_rate", "gst", "fraction", fraction_value, "GST rate on the services share (0.18).", required_for_release=True),
+        _spec(
+            "gst.quote_regime",
+            "gst",
+            "document",
+            _quote_gst_regime,
+            'How a BOM quote applies GST: {"mode": "COMPOSITE"} taxes the selling price once at the effective rate '
+            "derived from the four gst_* split keys (what Golden-Ray-BOM does), while PER_LINE taxes each line at its "
+            "category rate. Absent means PER_LINE, so the public website quote is never re-priced by a deployment.",
+        ),
         _spec("target_gross_margin_by_tier", "margin", "document", margin_by_tier_value, "Target/minimum gross margin per tier (fractions).", internal=True),
         _spec("cost_engine.config", "documents", "document", cost_engine_config_value, "The Flarize cost-engine configuration (cost-config.json) read by engines.cost."),
         _spec("rate_card", "documents", "document", rate_card_value, "The Project Head rate card (project-rate-card.json), versioned records read by engines.rate_card."),

@@ -38,14 +38,35 @@ CORPORA = {
 #: does NOT match Golden-Ray-BOM, so each one needs a reason a reviewer can check —
 #: "rounding" is not a reason, "the split is authoritative and derives 8.9%" is.
 APPROVED_DIFFERENCES: dict[str, str] = {
-    # Phase 1. The source hardcodes 9%; the platform derives the composite rate from
-    # pricing_cost_config (0.70 x 5% + 0.30 x 18% = 8.9%) through
-    # engines.money.resolve_gst_regime, which is the same scheme audited and stamped into
-    # PriceRelease.payload["gst"]. Hardcoding 9 would fork the platform's single source of
-    # GST truth to reproduce a rounding. The delta is ~0.1pp, always in the customer's
-    # favour.
-    "gst_effective_rate": "composite 8.9% from cost config, not the source's rounded 9%",
+    # NOTE: the GST rate is NOT a difference. The platform states 9 % outright through
+    # gst.quote_regime.rate_pct rather than deriving 8.9 % from the 70/30 split, because
+    # Golden Ray invoices solar at a flat 9 % and the quote has to show the rate actually
+    # charged. engines.money still resolves it, as the FLAT regime.
+    #
+    # The source gets JSON-native numbers (13122 is an int, 1.7 a float); the platform
+    # reads Decimal columns and emits floats throughout (13122.0). The retired golden file
+    # pins that float shape as the public response contract, and `quotations` snapshots
+    # and `packs` read it, so matching the source's mixed types would be a breaking change
+    # for a cosmetic gain. Values are compared numerically instead.
+    "number_types": "platform emits floats for prices; the source emits JSON-native ints/floats",
+    # The source reports its material and ladder totals unrounded (123537.3), carrying a
+    # fraction that comes from per-watt panel pricing. The platform's response contract
+    # declares them as integers -- BomQuoteTotalsSerializer uses IntegerField and the
+    # retired golden file shows ints -- so they are rounded for the response while the
+    # ladder still compounds off the exact value internally. Totals are therefore
+    # compared to the rupee.
+    "totals_are_whole_rupees": "platform rounds totals to int per its contract; the source keeps the fraction",
 }
+
+#: Response paths where only the numeric value is compared, not its JSON type. Entries
+#: here are covered by ``APPROVED_DIFFERENCES["number_types"]``.
+NUMERIC_ONLY_FIELDS = frozenset({"unit_price", "amount", "qty", "market_rate", "discount_amt", "subsidy_amt"})
+
+#: Response paths compared to the nearest rupee rather than exactly, covered by
+#: ``APPROVED_DIFFERENCES["totals_are_whole_rupees"]``.
+WHOLE_RUPEE_FIELDS = frozenset(
+    {"material_ex_gst", "material_with_gst", "pre_gst_subtotal", "subtotal", "grand_total", "customer_price", "final_price", "price_after_subsidy"}
+)
 
 
 def _read_gz(name: str):
@@ -72,14 +93,33 @@ def dumped(value) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=False)
 
 
+def _leaf_name(path: str) -> str:
+    """The field name a path ends in, ignoring any list index (``lines[3].amount``)."""
+    return path.rsplit(".", 1)[-1].split("[", 1)[0]
+
+
 def differences(expected: dict, actual: dict, *, path: str = "") -> list[str]:
     """Every leaf where ``actual`` departs from ``expected``, as readable paths.
 
     Reports the whole set rather than failing on the first, because a pricing change
     usually moves a dozen related numbers at once and seeing them together is what tells
     you which stage of the ladder moved.
+
+    Comparison is on serialised JSON — so ``13122.0`` is not ``13122`` — except on the
+    price fields in :data:`NUMERIC_ONLY_FIELDS`, where the platform's float shape is an
+    approved difference and only the value is checked.
     """
     out: list[str] = []
+    leaf = _leaf_name(path)
+    if isinstance(expected, int | float) and isinstance(actual, int | float) and not isinstance(expected, bool):
+        if leaf in NUMERIC_ONLY_FIELDS:
+            if float(expected) != float(actual):
+                out.append(f"{path}: {actual}, expected {expected}")
+            return out
+        if leaf in WHOLE_RUPEE_FIELDS:
+            if abs(float(expected) - float(actual)) >= 1:
+                out.append(f"{path}: {actual}, expected {expected} (beyond a rupee)")
+            return out
     if isinstance(expected, dict) and isinstance(actual, dict):
         for key in expected.keys() | actual.keys():
             where = f"{path}.{key}" if path else str(key)

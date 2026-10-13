@@ -59,10 +59,18 @@ class BomQuoteCostsSerializer(serializers.Serializer):
 
 class BomQuoteTotalsSerializer(serializers.Serializer):
     material_ex_gst = serializers.IntegerField()
+    # Under COMPOSITE the whole bill is taxed once, so these three are zero and only
+    # custom items write them; under PER_LINE they are the per-category buckets.
     gst_5 = serializers.IntegerField()
     gst_12 = serializers.IntegerField()
     gst_18 = serializers.IntegerField()
+    gst_total = serializers.IntegerField(help_text="GST on the material, whichever regime produced it.")
     material_with_gst = serializers.IntegerField()
+    # COMPOSITE only: the cost the margin is taken on, and the single GST charge on
+    # (cost + profit). Null under PER_LINE, where margin is taken on a GST-inclusive
+    # subtotal and there is no separate charge on the sale.
+    pre_gst_subtotal = serializers.IntegerField(allow_null=True)
+    gst_on_sale = serializers.IntegerField(allow_null=True)
     subtotal = serializers.IntegerField()
     margin = serializers.IntegerField()
     grand_total = serializers.IntegerField()
