@@ -1,0 +1,17 @@
+{
+  "captured_from": "bom/Golden-Ray-BOM/src/App.jsx",
+  "app_jsx_sha256": "37b2ac996cb65d2a9b29a478ac31def4123b2635dd97f833878cb8e317c85db5",
+  "catalog_path": "bom/Golden-Ray-BOM/data/catalog.json",
+  "catalog_sha256": "00f71cfeee047ea34abddfe3f5155982990e59b2997abde217b79f1d6bee76d7",
+  "node_version": "v24.18.0",
+  "corpora": {
+    "corpus_bill": 408,
+    "corpus_discount": 420,
+    "corpus_micro": 43,
+    "corpus_standard": 132,
+    "corpus_standard_fu": 40,
+    "corpus_string": 51,
+    "corpus_upgrade": 123
+  },
+  "total_cases": 1217
+}
