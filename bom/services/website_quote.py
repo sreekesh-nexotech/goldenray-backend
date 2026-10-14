@@ -1329,6 +1329,17 @@ class Calculator:
         cell = self.s.installation_matrix.get((size_key, STRUCTURE_TO_INSTALLATION.get(struct_type, "FLAT")))
         return cell if cell else self._cost("install_rate") * kw
 
+    @staticmethod
+    def _size_key_for_kw(kw: float) -> str:
+        """The matrix key for a plain kW figure (``3.0`` -> ``"3"``).
+
+        The installation matrix is keyed the way the price list is -- ``3``, ``6``,
+        ``5sp``/``5tp`` -- so a float has to be rendered without its decimal. 5 kW is
+        phase-split and therefore has no bare ``"5"`` row; that lookup misses and the
+        per-kW fallback applies, which is what the source does too.
+        """
+        return str(int(kw)) if float(kw).is_integer() else str(kw)
+
     def _office_cost(self) -> float:
         """Office overhead amortised across the month's projects.
 
@@ -1673,11 +1684,17 @@ class Calculator:
         composite = self._composite
         if composite:
             # The same three cost inputs as the standard path (App.jsx:2969-2983), with
-            # one upstream quirk kept: the matrix is read at the BASE system size, not at
-            # the added capacity, so a 3→5 kW upgrade is costed as a 3 kW install. That is
-            # what the source does; replicated and flagged rather than corrected, since
-            # fixing it here would make the platform disagree with the tool.
-            install = self._install_cost(to_kw - from_kw, p["size"], p["structure_type"])
+            # one upstream quirk kept: the matrix is read at the EXISTING system's size,
+            # not at the upgrade target or the added capacity, so a 3→5 kW upgrade is
+            # costed as a 3 kW install. That is what the source does (`upInstMatrix[size]`,
+            # App.jsx:2970, where `size` is the base system's own state); replicated and
+            # flagged rather than corrected, since diverging would put the platform at odds
+            # with the tool on every upgrade quote.
+            #
+            # `from_kw`, not `p["size"]`: on the upgrade path the request's `size` is the
+            # TARGET, so reading it would look up "5" — a key the matrix does not hold
+            # (it has 5sp/5tp) — and fall through to the per-kW rate at ₹6,000.
+            install = self._install_cost(to_kw - from_kw, self._size_key_for_kw(from_kw), p["structure_type"])
             extra_km = max(0, p["dist_km"] - int(self.costs["default_dist_km"]))
             transport = extra_km * self.costs["extra_km_rate"]
             office = self._office_cost()

@@ -109,8 +109,10 @@ def upgrade_quote_request(params: dict) -> dict:
         ),
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
-        "subsidy_type": "none",
-        "module_dcr": params.get("moduleDcr", "dcr"),
+        "subsidy_type": params.get("subsidyType", "none"),
+        # Same substitution as the standard path: the corpus no longer carries
+        # `moduleDcr`, so reading it would silently default every case to "dcr".
+        "module_dcr": _module_dcr(params),
         "upgrade_phase": params.get("upgradePhase", "1P"),
         "upgrade_from_kw": float(params["upgradeFromKw"]),
         "upgrade_to_kw": float(to_kw),
@@ -136,7 +138,7 @@ def discount_request(params: dict) -> dict:
         "bat_config": "0",
         "subsidy_type": params.get("subsidyType", "none"),
         "ghs_houses": params.get("ghsHouses", 1),
-        "module_dcr": params.get("moduleDcr", "dcr"),
+        "module_dcr": _module_dcr(params),
     }
     if params.get("selectedOffer"):
         body["selected_offer_id"] = params["selectedOffer"]
