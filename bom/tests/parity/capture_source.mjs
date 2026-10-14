@@ -33,6 +33,22 @@ import { gzipSync } from "node:zlib";
 
 import * as E from "./source_engine.mjs";
 
+/**
+ * One tier's BOM, from the engine that now computes all three.
+ *
+ * `version-2` replaced the single-tier `bom` memo with `allTierBoms`, which returns
+ * `{base, value, premium}`; the app indexes into it (`const bom = allTierBoms[tier]`,
+ * App.jsx:2367). This shim does the same so every case below keeps its shape and its id —
+ * `tier` stays a capture axis even though it is no longer one of the memo's dependencies.
+ *
+ * `tier` is pulled out of the params rather than passed through, because passing an
+ * unknown key to the generated function would silently do nothing.
+ */
+function computeBom({ tier, ...params }) {
+  const all = E.computeAllTierBoms(params);
+  return all[tier] ?? { lines: [], totals: {} };
+}
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CATALOG_PATH = resolve(HERE, "../../../../bom/Golden-Ray-BOM/data/catalog.json");
 
@@ -61,7 +77,6 @@ const BOM_DEFAULTS = {
   sysType: "ongrid",
   size: "3",
   tier: "value",
-  batConfig: "0",
   microBrand: "enphase",
   zeroExport: true,
   selections: {},
@@ -78,7 +93,14 @@ const BOM_DEFAULTS = {
   addOns: NO_ADDONS,
   structGrade: "default",
   structGradeMode: "manual",
-  moduleDcr: "dcr",
+  // version-2 parameters. `batConfig` and `moduleDcr` are gone: the battery band is now
+  // derived from the package profile (decision C4) and module content is a tri-state
+  // filter that subsidy can force (App.jsx:1781-1793). `roofType` entered the BOM when
+  // installation cost moved to `installationMatrix[size][roofType]`.
+  panelTypeFilter: "all",
+  subsidyType: "none",
+  roofType: "flat",
+  projectBatteryOverride: null,
 };
 
 const UPGRADE_DEFAULTS = {
@@ -98,7 +120,14 @@ const UPGRADE_DEFAULTS = {
   marginVal: 20,
   upgradeCustomItems: [],
   upgradeAddOns: { structure: { enabled: false, type: "elevated" } },
-  moduleDcr: "dcr",
+  // Read by the body, absent from the memo's dependency array upstream; see the
+  // UNDECLARED note on computeUpgradeBom in source_engine.mjs.
+  panelTypeFilter: "all",
+  subsidyType: "none",
+  // `size` here is the base system size, which is what the upgrade engine wrongly keys
+  // its installation-matrix lookup off; `roofType` feeds the same lookup.
+  size: "3",
+  roofType: "flat",
 };
 
 // Template dimensions, read from the catalog rather than hardcoded, so the matrix
@@ -108,7 +137,6 @@ const SIZES = {
   hybrid: Object.keys(catalog.bomTemplates.hybrid.sizes),
 };
 const TIERS = ["base", "value", "premium"];
-const BAT_CONFIGS = catalog.bomTemplates.hybrid.batteryConfigs ?? ["0", "1", "2"];
 const STRUCTURES = ["elevated", "sheetRoof"];
 const UPGRADE_PATHS = [
   // The four paths the source has hardcoded panel counts for (App.jsx:2113) …
@@ -173,11 +201,14 @@ const SAMPLE_EVERY = 3;
   for (const sysType of ["ongrid", "hybrid"]) {
     for (const size of SIZES[sysType]) {
       for (const tier of TIERS) {
-        const bats = sysType === "hybrid" ? BAT_CONFIGS : ["0"];
-        for (const batConfig of bats) {
-          for (const moduleDcr of ["dcr", "ndcr"]) {
-            const params = { ...BOM_DEFAULTS, sysType, size, tier, batConfig, moduleDcr };
-            emit("corpus_standard", "computeBom", `std-${++n}`, params, E.computeBom(params));
+        // `batConfig` is no longer an axis: version-2 derives the battery band from the
+        // package profile, so the tier already selects it. Module content is now the
+        // tri-state `panelTypeFilter`, and `subsidyType` is varied with it because
+        // subsidy forces DCR regardless of the filter (App.jsx:1791).
+        for (const panelTypeFilter of ["all", "DCR", "NON_DCR"]) {
+          for (const subsidyType of ["none", "residential"]) {
+            const params = { ...BOM_DEFAULTS, sysType, size, tier, panelTypeFilter, subsidyType };
+            emit("corpus_standard", "computeBom", `std-${++n}`, params, computeBom(params));
           }
         }
       }
@@ -189,36 +220,42 @@ const SAMPLE_EVERY = 3;
   const base = { ...BOM_DEFAULTS, sysType: "ongrid", size: "6", tier: "value" };
   for (const distKm of [0, 50, 100, 101, 250]) {
     const params = { ...base, distKm };
-    emit("corpus_standard", "computeBom", `std-dist-${distKm}`, params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", `std-dist-${distKm}`, params, computeBom(params));
   }
   for (const [marginType, marginVal] of [["percent", 0], ["percent", 35], ["flat", 0], ["flat", 45000]]) {
     const params = { ...base, marginType, marginVal };
-    emit("corpus_standard", "computeBom", `std-margin-${marginType}-${marginVal}`, params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", `std-margin-${marginType}-${marginVal}`, params, computeBom(params));
   }
   for (const structGrade of ["default", "gp", "gi"]) {
     for (const structGradeMode of ["manual", "flat"]) {
       const params = { ...base, structGrade, structGradeMode };
-      emit("corpus_standard", "computeBom", `std-grade-${structGrade}-${structGradeMode}`, params, E.computeBom(params));
+      emit("corpus_standard", "computeBom", `std-grade-${structGrade}-${structGradeMode}`, params, computeBom(params));
     }
   }
   // Custom items are the ONLY writer of gst5/gst12/gst18 once the flat 9% model is on,
   // so all three buckets need a case each or the legacy fields go untested.
   for (const gst of [5, 12, 18]) {
     const params = { ...base, customItems: [{ id: 1, name: `Custom ${gst}%`, qty: 3, price: 1250, gst }] };
-    emit("corpus_standard", "computeBom", `std-custom-gst${gst}`, params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", `std-custom-gst${gst}`, params, computeBom(params));
   }
 
   // Add-ons: structure deltas, and each cable add-on against a real catalog item.
   for (const type of STRUCTURES) {
     const params = { ...base, addOns: { ...NO_ADDONS, structure: { enabled: true, type } } };
-    emit("corpus_standard", "computeBom", `std-struct-${type}`, params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", `std-struct-${type}`, params, computeBom(params));
+  }
+  // version-2 reads installation cost from `installationMatrix[size][roofType]`, so the
+  // roof is a BOM input and not only a cost-panel display.
+  for (const roofType of ["flat", "sheet", "elevated"]) {
+    const params = { ...BOM_DEFAULTS, roofType };
+    emit("corpus_standard", "computeBom", `std-roof-${roofType}`, params, computeBom(params));
   }
   for (const key of ["extraDcCable", "extraAcCable", "armouredCable"]) {
     const catKey = { extraDcCable: "dc_cable", extraAcCable: "ac_cable", armouredCable: "armoured_cable" }[key];
     const itemId = catalog.categories[catKey]?.items?.[0]?.id;
     if (!itemId) continue;
     const params = { ...base, addOns: { ...NO_ADDONS, [key]: { enabled: true, itemId, qty: 30 } } };
-    emit("corpus_standard", "computeBom", `std-addon-${key}`, params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", `std-addon-${key}`, params, computeBom(params));
   }
   // Every add-on at once, which is how addOnTotal's three summands interact.
   {
@@ -232,7 +269,7 @@ const SAMPLE_EVERY = 3;
         armouredCable: { enabled: true, itemId: catalog.categories.armoured_cable.items[0].id, qty: 15 },
       },
     };
-    emit("corpus_standard", "computeBom", "std-addon-all", params, E.computeBom(params));
+    emit("corpus_standard", "computeBom", "std-addon-all", params, computeBom(params));
   }
 
   // Add-ons ON TOP OF A CONFIGURED RATE. The cases above all sit on the 6 kW value
@@ -260,7 +297,7 @@ const SAMPLE_EVERY = 3;
       ],
     ]) {
       const params = { ...priced, ...over };
-      emit("corpus_standard", "computeBom", `std-rated-addon-${id}`, params, E.computeBom(params));
+      emit("corpus_standard", "computeBom", `std-rated-addon-${id}`, params, computeBom(params));
     }
   }
 }
@@ -277,7 +314,7 @@ const SAMPLE_EVERY = 3;
         const params = {
           ...BOM_DEFAULTS, sysType, size: "3", tier, futureUpgrade: true, upgradeSize,
         };
-        emit("corpus_standard_fu", "computeBom", `fu-${++n}`, params, E.computeBom(params));
+        emit("corpus_standard_fu", "computeBom", `fu-${++n}`, params, computeBom(params));
       }
     }
   }
@@ -292,7 +329,7 @@ const SAMPLE_EVERY = 3;
       ...BOM_DEFAULTS, sysType: "ongrid", size: "3", tier: "value",
       futureUpgrade: true, upgradeSize: "8", fuOpts,
     };
-    emit("corpus_standard_fu", "computeBom", `fu-opts-${bits}`, params, E.computeBom(params));
+    emit("corpus_standard_fu", "computeBom", `fu-opts-${bits}`, params, computeBom(params));
   }
 }
 
@@ -307,14 +344,16 @@ const SAMPLE_EVERY = 3;
       for (const microBrand of ["enphase", "hoymiles"]) {
         for (const zeroExport of [true, false]) {
           const params = { ...BOM_DEFAULTS, sysType, size, tier: "premium", microBrand, zeroExport };
-          emit("corpus_micro", "computeBom", `micro-${++n}`, params, E.computeBom(params));
+          emit("corpus_micro", "computeBom", `micro-${++n}`, params, computeBom(params));
         }
       }
     }
   }
-  for (const batConfig of BAT_CONFIGS) {
-    const params = { ...BOM_DEFAULTS, sysType: "hybrid", size: "5", tier: "premium", batConfig };
-    emit("corpus_micro", "computeBom", `micro-hyb-bat${batConfig}`, params, E.computeBom(params));
+  // Battery quantity comes from the package profile now, so the axis is the profile —
+  // i.e. the tier — not a battery band the caller picks.
+  for (const tier of TIERS) {
+    const params = { ...BOM_DEFAULTS, sysType: "hybrid", size: "5", tier };
+    emit("corpus_micro", "computeBom", `micro-hyb-${tier}`, params, computeBom(params));
   }
 }
 
@@ -356,9 +395,14 @@ const SAMPLE_EVERY = 3;
     const params = { ...UPGRADE_DEFAULTS, upgradeCustomItems };
     emit("corpus_upgrade", "computeUpgradeBom", "upg-custom", params, E.computeUpgradeBom(params));
   }
-  for (const moduleDcr of ["dcr", "ndcr"]) {
-    const params = { ...UPGRADE_DEFAULTS, moduleDcr };
-    emit("corpus_upgrade", "computeUpgradeBom", `upg-dcr-${moduleDcr}`, params, E.computeUpgradeBom(params));
+  // `computeUpgradeBom`'s dependency array dropped `moduleDcr` and never gained
+  // `panelTypeFilter`, though its body reads the latter (App.jsx:2730-2739 vs :3063) --
+  // an upstream stale-memo bug, replicated and flagged rather than fixed. Passing a key
+  // the generated signature does not declare would do nothing, so the axis becomes the
+  // tier, which does change the upgrade BOM.
+  for (const upgradeTier of TIERS) {
+    const params = { ...UPGRADE_DEFAULTS, upgradeTier };
+    emit("corpus_upgrade", "computeUpgradeBom", `upg-tier-${upgradeTier}`, params, E.computeUpgradeBom(params));
   }
 }
 
@@ -372,7 +416,7 @@ const SAMPLE_EVERY = 3;
     for (const size of SIZES[sysType]) {
       for (const tier of TIERS) {
         const bomParams = { ...BOM_DEFAULTS, sysType, size, tier };
-        const bom = E.computeBom(bomParams);
+        const bom = computeBom(bomParams);
         const params = { bom, catalog };
         emit("corpus_string", "computeStringConfig", `str-${++n}`, { ...bomParams, _via: "computeBom" }, E.computeStringConfig(params));
       }
@@ -384,10 +428,10 @@ const SAMPLE_EVERY = 3;
     const panel = panels[i];
     const bomParams = {
       ...BOM_DEFAULTS, sysType: "ongrid", size: "6", tier: "value",
-      moduleDcr: panel.dcr === true ? "dcr" : "ndcr",
+      panelTypeFilter: (panel.panelType || (panel.dcr ? "DCR" : "NON_DCR")),
       selections: { ongrid_value_6_1: panel.id },
     };
-    const bom = E.computeBom(bomParams);
+    const bom = computeBom(bomParams);
     emit("corpus_string", "computeStringConfig", `str-panel-${panel.id}`, { ...bomParams, _via: "computeBom" }, E.computeStringConfig({ bom, catalog }));
   }
   for (const [from, to] of UPGRADE_PATHS) {
@@ -438,10 +482,10 @@ const SAMPLE_EVERY = 3;
   const offerIds = ["", ...OFFERS.map((o) => o.id)];
 
   const bomCache = new Map();
-  const bomFor = (sysType, size, tier, moduleDcr) => {
-    const key = [sysType, size, tier, moduleDcr].join("|");
+  const bomFor = (sysType, size, tier, panelTypeFilter) => {
+    const key = [sysType, size, tier, panelTypeFilter].join("|");
     if (!bomCache.has(key)) {
-      bomCache.set(key, E.computeBom({ ...BOM_DEFAULTS, sysType, size, tier, moduleDcr }));
+      bomCache.set(key, computeBom({ ...BOM_DEFAULTS, sysType, size, tier, panelTypeFilter }));
     }
     return bomCache.get(key);
   };
@@ -453,14 +497,14 @@ const SAMPLE_EVERY = 3;
     for (const size of sizes) {
       for (const tier of TIERS) {
         for (const subsidyType of ["residential", "ghs", "none"]) {
-          for (const moduleDcr of ["dcr", "ndcr"]) {
+          for (const panelTypeFilter of ["DCR", "NON_DCR"]) {
             for (const selectedOffer of offerIds) {
               // Keep the file honest in size: sample the offer axis except for the
               // no-offer case, which every configuration needs.
               if (selectedOffer && n % SAMPLE_EVERY !== 0) { n++; continue; }
               const params = {
                 sysType,
-                bom: bomFor(sysType === "upgrade" ? "ongrid" : sysType, size, tier, moduleDcr),
+                bom: bomFor(sysType === "upgrade" ? "ongrid" : sysType, size, tier, panelTypeFilter),
                 upgradeBom,
                 offers: OFFERS,
                 selectedOffer,
@@ -469,7 +513,7 @@ const SAMPLE_EVERY = 3;
                 upgradeTier: tier,
                 subsidyType,
                 ghsHouses: 1,
-                moduleDcr,
+                panelTypeFilter,
               };
               emit("corpus_discount", "computeDiscountCalc", `disc-${++n}`, params, E.computeDiscountCalc(params));
             }
@@ -493,7 +537,6 @@ const SAMPLE_EVERY = 3;
         upgradeTier: "value",
         subsidyType: "ghs",
         ghsHouses,
-        moduleDcr: "dcr",
       };
       emit("corpus_discount", "computeDiscountCalc", `disc-ghs-${ghsHouses}-${size}`, params, E.computeDiscountCalc(params));
     }

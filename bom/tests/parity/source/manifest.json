@@ -1,17 +1,17 @@
 {
   "captured_from": "bom/Golden-Ray-BOM/src/App.jsx",
-  "app_jsx_sha256": "37b2ac996cb65d2a9b29a478ac31def4123b2635dd97f833878cb8e317c85db5",
+  "app_jsx_sha256": "be52e5ad7c4c2fa06cb2aa9b777807012d95fc8e75bad804e86e19bd12d10b73",
   "catalog_path": "bom/Golden-Ray-BOM/data/catalog.json",
-  "catalog_sha256": "00f71cfeee047ea34abddfe3f5155982990e59b2997abde217b79f1d6bee76d7",
+  "catalog_sha256": "f971226cf1765f66edacdeff5d2f492877fc205407f51a4ece8659a6c51324a4",
   "node_version": "v24.18.0",
   "corpora": {
     "corpus_bill": 408,
     "corpus_discount": 420,
     "corpus_micro": 43,
-    "corpus_standard": 136,
+    "corpus_standard": 211,
     "corpus_standard_fu": 40,
     "corpus_string": 51,
-    "corpus_upgrade": 123
+    "corpus_upgrade": 124
   },
-  "total_cases": 1221
+  "total_cases": 1297
 }

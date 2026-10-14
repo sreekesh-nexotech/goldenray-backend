@@ -35,6 +35,10 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const APP_JSX = resolve(HERE, "../../../../bom/Golden-Ray-BOM/src/App.jsx");
 const OUT = resolve(HERE, "source_engine.mjs");
+// Import specifiers for the generated module, which sits in HERE — so they are the same
+// relative depth as APP_JSX above and resolve into the sibling source checkout.
+const LIB = "../../../../bom/Golden-Ray-BOM/src/lib";
+const DATA = "../../../../bom/Golden-Ray-BOM/data";
 
 /**
  * Each engine is located by the text that opens it and the first dependency array
@@ -50,10 +54,24 @@ const OUT = resolve(HERE, "source_engine.mjs");
  * substitution this harness exists to prevent.
  */
 const ENGINES = [
-  { name: "computeBom", open: "  const bom = useMemo(() => {" },
+  // `version-2` computes all three tiers at once and the UI indexes into the result
+  // (`const bom = allTierBoms[tier]`, App.jsx:2367). The memo keeps the same shape, so the
+  // slicer is unchanged -- but the generated function returns `{base, value, premium}`
+  // rather than one tier's BOM, and `tier` is no longer in its dependency array.
+  // `capture_source.mjs` selects the tier; see `computeBomForTier` there.
+  { name: "computeAllTierBoms", open: "  const allTierBoms = useMemo(() => {" },
   { name: "computeBillCalc", open: "  const billCalc = useMemo(() => {" },
   { name: "computeStringConfig", open: "  const stringConfig = useMemo(() => {" },
-  { name: "computeUpgradeBom", open: "  const upgradeBom = useMemo(() => {" },
+  // `upgradeBom`'s body reads `panelTypeFilter` and `subsidyType` (App.jsx:2736-2739) but
+  // its dependency array (App.jsx:3063) declares neither -- an upstream stale-memo bug:
+  // changing the panel filter does not recompute the upgrade BOM until something else
+  // does. It also reads `size` and `roofType` for its installation-matrix lookup
+  // (App.jsx:2970) -- and `size` there is the *base* system size, not the upgrade delta,
+  // so an upgrade's installation cost is looked up against the wrong kW. Both are
+  // upstream defects. In React they still resolve from the component closure, so they are passed here
+  // as parameters rather than left undefined, which would be a crash the source does not
+  // have. Replicated and flagged, not fixed; `undeclaredDeps` keeps it visible.
+  { name: "computeUpgradeBom", open: "  const upgradeBom = useMemo(() => {", undeclaredDeps: ["panelTypeFilter", "subsidyType", "size", "roofType"] },
   { name: "computeUpgradeStringConfig", open: "  const upgradeStringConfig = useMemo(() => {" },
   { name: "computeDiscountCalc", open: "  const discountCalc = useMemo(() => {" },
 ];
@@ -69,8 +87,53 @@ const ENGINES = [
  *
  * `closer` is the line that ends the declaration, at the same indentation it opened on.
  */
+/**
+ * Modules the engine bodies now call into, re-imported rather than copied.
+ *
+ * `version-2` moved real logic out of App.jsx and into `src/lib/` — battery resolution,
+ * engineering validation, the subsidy slabs. Copying those bodies here would fork them: the
+ * corpus would be generated against this file's snapshot rather than against the source the
+ * app actually runs. Importing from the source tree keeps one definition, and the path is
+ * relative to the generated module's own location so it resolves the same way App.jsx's does.
+ *
+ * `batteryMasterFile` is a JSON import; Node needs the import attribute for it.
+ */
+const IMPORTS = [
+  `import { resolveBattery } from "${LIB}/resolveBattery.js";`,
+  `import { toBatteryMaster, isPermanentlyUnselectable } from "${LIB}/batteryMaster.js";`,
+  `import { validateEngineering } from "${LIB}/engineeringValidation.js";`,
+  `import { statusFromValidation, quotationGate } from "${LIB}/bomStatus.js";`,
+  `import { calculateSubsidy } from "${LIB}/subsidyEngine.js";`,
+  `import batteryMasterFile from "${DATA}/battery-master.json" with { type: "json" };`,
+  `import subsidyConfigData from "${DATA}/subsidy-config.json" with { type: "json" };`,
+  // App.jsx:22, verbatim. A one-line derivation of the JSON import rather than a
+  // declaration block, so it belongs here rather than in HELPERS.
+  "const BATTERY_MASTER = batteryMasterFile?.batteries || {};",
+];
+
+/** Names `IMPORTS` brings into scope, so the free-variable check accepts them. */
+const IMPORTED_NAMES = [
+  "resolveBattery",
+  "toBatteryMaster",
+  "isPermanentlyUnselectable",
+  "validateEngineering",
+  "statusFromValidation",
+  "quotationGate",
+  "calculateSubsidy",
+  "batteryMasterFile",
+  "BATTERY_MASTER",
+  "subsidyConfigData",
+];
+
 const HELPERS = [
   { name: "getStructureQty", open: "function getStructureQty(item, kw) {", closer: "}" },
+  // version-2: the package profile now decides battery quantity and structure grade
+  // (decision C4). All four are module-level in App.jsx, so they copy across verbatim.
+  // version-2 records WHY each item was chosen (App.jsx:55). A frozen label table.
+  { name: "RESOLUTION", open: "const RESOLUTION = {", closer: "};" },
+  { name: "getProfileKey", open: "function getProfileKey(sysType, tier) {", closer: "}" },
+  { name: "getPackageProfile", open: "function getPackageProfile(catalog, profileKey) {", closer: "}" },
+  { name: "getProfileStructure", open: "function getProfileStructure(catalog, profileKey) {", closer: "}" },
   { name: "calcStructureCost", open: "function calcStructureCost(template, kw, ratePerKg) {", closer: "}" },
   { name: "upgSectionMap", open: "  const upgSectionMap = {", closer: "  };", dedent: 2 },
 ];
@@ -214,6 +277,8 @@ for (const engine of engines) {
     const id = m[2];
     if (RESERVED.has(id) || JS_GLOBALS.has(id)) continue;
     if (bound.has(id) || helperNames.has(id) || engine.params.includes(id)) continue;
+    if (engine.undeclaredDeps?.includes(id)) continue;
+    if (IMPORTED_NAMES.includes(id)) continue;
     free.add(id);
   }
   // Object-literal keys and member names slip through the rough scan; only flag an
@@ -221,7 +286,12 @@ for (const engine of engines) {
   const genuinelyFree = [...free].filter((id) => {
     const called = new RegExp(`(^|[^.\\w$])${id}\\s*\\(`, "m").test(stripped);
     const indexed = new RegExp(`(^|[^.\\w$])${id}\\s*\\[`, "m").test(stripped);
-    return called || indexed;
+    // `RESOLUTION.SAVED` is a read of a free `RESOLUTION`, and missing it meant the
+    // generated module threw at runtime rather than failing here, which is the whole
+    // point of this check. An object-literal key cannot be followed by `.`, so this
+    // does not reintroduce the false positives the filter exists to suppress.
+    const dotted = new RegExp(`(^|[^.\\w$])${id}\\s*\\.`, "m").test(stripped);
+    return called || indexed || dotted;
   });
   if (genuinelyFree.length) {
     freeVariableProblems.push(`  ${engine.name}: ${genuinelyFree.sort().join(", ")}`);
@@ -259,12 +329,16 @@ const helperBlocks = helpers.map(
 );
 
 const engineBlocks = engines.map((e) => {
-  const signature = e.params.length
-    ? `{\n${e.params.map((p) => `  ${p},`).join("\n")}\n}`
+  const all = [...e.params, ...(e.undeclaredDeps ?? [])];
+  const signature = all.length
+    ? `{\n${all.map((p) => `  ${p},`).join("\n")}\n}`
     : "";
   return [
     `// ── ${e.name} — App.jsx:${e.startLine}-${e.endLine} ──`,
     `// deps: ${e.params.join(", ") || "(none)"}`,
+    ...(e.undeclaredDeps?.length
+      ? [`// UNDECLARED (read by the body, absent from the dependency array — upstream stale-memo bug): ${e.undeclaredDeps.join(", ")}`]
+      : []),
     `export function ${e.name}(${signature}) {`,
     e.body.join("\n"),
     `}`,
@@ -273,6 +347,7 @@ const engineBlocks = engines.map((e) => {
 
 const generated = [
   banner,
+  IMPORTS.join("\n"),
   helperBlocks.join("\n\n"),
   engineBlocks.join("\n\n"),
   `export const SOURCE_SHA256 = ${JSON.stringify(sourceSha)};`,

@@ -10,9 +10,17 @@
 // corpus that the platform engine is held to, so any edit here silently moves the target.
 // Re-run the extractor instead.
 //
-// App.jsx sha256: 37b2ac996cb65d2a9b29a478ac31def4123b2635dd97f833878cb8e317c85db5
+// App.jsx sha256: be52e5ad7c4c2fa06cb2aa9b777807012d95fc8e75bad804e86e19bd12d10b73
 
-// ── getStructureQty — App.jsx:28-47 ──
+import { resolveBattery } from "../../../../bom/Golden-Ray-BOM/src/lib/resolveBattery.js";
+import { toBatteryMaster, isPermanentlyUnselectable } from "../../../../bom/Golden-Ray-BOM/src/lib/batteryMaster.js";
+import { validateEngineering } from "../../../../bom/Golden-Ray-BOM/src/lib/engineeringValidation.js";
+import { statusFromValidation, quotationGate } from "../../../../bom/Golden-Ray-BOM/src/lib/bomStatus.js";
+import { calculateSubsidy } from "../../../../bom/Golden-Ray-BOM/src/lib/subsidyEngine.js";
+import batteryMasterFile from "../../../../bom/Golden-Ray-BOM/data/battery-master.json" with { type: "json" };
+import subsidyConfigData from "../../../../bom/Golden-Ray-BOM/data/subsidy-config.json" with { type: "json" };
+const BATTERY_MASTER = batteryMasterFile?.batteries || {};
+// ── getStructureQty — App.jsx:174-193 ──
 function getStructureQty(item, kw) {
   const qtyMap = item.qty;
   const sizes = Object.keys(qtyMap).map(Number).sort((a, b) => a - b);
@@ -34,7 +42,50 @@ function getStructureQty(item, kw) {
   return qtyMap[String(sizes[sizes.length - 1])];
 }
 
-// ── calcStructureCost — App.jsx:50-66 ──
+// ── RESOLUTION — App.jsx:55-60 ──
+const RESOLUTION = {
+  SAVED: 'saved',                 // explicit saved/user selection was applied
+  NEAREST_KW: 'fallback:nearestKw',   // no saved selection — nearest kW inverter
+  FIRST_AVAILABLE: 'fallback:firstAvailable', // no saved selection — first catalog item
+  NONE: 'fallback:noCandidate',   // nothing available at all — N/A line
+};
+
+// ── getProfileKey — App.jsx:282-288 ──
+function getProfileKey(sysType, tier) {
+  if (sysType === 'hybrid') {
+    return `hybrid_${tier}`; // hybrid_base, hybrid_value, hybrid_premium
+  }
+  if (tier === 'premium') return 'premium';
+  return `ongrid_${tier}`; // ongrid_base or ongrid_value
+}
+
+// ── getPackageProfile — App.jsx:291-309 ──
+function getPackageProfile(catalog, profileKey) {
+  const profiles = catalog?.packageProfiles || {};
+  const profile = profiles[profileKey];
+  if (!profile) {
+    console.warn(`Profile ${profileKey} not found, using default`);
+    return {
+      structureType: 'GI',
+      inverterType: 'ongrid',
+      batteryIncluded: false,
+      batteryBrand: null,
+      batteryModel: null,
+      batteryCapacity: 0,
+      batteryQuantity: 0,
+      structureLaborOverride: null,
+      repairMarginOverride: null
+    };
+  }
+  return profile;
+}
+
+// ── getProfileStructure — App.jsx:312-314 ──
+function getProfileStructure(catalog, profileKey) {
+  return getPackageProfile(catalog, profileKey).structureType;
+}
+
+// ── calcStructureCost — App.jsx:196-212 ──
 function calcStructureCost(template, kw, ratePerKg) {
   if (!template || !template.items) return { total: 0, lines: [] };
   let total = 0;
@@ -53,7 +104,7 @@ function calcStructureCost(template, kw, ratePerKg) {
   return { total, lines };
 }
 
-// ── upgSectionMap — App.jsx:1802-1818 ──
+// ── upgSectionMap — App.jsx:2572-2588 ──
 const upgSectionMap = {
   // "panels" section: panels only
   panel: 'panels',
@@ -71,14 +122,12 @@ const upgSectionMap = {
   mc4_connector: 'wiring', copper_lug: 'wiring', insulation_tape: 'wiring',
   cable_tie: 'wiring', flexible_pipe: 'wiring'
 };
-// ── computeBom — App.jsx:1047-1597 ──
-// deps: catalog, sysType, size, tier, batConfig, microBrand, zeroExport, selections, qtyOverrides, priceOverrides, customItems, distKm, costOvr, marginType, marginVal, futureUpgrade, upgradeSize, fuOpts, addOns, structGrade, structGradeMode, moduleDcr
-export function computeBom({
+// ── computeAllTierBoms — App.jsx:1663-2364 ──
+// deps: catalog, sysType, size, microBrand, zeroExport, selections, qtyOverrides, priceOverrides, customItems, distKm, costOvr, marginType, marginVal, futureUpgrade, upgradeSize, fuOpts, addOns, structGrade, structGradeMode, panelTypeFilter, subsidyType, roofType, projectBatteryOverride
+export function computeAllTierBoms({
   catalog,
   sysType,
   size,
-  tier,
-  batConfig,
   microBrand,
   zeroExport,
   selections,
@@ -95,12 +144,37 @@ export function computeBom({
   addOns,
   structGrade,
   structGradeMode,
-  moduleDcr,
+  panelTypeFilter,
+  subsidyType,
+  roofType,
+  projectBatteryOverride,
 }) {
+    if (!catalog?.categories) return { base: { lines: [], totals: {} }, value: { lines: [], totals: {} }, premium: { lines: [], totals: {} } };
+
+    function computeForTier(tierParam) {
+
     if (!catalog) return { lines: [], totals: {} };
 
     const template = catalog.bomTemplates[sysType];
     if (!template) return { lines: [], totals: {} };
+
+    // Battery config from Engineering Profile, not hardcoded or user state
+    const profileKey = getProfileKey(sysType, tierParam);
+    const profile = getPackageProfile(catalog, profileKey);
+    // Phase 1C/1D: ONE authoritative battery resolution. The profile decides
+    // quantity; the canonical `battery` category decides identity. Every
+    // battery-dependent quantity below reads from this single object.
+    // Phase 1D: master data (protection topology, engineering approval) is passed
+    // in, so the protection requirement is read from the SELECTED battery rather
+    // than from a hardcoded per-component table. `projectOverride` is the
+    // Project Head selection slot; V1 UI does not set it yet, so it is null and
+    // the package default applies — the package is never mutated by a project.
+    const battery = resolveBattery(profile, catalog, {
+      sysType, tier: tierParam, sizeKey: size,
+      batteryMaster: BATTERY_MASTER,
+      projectOverride: projectBatteryOverride || null,
+    });
+    const batConfig = battery.batQtyIndex;
 
     // Future upgrade: panels use `size`, everything else uses `bomSize`
     const bomSize = (futureUpgrade && upgradeSize) ? upgradeSize : size;
@@ -116,6 +190,9 @@ export function computeBom({
     const panelPhaseIs3P = template.threePhase?.includes(size);
     const lines = [];
     let pos = 0;
+    // H3: every component chosen by fallback rather than by an explicit saved
+    // selection is recorded here. Informational only — never used in any sum.
+    const resolutionWarnings = [];
 
     // Enhanced future upgrade: categories that use panel kW (size) instead of inverter kW (bomSize)
     // Checked = use bomSize (inverter kW), Unchecked = use size (panel kW)
@@ -128,8 +205,8 @@ export function computeBom({
     }
 
     // Detect premium micro-inverter mode
-    const isPremiumMicro = tier === 'premium' && (sysType === 'ongrid' || sysType === 'hybrid');
-    const isPremiumHybrid = sysType === 'hybrid' && tier === 'premium';
+    const isPremiumMicro = tierParam === 'premium' && (sysType === 'ongrid' || sysType === 'hybrid');
+    const isPremiumHybrid = sysType === 'hybrid' && tierParam === 'premium';
     const panelSlot = template.slots.find(s => s.category === 'panel');
     // numPanels will be recalculated after panel selection (see below)
     let numPanels = panelSlot?.qty?.[size] || 0;
@@ -144,6 +221,7 @@ export function computeBom({
       let qty = 0;
       if (isPremiumMicro && (slot.premiumBatQty || slot.premiumQty)) {
         if (slot.premiumBatQty) {
+          // Phase 1C: index by the profile-derived quantity, not a hardcoded '0'.
           const bq = slot.premiumBatQty[batConfig] || slot.premiumBatQty['0'] || {};
           qty = bq[slotSize] || 0;
         } else if (slot.premiumQty) {
@@ -155,12 +233,20 @@ export function computeBom({
       } else if (slot.qty) {
         qty = slot.qty[slotSize] || 0;
       }
+
+      // Phase 1C: the battery and its mandatory protection are decided by the
+      // authoritative resolver, never by a template lookup. This is what stops
+      // battery accessories shipping without a battery (defect D1) and stops
+      // premium emitting a battery outside the `battery` category (defect D2).
+      if (slot.category === 'battery') qty = battery.quantity;
+      if (slot.category === 'mccb_box') qty = battery.requiresMccb ? Math.max(1, qty) : 0;
+
       if (qty === 0) continue;
 
       const category = catalog.categories[slot.category];
       if (!category) continue;
 
-      // Phase/type filter (applies regardless of tier)
+      // Phase/type filter (applies regardless of tierParam)
       // DCDB for 5sp uses 2/2 (3P-tagged) for future upgrade readiness
       const dcdb5spForce3P = slot.category === 'dcdb' && size === '5sp';
       // Downsized categories use panel phase; upsized use inverter phase
@@ -179,44 +265,101 @@ export function computeBom({
         return true;
       };
 
-      // DCR / Non-DCR gate: only modules matching the picked content type may
-      // be offered, since that choice decides PM Surya Ghar eligibility.
-      const dcrFilter = item =>
-        slot.category !== 'panel' || (moduleDcr === 'dcr' ? item.dcr === true : item.dcr !== true);
+      // --- DCR/Non-DCR filtering + status check for panels ---
+      const dcrFilter = (item) => {
+        if (slot.category !== 'panel') return true;
+        // Filter out inactive panels
+        if (item.status === 'inactive') return false;
+        // Determine panel type (panelType takes priority, fallback to dcr boolean)
+        const pt = item.panelType || (item.dcr ? 'DCR' : 'NON_DCR');
+        // If panelTypeFilter explicitly set
+        if (panelTypeFilter === 'DCR') return pt === 'DCR';
+        if (panelTypeFilter === 'NON_DCR') return pt === 'NON_DCR';
+        // Auto-enforce: subsidy YES = DCR only
+        if (subsidyType === 'residential' || subsidyType === 'ghs') return pt === 'DCR';
+        return true;
+      };
 
-      // Current tier items (for default selection + price-diff baseline)
-      const available = category.items.filter(item => item.tiers.includes(tier) && phaseFilter(item) && dcrFilter(item));
+      // Current tierParam items (for default selection + price-diff baseline)
+      // D11-D (approved): a component that is not ACTIVE must never appear in
+      // production selection or BOM resolution. The record is retained in the
+      // catalog for historical reference but is excluded here.
+      // Phase 1D: a battery must additionally be ENGINEERING-APPROVED and
+      // commercially available before anyone may select it. A battery added by
+      // Procurement is not selectable until Engineering approves it. Nothing is
+      // substituted — a non-approved battery is simply not offered.
+      // Phase 1D review correction: this filter removes only records that may
+      // NEVER be used again (REJECTED / WITHDRAWN / INACTIVE / DISCONTINUED).
+      // A battery PENDING engineering approval is deliberately RETAINED — the
+      // configuration is BLOCKED by validation instead. Dropping it would emit
+      // a hybrid BOM with no battery, which is defect D1 and is unsafe.
+      const engineeringFilter = item => {
+        if (slot.category !== 'battery') return true;
+        return !isPermanentlyUnselectable(toBatteryMaster(item, BATTERY_MASTER[item.id] || {}));
+      };
+      const statusFilter = item => (item.status || 'ACTIVE') === 'ACTIVE';
+      const available = category.items.filter(item => item.tiers.includes(tierParam) && statusFilter(item) && engineeringFilter(item) && phaseFilter(item) && dcrFilter(item));
 
-      // All tiers (for sales team cross-tier selection — customer picks value panel in base etc.)
+      // All tiers (for sales team cross-tierParam selection — customer picks value panel in base etc.)
       // DCDB/ACDB: show ALL options (1/1, 2/2, hybrid) so user can override phase default
       const isDcdbAcdb = slot.category === 'dcdb' || slot.category === 'acdb';
       const allAvailable = isDcdbAcdb
-        ? category.items.filter(item => item.tiers?.length > 0)
-        : category.items.filter(item => item.tiers?.length > 0 && phaseFilter(item) && dcrFilter(item));
+        ? category.items.filter(item => item.tiers?.length > 0 && statusFilter(item))
+        : category.items.filter(item => item.tiers?.length > 0 && statusFilter(item) && engineeringFilter(item) && phaseFilter(item) && dcrFilter(item));
 
-      const qKey = `${sysType}_${slotSize}_${tier}_${batConfig}_${slot.pos}`;
-      const selKey = `${sysType}_${tier}_${slotSize}_${slot.pos}`;
-      const pKey = `${sysType}_${tier}_${slotSize}_${slot.pos}`;
+      const qKey = `${sysType}_${slotSize}_${tierParam}_${batConfig}_${slot.pos}`;
+      const selKey = `${sysType}_${tierParam}_${slotSize}_${slot.pos}`;
+      const pKey = `${sysType}_${tierParam}_${slotSize}_${slot.pos}`;
 
+      // === Component resolution (Phase 0 hotfix H3) ===
+      // The chosen item is UNCHANGED from the legacy behaviour. What is new is
+      // that the engine now records HOW it was chosen, so a silent substitution
+      // becomes a visible one. No numeric output is affected.
       let selected = null;
-      if (selections[selKey]) {
-        // Look in allAvailable so cross-tier picks are found
-        selected = allAvailable.find(i => i.id === selections[selKey]);
+      let resolution = RESOLUTION.NONE;
+      let resolutionDetail = '';
+      const requestedItemId = selections[selKey];
+
+      if (requestedItemId) {
+        // Look in allAvailable so cross-tierParam picks are found
+        selected = allAvailable.find(i => i.id === requestedItemId);
+        if (selected) {
+          resolution = RESOLUTION.SAVED;
+        } else {
+          // A saved selection existed but is no longer resolvable: the item was
+          // deleted, its tiers were emptied, or a phase/DCR filter now excludes
+          // it. Previously this was silent.
+          resolutionDetail = `saved item "${requestedItemId}" is no longer available for ${sysType}/${tierParam}/${slotSize}`;
+        }
+      } else {
+        resolutionDetail = `no saved selection for ${selKey}`;
       }
+
       if (!selected && available.length > 0) {
-        // Default: auto-select from current tier
+        // Default: auto-select from current tierParam
         if (slot.category === 'inverter' && available.some(i => i.kw)) {
           const targetKw = parseFloat(slotSize) || 3;
           const kwSorted = [...available].sort((a, b) => Math.abs((a.kw || 0) - targetKw) - Math.abs((b.kw || 0) - targetKw));
           selected = kwSorted[0];
+          resolution = RESOLUTION.NEAREST_KW;
         } else {
           selected = available[0];
+          resolution = RESOLUTION.FIRST_AVAILABLE;
         }
       }
-      // No item in this tier survives the phase/DCR gate (the catalog has no
-      // Non-DCR premium panel, for one). Fall back to a cross-tier item rather
-      // than leaving the line as "N/A" at ₹0.
-      if (!selected && allAvailable.length > 0) selected = allAvailable[0];
+      if (!selected) {
+        resolution = RESOLUTION.NONE;
+        resolutionDetail = resolutionDetail || `no candidate item for ${slot.category} at ${sysType}/${tierParam}/${slotSize}`;
+      }
+      const autoSelected = resolution !== RESOLUTION.SAVED;
+      if (autoSelected) {
+        resolutionWarnings.push({
+          pos: slot.pos, category: slot.category, label: slot.label,
+          resolution, detail: resolutionDetail,
+          chosenItemId: selected?.id || null, chosenName: selected?.name || 'N/A',
+          requestedItemId: requestedItemId || null,
+        });
+      }
 
       // === Dynamic panel qty based on selected panel wattage ===
       if (slot.category === 'panel' && selected?.watt) {
@@ -224,6 +367,20 @@ export function computeBom({
         const panelWatts = selected.watt; // e.g. 550W
         qty = Math.ceil(systemWatts / panelWatts); // e.g. ceil(3000/550) = 6
         numPanels = qty; // Update numPanels for micro-inverter accessory calculations
+      }
+
+      // Phase 1D: the authoritative resolver and the slot must name the SAME
+      // battery. If a saved selection points elsewhere the divergence is made
+      // visible rather than silently accepted. Nothing is substituted here.
+      if (slot.category === 'battery' && selected && battery.componentId &&
+          selected.id !== battery.componentId) {
+        resolutionWarnings.push({
+          pos: slot.pos, category: slot.category, label: slot.label,
+          resolution: 'BATTERY_IDENTITY_DIVERGENCE',
+          detail: `slot resolved "${selected.id}" but resolveBattery resolved "${battery.componentId}"`,
+          chosenItemId: selected.id, chosenName: selected.name,
+          requestedItemId: requestedItemId || null,
+        });
       }
 
       const finalQty = qtyOverrides[qKey] !== undefined ? qtyOverrides[qKey] : qty;
@@ -235,8 +392,27 @@ export function computeBom({
       lines.push({
         pos: slot.pos, category: slot.category, label: slot.label,
         name: selected?.name || 'N/A', catalogItemId: selected?.id,
+        type: selected?.type, brand: selected?.brand, watt: selected?.watt,
+        kwh: selected?.kwh, kw: selected?.kw,
+        panelType: selected?.panelType, dcr: selected?.dcr,
+        sqmm: selected?.sqmm, unit: selected?.unit,
         qty: finalQty, defQty: qty, unitPrice, amount, gst, gstAmt,
-        isVariable: true, available, allAvailable
+        isVariable: true, available, allAvailable,
+        // H3 — informational only, never used in any calculation
+        autoSelected, resolution, resolutionDetail, requestedItemId: requestedItemId || null,
+        // Phase 1D §8 — traceability. Identity + provenance, never a display name.
+        // Informational only; no numeric output depends on these fields.
+        ...(slot.category === 'battery' ? {
+          componentId: selected?.id || battery.componentId || null,
+          selectionMethod: requestedItemId ? 'USER_SELECTION' : (battery.selectionMethod || null),
+          approvalStatus: selected
+            ? toBatteryMaster(selected, BATTERY_MASTER[selected.id] || {}).engineeringStatus
+            : null,
+          selectedBy: battery.selectedBy || null,
+          selectionTimestamp: battery.selectionTimestamp || null,
+          batteryProtectionMode: battery.protection?.mode || 'UNKNOWN',
+          batteryProtectionRating: battery.protection?.rating ?? null,
+        } : {}),
       });
       pos++;
     }
@@ -277,10 +453,14 @@ export function computeBom({
         // Hybrid premium extras: System Controller + Flex Battery + UG Cable
         if (isPremiumHybrid) {
           addMicroLine('enphase', find('System Controller'), 1, 'Enphase System Controller');
-          const batQtyNum = Number(batConfig) || 0;
-          if (batQtyNum > 0) {
-            addMicroLine('enphase', find('Flex Battery'), batQtyNum, `Enphase Flex Battery (x${batQtyNum})`);
-          }
+          // Phase 1D (defect D2): the battery is NOT emitted here any more.
+          // A battery is a battery, not an `enphase` accessory. It is resolved
+          // by resolveBattery() and emitted by the `battery` slot above, in the
+          // canonical `battery` category and at the canonical catalog price, so
+          // the spec table, procurement BOM and cost engine all see it as a
+          // battery. The duplicate `enphase` "Flex Battery" catalog record is
+          // retained for traceability and is registered in
+          // BATTERY_IDENTITY_ALIASES — do not delete it before review.
           // UG Cable: 2-core for 1P (3/5kw), 4-core for 3P (8/10kw)
           if (catalog.categories.ug_cable) {
             const ug = catalog.categories.ug_cable.items;
@@ -339,6 +519,10 @@ export function computeBom({
         qty = fixed.premiumQty[fixedItemSize] || 0;
       } else if (fixed.batQty) {
         const bq = fixed.batQty[batConfig] || fixed.batQty['0'] || {};
+        // D12 (approved): the generic 25 mm DC battery cable belongs to the
+        // Deye/SEG DC-coupled topology. It is PROHIBITED on Enphase premium,
+        // where the battery carries INTEGRATED protection.
+        if (!battery.requiresCable && /Battery Cable/i.test(fixed.name || '')) continue;
         qty = bq[fixedItemSize] || 0;
       } else if (fixed.qty) {
         qty = fixed.qty[fixedItemSize] || 0;
@@ -352,7 +536,7 @@ export function computeBom({
       }
 
       const fKey = `fixed_${sysType}_${bomSize}_${batConfig}_${pos}`;
-      const pKey = `${sysType}_${tier}_${bomSize}_${pos}`;
+      const pKey = `${sysType}_${tierParam}_${bomSize}_${pos}`;
       const finalQty = qtyOverrides[fKey] !== undefined ? qtyOverrides[fKey] : qty;
       const unitPrice = priceOverrides[pKey] !== undefined ? priceOverrides[pKey] : fixed.price;
       const amount = finalQty * unitPrice;
@@ -401,8 +585,10 @@ export function computeBom({
     const costs = catalog.costs || {};
     const gpRate = costs.gpRatePerKg || 85;
     const giRate = costs.giRatePerKg || 98.3;
-    const defaultTubeRate = tier === 'base' ? gpRate : giRate;
-    const defaultGradeLabel = tier === 'base' ? 'GP' : 'GI';
+    // Config-driven: look up structure type from package profile (profileKey already defined at line 1471)
+    const profileStructure = getProfileStructure(catalog, profileKey);
+    const defaultTubeRate = profileStructure === 'GP' ? gpRate : giRate;
+    const defaultGradeLabel = profileStructure;
     const customerTubeRate = structGrade === 'gp' ? gpRate : structGrade === 'gi' ? giRate : defaultTubeRate;
     const customerGradeLabel = structGrade === 'gp' ? 'GP' : structGrade === 'gi' ? 'GI' : defaultGradeLabel;
     const tubeRate = customerTubeRate;
@@ -466,7 +652,7 @@ export function computeBom({
     const totalGst = totalGstFlat; // Flat 9% GST
     const matWithGst = matTotal + totalGst;
 
-    // Structure grade diff: difference between customer-selected and tier-default rate (admin only)
+    // Structure grade diff: difference between customer-selected and tierParam-default rate (admin only)
     const defaultFlatRoofCost = calcStructureCost(stTemplates.flatRoof, bomKw, defaultTubeRate).total;
     let structGradeDiff = 0;
     const gradeFlatPerKw = costs.structGradeFlatPerKw || 0;
@@ -476,8 +662,8 @@ export function computeBom({
         // Flat mode: fixed ₹/kW premium (includes GST)
         structGradeDiff = Math.round(gradeFlatPerKw * bomKw);
         // Negative if downgrading (e.g. value/premium switching to GP)
-        const isDowngrade = (tier !== 'base' && structGrade === 'gp') ? false
-          : (tier === 'base' && structGrade === 'gp') ? false // same as default
+        const isDowngrade = (profileStructure !== 'GP' && structGrade === 'gp') ? false
+          : (profileStructure === 'GP' && structGrade === 'gp') ? false // same as default
           : false;
       } else {
         // Manual mode: calculated from rate-per-kg difference + 18% GST
@@ -512,12 +698,24 @@ export function computeBom({
     const flatRoofGst = 0;
     const structureExtraGst = 0;
 
+    // Cost Engine: Installation from matrix, Transport from config, Office from config
+    const instMatrix = catalog.installationMatrix || {};
+    const instMatrixCost = instMatrix[size]?.[roofType] || 0;
+    const tConfig = catalog.transportConfig || {};
+    const tBaseKm = tConfig.baseDistanceKm || 100;
+    const tCostPerKm = tConfig.costPerKm || 35;
+    const transportCalc = Math.max(0, distKm - tBaseKm) * tCostPerKm;
+    const oConfig = catalog.officeExpense || {};
+    const officeCostPerProject = oConfig.expectedProjectsPerMonth > 0
+      ? Math.round(oConfig.monthlyExpense / oConfig.expectedProjectsPerMonth)
+      : (costs.office || 0);
+
     const costCalc = {
-      installation: costOvr.installation ?? bomKw * (costs.installRate || 0),
+      installation: costOvr.installation ?? (instMatrixCost || bomKw * (costs.installRate || 0)),
       service: costOvr.service ?? (costs.serviceRateYear || 0) * (costs.serviceYears || 0),
-      transportation: distKm * (costs.transportRate || 0),
+      transportation: costOvr.transportation ?? transportCalc,
       miscellaneous: costOvr.miscellaneous ?? (costs.miscellaneous || 0),
-      office: costOvr.office ?? (costs.office || 0),
+      office: costOvr.office ?? officeCostPerProject,
       // Structure extras (elevated/sheet roof add-on — NOT flat roof which is now in material lines)
       structureExtra: structureExtraCost,
       structureExtraGst: 0, // Now using flat 9% GST
@@ -567,30 +765,13 @@ export function computeBom({
 
     // Market rate lookup
     const upgTag = (futureUpgrade && upgradeSize) ? `_up${bomSize}` : '';
-    // The hybrid price list quotes DCR and Non-DCR separately — the module
-    // content moves the price by ₹38k–₹64k, so the two cannot share one rate.
-    // On-grid is quoted at a single price either way, so its key is unchanged.
-    const dcrTag = sysType === 'hybrid' ? `_${moduleDcr}` : '';
     const mrKey = sysType === 'hybrid'
-      ? `hybrid_${tier}_${batConfig}${dcrTag}${upgTag}`
-      : `${sysType}_${tier}${upgTag}`;
+      ? `hybrid_${tierParam}_${batConfig}${upgTag}`
+      : `${sysType}_${tierParam}${upgTag}`;
     const marketRate = catalog.marketRates?.[mrKey]?.[size] || 0;
     // priceDiffBase: the priceDiffTotal that existed when admin last saved the market rate
-    // This lets us track DELTA from admin's config, not from tier default
+    // This lets us track DELTA from admin's config, not from tierParam default
     const priceDiffBase = catalog.marketRates?.[mrKey + '_diffBase']?.[size] || 0;
-
-    // Market rate of the *other* tiers for this same configuration. The
-    // quotation prices its Base/Value/Premium columns off the real price list
-    // rather than a flat step, so a customer who picks a different tier off
-    // page 4 is reading a price we would actually honour. A tier with no rate
-    // entered stays 0 and the quotation falls back to its estimate.
-    const tierMarketRates = {};
-    for (const t of ['base', 'value', 'premium']) {
-      const tKey = sysType === 'hybrid'
-        ? `hybrid_${t}_${batConfig}${dcrTag}${upgTag}`
-        : `${sysType}_${t}${upgTag}`;
-      tierMarketRates[t] = catalog.marketRates?.[tKey]?.[size] || 0;
-    }
 
     // --- Price difference: selected vs default items for all variable slots ---
     // Includes GST on the difference (panel 5%, inverter 5%/12%, etc.)
@@ -638,17 +819,39 @@ export function computeBom({
       totals: { matTotal, gst5, gst12, gst18, totalGst, matWithGst },
       costCalc, sub, mAmt, grand, preGstSub, allGst,
       marketRate, customerPrice, addOnTotal, transportExtra, mrKey, baseGrand,
-      tierMarketRates,
       panelKw, bomKw, bomSize,
       flatRoofCost, flatRoofGst, flatRoofLines: flatRoofResult.lines,
       structureExtraCost, structureExtraLines, structureExtraLabel,
       structureLabor, structureRepairAmt, structureAddOnTotal, tubeRate,
       priceDiffTotal, priceDiffBase, priceDiffDelta, priceDiffLines,
-      structGradeDiff, defaultGradeLabel, customerGradeLabel
+      structGradeDiff, defaultGradeLabel, customerGradeLabel,
+      profileKey, profileStructure,
+      resolutionWarnings, // H3
+      // Phase 1E/1H — engineering verdict for this configuration.
+      // Computed here so BOM, validation and status share one input set.
+      // Display only in Phase 1: the quotation is NOT hard-blocked yet (C26).
+      engineering: (() => {
+        const v = validateEngineering({
+          bom: { lines }, profile, catalog, sysType, size: bomSize, tier: tierParam,
+          phase: isThreePhase ? '3P' : '1P', subsidyType,
+          batteryProtectionMode: battery.protection?.mode || 'UNKNOWN',
+          battery,                       // Phase 1D — approval + safe-issue data
+          upgrade: null,
+        });
+        return { ...v, bomStatus: statusFromValidation(v), gate: quotationGate(statusFromValidation(v)) };
+      })(),
+    };
+
+    }
+
+    return {
+      base: computeForTier('base'),
+      value: computeForTier('value'),
+      premium: computeForTier('premium'),
     };
 }
 
-// ── computeBillCalc — App.jsx:896-1044 ──
+// ── computeBillCalc — App.jsx:1513-1659 ──
 // deps: billAmt, billFreq, sysType, housePhase
 export function computeBillCalc({
   billAmt,
@@ -733,9 +936,9 @@ export function computeBillCalc({
     const exactKw = monthlyUnits / monthlyGenPerKw;
 
     // Map to available system sizes — filtered by house phase
-    // 3kW is offered on single-phase connections only
+    // 3kW works on BOTH phases (1P inverter on 3P house is fine)
     const allSizes = [
-      { key: '3', kw: 3, label: '3 kW', phase: '1P' },
+      { key: '3', kw: 3, label: '3 kW' },
       { key: '5sp', kw: 5, label: '5 kW (1\u03A6)', sysType: 'ongrid', phase: '1P' },
       { key: '5tp', kw: 5, label: '5 kW (3\u03A6)', sysType: 'ongrid', phase: '3P' },
       { key: '5', kw: 5, label: '5 kW', sysType: 'hybrid' },
@@ -752,11 +955,9 @@ export function computeBillCalc({
     const isHybrid = sysType === 'hybrid';
     const relevantSizes = allSizes.filter(s => {
       if (s.sysType && s.sysType !== sysType) return false;
-      // 3kW is 1P-only on both system types
-      if (s.key === '3' && housePhase === '3P') return false;
-      // For hybrid, no further phase filtering on size keys
+      // For hybrid, no phase filtering on size keys
       if (isHybrid) return true;
-      // For ongrid: 5kW picks sp/tp based on phase, 6/8/10 need 3P
+      // For ongrid: 3kW works on both, 5kW picks sp/tp based on phase, 6/8/10 need 3P
       if (s.phase && s.phase !== housePhase) return false;
       return true;
     });
@@ -805,7 +1006,7 @@ export function computeBillCalc({
     };
 }
 
-// ── computeStringConfig — App.jsx:1604-1798 ──
+// ── computeStringConfig — App.jsx:2374-2568 ──
 // deps: bom, catalog
 export function computeStringConfig({
   bom,
@@ -1006,8 +1207,9 @@ export function computeStringConfig({
     };
 }
 
-// ── computeUpgradeBom — App.jsx:1820-2272 ──
-// deps: catalog, sysType, upgradeFromKw, upgradeToKw, upgradePhase, upgradeTier, upgradeSelections, upgradeQtyOverrides, upgradePriceOverrides, upgradeSections, distKm, costOvr, marginType, marginVal, upgradeCustomItems, upgradeAddOns, moduleDcr
+// ── computeUpgradeBom — App.jsx:2590-3059 ──
+// deps: catalog, sysType, upgradeFromKw, upgradeToKw, upgradePhase, upgradeTier, upgradeSelections, upgradeQtyOverrides, upgradePriceOverrides, upgradeSections, distKm, costOvr, marginType, marginVal, upgradeCustomItems, upgradeAddOns
+// UNDECLARED (read by the body, absent from the dependency array — upstream stale-memo bug): panelTypeFilter, subsidyType, size, roofType
 export function computeUpgradeBom({
   catalog,
   sysType,
@@ -1025,7 +1227,10 @@ export function computeUpgradeBom({
   marginVal,
   upgradeCustomItems,
   upgradeAddOns,
-  moduleDcr,
+  panelTypeFilter,
+  subsidyType,
+  size,
+  roofType,
 }) {
     if (!catalog || sysType !== 'upgrade') return { lines: [], totals: {}, newPanels: 0, fromKw: 3, toKw: 5 };
     const tmpl = catalog.bomTemplates.upgrade;
@@ -1169,9 +1374,16 @@ export function computeUpgradeBom({
         return true;
       };
 
-      // DCR / Non-DCR gate — see the same filter in the main BOM builder.
-      const upgDcrFilter = item =>
-        slot.category !== 'panel' || (moduleDcr === 'dcr' ? item.dcr === true : item.dcr !== true);
+      // DCR filter for upgrade panels
+      const upgDcrFilter = (item) => {
+        if (slot.category !== 'panel') return true;
+        if (panelTypeFilter === 'DCR') return item.panelType === 'DCR' || item.dcr === true;
+        if (panelTypeFilter === 'NON_DCR') return item.panelType === 'NON_DCR' || item.dcr === false;
+        if (subsidyType === 'residential' || subsidyType === 'ghs') {
+          return item.panelType === 'DCR' || item.dcr === true;
+        }
+        return true;
+      };
 
       const available = category.items.filter(item => item.tiers?.includes(upgradeTier) && upgPhaseFilter(item) && upgDcrFilter(item));
       // DCDB/ACDB: show ALL options (1/1, 2/2, hybrid) so user can override phase default
@@ -1193,9 +1405,6 @@ export function computeUpgradeBom({
           selected = available[0];
         }
       }
-      // See the main BOM builder: keep the line usable when the tier + DCR gate
-      // leaves nothing in this tier.
-      if (!selected && allAvailable.length > 0) selected = allAvailable[0];
 
       // Dynamic panel qty for upgrade: panels needed = ceil(additionalKW * 1000 / panelWatts)
       if (slot.category === 'panel' && slot.qtyMode === 'newPanels' && selected?.watt) {
@@ -1215,6 +1424,8 @@ export function computeUpgradeBom({
       lines.push({
         pos: slot.pos, category: slot.category, label: slot.label, section,
         name: selected?.name || 'N/A', catalogItemId: selected?.id,
+        type: selected?.type, brand: selected?.brand, watt: selected?.watt,
+        kwh: selected?.kwh, kw: selected?.kw,
         qty: finalQty, defQty: qty, unitPrice, amount, gst, gstAmt,
         isVariable: true, available, allAvailable, qKey, pKey, unit: slot.category === 'dc_cable' || slot.category === 'ac_cable' ? 'm' : 'nos'
       });
@@ -1399,13 +1610,21 @@ export function computeUpgradeBom({
     const gst5 = 0, gst12 = 0, gst18 = 0; // Legacy compat
     const matWithGst = matTotal + totalGst;
 
-    // Costs
+    // Costs — use Cost Engine (matrix, transport config, office config)
     const costs = catalog.costs || {};
+    const upInstMatrix = catalog.installationMatrix || {};
+    const upInstCost = upInstMatrix[size]?.[roofType] || 0;
+    const upTConfig = catalog.transportConfig || {};
+    const upTransportCalc = Math.max(0, distKm - (upTConfig.baseDistanceKm || 100)) * (upTConfig.costPerKm || 35);
+    const upOConfig = catalog.officeExpense || {};
+    const upOfficeCost = upOConfig.expectedProjectsPerMonth > 0
+      ? Math.round(upOConfig.monthlyExpense / upOConfig.expectedProjectsPerMonth)
+      : (costs.office || 0);
     const costCalc = {
-      installation: (toKw - fromKw) * (costs.installRate || 0),
-      transportation: distKm * (costs.transportRate || 0),
+      installation: upInstCost || (toKw - fromKw) * (costs.installRate || 0),
+      transportation: upTransportCalc,
       miscellaneous: costs.miscellaneous || 0,
-      office: costs.office || 0
+      office: upOfficeCost
     };
     // Upgrade structure add-on
     let upgradeStructureAddOnTotal = 0;
@@ -1416,7 +1635,10 @@ export function computeUpgradeBom({
     let upgradeStructureRepairAmt = 0;
     if (upgradeAddOns.structure.enabled && catalog.structureTemplates) {
       const newKw = toKw - fromKw;
-      const tubeRate = upgradeTier === 'base' ? (costs.gpRatePerKg || 85) : (costs.giRatePerKg || 98.3);
+      // Config-driven: look up structure type from package profile for upgrade tier
+      const upProfileKey = getProfileKey('ongrid', upgradeTier, '0');
+      const upProfileStructure = getProfileStructure(catalog, upProfileKey);
+      const tubeRate = upProfileStructure === 'GP' ? (costs.gpRatePerKg || 85) : (costs.giRatePerKg || 98.3);
       const flatRoofKey = 'flatRoof';
       const extraKey = upgradeAddOns.structure.type === 'elevated' ? 'elevated' : 'sheetRoof';
       const flatResult = calcStructureCost(catalog.structureTemplates[flatRoofKey], newKw, tubeRate);
@@ -1480,7 +1702,7 @@ export function computeUpgradeBom({
     };
 }
 
-// ── computeUpgradeStringConfig — App.jsx:2277-2357 ──
+// ── computeUpgradeStringConfig — App.jsx:3064-3144 ──
 // deps: upgradeBom, catalog, upgradeFromKw
 export function computeUpgradeStringConfig({
   upgradeBom,
@@ -1568,8 +1790,8 @@ export function computeUpgradeStringConfig({
     };
 }
 
-// ── computeDiscountCalc — App.jsx:2360-2420 ──
-// deps: sysType, bom, upgradeBom, offers, selectedOffer, size, tier, upgradeTier, subsidyType, ghsHouses, moduleDcr
+// ── computeDiscountCalc — App.jsx:3147-3192 ──
+// deps: sysType, bom, upgradeBom, offers, selectedOffer, size, tier, upgradeTier, subsidyType, ghsHouses
 export function computeDiscountCalc({
   sysType,
   bom,
@@ -1581,7 +1803,6 @@ export function computeDiscountCalc({
   upgradeTier,
   subsidyType,
   ghsHouses,
-  moduleDcr,
 }) {
     const activeBom = sysType === 'upgrade' ? upgradeBom : bom;
     const basePrice = activeBom.customerPrice || activeBom.grand || 0;
@@ -1606,41 +1827,26 @@ export function computeDiscountCalc({
 
     const finalPrice = Math.max(0, basePrice - discountAmt);
 
-    // PM Surya Ghar subsidy calculation
+    // PM Surya Ghar subsidy — single authoritative calculation via subsidyEngine
     const kw = sysType === 'upgrade' ? (upgradeBom.toKw - upgradeBom.fromKw) : (parseFloat(size) || 3);
-    let subsidy = 0;
+    const subsidyResult = calculateSubsidy({
+      systemSizeKw: kw,
+      subsidyType,
+      ghsHouses,
+      panelType: 'DCR',
+      connectionType: 'domestic',
+      subsidyConfig: subsidyConfigData,
+    });
+    const subsidy = subsidyResult.totalSubsidy ?? 0;
     let subsidyLabel = '';
     if (subsidyType === 'residential') {
-      // Residential: ₹30,000/kW first 2kW, ₹18,000/kW for 2-3kW, capped ₹78,000 for >3kW
-      if (kw <= 2) {
-        subsidy = kw * 30000;
-      } else if (kw <= 3) {
-        subsidy = (2 * 30000) + ((kw - 2) * 18000);
-      } else {
-        subsidy = 78000;
-      }
       subsidyLabel = `PM Surya Ghar — Residential (${kw}kW)`;
     } else if (subsidyType === 'ghs') {
-      // GHS/RWA: ₹18,000/kW, up to 500kW total (3kW per house cap)
-      const perHouseKw = Math.min(kw, 3); // max 3kW subsidy per house
-      subsidy = perHouseKw * 18000 * ghsHouses;
-      const maxCommunity = 500; // max 500kW community cap
-      const maxSubsidy = Math.min(maxCommunity, ghsHouses * 3) * 18000;
-      subsidy = Math.min(subsidy, maxSubsidy);
+      const perHouseKw = Math.min(kw, subsidyConfigData.ghs?.maxKwPerHouse ?? 3);
       subsidyLabel = `PM Surya Ghar — GHS/RWA (${ghsHouses} house${ghsHouses > 1 ? 's' : ''} × ${perHouseKw}kW)`;
     }
-
-    // Non-DCR modules are not eligible for PM Surya Ghar under any scheme, so
-    // the subsidy is dropped regardless of the scheme picked above. This is the
-    // single source of truth — the quotation reads `subsidy` from here.
-    const subsidyEligible = moduleDcr === 'dcr';
-    if (!subsidyEligible) {
-      subsidy = 0;
-      subsidyLabel = 'Not eligible — Non-DCR modules';
-    }
-
     const priceAfterSubsidy = Math.max(0, finalPrice - subsidy);
 
-    return { discountAmt, discountLabel, finalPrice, subsidy, subsidyLabel, priceAfterSubsidy, applicableOffers, basePrice, kw, subsidyEligible };
+    return { discountAmt, discountLabel, finalPrice, subsidy, subsidyLabel, priceAfterSubsidy, applicableOffers, basePrice, kw };
 }
-export const SOURCE_SHA256 = "37b2ac996cb65d2a9b29a478ac31def4123b2635dd97f833878cb8e317c85db5";
+export const SOURCE_SHA256 = "be52e5ad7c4c2fa06cb2aa9b777807012d95fc8e75bad804e86e19bd12d10b73";
