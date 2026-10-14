@@ -46,6 +46,14 @@ SEARCH_VECTOR = (
 
 class Component(BaseModel):
     sku = models.CharField(max_length=32)
+    #: Position within its category in the price list, which is what decides selection.
+    #:
+    #: Golden-Ray-BOM picks `available[0]` -- the first item of the category's array that
+    #: survives the filters -- so catalog order *is* the default-component rule, not a
+    #: display preference. Ordering by `created_at` instead only coincided with it: when
+    #: version-2 gave one panel of 37 an authored `createdAt`, that panel sorted ahead of
+    #: every other and became the default on every base and value quote.
+    sort_order = models.PositiveIntegerField(default=0, help_text="Position in the price list; decides which item a slot defaults to.")
     # PROTECT: a category with components cannot disappear.
     category = models.ForeignKey("catalog.Category", on_delete=models.PROTECT, related_name="components")
     # PROTECT: a brand with components cannot disappear. Nullable: unbranded consumables.

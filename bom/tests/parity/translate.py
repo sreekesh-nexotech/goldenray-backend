@@ -17,6 +17,32 @@ from __future__ import annotations
 STRUCTURE_TYPES = {"elevated": "elevated", "sheetRoof": "sheetRoof"}
 
 
+def _module_dcr(params: dict) -> str:
+    """version-2's tri-state panel filter, as the platform's two-state request field.
+
+    The source replaced `moduleDcr` ("dcr"|"ndcr") with `panelTypeFilter`
+    ("all"|"DCR"|"NON_DCR"), and made a claimed subsidy force DCR regardless
+    (App.jsx:1781-1793). The platform still takes the two-state field, so this maps the
+    cases that have a determinate answer:
+
+      DCR / NON_DCR        -> the matching content
+      all + subsidy        -> "dcr", because the source's gate forces it
+      all + no subsidy     -> "dcr", the platform's default
+
+    The last line is the one that is *not* equivalent: with `all` and no subsidy the
+    source offers panels of either content and takes the first that survives, while the
+    platform restricts to DCR. Those cases are expected to differ until the engine grows
+    the tri-state filter (Phase C), and this mapping keeps every other axis comparable in
+    the meantime rather than hiding them all behind one wrong default.
+    """
+    explicit = params.get("panelTypeFilter")
+    if explicit == "DCR":
+        return "dcr"
+    if explicit == "NON_DCR":
+        return "ndcr"
+    return params.get("moduleDcr", "dcr")
+
+
 def quote_request(params: dict) -> dict:
     """The platform request body for a captured ``computeBom`` case."""
     add_ons = params.get("addOns") or {}
@@ -32,13 +58,18 @@ def quote_request(params: dict) -> dict:
         ),
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
-        "module_dcr": params.get("moduleDcr", "dcr"),
+        "module_dcr": _module_dcr(params),
         "micro_brand": params.get("microBrand", "enphase"),
         "zero_export": params.get("zeroExport", True),
-        # The source's BOM memo carries no subsidy or offer; those live in discountCalc,
-        # which has its own corpus. Pin them off so a standard case compares only the
-        # material/cost/margin ladder.
-        "subsidy_type": "none",
+        # Subsidy reaches the BOM in version-2: `dcrFilter` forces DCR panels whenever a
+        # subsidy is claimed, whatever the filter says (App.jsx:1791). So unlike the
+        # `main` corpus it cannot be pinned off here -- doing so would compare a
+        # DCR-restricted source BOM against an unrestricted platform one.
+        "subsidy_type": params.get("subsidyType", "none"),
+        # `roofType` is deliberately not sent: version-2 made it a BOM input (installation
+        # cost reads `installationMatrix[size][roofType]`) but the platform has no such
+        # field yet -- that lands in Phase C. Sending an unknown key would be rejected by
+        # the request serializer, so roof-varying cases differ until then.
     }
     # The source names each cable add-on after the category it draws from.
     extra_cable = [

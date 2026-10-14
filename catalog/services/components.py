@@ -34,6 +34,10 @@ from flarize.cache_utils import bump
 
 COMPONENT_FIELDS = (
     "sku",
+    # Position in the price list. Writable because it decides which item a BOM slot
+    # defaults to -- the source picks the first surviving item of the category's array --
+    # so it is configuration, not presentation.
+    "sort_order",
     "category",
     "brand",
     "brand_label",

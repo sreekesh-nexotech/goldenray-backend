@@ -586,9 +586,9 @@ def _import_flarize(catalog_json: dict, battery_master_json: dict, *, user, resu
                 result.count(FL_ITEM, "skipped")
             continue
         plans = []
-        for item in payload.get("items") or []:
+        for index, item in enumerate(payload.get("items") or []):
             try:
-                plans.append((item, _flarize_plan(item, category, masters.get(str(item.get("id"))))))
+                plans.append((item, _flarize_plan(item, category, masters.get(str(item.get("id"))), index=index)))
             except BadValue as exc:
                 result.violation(FL_ITEM, item.get("id"), "invalid_value", f"{exc.column}: {exc.reason}.", column=exc.column, value=exc.value)
                 result.count(FL_ITEM, "skipped")
@@ -650,7 +650,7 @@ def _flarize_status(item: dict, master: dict | None) -> tuple[str, str]:
     return ComponentStatus.ACTIVE, ""
 
 
-def _flarize_plan(item: dict, category: Category, master: dict | None) -> dict:
+def _flarize_plan(item: dict, category: Category, master: dict | None, *, index: int = 0) -> dict:
     kind = spec_kind(category)
     sku = text(item.get("id"), "id", max_length=32)
     unit = str(item.get("unit") or "").upper()
@@ -669,6 +669,9 @@ def _flarize_plan(item: dict, category: Category, master: dict | None) -> dict:
             "warranty_text": text(item.get("warranty"), "warranty", max_length=64),
             "engineering_status": text(item.get("engineeringStatus"), "engineeringStatus", max_length=48),
             "notes": text(item.get("note"), "note", max_length=10000),
+            # Position in the category's array. The source selects `available[0]`, so this
+            # is the rule that decides a slot's default component -- not a display order.
+            "sort_order": index,
         },
         "brand_name": item.get("brand"),
         "spec": {},

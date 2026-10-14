@@ -530,7 +530,11 @@ def _items(category_ids: set[int], extra_component_ids: set[int]) -> tuple[dict[
         Component.objects.filter(Q(category_id__in=category_ids) | Q(pk__in=extra_component_ids), status__in=QUOTABLE)
         .select_related("inverter_spec", "panel_spec")
         .prefetch_related("tiers")
-        .order_by("created_at", "id")
+        # Catalog order, which is what the source means by `available[0]` -- the first
+        # item of the category's array that survives the filters. Ordering by `created_at`
+        # only coincided with it until version-2 gave one panel an authored date, at which
+        # point that panel became the default on every base and value quote.
+        .order_by("sort_order", "created_at", "id")
     )
     prices = dict(Price.objects.filter(kind=PriceKind.LIST, effective_to__isnull=True, component_id__in=[c.pk for c in components]).values_list("component_id", "amount"))
     by_category: dict[int, list[Item]] = {}
