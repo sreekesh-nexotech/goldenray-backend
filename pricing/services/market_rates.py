@@ -124,9 +124,14 @@ def create_set(*, user, data: dict) -> MarketRateSet:
 def _copy_children(source: MarketRateSet, target: MarketRateSet, *, user) -> int:
     count = 0
     for model, fields in (
-        (MarketRate, ("system_type", "tier", "battery_config", "size_kw", "size_key", "phase", "from_size_key", "from_size_kw", "future_size_key", "variant", "customer_price_incl_gst", "sort_order")),
-        (SwapDelta, ("system_type", "tier", "slot", "from_component_id", "to_component_id", "delta_incl_gst")),
-        (RoofAddon, ("structure_type", "size_kw", "addon_incl_gst")),
+        # `RATE_FIELDS` rather than a second hand-written list: it already is every
+        # copyable column, and the two drifting is exactly what went wrong -- `dcr` was
+        # added to the model, the constraint and `RATE_FIELDS`, but not here, so every
+        # hybrid row copied with `dcr=''` and the DCR/non-DCR pair collapsed onto one
+        # cell. Cloning a set with hybrid prices then died on the uniqueness constraint.
+        (MarketRate, RATE_FIELDS),
+        (SwapDelta, DELTA_FIELDS),
+        (RoofAddon, ADDON_FIELDS),
     ):
         rows = []
         for row in model.objects.filter(set=source).order_by("id"):
