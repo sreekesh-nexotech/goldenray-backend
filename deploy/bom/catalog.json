@@ -1,0 +1,7159 @@
+{
+  "costs": {
+    "installRate": 3000,
+    "serviceRateYear": 2000,
+    "serviceYears": 5,
+    "transportRate": 40,
+    "defaultDistKm": 100,
+    "miscellaneous": 1000,
+    "office": 5500,
+    "elevatedStructureRate": 5000,
+    "sheetStructureRate": 3000,
+    "gpRatePerKg": 85,
+    "giRatePerKg": 130,
+    "structureLabor": 1500,
+    "structureRepairPct": 10
+  },
+  "categories": {
+    "panel": {
+      "label": "Solar Panel",
+      "gstDefault": 5,
+      "items": [
+        {
+          "id": "p1",
+          "name": "Waaree Mono perc Bifacial 540W DCR",
+          "brand": "Waaree",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "watt": 540,
+          "perWatt": 24.3,
+          "price": 13122,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p2",
+          "name": "Adani Mono perc Bifacial 550W DCR",
+          "brand": "Adani",
+          "tiers": [
+            "value"
+          ],
+          "watt": 550,
+          "perWatt": 26,
+          "price": 14300,
+          "dcr": true,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p3",
+          "name": "Adani Bifacial Topcon G2S 620W DCR",
+          "brand": "Adani",
+          "tiers": [
+            "premium",
+            "value"
+          ],
+          "watt": 620,
+          "perWatt": 27,
+          "price": 16740,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.4,
+          "isc": 15.91,
+          "imp": 14.98,
+          "tempCoeffVoc": -0.23,
+          "tempCoeffPmax": -0.28,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p4",
+          "name": "Premier Energies Mono perc 540W DCR",
+          "brand": "Premier Energies",
+          "tiers": [
+            "value"
+          ],
+          "watt": 540,
+          "perWatt": 25.25,
+          "price": 13635,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p5",
+          "name": "Premier Energies TopCon 600W DCR",
+          "brand": "Premier Energies",
+          "tiers": [
+            "premium"
+          ],
+          "watt": 600,
+          "perWatt": 26.25,
+          "price": 15750,
+          "dcr": true,
+          "voc": 51.5,
+          "vmp": 43.2,
+          "isc": 14.8,
+          "imp": 13.89,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p6",
+          "name": "Vikram Solar Mono perc 540W DCR",
+          "brand": "Vikram Solar",
+          "tiers": [
+            "base"
+          ],
+          "watt": 540,
+          "perWatt": 23.5,
+          "price": 12690,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p7",
+          "name": "Renewsys Mono perc 545W DCR",
+          "brand": "Renewsys",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "watt": 545,
+          "perWatt": 24.4,
+          "price": 13298,
+          "dcr": true,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p8",
+          "name": "Rayzon Mono perc 545W DCR",
+          "brand": "Rayzon",
+          "tiers": [
+            "base"
+          ],
+          "watt": 545,
+          "perWatt": 23.5,
+          "price": 12807.5,
+          "dcr": true,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p9",
+          "name": "Panasonic Mono perc 540W DCR",
+          "brand": "Panasonic",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "watt": 540,
+          "perWatt": 25,
+          "price": 13500,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p10",
+          "name": "Axitec Mono perc 550W DCR",
+          "brand": "Axitec",
+          "tiers": [
+            "base"
+          ],
+          "watt": 550,
+          "perWatt": 23.5,
+          "price": 12925,
+          "dcr": true,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p11",
+          "name": "Saatvik Solar Mono perc 540W DCR",
+          "brand": "Saatvik Solar",
+          "tiers": [
+            "base"
+          ],
+          "watt": 540,
+          "perWatt": 23,
+          "price": 12420,
+          "dcr": true,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p12",
+          "name": "Saatvik Solar Topcon G2G 565W DCR",
+          "brand": "Saatvik Solar",
+          "tiers": [
+            "value"
+          ],
+          "watt": 565,
+          "perWatt": 26.5,
+          "price": 14972.5,
+          "dcr": true,
+          "voc": 50.5,
+          "vmp": 42.3,
+          "isc": 14.2,
+          "imp": 13.36,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p13",
+          "name": "Jakson 570W DCR",
+          "brand": "Jakson",
+          "tiers": [
+            "base"
+          ],
+          "watt": 570,
+          "perWatt": 19,
+          "price": 10830,
+          "dcr": true,
+          "voc": 50.6,
+          "vmp": 42.4,
+          "isc": 14.3,
+          "imp": 13.44,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p14",
+          "name": "Renew Mono perc 550W",
+          "brand": "Renew",
+          "tiers": [
+            "base"
+          ],
+          "watt": 550,
+          "perWatt": 23.7,
+          "price": 13035,
+          "dcr": false,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p15",
+          "name": "Emvee Topcon G2G 565W DCR",
+          "brand": "Emvee",
+          "tiers": [
+            "value"
+          ],
+          "watt": 565,
+          "perWatt": 26,
+          "price": 14916,
+          "dcr": true,
+          "voc": 50.5,
+          "vmp": 42.3,
+          "isc": 14.2,
+          "imp": 13.36,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p16",
+          "name": "Waaree Mono perc 545W NDCR",
+          "brand": "Waaree",
+          "tiers": [
+            "base"
+          ],
+          "watt": 545,
+          "perWatt": 15,
+          "price": 8175,
+          "dcr": false,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p17",
+          "name": "Waaree Bifacial Topcon 575W NDCR",
+          "brand": "Waaree",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "watt": 575,
+          "perWatt": 16,
+          "price": 9200,
+          "dcr": false,
+          "voc": 50.8,
+          "vmp": 42.6,
+          "isc": 14.4,
+          "imp": 13.5,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p18",
+          "name": "Vikram Solar Mono perc 550W NDCR",
+          "brand": "Vikram Solar",
+          "tiers": [
+            "base"
+          ],
+          "watt": 550,
+          "perWatt": 16,
+          "price": 8800,
+          "dcr": false,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p19",
+          "name": "Renewsys Mono perc 545W NDCR",
+          "brand": "Renewsys",
+          "tiers": [
+            "base"
+          ],
+          "watt": 545,
+          "perWatt": 15,
+          "price": 8175,
+          "dcr": false,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p20",
+          "name": "Renewsys TopCon G2G 600W NDCR",
+          "brand": "Renewsys",
+          "tiers": [
+            "value"
+          ],
+          "watt": 600,
+          "perWatt": 15.8,
+          "price": 9480,
+          "dcr": false,
+          "voc": 51.5,
+          "vmp": 43.2,
+          "isc": 14.8,
+          "imp": 13.89,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p21",
+          "name": "Rayzon Mono perc 545W NDCR",
+          "brand": "Rayzon",
+          "tiers": [
+            "base"
+          ],
+          "watt": 545,
+          "perWatt": 15.9,
+          "price": 8665.5,
+          "dcr": false,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p22",
+          "name": "Panasonic Mono perc 550W NDCR",
+          "brand": "Panasonic",
+          "tiers": [
+            "value"
+          ],
+          "watt": 550,
+          "perWatt": 17.25,
+          "price": 9487.5,
+          "dcr": false,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p23",
+          "name": "Axitec Bifacial Topcon 600W NDCR",
+          "brand": "Axitec",
+          "tiers": [
+            "value"
+          ],
+          "watt": 600,
+          "perWatt": 16.7,
+          "price": 10020,
+          "dcr": false,
+          "voc": 51.5,
+          "vmp": 43.2,
+          "isc": 14.8,
+          "imp": 13.89,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p24",
+          "name": "Premier Energies Mono perc 545W NDCR",
+          "brand": "Premier Energies",
+          "tiers": [
+            "base"
+          ],
+          "watt": 545,
+          "perWatt": 15.2,
+          "price": 8284,
+          "dcr": false,
+          "voc": 49.8,
+          "vmp": 41.7,
+          "isc": 13.9,
+          "imp": 13.07,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p25",
+          "name": "Premier Energies Bifacial Topcon 590W NDCR",
+          "brand": "Premier Energies",
+          "tiers": [
+            "value"
+          ],
+          "watt": 590,
+          "perWatt": 15.5,
+          "price": 9145,
+          "dcr": false,
+          "voc": 51.3,
+          "vmp": 43.1,
+          "isc": 14.6,
+          "imp": 13.7,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p26",
+          "name": "Saatvik Solar Mono perc 540W NDCR",
+          "brand": "Saatvik Solar",
+          "tiers": [
+            "base"
+          ],
+          "watt": 540,
+          "perWatt": 14.8,
+          "price": 7992,
+          "dcr": false,
+          "voc": 49.6,
+          "vmp": 41.5,
+          "isc": 13.83,
+          "imp": 13.01,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p27",
+          "name": "Saatvik Solar Topcon G2G 580W NDCR",
+          "brand": "Saatvik Solar",
+          "tiers": [
+            "value"
+          ],
+          "watt": 580,
+          "perWatt": 14.5,
+          "price": 8410,
+          "dcr": false,
+          "voc": 51,
+          "vmp": 42.8,
+          "isc": 14.45,
+          "imp": 13.55,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p28",
+          "name": "Adani Topcon 620W NDCR",
+          "brand": "Adani",
+          "tiers": [
+            "value"
+          ],
+          "watt": 620,
+          "perWatt": 17,
+          "price": 10540,
+          "dcr": false,
+          "voc": 49.6,
+          "vmp": 41.4,
+          "isc": 15.91,
+          "imp": 14.98,
+          "tempCoeffVoc": -0.23,
+          "tempCoeffPmax": -0.28,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p29",
+          "name": "Pahal Bifacial Topcon G2G 600W NDCR",
+          "brand": "Pahal",
+          "tiers": [
+            "base"
+          ],
+          "watt": 600,
+          "perWatt": 16,
+          "price": 9600,
+          "dcr": false,
+          "voc": 51.5,
+          "vmp": 43.2,
+          "isc": 14.8,
+          "imp": 13.89,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p30",
+          "name": "Goldi Bifacial Topcon G2G 580W NDCR",
+          "brand": "Goldi",
+          "tiers": [
+            "base"
+          ],
+          "watt": 580,
+          "perWatt": 16,
+          "price": 9280,
+          "dcr": false,
+          "voc": 51,
+          "vmp": 42.8,
+          "isc": 14.45,
+          "imp": 13.55,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p31",
+          "name": "Emvee Topcon 580W NDCR",
+          "brand": "Emvee",
+          "tiers": [
+            "base"
+          ],
+          "watt": 580,
+          "perWatt": 16,
+          "price": 9280,
+          "dcr": false,
+          "voc": 51,
+          "vmp": 42.8,
+          "isc": 14.45,
+          "imp": 13.55,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p32",
+          "name": "Renew Topcon G2G 640W NDCR",
+          "brand": "Renew",
+          "tiers": [
+            "base"
+          ],
+          "watt": 640,
+          "perWatt": 16,
+          "price": 10240,
+          "dcr": false,
+          "voc": 51.8,
+          "vmp": 43.5,
+          "isc": 15.6,
+          "imp": 14.71,
+          "tempCoeffVoc": -0.24,
+          "tempCoeffPmax": -0.29,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "p33",
+          "name": "Adani Bifacial G2G 555W NDCR",
+          "brand": "Adani",
+          "tiers": [
+            "base"
+          ],
+          "watt": 555,
+          "perWatt": 15,
+          "price": 8325,
+          "dcr": false,
+          "voc": 50.3,
+          "vmp": 42.1,
+          "isc": 14,
+          "imp": 13.18,
+          "tempCoeffVoc": -0.26,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "pa_0006870e2e7d",
+          "name": "hari 550",
+          "brand": "hari",
+          "tiers": [
+            "value",
+            "base"
+          ],
+          "price": 9900,
+          "watt": 550,
+          "perWatt": 18,
+          "dcr": true,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "pa_a2ea75b89b4d",
+          "name": "New Solar Panel",
+          "brand": "",
+          "tiers": [
+            "value",
+            "base"
+          ],
+          "price": 0,
+          "watt": 550,
+          "perWatt": 0,
+          "dcr": true,
+          "voc": 50,
+          "vmp": 41.9,
+          "isc": 14,
+          "imp": 13.13,
+          "tempCoeffVoc": -0.28,
+          "tempCoeffPmax": -0.35,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "pa_9e35d4adf2a3",
+          "name": "adani 600",
+          "brand": "adani",
+          "tiers": [
+            "value",
+            "premium",
+            "base"
+          ],
+          "price": 15420,
+          "watt": 600,
+          "perWatt": 25.7,
+          "dcr": true,
+          "voc": 51.5,
+          "vmp": 43.2,
+          "isc": 14.8,
+          "imp": 13.89,
+          "tempCoeffVoc": -0.25,
+          "tempCoeffPmax": -0.3,
+          "cells": 144,
+          "maxSysVoltage": 1500
+        },
+        {
+          "id": "pa_244e61c2193b",
+          "name": "New Solar Panel",
+          "brand": "",
+          "tiers": [
+            "value"
+          ],
+          "price": 0,
+          "watt": 550,
+          "perWatt": 0,
+          "dcr": true
+        }
+      ]
+    },
+    "inverter": {
+      "label": "Inverter",
+      "gstDefault": 5,
+      "items": [
+        {
+          "id": "i1",
+          "name": "Growatt MIC 3000TL-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "MIC 3000TL-X",
+          "type": "ongrid",
+          "price": 16600,
+          "mpptCount": 1,
+          "mpptVoltageMin": 50,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 80,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.25
+        },
+        {
+          "id": "i2",
+          "name": "Growatt MIC 3300TL-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3.3,
+          "model": "MIC 3300TL-X",
+          "type": "ongrid",
+          "price": 16700,
+          "mpptCount": 1,
+          "mpptVoltageMin": 50,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 80,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.25
+        },
+        {
+          "id": "i3",
+          "name": "Growatt MIN 4200 TL-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 4.2,
+          "model": "MIN 4200 TL-X",
+          "type": "ongrid",
+          "price": 30850,
+          "mpptCount": 2,
+          "mpptVoltageMin": 50,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 80,
+          "maxInputCurrent": 13.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.9
+        },
+        {
+          "id": "i4",
+          "name": "Growatt MIN 5000 TL-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "MIN 5000 TL-X",
+          "type": "ongrid",
+          "price": 29200,
+          "mpptCount": 2,
+          "mpptVoltageMin": 50,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 80,
+          "maxInputCurrent": 13.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.9
+        },
+        {
+          "id": "i5",
+          "name": "Growatt 5000 TL3-S",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "5000 TL3-S",
+          "type": "ongrid",
+          "price": 47600,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i6",
+          "name": "Growatt 6000 TL3-S",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "6000 TL3-S",
+          "type": "ongrid",
+          "price": 50400,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i7",
+          "name": "Growatt MOD 8000 TL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "MOD 8000 TL3-X",
+          "type": "ongrid",
+          "price": 53200,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i8",
+          "name": "Growatt MOD 10000 TL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "MOD 10000 TL3-X",
+          "type": "ongrid",
+          "price": 54500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i9",
+          "name": "Growatt MOD 12000 TL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 12,
+          "model": "MOD 12000 TL3-X",
+          "type": "ongrid",
+          "price": 64800,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i10",
+          "name": "Growatt MOD 15000 TL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "MOD 15000 TL3-X",
+          "type": "ongrid",
+          "price": 66650,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i11",
+          "name": "Growatt MID 20 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "MID 20 KTL3-X",
+          "type": "ongrid",
+          "price": 86700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27.5
+        },
+        {
+          "id": "i12",
+          "name": "Growatt MID 25 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 25,
+          "model": "MID 25 KTL3-X",
+          "type": "ongrid",
+          "price": 91650,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27.5
+        },
+        {
+          "id": "i13",
+          "name": "Growatt MID 30 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 30,
+          "model": "MID 30 KTL3-X",
+          "type": "ongrid",
+          "price": 121350,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27.5
+        },
+        {
+          "id": "i14",
+          "name": "Growatt MID 33 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 33,
+          "model": "MID 33 KTL3-X",
+          "type": "ongrid",
+          "price": 126500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27.5
+        },
+        {
+          "id": "i15",
+          "name": "Growatt MID 40 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 40,
+          "model": "MID 40 KTL3-X",
+          "type": "ongrid",
+          "price": 143950,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27.5
+        },
+        {
+          "id": "i16",
+          "name": "Growatt MAC 50 KTL3-X",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 50,
+          "model": "MAC 50 KTL3-X",
+          "type": "ongrid",
+          "price": 161850,
+          "mpptCount": 4,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i17",
+          "name": "Growatt MAX 80KTL3-LV",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 80,
+          "model": "MAX 80KTL3-LV",
+          "type": "ongrid",
+          "price": 236033,
+          "mpptCount": 6,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i18",
+          "name": "Growatt MAX 100KTL3-X-LV",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 100,
+          "model": "MAX 100KTL3-X-LV",
+          "type": "ongrid",
+          "price": 292000,
+          "mpptCount": 8,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i19",
+          "name": "Growatt MAX 125KTL3-X-LV",
+          "brand": "Growatt",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 125,
+          "model": "MAX 125KTL3-X-LV",
+          "type": "ongrid",
+          "price": 312000,
+          "mpptCount": 10,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i20",
+          "name": "Sungrow SG 3.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "SG 3.0RT",
+          "type": "ongrid",
+          "price": 18250,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 12.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15
+        },
+        {
+          "id": "i21",
+          "name": "Sungrow SG 3.3RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3.3,
+          "model": "SG 3.3RT",
+          "type": "ongrid",
+          "price": 22000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 12.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15
+        },
+        {
+          "id": "i22",
+          "name": "Sungrow SG 4.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 4,
+          "model": "SG 4.0RT",
+          "type": "ongrid",
+          "price": 28500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 12.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15
+        },
+        {
+          "id": "i23",
+          "name": "Sungrow SG5K-D",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "SG5K-D",
+          "type": "ongrid",
+          "price": 30600,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 12.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15
+        },
+        {
+          "id": "i24",
+          "name": "Sungrow SG5.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 5,
+          "model": "SG5.0RT",
+          "type": "ongrid",
+          "price": 54500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18.8
+        },
+        {
+          "id": "i25",
+          "name": "Sungrow SG6.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "SG6.0RT",
+          "type": "ongrid",
+          "price": 56000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18.8
+        },
+        {
+          "id": "i26",
+          "name": "Sungrow SG8.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "SG8.0RT",
+          "type": "ongrid",
+          "price": 58500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18.8
+        },
+        {
+          "id": "i27",
+          "name": "Sungrow SG10.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "SG10.0RT",
+          "type": "ongrid",
+          "price": 64500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18.8
+        },
+        {
+          "id": "i28",
+          "name": "Sungrow SG12.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 12,
+          "model": "SG12.0RT",
+          "type": "ongrid",
+          "price": 66500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18.8
+        },
+        {
+          "id": "i29",
+          "name": "Sungrow SG15.0RT",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "SG15.0RT",
+          "type": "ongrid",
+          "price": 87000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i30",
+          "name": "Sungrow SG20KTL-M",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "SG20KTL-M",
+          "type": "ongrid",
+          "price": 93000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i31",
+          "name": "Sungrow SG33CX",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 33,
+          "model": "SG33CX",
+          "type": "ongrid",
+          "price": 133000,
+          "mpptCount": 3,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i32",
+          "name": "Sungrow SG50CX",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 50,
+          "model": "SG50CX",
+          "type": "ongrid",
+          "price": 168000,
+          "mpptCount": 4,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i33",
+          "name": "Sungrow SG110CX",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 110,
+          "model": "SG110CX",
+          "type": "ongrid",
+          "price": 317000,
+          "mpptCount": 9,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i34",
+          "name": "Sungrow SG125HX",
+          "brand": "Sungrow",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 125,
+          "model": "SG125HX",
+          "type": "ongrid",
+          "price": 347000,
+          "mpptCount": 9,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i35",
+          "name": "SolarEdge SE3000H",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "SE3000H",
+          "type": "ongrid",
+          "price": 39000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 480,
+          "maxInputVoltage": 480,
+          "startVoltage": 380,
+          "maxInputCurrent": 10,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 12,
+          "optimizerBased": true
+        },
+        {
+          "id": "i36",
+          "name": "SolarEdge SE5K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 5,
+          "model": "SE5K",
+          "type": "ongrid",
+          "price": 75000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20,
+          "optimizerBased": true
+        },
+        {
+          "id": "i37",
+          "name": "SolarEdge SE8K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "SE8K",
+          "type": "ongrid",
+          "price": 60000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20,
+          "optimizerBased": true
+        },
+        {
+          "id": "i38",
+          "name": "SolarEdge SE15K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "SE15K",
+          "type": "ongrid",
+          "price": 88000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20,
+          "optimizerBased": true
+        },
+        {
+          "id": "i39",
+          "name": "SolarEdge SE17K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 17,
+          "model": "SE17K",
+          "type": "ongrid",
+          "price": 89000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20,
+          "optimizerBased": true
+        },
+        {
+          "id": "i40",
+          "name": "SolarEdge SE27.6K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 27.6,
+          "model": "SE27.6K",
+          "type": "ongrid",
+          "price": 112000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 32,
+          "maxStringsPerMppt": 4,
+          "maxIsc": 40,
+          "optimizerBased": true
+        },
+        {
+          "id": "i41",
+          "name": "SolarEdge SE-33.3KW",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 33.3,
+          "model": "SE-33.3KW",
+          "type": "ongrid",
+          "price": 118000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 380,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 850,
+          "startVoltage": 380,
+          "maxInputCurrent": 32,
+          "maxStringsPerMppt": 4,
+          "maxIsc": 40,
+          "optimizerBased": true
+        },
+        {
+          "id": "i42",
+          "name": "SolarEdge SE66K",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 66,
+          "model": "SE66K",
+          "type": "ongrid",
+          "price": 228000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 560,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1100,
+          "startVoltage": 560,
+          "maxInputCurrent": 60,
+          "maxStringsPerMppt": 8,
+          "maxIsc": 75,
+          "optimizerBased": true
+        },
+        {
+          "id": "i43",
+          "name": "SolarEdge SE 100kw",
+          "brand": "SolarEdge",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "kw": 100,
+          "model": "SE 100kw",
+          "type": "ongrid",
+          "price": 315000,
+          "mpptCount": 1,
+          "mpptVoltageMin": 560,
+          "mpptVoltageMax": 960,
+          "maxInputVoltage": 1100,
+          "startVoltage": 560,
+          "maxInputCurrent": 60,
+          "maxStringsPerMppt": 8,
+          "maxIsc": 75,
+          "optimizerBased": true
+        },
+        {
+          "id": "i44",
+          "name": "DEYE On-Grid 1P 3kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "On-Grid 1P",
+          "type": "ongrid",
+          "price": 15700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.5
+        },
+        {
+          "id": "i45",
+          "name": "DEYE On-Grid 1P 3.3kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3.3,
+          "model": "On-Grid 1P",
+          "type": "ongrid",
+          "price": 18672,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.5
+        },
+        {
+          "id": "i46",
+          "name": "DEYE On-Grid 1P 4kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 4,
+          "model": "On-Grid 1P",
+          "type": "ongrid",
+          "price": 19975,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.5
+        },
+        {
+          "id": "i47",
+          "name": "DEYE On-Grid 1P 5kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "On-Grid 1P",
+          "type": "ongrid",
+          "price": 26500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16.5
+        },
+        {
+          "id": "i48",
+          "name": "DEYE On-Grid 3P 5kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 5,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 45696,
+          "mpptCount": 2,
+          "mpptVoltageMin": 180,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i49",
+          "name": "DEYE On-Grid 3P 6kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 46502,
+          "mpptCount": 2,
+          "mpptVoltageMin": 180,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i50",
+          "name": "DEYE On-Grid 3P 8kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 48115,
+          "mpptCount": 2,
+          "mpptVoltageMin": 180,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i51",
+          "name": "DEYE On-Grid 3P 10kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 49728,
+          "mpptCount": 2,
+          "mpptVoltageMin": 180,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i52",
+          "name": "DEYE On-Grid 3P 15kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 60000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 180,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 15,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i53",
+          "name": "DEYE On-Grid 3P 20kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 69750,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i54",
+          "name": "DEYE On-Grid 3P 33kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 33,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 110611,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i55",
+          "name": "DEYE On-Grid 3P 40kW",
+          "brand": "DEYE",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 40,
+          "model": "On-Grid 3P",
+          "type": "ongrid",
+          "price": 140238,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i56",
+          "name": "Deye Hybrid 1P 3-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "Hybrid 3-48v",
+          "type": "hybrid",
+          "price": 67100,
+          "mpptCount": 2,
+          "mpptVoltageMin": 90,
+          "mpptVoltageMax": 450,
+          "maxInputVoltage": 500,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i57",
+          "name": "Deye Hybrid 1P 3.6-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3.6,
+          "model": "Hybrid 3.6-48v",
+          "type": "hybrid",
+          "price": 74786,
+          "mpptCount": 2,
+          "mpptVoltageMin": 90,
+          "mpptVoltageMax": 450,
+          "maxInputVoltage": 500,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i58",
+          "name": "Deye Hybrid 1P 5-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "Hybrid 5-48v",
+          "type": "hybrid",
+          "price": 81730,
+          "mpptCount": 2,
+          "mpptVoltageMin": 90,
+          "mpptVoltageMax": 450,
+          "maxInputVoltage": 500,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i59",
+          "name": "Deye Hybrid 1P 6-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 6,
+          "model": "Hybrid 6-48v",
+          "type": "hybrid",
+          "price": 86076,
+          "mpptCount": 2,
+          "mpptVoltageMin": 90,
+          "mpptVoltageMax": 450,
+          "maxInputVoltage": 500,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i60",
+          "name": "Deye Hybrid 3P 8-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "Hybrid 8-48v",
+          "type": "hybrid",
+          "price": 152719,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i61",
+          "name": "Deye Hybrid 3P 10-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "Hybrid 10-48v",
+          "type": "hybrid",
+          "price": 162136,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i62",
+          "name": "Deye Hybrid 3P 12-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 12,
+          "model": "Hybrid 12-48v",
+          "type": "hybrid",
+          "price": 168438,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 800,
+          "maxInputVoltage": 1000,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i63",
+          "name": "Deye Hybrid 3P 30-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 30,
+          "model": "Hybrid 30-48v",
+          "type": "hybrid",
+          "price": 353925,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 28,
+          "maxStringsPerMppt": 3,
+          "maxIsc": 35
+        },
+        {
+          "id": "i64",
+          "name": "Deye Hybrid 3P 40-48v",
+          "brand": "Deye",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 40,
+          "model": "Hybrid 40-48v",
+          "type": "hybrid",
+          "price": 423833,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 28,
+          "maxStringsPerMppt": 3,
+          "maxIsc": 35
+        },
+        {
+          "id": "i65",
+          "name": "DEYE Hybrid 3P 80-48v",
+          "brand": "DEYE",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 80,
+          "model": "Hybrid 80-48v",
+          "type": "hybrid",
+          "price": 686205,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 28,
+          "maxStringsPerMppt": 3,
+          "maxIsc": 35
+        },
+        {
+          "id": "i66",
+          "name": "Solaire ZIP-3.3kw",
+          "brand": "Solaire",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3.3,
+          "model": "ZIP-3.3kw",
+          "type": "ongrid",
+          "price": 19800,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i67",
+          "name": "Solaire ZIP-5kw",
+          "brand": "Solaire",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "ZIP-5kw",
+          "type": "ongrid",
+          "price": 32700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i68",
+          "name": "PV BLINK 1P 3kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "PV BLINK 3kW",
+          "type": "ongrid",
+          "price": 17500,
+          "mpptCount": 1,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i69",
+          "name": "PV BLINK 1P 5kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "PV BLINK 5kW",
+          "type": "ongrid",
+          "price": 31200,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i70",
+          "name": "PV BLINK 3P 5kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 5,
+          "model": "PV BLINK 5kW",
+          "type": "ongrid",
+          "price": 50700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i71",
+          "name": "PV BLINK 3P 6kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "PV BLINK 6kW",
+          "type": "ongrid",
+          "price": 53350,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i72",
+          "name": "PV BLINK 3P 8kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "PV BLINK 8kW",
+          "type": "ongrid",
+          "price": 60200,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i73",
+          "name": "PV BLINK 3P 10kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "PV BLINK 10kW",
+          "type": "ongrid",
+          "price": 61250,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i74",
+          "name": "PV BLINK 3P 12kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 12,
+          "model": "PV BLINK 12kW",
+          "type": "ongrid",
+          "price": 68700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i75",
+          "name": "PV BLINK 3P 15kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "PV BLINK 15kW",
+          "type": "ongrid",
+          "price": 71800,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 950,
+          "maxInputVoltage": 1100,
+          "startVoltage": 200,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 20
+        },
+        {
+          "id": "i76",
+          "name": "PV BLINK 3P 20kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "PV BLINK 20kW",
+          "type": "ongrid",
+          "price": 87700,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i77",
+          "name": "PV BLINK 3P 25kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 25,
+          "model": "PV BLINK 25kW",
+          "type": "ongrid",
+          "price": 102000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i78",
+          "name": "PV BLINK 3P 30kW",
+          "brand": "PV BLINK",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "kw": 30,
+          "model": "PV BLINK 30kW",
+          "type": "ongrid",
+          "price": 110000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 22,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 27
+        },
+        {
+          "id": "i79",
+          "name": "Solis 1P 3kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "Solis 3kW",
+          "type": "ongrid",
+          "price": 17900,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i80",
+          "name": "Solis 1P 5kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "Solis 5kW",
+          "type": "ongrid",
+          "price": 30000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 560,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i81",
+          "name": "Solis 3P 5kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 5,
+          "model": "Solis 5kW",
+          "type": "ongrid",
+          "price": 54000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i82",
+          "name": "Solis 3P 8kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "Solis 8kW",
+          "type": "ongrid",
+          "price": 58000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i83",
+          "name": "Solis 3P 10kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "Solis 10kW",
+          "type": "ongrid",
+          "price": 59000,
+          "mpptCount": 2,
+          "mpptVoltageMin": 160,
+          "mpptVoltageMax": 850,
+          "maxInputVoltage": 1000,
+          "startVoltage": 200,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i84",
+          "name": "Solis 3P 20kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "Solis 20kW",
+          "type": "ongrid",
+          "price": 85129,
+          "mpptCount": 4,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i85",
+          "name": "Solis 3P 40kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 40,
+          "model": "Solis 40kW",
+          "type": "ongrid",
+          "price": 142000,
+          "mpptCount": 4,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i86",
+          "name": "Solis 3P 50kW",
+          "brand": "Solis",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 50,
+          "model": "Solis 50kW",
+          "type": "ongrid",
+          "price": 152000,
+          "mpptCount": 4,
+          "mpptVoltageMin": 200,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 250,
+          "maxInputCurrent": 16,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 20
+        },
+        {
+          "id": "i87",
+          "name": "Foxess 1P 3.3kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 3.3,
+          "model": "Foxess 3.3kW",
+          "type": "ongrid",
+          "price": 16300,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 550,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i88",
+          "name": "Foxess 1P 5kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "Foxess 5kW",
+          "type": "ongrid",
+          "price": 31500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 550,
+          "maxInputVoltage": 600,
+          "startVoltage": 100,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 17.5
+        },
+        {
+          "id": "i89",
+          "name": "Foxess 3P 6kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 6,
+          "model": "Foxess 6kW",
+          "type": "ongrid",
+          "price": 55900,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18
+        },
+        {
+          "id": "i90",
+          "name": "Foxess 3P 8kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 8,
+          "model": "Foxess 8kW",
+          "type": "ongrid",
+          "price": 58500,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18
+        },
+        {
+          "id": "i91",
+          "name": "Foxess 3P 10kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 10,
+          "model": "Foxess 10kW",
+          "type": "ongrid",
+          "price": 59900,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18
+        },
+        {
+          "id": "i92",
+          "name": "Foxess 3P 15kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 15,
+          "model": "Foxess 15kW",
+          "type": "ongrid",
+          "price": 67800,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 14,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 18
+        },
+        {
+          "id": "i93",
+          "name": "Foxess 3P 20kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 20,
+          "model": "Foxess 20kW",
+          "type": "ongrid",
+          "price": 77900,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 28,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 35
+        },
+        {
+          "id": "i94",
+          "name": "Foxess 3P 25kW",
+          "brand": "Foxess",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "kw": 25,
+          "model": "Foxess 25kW",
+          "type": "ongrid",
+          "price": 83900,
+          "mpptCount": 2,
+          "mpptVoltageMin": 140,
+          "mpptVoltageMax": 1000,
+          "maxInputVoltage": 1100,
+          "startVoltage": 140,
+          "maxInputCurrent": 28,
+          "maxStringsPerMppt": 2,
+          "maxIsc": 35
+        },
+        {
+          "id": "i95",
+          "name": "Eastman 1P 3kW",
+          "brand": "Eastman",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 3,
+          "model": "Eastman 3kW",
+          "type": "ongrid",
+          "price": 14800,
+          "mpptCount": 1,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i96",
+          "name": "Eastman 1P 5kW",
+          "brand": "Eastman",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "kw": 5,
+          "model": "Eastman 5kW",
+          "type": "ongrid",
+          "price": 24900,
+          "mpptCount": 1,
+          "mpptVoltageMin": 80,
+          "mpptVoltageMax": 500,
+          "maxInputVoltage": 550,
+          "startVoltage": 100,
+          "maxInputCurrent": 13,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 16
+        },
+        {
+          "id": "i97",
+          "name": "ENPHASE IQ8P Micro",
+          "brand": "ENPHASE",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "1P",
+          "kw": 0.48,
+          "model": "IQ8P Micro",
+          "type": "micro",
+          "price": 8200,
+          "mpptCount": 1,
+          "mpptVoltageMin": 16,
+          "mpptVoltageMax": 58,
+          "maxInputVoltage": 60,
+          "startVoltage": 22,
+          "maxInputCurrent": 12,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15,
+          "isMicro": true
+        },
+        {
+          "id": "i98",
+          "name": "Hoymiles Micro Inverter",
+          "brand": "Hoymiles",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "kw": 0.5,
+          "model": "Micro Inverter",
+          "type": "micro",
+          "price": 7500,
+          "mpptCount": 1,
+          "mpptVoltageMin": 16,
+          "mpptVoltageMax": 60,
+          "maxInputVoltage": 65,
+          "startVoltage": 22,
+          "maxInputCurrent": 12.5,
+          "maxStringsPerMppt": 1,
+          "maxIsc": 15,
+          "isMicro": true
+        }
+      ]
+    },
+    "dcdb": {
+      "label": "DCDB",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "d1",
+          "name": "1/1 DCDB Havells MCB 500v 32A + Havells SPD",
+          "brand": "Havells",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "price": 1525
+        },
+        {
+          "id": "d2",
+          "name": "1/1 DCDB ETN MCB 500v 32A + Mersen 600v SPD",
+          "brand": "ETN+Mersen",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "price": 2800
+        },
+        {
+          "id": "d3",
+          "name": "1/1 DCDB ABB MCB 500v 32A + Citel 500v SPD",
+          "brand": "ABB+Citel",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "price": 3226
+        },
+        {
+          "id": "d4",
+          "name": "1/1 DCDB ABB MCB 500v + Mersen SPD",
+          "brand": "ABB+Mersen",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "phase": "1P",
+          "price": 2030
+        },
+        {
+          "id": "d5",
+          "name": "1/1 DCDB ABB MCB 500v + Phoenix SPD",
+          "brand": "ABB+Phoenix",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "1P",
+          "price": 2473
+        },
+        {
+          "id": "d6",
+          "name": "2/2 DCDB Havells MCB 500v + Havells SPD",
+          "brand": "Havells",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "price": 1525
+        },
+        {
+          "id": "d7",
+          "name": "2/2 DCDB ETN MCB 500v + Mersen 600v SPD",
+          "brand": "ETN+Mersen",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "price": 3700
+        },
+        {
+          "id": "d8",
+          "name": "2/2 DCDB ABB MCB 500v + Mersen SPD",
+          "brand": "ABB+Mersen",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "phase": "3P",
+          "price": 1858
+        },
+        {
+          "id": "d9",
+          "name": "1/1 DCDB ABB MCB 500v 32A + Citel 500v SPD + Fuses (Hybrid)",
+          "brand": "ABB+Citel",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P-HYB",
+          "price": 3226
+        },
+        {
+          "id": "d10",
+          "name": "2/2 DCDB ABB MCB 500v + Mersen 500v SPD + Fuses (Hybrid 3P)",
+          "brand": "ABB+Mersen",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P-HYB",
+          "price": 5594
+        }
+      ]
+    },
+    "acdb": {
+      "label": "ACDB",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "a1",
+          "name": "ETN 32A + Mersen ACDB",
+          "brand": "ETN+Mersen",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P",
+          "price": 1600
+        },
+        {
+          "id": "a2",
+          "name": "ABB + Citel SPD ACDB",
+          "brand": "ABB+Citel",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "price": 2282
+        },
+        {
+          "id": "a3",
+          "name": "ABB + Mersen SPD ACDB",
+          "brand": "ABB+Mersen",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "price": 1858
+        },
+        {
+          "id": "a4",
+          "name": "ETN 32A Mersen 3P ACDB",
+          "brand": "ETN+Mersen",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "price": 3700
+        },
+        {
+          "id": "a5",
+          "name": "Enphase ACDB + AJ Box ABB MCB 16A 2P",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "1P",
+          "price": 6080
+        },
+        {
+          "id": "a6",
+          "name": "Enphase ACDB + AJ Box 3P",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P",
+          "price": 9585
+        },
+        {
+          "id": "a7",
+          "name": "ACDB WITH CHANGE OVER SWITCH 1PH Hybrid",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "1P-HYB",
+          "price": 8100
+        },
+        {
+          "id": "a8",
+          "name": "ACDB Hybrid 3PH",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P-HYB",
+          "price": 12100
+        },
+        {
+          "id": "ac_hyb_en1p",
+          "name": "ACDB Hybrid Enphase 1Ph (ABB MCB+Citel SPD)",
+          "brand": "ABB/Citel",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "1P-HYB",
+          "type": "hybrid",
+          "price": 3500
+        },
+        {
+          "id": "ac_hyb_en3p",
+          "name": "ACDB Hybrid Enphase 3Ph (ABB MCB+Citel SPD)",
+          "brand": "ABB/Citel",
+          "tiers": [
+            "premium"
+          ],
+          "phase": "3P-HYB",
+          "type": "hybrid",
+          "price": 10612
+        }
+      ]
+    },
+    "meter": {
+      "label": "Meter",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "m1",
+          "name": "Visiontek Single Phase Meter",
+          "brand": "Visiontek",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "price": 1400
+        },
+        {
+          "id": "m2",
+          "name": "Genius Single Phase Energy Meter",
+          "brand": "Genius",
+          "tiers": [
+            "value",
+            "premium",
+            "base"
+          ],
+          "phase": "1P",
+          "price": 1440.68
+        },
+        {
+          "id": "m3",
+          "name": "Visiontek Three Phase Meter",
+          "brand": "Visiontek",
+          "tiers": [
+            "base"
+          ],
+          "phase": "3P",
+          "price": 3950
+        },
+        {
+          "id": "m5",
+          "name": "L&T 1P Meter",
+          "brand": "L&T",
+          "tiers": [
+            "value"
+          ],
+          "phase": "1P",
+          "price": 1398.36
+        },
+        {
+          "id": "m6",
+          "name": "L&T 3P Meter",
+          "brand": "L&T",
+          "tiers": [
+            "value"
+          ],
+          "phase": "3P",
+          "price": 4323
+        },
+        {
+          "id": "m7",
+          "name": "Three Phase Genus Meter",
+          "brand": "Genus",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "phase": "3P",
+          "price": 3899
+        }
+      ]
+    },
+    "dc_cable": {
+      "label": "DC Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "dc1",
+          "name": "DC-WACAB-Basic 4sqmm",
+          "brand": "WACAB",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 4,
+          "price": 43
+        },
+        {
+          "id": "dc2",
+          "name": "DC-WACAB-Basic 6sqmm",
+          "brand": "WACAB",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 6,
+          "price": 53
+        },
+        {
+          "id": "dc3",
+          "name": "DC-APAR 4sqmm",
+          "brand": "APAR",
+          "tiers": [
+            "value"
+          ],
+          "sqmm": 4,
+          "price": 64
+        },
+        {
+          "id": "dc4",
+          "name": "DC-POLY 4sqmm",
+          "brand": "POLY",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "sqmm": 4,
+          "price": 58
+        },
+        {
+          "id": "dc5",
+          "name": "DC-LUMICON 4sqmm",
+          "brand": "LUMICON",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 4,
+          "price": 37
+        },
+        {
+          "id": "dc6",
+          "name": "DC-LUMICON 6sqmm",
+          "brand": "LUMICON",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 6,
+          "price": 54
+        },
+        {
+          "id": "dc_8398622e03ee",
+          "name": "DC-FINOLEX 4sqmm",
+          "brand": "FINOLEX",
+          "tiers": [
+            "base"
+          ],
+          "price": 54,
+          "sqmm": 4
+        }
+      ]
+    },
+    "ac_cable": {
+      "label": "AC Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ac1",
+          "name": "AC-RR 4sqmm",
+          "brand": "RR",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 4,
+          "price": 58
+        },
+        {
+          "id": "ac2",
+          "name": "AC-RR 6sqmm",
+          "brand": "RR",
+          "tiers": [
+            "value"
+          ],
+          "sqmm": 6,
+          "price": 65.25
+        },
+        {
+          "id": "ac3",
+          "name": "AC-POLY 4sqmm",
+          "brand": "POLY",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 4,
+          "price": 56
+        },
+        {
+          "id": "ac4",
+          "name": "AC-POLY 6sqmm",
+          "brand": "POLY",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "sqmm": 6,
+          "price": 61
+        },
+        {
+          "id": "ac_a0473dd3b8ec",
+          "name": "AC-FINOLEX 6sqmm",
+          "brand": "FINOLEX",
+          "tiers": [
+            "value"
+          ],
+          "price": 76,
+          "sqmm": 4
+        }
+      ]
+    },
+    "isolator": {
+      "label": "Isolator",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "is1",
+          "name": "Honey Well Isolator 2P 40A",
+          "brand": "Honey Well",
+          "tiers": [
+            "base"
+          ],
+          "phase": "1P",
+          "price": 212
+        },
+        {
+          "id": "is2",
+          "name": "L&T Isolator 40A 4P",
+          "brand": "L&T",
+          "tiers": [
+            "value",
+            "premium",
+            "base"
+          ],
+          "phase": "3P",
+          "price": 623
+        },
+        {
+          "id": "is_9b53be37fab1",
+          "name": "New Isolator",
+          "brand": "",
+          "tiers": [
+            "value"
+          ],
+          "price": 0
+        }
+      ]
+    },
+    "cb_rod": {
+      "label": "CB Rod",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "cb1",
+          "name": "CB Rod 14mm 100u 1.2m",
+          "brand": "Generic",
+          "tiers": [
+            "base"
+          ],
+          "price": 260
+        },
+        {
+          "id": "cb2",
+          "name": "CB Rod 17.2mm 100u 1.2m",
+          "brand": "Generic",
+          "tiers": [
+            "base"
+          ],
+          "price": 360
+        },
+        {
+          "id": "cb3",
+          "name": "CB Rod 17.2mm 100u 2m",
+          "brand": "Generic",
+          "tiers": [
+            "base"
+          ],
+          "price": 595
+        },
+        {
+          "id": "cb4",
+          "name": "CB Rod 14mm 250u 1.0m",
+          "brand": "Generic",
+          "tiers": [
+            "value",
+            "base",
+            "premium"
+          ],
+          "price": 470
+        },
+        {
+          "id": "cb5",
+          "name": "CB Rod 17.2mm 250u 1.5m",
+          "brand": "Generic",
+          "tiers": [
+            "value",
+            "premium",
+            "base"
+          ],
+          "price": 750
+        },
+        {
+          "id": "cb6",
+          "name": "CB Rod 17.2mm 250u 2m",
+          "brand": "Generic",
+          "tiers": [
+            "premium",
+            "base",
+            "value"
+          ],
+          "price": 1000
+        }
+      ]
+    },
+    "earth_cable": {
+      "label": "Earthing Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ec1",
+          "name": "16sqmm Green Cable ",
+          "brand": "kanberry ",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 16,
+          "price": 26
+        },
+        {
+          "id": "ec2",
+          "name": "16sqmm Green Poluguards",
+          "brand": "Poluguards",
+          "tiers": [
+            "value"
+          ],
+          "sqmm": 16,
+          "price": 24
+        },
+        {
+          "id": "ec3",
+          "name": "16sqmm Green Cable APAR",
+          "brand": "APAR",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "sqmm": 16,
+          "price": 29
+        }
+      ]
+    },
+    "la_cable": {
+      "label": "LA Conductor",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "la1",
+          "name": "Excel FLX Al Down conductor 8mm",
+          "brand": "Excel",
+          "tiers": [
+            "value",
+            "premium",
+            "base"
+          ],
+          "sqmm": 8,
+          "price": 84
+        },
+        {
+          "id": "la2",
+          "name": "Kanberry FLX Al Down conductor 8mm",
+          "brand": "Kanberry",
+          "tiers": [
+            "base"
+          ],
+          "sqmm": 8,
+          "price": 58
+        }
+      ]
+    },
+    "battery": {
+      "label": "Battery",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "bt1",
+          "name": "SEG.5 PRO 100AH LV Battery",
+          "brand": "SEG",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "price": 86717
+        },
+        {
+          "id": "bt2",
+          "name": "Enphase Flex Battery",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 95000
+        },
+        {
+          "id": "bt3",
+          "name": "Okaya 100AH",
+          "brand": "Okaya",
+          "tiers": [
+            "base"
+          ],
+          "price": 78000
+        },
+        {
+          "id": "bt4",
+          "name": "Livguard 100AH",
+          "brand": "Livguard",
+          "tiers": [
+            "base"
+          ],
+          "price": 75000
+        }
+      ]
+    },
+    "enphase": {
+      "label": "Enphase Accessories",
+      "gstDefault": 5,
+      "items": [
+        {
+          "id": "en1",
+          "name": "Enphase IQ8P Micro Inverter",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 8200
+        },
+        {
+          "id": "en2",
+          "name": "Enphase Q Cable Portrait 2m",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 750
+        },
+        {
+          "id": "en3",
+          "name": "Enphase Envoy S Metered",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 12610
+        },
+        {
+          "id": "en4",
+          "name": "Enphase Q Relay",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 5150,
+          "gstOverride": 18
+        },
+        {
+          "id": "en5",
+          "name": "Enphase Q Terminal",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 700
+        },
+        {
+          "id": "en6",
+          "name": "Enphase CT 200",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 1500
+        },
+        {
+          "id": "en7",
+          "name": "Enphase System Controller",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "gstOverride": 18,
+          "price": 110000
+        },
+        {
+          "id": "en_sysctrl",
+          "name": "Enphase System Controller with Cable",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 25000,
+          "gstOverride": 5
+        },
+        {
+          "id": "en_flexbat",
+          "name": "Enphase Flex Battery 5kWh",
+          "brand": "Enphase",
+          "tiers": [
+            "premium"
+          ],
+          "price": 135000,
+          "gstOverride": 5
+        }
+      ]
+    },
+    "hoymiles": {
+      "label": "Hoymiles Accessories",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "hm1",
+          "name": "Hoymiles HMS 2000 (4 Module / 4 MPPT)",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "modules": 4,
+          "price": 22000
+        },
+        {
+          "id": "hm2",
+          "name": "Hoymiles HMS 1000 (2 Module / 2 MPPT)",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "modules": 2,
+          "price": 14000
+        },
+        {
+          "id": "hm3",
+          "name": "Hoymiles DTU Pro (Zero Export / Monitoring)",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "price": 15500
+        },
+        {
+          "id": "hm4",
+          "name": "Hoymiles DTU Lite (Basic Monitoring)",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "price": 8500
+        },
+        {
+          "id": "hm5",
+          "name": "Hoymiles End Cap (Pack of 5)",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "price": 1000
+        },
+        {
+          "id": "hm6",
+          "name": "Hoymiles AC Trunk Cable",
+          "brand": "Hoymiles",
+          "tiers": [
+            "premium"
+          ],
+          "price": 2000
+        }
+      ]
+    },
+    "armoured_cable": {
+      "label": "Armoured Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ar1",
+          "name": "4Core 4sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 4,
+          "core": 4,
+          "price": 80
+        },
+        {
+          "id": "ar2",
+          "name": "4Core 6sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 6,
+          "core": 4,
+          "price": 94
+        },
+        {
+          "id": "ar3",
+          "name": "4Core 10sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 10,
+          "core": 4,
+          "price": 112
+        },
+        {
+          "id": "ar4",
+          "name": "4Core 16sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 16,
+          "core": 4,
+          "price": 131
+        },
+        {
+          "id": "ar5",
+          "name": "4Core 25sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 25,
+          "core": 4,
+          "price": 179
+        },
+        {
+          "id": "ar6",
+          "name": "4Core 35sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 35,
+          "core": 4,
+          "price": 235
+        },
+        {
+          "id": "ar7",
+          "name": "4Core 50sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 50,
+          "core": 4,
+          "price": 390
+        },
+        {
+          "id": "ar8",
+          "name": "3.5Core 70sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 70,
+          "core": 3.5,
+          "price": 379
+        },
+        {
+          "id": "ar9",
+          "name": "3.5Core 95sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 95,
+          "core": 3.5,
+          "price": 468
+        },
+        {
+          "id": "ar10",
+          "name": "3.5Core 120sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 120,
+          "core": 3.5,
+          "price": 585
+        },
+        {
+          "id": "ar11",
+          "name": "3.5Core 150sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 150,
+          "core": 3.5,
+          "price": 690
+        },
+        {
+          "id": "ar12",
+          "name": "3.5Core 185sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 185,
+          "core": 3.5,
+          "price": 884
+        },
+        {
+          "id": "ar13",
+          "name": "3.5Core 240sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 240,
+          "core": 3.5,
+          "price": 1096
+        },
+        {
+          "id": "ar14",
+          "name": "3.5Core 300sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 300,
+          "core": 3.5,
+          "price": 1331
+        },
+        {
+          "id": "ar15",
+          "name": "3.5Core 400sqmm Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "sqmm": 400,
+          "core": 3.5,
+          "price": 1734
+        }
+      ]
+    },
+    "mccb_box": {
+      "label": "Battery MCCB Box",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "mb1",
+          "name": "Battery MCCB Box 160A",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value"
+          ],
+          "price": 8500
+        }
+      ]
+    },
+    "ug_cable": {
+      "label": "UG Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ug_2core",
+          "name": "UG Cable 2 Core Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "price": 150,
+          "unit": "m"
+        },
+        {
+          "id": "ug_4core",
+          "name": "UG Cable 4 Core Armoured",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "price": 250,
+          "unit": "m"
+        }
+      ]
+    },
+    "change_over": {
+      "label": "Change Over Switch",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "co_1",
+          "name": "Change Over Switch",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "price": 1200
+        }
+      ]
+    },
+    "battery_cable": {
+      "label": "Battery Cable",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "bc_25",
+          "name": "25mm Battery Cable",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "price": 120,
+          "unit": "m"
+        }
+      ]
+    },
+    "meter_box": {
+      "label": "Meter Box",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "mbox_1",
+          "name": "Meter Box",
+          "brand": "Generic",
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ],
+          "price": 500
+        }
+      ]
+    },
+    "mc4_connector": {
+      "label": "MC4 Connector",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "mc4_1",
+          "name": "MC4 Connector Pair",
+          "price": 50,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "cable_tie": {
+      "label": "Cable Tie",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ct_1",
+          "name": "Cable Tie 300mm Weather Resistant (Pkt)",
+          "price": 120,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "flexible_pipe": {
+      "label": "Flexible Pipe",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "fp_1",
+          "name": "Flexible Pipe (per meter)",
+          "price": 80,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "ss_screw": {
+      "label": "SS Screws & Bolts",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "ss_15",
+          "name": "SS Star Screw 1½ inch",
+          "price": 8,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "ss_1",
+          "name": "SS Star Screw 1 inch",
+          "price": 6,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "ss_self34",
+          "name": "¾ inch Self Screw",
+          "price": 5,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "ss_selfbolt",
+          "name": "Self Bolt Corroshield",
+          "price": 12,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "copper_lug": {
+      "label": "Copper Lug",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "cl_1",
+          "name": "Ring Type 4-6mm Copper Lug",
+          "price": 15,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cl_25",
+          "name": "25mm Lug",
+          "price": 35,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "insulation_tape": {
+      "label": "Insulation Tape",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "it_1",
+          "name": "Insulation Tape",
+          "price": 40,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "conduit_pipe": {
+      "label": "Conduit Pipe & Fittings",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "cp_pipe",
+          "name": "20mm Conduit Pipe",
+          "price": 35,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cp_bend",
+          "name": "20mm Bend",
+          "price": 12,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cp_elbow",
+          "name": "20mm Elbow",
+          "price": 10,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cp_t",
+          "name": "20mm T Connector",
+          "price": 12,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cp_saddle",
+          "name": "SS Saddle 20mm",
+          "price": 8,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "cp_gland",
+          "name": "20mm Gland",
+          "price": 15,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "solar_clamp": {
+      "label": "Solar Clamps & Bolts",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "sc_mid",
+          "name": "Mid Clamp",
+          "price": 35,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sc_end",
+          "name": "End Clamp",
+          "price": 35,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sc_jbolt",
+          "name": "J Bolt",
+          "price": 25,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "structure_material": {
+      "label": "Structure Material",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "sm_15x15",
+          "name": "1.5×1.5 Square Tube 16 Gauge GP",
+          "price": 450,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sm_25x15",
+          "name": "2.5×1.5 Square Tube 16 Gauge GP",
+          "price": 600,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sm_plate",
+          "name": "MS Square Plate 5×5",
+          "price": 80,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sm_anchor",
+          "name": "Anchor Bolt 8mm",
+          "price": 12,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sm_endcap_25",
+          "name": "2.5×1.5 End Cap",
+          "price": 15,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "sm_endcap_15",
+          "name": "1.5×1.5 End Cap",
+          "price": 12,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "painting_material": {
+      "label": "Painting & Finishing",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "pm_epoxy",
+          "name": "Epoxy Primer ESS Dee Black (per litre)",
+          "price": 350,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "pm_thinner",
+          "name": "Thinner D13 (per litre)",
+          "price": 180,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "pm_roller",
+          "name": "Roller 4 inch",
+          "price": 60,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "pm_cotton",
+          "name": "Cotton Waste (50gm)",
+          "price": 30,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    },
+    "welding_material": {
+      "label": "Welding & Cutting",
+      "gstDefault": 18,
+      "items": [
+        {
+          "id": "wm_wheel",
+          "name": "4\" Cutting Wheel Bullet",
+          "price": 45,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        },
+        {
+          "id": "wm_electrode",
+          "name": "Welding Electrodes 2.50 Sunbond (12 pack)",
+          "price": 280,
+          "tiers": [
+            "base",
+            "value",
+            "premium"
+          ]
+        }
+      ]
+    }
+  },
+  "bomTemplates": {
+    "ongrid": {
+      "sizes": {
+        "3": "3 kW",
+        "6": "6 kW",
+        "8": "8 kW",
+        "10": "10 kW",
+        "5sp": "5kW 1P",
+        "5tp": "5kW 3P"
+      },
+      "tiers": [
+        "base",
+        "value",
+        "premium"
+      ],
+      "threePhase": [
+        "5tp",
+        "6",
+        "8",
+        "10"
+      ],
+      "slots": [
+        {
+          "pos": 0,
+          "category": "panel",
+          "label": "Solar Panel",
+          "variable": true,
+          "gst": 5,
+          "qty": {
+            "3": 6,
+            "6": 11,
+            "8": 15,
+            "10": 18,
+            "5sp": 9,
+            "5tp": 9
+          }
+        },
+        {
+          "pos": 1,
+          "category": "inverter",
+          "label": "Inverter",
+          "variable": true,
+          "gst": 5,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          },
+          "premiumQty": {
+            "3": 0,
+            "6": 0,
+            "8": 0,
+            "10": 0,
+            "5sp": 0,
+            "5tp": 0
+          },
+          "filterType": "ongrid"
+        },
+        {
+          "pos": 2,
+          "category": "dcdb",
+          "label": "DCDB",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          },
+          "premiumQty": {
+            "3": 0,
+            "6": 0,
+            "8": 0,
+            "10": 0,
+            "5sp": 0,
+            "5tp": 0
+          }
+        },
+        {
+          "pos": 3,
+          "category": "acdb",
+          "label": "ACDB",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "pos": 4,
+          "category": "meter",
+          "label": "Meter",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "pos": 5,
+          "category": "dc_cable",
+          "label": "DC Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 50,
+            "6": 50,
+            "8": 80,
+            "10": 100,
+            "5sp": 50,
+            "5tp": 50
+          }
+        },
+        {
+          "pos": 6,
+          "category": "ac_cable",
+          "label": "AC Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 20,
+            "6": 35,
+            "8": 35,
+            "10": 35,
+            "5sp": 20,
+            "5tp": 35
+          }
+        },
+        {
+          "pos": 7,
+          "category": "isolator",
+          "label": "Isolator",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "pos": 8,
+          "category": "cb_rod",
+          "label": "CB Rod",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 3,
+            "6": 3,
+            "8": 3,
+            "10": 3,
+            "5sp": 3,
+            "5tp": 3
+          }
+        },
+        {
+          "pos": 9,
+          "category": "earth_cable",
+          "label": "Earthing Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 20,
+            "6": 20,
+            "8": 20,
+            "10": 20,
+            "5sp": 20,
+            "5tp": 20
+          }
+        },
+        {
+          "pos": 10,
+          "category": "la_cable",
+          "label": "LA Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 20,
+            "6": 20,
+            "8": 20,
+            "10": 40,
+            "5sp": 20,
+            "5tp": 20
+          }
+        }
+      ],
+      "fixedItems": [
+        {
+          "name": "MC4 Connector",
+          "gst": 18,
+          "price": 56,
+          "qty": {
+            "3": 3,
+            "6": 3,
+            "8": 5,
+            "10": 6,
+            "5sp": 3,
+            "5tp": 3
+          }
+        },
+        {
+          "name": "Cable Tray",
+          "gst": 18,
+          "price": 186,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "10 SWG Earthing Copper",
+          "gst": 18,
+          "price": 105,
+          "qty": {
+            "3": 23,
+            "6": 23,
+            "8": 23,
+            "10": 23,
+            "5sp": 23,
+            "5tp": 23
+          }
+        },
+        {
+          "name": "SS Terminal Strip 4P",
+          "gst": 18,
+          "price": 140,
+          "qty": {
+            "3": 2,
+            "6": 2,
+            "8": 2,
+            "10": 2,
+            "5sp": 2,
+            "5tp": 2
+          }
+        },
+        {
+          "name": "Earthing Chamber 180x180mm",
+          "gst": 18,
+          "price": 250,
+          "qty": {
+            "3": 3,
+            "6": 3,
+            "8": 3,
+            "10": 3,
+            "5sp": 3,
+            "5tp": 3
+          }
+        },
+        {
+          "name": "Lightning Arrester 16mm 1m",
+          "gst": 18,
+          "price": 517,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "Flexible Pipe",
+          "gst": 18,
+          "price": 49,
+          "qty": {
+            "3": 1.5,
+            "6": 1.5,
+            "8": 1.5,
+            "10": 1.5,
+            "5sp": 1.5,
+            "5tp": 1.5
+          }
+        },
+        {
+          "name": "Earth Pit Compound",
+          "gst": 18,
+          "price": 180,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "Cable Tie 300mm WR",
+          "gst": 18,
+          "price": 320,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "SS Star Screw 1.5in",
+          "gst": 18,
+          "price": 1,
+          "qty": {
+            "3": 35,
+            "6": 35,
+            "8": 35,
+            "10": 35,
+            "5sp": 35,
+            "5tp": 35
+          }
+        },
+        {
+          "name": "SS Star Screw 1in",
+          "gst": 18,
+          "price": 1.7,
+          "qty": {
+            "3": 65,
+            "6": 65,
+            "8": 60,
+            "10": 60,
+            "5sp": 65,
+            "5tp": 65
+          }
+        },
+        {
+          "name": "Ring Type 4-6mm Copper Lug",
+          "gst": 18,
+          "price": 9.3,
+          "qty": {
+            "3": 20,
+            "6": 26,
+            "8": 30,
+            "10": 40,
+            "5sp": 26,
+            "5tp": 26
+          }
+        },
+        {
+          "name": "Insulation Tape",
+          "gst": 18,
+          "price": 9,
+          "qty": {
+            "3": 1,
+            "6": 4,
+            "8": 4,
+            "10": 4,
+            "5sp": 1,
+            "5tp": 4
+          }
+        },
+        {
+          "name": "16mm Aluminium Lug",
+          "gst": 18,
+          "price": 4.2,
+          "qty": {
+            "3": 2,
+            "6": 2,
+            "8": 2,
+            "10": 2,
+            "5sp": 2,
+            "5tp": 2
+          }
+        },
+        {
+          "name": "50mm Aluminium Lug",
+          "gst": 18,
+          "price": 13.6,
+          "qty": {
+            "3": 2,
+            "6": 2,
+            "8": 2,
+            "10": 2,
+            "5sp": 2,
+            "5tp": 2
+          }
+        },
+        {
+          "name": "20mm PVC Pipe",
+          "gst": 18,
+          "price": 45,
+          "qty": {
+            "3": 5,
+            "6": 7,
+            "8": 7,
+            "10": 8,
+            "5sp": 5,
+            "5tp": 6
+          }
+        },
+        {
+          "name": "25mm PVC Pipe",
+          "gst": 18,
+          "price": 72,
+          "qty": {
+            "3": 6,
+            "6": 9,
+            "8": 9,
+            "10": 10,
+            "5sp": 6,
+            "5tp": 8
+          }
+        },
+        {
+          "name": "20mm Bend",
+          "gst": 18,
+          "price": 5.5,
+          "qty": {
+            "3": 10,
+            "6": 10,
+            "8": 10,
+            "10": 12,
+            "5sp": 10,
+            "5tp": 10
+          }
+        },
+        {
+          "name": "25mm Bend",
+          "gst": 18,
+          "price": 8,
+          "qty": {
+            "3": 10,
+            "6": 12,
+            "8": 10,
+            "10": 10,
+            "5sp": 10,
+            "5tp": 10
+          }
+        },
+        {
+          "name": "20mm Elbow",
+          "gst": 18,
+          "price": 4,
+          "qty": {
+            "3": 12,
+            "6": 10,
+            "8": 12,
+            "10": 12,
+            "5sp": 10,
+            "5tp": 10
+          }
+        },
+        {
+          "name": "25mm Elbow",
+          "gst": 18,
+          "price": 4.5,
+          "qty": {
+            "3": 12,
+            "6": 12,
+            "8": 12,
+            "10": 12,
+            "5sp": 12,
+            "5tp": 12
+          }
+        },
+        {
+          "name": "SS Saddle 20mm",
+          "gst": 18,
+          "price": 2.7,
+          "qty": {
+            "3": 30,
+            "6": 30,
+            "8": 30,
+            "10": 30,
+            "5sp": 30,
+            "5tp": 30
+          }
+        },
+        {
+          "name": "25mm Saddle",
+          "gst": 18,
+          "price": 3,
+          "qty": {
+            "3": 35,
+            "6": 35,
+            "8": 35,
+            "10": 50,
+            "5sp": 35,
+            "5tp": 35
+          }
+        },
+        {
+          "name": "1P Meter Box",
+          "gst": 18,
+          "price": 950,
+          "qty": {
+            "3": 1,
+            "6": 0,
+            "8": 0,
+            "10": 0,
+            "5sp": 1,
+            "5tp": 0
+          }
+        },
+        {
+          "name": "3P Meter Box",
+          "gst": 18,
+          "price": 950,
+          "qty": {
+            "3": 0,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 0,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "End Sleeve Green",
+          "gst": 18,
+          "price": 5,
+          "qty": {
+            "3": 1.5,
+            "6": 1.5,
+            "8": 1.5,
+            "10": 1.5,
+            "5sp": 1.5,
+            "5tp": 1.5
+          }
+        },
+        {
+          "name": "6mm Wall Plug",
+          "gst": 18,
+          "price": 17,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 2,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "LA Nylon Holder",
+          "gst": 18,
+          "price": 9,
+          "qty": {
+            "3": 30,
+            "6": 30,
+            "8": 30,
+            "10": 50,
+            "5sp": 30,
+            "5tp": 30
+          }
+        },
+        {
+          "name": "Mid Clamp",
+          "gst": 18,
+          "price": 19,
+          "qty": {
+            "3": 8,
+            "6": 14,
+            "8": 24,
+            "10": 28,
+            "5sp": 14,
+            "5tp": 14
+          }
+        },
+        {
+          "name": "End Clamp",
+          "gst": 18,
+          "price": 13,
+          "qty": {
+            "3": 8,
+            "6": 8,
+            "8": 8,
+            "10": 8,
+            "5sp": 8,
+            "5tp": 8
+          }
+        },
+        {
+          "name": "J Bolt",
+          "gst": 18,
+          "price": 20,
+          "qty": {
+            "3": 16,
+            "6": 22,
+            "8": 32,
+            "10": 36,
+            "5sp": 22,
+            "5tp": 22
+          }
+        },
+        {
+          "name": "Panel Earthing Nut & Bolt",
+          "gst": 18,
+          "price": 1.6,
+          "qty": {
+            "3": 20,
+            "6": 25,
+            "8": 24,
+            "10": 40,
+            "5sp": 25,
+            "5tp": 25
+          }
+        },
+        {
+          "name": "PVC T 20mm",
+          "gst": 18,
+          "price": 5,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "PVC T 25mm",
+          "gst": 18,
+          "price": 7.6,
+          "qty": {
+            "3": 1,
+            "6": 1,
+            "8": 1,
+            "10": 1,
+            "5sp": 1,
+            "5tp": 1
+          }
+        },
+        {
+          "name": "LA Base Nut & Bolt",
+          "gst": 18,
+          "price": 1.4,
+          "qty": {
+            "3": 7,
+            "6": 7,
+            "8": 7,
+            "10": 7,
+            "5sp": 7,
+            "5tp": 7
+          }
+        },
+        {
+          "name": "20mm Gland",
+          "gst": 18,
+          "price": 7.4,
+          "qty": {
+            "3": 12,
+            "6": 12,
+            "8": 12,
+            "10": 14,
+            "5sp": 12,
+            "5tp": 12
+          }
+        }
+      ]
+    },
+    "hybrid": {
+      "sizes": {
+        "3": "3 kW",
+        "5": "5 kW",
+        "8": "8 kW",
+        "10": "10 kW"
+      },
+      "tiers": [
+        "base",
+        "value",
+        "premium"
+      ],
+      "threePhase": [
+        "8",
+        "10"
+      ],
+      "batteryConfigs": [
+        "0",
+        "1",
+        "2"
+      ],
+      "slots": [
+        {
+          "pos": 0,
+          "category": "panel",
+          "label": "Solar Panel",
+          "variable": true,
+          "gst": 5,
+          "qty": {
+            "3": 6,
+            "5": 9,
+            "8": 15,
+            "10": 18
+          }
+        },
+        {
+          "pos": 1,
+          "category": "inverter",
+          "label": "Hybrid Inverter",
+          "variable": true,
+          "gst": 5,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          },
+          "filterType": "hybrid",
+          "premiumQty": {
+            "3": 0,
+            "5": 0,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "pos": 2,
+          "category": "dcdb",
+          "label": "DCDB",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          },
+          "filterPhase": "HYB",
+          "premiumQty": {
+            "3": 0,
+            "5": 0,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "pos": 3,
+          "category": "acdb",
+          "label": "ACDB",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          },
+          "filterPhase": "HYB"
+        },
+        {
+          "pos": 4,
+          "category": "mccb_box",
+          "label": "Battery MCCB Box",
+          "variable": true,
+          "gst": 18,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            },
+            "2": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            }
+          },
+          "premiumBatQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "2": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            }
+          }
+        },
+        {
+          "pos": 5,
+          "category": "battery",
+          "label": "Battery",
+          "variable": true,
+          "gst": 18,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            },
+            "2": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            }
+          },
+          "premiumBatQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "2": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            }
+          }
+        },
+        {
+          "pos": 6,
+          "category": "meter",
+          "label": "Meter",
+          "variable": true,
+          "gst": 18,
+          "batQty": {
+            "0": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            },
+            "1": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            },
+            "2": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            }
+          },
+          "premiumBatQty": {
+            "0": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            },
+            "1": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            },
+            "2": {
+              "3": 2,
+              "5": 2,
+              "8": 2,
+              "10": 2
+            }
+          }
+        },
+        {
+          "pos": 7,
+          "category": "dc_cable",
+          "label": "DC Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 50,
+            "5": 50,
+            "8": 120,
+            "10": 120
+          },
+          "premiumQty": {
+            "3": 15,
+            "5": 15,
+            "8": 25,
+            "10": 25
+          }
+        },
+        {
+          "pos": 8,
+          "category": "ac_cable",
+          "label": "AC Cable",
+          "variable": true,
+          "gst": 18,
+          "batQty": {
+            "0": {
+              "3": 30,
+              "5": 30,
+              "8": 80,
+              "10": 80
+            },
+            "1": {
+              "3": 40,
+              "5": 40,
+              "8": 80,
+              "10": 80
+            },
+            "2": {
+              "3": 40,
+              "5": 40,
+              "8": 80,
+              "10": 80
+            }
+          },
+          "premiumQty": {
+            "3": 40,
+            "5": 50,
+            "8": 160,
+            "10": 160
+          }
+        },
+        {
+          "pos": 9,
+          "category": "isolator",
+          "label": "Isolator",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "pos": 10,
+          "category": "cb_rod",
+          "label": "CB Rod",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 3,
+            "10": 3
+          },
+          "premiumQty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "pos": 11,
+          "category": "earth_cable",
+          "label": "Earthing Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 20,
+            "5": 20,
+            "8": 20,
+            "10": 20
+          }
+        },
+        {
+          "pos": 12,
+          "category": "la_cable",
+          "label": "LA Cable",
+          "variable": true,
+          "gst": 18,
+          "qty": {
+            "3": 20,
+            "5": 20,
+            "8": 20,
+            "10": 20
+          }
+        }
+      ],
+      "fixedItems": [
+        {
+          "name": "MC4 Connector",
+          "gst": 18,
+          "price": 56,
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 6,
+            "10": 10
+          }
+        },
+        {
+          "name": "Cable Tray",
+          "gst": 18,
+          "price": 186,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "10 SWG Earthing Copper",
+          "gst": 18,
+          "price": 105,
+          "qty": {
+            "3": 23,
+            "5": 23,
+            "8": 23,
+            "10": 23
+          },
+          "premiumQty": {
+            "3": 15,
+            "5": 15,
+            "8": 15,
+            "10": 15
+          }
+        },
+        {
+          "name": "SS Terminal Strip 4P Excel",
+          "gst": 18,
+          "price": 150,
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "name": "Earthing Chamber 180x180mm",
+          "gst": 18,
+          "price": 270,
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 3,
+            "10": 3
+          },
+          "premiumQty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "name": "Lightning Arrester 16mm 1m",
+          "gst": 18,
+          "price": 600,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Flexible Pipe",
+          "gst": 18,
+          "price": 49,
+          "qty": {
+            "3": 1.5,
+            "5": 1.5,
+            "8": 1.5,
+            "10": 1.5
+          }
+        },
+        {
+          "name": "Earth Pit Compound",
+          "gst": 18,
+          "price": 167,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Cable Tie 300mm WR",
+          "gst": 18,
+          "price": 320,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "SS Star Screw 1.5in",
+          "gst": 18,
+          "price": 1,
+          "qty": {
+            "3": 35,
+            "5": 35,
+            "8": 40,
+            "10": 40
+          }
+        },
+        {
+          "name": "SS Star Screw 1in",
+          "gst": 18,
+          "price": 1.7,
+          "qty": {
+            "3": 60,
+            "5": 60,
+            "8": 80,
+            "10": 80
+          }
+        },
+        {
+          "name": "Ring Type 4-6mm Copper Lug",
+          "gst": 18,
+          "price": 9.3,
+          "qty": {
+            "3": 20,
+            "5": 26,
+            "8": 40,
+            "10": 50
+          }
+        },
+        {
+          "name": "Insulation Tape",
+          "gst": 18,
+          "price": 9,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 4,
+            "10": 4
+          }
+        },
+        {
+          "name": "16mm Aluminium Lug",
+          "gst": 18,
+          "price": 4.2,
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "name": "50mm Aluminium Lug",
+          "gst": 18,
+          "price": 13.6,
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "name": "20mm Pipe",
+          "gst": 18,
+          "price": 45,
+          "qty": {
+            "3": 5,
+            "5": 6,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "25mm Pipe",
+          "gst": 18,
+          "price": 72,
+          "qty": {
+            "3": 6,
+            "5": 8,
+            "8": 10,
+            "10": 10
+          }
+        },
+        {
+          "name": "20mm Bend",
+          "gst": 18,
+          "price": 5.5,
+          "qty": {
+            "3": 10,
+            "5": 12,
+            "8": 10,
+            "10": 12
+          }
+        },
+        {
+          "name": "25mm Bend",
+          "gst": 18,
+          "price": 8,
+          "qty": {
+            "3": 12,
+            "5": 12,
+            "8": 10,
+            "10": 12
+          }
+        },
+        {
+          "name": "20mm Elbow",
+          "gst": 18,
+          "price": 4,
+          "qty": {
+            "3": 12,
+            "5": 12,
+            "8": 10,
+            "10": 12
+          }
+        },
+        {
+          "name": "25mm Elbow",
+          "gst": 18,
+          "price": 4.5,
+          "qty": {
+            "3": 12,
+            "5": 12,
+            "8": 10,
+            "10": 0
+          }
+        },
+        {
+          "name": "SS Saddle 20mm",
+          "gst": 18,
+          "price": 2.7,
+          "qty": {
+            "3": 30,
+            "5": 36,
+            "8": 48,
+            "10": 48
+          }
+        },
+        {
+          "name": "25mm Saddle",
+          "gst": 18,
+          "price": 3,
+          "qty": {
+            "3": 36,
+            "5": 48,
+            "8": 60,
+            "10": 60
+          }
+        },
+        {
+          "name": "End Sleeve Green",
+          "gst": 18,
+          "price": 5,
+          "qty": {
+            "3": 1.5,
+            "5": 1.5,
+            "8": 1.5,
+            "10": 1.5
+          }
+        },
+        {
+          "name": "6mm Plug",
+          "gst": 18,
+          "price": 17,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 2,
+            "10": 2
+          }
+        },
+        {
+          "name": "LA Nylon Holder",
+          "gst": 18,
+          "price": 9,
+          "qty": {
+            "3": 30,
+            "5": 30,
+            "8": 30,
+            "10": 30
+          }
+        },
+        {
+          "name": "Mid Clamp",
+          "gst": 18,
+          "price": 19,
+          "qty": {
+            "3": 8,
+            "5": 14,
+            "8": 24,
+            "10": 32
+          }
+        },
+        {
+          "name": "End Clamp",
+          "gst": 18,
+          "price": 13,
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "J Bolt",
+          "gst": 18,
+          "price": 20,
+          "qty": {
+            "3": 16,
+            "5": 22,
+            "8": 32,
+            "10": 40
+          }
+        },
+        {
+          "name": "Panel Earthing Nut & Bolt",
+          "gst": 18,
+          "price": 1.6,
+          "qty": {
+            "3": 25,
+            "5": 30,
+            "8": 40,
+            "10": 40
+          }
+        },
+        {
+          "name": "T 20mm Ivory",
+          "gst": 18,
+          "price": 5,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "25mm T",
+          "gst": 18,
+          "price": 7.6,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "LA Base Nut & Bolt",
+          "gst": 18,
+          "price": 1.4,
+          "qty": {
+            "3": 7,
+            "5": 7,
+            "8": 7,
+            "10": 7
+          }
+        },
+        {
+          "name": "20mm Gland",
+          "gst": 18,
+          "price": 7.4,
+          "qty": {
+            "3": 12,
+            "5": 12,
+            "8": 14,
+            "10": 14
+          }
+        },
+        {
+          "name": "40A Change Over Switch",
+          "gst": 18,
+          "price": 3500,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            },
+            "2": {
+              "3": 1,
+              "5": 1,
+              "8": 1,
+              "10": 1
+            }
+          },
+          "premiumQty": {
+            "3": 1,
+            "5": 1,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "name": "25mm Battery Cable",
+          "gst": 18,
+          "price": 180,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 5,
+              "5": 5,
+              "8": 5,
+              "10": 5
+            },
+            "2": {
+              "3": 5,
+              "5": 5,
+              "8": 5,
+              "10": 5
+            }
+          },
+          "premiumQty": {
+            "3": 0,
+            "5": 0,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "name": "25mm Copper Lug",
+          "gst": 18,
+          "price": 85,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 4,
+              "5": 4,
+              "8": 4,
+              "10": 4
+            },
+            "2": {
+              "3": 4,
+              "5": 4,
+              "8": 4,
+              "10": 4
+            }
+          },
+          "premiumQty": {
+            "3": 0,
+            "5": 0,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "name": "1 Phase Meter Box",
+          "gst": 18,
+          "price": 950,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 2,
+              "5": 2,
+              "8": 0,
+              "10": 0
+            },
+            "2": {
+              "3": 2,
+              "5": 2,
+              "8": 0,
+              "10": 0
+            }
+          },
+          "premiumQty": {
+            "3": 2,
+            "5": 2,
+            "8": 0,
+            "10": 0
+          }
+        },
+        {
+          "name": "Three Phase Meter Box",
+          "gst": 18,
+          "price": 950,
+          "batQty": {
+            "0": {
+              "3": 0,
+              "5": 0,
+              "8": 0,
+              "10": 0
+            },
+            "1": {
+              "3": 0,
+              "5": 0,
+              "8": 2,
+              "10": 2
+            },
+            "2": {
+              "3": 0,
+              "5": 0,
+              "8": 2,
+              "10": 2
+            }
+          },
+          "premiumQty": {
+            "3": 0,
+            "5": 0,
+            "8": 2,
+            "10": 2
+          }
+        }
+      ]
+    },
+    "upgrade": {
+      "label": "On-Grid Upgrade",
+      "description": "Upgrade existing solar system to higher capacity",
+      "slots": [
+        {
+          "pos": 0,
+          "category": "panel",
+          "label": "Solar Panel (New)",
+          "variable": true,
+          "gst": 5,
+          "qtyMode": "newPanels"
+        },
+        {
+          "pos": 1,
+          "category": "inverter",
+          "label": "Inverter (Replacement)",
+          "variable": true,
+          "gst": 5,
+          "filterType": "ongrid",
+          "qtyMode": "fixed",
+          "fixedQty": 1
+        },
+        {
+          "pos": 2,
+          "category": "dcdb",
+          "label": "DCDB",
+          "variable": true,
+          "gst": 18,
+          "qtyMode": "fixed",
+          "fixedQty": 1
+        },
+        {
+          "pos": 3,
+          "category": "acdb",
+          "label": "ACDB",
+          "variable": true,
+          "gst": 18,
+          "qtyMode": "fixed",
+          "fixedQty": 1
+        },
+        {
+          "pos": 4,
+          "category": "dc_cable",
+          "label": "DC Cable",
+          "variable": true,
+          "gst": 18,
+          "qtyMode": "fixed",
+          "fixedQty": 40
+        },
+        {
+          "pos": 5,
+          "category": "ac_cable",
+          "label": "AC Cable",
+          "variable": true,
+          "gst": 18,
+          "qtyMode": "fixed",
+          "fixedQty": 20,
+          "hybridQty": 30
+        }
+      ],
+      "fixedItems": [
+        {
+          "name": "MC4 Connector Pair",
+          "category": "mc4_connector",
+          "itemId": "mc4_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 3,
+            "5_8": 3,
+            "5_10": 3,
+            "8_10": 3
+          }
+        },
+        {
+          "name": "Cable Tie 300mm Weather Resistant",
+          "category": "cable_tie",
+          "itemId": "ct_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "Flexible Pipe",
+          "category": "flexible_pipe",
+          "itemId": "fp_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "Insulation Tape",
+          "category": "insulation_tape",
+          "itemId": "it_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "Ring Type 4-6mm Copper Lug",
+          "category": "copper_lug",
+          "itemId": "cl_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 8,
+            "5_8": 8,
+            "5_10": 20,
+            "8_10": 8
+          }
+        },
+        {
+          "name": "20mm Conduit Pipe",
+          "category": "conduit_pipe",
+          "itemId": "cp_pipe",
+          "gst": 18,
+          "qty": {
+            "3_5": 6,
+            "5_8": 6,
+            "5_10": 6,
+            "8_10": 6
+          }
+        },
+        {
+          "name": "20mm Bend",
+          "category": "conduit_pipe",
+          "itemId": "cp_bend",
+          "gst": 18,
+          "qty": {
+            "3_5": 5,
+            "5_8": 5,
+            "5_10": 5,
+            "8_10": 5
+          }
+        },
+        {
+          "name": "20mm Elbow",
+          "category": "conduit_pipe",
+          "itemId": "cp_elbow",
+          "gst": 18,
+          "qty": {
+            "3_5": 5,
+            "5_8": 5,
+            "5_10": 5,
+            "8_10": 5
+          }
+        },
+        {
+          "name": "20mm T Connector",
+          "category": "conduit_pipe",
+          "itemId": "cp_t",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "SS Saddle 20mm",
+          "category": "conduit_pipe",
+          "itemId": "cp_saddle",
+          "gst": 18,
+          "qty": {
+            "3_5": 30,
+            "5_8": 30,
+            "5_10": 30,
+            "8_10": 30
+          }
+        },
+        {
+          "name": "20mm Gland",
+          "category": "conduit_pipe",
+          "itemId": "cp_gland",
+          "gst": 18,
+          "qty": {
+            "3_5": 12,
+            "5_8": 12,
+            "5_10": 12,
+            "8_10": 12
+          }
+        },
+        {
+          "name": "Mid Clamp",
+          "category": "solar_clamp",
+          "itemId": "sc_mid",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 18,
+            "8_10": 4
+          }
+        },
+        {
+          "name": "End Clamp",
+          "category": "solar_clamp",
+          "itemId": "sc_end",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 4,
+            "8_10": 4
+          }
+        },
+        {
+          "name": "J Bolt",
+          "category": "solar_clamp",
+          "itemId": "sc_jbolt",
+          "gst": 18,
+          "qty": {
+            "3_5": 8,
+            "5_8": 8,
+            "5_10": 22,
+            "8_10": 8
+          }
+        },
+        {
+          "name": "SS Star Screw 1½ inch",
+          "category": "ss_screw",
+          "itemId": "ss_15",
+          "gst": 18,
+          "qty": {
+            "3_5": 35,
+            "5_8": 35,
+            "5_10": 35,
+            "8_10": 35
+          }
+        },
+        {
+          "name": "SS Star Screw 1 inch",
+          "category": "ss_screw",
+          "itemId": "ss_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 65,
+            "5_8": 65,
+            "5_10": 65,
+            "8_10": 65
+          }
+        },
+        {
+          "name": "¾ inch Self Screw",
+          "category": "ss_screw",
+          "itemId": "ss_self34",
+          "gst": 18,
+          "qty": {
+            "3_5": 10,
+            "5_8": 10,
+            "5_10": 25,
+            "8_10": 10
+          }
+        },
+        {
+          "name": "Self Bolt Corroshield",
+          "category": "ss_screw",
+          "itemId": "ss_selfbolt",
+          "gst": 18,
+          "qty": {
+            "3_5": 6,
+            "5_8": 6,
+            "5_10": 15,
+            "8_10": 6
+          }
+        },
+        {
+          "name": "1.5×1.5 Square Tube 16G GP",
+          "category": "structure_material",
+          "itemId": "sm_15x15",
+          "gst": 18,
+          "qty": {
+            "3_5": 2,
+            "5_8": 2,
+            "5_10": 4,
+            "8_10": 2
+          },
+          "isTube": true
+        },
+        {
+          "name": "2.5×1.5 Square Tube 16G GP",
+          "category": "structure_material",
+          "itemId": "sm_25x15",
+          "gst": 18,
+          "qty": {
+            "3_5": 2,
+            "5_8": 2,
+            "5_10": 4,
+            "8_10": 2
+          },
+          "isTube": true
+        },
+        {
+          "name": "MS Square Plate 5×5",
+          "category": "structure_material",
+          "itemId": "sm_plate",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 6,
+            "8_10": 4
+          }
+        },
+        {
+          "name": "Anchor Bolt 8mm",
+          "category": "structure_material",
+          "itemId": "sm_anchor",
+          "gst": 18,
+          "qty": {
+            "3_5": 16,
+            "5_8": 16,
+            "5_10": 36,
+            "8_10": 36
+          }
+        },
+        {
+          "name": "2.5×1.5 End Cap",
+          "category": "structure_material",
+          "itemId": "sm_endcap_25",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 8,
+            "8_10": 4
+          }
+        },
+        {
+          "name": "1.5×1.5 End Cap",
+          "category": "structure_material",
+          "itemId": "sm_endcap_15",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 8,
+            "8_10": 4
+          }
+        },
+        {
+          "name": "Epoxy Primer ESS Dee Black",
+          "category": "painting_material",
+          "itemId": "pm_epoxy",
+          "gst": 18,
+          "qty": {
+            "3_5": 0.5,
+            "5_8": 0.5,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "Thinner D13",
+          "category": "painting_material",
+          "itemId": "pm_thinner",
+          "gst": 18,
+          "qty": {
+            "3_5": 0.5,
+            "5_8": 0.5,
+            "5_10": 0.5,
+            "8_10": 0.5
+          }
+        },
+        {
+          "name": "Roller 4 inch",
+          "category": "painting_material",
+          "itemId": "pm_roller",
+          "gst": 18,
+          "qty": {
+            "3_5": 2,
+            "5_8": 2,
+            "5_10": 2,
+            "8_10": 2
+          }
+        },
+        {
+          "name": "Cotton Waste 50gm",
+          "category": "painting_material",
+          "itemId": "pm_cotton",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          }
+        },
+        {
+          "name": "4\" Cutting Wheel Bullet",
+          "category": "welding_material",
+          "itemId": "wm_wheel",
+          "gst": 18,
+          "qty": {
+            "3_5": 2,
+            "5_8": 2,
+            "5_10": 3,
+            "8_10": 2
+          }
+        },
+        {
+          "name": "Welding Electrodes 2.50 Sunbond",
+          "category": "welding_material",
+          "itemId": "wm_electrode",
+          "gst": 18,
+          "qty": {
+            "3_5": 0.5,
+            "5_8": 0.5,
+            "5_10": 0.5,
+            "8_10": 0.5
+          }
+        },
+        {
+          "name": "Change Over Switch",
+          "category": "change_over",
+          "itemId": "co_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          },
+          "_section": "battery"
+        },
+        {
+          "name": "25mm Battery Cable",
+          "category": "battery_cable",
+          "itemId": "bc_25",
+          "gst": 18,
+          "qty": {
+            "3_5": 5,
+            "5_8": 5,
+            "5_10": 5,
+            "8_10": 5
+          },
+          "unit": "m",
+          "_section": "battery"
+        },
+        {
+          "name": "25mm Lug",
+          "category": "copper_lug",
+          "itemId": "cl_25",
+          "gst": 18,
+          "qty": {
+            "3_5": 4,
+            "5_8": 4,
+            "5_10": 4,
+            "8_10": 4
+          },
+          "_section": "battery"
+        },
+        {
+          "name": "Meter Box",
+          "category": "meter_box",
+          "itemId": "mbox_1",
+          "gst": 18,
+          "qty": {
+            "3_5": 1,
+            "5_8": 1,
+            "5_10": 1,
+            "8_10": 1
+          },
+          "_section": "hybridInv"
+        }
+      ]
+    }
+  },
+  "adminPassword": "golden@123",
+  "marketRates": {
+    "ongrid_base": {
+      "3": 210000,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 335000,
+      "5tp": 310000
+    },
+    "ongrid_value": {
+      "3": 230000,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 355000,
+      "5tp": 330000
+    },
+    "ongrid_premium": {
+      "3": 260000,
+      "6": 0,
+      "8": 0,
+      "10": 0,
+      "5sp": 425000,
+      "5tp": 370000
+    },
+    "upgrade_3_5": {
+      "rate": 0
+    },
+    "upgrade_5_8": {
+      "rate": 0
+    },
+    "upgrade_5_10": {
+      "rate": 0
+    },
+    "upgrade_8_10": {
+      "rate": 0
+    },
+    "ongrid_base_diffBase": {
+      "3": 0,
+      "5tp": 0,
+      "5sp": 0
+    },
+    "ongrid_base_up5sp": {
+      "3": 265000
+    },
+    "ongrid_base_up5sp_diffBase": {
+      "3": 0
+    },
+    "ongrid_value_diffBase": {
+      "3": 0,
+      "5tp": 0,
+      "5sp": 0
+    },
+    "ongrid_premium_diffBase": {
+      "3": 0,
+      "5tp": 0,
+      "5sp": 0
+    },
+    "ongrid_base_up5tp": {
+      "3": 245000
+    },
+    "ongrid_base_up5tp_diffBase": {
+      "3": 0
+    },
+    "ongrid_value_up5tp": {
+      "3": 265000
+    },
+    "ongrid_value_up5tp_diffBase": {
+      "3": 0
+    },
+    "ongrid_value_up5sp": {
+      "3": 290000
+    },
+    "ongrid_value_up5sp_diffBase": {
+      "3": 0
+    },
+    "hybrid_value_0_dcr": {
+      "3": 310000,
+      "5": 394000
+    },
+    "hybrid_value_0_dcr_diffBase": {
+      "3": 0,
+      "5": 0
+    },
+    "hybrid_value_1_dcr": {
+      "3": 433000,
+      "5": 530000
+    },
+    "hybrid_value_1_dcr_diffBase": {
+      "3": 0,
+      "5": 0
+    },
+    "hybrid_value_0_ndcr": {
+      "3": 272000,
+      "5": 336419
+    },
+    "hybrid_value_0_ndcr_diffBase": {
+      "3": 0,
+      "5": 0
+    },
+    "hybrid_value_1_ndcr": {
+      "3": 392089,
+      "5": 466190
+    },
+    "hybrid_value_1_ndcr_diffBase": {
+      "3": 0,
+      "5": 0
+    },
+    "hybrid_value_0_dcr_up5": {
+      "3": 339000
+    },
+    "hybrid_value_0_dcr_up5_diffBase": {
+      "3": 0
+    },
+    "hybrid_value_1_dcr_up5": {
+      "3": 468266
+    },
+    "hybrid_value_1_dcr_up5_diffBase": {
+      "3": 0
+    },
+    "hybrid_value_0_ndcr_up5": {
+      "3": 300616
+    },
+    "hybrid_value_0_ndcr_up5_diffBase": {
+      "3": 0
+    },
+    "hybrid_value_1_ndcr_up5": {
+      "3": 430388
+    },
+    "hybrid_value_1_ndcr_up5_diffBase": {
+      "3": 0
+    }
+  },
+  "structureTemplates": {
+    "flatRoof": {
+      "label": "Flat Roof",
+      "items": [
+        {
+          "name": "2.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "2.5x1.5",
+          "weightKg": 15.3,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 5,
+            "10": 6
+          }
+        },
+        {
+          "name": "1.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "1.5x1.5",
+          "weightKg": 12.2,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 7,
+            "10": 8
+          }
+        },
+        {
+          "name": "Epoxy Primer ESS Dee Grey",
+          "type": "fixed",
+          "price": 350,
+          "unit": "ltr",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "1.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "2.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 15,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 12
+          }
+        },
+        {
+          "name": "Cotton Waste 50gm",
+          "type": "fixed",
+          "price": 30,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "4\" Cutting Wheel Bullet",
+          "type": "fixed",
+          "price": 45,
+          "unit": "nos",
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 4,
+            "10": 4
+          }
+        },
+        {
+          "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+          "type": "fixed",
+          "price": 280,
+          "unit": "pkt",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Thinner D13",
+          "type": "fixed",
+          "price": 180,
+          "unit": "ltr",
+          "qty": {
+            "3": 0.5,
+            "5": 0.5,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Roller 4\"",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 3
+          }
+        },
+        {
+          "name": "4×4 MS Base Plate",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "5×5 MS Square Plate",
+          "type": "fixed",
+          "price": 80,
+          "unit": "nos",
+          "qty": {
+            "3": 4,
+            "5": 6,
+            "8": 8,
+            "10": 10
+          }
+        },
+        {
+          "name": "Anchor Bolt 8mm",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 16,
+            "5": 24,
+            "8": 32,
+            "10": 40
+          }
+        },
+        {
+          "name": "3/4in Self Screw",
+          "type": "fixed",
+          "price": 1.5,
+          "unit": "nos",
+          "qty": {
+            "3": 25,
+            "5": 25,
+            "8": 50,
+            "10": 50
+          }
+        },
+        {
+          "name": "Self Bolt Corroshield",
+          "type": "fixed",
+          "price": 1.2,
+          "unit": "nos",
+          "qty": {
+            "3": 20,
+            "5": 20,
+            "8": 40,
+            "10": 40
+          }
+        }
+      ]
+    },
+    "elevated": {
+      "label": "Elevated",
+      "items": [
+        {
+          "name": "2.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "2.5x1.5",
+          "weightKg": 15.3,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 5,
+            "10": 6
+          }
+        },
+        {
+          "name": "1.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "1.5x1.5",
+          "weightKg": 12.2,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 7,
+            "10": 8
+          }
+        },
+        {
+          "name": "2×1 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "2x1",
+          "weightKg": 10.2,
+          "qty": {
+            "3": 5,
+            "5": 5,
+            "8": 7,
+            "10": 7
+          }
+        },
+        {
+          "name": "Epoxy Primer ESS Dee Grey",
+          "type": "fixed",
+          "price": 350,
+          "unit": "ltr",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1.5
+          }
+        },
+        {
+          "name": "1.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "2.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 15,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "2×1 End Cap",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "Cotton Waste 50gm",
+          "type": "fixed",
+          "price": 30,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "4\" Cutting Wheel Bullet",
+          "type": "fixed",
+          "price": 45,
+          "unit": "nos",
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 4,
+            "10": 4
+          }
+        },
+        {
+          "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+          "type": "fixed",
+          "price": 280,
+          "unit": "pkt",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Thinner D13",
+          "type": "fixed",
+          "price": 180,
+          "unit": "ltr",
+          "qty": {
+            "3": 0.5,
+            "5": 0.5,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Roller 4\"",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 3
+          }
+        },
+        {
+          "name": "4×4 MS Base Plate",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "5×5 MS Square Plate",
+          "type": "fixed",
+          "price": 80,
+          "unit": "nos",
+          "qty": {
+            "3": 4,
+            "5": 4,
+            "8": 8,
+            "10": 10
+          }
+        },
+        {
+          "name": "Anchor Bolt 8mm",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 16,
+            "5": 16,
+            "8": 32,
+            "10": 40
+          }
+        },
+        {
+          "name": "3/4in Self Screw",
+          "type": "fixed",
+          "price": 1.5,
+          "unit": "nos",
+          "qty": {
+            "3": 25,
+            "5": 25,
+            "8": 50,
+            "10": 50
+          }
+        },
+        {
+          "name": "Self Bolt Corroshield",
+          "type": "fixed",
+          "price": 1.2,
+          "unit": "nos",
+          "qty": {
+            "3": 20,
+            "5": 20,
+            "8": 40,
+            "10": 40
+          }
+        }
+      ]
+    },
+    "sheetRoof": {
+      "label": "Sheet Roof",
+      "items": [
+        {
+          "name": "2.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "2.5x1.5",
+          "weightKg": 15.3,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 5,
+            "10": 6
+          }
+        },
+        {
+          "name": "1.5×1.5 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "1.5x1.5",
+          "weightKg": 12.2,
+          "qty": {
+            "3": 3,
+            "5": 4,
+            "8": 7,
+            "10": 8
+          }
+        },
+        {
+          "name": "2×1 Square Tube 16G",
+          "type": "tube",
+          "tubeSize": "2x1",
+          "weightKg": 10.2,
+          "qty": {
+            "3": 5,
+            "5": 5,
+            "8": 7,
+            "10": 7
+          }
+        },
+        {
+          "name": "Epoxy Primer ESS Dee Grey",
+          "type": "fixed",
+          "price": 350,
+          "unit": "ltr",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1.5,
+            "10": 1.5
+          }
+        },
+        {
+          "name": "1.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "2.5×1.5 End Cap",
+          "type": "fixed",
+          "price": 15,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "2×1 End Cap",
+          "type": "fixed",
+          "price": 12,
+          "unit": "nos",
+          "qty": {
+            "3": 8,
+            "5": 8,
+            "8": 8,
+            "10": 8
+          }
+        },
+        {
+          "name": "Cotton Waste 50gm",
+          "type": "fixed",
+          "price": 30,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "4ft Sheet",
+          "type": "fixed",
+          "price": 500,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "1×1 Tube (GI/GP)",
+          "type": "tube",
+          "tubeSize": "1x1",
+          "weightKg": 9,
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "4\" Cutting Wheel Bullet",
+          "type": "fixed",
+          "price": 45,
+          "unit": "nos",
+          "qty": {
+            "3": 3,
+            "5": 3,
+            "8": 4,
+            "10": 4
+          }
+        },
+        {
+          "name": "Welding Electrodes 2.50 Sunbond (pkt)",
+          "type": "fixed",
+          "price": 280,
+          "unit": "pkt",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Thinner D13",
+          "type": "fixed",
+          "price": 180,
+          "unit": "ltr",
+          "qty": {
+            "3": 0.5,
+            "5": 0.5,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Roller 4\"",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 2,
+            "5": 2,
+            "8": 2,
+            "10": 3
+          }
+        },
+        {
+          "name": "4×4 MS Base Plate",
+          "type": "fixed",
+          "price": 60,
+          "unit": "nos",
+          "qty": {
+            "3": 1,
+            "5": 1,
+            "8": 1,
+            "10": 1
+          }
+        },
+        {
+          "name": "Silicon Black",
+          "type": "fixed",
+          "price": 150,
+          "unit": "nos",
+          "qty": {
+            "3": 2,
+            "5": 3,
+            "8": 4,
+            "10": 5
+          }
+        },
+        {
+          "name": "Tar Sheet",
+          "type": "fixed",
+          "price": 200,
+          "unit": "m",
+          "qty": {
+            "3": 1.5,
+            "5": 2,
+            "8": 2.5,
+            "10": 3
+          }
+        },
+        {
+          "name": "3/4in Self Screw",
+          "type": "fixed",
+          "price": 1.5,
+          "unit": "nos",
+          "qty": {
+            "3": 25,
+            "5": 25,
+            "8": 50,
+            "10": 50
+          }
+        },
+        {
+          "name": "Self Bolt Corroshield",
+          "type": "fixed",
+          "price": 1.2,
+          "unit": "nos",
+          "qty": {
+            "3": 20,
+            "5": 20,
+            "8": 40,
+            "10": 40
+          }
+        }
+      ]
+    }
+  },
+  "tubeWeights": {
+    "1x1": 9,
+    "2x1": 10.2,
+    "1.5x1.5": 12.2,
+    "2.5x1.5": 15.3,
+    "3x1.5": 19
+  },
+  "offers": [
+    {
+      "id": "offer_1778395223186",
+      "name": "hari",
+      "type": "flat",
+      "value": 10000,
+      "appliesTo": "ongrid",
+      "appliesToTier": "all",
+      "startDate": "2026-05-10",
+      "endDate": "2026-05-11",
+      "active": true,
+      "createdAt": "2026-05-10T06:40:23.186Z"
+    }
+  ],
+  "quotationSettings": {
+    "emi": {
+      "upTo3kW": 5.75,
+      "above3kW": 7.9
+    },
+    "offer": {
+      "enabled": true,
+      "title": "Priority 10-Day Installation",
+      "description": "Fast-tracked scheduling and execution",
+      "details": "",
+      "titleMl": "10 ദിവസത്തിനുള്ളിൽ മുൻഗണനാ ഇൻസ്റ്റലേഷൻ",
+      "descriptionMl": "വേഗത്തിലുള്ള ഷെഡ്യൂളിംഗും ഇൻസ്റ്റലേഷനും",
+      "detailsMl": "",
+      "validFrom": "",
+      "validUntil": "",
+      "imageUrl": "https://golden-ray.b-cdn.net/icons/37.png"
+    }
+  }
+}
