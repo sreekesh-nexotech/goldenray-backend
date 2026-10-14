@@ -61,6 +61,9 @@ VALID_UPGRADE_PHASE = ("1P", "3P")
 #: carry different accessory sets, so the choice is the caller's.
 VALID_MICRO_BRAND = ("enphase", "hoymiles")
 #: Categories an upgrade to three phase needs but the template has no slot for.
+#: The request's roof type, as the installation matrix spells it.
+STRUCTURE_TO_INSTALLATION = {"flatRoof": "FLAT", "sheetRoof": "SHEET", "elevated": "ELEVATED"}
+
 PHASE_CHANGE_CATEGORIES = ("meter", "meter_box", "isolator")
 #: Cable a site can need beyond the standard run, priced at the category's own GST rather
 #: than the composite rate (App.jsx:1321-1322) — the add-on ladder is not the material one.
@@ -159,6 +162,10 @@ COST_KEYS = {
     "default_dist_km": "transport_base_km",
     "miscellaneous": "miscellaneous",
     "office": "office_per_project",
+    # version-2 amortises the office overhead across the month's projects instead of
+    # charging a flat figure per project (App.jsx:2220-2222).
+    "office_expense_monthly": "office_expense_monthly",
+    "expected_projects_per_month": "expected_projects_per_month",
     "gp_rate_per_kg": "gp_rate_per_kg",
     "gi_rate_per_kg": "gi_rate_per_kg",
     "structure_labor": "structure_labor",
@@ -359,6 +366,12 @@ class Item:
     #: Engineering values the string/MPPT layout needs, in engines.string_config's field
     #: names. Empty for anything without a panel or inverter spec.
     specs: dict | None = None
+    #: The item's own GST rate where it differs from its category's. The source reads
+    #: `item.gstOverride || cat.gstDefault || 18` (App.jsx:1939), and four of the nine
+    #: Enphase accessories carry one -- the Q Relay and the System Controller are 18%
+    #: against the category's 5%. Taxing those at the category rate under-charges GST on
+    #: every premium quote.
+    gst_override: float | None = None
 
 
 @dataclass
@@ -415,6 +428,11 @@ class Snapshot:
     structures: dict[str, list[StructureItemView]]
     market_rates: list[dict]
     offers: list[dict]
+    #: ``{(size_key, installation_type): cost}``. version-2 prices installation from this
+    #: matrix rather than a flat per-kW rate, so a 3 kW flat roof is ₹15,000 and not
+    #: 3 × ₹3,000. Empty leaves the per-kW fallback in place, which is what the source
+    #: does when the matrix has no cell (`instMatrixCost || bomKw * installRate`).
+    installation_matrix: dict[tuple[str, str], float] = field(default_factory=dict)
     #: Categories reachable by slug rather than through a slot -- the parts an upgrade to
     #: three phase needs (:data:`PHASE_CHANGE_CATEGORIES`). Empty for the standard path.
     categories_by_slug: dict[str, CategoryView] = field(default_factory=dict)
@@ -488,6 +506,7 @@ def _legacy_item(component: Component, price: Decimal) -> Item:
         dcr=panel.is_dcr if panel is not None else None,
         sku=component.sku,
         specs=_specs(panel, spec),
+        gst_override=float(component.gst_rate_override * 100) if component.gst_rate_override is not None else None,
     )
 
 
@@ -613,6 +632,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
         structures=_structures() if sys_type != "upgrade" else {},
         market_rates=_market_rates(sys_type),
         offers=_offers(),
+        installation_matrix=_installation_matrix(),
         categories_by_slug={category.slug: categories[category.pk] for category in extra},
     )
 
@@ -621,6 +641,16 @@ def _plain(number: Decimal | None):
     if number is None:
         return 0
     return int(number) if number == number.to_integral_value() else float(number)
+
+
+def _installation_matrix() -> dict[tuple[str, str], float]:
+    """Installation cost by (size key, roof type), the way version-2 prices it."""
+    from pricing.models import InstallationMatrix
+
+    return {
+        (row.size_key, row.installation_type): float(row.install_cost)
+        for row in InstallationMatrix.objects.all()
+    }
 
 
 def _structures() -> dict[str, list[StructureItemView]]:
@@ -745,7 +775,8 @@ class Calculator:
                 return
             unit_price = float(item.price)
             amount = qty * unit_price
-            gst_pct = category.gst_default
+            # `item.gstOverride || cat.gstDefault || 18` (App.jsx:1939).
+            gst_pct = item.gst_override if item.gst_override is not None else category.gst_default
             lines.append(
                 {
                     "pos": next_pos + len(lines),
@@ -922,7 +953,9 @@ class Calculator:
         # being lost among the slot lines.
         bom_lines += self._extra_cable_lines(next_pos=len(bom_lines))
         totals = self._calc_totals(bom_lines)
-        cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite)
+        # `bom_size` rather than `size`: an upgrade-ready build is installed at the future
+        # size, which is the kW the matrix should be read at.
+        cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite, size_key=bom_size)
         if composite:
             # Source ladder (App.jsx:1477-1488): margin on PRE-GST cost, then one GST
             # charge on cost + profit. Taxing a GST-inclusive subtotal, as PER_LINE does,
@@ -1282,23 +1315,54 @@ class Calculator:
             )
         return lines
 
-    def _calc_costs(self, mat_with_gst: float, kw: float, *, structure_as_material: bool = False) -> dict:
+    def _install_cost(self, kw: float, size_key: str, struct_type: str) -> float:
+        """Installation from the matrix, falling back to the per-kW rate.
+
+        version-2 prices installation per (size, roof) rather than per kW
+        (App.jsx:2214-2215): a 3 kW flat roof is ₹15,000, where ``3 × install_rate`` gives
+        ₹9,000. The fallback is the source's own ``instMatrixCost || bomKw * installRate``,
+        so a size with no cell still prices rather than coming out free.
+        """
+        cell = self.s.installation_matrix.get((size_key, STRUCTURE_TO_INSTALLATION.get(struct_type, "FLAT")))
+        return cell if cell else self._cost("install_rate") * kw
+
+    def _office_cost(self) -> float:
+        """Office overhead amortised across the month's projects.
+
+        version-2 replaced the flat per-project figure with
+        ``monthlyExpense / expectedProjectsPerMonth`` (App.jsx:2220-2222) -- ₹15,000 rather
+        than ₹5,500 at the configured 150,000/10. Falls back to the flat key when the
+        monthly figures are not configured, as the source does.
+        """
+        monthly = self.costs.get("office_expense_monthly")
+        per_month = self.costs.get("expected_projects_per_month")
+        if monthly and per_month:
+            return round(float(monthly) / float(per_month))
+        return self._cost("office")
+
+    def _calc_costs(self, mat_with_gst: float, kw: float, *, structure_as_material: bool = False, size_key: str = "") -> dict:
         p = self.p
         dist_km = p["dist_km"]
         struct_type = p["structure_type"]
-        install = self._cost("install_rate") * kw
+        composite = self._composite
+        install = self._install_cost(kw, size_key, struct_type) if composite else self._cost("install_rate") * kw
         service = self._cost("service_rate_year") * self._cost("service_years")
-        transport = dist_km * self._cost("transport_rate")
         extra_km = max(0, dist_km - int(self.costs["default_dist_km"]))
         transport_extra = extra_km * self.costs["extra_km_rate"]
-        # The source keeps these on separate ladders: `costCalc.transportation` is the
-        # whole distance at the per-km rate and feeds the internal cost, while the
-        # beyond-base surcharge lives only in `addOnTotal`, which sits on top of the
-        # market rate (App.jsx:1458, 1494). Folding the surcharge into cost_total would
-        # charge the same distance twice on the one number the customer pays.
-        transport += transport_extra
+        if composite:
+            # version-2 charges transport only BEYOND the included distance
+            # (App.jsx:2218) -- at the base 100 km the cost is 0, where the legacy rate
+            # billed the whole distance and made a local job carry ₹4,000.
+            transport = transport_extra
+        else:
+            # The legacy engine keeps these on separate ladders: `costCalc.transportation`
+            # is the whole distance at the per-km rate and feeds the internal cost, while
+            # the beyond-base surcharge lives only in `addOnTotal`, which sits on top of
+            # the market rate (App.jsx:1458, 1494). Folding the surcharge into cost_total
+            # would charge the same distance twice on the one number the customer pays.
+            transport = dist_km * self._cost("transport_rate") + transport_extra
         misc = self._cost("miscellaneous")
-        office = self._cost("office")
+        office = self._office_cost() if composite else self._cost("office")
         structure_base = self._calc_structure_cost("flatRoof", kw)["total"]
         structure_extra = 0
         structure_labor = 0
