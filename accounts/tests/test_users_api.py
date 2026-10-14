@@ -122,6 +122,64 @@ class TestCreate:
         entry = AuditLog.objects.get(action="accounts.user_created")
         assert entry.actor_id == admin.pk and entry.after["email"] == "New.Person@example.com" and entry.after["role"] == str(member_role.uid)
 
+    def test_a_supplied_password_is_stored_and_no_invitation_is_sent(self, client, member_role, django_capture_on_commit_callbacks):
+        """The fallback: when the creator sets a password there is nothing to invite the user to do."""
+        payload = {"email": "handover@example.com", "role": str(member_role.uid), "password": NEW_PASSWORD}
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.post(URL, payload, format="json")
+        assert response.status_code == 201, response.json()
+        body = response.json()
+        user = User.objects.get(uid=body["uid"])
+        assert user.has_usable_password() and user.check_password(NEW_PASSWORD)
+        assert user.password_changed_at is not None
+        # No invitation: neither a reset row nor an e-mail.
+        assert not PasswordReset.objects.filter(user=user).exists()
+        assert mail.outbox == []
+        # Not forced to reset: that flag is a hard login block, so it would make the password unusable.
+        assert body["must_reset_password"] is False
+        # The password never comes back out of the API.
+        assert "password" not in body
+        assert AuditLog.objects.get(action="accounts.user_created").after["credentials_set_by_creator"] is True
+
+    def test_the_supplied_password_lets_the_user_sign_in(self, client, member_role, django_capture_on_commit_callbacks):
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.post(URL, {"email": "signsin@example.com", "role": str(member_role.uid), "password": NEW_PASSWORD}, format="json")
+        assert response.status_code == 201
+        login = client.post("/api/v1/auth/login/", {"email": "signsin@example.com", "password": NEW_PASSWORD}, format="json")
+        assert login.status_code == 200, login.json()
+        assert "access" in login.json()
+
+    @pytest.mark.parametrize("blank", ["", None])
+    def test_an_empty_password_falls_back_to_the_invitation(self, client, member_role, django_capture_on_commit_callbacks, blank):
+        """An untouched form field must behave exactly like an absent one."""
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.post(URL, {"email": f"blank{blank!r}@example.com".replace("'", ""), "role": str(member_role.uid), "password": blank}, format="json")
+        assert response.status_code == 201, response.json()
+        user = User.objects.get(uid=response.json()["uid"])
+        assert not user.has_usable_password()
+        assert PasswordReset.objects.filter(user=user).exists() and len(mail.outbox) == 1
+
+    @pytest.mark.parametrize("weak", ["short", "password123", "12345678901"])
+    def test_a_supplied_password_must_pass_the_policy(self, client, member_role, weak):
+        response = client.post(URL, {"email": "weak@example.com", "role": str(member_role.uid), "password": weak}, format="json")
+        assert response.status_code == 400, response.json()
+        assert "password" in response.json()["errors"]
+        assert not User.objects.filter(email="weak@example.com").exists()
+
+    def test_a_rejected_password_creates_nothing(self, client, member_role, django_capture_on_commit_callbacks):
+        """The whole create is one transaction: a policy failure must not leave a half-made account."""
+        before = User.objects.count()
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.post(URL, {"email": "rolledback@example.com", "role": str(member_role.uid), "password": "similar"}, format="json")
+        assert response.status_code == 400
+        assert User.objects.count() == before and mail.outbox == []
+
+    def test_a_password_echoing_the_email_is_rejected(self, client, member_role):
+        """Validated against the half-built account, so similarity to its own e-mail is caught."""
+        response = client.post(URL, {"email": "charlotte.banks@example.com", "role": str(member_role.uid), "password": "charlotte.banks"}, format="json")
+        assert response.status_code == 400, response.json()
+        assert "password" in response.json()["errors"]
+
     @pytest.mark.parametrize(
         "payload,field",
         [
