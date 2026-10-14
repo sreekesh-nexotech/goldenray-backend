@@ -1,0 +1,482 @@
+{
+ "schema": "flarize.cost-config/2",
+ "configVersion": "cost-config@2026-08-16.2",
+ "note": "Phase 2A FINAL commercial configuration. Values are either (a) an APPROVED business rule supplied by the business, or (b) extracted from data/catalog.json with provenance, or (c) null and BLOCKING. Nothing is invented. Where a rule exists but its values were never supplied, the record is present with null values and status NOT_CONFIGURED so the engine blocks explicitly.",
+ "sourceCatalogVersion": "catalog@2026-08-15",
+ "procurement": {
+  "owner": "PROCUREMENT",
+  "version": "procurement@2026-08-16.1",
+  "purchasePriceVersion": "BATCH-SEED-005",
+  "landedCostVersion": "BATCH-SEED-005",
+  "status": "CONFIGURED",
+  "landedCostFormula": "purchaseUnitPrice + allocatedProcurementDelivery/quantity + otherProcurementCharges/quantity",
+  "allocationMethod": "PURCHASE_VALUE_PROPORTION",
+  "allocationScope": "SUPPLIER_TO_WAREHOUSE",
+  "forbiddenAllocationMethods": [
+   "WEIGHT",
+   "VOLUME",
+   "QUANTITY",
+   "EQUAL_SPLIT"
+  ],
+  "procurementSideCosts": [
+   "inboundMaterialDelivery",
+   "loading",
+   "unloading",
+   "handling",
+   "warehouseProcurementCost",
+   "otherExplicitlyEnteredCharges"
+  ],
+  "allocationExample": {
+   "status": "EXAMPLE — NOT ACTIVE CONFIGURATION",
+   "deliveryCost": 5000,
+   "materials": [
+    {
+     "id": "A",
+     "purchaseValue": 70000,
+     "pct": 70,
+     "allocated": 3500
+    },
+    {
+     "id": "B",
+     "purchaseValue": 20000,
+     "pct": 20,
+     "allocated": 1000
+    },
+    {
+     "id": "C",
+     "purchaseValue": 10000,
+     "pct": 10,
+     "allocated": 500
+    }
+   ],
+   "totalPurchaseValue": 100000
+  },
+  "note": "DECISION CLOSED (P2-J): allocation is by purchase-value proportion, supplier->warehouse only. Project transportation is NEVER allocated in here. PROCUREMENT DATA STATUS (updated 2026-09-05): 5 SEED batches present (BATCH-SEED-001 through BATCH-SEED-005). 257 procurement records carry landedUnitCost (100% coverage). 112/257 records have delivery allocation applied (landedUnitCost != purchasePrice); 145/257 have landedUnitCost == purchasePrice — Procurement must confirm intent (delivery absorbed vs allocation gap). All 5 batches are SEED, not PRODUCTION. Production issuance requires a non-seed batch (locked 2.8). cost engine no longer blocks on LANDED_COST_NOT_CONFIGURED for these 257 records; production quotation issuance still requires production procurement data.",
+  "componentLevelSellingPrice": {
+   "supported": false,
+   "reason": "Decision C74 — V1 has ONE pricing methodology, at project level."
+  },
+  "dataStatus": {
+   "seedBatchesPresent": [
+    "BATCH-SEED-001",
+    "BATCH-SEED-002",
+    "BATCH-SEED-003",
+    "BATCH-SEED-004",
+    "BATCH-SEED-005"
+   ],
+   "productionBatchesPresent": [],
+   "recordsWithLandedCost": 257,
+   "recordsWithAllocationApplied": 112,
+   "recordsParityPurchaseVsLanded": 145,
+   "reviewedAt": "2026-09-05",
+   "note": "Per locked 2.8: seed data preserved; production issuance requires a non-seed batch"
+  }
+ },
+ "structure": {
+  "owner": "PROJECT_HEAD",
+  "version": "structure@2026-08-15.1",
+  "source": "catalog.costs — sheetStructureRate, elevatedStructureRate, structureLabor, structureRepairPct",
+  "roofAddOn": [
+   {
+    "installationType": "FLAT",
+    "roofType": "FLAT",
+    "rate": 0,
+    "unit": "PER_PROJECT",
+    "note": "flat-roof structure material is emitted as BOM lines"
+   },
+   {
+    "installationType": "SHEET",
+    "roofType": "SHEET",
+    "rate": 3000,
+    "unit": "PER_PROJECT",
+    "source": "catalog.costs.sheetStructureRate"
+   },
+   {
+    "installationType": "ELEVATED",
+    "roofType": "ELEVATED",
+    "rate": 5000,
+    "unit": "PER_PROJECT",
+    "source": "catalog.costs.elevatedStructureRate"
+   }
+  ],
+  "labour": {
+   "rate": 3000,
+   "unit": "PER_PROJECT",
+   "source": "catalog.costs.structureLabor"
+  },
+  "repairAllowancePct": {
+   "value": 10,
+   "basis": "STRUCTURE_MATERIAL",
+   "source": "catalog.costs.structureRepairPct"
+  }
+ },
+ "installation": {
+  "owner": "PROJECT_HEAD",
+  "version": "install@2026-08-15.2",
+  "source": "catalog.installationMatrix, used at src/App.jsx:2113 as an absolute project amount",
+  "unitEvidence": "The matrix value is used directly, never multiplied by kW. 3 kW FLAT = 15000 and 10 kW FLAT = 42000 is not a common per-kW rate. PER_PROJECT is established by the source. Confirmation by the business remains open item P2-H.",
+  "exactMatchOnly": true,
+  "rates": [
+   {
+    "systemSizeKw": 3,
+    "installationType": "FLAT",
+    "unit": "PER_PROJECT",
+    "rate": 15000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 3,
+    "installationType": "SHEET",
+    "unit": "PER_PROJECT",
+    "rate": 18000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 3,
+    "installationType": "ELEVATED",
+    "unit": "PER_PROJECT",
+    "rate": 22000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 5,
+    "installationType": "FLAT",
+    "unit": "PER_PROJECT",
+    "rate": 22000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 5,
+    "installationType": "SHEET",
+    "unit": "PER_PROJECT",
+    "rate": 26000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 5,
+    "installationType": "ELEVATED",
+    "unit": "PER_PROJECT",
+    "rate": 32000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 6,
+    "installationType": "FLAT",
+    "unit": "PER_PROJECT",
+    "rate": 28000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 6,
+    "installationType": "SHEET",
+    "unit": "PER_PROJECT",
+    "rate": 33000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 6,
+    "installationType": "ELEVATED",
+    "unit": "PER_PROJECT",
+    "rate": 40000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 8,
+    "installationType": "FLAT",
+    "unit": "PER_PROJECT",
+    "rate": 35000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 8,
+    "installationType": "SHEET",
+    "unit": "PER_PROJECT",
+    "rate": 42000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 8,
+    "installationType": "ELEVATED",
+    "unit": "PER_PROJECT",
+    "rate": 50000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 10,
+    "installationType": "FLAT",
+    "unit": "PER_PROJECT",
+    "rate": 42000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 10,
+    "installationType": "SHEET",
+    "unit": "PER_PROJECT",
+    "rate": 50000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   },
+   {
+    "systemSizeKw": 10,
+    "installationType": "ELEVATED",
+    "unit": "PER_PROJECT",
+    "rate": 60000,
+    "effectiveFrom": null,
+    "version": "install@2026-08-15.2"
+   }
+  ],
+  "removedLegacyFallback": {
+   "field": "catalog.costs.installRate",
+   "value": 3000,
+   "unit": "PER_KW",
+   "status": "REMOVED",
+   "note": "The per-kW legacy fallback is no longer reachable. Decision C75: a missing exact size/type combination returns INSTALLATION_COST_NOT_CONFIGURED and blocks. The nearest system size is never used."
+  }
+ },
+ "siteSurvey": {
+  "owner": "PROJECT_HEAD",
+  "version": "survey@2026-08-16.1",
+  "costPerProject": 500,
+  "unit": "PER_PROJECT",
+  "coverageKm": 100,
+  "excessRatePerKm": 3,
+  "allInclusive": [
+   "engineerCost",
+   "engineerTravel",
+   "siteVisit",
+   "siteSurveyReport"
+  ],
+  "formula": "<=100 km: 500 | >100 km: 500 + (distanceKm - 100) x 3",
+  "example": "130 km -> 500 + (30 x 3) = 590",
+  "source": "APPROVED business rule supplied 2026-08-16.",
+  "note": "The 500 is ALL-INCLUSIVE — no separate engineer travel is ever added, and project transportation is a different cost head. The 100 km threshold is an approved business rule and is never silently changed. The 3/km excess rate is Project Head configuration on the rate card and may be revised there, with full audit history.",
+  "customerFacingCharge": null
+ },
+ "engineeringDesign": {
+  "owner": "PROJECT_HEAD",
+  "version": "engdesign@2026-08-16.1",
+  "costPerProject": 500,
+  "unit": "PER_PROJECT",
+  "sizeLimitKw": 20,
+  "allInclusive": [
+   "engineerCost",
+   "engineerTravel",
+   "designWork",
+   "siteEngineeringReport"
+  ],
+  "source": "APPROVED business rule: 500 per project up to 20 kW, all-inclusive.",
+  "aboveLimitRate": null,
+  "aboveLimitStatus": "DECISION_CLOSED_VALUE_NOT_CONFIGURED",
+  "note": "DECISION CLOSED (P2-L): above 20 kW the Project Head RATE CARD band \">20kW\" determines the rate, with its own unit. The 500 is NEVER extrapolated and never computed per kW unless a band record explicitly declares PER_KW. VALUE NOT YET CONFIGURED: no >20kW rate supplied, so projects over 20 kW block with ENGINEERING_DESIGN_NOT_CONFIGURED."
+ },
+ "transportation": {
+  "owner": "PROJECT_HEAD",
+  "version": "TRANSPORT-UAT-2026-09-05.1",
+  "status": "CONFIGURED",
+  "scope": "WAREHOUSE_TO_SITE",
+  "distanceBasis": "ONE_WAY",
+  "formula": "distanceKm x vehicle.ratePerKm",
+  "vehicles": [
+   {
+    "vehicleId": "VEH-STANDARD",
+    "vehicleType": "STANDARD",
+    "vehicleName": "Standard vehicle (residential)",
+    "ratePerKm": 35,
+    "unit": "PER_KM",
+    "effectiveFrom": "2026-09-05T00:00:00.000Z",
+    "effectiveTo": null,
+    "version": "VEH-STANDARD@2026-09-05",
+    "status": "ACTIVE",
+    "changedBy": "UAT_HANDOFF_2026_09_05",
+    "changedAt": "2026-09-05T00:00:00.000Z",
+    "changeReason": "UAT reference rate (locked 2.1 formula). Historical/reference value only — NOT a production rate. isDemo:true.",
+    "previousVersionId": null,
+    "isDemo": true
+   },
+   {
+    "vehicleId": "VEH-LORRY",
+    "vehicleType": "LORRY",
+    "vehicleName": "Lorry (commercial)",
+    "ratePerKm": 50,
+    "unit": "PER_KM",
+    "effectiveFrom": "2026-09-05T00:00:00.000Z",
+    "effectiveTo": null,
+    "version": "VEH-LORRY@2026-09-05",
+    "status": "ACTIVE",
+    "changedBy": "UAT_HANDOFF_2026_09_05",
+    "changedAt": "2026-09-05T00:00:00.000Z",
+    "changeReason": "UAT reference rate (locked 2.1 formula). Historical/reference value only — NOT a production rate. isDemo:true.",
+    "previousVersionId": null,
+    "isDemo": true
+   }
+  ],
+  "note": "DECISION CLOSED (P2-M / locked 2.1): warehouse->site, ONE WAY, distanceKm x vehicle.ratePerKm. No round trip. No free-100km. No universal per-km rate (C76). The vehicles here are VERSIONED UAT REFERENCE rates flagged isDemo:true (2026-09-07 §16/§24): the Cost Engine may use them when productionMode=false; in PRODUCTION_MODE the commercial freeze REFUSES issuance unless the applied transport rate came from the PROJECT_HEAD versioned rate card (PUT /api/workspace/commercial/rate-card, rateType TRANSPORT_VEHICLE_RATE -> data/project-rate-card.json). The snapshot freezes vehicleType, distanceKm, ratePerKm, rateVersion, rateSource.",
+  "rejectedLegacyRates": [
+   {
+    "field": "catalog.transportConfig.costPerKm",
+    "value": 35,
+    "status": "NOT_APPLIED",
+    "reason": "Decision C76 — no universal per-km rate. Rates are per vehicle type."
+   },
+   {
+    "field": "catalog.costs.transportRate",
+    "value": 40,
+    "status": "NOT_APPLIED",
+    "reason": "Second conflicting legacy rate, never read by the legacy engine."
+   },
+   {
+    "field": "catalog.transportConfig.baseDistanceKm",
+    "value": 100,
+    "status": "NOT_APPLIED",
+    "reason": "The legacy free-distance allowance is not part of the approved model: TRANSPORTATION_COST = distanceKm x ratePerKm."
+   }
+  ],
+  "vehicleRecordShape": [
+   "vehicleId",
+   "vehicleName",
+   "ratePerKm",
+   "unit=PER_KM",
+   "effectiveFrom",
+   "effectiveTo",
+   "version",
+   "status",
+   "changedBy",
+   "changedAt",
+   "changeReason",
+   "previousVersionId"
+  ],
+  "source": "COST_CONFIG_UAT_REFERENCE",
+  "isDemo": true,
+  "productionUse": false
+ },
+ "serviceAmc": {
+  "owner": "PROJECT_HEAD",
+  "version": "service@2026-08-16.1",
+  "serviceIncluded": true,
+  "model": "COST_PER_VISIT_X_VISITS_PER_YEAR_X_YEARS",
+  "formula": "costPerVisit x visitsPerYear x serviceYears",
+  "costPerVisit": 1000,
+  "visitsPerYear": 2,
+  "serviceYears": 5,
+  "sizeLimitKw": 10,
+  "status": "CONFIGURED",
+  "source": "APPROVED business values supplied 2026-08-16, under decision C9.",
+  "worked": "1000 x 2 x 5 = 10000",
+  "businessMeaning": "2000 per year, 2 planned service visits per year, 5-year internal service period. BREAKDOWN HANDLING IS INCLUDED in this figure — there is no separate breakdown cost head.",
+  "annualEquivalentMetadata": {
+   "value": 2000,
+   "unit": "PER_YEAR",
+   "status": "EXPLANATORY_METADATA_ONLY",
+   "note": "Retained to explain the business meaning. The engine's authoritative calculation is costPerVisit x visitsPerYear x serviceYears; no annual-rate path exists in code."
+  },
+  "note": "Above 10 kW returns SERVICE_OUT_OF_COVERAGE and is never extrapolated. All values are Project Head controlled and versioned on the rate card.",
+  "customerFacingAmcPrice": null,
+  "customerPriceNote": "Internal service cost and any customer-facing AMC selling price are different concepts, separately owned, never merged."
+ },
+ "officeExpenseAllocation": {
+  "owner": "ADMIN",
+  "version": "office@2026-08-15.1",
+  "monthlyOfficeExpense": 150000,
+  "expectedProjectsPerMonth": 10,
+  "source": "catalog.officeExpense, used at src/App.jsx:2107",
+  "formula": "monthlyOfficeExpense / expectedProjectsPerMonth",
+  "rejectedLegacyFallback": {
+   "field": "catalog.costs.office",
+   "value": 5500,
+   "status": "NOT_APPLIED",
+   "reason": "The legacy engine fell back to 5500 when expectedProjectsPerMonth <= 0. That hides a misconfiguration; the engine now returns OFFICE_ALLOCATION_INVALID."
+  }
+ },
+ "miscellaneous": {
+  "owner": "ADMIN",
+  "version": "misc@2026-08-15.2",
+  "label": "CONFIGURED MISCELLANEOUS ALLOWANCE",
+  "percentage": 1,
+  "base": "DIRECT_PROJECT_COST_BEFORE_MISCELLANEOUS",
+  "source": "APPROVED business rule supplied 2026-08-15: V1 default 1% of direct project cost before miscellaneous.",
+  "note": "An explicit COST ALLOWANCE, not hidden margin. Never computed from the selling price, so no circular dependency exists. Admin may change it, including to 0%. The legacy fixed Rs 1000 (catalog.costs.miscellaneous) is superseded."
+ },
+ "margin": {
+  "owner": "ADMIN",
+  "version": "margin@2026-08-15.1",
+  "marginType": "GROSS_MARGIN",
+  "status": "CONFIGURED",
+  "tiers": {
+   "BASE": {
+    "targetMarginPct": 20,
+    "minimumMarginPct": 15
+   },
+   "VALUE": {
+    "targetMarginPct": 20,
+    "minimumMarginPct": 15
+   },
+   "PREMIUM": {
+    "targetMarginPct": 20,
+    "minimumMarginPct": 15
+   }
+  },
+  "constraints": "0 <= minimumMarginPct <= targetMarginPct < 100",
+  "note": "CONFIGURED 2026-08-29: 20% gross margin for all tiers. minimumMarginPct 15% as a guard rail. These are configuration values changeable by ADMIN role. Values approved by business owner."
+ },
+ "gst": {
+  "owner": "ADMIN",
+  "version": "gst@2026-08-15.2",
+  "regime": "SOLAR_70_30_COMPOSITE",
+  "goodsValuationPct": 70,
+  "goodsRatePct": 5,
+  "serviceValuationPct": 30,
+  "serviceRatePct": 18,
+  "effectiveRatePct": 8.9,
+  "appliesTo": "SELLING_PRICE_BEFORE_GST",
+  "source": "APPROVED commercial decision C73.",
+  "derivation": "0.70 x 5 + 0.30 x 18 = 3.5 + 5.4 = 8.9. The effective rate is an OUTPUT and a cross-check, never the calculation input.",
+  "supersedes": {
+   "version": "gst@2026-08-15.1",
+   "regime": "FLAT",
+   "ratePct": 9
+  }
+ },
+ "marketRate": {
+  "owner": "ADMIN",
+  "version": "marketrate@2026-08-15.1",
+  "usage": "REFERENCE_ONLY",
+  "source": "catalog.marketRates",
+  "note": "Benchmark only. It never replaces TOTAL_ACTUAL_PROJECT_COST and never becomes the customer selling price. Phase 0 found two configurations quoted below cost through marketRate (ongrid 3kW Value -11.1%, ongrid 5kW 1P Premium -41.9%); that failure is covered by regression tests."
+ },
+ "specialProjectWorks": {
+  "owner": "PROJECT_HEAD",
+  "version": null,
+  "rates": [],
+  "status": "NO_PREDEFINED_RATES",
+  "note": "Special works are added explicitly per project by the Project Head with an actual amount. Predefined rates MAY be held on the rate card (rateType SPECIAL_WORK) but none has been supplied, so none exists. A work added without an amount returns SPECIAL_WORK_INVALID; no rate is invented."
+ },
+ "netMeter": {
+  "owner": "CUSTOMER",
+  "status": "NOT_A_FLARIZE_ITEM",
+  "decision": "The net meter is supplied/purchased by the CUSTOMER as required by KSEB. It is not a Flarize procurement item.",
+  "excludedFrom": [
+   "flarizeBOM",
+   "materialLandedCost",
+   "landedCost",
+   "totalActualProjectCost",
+   "flarizeMargin",
+   "solarSystemSellingPrice"
+  ],
+  "display": "May be shown as a separate CUSTOMER_SIDE_EXPENSE reference only.",
+  "markup": "NONE — Flarize never marks it up.",
+  "note": "Supersedes the earlier treatment of net metering as a Flarize CUSTOMER_EXTRA. There is no net-meter procurement price and no net-meter margin model. The deferred net-meter price master is moot: Flarize does not sell it."
+ }
+}

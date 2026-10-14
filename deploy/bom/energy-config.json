@@ -1,0 +1,199 @@
+{
+ "configVersion": "energy-config.2",
+ "description": "Energy engine configuration — KSEB LT-1A domestic tariff (Phase 3, FY 2026-27), yield assumptions, sizing rules. Configurable per region/DISCOM. Future states add entries; existing entries never silently apply to unsupported regions.",
+ "regions": {
+  "kerala": {
+   "regionId": "kerala",
+   "regionName": "Kerala",
+   "discom": "KSEB",
+   "tariffName": "LT-1A Domestic",
+   "tariffVersion": "2026-27-phase3",
+   "tariffAuthority": "KSERC",
+   "tariffOrder": "OP No. 18/2023",
+   "effectivePeriod": "1 Apr 2026 – 31 Mar 2027",
+   "tariffCategory": "LT-1A(a) Domestic",
+   "billingPeriod": "bimonthly",
+   "note": "KSEB bills bi-monthly. All slab thresholds in this config are BI-MONTHLY units. Telescopic ≤500 bi-monthly (≤250 monthly). Non-telescopic >500 bi-monthly: entire consumption at single flat rate determined by consumption band.",
+   "tariffSlabs": [
+    {
+     "upToUnits": 100,
+     "ratePerUnit": 3.35,
+     "note": "0–100 bi-monthly (0–50 monthly)"
+    },
+    {
+     "upToUnits": 200,
+     "ratePerUnit": 4.25,
+     "note": "101–200 bi-monthly (51–100 monthly)"
+    },
+    {
+     "upToUnits": 300,
+     "ratePerUnit": 5.35,
+     "note": "201–300 bi-monthly (101–150 monthly)"
+    },
+    {
+     "upToUnits": 400,
+     "ratePerUnit": 7.2,
+     "note": "301–400 bi-monthly (151–200 monthly)"
+    },
+    {
+     "upToUnits": 500,
+     "ratePerUnit": 8.5,
+     "note": "401–500 bi-monthly (201–250 monthly)"
+    }
+   ],
+   "nonTelescopicThreshold": 500,
+   "nonTelescopicSlabs": [
+    {
+     "upToUnits": 600,
+     "ratePerUnit": 6.75,
+     "note": "501–600 bi-monthly (251–300 monthly) — entire consumption at this rate"
+    },
+    {
+     "upToUnits": 700,
+     "ratePerUnit": 7.6,
+     "note": "601–700 bi-monthly (301–350 monthly)"
+    },
+    {
+     "upToUnits": 800,
+     "ratePerUnit": 7.95,
+     "note": "701–800 bi-monthly (351–400 monthly)"
+    },
+    {
+     "upToUnits": 1000,
+     "ratePerUnit": 8.25,
+     "note": "801–1000 bi-monthly (401–500 monthly)"
+    },
+    {
+     "upToUnits": null,
+     "ratePerUnit": 9.2,
+     "note": ">1000 bi-monthly (>500 monthly)"
+    }
+   ],
+   "fixedChargeSlabs": {
+    "note": "Fixed charge depends on consumption band AND connection phase. Values are bi-monthly (₹). Monthly equivalent = value / 2.",
+    "singlePhase": [
+     {
+      "upToUnits": 100,
+      "chargeBiMonthly": 100,
+      "note": "₹50/month"
+     },
+     {
+      "upToUnits": 200,
+      "chargeBiMonthly": 170,
+      "note": "₹85/month"
+     },
+     {
+      "upToUnits": 300,
+      "chargeBiMonthly": 210,
+      "note": "₹105/month"
+     },
+     {
+      "upToUnits": 400,
+      "chargeBiMonthly": 280,
+      "note": "₹140/month"
+     },
+     {
+      "upToUnits": 500,
+      "chargeBiMonthly": 320,
+      "note": "₹160/month"
+     },
+     {
+      "upToUnits": 600,
+      "chargeBiMonthly": 440,
+      "note": "₹220/month"
+     },
+     {
+      "upToUnits": 700,
+      "chargeBiMonthly": 480,
+      "note": "₹240/month"
+     },
+     {
+      "upToUnits": 800,
+      "chargeBiMonthly": 520,
+      "note": "₹260/month"
+     },
+     {
+      "upToUnits": 1000,
+      "chargeBiMonthly": 570,
+      "note": "₹285/month"
+     },
+     {
+      "upToUnits": null,
+      "chargeBiMonthly": 620,
+      "note": "₹310/month"
+     }
+    ],
+    "threePhase": [
+     {
+      "upToUnits": 100,
+      "chargeBiMonthly": 260,
+      "note": "₹130/month"
+     },
+     {
+      "upToUnits": 200,
+      "chargeBiMonthly": 350,
+      "note": "₹175/month"
+     },
+     {
+      "upToUnits": 300,
+      "chargeBiMonthly": 410,
+      "note": "₹205/month"
+     },
+     {
+      "upToUnits": 400,
+      "chargeBiMonthly": 430,
+      "note": "₹215/month"
+     },
+     {
+      "upToUnits": 500,
+      "chargeBiMonthly": 470,
+      "note": "₹235/month"
+     },
+     {
+      "upToUnits": 600,
+      "chargeBiMonthly": 480,
+      "note": "₹240/month"
+     },
+     {
+      "upToUnits": 700,
+      "chargeBiMonthly": 500,
+      "note": "₹250/month"
+     },
+     {
+      "upToUnits": 800,
+      "chargeBiMonthly": 520,
+      "note": "₹260/month"
+     },
+     {
+      "upToUnits": 1000,
+      "chargeBiMonthly": 570,
+      "note": "₹285/month"
+     },
+     {
+      "upToUnits": null,
+      "chargeBiMonthly": 620,
+      "note": "₹310/month"
+     }
+    ]
+   },
+   "meterRent": {
+    "singlePhaseBiMonthly": 12,
+    "threePhaseBiMonthly": 30,
+    "note": "Single phase ₹6/month, three phase ₹15/month"
+   },
+   "electricityDutyPct": 10,
+   "electricityDutyBasis": "energyChargeOnly",
+   "yield": {
+    "dailyGenPerKw": 4.0,
+    "unit": "kWh/kW/day",
+    "source": "Kerala average — GHI ~4.8-5.0 kWh/m²/day, PR ~0.78",
+    "note": "Conservative Kerala average. 4.0 × 30 = 120 units/kW/month"
+   },
+   "sizing": {
+    "coverageTarget": 0.85,
+    "note": "System sized to cover ≥85% of monthly consumption. Smallest catalog size ≥ exactKw × 0.85."
+   }
+  }
+ },
+ "defaultRegion": "kerala"
+}

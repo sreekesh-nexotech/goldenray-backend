@@ -1,0 +1,54 @@
+{
+ "configVersion": "subsidy-config.1",
+ "scheme": {
+  "name": "PM Surya Ghar: Muft Bijli Yojana",
+  "schemeVersion": "PMSG_2024_V1",
+  "authority": "MNRE, Government of India",
+  "tariffOrder": "Cabinet approval 29 Feb 2024",
+  "effectivePeriod": "FY 2024-25 through FY 2026-27",
+  "budgetAllocation": "₹75,021 crore",
+  "subsidyType": "Central Financial Assistance (CFA)",
+  "disbursement": "Direct Benefit Transfer (DBT) to consumer bank account post-commissioning"
+ },
+ "residential": {
+  "tiers": [
+   {
+    "upToKw": 2,
+    "ratePerKw": 30000,
+    "note": "₹30,000/kW for first 2 kW"
+   },
+   {
+    "upToKw": 3,
+    "ratePerKw": 18000,
+    "note": "₹18,000/kW for 3rd kW"
+   }
+  ],
+  "maxSubsidy": 78000,
+  "maxCapacityKw": 10,
+  "minCapacityKw": 1,
+  "eligibility": "Individual residential household with domestic electricity connection"
+ },
+ "ghs": {
+  "ratePerKw": 18000,
+  "maxKwPerHouse": 3,
+  "maxCommunityKw": 500,
+  "note": "Group Housing Society / Resident Welfare Association — common facilities"
+ },
+ "stateTopUp": {
+  "kerala": 0,
+  "note": "Kerala provides no additional state subsidy. Central CFA only."
+ },
+ "dcr": {
+  "required": true,
+  "note": "DCR (Domestic Content Requirement) modules mandatory for subsidy eligibility. Solar cells must be manufactured in India from undiffused silicon wafer (Black Wafer).",
+  "almmListI": "Solar PV Modules — mandatory since March 2021",
+  "almmListII": "Solar PV Cells — mandatory since June 2026",
+  "giveItUpAllowed": true,
+  "giveItUpNote": "Consumer may forgo subsidy and use non-DCR panels. Retains net metering benefits. Choice is irreversible."
+ },
+ "source": {
+  "portal": "pmsuryaghar.gov.in",
+  "verifiedDate": "2026-08-29",
+  "ratesConfirmedCurrent": true
+ }
+}

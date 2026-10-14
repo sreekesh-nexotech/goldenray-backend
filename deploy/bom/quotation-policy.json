@@ -1,0 +1,311 @@
+{
+ "schema": "flarize.quotation-policy/2",
+ "note": "Phase F (locked 2.6) + Phase J effective-period policies (2026-09-05). Project Head owns validity policies; Admin retains write access. Sales cannot mutate. Every new quotation resolves the ACTIVE policy whose window contains its issuedAt and freezes its validityDays into the snapshot. Changing a future policy never mutates an already-issued quotation. See src/lib/quotationPolicy.js.",
+ "validity": {
+  "defaultDays": 15,
+  "version": "DEFAULT@2026-09-14T07:57:35.648Z",
+  "updatedBy": "admin-001",
+  "updatedAt": "2026-09-14T07:57:35.648Z",
+  "status": "CONFIGURED",
+  "note": "Legacy admin default. Effective-period policies below are the primary control. Admin may set defaultDays as a fallback for gaps between policy windows."
+ },
+ "policies": [
+  {
+   "policyId": "E2E-SEP-1789015195517",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789015195517@2026-09-10T04:39:55.517Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T04:39:55.517Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789015195519",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789015195519@2026-09-10T04:39:55.519Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T04:39:55.519Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789015319402",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789015319402@2026-09-10T04:41:59.402Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T04:41:59.402Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789015319403",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789015319403@2026-09-10T04:41:59.403Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T04:41:59.403Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789015325986",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789015325986@2026-09-10T04:42:05.986Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T04:42:05.986Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789015325988",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789015325988@2026-09-10T04:42:05.988Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T04:42:05.988Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789015340435",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789015340435@2026-09-10T04:42:20.435Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T04:42:20.435Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789015340436",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789015340436@2026-09-10T04:42:20.436Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T04:42:20.436Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789039793944",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789039793944@2026-09-10T11:29:53.944Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:29:53.944Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789039793945",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789039793945@2026-09-10T11:29:53.945Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T11:29:53.945Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789039801382",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789039801382@2026-09-10T11:30:01.382Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:30:01.382Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789039801383",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789039801383@2026-09-10T11:30:01.383Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T11:30:01.383Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789039866271",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789039866271@2026-09-10T11:31:06.271Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:31:06.271Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789039866272",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789039866272@2026-09-10T11:31:06.272Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T11:31:06.272Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP2-1789039867581",
+   "validityDays": 7,
+   "effectiveFrom": "2026-09-02T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP2-1789039867581@2026-09-10T11:31:07.581Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:31:07.581Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789039904908",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789039904908@2026-09-10T11:31:44.908Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:31:44.908Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789039904909",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789039904909@2026-09-10T11:31:44.909Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-10T11:31:44.909Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP2-1789039906198",
+   "validityDays": 7,
+   "effectiveFrom": "2026-09-02T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP2-1789039906198@2026-09-10T11:31:46.198Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-10T11:31:46.198Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789191104021",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789191104021@2026-09-12T05:31:44.021Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:31:44.021Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789191104023",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789191104023@2026-09-12T05:31:44.023Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-12T05:31:44.023Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP2-1789191105766",
+   "validityDays": 7,
+   "effectiveFrom": "2026-09-02T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP2-1789191105766@2026-09-12T05:31:45.766Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:31:45.766Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789192348650",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789192348650@2026-09-12T05:52:28.650Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:52:28.650Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789192348651",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789192348651@2026-09-12T05:52:28.651Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-12T05:52:28.651Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP2-1789192350512",
+   "validityDays": 7,
+   "effectiveFrom": "2026-09-02T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP2-1789192350512@2026-09-12T05:52:30.512Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:52:30.512Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP-1789192685869",
+   "validityDays": 30,
+   "effectiveFrom": "2026-09-01T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP-1789192685869@2026-09-12T05:58:05.869Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:58:05.869Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-OCT-1789192685870",
+   "validityDays": 15,
+   "effectiveFrom": "2026-10-01T00:00:00Z",
+   "effectiveTo": null,
+   "status": "ACTIVE",
+   "version": "E2E-OCT-1789192685870@2026-09-12T05:58:05.870Z",
+   "createdBy": "admin-001",
+   "createdAt": "2026-09-12T05:58:05.870Z",
+   "note": null
+  },
+  {
+   "policyId": "E2E-SEP2-1789192687813",
+   "validityDays": 7,
+   "effectiveFrom": "2026-09-02T00:00:00Z",
+   "effectiveTo": "2026-10-01T00:00:00Z",
+   "status": "ACTIVE",
+   "version": "E2E-SEP2-1789192687813@2026-09-12T05:58:07.813Z",
+   "createdBy": "user-1788862142273-2af8aa7d",
+   "createdAt": "2026-09-12T05:58:07.813Z",
+   "note": null
+  }
+ ]
+}
