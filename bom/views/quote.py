@@ -3,8 +3,10 @@ internal ``cost_breakdown`` and ``totals``, business default B-1)."""
 
 from __future__ import annotations
 
+from django.http import HttpResponse
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from drf_spectacular.types import OpenApiTypes
 from rest_framework.response import Response
 
 from accounts.authentication import StudioTokenAuthentication
@@ -12,6 +14,7 @@ from accounts.services.authz import can
 from bom.models import Template
 from bom.serializers.quote import QUOTE_STRUCTURE_TYPES, BomBillSizingRequestSerializer, BomBuildRequestSerializer, BomBuildSerializer, BomQuotePublicSerializer, BomQuoteRequestSerializer
 from bom.services import build as build_service
+from bom.services import quote_csv
 from bom.services import website_quote
 from bom.views.masters import TAGS, WRITE_ERRORS
 from core.errors import DomainError
@@ -48,14 +51,57 @@ class StaffQuoteView(BaseAPIView):
         tags=TAGS,
         description=(
             "The internal BOM calculator: the same engine and request as the public quote, with the `cost_breakdown` and `totals` (cost and margin) "
-            "included for callers holding `pricing_internal.view`; without it the body equals the public one."
+            "included for callers holding `pricing_internal.view`; without it the body equals the public one. "
+            "`mode=dispatch` returns the warehouse picking list instead: no prices at all, on the lines or the quote."
         ),
     )
     def post(self, request, *args, **kwargs):
         result = website_quote.quote(request.data, today=timezone.localdate())
-        if not can(request.user, "pricing_internal", "view"):
+        # The picking list is a different document, so it is a different response: a
+        # browser on the warehouse floor is never sent prices it must not display.
+        # Checked before the cost gate, since dispatch strips strictly more.
+        if str(request.data.get("mode") or "").lower() == "dispatch":
+            result = website_quote.dispatch_body(result)
+        elif not can(request.user, "pricing_internal", "view"):
             result = website_quote.public_body(result)
         response = Response(result)
+        response["Cache-Control"] = "no-store"
+        return response
+
+
+class QuoteCsvView(BaseAPIView):
+    """``POST bom/quote/csv/`` — the same quote as a spreadsheet.
+
+    Server-rendered rather than built in the browser, for the same reason dispatch mode
+    strips server-side: in ``dispatch`` the sheet must contain no prices, and a client
+    that assembled it from a priced response would have had the prices to begin with.
+
+    Gated on ``bom.view`` alone: the data is what ``bom/quote/`` already returns to the
+    same caller, and the per-line prices are subject to the same ``pricing_internal``
+    reasoning as that endpoint -- the lines themselves are not internal, the cost
+    breakdown is.
+    """
+
+    authentication_classes = [StudioTokenAuthentication]
+    module = "bom"
+    action_permissions = {"POST": "view"}
+
+    @extend_schema(
+        operation_id="bom_quote_csv",
+        request=BomQuoteRequestSerializer,
+        responses={(200, "text/csv"): OpenApiResponse(response=OpenApiTypes.STR, description="The BOM as CSV."), 400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer, 503: ErrorSerializer},
+        tags=TAGS,
+        description=(
+            "The BOM as a CSV attachment. `mode=quotation` (default) carries qty, unit price, amount and the line's GST rate; "
+            "`mode=dispatch` is the warehouse picking list and carries no prices at all."
+        ),
+    )
+    def post(self, request, *args, **kwargs):
+        mode = "dispatch" if str(request.data.get("mode") or "").lower() == "dispatch" else "quotation"
+        result = website_quote.quote(request.data, today=timezone.localdate())
+        body = website_quote.dispatch_body(result) if mode == "dispatch" else result
+        response = HttpResponse(quote_csv.quote_csv(body, mode=mode), content_type="text/csv; charset=utf-8")
+        response["Content-Disposition"] = f'attachment; filename="{quote_csv.filename(body, mode=mode)}"'
         response["Cache-Control"] = "no-store"
         return response
 

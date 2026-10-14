@@ -904,7 +904,7 @@ class Calculator:
         # 5 of 600 W, and one micro-inverter per panel makes that an ₹8,200 difference.
         panel_count = next((int(line["qty"]) for line in bom_lines if line["section"] == "panel"), 0)
         bom_lines += self._micro_lines(tier, panel_count, is_three_phase, bat_config, next_pos=len(bom_lines))
-        bom_lines += self._get_fixed_lines(size, tier, bat_config, is_three_phase)
+        bom_lines += self._get_fixed_lines(size, tier, bat_config, is_three_phase, panels=panel_count)
         # Under COMPOSITE the flat-roof structure is quoted as material, as the source
         # does; _calc_costs then leaves structure_base out of cost_total so it is not
         # charged twice.
@@ -1032,6 +1032,20 @@ class Calculator:
             item = self._select_item(cat, tier, slot, slot_three_phase, self._size_to_kw(slot_size))
             if not item:
                 continue
+            # Panel count comes from the module actually chosen, not the template's figure
+            # (App.jsx:1169-1174). A 3 kW system is 6 panels of 540 W but 5 of 620 W, and
+            # the template can only carry one of those. Getting this wrong is expensive
+            # twice over: the panels themselves, and anything priced per panel -- a
+            # premium build buys one micro-inverter per panel, so a spare panel is a spare
+            # ₹8,200 inverter too.
+            #
+            # Gated like every other behaviour the port adds: deriving the count is the
+            # better arithmetic, but it is still a re-pricing, and under PER_LINE this code
+            # path serves the public website. The parity pin caught this one too -- a 3 kW
+            # premium quote went from 6 panels to 5 and moved the customer's price.
+            watt = (item.specs or {}).get("watt") if (cat.is_panel and self._composite) else None
+            if watt:
+                qty = math.ceil(self._size_to_kw(slot_size) * 1000 / float(watt))
             unit_price = float(item.price)
             amount = qty * unit_price
             gst_pct = slot.gst if slot.gst is not None else cat.gst_default
@@ -1053,7 +1067,7 @@ class Calculator:
             )
         return lines
 
-    def _get_fixed_lines(self, size, tier, bat_config, is_three_phase) -> list:
+    def _get_fixed_lines(self, size, tier, bat_config, is_three_phase, *, panels: int = 0) -> list:
         lines = []
         pos_offset = 500
         ctx = self._context(size, tier, bat_config, is_three_phase)
@@ -1076,6 +1090,10 @@ class Calculator:
             if not matches(fi.condition, row_ctx):
                 continue
             qty = evaluate(fi.rule, row_ctx)
+            # MC4 connectors pair a panel to its micro-inverter, so a premium build needs
+            # one per panel rather than the template's per-string figure (App.jsx:1296).
+            if panels and tier == "premium" and self._composite and "mc4" in (fi.name or "").lower():
+                qty = panels
             if not qty:
                 continue
             price = fi.price if fi.price is not None else (fi.item.price if fi.item else None)
@@ -1131,9 +1149,19 @@ class Calculator:
         # one, since the whole quote silently loses its largest cost.
         want_dcr = self.p.get("module_dcr", "dcr") == "dcr"
         off_content = []
+        cross_tier = []
         for item in category.items:
-            if tier not in item.tiers:
+            # Tracked separately for the same reason as the content gate below: when no
+            # item in the requested tier survives the phase filter, the source falls back
+            # across tiers rather than dropping the line — its `allAvailable`
+            # (App.jsx:1137-1142) keeps the phase and content filters but not the tier.
+            #
+            # The isolator is the live example: the 1P part is base-only and the other is
+            # 3P, so a premium single-phase build has no in-tier match and would otherwise
+            # lose its isolator entirely.
+            if not item.tiers:
                 continue
+            in_tier = tier in item.tiers
             ft = slot.filter_type
             if ft == "hybrid":
                 if item.inverter_type != "hybrid":
@@ -1156,13 +1184,26 @@ class Calculator:
                 elif "3P" in item.phase:
                     continue
             if category.is_panel and (item.dcr is True) != want_dcr:
-                off_content.append(item)
+                if in_tier:
+                    off_content.append(item)
                 continue
-            available.append(item)
+            if in_tier:
+                available.append(item)
+            else:
+                cross_tier.append(item)
+        # Fallbacks in the source's order: the requested tier first, then an off-content
+        # panel, then any tier. Each step keeps the line rather than losing it.
         if not available:
             # Everything else passed but the content gate: quote the off-content panel
             # rather than dropping the line (App.jsx:1164-1167).
-            available = off_content
+            #
+            # The cross-tier step is COMPOSITE-only. The source does fall back across
+            # tiers (its `allAvailable`, App.jsx:1137-1142), but under PER_LINE this path
+            # serves the public website, where the legacy engine drops the line instead --
+            # and resurrecting it adds a part, and its price, to 728 captured quotes. The
+            # off-content fallback is not gated: it only ever *substitutes* a panel for a
+            # panel, so it cannot add a line that was not already there.
+            available = off_content or (cross_tier if self._composite else [])
         if not available:
             return None
         if category.is_inverter and any(i.kw for i in available):
@@ -1726,3 +1767,31 @@ INTERNAL_KEYS = ("cost_breakdown", "totals")
 def public_body(result: dict) -> dict:
     """The quote without ``cost_breakdown`` and ``totals``; every other key, in order, unchanged."""
     return {key: value for key, value in result.items() if key not in INTERNAL_KEYS}
+
+
+#: Per-line money keys. Stripped for the warehouse's picking list, which is a document
+#: about *what to load*, handled by people who have no reason to see what the customer paid.
+DISPATCH_LINE_KEYS = ("unit_price", "amount", "gst_pct", "gst_amt")
+
+
+def dispatch_body(result: dict) -> dict:
+    """The picking list: what to load, with every price removed.
+
+    Stripping happens here rather than in the browser. Hiding the columns client-side
+    would still send every price to a machine on the warehouse floor, where a glance at
+    the network tab -- or a screenshot of a mis-rendered page -- is a margin leak. The
+    quote and the picking list are different documents, so they are different responses.
+
+    ``pricing`` and ``available_offers`` go entirely; ``meta`` and ``string_config`` stay,
+    because the installer reads the system size and the string layout off this sheet.
+    """
+    body = {
+        key: value
+        for key, value in public_body(result).items()
+        if key not in ("pricing", "available_offers")
+    }
+    body["bom_lines"] = [
+        {key: value for key, value in line.items() if key not in DISPATCH_LINE_KEYS}
+        for line in body.get("bom_lines") or []
+    ]
+    return body
