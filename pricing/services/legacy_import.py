@@ -341,6 +341,24 @@ def _upsert_rate(result: ImportRun, rate_set: MarketRateSet, values: dict, *, sy
     lookup = {name: clean[name] for name in ("system_type", "tier", "battery_config", "dcr", "size_key", "from_size_key", "future_size_key", "variant")}
     existing = MarketRate.objects.filter(set=rate_set, **lookup).first()
     if existing is not None:
+        # A zero is "not priced", not a price. Golden-Ray-BOM version-2 ships a largely
+        # emptied list -- 3 of 59 cells carry a figure -- because its own decision C3
+        # demotes the market rate to a reference the cost engine never reads. Letting
+        # that overwrite a configured price would silently move every affected quote onto
+        # cost-plus, since the engine falls back to `grand_total` when the rate is 0.
+        # Importing a rate list can add and correct prices; it cannot delete them.
+        if not clean["customer_price_incl_gst"] and existing.customer_price_incl_gst:
+            result.violation(
+                table,
+                source_id,
+                "zero_rate_kept_existing",
+                f"{market_rates.rate_key(existing)} {existing.size_key}: source has no price; kept {existing.customer_price_incl_gst}.",
+                severity="warning",
+                kept=str(existing.customer_price_incl_gst),
+                other="0",
+            )
+            remember(system, table, source_id, existing)
+            return "skipped"
         owners = mapped_from(existing)
         if system == BACKEND and FLARIZE in owners:
             if existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:

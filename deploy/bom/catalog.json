@@ -10,9 +10,49 @@
     "elevatedStructureRate": 5000,
     "sheetStructureRate": 3000,
     "gpRatePerKg": 85,
-    "giRatePerKg": 130,
-    "structureLabor": 1500,
+    "giRatePerKg": 98.3,
+    "structureLabor": 3000,
     "structureRepairPct": 10
+  },
+  "installationMatrix": {
+    "3": {
+      "flat": 15000,
+      "sheet": 18000,
+      "elevated": 22000
+    },
+    "6": {
+      "flat": 28000,
+      "sheet": 33000,
+      "elevated": 40000
+    },
+    "8": {
+      "flat": 35000,
+      "sheet": 42000,
+      "elevated": 50000
+    },
+    "10": {
+      "flat": 42000,
+      "sheet": 50000,
+      "elevated": 60000
+    },
+    "5sp": {
+      "flat": 22000,
+      "sheet": 26000,
+      "elevated": 32000
+    },
+    "5tp": {
+      "flat": 22000,
+      "sheet": 26000,
+      "elevated": 32000
+    }
+  },
+  "transportConfig": {
+    "baseDistanceKm": 100,
+    "costPerKm": 35
+  },
+  "officeExpense": {
+    "monthlyExpense": 150000,
+    "expectedProjectsPerMonth": 10
   },
   "categories": {
     "panel": {
@@ -24,8 +64,7 @@
           "name": "Waaree Mono perc Bifacial 540W DCR",
           "brand": "Waaree",
           "tiers": [
-            "base",
-            "value"
+            "base"
           ],
           "watt": 540,
           "perWatt": 24.3,
@@ -38,7 +77,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p2",
@@ -48,8 +90,8 @@
             "value"
           ],
           "watt": 550,
-          "perWatt": 26,
-          "price": 14300,
+          "perWatt": 24.7,
+          "price": 13585,
           "dcr": true,
           "voc": 50,
           "vmp": 41.9,
@@ -58,7 +100,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p3",
@@ -69,8 +114,8 @@
             "value"
           ],
           "watt": 620,
-          "perWatt": 27,
-          "price": 16740,
+          "perWatt": 25.7,
+          "price": 15934,
           "dcr": true,
           "voc": 49.6,
           "vmp": 41.4,
@@ -79,7 +124,10 @@
           "tempCoeffVoc": -0.23,
           "tempCoeffPmax": -0.28,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p4",
@@ -99,7 +147,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p5",
@@ -119,7 +170,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p6",
@@ -139,7 +193,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p7",
@@ -160,7 +217,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p8",
@@ -171,7 +231,7 @@
           ],
           "watt": 545,
           "perWatt": 23.5,
-          "price": 12807.5,
+          "price": 12808,
           "dcr": true,
           "voc": 49.8,
           "vmp": 41.7,
@@ -180,7 +240,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p9",
@@ -201,7 +264,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p10",
@@ -221,7 +287,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p11",
@@ -241,7 +310,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p12",
@@ -252,7 +324,7 @@
           ],
           "watt": 565,
           "perWatt": 26.5,
-          "price": 14972.5,
+          "price": 14973,
           "dcr": true,
           "voc": 50.5,
           "vmp": 42.3,
@@ -261,7 +333,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p13",
@@ -281,7 +356,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p14",
@@ -301,7 +379,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p15",
@@ -312,7 +393,7 @@
           ],
           "watt": 565,
           "perWatt": 26,
-          "price": 14916,
+          "price": 14690,
           "dcr": true,
           "voc": 50.5,
           "vmp": 42.3,
@@ -321,7 +402,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p16",
@@ -341,7 +425,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p17",
@@ -362,7 +449,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p18",
@@ -382,7 +472,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p19",
@@ -402,7 +495,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p20",
@@ -422,7 +518,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p21",
@@ -433,7 +532,7 @@
           ],
           "watt": 545,
           "perWatt": 15.9,
-          "price": 8665.5,
+          "price": 8666,
           "dcr": false,
           "voc": 49.8,
           "vmp": 41.7,
@@ -442,7 +541,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p22",
@@ -453,7 +555,7 @@
           ],
           "watt": 550,
           "perWatt": 17.25,
-          "price": 9487.5,
+          "price": 9488,
           "dcr": false,
           "voc": 50,
           "vmp": 41.9,
@@ -462,7 +564,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p23",
@@ -482,7 +587,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p24",
@@ -502,7 +610,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p25",
@@ -522,7 +633,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p26",
@@ -542,7 +656,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p27",
@@ -562,7 +679,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p28",
@@ -582,7 +702,10 @@
           "tempCoeffVoc": -0.23,
           "tempCoeffPmax": -0.28,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p29",
@@ -602,7 +725,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p30",
@@ -622,7 +748,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p31",
@@ -642,7 +771,10 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p32",
@@ -662,7 +794,10 @@
           "tempCoeffVoc": -0.24,
           "tempCoeffPmax": -0.29,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "p33",
@@ -682,7 +817,10 @@
           "tempCoeffVoc": -0.26,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "NON_DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pa_0006870e2e7d",
@@ -703,7 +841,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pa_a2ea75b89b4d",
@@ -724,7 +865,10 @@
           "tempCoeffVoc": -0.28,
           "tempCoeffPmax": -0.35,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pa_9e35d4adf2a3",
@@ -732,8 +876,7 @@
           "brand": "adani",
           "tiers": [
             "value",
-            "premium",
-            "base"
+            "premium"
           ],
           "price": 15420,
           "watt": 600,
@@ -746,19 +889,39 @@
           "tempCoeffVoc": -0.25,
           "tempCoeffPmax": -0.3,
           "cells": 144,
-          "maxSysVoltage": 1500
+          "maxSysVoltage": 1500,
+          "panelType": "DCR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
-          "id": "pa_244e61c2193b",
-          "name": "New Solar Panel",
-          "brand": "",
+          "id": "pa_6a2a92fe02b0",
+          "name": "E2E Test Panel 560W",
+          "brand": "E2E",
+          "price": 12000,
           "tiers": [
+            "base",
             "value"
           ],
-          "price": 0,
-          "watt": 550,
-          "perWatt": 0,
-          "dcr": true
+          "warranty": "25 Years",
+          "watt": 560,
+          "dcr": true,
+          "panelType": "DCR",
+          "status": "ACTIVE",
+          "approvalStatus": "APPROVED",
+          "createdBy": "admin-001",
+          "createdAt": "2026-09-09T06:30:38.189Z",
+          "updatedBy": "admin-001",
+          "updatedAt": "2026-09-09T06:30:38.189Z",
+          "changeLog": [
+            {
+              "at": "2026-09-09T06:30:38.189Z",
+              "by": "admin-001",
+              "role": "ADMIN",
+              "action": "CREATED"
+            }
+          ],
+          "perWatt": 21.43
         }
       ]
     },
@@ -785,7 +948,11 @@
           "startVoltage": 80,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.25
+          "maxIsc": 16.25,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i2",
@@ -806,7 +973,11 @@
           "startVoltage": 80,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.25
+          "maxIsc": 16.25,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i3",
@@ -827,7 +998,11 @@
           "startVoltage": 80,
           "maxInputCurrent": 13.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.9
+          "maxIsc": 16.9,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i4",
@@ -848,7 +1023,11 @@
           "startVoltage": 80,
           "maxInputCurrent": 13.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.9
+          "maxIsc": 16.9,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i5",
@@ -869,7 +1048,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i6",
@@ -890,7 +1073,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i7",
@@ -911,7 +1098,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i8",
@@ -932,7 +1123,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i9",
@@ -953,7 +1148,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i10",
@@ -974,7 +1173,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i11",
@@ -995,7 +1198,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27.5
+          "maxIsc": 27.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i12",
@@ -1016,7 +1223,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27.5
+          "maxIsc": 27.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i13",
@@ -1037,7 +1248,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27.5
+          "maxIsc": 27.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i14",
@@ -1058,7 +1273,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27.5
+          "maxIsc": 27.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i15",
@@ -1079,7 +1298,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27.5
+          "maxIsc": 27.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i16",
@@ -1100,7 +1323,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i17",
@@ -1121,7 +1348,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i18",
@@ -1142,7 +1373,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i19",
@@ -1163,7 +1398,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i20",
@@ -1184,7 +1423,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 12.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 15
+          "maxIsc": 15,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i21",
@@ -1205,7 +1448,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 12.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 15
+          "maxIsc": 15,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i22",
@@ -1226,7 +1473,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 12.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 15
+          "maxIsc": 15,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i23",
@@ -1247,7 +1498,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 12.5,
           "maxStringsPerMppt": 1,
-          "maxIsc": 15
+          "maxIsc": 15,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i24",
@@ -1268,7 +1523,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18.8
+          "maxIsc": 18.8,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i25",
@@ -1289,7 +1548,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18.8
+          "maxIsc": 18.8,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i26",
@@ -1310,7 +1573,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18.8
+          "maxIsc": 18.8,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i27",
@@ -1331,7 +1598,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18.8
+          "maxIsc": 18.8,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i28",
@@ -1352,7 +1623,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18.8
+          "maxIsc": 18.8,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i29",
@@ -1373,7 +1648,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i30",
@@ -1394,7 +1673,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i31",
@@ -1415,7 +1698,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i32",
@@ -1436,7 +1723,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i33",
@@ -1457,7 +1748,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i34",
@@ -1478,7 +1773,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i35",
@@ -1500,7 +1799,11 @@
           "maxInputCurrent": 10,
           "maxStringsPerMppt": 1,
           "maxIsc": 12,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i36",
@@ -1522,7 +1825,11 @@
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
           "maxIsc": 20,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i37",
@@ -1544,7 +1851,11 @@
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
           "maxIsc": 20,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i38",
@@ -1566,7 +1877,11 @@
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
           "maxIsc": 20,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i39",
@@ -1588,7 +1903,11 @@
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
           "maxIsc": 20,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i40",
@@ -1610,7 +1929,11 @@
           "maxInputCurrent": 32,
           "maxStringsPerMppt": 4,
           "maxIsc": 40,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i41",
@@ -1632,7 +1955,11 @@
           "maxInputCurrent": 32,
           "maxStringsPerMppt": 4,
           "maxIsc": 40,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i42",
@@ -1654,7 +1981,11 @@
           "maxInputCurrent": 60,
           "maxStringsPerMppt": 8,
           "maxIsc": 75,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i43",
@@ -1676,7 +2007,11 @@
           "maxInputCurrent": 60,
           "maxStringsPerMppt": 8,
           "maxIsc": 75,
-          "optimizerBased": true
+          "optimizerBased": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i44",
@@ -1697,7 +2032,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.5
+          "maxIsc": 16.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i45",
@@ -1718,7 +2057,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.5
+          "maxIsc": 16.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i46",
@@ -1739,7 +2082,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.5
+          "maxIsc": 16.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i47",
@@ -1760,7 +2107,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16.5
+          "maxIsc": 16.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i48",
@@ -1781,7 +2132,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i49",
@@ -1802,7 +2157,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i50",
@@ -1823,7 +2182,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i51",
@@ -1844,7 +2207,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i52",
@@ -1865,7 +2232,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 15,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i53",
@@ -1886,7 +2257,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i54",
@@ -1907,7 +2282,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i55",
@@ -1928,7 +2307,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i56",
@@ -1950,7 +2333,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i57",
@@ -1972,7 +2359,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i58",
@@ -1994,7 +2385,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i59",
@@ -2016,7 +2411,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i60",
@@ -2038,7 +2437,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i61",
@@ -2060,7 +2463,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i62",
@@ -2082,7 +2489,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i63",
@@ -2104,7 +2515,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 28,
           "maxStringsPerMppt": 3,
-          "maxIsc": 35
+          "maxIsc": 35,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i64",
@@ -2126,7 +2541,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 28,
           "maxStringsPerMppt": 3,
-          "maxIsc": 35
+          "maxIsc": 35,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i65",
@@ -2148,7 +2567,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 28,
           "maxStringsPerMppt": 3,
-          "maxIsc": 35
+          "maxIsc": 35,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i66",
@@ -2169,7 +2592,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i67",
@@ -2190,7 +2617,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i68",
@@ -2211,7 +2642,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i69",
@@ -2232,7 +2667,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i70",
@@ -2253,7 +2692,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i71",
@@ -2274,7 +2717,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i72",
@@ -2295,7 +2742,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i73",
@@ -2316,7 +2767,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i74",
@@ -2337,7 +2792,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i75",
@@ -2358,7 +2817,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 1,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i76",
@@ -2379,7 +2842,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i77",
@@ -2400,7 +2867,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i78",
@@ -2421,7 +2892,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 22,
           "maxStringsPerMppt": 2,
-          "maxIsc": 27
+          "maxIsc": 27,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i79",
@@ -2442,7 +2917,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i80",
@@ -2463,7 +2942,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i81",
@@ -2484,7 +2967,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i82",
@@ -2505,7 +2992,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i83",
@@ -2526,7 +3017,11 @@
           "startVoltage": 200,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i84",
@@ -2547,7 +3042,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i85",
@@ -2568,7 +3067,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i86",
@@ -2589,7 +3092,11 @@
           "startVoltage": 250,
           "maxInputCurrent": 16,
           "maxStringsPerMppt": 2,
-          "maxIsc": 20
+          "maxIsc": 20,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i87",
@@ -2610,7 +3117,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i88",
@@ -2631,7 +3142,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 17.5
+          "maxIsc": 17.5,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i89",
@@ -2652,7 +3167,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18
+          "maxIsc": 18,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i90",
@@ -2673,7 +3192,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18
+          "maxIsc": 18,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i91",
@@ -2694,7 +3217,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18
+          "maxIsc": 18,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i92",
@@ -2715,7 +3242,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 14,
           "maxStringsPerMppt": 1,
-          "maxIsc": 18
+          "maxIsc": 18,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i93",
@@ -2736,7 +3267,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 28,
           "maxStringsPerMppt": 2,
-          "maxIsc": 35
+          "maxIsc": 35,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i94",
@@ -2757,7 +3292,11 @@
           "startVoltage": 140,
           "maxInputCurrent": 28,
           "maxStringsPerMppt": 2,
-          "maxIsc": 35
+          "maxIsc": 35,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i95",
@@ -2778,7 +3317,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i96",
@@ -2799,7 +3342,11 @@
           "startVoltage": 100,
           "maxInputCurrent": 13,
           "maxStringsPerMppt": 1,
-          "maxIsc": 16
+          "maxIsc": 16,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i97",
@@ -2821,7 +3368,11 @@
           "maxInputCurrent": 12,
           "maxStringsPerMppt": 1,
           "maxIsc": 15,
-          "isMicro": true
+          "isMicro": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "i98",
@@ -2843,7 +3394,11 @@
           "maxInputCurrent": 12.5,
           "maxStringsPerMppt": 1,
           "maxIsc": 15,
-          "isMicro": true
+          "isMicro": true,
+          "deviceType": "string_inverter",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -2859,7 +3414,9 @@
             "base"
           ],
           "phase": "1P",
-          "price": 1525
+          "price": 1525,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d2",
@@ -2869,7 +3426,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 2800
+          "price": 2800,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d3",
@@ -2879,7 +3438,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 3226
+          "price": 3226,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d4",
@@ -2890,7 +3451,9 @@
             "premium"
           ],
           "phase": "1P",
-          "price": 2030
+          "price": 2030,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d5",
@@ -2900,7 +3463,9 @@
             "premium"
           ],
           "phase": "1P",
-          "price": 2473
+          "price": 2473,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d6",
@@ -2910,7 +3475,9 @@
             "base"
           ],
           "phase": "3P",
-          "price": 1525
+          "price": 1525,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d7",
@@ -2920,7 +3487,9 @@
             "value"
           ],
           "phase": "3P",
-          "price": 3700
+          "price": 3700,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d8",
@@ -2931,7 +3500,9 @@
             "premium"
           ],
           "phase": "3P",
-          "price": 1858
+          "price": 1858,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d9",
@@ -2942,7 +3513,9 @@
             "value"
           ],
           "phase": "1P-HYB",
-          "price": 3226
+          "price": 3226,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "d10",
@@ -2953,7 +3526,9 @@
             "value"
           ],
           "phase": "3P-HYB",
-          "price": 5594
+          "price": 5594,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -2970,7 +3545,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 1600
+          "price": 1600,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a2",
@@ -2980,7 +3557,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 2282
+          "price": 2282,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a3",
@@ -2990,7 +3569,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 1858
+          "price": 1858,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a4",
@@ -3001,7 +3582,9 @@
             "value"
           ],
           "phase": "3P",
-          "price": 3700
+          "price": 3700,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a5",
@@ -3011,7 +3594,9 @@
             "premium"
           ],
           "phase": "1P",
-          "price": 6080
+          "price": 6080,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a6",
@@ -3021,7 +3606,9 @@
             "premium"
           ],
           "phase": "3P",
-          "price": 9585
+          "price": 9585,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a7",
@@ -3032,7 +3619,9 @@
             "value"
           ],
           "phase": "1P-HYB",
-          "price": 8100
+          "price": 8100,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "a8",
@@ -3043,7 +3632,9 @@
             "value"
           ],
           "phase": "3P-HYB",
-          "price": 12100
+          "price": 12100,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ac_hyb_en1p",
@@ -3054,7 +3645,9 @@
           ],
           "phase": "1P-HYB",
           "type": "hybrid",
-          "price": 3500
+          "price": 3500,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ac_hyb_en3p",
@@ -3065,7 +3658,9 @@
           ],
           "phase": "3P-HYB",
           "type": "hybrid",
-          "price": 10612
+          "price": 10612,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3081,7 +3676,9 @@
             "base"
           ],
           "phase": "1P",
-          "price": 1400
+          "price": 1400,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "m2",
@@ -3089,11 +3686,12 @@
           "brand": "Genius",
           "tiers": [
             "value",
-            "premium",
-            "base"
+            "premium"
           ],
           "phase": "1P",
-          "price": 1440.68
+          "price": 1610,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "m3",
@@ -3103,7 +3701,22 @@
             "base"
           ],
           "phase": "3P",
-          "price": 3950
+          "price": 3950,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
+        },
+        {
+          "id": "m4",
+          "name": "Genius Three Phase Energy Meter",
+          "brand": "Genius",
+          "tiers": [
+            "value",
+            "premium"
+          ],
+          "phase": "3P",
+          "price": 4650,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "m5",
@@ -3113,7 +3726,9 @@
             "value"
           ],
           "phase": "1P",
-          "price": 1398.36
+          "price": 1680,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "m6",
@@ -3123,7 +3738,9 @@
             "value"
           ],
           "phase": "3P",
-          "price": 4323
+          "price": 5000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "m7",
@@ -3134,7 +3751,9 @@
             "value"
           ],
           "phase": "3P",
-          "price": 3899
+          "price": 4000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3150,7 +3769,9 @@
             "base"
           ],
           "sqmm": 4,
-          "price": 43
+          "price": 43,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "dc2",
@@ -3160,17 +3781,21 @@
             "base"
           ],
           "sqmm": 6,
-          "price": 53
+          "price": 53,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "dc3",
-          "name": "DC-APAR 4sqmm",
+          "name": "DC-APAR 6sqmm",
           "brand": "APAR",
           "tiers": [
             "value"
           ],
-          "sqmm": 4,
-          "price": 64
+          "sqmm": 6,
+          "price": 55,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "dc4",
@@ -3181,7 +3806,9 @@
             "premium"
           ],
           "sqmm": 4,
-          "price": 58
+          "price": 60,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "dc5",
@@ -3191,7 +3818,9 @@
             "base"
           ],
           "sqmm": 4,
-          "price": 37
+          "price": 37,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "dc6",
@@ -3201,17 +3830,9 @@
             "base"
           ],
           "sqmm": 6,
-          "price": 54
-        },
-        {
-          "id": "dc_8398622e03ee",
-          "name": "DC-FINOLEX 4sqmm",
-          "brand": "FINOLEX",
-          "tiers": [
-            "base"
-          ],
           "price": 54,
-          "sqmm": 4
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3227,7 +3848,9 @@
             "base"
           ],
           "sqmm": 4,
-          "price": 58
+          "price": 58,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ac2",
@@ -3237,7 +3860,9 @@
             "value"
           ],
           "sqmm": 6,
-          "price": 65.25
+          "price": 65.25,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ac3",
@@ -3249,7 +3874,9 @@
             "premium"
           ],
           "sqmm": 4,
-          "price": 56
+          "price": 56,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ac4",
@@ -3260,17 +3887,9 @@
             "premium"
           ],
           "sqmm": 6,
-          "price": 61
-        },
-        {
-          "id": "ac_a0473dd3b8ec",
-          "name": "AC-FINOLEX 6sqmm",
-          "brand": "FINOLEX",
-          "tiers": [
-            "value"
-          ],
-          "price": 76,
-          "sqmm": 4
+          "price": 61,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3283,22 +3902,30 @@
           "name": "Honey Well Isolator 2P 40A",
           "brand": "Honey Well",
           "tiers": [
-            "base"
+            "base",
+            "value",
+            "premium"
           ],
           "phase": "1P",
-          "price": 212
+          "price": 212,
+          "engineeringStatus": "APPROVED_V1_1P_AC_ISOLATOR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "is2",
           "name": "L&T Isolator 40A 4P",
           "brand": "L&T",
           "tiers": [
+            "base",
             "value",
-            "premium",
-            "base"
+            "premium"
           ],
           "phase": "3P",
-          "price": 623
+          "price": 623,
+          "engineeringStatus": "APPROVED_V1_3P_AC_ISOLATOR",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "is_9b53be37fab1",
@@ -3307,7 +3934,12 @@
           "tiers": [
             "value"
           ],
-          "price": 0
+          "price": 0,
+          "status": "TEST",
+          "engineeringStatus": "TEST_PLACEHOLDER_DO_NOT_USE",
+          "note": "Placeholder/test record. Retained for historical reference (D11-D). Must not appear in production selection or BOM resolution.",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3322,7 +3954,9 @@
           "tiers": [
             "base"
           ],
-          "price": 260
+          "price": 260,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cb2",
@@ -3331,7 +3965,9 @@
           "tiers": [
             "base"
           ],
-          "price": 360
+          "price": 360,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cb3",
@@ -3340,40 +3976,43 @@
           "tiers": [
             "base"
           ],
-          "price": 595
+          "price": 595,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cb4",
-          "name": "CB Rod 14mm 250u 1.0m",
+          "name": "CB Rod 14mm 250u 1.2m",
           "brand": "Generic",
           "tiers": [
-            "value",
-            "base",
-            "premium"
+            "value"
           ],
-          "price": 470
+          "price": 900,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cb5",
-          "name": "CB Rod 17.2mm 250u 1.5m",
+          "name": "CB Rod 17.2mm 250u 1.2m",
           "brand": "Generic",
           "tiers": [
             "value",
-            "premium",
-            "base"
+            "premium"
           ],
-          "price": 750
+          "price": 900,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cb6",
           "name": "CB Rod 17.2mm 250u 2m",
           "brand": "Generic",
           "tiers": [
-            "premium",
-            "base",
-            "value"
+            "premium"
           ],
-          "price": 1000
+          "price": 1000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3383,13 +4022,15 @@
       "items": [
         {
           "id": "ec1",
-          "name": "16sqmm Green Cable ",
-          "brand": "kanberry ",
+          "name": "16sqmm Green Cable FLEXGUARD",
+          "brand": "FLEXGUARD",
           "tiers": [
             "base"
           ],
           "sqmm": 16,
-          "price": 26
+          "price": 21.6,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ec2",
@@ -3399,7 +4040,9 @@
             "value"
           ],
           "sqmm": 16,
-          "price": 24
+          "price": 24,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ec3",
@@ -3410,7 +4053,9 @@
             "premium"
           ],
           "sqmm": 16,
-          "price": 29
+          "price": 29,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3424,11 +4069,12 @@
           "brand": "Excel",
           "tiers": [
             "value",
-            "premium",
-            "base"
+            "premium"
           ],
           "sqmm": 8,
-          "price": 84
+          "price": 72,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "la2",
@@ -3438,7 +4084,9 @@
             "base"
           ],
           "sqmm": 8,
-          "price": 58
+          "price": 58,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3454,7 +4102,9 @@
             "base",
             "value"
           ],
-          "price": 86717
+          "price": 86717,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "bt2",
@@ -3463,7 +4113,9 @@
           "tiers": [
             "premium"
           ],
-          "price": 95000
+          "price": 95000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "bt3",
@@ -3472,7 +4124,9 @@
           "tiers": [
             "base"
           ],
-          "price": 78000
+          "price": 78000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "bt4",
@@ -3481,7 +4135,20 @@
           "tiers": [
             "base"
           ],
-          "price": 75000
+          "price": 75000,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
+        },
+        {
+          "id": "ba_3b51aef23f0b",
+          "name": "New Battery",
+          "brand": "",
+          "tiers": [
+            "value"
+          ],
+          "price": 0,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3496,7 +4163,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 8200
+          "price": 8200,
+          "deviceType": "microinverter",
+          "panelsPerDevice": 1,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "microinverter"
         },
         {
           "id": "en2",
@@ -3505,7 +4177,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 750
+          "price": 750,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "cable_per_panel"
         },
         {
           "id": "en3",
@@ -3514,7 +4191,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 12610
+          "price": 12610,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "gateway"
         },
         {
           "id": "en4",
@@ -3524,7 +4206,12 @@
             "premium"
           ],
           "price": 5150,
-          "gstOverride": 18
+          "gstOverride": 18,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "relay"
         },
         {
           "id": "en5",
@@ -3533,7 +4220,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 700
+          "price": 700,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "terminal"
         },
         {
           "id": "en6",
@@ -3542,7 +4234,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 1500
+          "price": 1500,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "ct"
         },
         {
           "id": "en7",
@@ -3552,7 +4249,12 @@
             "premium"
           ],
           "gstOverride": 18,
-          "price": 110000
+          "price": 110000,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "system_controller"
         },
         {
           "id": "en_sysctrl",
@@ -3562,7 +4264,12 @@
             "premium"
           ],
           "price": 25000,
-          "gstOverride": 5
+          "gstOverride": 5,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "system_controller_with_cable"
         },
         {
           "id": "en_flexbat",
@@ -3572,7 +4279,12 @@
             "premium"
           ],
           "price": 135000,
-          "gstOverride": 5
+          "gstOverride": 5,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "flex_battery"
         }
       ]
     },
@@ -3588,7 +4300,12 @@
             "premium"
           ],
           "modules": 4,
-          "price": 22000
+          "price": 22000,
+          "deviceType": "microinverter",
+          "panelsPerDevice": 4,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "microinverter"
         },
         {
           "id": "hm2",
@@ -3598,7 +4315,12 @@
             "premium"
           ],
           "modules": 2,
-          "price": 14000
+          "price": 14000,
+          "deviceType": "microinverter",
+          "panelsPerDevice": 2,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "microinverter"
         },
         {
           "id": "hm3",
@@ -3607,7 +4329,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 15500
+          "price": 15500,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "monitoring_zero_export"
         },
         {
           "id": "hm4",
@@ -3616,7 +4343,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 8500
+          "price": 8500,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "monitoring_basic"
         },
         {
           "id": "hm5",
@@ -3625,7 +4357,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 1000
+          "price": 1000,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "end_cap"
         },
         {
           "id": "hm6",
@@ -3634,7 +4371,12 @@
           "tiers": [
             "premium"
           ],
-          "price": 2000
+          "price": 2000,
+          "deviceType": "micro_accessory",
+          "panelsPerDevice": null,
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "ac_trunk"
         }
       ]
     },
@@ -3653,7 +4395,9 @@
           ],
           "sqmm": 4,
           "core": 4,
-          "price": 80
+          "price": 80,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar2",
@@ -3666,7 +4410,9 @@
           ],
           "sqmm": 6,
           "core": 4,
-          "price": 94
+          "price": 94,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar3",
@@ -3679,7 +4425,9 @@
           ],
           "sqmm": 10,
           "core": 4,
-          "price": 112
+          "price": 112,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar4",
@@ -3692,7 +4440,9 @@
           ],
           "sqmm": 16,
           "core": 4,
-          "price": 131
+          "price": 131,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar5",
@@ -3705,7 +4455,9 @@
           ],
           "sqmm": 25,
           "core": 4,
-          "price": 179
+          "price": 179,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar6",
@@ -3718,7 +4470,9 @@
           ],
           "sqmm": 35,
           "core": 4,
-          "price": 235
+          "price": 235,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar7",
@@ -3731,7 +4485,9 @@
           ],
           "sqmm": 50,
           "core": 4,
-          "price": 390
+          "price": 390,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar8",
@@ -3744,7 +4500,9 @@
           ],
           "sqmm": 70,
           "core": 3.5,
-          "price": 379
+          "price": 379,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar9",
@@ -3757,7 +4515,9 @@
           ],
           "sqmm": 95,
           "core": 3.5,
-          "price": 468
+          "price": 468,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar10",
@@ -3770,7 +4530,9 @@
           ],
           "sqmm": 120,
           "core": 3.5,
-          "price": 585
+          "price": 585,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar11",
@@ -3783,7 +4545,9 @@
           ],
           "sqmm": 150,
           "core": 3.5,
-          "price": 690
+          "price": 690,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar12",
@@ -3796,7 +4560,9 @@
           ],
           "sqmm": 185,
           "core": 3.5,
-          "price": 884
+          "price": 884,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar13",
@@ -3809,7 +4575,9 @@
           ],
           "sqmm": 240,
           "core": 3.5,
-          "price": 1096
+          "price": 1096,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar14",
@@ -3822,7 +4590,9 @@
           ],
           "sqmm": 300,
           "core": 3.5,
-          "price": 1331
+          "price": 1331,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ar15",
@@ -3835,7 +4605,9 @@
           ],
           "sqmm": 400,
           "core": 3.5,
-          "price": 1734
+          "price": 1734,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3851,7 +4623,9 @@
             "base",
             "value"
           ],
-          "price": 8500
+          "price": 8500,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3869,7 +4643,10 @@
             "premium"
           ],
           "price": 150,
-          "unit": "m"
+          "unit": "m",
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "cable_2core"
         },
         {
           "id": "ug_4core",
@@ -3881,7 +4658,10 @@
             "premium"
           ],
           "price": 250,
-          "unit": "m"
+          "unit": "m",
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "microAccessoryRole": "cable_4core"
         }
       ]
     },
@@ -3898,7 +4678,9 @@
             "value",
             "premium"
           ],
-          "price": 1200
+          "price": 1200,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3916,7 +4698,9 @@
             "premium"
           ],
           "price": 120,
-          "unit": "m"
+          "unit": "m",
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3933,7 +4717,9 @@
             "value",
             "premium"
           ],
-          "price": 500
+          "price": 500,
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3949,7 +4735,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3965,7 +4753,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3981,7 +4771,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -3997,7 +4789,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ss_1",
@@ -4007,7 +4801,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ss_self34",
@@ -4017,7 +4813,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "ss_selfbolt",
@@ -4027,7 +4825,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4043,7 +4843,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cl_25",
@@ -4053,7 +4855,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4069,7 +4873,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4085,7 +4891,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cp_bend",
@@ -4095,7 +4903,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cp_elbow",
@@ -4105,7 +4915,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cp_t",
@@ -4115,7 +4927,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cp_saddle",
@@ -4125,7 +4939,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "cp_gland",
@@ -4135,7 +4951,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4151,7 +4969,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "sc_end",
@@ -4161,7 +4981,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "sc_jbolt",
@@ -4171,7 +4993,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4187,7 +5011,13 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "tubeSize": "1.5x1.5",
+          "structureRole": "PRIMARY_TUBE",
+          "note": "tubeSize attribute added 2026-09-08 so the roof structure pack maps its primary tube to this catalog item (structured mapping, not name matching).",
+          "specification": "Square tube 1.5×1.5 in, 16 gauge"
         },
         {
           "id": "sm_25x15",
@@ -4197,7 +5027,13 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED",
+          "tubeSize": "2.5x1.5",
+          "structureRole": "PRIMARY_TUBE",
+          "note": "tubeSize attribute added 2026-09-08 so the roof structure pack maps its primary tube to this catalog item (structured mapping, not name matching).",
+          "specification": "Square tube 2.5×1.5 in, 16 gauge"
         },
         {
           "id": "sm_plate",
@@ -4207,7 +5043,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "sm_anchor",
@@ -4217,7 +5055,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "sm_endcap_25",
@@ -4227,7 +5067,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "sm_endcap_15",
@@ -4237,7 +5079,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4253,7 +5097,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pm_thinner",
@@ -4263,7 +5109,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pm_roller",
@@ -4273,7 +5121,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "pm_cotton",
@@ -4283,7 +5133,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     },
@@ -4299,7 +5151,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         },
         {
           "id": "wm_electrode",
@@ -4309,7 +5163,9 @@
             "base",
             "value",
             "premium"
-          ]
+          ],
+          "isPremium": false,
+          "approvalStatus": "APPROVED"
         }
       ]
     }
@@ -4531,7 +5387,8 @@
             "10": 6,
             "5sp": 3,
             "5tp": 3
-          }
+          },
+          "id": "fi_mc4_connector"
         },
         {
           "name": "Cable Tray",
@@ -4544,7 +5401,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_cable_tray"
         },
         {
           "name": "10 SWG Earthing Copper",
@@ -4557,12 +5415,13 @@
             "10": 23,
             "5sp": 23,
             "5tp": 23
-          }
+          },
+          "id": "fi_earthing_copper_10swg"
         },
         {
           "name": "SS Terminal Strip 4P",
           "gst": 18,
-          "price": 140,
+          "price": 150,
           "qty": {
             "3": 2,
             "6": 2,
@@ -4570,12 +5429,13 @@
             "10": 2,
             "5sp": 2,
             "5tp": 2
-          }
+          },
+          "id": "fi_ss_terminal_4p"
         },
         {
           "name": "Earthing Chamber 180x180mm",
           "gst": 18,
-          "price": 250,
+          "price": 270,
           "qty": {
             "3": 3,
             "6": 3,
@@ -4583,12 +5443,13 @@
             "10": 3,
             "5sp": 3,
             "5tp": 3
-          }
+          },
+          "id": "fi_earthing_chamber"
         },
         {
           "name": "Lightning Arrester 16mm 1m",
           "gst": 18,
-          "price": 517,
+          "price": 600,
           "qty": {
             "3": 1,
             "6": 1,
@@ -4596,7 +5457,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_lightning_arrester"
         },
         {
           "name": "Flexible Pipe",
@@ -4609,12 +5471,13 @@
             "10": 1.5,
             "5sp": 1.5,
             "5tp": 1.5
-          }
+          },
+          "id": "fi_flexible_pipe"
         },
         {
           "name": "Earth Pit Compound",
           "gst": 18,
-          "price": 180,
+          "price": 167,
           "qty": {
             "3": 1,
             "6": 1,
@@ -4622,7 +5485,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_earth_pit_compound"
         },
         {
           "name": "Cable Tie 300mm WR",
@@ -4635,7 +5499,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_cable_tie_300mm"
         },
         {
           "name": "SS Star Screw 1.5in",
@@ -4648,7 +5513,8 @@
             "10": 35,
             "5sp": 35,
             "5tp": 35
-          }
+          },
+          "id": "fi_ss_screw_1_5in"
         },
         {
           "name": "SS Star Screw 1in",
@@ -4661,7 +5527,8 @@
             "10": 60,
             "5sp": 65,
             "5tp": 65
-          }
+          },
+          "id": "fi_ss_screw_1in"
         },
         {
           "name": "Ring Type 4-6mm Copper Lug",
@@ -4674,7 +5541,8 @@
             "10": 40,
             "5sp": 26,
             "5tp": 26
-          }
+          },
+          "id": "fi_copper_lug_4_6mm"
         },
         {
           "name": "Insulation Tape",
@@ -4687,7 +5555,8 @@
             "10": 4,
             "5sp": 1,
             "5tp": 4
-          }
+          },
+          "id": "fi_insulation_tape"
         },
         {
           "name": "16mm Aluminium Lug",
@@ -4700,7 +5569,8 @@
             "10": 2,
             "5sp": 2,
             "5tp": 2
-          }
+          },
+          "id": "fi_alu_lug_16mm"
         },
         {
           "name": "50mm Aluminium Lug",
@@ -4713,7 +5583,8 @@
             "10": 2,
             "5sp": 2,
             "5tp": 2
-          }
+          },
+          "id": "fi_alu_lug_50mm"
         },
         {
           "name": "20mm PVC Pipe",
@@ -4726,7 +5597,8 @@
             "10": 8,
             "5sp": 5,
             "5tp": 6
-          }
+          },
+          "id": "fi_pvc_pipe_20mm"
         },
         {
           "name": "25mm PVC Pipe",
@@ -4739,7 +5611,8 @@
             "10": 10,
             "5sp": 6,
             "5tp": 8
-          }
+          },
+          "id": "fi_pvc_pipe_25mm"
         },
         {
           "name": "20mm Bend",
@@ -4752,7 +5625,8 @@
             "10": 12,
             "5sp": 10,
             "5tp": 10
-          }
+          },
+          "id": "fi_bend_20mm"
         },
         {
           "name": "25mm Bend",
@@ -4765,7 +5639,8 @@
             "10": 10,
             "5sp": 10,
             "5tp": 10
-          }
+          },
+          "id": "fi_bend_25mm"
         },
         {
           "name": "20mm Elbow",
@@ -4778,7 +5653,8 @@
             "10": 12,
             "5sp": 10,
             "5tp": 10
-          }
+          },
+          "id": "fi_elbow_20mm"
         },
         {
           "name": "25mm Elbow",
@@ -4791,7 +5667,8 @@
             "10": 12,
             "5sp": 12,
             "5tp": 12
-          }
+          },
+          "id": "fi_elbow_25mm"
         },
         {
           "name": "SS Saddle 20mm",
@@ -4804,7 +5681,8 @@
             "10": 30,
             "5sp": 30,
             "5tp": 30
-          }
+          },
+          "id": "fi_ss_saddle_20mm"
         },
         {
           "name": "25mm Saddle",
@@ -4817,7 +5695,8 @@
             "10": 50,
             "5sp": 35,
             "5tp": 35
-          }
+          },
+          "id": "fi_saddle_25mm"
         },
         {
           "name": "1P Meter Box",
@@ -4830,7 +5709,8 @@
             "10": 0,
             "5sp": 1,
             "5tp": 0
-          }
+          },
+          "id": "fi_meter_box_1p"
         },
         {
           "name": "3P Meter Box",
@@ -4843,7 +5723,8 @@
             "10": 1,
             "5sp": 0,
             "5tp": 1
-          }
+          },
+          "id": "fi_meter_box_3p"
         },
         {
           "name": "End Sleeve Green",
@@ -4856,7 +5737,8 @@
             "10": 1.5,
             "5sp": 1.5,
             "5tp": 1.5
-          }
+          },
+          "id": "fi_end_sleeve_green"
         },
         {
           "name": "6mm Wall Plug",
@@ -4869,7 +5751,8 @@
             "10": 2,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_wall_plug_6mm"
         },
         {
           "name": "LA Nylon Holder",
@@ -4882,7 +5765,8 @@
             "10": 50,
             "5sp": 30,
             "5tp": 30
-          }
+          },
+          "id": "fi_la_nylon_holder"
         },
         {
           "name": "Mid Clamp",
@@ -4895,7 +5779,8 @@
             "10": 28,
             "5sp": 14,
             "5tp": 14
-          }
+          },
+          "id": "fi_mid_clamp"
         },
         {
           "name": "End Clamp",
@@ -4908,7 +5793,8 @@
             "10": 8,
             "5sp": 8,
             "5tp": 8
-          }
+          },
+          "id": "fi_end_clamp"
         },
         {
           "name": "J Bolt",
@@ -4921,7 +5807,8 @@
             "10": 36,
             "5sp": 22,
             "5tp": 22
-          }
+          },
+          "id": "fi_j_bolt"
         },
         {
           "name": "Panel Earthing Nut & Bolt",
@@ -4934,7 +5821,8 @@
             "10": 40,
             "5sp": 25,
             "5tp": 25
-          }
+          },
+          "id": "fi_panel_earthing_bolt"
         },
         {
           "name": "PVC T 20mm",
@@ -4947,7 +5835,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_pvc_t_20mm"
         },
         {
           "name": "PVC T 25mm",
@@ -4960,7 +5849,8 @@
             "10": 1,
             "5sp": 1,
             "5tp": 1
-          }
+          },
+          "id": "fi_pvc_t_25mm"
         },
         {
           "name": "LA Base Nut & Bolt",
@@ -4973,7 +5863,8 @@
             "10": 7,
             "5sp": 7,
             "5tp": 7
-          }
+          },
+          "id": "fi_la_base_bolt"
         },
         {
           "name": "20mm Gland",
@@ -4986,7 +5877,8 @@
             "10": 14,
             "5sp": 12,
             "5tp": 12
-          }
+          },
+          "id": "fi_gland_20mm"
         }
       ]
     },
@@ -5341,7 +6233,8 @@
             "5": 3,
             "8": 6,
             "10": 10
-          }
+          },
+          "id": "fi_mc4_connector"
         },
         {
           "name": "Cable Tray",
@@ -5352,7 +6245,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_cable_tray"
         },
         {
           "name": "10 SWG Earthing Copper",
@@ -5369,7 +6263,8 @@
             "5": 15,
             "8": 15,
             "10": 15
-          }
+          },
+          "id": "fi_earthing_copper_10swg"
         },
         {
           "name": "SS Terminal Strip 4P Excel",
@@ -5380,7 +6275,8 @@
             "5": 2,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_ss_terminal_4p_excel"
         },
         {
           "name": "Earthing Chamber 180x180mm",
@@ -5397,7 +6293,8 @@
             "5": 2,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_earthing_chamber"
         },
         {
           "name": "Lightning Arrester 16mm 1m",
@@ -5408,7 +6305,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_lightning_arrester"
         },
         {
           "name": "Flexible Pipe",
@@ -5419,7 +6317,8 @@
             "5": 1.5,
             "8": 1.5,
             "10": 1.5
-          }
+          },
+          "id": "fi_flexible_pipe"
         },
         {
           "name": "Earth Pit Compound",
@@ -5430,7 +6329,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_earth_pit_compound"
         },
         {
           "name": "Cable Tie 300mm WR",
@@ -5441,7 +6341,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_cable_tie_300mm"
         },
         {
           "name": "SS Star Screw 1.5in",
@@ -5452,7 +6353,8 @@
             "5": 35,
             "8": 40,
             "10": 40
-          }
+          },
+          "id": "fi_ss_screw_1_5in"
         },
         {
           "name": "SS Star Screw 1in",
@@ -5463,7 +6365,8 @@
             "5": 60,
             "8": 80,
             "10": 80
-          }
+          },
+          "id": "fi_ss_screw_1in"
         },
         {
           "name": "Ring Type 4-6mm Copper Lug",
@@ -5474,7 +6377,8 @@
             "5": 26,
             "8": 40,
             "10": 50
-          }
+          },
+          "id": "fi_copper_lug_4_6mm"
         },
         {
           "name": "Insulation Tape",
@@ -5485,7 +6389,8 @@
             "5": 1,
             "8": 4,
             "10": 4
-          }
+          },
+          "id": "fi_insulation_tape"
         },
         {
           "name": "16mm Aluminium Lug",
@@ -5496,7 +6401,8 @@
             "5": 2,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_alu_lug_16mm"
         },
         {
           "name": "50mm Aluminium Lug",
@@ -5507,7 +6413,8 @@
             "5": 2,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_alu_lug_50mm"
         },
         {
           "name": "20mm Pipe",
@@ -5518,7 +6425,8 @@
             "5": 6,
             "8": 8,
             "10": 8
-          }
+          },
+          "id": "fi_pipe_20mm"
         },
         {
           "name": "25mm Pipe",
@@ -5529,7 +6437,8 @@
             "5": 8,
             "8": 10,
             "10": 10
-          }
+          },
+          "id": "fi_pipe_25mm"
         },
         {
           "name": "20mm Bend",
@@ -5540,7 +6449,8 @@
             "5": 12,
             "8": 10,
             "10": 12
-          }
+          },
+          "id": "fi_bend_20mm"
         },
         {
           "name": "25mm Bend",
@@ -5551,7 +6461,8 @@
             "5": 12,
             "8": 10,
             "10": 12
-          }
+          },
+          "id": "fi_bend_25mm"
         },
         {
           "name": "20mm Elbow",
@@ -5562,7 +6473,8 @@
             "5": 12,
             "8": 10,
             "10": 12
-          }
+          },
+          "id": "fi_elbow_20mm"
         },
         {
           "name": "25mm Elbow",
@@ -5573,7 +6485,8 @@
             "5": 12,
             "8": 10,
             "10": 0
-          }
+          },
+          "id": "fi_elbow_25mm"
         },
         {
           "name": "SS Saddle 20mm",
@@ -5584,7 +6497,8 @@
             "5": 36,
             "8": 48,
             "10": 48
-          }
+          },
+          "id": "fi_ss_saddle_20mm"
         },
         {
           "name": "25mm Saddle",
@@ -5595,7 +6509,8 @@
             "5": 48,
             "8": 60,
             "10": 60
-          }
+          },
+          "id": "fi_saddle_25mm"
         },
         {
           "name": "End Sleeve Green",
@@ -5606,7 +6521,8 @@
             "5": 1.5,
             "8": 1.5,
             "10": 1.5
-          }
+          },
+          "id": "fi_end_sleeve_green"
         },
         {
           "name": "6mm Plug",
@@ -5617,7 +6533,8 @@
             "5": 1,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_plug_6mm"
         },
         {
           "name": "LA Nylon Holder",
@@ -5628,7 +6545,8 @@
             "5": 30,
             "8": 30,
             "10": 30
-          }
+          },
+          "id": "fi_la_nylon_holder"
         },
         {
           "name": "Mid Clamp",
@@ -5639,7 +6557,8 @@
             "5": 14,
             "8": 24,
             "10": 32
-          }
+          },
+          "id": "fi_mid_clamp"
         },
         {
           "name": "End Clamp",
@@ -5650,7 +6569,8 @@
             "5": 8,
             "8": 8,
             "10": 8
-          }
+          },
+          "id": "fi_end_clamp"
         },
         {
           "name": "J Bolt",
@@ -5661,7 +6581,8 @@
             "5": 22,
             "8": 32,
             "10": 40
-          }
+          },
+          "id": "fi_j_bolt"
         },
         {
           "name": "Panel Earthing Nut & Bolt",
@@ -5672,7 +6593,8 @@
             "5": 30,
             "8": 40,
             "10": 40
-          }
+          },
+          "id": "fi_panel_earthing_bolt"
         },
         {
           "name": "T 20mm Ivory",
@@ -5683,7 +6605,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_t_20mm_ivory"
         },
         {
           "name": "25mm T",
@@ -5694,7 +6617,8 @@
             "5": 1,
             "8": 1,
             "10": 1
-          }
+          },
+          "id": "fi_t_25mm"
         },
         {
           "name": "LA Base Nut & Bolt",
@@ -5705,7 +6629,8 @@
             "5": 7,
             "8": 7,
             "10": 7
-          }
+          },
+          "id": "fi_la_base_bolt"
         },
         {
           "name": "20mm Gland",
@@ -5716,7 +6641,8 @@
             "5": 12,
             "8": 14,
             "10": 14
-          }
+          },
+          "id": "fi_gland_20mm"
         },
         {
           "name": "40A Change Over Switch",
@@ -5747,7 +6673,8 @@
             "5": 1,
             "8": 0,
             "10": 0
-          }
+          },
+          "id": "fi_changeover_40a"
         },
         {
           "name": "25mm Battery Cable",
@@ -5778,7 +6705,8 @@
             "5": 0,
             "8": 0,
             "10": 0
-          }
+          },
+          "id": "fi_battery_cable_25mm"
         },
         {
           "name": "25mm Copper Lug",
@@ -5809,7 +6737,8 @@
             "5": 0,
             "8": 0,
             "10": 0
-          }
+          },
+          "id": "fi_copper_lug_25mm"
         },
         {
           "name": "1 Phase Meter Box",
@@ -5840,7 +6769,8 @@
             "5": 2,
             "8": 0,
             "10": 0
-          }
+          },
+          "id": "fi_meter_box_1phase"
         },
         {
           "name": "Three Phase Meter Box",
@@ -5871,7 +6801,8 @@
             "5": 0,
             "8": 2,
             "10": 2
-          }
+          },
+          "id": "fi_meter_box_3phase"
         }
       ]
     },
@@ -6356,28 +7287,82 @@
   },
   "marketRates": {
     "ongrid_base": {
-      "3": 210000,
+      "3": 0,
       "6": 0,
       "8": 0,
       "10": 0,
-      "5sp": 335000,
-      "5tp": 310000
+      "5sp": 0,
+      "5tp": 0
     },
     "ongrid_value": {
-      "3": 230000,
+      "3": 228000,
       "6": 0,
       "8": 0,
       "10": 0,
-      "5sp": 355000,
-      "5tp": 330000
+      "5sp": 0,
+      "5tp": 0
     },
     "ongrid_premium": {
-      "3": 260000,
+      "3": 0,
       "6": 0,
       "8": 0,
       "10": 0,
-      "5sp": 425000,
-      "5tp": 370000
+      "5sp": 250000,
+      "5tp": 0
+    },
+    "hybrid_base_0": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_base_1": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_base_2": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_value_0": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_value_1": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_value_2": {
+      "3": 549901.8,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_premium_0": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_premium_1": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
+    },
+    "hybrid_premium_2": {
+      "3": 0,
+      "5": 0,
+      "8": 0,
+      "10": 0
     },
     "upgrade_3_5": {
       "rate": 0
@@ -6391,99 +7376,7 @@
     "upgrade_8_10": {
       "rate": 0
     },
-    "ongrid_base_diffBase": {
-      "3": 0,
-      "5tp": 0,
-      "5sp": 0
-    },
-    "ongrid_base_up5sp": {
-      "3": 265000
-    },
-    "ongrid_base_up5sp_diffBase": {
-      "3": 0
-    },
-    "ongrid_value_diffBase": {
-      "3": 0,
-      "5tp": 0,
-      "5sp": 0
-    },
-    "ongrid_premium_diffBase": {
-      "3": 0,
-      "5tp": 0,
-      "5sp": 0
-    },
-    "ongrid_base_up5tp": {
-      "3": 245000
-    },
-    "ongrid_base_up5tp_diffBase": {
-      "3": 0
-    },
-    "ongrid_value_up5tp": {
-      "3": 265000
-    },
-    "ongrid_value_up5tp_diffBase": {
-      "3": 0
-    },
-    "ongrid_value_up5sp": {
-      "3": 290000
-    },
-    "ongrid_value_up5sp_diffBase": {
-      "3": 0
-    },
-    "hybrid_value_0_dcr": {
-      "3": 310000,
-      "5": 394000
-    },
-    "hybrid_value_0_dcr_diffBase": {
-      "3": 0,
-      "5": 0
-    },
-    "hybrid_value_1_dcr": {
-      "3": 433000,
-      "5": 530000
-    },
-    "hybrid_value_1_dcr_diffBase": {
-      "3": 0,
-      "5": 0
-    },
-    "hybrid_value_0_ndcr": {
-      "3": 272000,
-      "5": 336419
-    },
-    "hybrid_value_0_ndcr_diffBase": {
-      "3": 0,
-      "5": 0
-    },
-    "hybrid_value_1_ndcr": {
-      "3": 392089,
-      "5": 466190
-    },
-    "hybrid_value_1_ndcr_diffBase": {
-      "3": 0,
-      "5": 0
-    },
-    "hybrid_value_0_dcr_up5": {
-      "3": 339000
-    },
-    "hybrid_value_0_dcr_up5_diffBase": {
-      "3": 0
-    },
-    "hybrid_value_1_dcr_up5": {
-      "3": 468266
-    },
-    "hybrid_value_1_dcr_up5_diffBase": {
-      "3": 0
-    },
-    "hybrid_value_0_ndcr_up5": {
-      "3": 300616
-    },
-    "hybrid_value_0_ndcr_up5_diffBase": {
-      "3": 0
-    },
-    "hybrid_value_1_ndcr_up5": {
-      "3": 430388
-    },
-    "hybrid_value_1_ndcr_up5_diffBase": {
+    "hybrid_value_2_diffBase": {
       "3": 0
     }
   },
@@ -7125,34 +8018,249 @@
   },
   "offers": [
     {
-      "id": "offer_1778395223186",
-      "name": "hari",
+      "id": "offer_1788107665827",
+      "name": "Monsoon 2026 Discount",
       "type": "flat",
-      "value": 10000,
-      "appliesTo": "ongrid",
+      "value": 5000,
+      "appliesTo": "all",
       "appliesToTier": "all",
-      "startDate": "2026-05-10",
-      "endDate": "2026-05-11",
+      "appliesToSize": "all",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "description": "",
+      "status": "ACTIVE",
       "active": true,
-      "createdAt": "2026-05-10T06:40:23.186Z"
+      "offerVersion": 1,
+      "createdAt": "2026-08-30T16:34:25.827Z",
+      "createdBy": "admin-001",
+      "changedAt": "2026-08-30T16:34:25.951Z",
+      "changedBy": "admin-001",
+      "transitions": [
+        {
+          "from": null,
+          "to": "DRAFT",
+          "changedBy": "admin-001",
+          "changedAt": "2026-08-30T16:34:25.827Z",
+          "reason": "Offer created"
+        },
+        {
+          "from": "DRAFT",
+          "to": "APPROVED",
+          "changedBy": "admin-001",
+          "changedAt": "2026-08-30T16:34:25.914Z",
+          "reason": "Approved by admin"
+        },
+        {
+          "from": "APPROVED",
+          "to": "ACTIVE",
+          "changedBy": "admin-001",
+          "changedAt": "2026-08-30T16:34:25.951Z",
+          "reason": "Activated by admin"
+        }
+      ]
     }
   ],
-  "quotationSettings": {
-    "emi": {
-      "upTo3kW": 5.75,
-      "above3kW": 7.9
+  "packageProfiles": {
+    "ongrid_base": {
+      "label": "On-Grid Base",
+      "packageKey": "ongrid_base",
+      "structureType": "GP",
+      "inverterType": "ongrid",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "GP Structure (16G Square Tube) for Base On-Grid systems"
     },
-    "offer": {
-      "enabled": true,
-      "title": "Priority 10-Day Installation",
-      "description": "Fast-tracked scheduling and execution",
-      "details": "",
-      "titleMl": "10 ദിവസത്തിനുള്ളിൽ മുൻഗണനാ ഇൻസ്റ്റലേഷൻ",
-      "descriptionMl": "വേഗത്തിലുള്ള ഷെഡ്യൂളിംഗും ഇൻസ്റ്റലേഷനും",
-      "detailsMl": "",
-      "validFrom": "",
-      "validUntil": "",
-      "imageUrl": "https://golden-ray.b-cdn.net/icons/37.png"
+    "ongrid_value": {
+      "label": "On-Grid Value",
+      "packageKey": "ongrid_value",
+      "structureType": "GI",
+      "inverterType": "ongrid",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "GI Structure (16G Galvanized Iron) for Value On-Grid systems"
+    },
+    "hybrid_base": {
+      "label": "Hybrid Base",
+      "packageKey": "hybrid_base",
+      "structureType": "GI",
+      "inverterType": "hybrid",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Hybrid Inverter Base package without battery"
+    },
+    "hybrid_value": {
+      "label": "Hybrid Value",
+      "packageKey": "hybrid_value",
+      "structureType": "GI",
+      "inverterType": "hybrid",
+      "batteryIncluded": true,
+      "batteryBrand": "LiFePO4 Generic",
+      "batteryModel": "Generic 48V",
+      "batteryCapacity": 10,
+      "batteryQuantity": 1,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Hybrid Inverter Value package with 10kWh battery | 2026-09-07: batteryQuantity aligned to locked D1 (Phase 1C) and to the four APPROVED hybrid VALUE packages (bt1 x1); project-level battery quantity 0/1/2 is set per project by PROJECT_HEAD (B.6).",
+      "batteryComponentId": "bt1"
+    },
+    "hybrid_premium": {
+      "label": "Hybrid Premium",
+      "packageKey": "hybrid_premium",
+      "structureType": "GI",
+      "inverterType": "micro",
+      "batteryIncluded": true,
+      "batteryBrand": "Enphase",
+      "batteryModel": "Enphase Flex Battery",
+      "batteryCapacity": 5,
+      "batteryQuantity": 1,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Enphase Micro-Inverter Premium package with battery"
+    },
+    "hybrid_nobat": {
+      "label": "Hybrid Without Battery",
+      "packageKey": "hybrid_nobat",
+      "structureType": "GI",
+      "inverterType": "hybrid",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Legacy: Hybrid Inverter without battery storage"
+    },
+    "hybrid_bat": {
+      "label": "Hybrid With Battery",
+      "packageKey": "hybrid_bat",
+      "structureType": "GI",
+      "inverterType": "hybrid",
+      "batteryIncluded": true,
+      "batteryBrand": "LiFePO4 Generic",
+      "batteryModel": "Generic 48V",
+      "batteryCapacity": 10,
+      "batteryQuantity": 1,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Legacy: Hybrid Inverter with integrated battery storage"
+    },
+    "premium": {
+      "label": "Premium Enphase",
+      "packageKey": "premium",
+      "structureType": "GI",
+      "inverterType": "micro",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Enphase Microinverter with optional future battery support"
+    },
+    "ongrid_premium": {
+      "label": "On-Grid Premium (Enphase Micro)",
+      "packageKey": "ongrid_premium",
+      "structureType": "GI",
+      "inverterType": "micro",
+      "batteryIncluded": false,
+      "batteryBrand": null,
+      "batteryModel": null,
+      "batteryCapacity": 0,
+      "batteryQuantity": 0,
+      "structureLaborOverride": null,
+      "repairMarginOverride": null,
+      "notes": "Distinct on-grid Premium profile (added Phase B 2026-09-05, locked 2.2). Mirrors global 'premium' at creation; Admin/Project Head may differentiate. getProfileKey() should route on-grid Premium to this key instead of the shared 'premium' fallback."
     }
+  },
+  "_legacyMarkers": {
+    "costs.transportRate": {
+      "value": 40,
+      "status": "LEGACY_NOT_APPLIED",
+      "supersededBy": "cost-config.transportation.vehicles",
+      "supersededOn": "2026-08-16",
+      "decision": "P2-M / C76",
+      "note": "Retained for historical reference and regression tests. Do NOT read as authoritative."
+    },
+    "costs.defaultDistKm": {
+      "value": 100,
+      "status": "LEGACY_NOT_APPLIED",
+      "supersededBy": "project.distanceKm (per-quotation)",
+      "note": "No default distance; each quotation carries its actual one-way distance."
+    },
+    "transportConfig.baseDistanceKm": {
+      "value": 100,
+      "status": "LEGACY_NOT_APPLIED",
+      "supersededBy": "NONE — no free-km allowance in approved model",
+      "note": "Legacy free-100-km allowance is NOT part of approved transportation model (locked 2.1)."
+    },
+    "transportConfig.costPerKm": {
+      "value": 35,
+      "status": "LEGACY_NOT_APPLIED",
+      "supersededBy": "cost-config.transportation.vehicles[].ratePerKm",
+      "note": "Per-vehicle rate is authoritative. No universal per-km rate."
+    },
+    "costs.installRate": {
+      "value": 3000,
+      "status": "LEGACY_REMOVED",
+      "supersededBy": "cost-config.installation.rates[]",
+      "decision": "C75",
+      "note": "Per-kW fallback removed. Installation is exact-match sizeKw × installationType."
+    },
+    "costs.office": {
+      "value": 5500,
+      "status": "LEGACY_NOT_APPLIED",
+      "supersededBy": "cost-config.officeExpenseAllocation",
+      "note": "Fixed 5500 rejected; computed allocation is authoritative."
+    },
+    "costs.miscellaneous": {
+      "value": 1000,
+      "status": "LEGACY_SUPERSEDED",
+      "supersededBy": "cost-config.miscellaneous.percentage",
+      "note": "Fixed 1000 superseded by 1% of DIRECT_PROJECT_COST_BEFORE_MISCELLANEOUS."
+    },
+    "costs.serviceRateYear": {
+      "value": 2000,
+      "status": "LEGACY_REJECTED",
+      "supersededBy": "cost-config.serviceAmc",
+      "decision": "C9",
+      "note": "Annual-rate formula rejected in favor of visit-based model."
+    }
+  },
+  "_phaseBSchemaExtension": {
+    "appliedAt": "2026-09-05",
+    "note": "Additive fields per Phase B: deviceType + panelsPerDevice + isPremium + approvalStatus on catalog items. Existing item.status (ACTIVE/INACTIVE) preserved unchanged. _legacyMarkers document stale transport/office/misc/service legacy fields per §14. ongrid_premium profile added per locked 2.2/R8.",
+    "locked_refs": [
+      "2.1",
+      "2.2",
+      "2.9",
+      "2.10",
+      "§14",
+      "R8"
+    ]
+  },
+  "_phaseCSchemaExtension": {
+    "appliedAt": "2026-09-05",
+    "note": "Phase C additive: microAccessoryRole on enphase, hoymiles, ug_cable items. Retires name.includes() routing in server-bom-builder.js Enphase branch (locked 2.10 / §5). deviceType still governs whether an item is per-panel-allocatable; microAccessoryRole tags accessory purpose independently.",
+    "locked_refs": [
+      "2.10",
+      "§5"
+    ]
   }
 }
