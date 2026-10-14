@@ -953,9 +953,12 @@ class Calculator:
         # being lost among the slot lines.
         bom_lines += self._extra_cable_lines(next_pos=len(bom_lines))
         totals = self._calc_totals(bom_lines)
-        # `bom_size` rather than `size`: an upgrade-ready build is installed at the future
-        # size, which is the kW the matrix should be read at.
-        cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite, size_key=bom_size)
+        # `size`, not `bom_size`: the source reads `instMatrix[size]` (App.jsx:2214), which
+        # is today's system size even on an upgrade-ready build quoted at the future one.
+        # So a 3 kW system wired for 5 kW is installed at the 3 kW price. That reads like
+        # an oversight, but it is what the tool charges, and the installation really is
+        # being done on today's array -- replicated and flagged either way.
+        cost_bd = self._calc_costs(totals["material_with_gst"], kw, structure_as_material=composite, size_key=p["size"])
         if composite:
             # Source ladder (App.jsx:1477-1488): margin on PRE-GST cost, then one GST
             # charge on cost + profit. Taxing a GST-inclusive subtotal, as PER_LINE does,
@@ -1667,10 +1670,22 @@ class Calculator:
         totals = self._calc_totals(lines)
         # Installation is charged on the ADDED capacity, and the upgrade path carries no
         # service line and no extra-km transport (App.jsx:2195-2200).
-        install = self._cost("install_rate") * (to_kw - from_kw)
-        transport = p["dist_km"] * self._cost("transport_rate")
+        composite = self._composite
+        if composite:
+            # The same three cost inputs as the standard path (App.jsx:2969-2983), with
+            # one upstream quirk kept: the matrix is read at the BASE system size, not at
+            # the added capacity, so a 3→5 kW upgrade is costed as a 3 kW install. That is
+            # what the source does; replicated and flagged rather than corrected, since
+            # fixing it here would make the platform disagree with the tool.
+            install = self._install_cost(to_kw - from_kw, p["size"], p["structure_type"])
+            extra_km = max(0, p["dist_km"] - int(self.costs["default_dist_km"]))
+            transport = extra_km * self.costs["extra_km_rate"]
+            office = self._office_cost()
+        else:
+            install = self._cost("install_rate") * (to_kw - from_kw)
+            transport = p["dist_km"] * self._cost("transport_rate")
+            office = self._cost("office")
         misc = self._cost("miscellaneous")
-        office = self._cost("office")
         cost_total = round(install + transport + misc + office)
         if self._composite:
             pre_gst = totals.pop("_material_ex_gst_exact") + cost_total
