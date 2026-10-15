@@ -116,6 +116,14 @@ services:
       <<: *app-environment
       DJANGO_SETTINGS_MODULE: flarize.settings.test
       DB_NAME: flarize_docker
+    # The source the suite imports. `..` (the default) is the live working tree, which is
+    # convenient and also the one way a long run can be silently corrupted: the mount is
+    # live, so editing a file or switching branches mid-run changes what pytest imports
+    # half-way through. `make test-frozen` points SRC_DIR at a detached git worktree
+    # instead, so the run reads an immutable snapshot and stays trustworthy while work
+    # continues in the real tree.
+    volumes:
+      - ${SRC_DIR:-..}:/app
     entrypoint: ["pytest"]
     command: ["-q"]
     restart: "no"
@@ -133,6 +141,14 @@ services:
       <<: *app-environment
       DJANGO_SETTINGS_MODULE: flarize.settings.test
       DB_NAME: flarize_docker_b
+    # The source the suite imports. `..` (the default) is the live working tree, which is
+    # convenient and also the one way a long run can be silently corrupted: the mount is
+    # live, so editing a file or switching branches mid-run changes what pytest imports
+    # half-way through. `make test-frozen` points SRC_DIR at a detached git worktree
+    # instead, so the run reads an immutable snapshot and stays trustworthy while work
+    # continues in the real tree.
+    volumes:
+      - ${SRC_DIR:-..}:/app
     entrypoint: ["pytest"]
     command: ["-q"]
     restart: "no"
