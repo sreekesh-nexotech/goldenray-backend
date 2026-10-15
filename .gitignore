@@ -7,9 +7,18 @@ var/
 # Local Redis snapshots (a dev redis-server started in the repo writes dump.rdb here) — data dumps never go to git
 *.rdb
 
+# Database dumps (legacy imports carry password hashes and customer PII) never go to git
+*.sql
+*.sql.gz
+*.dump
+*.backup
+!**/tests/**/*.sql
+
 # Environment files never go to git
 .env*
 !.env.example
+!.env.docker.example
+!.env.compose.example
 
 # Python
 __pycache__/
