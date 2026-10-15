@@ -361,18 +361,39 @@ def _upsert_rate(result: ImportRun, rate_set: MarketRateSet, values: dict, *, sy
             return "skipped"
         owners = mapped_from(existing)
         if system == BACKEND and FLARIZE in owners:
-            if existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
+            # The other half of the zero rule, and what makes it order-independent: a
+            # Flarize cell with no price does not get to outrank a real one just because
+            # it was imported first. Without this the two orders disagree on exactly the
+            # cells version-2 emptied -- backend-then-Flarize keeps ₹202,539.30 while
+            # Flarize-then-backend writes 0 and then refuses the real figure as a
+            # "Flarize win". Precedence is about which source is authoritative, not about
+            # which one ran first.
+            if not existing.customer_price_incl_gst and clean["customer_price_incl_gst"]:
                 result.violation(
                     table,
                     source_id,
-                    "d2_flarize_wins",
-                    f"{market_rates.rate_key(existing)} {existing.size_key}: kept Flarize {existing.customer_price_incl_gst}; the main backend has {clean['customer_price_incl_gst']}.",
+                    "zero_rate_kept_existing",
+                    f"{market_rates.rate_key(existing)} {existing.size_key}: catalog.json has no price; took {clean['customer_price_incl_gst']}.",
                     severity="warning",
-                    kept=str(existing.customer_price_incl_gst),
-                    other=str(clean["customer_price_incl_gst"]),
+                    kept=str(clean["customer_price_incl_gst"]),
+                    other="0",
                 )
-            remember(system, table, source_id, existing)
-            return "skipped"
+            else:
+                # Flarize is authoritative for every cell that carries a price, whether or
+                # not the figures agree -- so this is the branch that returns, and the
+                # zero case above is the one exception that falls through to the write.
+                if existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
+                    result.violation(
+                        table,
+                        source_id,
+                        "d2_flarize_wins",
+                        f"{market_rates.rate_key(existing)} {existing.size_key}: kept Flarize {existing.customer_price_incl_gst}; the main backend has {clean['customer_price_incl_gst']}.",
+                        severity="warning",
+                        kept=str(existing.customer_price_incl_gst),
+                        other=str(clean["customer_price_incl_gst"]),
+                    )
+                remember(system, table, source_id, existing)
+                return "skipped"
         if system == FLARIZE and BACKEND in owners and existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
             result.violation(
                 table,

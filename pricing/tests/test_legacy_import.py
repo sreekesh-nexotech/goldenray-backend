@@ -74,7 +74,17 @@ class TestMarketRates:
         assert rate_set.name.startswith("Imported ") and rate_set.status == "DRAFT"
         flarize = legacy_import.import_flarize_pricing(flarize_catalog_pricing())
         differences = codes(flarize, "d2_flarize_wins")
-        assert {(v["kept"], v["other"]) for v in differences if "kept" in v and v["kept"] not in ("98.3", "3000")} >= {("0.00", "202539.30"), ("228000.00", "230000.00"), ("549901.80", "0.00")}
+        kept = {(v["kept"], v["other"]) for v in differences if "kept" in v and v["kept"] not in ("98.3", "3000")}
+        # Flarize wins on a real disagreement, both directions.
+        assert kept >= {("228000.00", "230000.00"), ("549901.80", "0.00")}
+        # But a zero is "not priced", not a price: `ongrid_base[3]` is 0 in catalog.json
+        # against ₹202,539.30 from the main backend, and the price survives. Golden-Ray-BOM
+        # version-2 ships a largely emptied list (3 of 59 cells carry a figure), so letting
+        # a zero through would move nearly every quote onto cost-plus -- the engine falls
+        # back to `grand_total` whenever the rate is 0. An import may add and correct
+        # prices; it may not delete them.
+        assert ("0.00", "202539.30") not in kept
+        assert ("202539.30", "0") in {(v["kept"], v["other"]) for v in codes(flarize, "zero_rate_kept_existing") if "kept" in v}
         backend_first = cells()
         assert MarketRateSet.objects.count() == 1 and len(backend_first) == 59  # + hybrid_value_2_diffBase
         MarketRate.all_objects.all().delete()
@@ -82,7 +92,14 @@ class TestMarketRates:
         LegacyMap.objects.all().delete()
         legacy_import.import_flarize_pricing(flarize_catalog_pricing())
         reverse = legacy_import.import_bom_market_rates(goldenapp("bom_marketrate"))
-        assert len(codes(reverse, "d2_flarize_wins")) == 3
+        # Two real disagreements plus the zero, which is reported under its own code
+        # rather than as a Flarize win -- in whichever order the imports ran.
+        # One real disagreement wins for Flarize; the two emptied cells take the main
+        # backend's figure instead, because a cell with no price is not a price.
+        assert len(codes(reverse, "d2_flarize_wins")) == 1
+        assert len(codes(reverse, "zero_rate_kept_existing")) == 2
+        # The point of the zero rule being symmetric: both orders end at the same cells,
+        # which is what this test has always been for.
         assert cells() == backend_first
         again = legacy_import.import_bom_market_rates(goldenapp("bom_marketrate"))
         assert again["created"] == 0 and again["updated"] == 0

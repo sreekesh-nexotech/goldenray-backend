@@ -20,6 +20,14 @@ class BomQuoteRequestSerializer(serializers.Serializer):
     dist_km = serializers.IntegerField(required=False, default=100, min_value=0)
     structure_type = serializers.ChoiceField(choices=QUOTE_STRUCTURE_TYPES, required=False, default="flatRoof")
     subsidy_type = serializers.ChoiceField(choices=["residential", "ghs", "none"], required=False, default="none")
+    panel_type_filter = serializers.ChoiceField(
+        choices=["all", "DCR", "NON_DCR"],
+        required=False,
+        help_text=(
+            "Which module content may be offered. `all` leaves it open unless a subsidy is "
+            "claimed, which forces DCR. Supersedes `module_dcr`, which is still accepted."
+        ),
+    )
     module_dcr = serializers.ChoiceField(
         choices=["dcr", "ndcr"],
         required=False,

@@ -172,6 +172,50 @@ class TestCalculator:
             quote(_body(module_dcr="maybe"), today=TODAY)
         assert "module_dcr" in caught.value.errors
 
+    def test_panel_type_filter_is_tri_state_and_subsidy_forces_dcr(self, world):
+        """version-2's tri-state gate, and the one branch that protects real money.
+
+        `module_dcr` could only say DCR or non-DCR. version-2 added `all`, meaning "either
+        content" -- except when a subsidy is claimed, where it still forces DCR
+        (App.jsx:1781-1793), because PM Surya Ghar needs DCR modules and a quote claiming
+        it must not offer a panel that would forfeit it.
+
+        The fixture's own panel carries no PanelSpec, which the source counts as non-DCR,
+        so `all` without a subsidy may offer it while `all` with one must not.
+        """
+        from catalog.tests.factories import PanelSpecFactory
+
+        panel_category = SlotFactory._meta.model.objects.get(key="panel").category
+        existing = panel_category.components.get(name="Panel 540")
+        PanelSpecFactory(component=existing, wattage_w=540, is_dcr=True)
+
+        ndcr = ComponentFactory(category=panel_category, name="Panel 550 NDCR", status=ComponentStatus.ACTIVE)
+        for tier in ("BASE", "VALUE", "PREMIUM"):
+            ComponentTierFactory(component=ndcr, tier=tier)
+        PriceFactory(component=ndcr, amount=Decimal("13035.00"))
+        PanelSpecFactory(component=ndcr, wattage_w=550, is_dcr=False)
+
+        # Explicit content, either spelling of the request.
+        assert quote(_body(panel_type_filter="DCR"), today=TODAY)["bom_lines"][0]["name"] == "Panel 540"
+        assert quote(_body(panel_type_filter="NON_DCR"), today=TODAY)["bom_lines"][0]["name"] == "Panel 550 NDCR"
+
+        # `all` leaves the gate open, so selection falls to catalog order rather than
+        # content -- the point of the tri-state is that neither is excluded.
+        either = quote(_body(panel_type_filter="all", subsidy_type="none"), today=TODAY)
+        assert either["bom_lines"][0]["name"] in ("Panel 540", "Panel 550 NDCR")
+
+        # ...but a claimed subsidy overrides it, and the subsidy is actually paid.
+        # GHS is ₹18,000 *per kW* (3 kW here), not a flat figure; residential hits its cap.
+        for scheme, expected in (("residential", 78000), ("ghs", 54000)):
+            forced = quote(_body(panel_type_filter="all", subsidy_type=scheme), today=TODAY)
+            assert forced["bom_lines"][0]["name"] == "Panel 540", scheme
+            assert forced["pricing"]["subsidy_amt"] == expected, scheme
+
+    def test_panel_type_filter_is_validated(self, world):
+        with pytest.raises(QuoteInvalid) as caught:
+            quote(_body(panel_type_filter="DCR_ish"), today=TODAY)
+        assert "panel_type_filter" in caught.value.errors
+
     def test_margin_subsidy_structure_and_distance(self, world):
         result = quote(_body(margin_type="flat", margin_val=15000, subsidy_type="ghs", ghs_houses=3, structure_type="elevated", dist_km=175), today=TODAY)
         costs = result["cost_breakdown"]

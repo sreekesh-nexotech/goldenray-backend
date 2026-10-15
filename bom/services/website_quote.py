@@ -53,6 +53,8 @@ VALID_MARGIN = ("percent", "flat")
 VALID_STRUCTURE = ("flatRoof", "elevated", "sheetRoof")
 #: Module content. Decides which panels may be offered and whether PM Surya Ghar applies;
 #: for hybrid it also selects the price list (Flarize quotes DCR and non-DCR apart).
+#: version-2's tri-state panel gate. `module_dcr` stays accepted as the two-state spelling.
+VALID_PANEL_TYPE_FILTER = ("all", "DCR", "NON_DCR")
 VALID_MODULE_DCR = ("dcr", "ndcr")
 #: The phase of the system AFTER an upgrade. Chosen, not derived from the target size: a
 #: customer going to 5 kW may stay single-phase or move to three.
@@ -162,10 +164,6 @@ COST_KEYS = {
     "default_dist_km": "transport_base_km",
     "miscellaneous": "miscellaneous",
     "office": "office_per_project",
-    # version-2 amortises the office overhead across the month's projects instead of
-    # charging a flat figure per project (App.jsx:2220-2222).
-    "office_expense_monthly": "office_expense_monthly",
-    "expected_projects_per_month": "expected_projects_per_month",
     "gp_rate_per_kg": "gp_rate_per_kg",
     "gi_rate_per_kg": "gi_rate_per_kg",
     "structure_labor": "structure_labor",
@@ -210,6 +208,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("margin_type", "margin_type must be percent | flat"))
     if not _hashable_in(data.get("module_dcr", "dcr"), VALID_MODULE_DCR):
         messages.append(("module_dcr", "module_dcr must be dcr | ndcr"))
+    if data.get("panel_type_filter") is not None and not _hashable_in(data.get("panel_type_filter"), VALID_PANEL_TYPE_FILTER):
+        messages.append(("panel_type_filter", "panel_type_filter must be all | DCR | NON_DCR"))
     if not _hashable_in(data.get("upgrade_phase", "1P"), VALID_UPGRADE_PHASE):
         messages.append(("upgrade_phase", "upgrade_phase must be 1P | 3P"))
     if not _hashable_in(data.get("micro_brand") or "enphase", VALID_MICRO_BRAND):
@@ -287,6 +287,9 @@ def _coerce(data: dict) -> dict:
         "structure_type": data.get("structure_type", "flatRoof"),
         "subsidy_type": data.get("subsidy_type", "none"),
         "module_dcr": data.get("module_dcr", "dcr"),
+        # Absent means the caller is using the two-state `module_dcr`; see
+        # `_wanted_panel_type`.
+        "panel_type_filter": data.get("panel_type_filter"),
         "upgrade_phase": data.get("upgrade_phase", "1P"),
         "ghs_houses": max(1, ghs_houses),
         "selected_offer_id": offer_id,
@@ -448,6 +451,14 @@ def _costs() -> dict:
     costs = {name: values[key] for name, key in COST_KEYS.items()}
     costs["structure_repair_pct"] = float(Decimal(str(costs["structure_repair_pct"])) * 100)
     costs["extra_km_rate"] = values.get("transport_extra_rate_per_km", LEGACY_EXTRA_KM_RATE)
+    # Optional, like `extra_km_rate` above: version-2 amortises the office overhead across
+    # the month's projects (App.jsx:2220-2222), but a deployment that has not configured
+    # the monthly figures still prices -- `_office_cost` falls back to the flat per-project
+    # key. Listing them in COST_KEYS would make them MANDATORY and 503 every quote, which
+    # is exactly what it did: 32 tests failed on `quote_not_configured` because most
+    # fixtures set only the flat key.
+    costs["office_expense_monthly"] = values.get("office_expense_monthly")
+    costs["expected_projects_per_month"] = values.get("expected_projects_per_month")
     costs["gst_regime"], costs["gst_rate_pct"] = _gst_regime(values)
     return costs
 
@@ -1175,6 +1186,34 @@ class Calculator:
             return cls._fixed_gst(fi)
         return fi.gst or (fi.slot_category_gst if fi.slot_category_gst is not None else 18)
 
+    def _wanted_panel_type(self) -> bool | None:
+        """Which module content may be offered: ``True`` DCR, ``False`` non-DCR, ``None`` either.
+
+        version-2 turned the two-state ``moduleDcr`` into a tri-state filter and let a
+        claimed subsidy override it (App.jsx:1781-1793)::
+
+            if panelTypeFilter === 'DCR'      -> DCR only
+            if panelTypeFilter === 'NON_DCR'  -> non-DCR only
+            if subsidy is residential or ghs  -> DCR only, whatever the filter said
+            otherwise                          -> either
+
+        The subsidy branch is the one that matters commercially: PM Surya Ghar needs DCR
+        modules, so a quote claiming it must not offer a panel that would forfeit it.
+
+        ``module_dcr`` is still accepted as the deprecated two-state spelling, so the
+        public website and existing integrations keep working.
+        """
+        explicit = self.p.get("panel_type_filter")
+        if explicit == "DCR":
+            return True
+        if explicit == "NON_DCR":
+            return False
+        if explicit == "all":
+            # Subsidy forces DCR even when the filter asks for anything.
+            return True if self.p.get("subsidy_type") in ("residential", "ghs") else None
+        # No tri-state field: the legacy two-state request.
+        return self.p.get("module_dcr", "dcr") == "dcr"
+
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
         available = []
         # Module content gate (App.jsx:1132-1133). Only panels are filtered, and the
@@ -1187,7 +1226,7 @@ class Calculator:
         # of vanishing. App.jsx:1164 explains why -- "the catalog has no Non-DCR premium
         # panel, for one" -- and a dropped panel line is far worse than an off-content
         # one, since the whole quote silently loses its largest cost.
-        want_dcr = self.p.get("module_dcr", "dcr") == "dcr"
+        want_dcr = self._wanted_panel_type()
         off_content = []
         cross_tier = []
         for item in category.items:
@@ -1223,7 +1262,7 @@ class Calculator:
                         continue
                 elif "3P" in item.phase:
                     continue
-            if category.is_panel and (item.dcr is True) != want_dcr:
+            if category.is_panel and want_dcr is not None and (item.dcr is True) != want_dcr:
                 if in_tier:
                     off_content.append(item)
                 continue

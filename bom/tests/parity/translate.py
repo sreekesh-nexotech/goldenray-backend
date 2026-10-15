@@ -17,30 +17,15 @@ from __future__ import annotations
 STRUCTURE_TYPES = {"elevated": "elevated", "sheetRoof": "sheetRoof"}
 
 
-def _module_dcr(params: dict) -> str:
-    """version-2's tri-state panel filter, as the platform's two-state request field.
+def _panel_filter(params: dict) -> str:
+    """version-2's tri-state panel filter, passed straight through.
 
-    The source replaced `moduleDcr` ("dcr"|"ndcr") with `panelTypeFilter`
-    ("all"|"DCR"|"NON_DCR"), and made a claimed subsidy force DCR regardless
-    (App.jsx:1781-1793). The platform still takes the two-state field, so this maps the
-    cases that have a determinate answer:
-
-      DCR / NON_DCR        -> the matching content
-      all + subsidy        -> "dcr", because the source's gate forces it
-      all + no subsidy     -> "dcr", the platform's default
-
-    The last line is the one that is *not* equivalent: with `all` and no subsidy the
-    source offers panels of either content and takes the first that survives, while the
-    platform restricts to DCR. Those cases are expected to differ until the engine grows
-    the tri-state filter (Phase C), and this mapping keeps every other axis comparable in
-    the meantime rather than hiding them all behind one wrong default.
+    The platform now takes `panel_type_filter` itself, so the case no longer has to be
+    squeezed into the two-state `module_dcr` -- which could not express "either content
+    unless a subsidy forces DCR" and so made every `all` case compare against a
+    DCR-restricted platform BOM.
     """
-    explicit = params.get("panelTypeFilter")
-    if explicit == "DCR":
-        return "dcr"
-    if explicit == "NON_DCR":
-        return "ndcr"
-    return params.get("moduleDcr", "dcr")
+    return params.get("panelTypeFilter") or ("DCR" if params.get("moduleDcr", "dcr") == "dcr" else "NON_DCR")
 
 
 def quote_request(params: dict) -> dict:
@@ -58,7 +43,7 @@ def quote_request(params: dict) -> dict:
         ),
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
-        "module_dcr": _module_dcr(params),
+        "panel_type_filter": _panel_filter(params),
         "micro_brand": params.get("microBrand", "enphase"),
         "zero_export": params.get("zeroExport", True),
         # Subsidy reaches the BOM in version-2: `dcrFilter` forces DCR panels whenever a
@@ -112,7 +97,7 @@ def upgrade_quote_request(params: dict) -> dict:
         "subsidy_type": params.get("subsidyType", "none"),
         # Same substitution as the standard path: the corpus no longer carries
         # `moduleDcr`, so reading it would silently default every case to "dcr".
-        "module_dcr": _module_dcr(params),
+        "panel_type_filter": _panel_filter(params),
         "upgrade_phase": params.get("upgradePhase", "1P"),
         "upgrade_from_kw": float(params["upgradeFromKw"]),
         "upgrade_to_kw": float(to_kw),
@@ -138,7 +123,7 @@ def discount_request(params: dict) -> dict:
         "bat_config": "0",
         "subsidy_type": params.get("subsidyType", "none"),
         "ghs_houses": params.get("ghsHouses", 1),
-        "module_dcr": _module_dcr(params),
+        "panel_type_filter": _panel_filter(params),
     }
     if params.get("selectedOffer"):
         body["selected_offer_id"] = params["selectedOffer"]
