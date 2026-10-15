@@ -99,6 +99,11 @@ def upgrade_quote_request(params: dict) -> dict:
         # `moduleDcr`, so reading it would silently default every case to "dcr".
         "panel_type_filter": _panel_filter(params),
         "upgrade_phase": params.get("upgradePhase", "1P"),
+        # The source keys the installation matrix on the standard configurator's `size`,
+        # not on the upgrade (App.jsx:2972). Replicated as an upstream bug, so the case's
+        # own `size` has to reach the engine -- `size` above carries the target, which the
+        # slot sizing needs.
+        "base_size_key": params["size"],
         "upgrade_from_kw": float(params["upgradeFromKw"]),
         "upgrade_to_kw": float(to_kw),
         # The platform spells the hybrid-inverter section `hybrid_inv`.
@@ -128,8 +133,24 @@ def discount_request(params: dict) -> dict:
     if params.get("selectedOffer"):
         body["selected_offer_id"] = params["selectedOffer"]
     if sys_type == "upgrade":
+        # The discount cases carry no upgrade from/to -- `computeDiscountCalc` reuses
+        # whatever `upgradeBom` already held, and the capture pinned the defaults.
         body["upgrade_from_kw"] = 3.0
         body["upgrade_to_kw"] = 5.0
+        # `computeDiscountCalc` never builds a BOM: the capture passes it ONE
+        # precomputed `upgradeBom` (capture_source.mjs:492,
+        # `E.computeUpgradeBom(UPGRADE_DEFAULTS)`), reused for every discount-upgrade
+        # case. So its `basePrice` comes from UPGRADE_DEFAULTS, not from the case's own
+        # params -- which is why all three tiers report the same ₹170,883.
+        #
+        # Hence the fixture's values, not the case's: `size: "3"` keys the installation
+        # matrix (the upstream quirk, which the capture script itself documents),
+        # `upgradeTier: "value"`, `panelTypeFilter: "all"`. Reading the case's `size`
+        # ("5") would look up a key the matrix does not hold and price installation per
+        # kW against a fixture that paid ₹15,000.
+        body["base_size_key"] = "3"
+        body["tier"] = "value"
+        body["panel_type_filter"] = "all"
     return body
 
 

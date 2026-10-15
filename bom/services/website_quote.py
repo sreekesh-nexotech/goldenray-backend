@@ -32,7 +32,7 @@ from __future__ import annotations
 
 import math
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal
 
@@ -294,6 +294,11 @@ def _coerce(data: dict) -> dict:
         # Absent means the caller is using the two-state `module_dcr`; see
         # `_wanted_panel_type`.
         "panel_type_filter": data.get("panel_type_filter"),
+        # UPGRADE only: the size the installation matrix is keyed on, which upstream is
+        # the standard configurator's `size` rather than anything about the upgrade. See
+        # the matrix lookup in `_compute_upgrade`'s cost block. Absent falls back to
+        # `size`, so a caller that does not know about the quirk still gets a figure.
+        "base_size_key": data.get("base_size_key"),
         "upgrade_phase": data.get("upgrade_phase", "1P"),
         "ghs_houses": max(1, ghs_houses),
         "selected_offer_id": offer_id,
@@ -1749,6 +1754,24 @@ class Calculator:
             item = self._select_item_upgrade(cat, tier, slot, is_3p, to_kw)
             if not item:
                 continue
+            # The new panel count comes from the chosen module's wattage, not from the
+            # nominal 0.55 kW the pre-selection estimate assumes (App.jsx:2764-2769,
+            # "newPanels will be recalculated after panel selection based on wattage").
+            #
+            # 5 -> 8 kW with a 540 W panel is ceil(3000/540) = 6 panels, where
+            # `round(3/0.55)` gives 5. One panel short, and every consumable that scales
+            # off the count follows it -- which is why the whole upgrade corpus sat flat
+            # at 98 while other corpora moved: one cause, 98 cases.
+            #
+            # Same defect as the standard path's (fixed earlier, ~Rs 25,000 on a 3 kW
+            # premium build); the upgrade path keeps its own copy of the arithmetic, so it
+            # needed fixing twice. `panels` is reassigned because the consumables below --
+            # DC cable, MC4, the micro accessories -- read it.
+            watt = (item.specs or {}).get("watt") if (cat.is_panel and self._composite) else None
+            if watt and slot.rule.get("type") == "new_panels":
+                qty = max(1, math.ceil((to_kw - from_kw) * 1000 / float(watt)))
+                panels = qty
+                ctx = replace(ctx, panels=panels)
             unit_price = float(item.price)
             amount = qty * unit_price
             gst_pct = slot.gst or (cat.gst_default if cat else 18)
@@ -1826,10 +1849,24 @@ class Calculator:
             # flagged rather than corrected, since diverging would put the platform at odds
             # with the tool on every upgrade quote.
             #
-            # `from_kw`, not `p["size"]`: on the upgrade path the request's `size` is the
-            # TARGET, so reading it would look up "5" — a key the matrix does not hold
-            # (it has 5sp/5tp) — and fall through to the per-kW rate at ₹6,000.
-            install = self._install_cost(to_kw - from_kw, self._size_key_for_kw(from_kw), p["structure_type"])
+            # The matrix key is the *standard* BOM's size, not the upgrade's from or to
+            # (App.jsx:2972, `upInstMatrix[size]`). `size` there is the outer component's
+            # state, which an upgrade quote never sets -- so an upgrade is charged
+            # installation for whatever size the on-grid configurator happened to be left
+            # on. On `upg-10` (5 -> 8 kW) that is `size = "3"`, giving ₹15,000.
+            #
+            # **This is an upstream bug, replicated deliberately and flagged** -- the same
+            # class as `upgradeBom`'s stale dependency array, which omits several values
+            # its body reads. Keying off the delta or the target would be more defensible
+            # and would disagree with every quote the tool has issued.
+            #
+            # Two of my own guesses are recorded here because both looked right and both
+            # were wrong: `bom_size` charged ₹22,000 against the tool's ₹15,000, and
+            # `_size_key_for_kw(from_kw)` looks up "5" -- a key the matrix does not hold
+            # (it has 5sp/5tp) -- falling through the source's own silent
+            # `instMatrixCost || bomKw * installRate` to ₹9,000. A silent fallback is
+            # exactly what a parity corpus is for.
+            install = self._install_cost(to_kw - from_kw, p.get("base_size_key") or p["size"], p["structure_type"])
             extra_km = max(0, p["dist_km"] - int(self.costs["default_dist_km"]))
             transport = extra_km * self.costs["extra_km_rate"]
             office = self._office_cost()
