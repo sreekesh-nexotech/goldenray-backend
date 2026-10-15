@@ -54,12 +54,29 @@ shell: env
 manage: env
 	$(COMPOSE) run --rm api python manage.py $(CMD)
 
-test: env
+# The test services bind-mount the working tree (`..:/app`), so pytest imports whatever
+# is on disk *now* -- not what was there when the run started. Editing a file or switching
+# branches mid-run therefore corrupts the run silently: it keeps printing dots, slows to a
+# crawl as imports miss, and its pass/fail means nothing. Both have happened. The snapshot
+# below is not a style check: a dirty tree is the one state in which a long run cannot be
+# trusted, so the runner says so up front instead of handing back a green that is noise.
+# `make test DIRTY=1` runs anyway, for the ordinary case of testing work in progress that
+# you then leave alone until it finishes.
+.PHONY: _tree-stable
+_tree-stable:
+	@if [ -z "$(DIRTY)" ] && [ -n "$$(git status --porcelain 2>/dev/null)" ]; then \
+		echo "make: the working tree has uncommitted changes."; \
+		echo "      The test container mounts it live, so any edit while this runs invalidates the result."; \
+		echo "      Commit or stash first, or pass DIRTY=1 and then leave the tree alone until it finishes."; \
+		exit 1; \
+	fi
+
+test: env _tree-stable
 	$(COMPOSE) run --rm test $(ARGS)
 
 # A second runner on its own database, so two suites can run at once. pytest names its
 # database after DB_NAME, so `test` and `test2` never contend for `test_flarize_docker`.
-test2: env
+test2: env _tree-stable
 	$(COMPOSE) run --rm test2 $(ARGS)
 
 lint: env

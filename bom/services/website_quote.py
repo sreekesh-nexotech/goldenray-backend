@@ -436,6 +436,10 @@ class Snapshot:
     #: 3 × ₹3,000. Empty leaves the per-kW fallback in place, which is what the source
     #: does when the matrix has no cell (`instMatrixCost || bomKw * installRate`).
     installation_matrix: dict[tuple[str, str], float] = field(default_factory=dict)
+    #: ``{profile_key: battery_quantity}``. version-2 derives the battery band from the
+    #: package profile instead of taking it from the request, so the band is a property of
+    #: the package being sold rather than something a caller can ask for.
+    battery_bands: dict[str, int] = field(default_factory=dict)
     #: Categories reachable by slug rather than through a slot -- the parts an upgrade to
     #: three phase needs (:data:`PHASE_CHANGE_CATEGORIES`). Empty for the standard path.
     categories_by_slug: dict[str, CategoryView] = field(default_factory=dict)
@@ -644,6 +648,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
         market_rates=_market_rates(sys_type),
         offers=_offers(),
         installation_matrix=_installation_matrix(),
+        battery_bands=_battery_bands(),
         categories_by_slug={category.slug: categories[category.pk] for category in extra},
     )
 
@@ -652,6 +657,19 @@ def _plain(number: Decimal | None):
     if number is None:
         return 0
     return int(number) if number == number.to_integral_value() else float(number)
+
+
+def _battery_bands() -> dict[str, int]:
+    """Each package profile's default battery quantity, keyed by profile key.
+
+    version-2 made the battery band authoritative in the profile (App.jsx:1674-1690,
+    `resolveBattery`): the package decides how many batteries it carries, so a hybrid
+    value package is a one-battery package by definition rather than because a caller
+    said so.
+    """
+    from bom.models.profiles import PackageProfile
+
+    return {row.key: int(row.battery_quantity) for row in PackageProfile.objects.filter(deleted_at__isnull=True)}
 
 
 def _installation_matrix() -> dict[tuple[str, str], float]:
@@ -932,7 +950,7 @@ class Calculator:
         p = self.p
         size = p["size"]
         tier = p["tier"]
-        bat_config = p["bat_config"]
+        bat_config = self._battery_band(p["sys_type"], tier)
         three_phase_sizes = self.s.three_phase_sizes or []
         # Future-upgrade: the panels go in at `size` while the inverter and the chosen
         # balance-of-system are built for `future_size`, so panels can be added later
@@ -1213,6 +1231,45 @@ class Calculator:
             return True if self.p.get("subsidy_type") in ("residential", "ghs") else None
         # No tri-state field: the legacy two-state request.
         return self.p.get("module_dcr", "dcr") == "dcr"
+
+    def _battery_band(self, sys_type: str, tier: str) -> str:
+        """How many batteries this package carries: ``"0"``, ``"1"`` or ``"2"``.
+
+        version-2 stopped taking the band from the request and derived it from the package
+        profile (App.jsx:1674-1690). `resolveBattery` is 378 lines, but the quantity it
+        returns is one line::
+
+            const quantity = sysType === 'hybrid' ? effectiveDeclaredQty : 0;
+
+        `effectiveDeclaredQty` is the profile's own `batteryQuantity` unless a Project Head
+        override is supplied, and the source's comment records that the V1 UI never sets
+        one -- so the profile is the answer. The rest of that module is identity,
+        protection topology and validation, which the platform already models in
+        `engines/battery_compat.py` and `BatterySpec`.
+
+        Why this matters commercially: it is what stops a hybrid *value* quote shipping
+        battery cabling and a change-over switch with no battery (the source's defect D1).
+        A band that is a property of the package cannot disagree with the package.
+
+        Non-hybrid is always ``"0"``: an on-grid system carries no battery whatever a
+        caller asks for. Where no profile is seeded the request's `bat_config` still
+        applies, so a deployment without `packageProfiles` keeps quoting rather than
+        silently losing its batteries.
+
+        COMPOSITE only, like every other behaviour this port adds. The profiles are
+        seeded, and `hybrid_value` and `hybrid_premium` both declare a band of 1 -- so
+        deriving under `PER_LINE` would hand a battery to a public-website caller that
+        asked for `bat_config=0` and move the price it is quoted. "More correct" and "safe
+        to change silently on a live website" are different claims; this is the fifth time
+        that distinction has mattered.
+        """
+        requested = str(self.p.get("bat_config", "0"))
+        if not self._composite:
+            return requested
+        if sys_type != "hybrid":
+            return "0"
+        band = self.s.battery_bands.get(f"hybrid_{tier}")
+        return requested if band is None else str(band)
 
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
         available = []
