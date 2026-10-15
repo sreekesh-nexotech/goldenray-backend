@@ -454,6 +454,8 @@ class Snapshot:
     #: package profile instead of taking it from the request, so the band is a property of
     #: the package being sold rather than something a caller can ask for.
     battery_bands: dict[str, int] = field(default_factory=dict)
+    #: ``{profile_key: "GP" | "GI"}`` -- the structure grade, which sets the tube rate.
+    structure_grades: dict[str, str] = field(default_factory=dict)
     #: Categories reachable by slug rather than through a slot -- the parts an upgrade to
     #: three phase needs (:data:`PHASE_CHANGE_CATEGORIES`). Empty for the standard path.
     categories_by_slug: dict[str, CategoryView] = field(default_factory=dict)
@@ -686,6 +688,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
         offers=_offers(),
         installation_matrix=_installation_matrix(),
         battery_bands=_battery_bands(),
+        structure_grades=_structure_grades(),
         categories_by_slug={category.slug: categories[category.pk] for category in extra},
     )
 
@@ -694,6 +697,23 @@ def _plain(number: Decimal | None):
     if number is None:
         return 0
     return int(number) if number == number.to_integral_value() else float(number)
+
+
+def _profile_key(sys_type: str, tier: str) -> str:
+    """The package-profile key for a configuration (``hybrid_value``, ``ongrid_base`` …).
+
+    Mirrors the source's `getProfileKey` (App.jsx:282-288) and
+    `engines.bom_builder.get_profile_key`. Written once here because both the battery band
+    and the structure grade are looked up by it, and two inline copies of the same
+    key-building is how they drift apart.
+
+    Note `ongrid_premium` rather than the source's bare `premium`: the platform's
+    `engines.bom_builder` already made that choice deliberately, and both keys exist in the
+    seeded data carrying the same values, so the two agree in practice.
+    """
+    if sys_type == "hybrid":
+        return f"hybrid_{tier}"
+    return f"ongrid_{tier}"
 
 
 def _battery_bands() -> dict[str, int]:
@@ -707,6 +727,19 @@ def _battery_bands() -> dict[str, int]:
     from bom.models.profiles import PackageProfile
 
     return {row.key: int(row.battery_quantity) for row in PackageProfile.objects.filter(deleted_at__isnull=True)}
+
+
+def _structure_grades() -> dict[str, str]:
+    """Each package profile's structure material, ``GP`` or ``GI``.
+
+    The grade decides the tube rate, and version-2 reads it from the profile
+    (App.jsx:2101-2102, `getProfileStructure`) rather than inferring it from the tier.
+    Only `ongrid_base` is GP; every other package -- including **hybrid base** -- is GI,
+    which is the case a `tier == "base"` rule gets wrong.
+    """
+    from bom.models.profiles import PackageProfile
+
+    return {row.key: row.structure_material for row in PackageProfile.objects.filter(deleted_at__isnull=True)}
 
 
 def _installation_matrix() -> dict[tuple[str, str], float]:
@@ -1354,8 +1387,25 @@ class Calculator:
             return requested
         if sys_type != "hybrid":
             return "0"
-        band = self.s.battery_bands.get(f"hybrid_{tier}")
+        band = self.s.battery_bands.get(_profile_key(sys_type, tier))
         return requested if band is None else str(band)
+
+    def _tube_rate(self) -> float:
+        """The structure tube rate, from the package profile's grade.
+
+        version-2 reads the grade off the profile (App.jsx:2101-2102,
+        `getProfileStructure`), not from the tier. The two agree everywhere except
+        **hybrid base**, which is a GI package: inferring from the tier prices its tubes
+        at the GP rate (₹85/kg against ₹98.3), understating a 3 kW hybrid base quote by
+        about ₹1,433.
+
+        Falls back to the tier rule where no profile is seeded, so a deployment without
+        `packageProfiles` keeps the behaviour it has today rather than silently repricing.
+        """
+        grade = self.s.structure_grades.get(_profile_key(self.p["sys_type"], self.p["tier"]))
+        if grade is None:
+            grade = "GP" if self.p["tier"] == "base" else "GI"
+        return self._cost("gp_rate_per_kg") if grade == "GP" else self._cost("gi_rate_per_kg")
 
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
         available = []
@@ -1437,7 +1487,7 @@ class Calculator:
         items = self.s.structures.get(STRUCTURE_SLUGS.get(source_slug, source_slug))
         if items is None:
             return {"total": 0, "lines": []}
-        tube_rate = self._cost("gp_rate_per_kg") if self.p["tier"] == "base" else self._cost("gi_rate_per_kg")
+        tube_rate = self._tube_rate()
         total = 0
         ctx = QtyContext(kw=kw)
         for item in items:
@@ -1459,7 +1509,7 @@ class Calculator:
         reads, while :meth:`_calc_totals` ignores per-line GST in that regime anyway.
         """
         items = self.s.structures.get(STRUCTURE_SLUGS["flatRoof"]) or []
-        tube_rate = self._cost("gp_rate_per_kg") if self.p["tier"] == "base" else self._cost("gi_rate_per_kg")
+        tube_rate = self._tube_rate()
         ctx = QtyContext(kw=kw)
         lines = []
         for item in items:
