@@ -1787,6 +1787,16 @@ class Calculator:
         sections = p.get("upgrade_sections", DEFAULT_SECTIONS)
         panels = new_panels(from_kw, to_kw)
         is_hyb_upgrade = sections.get("hybrid_inv", False)
+        #: Premium micro-inverter upgrade: per-panel micros instead of a string inverter.
+        #: A hybrid upgrade is excluded -- it keeps its hybrid inverter (App.jsx:2660).
+        #:
+        #: COMPOSITE only. The legacy engine quotes the string inverter AND knows nothing
+        #: of micros, so dropping the inverter under PER_LINE removes a ₹39,000 line from
+        #: live legacy quotes. `test_the_exempt_upgrade_cases_differ_only_in_understood_ways`
+        #: caught exactly that -- it asserts the upgrade path only ever *adds* parts, and
+        #: `SolarEdge SE5K` had gone missing. Fifth time this gate has stopped a public
+        #: re-pricing; the rule holds even when the new behaviour is plainly more correct.
+        is_upg_premium_micro = tier == "premium" and not is_hyb_upgrade and self._composite
         # The finished system's phase is the sales person's choice, not a function of its
         # size. The one override: hybrid inverters below 5 kW exist only as single-phase
         # (3P starts at 8 kW), so a 3P pick there is forced back (App.jsx:1837).
@@ -1802,13 +1812,28 @@ class Calculator:
             effective_section = ("hybrid_inv" if is_hyb_upgrade else "inverter") if cat_slug == "inverter" else section
             if not sections.get(effective_section, False):
                 continue
+            # A premium upgrade replaces the string inverter with one micro per panel, so
+            # the inverter and its DCDB are not bought at all (App.jsx:2669). Quoting
+            # either alongside the micros charges for hardware the design removes --
+            # ₹39,000 of SolarEdge and ₹1,858 of DCDB on this fixture.
+            if is_upg_premium_micro and cat_slug in ("inverter", "dcdb"):
+                continue
             qty = evaluate(slot.rule, ctx)
             # A three-phase upgrade runs more AC cable than a single-phase one -- four
             # conductors over the same route -- so the template's figure is replaced
             # rather than scaled (App.jsx:1910-1916). 1P keeps the template's 20 m, and
             # a hybrid keeps its own 30 m.
-            if cat_slug == "ac_cable" and is_3p and not is_hyb_upgrade:
-                qty = 40
+            #
+            # Micro-inverters inverter at the panel, so the cable split reverses: the AC
+            # run carries the whole array (60 m, or 90 m on three phase) while DC is only
+            # the short panel-to-micro tails, about 2 m each (App.jsx:2680-2692).
+            if cat_slug == "ac_cable":
+                if is_upg_premium_micro:
+                    qty = 90 if is_3p else 60
+                elif is_3p and not is_hyb_upgrade:
+                    qty = 40
+            elif cat_slug == "dc_cable" and is_upg_premium_micro:
+                qty = max(10, math.ceil(panels * 2))
             if not qty:
                 continue
             item = self._select_item_upgrade(cat, tier, slot, is_3p, to_kw)
@@ -1852,6 +1877,12 @@ class Calculator:
                 }
             )
             pos += 1
+        # Premium upgrades carry micro-inverter accessories too, but a deliberately
+        # narrower set than a new premium system: only the per-panel parts plus the
+        # terminal. The source says why -- "Envoy & Q Relay already installed in existing
+        # system" (App.jsx:2817) -- so billing them again would charge the customer twice
+        # for hardware they already own.
+        pos = self._add_upgrade_micro_lines(lines, tier, panels, is_3p, pos)
         if is_3p:
             pos = self._add_phase_change_lines(lines, tier, pos)
         for fi in self.s.fixed_items:
@@ -1874,6 +1905,12 @@ class Calculator:
             if not matches(fi.condition, ctx):
                 continue
             qty = evaluate(fi.rule, ctx)
+            # MC4 connectors pair each panel to its own micro-inverter on a premium
+            # upgrade, so they follow the new panel count rather than the template's
+            # per-string figure (App.jsx:2923-2926). Name-matched because that is how the
+            # source finds them, and a fixed item carries no category of its own.
+            if is_upg_premium_micro and panels and "mc4" in (fi.name or "").lower():
+                qty = panels
             if not qty:
                 continue
             unit_price = float(fi.price if fi.price is not None else item.price)
@@ -1951,7 +1988,17 @@ class Calculator:
             totals = {**totals, "pre_gst_subtotal": None, "gst_on_sale": None}
         market_rate = self._lookup_upgrade_market_rate(from_kw, to_kw)
         customer_price = market_rate if market_rate > 0 else grand_total
-        subsidy = self._calc_subsidy(to_kw)
+        # The subsidy follows the capacity ADDED, not the finished system's size
+        # (App.jsx:3172, `kw = sysType === 'upgrade' ? (toKw - fromKw) : size`). A 3 -> 5
+        # kW upgrade earns the 2 kW figure of ₹60,000, not the ₹78,000 cap the full 5 kW
+        # would reach -- PM Surya Ghar pays for new capacity, and the first 3 kW was
+        # already subsidised when it was installed.
+        # COMPOSITE only, like every other behaviour the port adds. The direction matters:
+        # this *reduces* a customer's subsidy (₹60,000 instead of ₹78,000 on a 3 -> 5 kW
+        # upgrade), so applying it to legacy quotes would tell someone their subsidy had
+        # shrunk. More correct is still a re-pricing.
+        subsidy_kw = max(0.0, to_kw - from_kw) if self._composite else to_kw
+        subsidy = self._calc_subsidy(subsidy_kw)
         discount_info = self._calc_discount(customer_price)
         final_price = max(0, discount_info["discount_base"] - discount_info["discount_amt"])
         price_after_subsidy = max(0, final_price - subsidy)
@@ -1978,7 +2025,7 @@ class Calculator:
                 "discount_label": discount_info["discount_label"],
                 "final_price": final_price,
                 "subsidy_amt": subsidy,
-                "subsidy_label": self._subsidy_label(to_kw),
+                "subsidy_label": self._subsidy_label(subsidy_kw),
                 "price_after_subsidy": price_after_subsidy,
             },
             # The phase actually used, not one inferred from the size -- what the quote
@@ -1986,6 +2033,57 @@ class Calculator:
             "meta": {"system_type": "upgrade", "size": f"{from_kw}→{to_kw}", "tier": tier, "bat_config": "0", "is_three_phase": is_3p, "new_panels": panels},
             "available_offers": self._applicable_offers(),
         }
+
+    def _add_upgrade_micro_lines(self, lines: list, tier: str, panels: int, is_3p: bool, pos: int) -> int:
+        """Enphase parts a premium upgrade adds (App.jsx:2791-2824).
+
+        Only the per-panel items and the terminal, never the Envoy or the Q Relay: those
+        are single-system controllers already installed, so the upgrade adds micros and
+        cable for the *new* panels and one more terminal. The standard path's
+        `_micro_lines` emits the full set, which is the difference between extending a
+        system and building one.
+
+        Three-phase takes three terminals and four CTs, as on the standard path.
+        """
+        if tier != "premium" or not self._composite:
+            return pos
+        category = self.s.categories_by_slug.get("enphase")
+        if category is None:
+            return pos
+        wanted = (
+            (ENPHASE_SKUS["micro"], panels),
+            (ENPHASE_SKUS["cable"], panels),
+            (ENPHASE_SKUS["terminal"], 3 if is_3p else 1),
+            (ENPHASE_SKUS["ct"], 4 if is_3p else 0),
+        )
+        for sku, qty in wanted:
+            if not qty:
+                continue
+            item = next((i for i in category.items if i.sku == sku), None)
+            if item is None:
+                continue
+            unit_price = float(item.price)
+            amount = qty * unit_price
+            # Per-item GST where the part carries an override, as everywhere else: the Q
+            # Relay and System Controller are 18% against the category's 5%.
+            gst_pct = item.gst_override if item.gst_override is not None else category.gst_default
+            lines.append(
+                {
+                    "pos": pos,
+                    "name": item.name,
+                    "brand": item.brand,
+                    "qty": qty,
+                    "unit": "nos",
+                    "unit_price": unit_price,
+                    "amount": amount,
+                    "gst_pct": gst_pct,
+                    "gst_amt": round(amount * gst_pct / 100),
+                    "section": "inverter",
+                    "is_variable": False,
+                }
+            )
+            pos += 1
+        return pos
 
     def _add_phase_change_lines(self, lines: list, tier: str, pos: int) -> int:
         """Parts a single-to-three-phase upgrade needs beyond the template (App.jsx:2051-2080).
