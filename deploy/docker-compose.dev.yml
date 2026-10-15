@@ -1,0 +1,143 @@
+# Flarize Platform — local development and test stack. NOT the staging/prod topology (that is deploy/docker-compose.yml).
+#
+#   cp .env.compose.example .env && cp .env.docker.example .env.docker   # once (make does it for you)
+#   make up                                     # build, migrate + seed (setup), then api/worker/beat on :8000
+#   make test                                   # full pytest suite inside the stack (flarize.settings.test)
+#   make test ARGS="catalog -q -x"              # any pytest args
+#
+# Plain `docker compose ps|logs|exec|up` works from the repository root: the root .env sets COMPOSE_FILE and the
+# compose-only knobs (UID/GID, bind address, ports). Container settings and DB credentials live in .env.docker.
+#
+# The repository is bind-mounted at /app: runserver reloads on save; restart worker/beat after changing task code.
+# Dev JWT/Fernet keys and local media are generated into var/ (git-ignored). Postgres is published on 5433 and Redis
+# on 6380 by default so they never clash with services already running on the host.
+#
+# SECURITY: every port is bound to 127.0.0.1 (PUBLISH_ADDR). Docker's port publishing bypasses host firewalls (ufw), and
+# the dev credentials are public defaults: an exposed Postgres here was found and taken over by a botnet within an hour.
+# Reach the stack from another machine through an SSH tunnel (ssh -L 8000:127.0.0.1:8000 host), never 0.0.0.0.
+
+name: flarize-dev
+
+x-app: &app
+  build:
+    context: ..
+    dockerfile: deploy/Dockerfile.dev
+    args:
+      WITH_CHROMIUM: ${WITH_CHROMIUM:-0}
+  image: flarize-backend-dev:latest
+  user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+  init: true
+  # App settings and DB credentials come only from .env.docker (required: no silent fallback to default credentials).
+  env_file:
+    - path: ../.env.docker
+      required: true
+  # Wiring to the containers below; everything else (DB credentials, DEBUG, backends, flags) comes from .env.docker.
+  environment: &app-environment
+    DJANGO_SETTINGS_MODULE: flarize.settings.dev
+    DB_HOST: db
+    DB_PORT: "5432"
+    REDIS_URL: redis://redis:6379/1
+    CELERY_BROKER_URL: redis://redis:6379/0
+    CELERY_RESULT_BACKEND: redis://redis:6379/2
+  volumes:
+    - ..:/app
+  depends_on: &app-depends
+    db: { condition: service_healthy }
+    redis: { condition: service_healthy }
+
+services:
+  db:
+    image: postgres:16-alpine
+    # Same DB_NAME/DB_USER/DB_PASSWORD as the app, read from .env.docker and mapped to the image's POSTGRES_* names.
+    env_file:
+      - path: ../.env.docker
+        required: true
+    entrypoint: ["sh", "-c", "export POSTGRES_DB=\"$$DB_NAME\" POSTGRES_USER=\"$$DB_USER\" POSTGRES_PASSWORD=\"$$DB_PASSWORD\"; exec docker-entrypoint.sh postgres"]
+    ports: ["${PUBLISH_ADDR:-127.0.0.1}:${DB_PUBLISH_PORT:-5433}:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${DB_USER} -d $${DB_NAME}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports: ["${PUBLISH_ADDR:-127.0.0.1}:${REDIS_PUBLISH_PORT:-6380}:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # One-off: migrate, partitions, seed pages + roles (and DEV_ADMIN_EMAIL if set). Everything else waits for it.
+  setup:
+    <<: *app
+    command: ["bash", "deploy/scripts/dev-setup.sh"]
+    restart: "no"
+
+  api:
+    <<: *app
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    ports: ["${PUBLISH_ADDR:-127.0.0.1}:${API_PUBLISH_PORT:-8000}:8000"]
+    depends_on:
+      <<: *app-depends
+      setup: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4).status == 200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  # One worker consumes every queue locally (prod splits documents onto its own Chromium image).
+  worker:
+    <<: *app
+    command: ["celery", "-A", "flarize", "worker", "-Q", "default,ingest,documents", "-c", "2", "-n", "dev@%h", "--loglevel", "INFO"]
+    depends_on:
+      <<: *app-depends
+      setup: { condition: service_completed_successfully }
+
+  beat:
+    <<: *app
+    command: ["celery", "-A", "flarize", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler", "--loglevel", "INFO", "--pidfile="]
+    depends_on:
+      <<: *app-depends
+      setup: { condition: service_completed_successfully }
+
+  # `make test` / `docker compose … run --rm test [pytest args]`. Uses flarize.settings.test: LocMem cache, eager Celery,
+  # its own test_<DB_NAME> database on the same Postgres (created and dropped by pytest-django).
+  test:
+    <<: *app
+    profiles: ["test"]
+    environment:
+      <<: *app-environment
+      DJANGO_SETTINGS_MODULE: flarize.settings.test
+      DB_NAME: flarize_docker
+    entrypoint: ["pytest"]
+    command: ["-q"]
+    restart: "no"
+    depends_on:
+      db: { condition: service_healthy }
+
+  # A second, independent test runner. pytest derives its database name from DB_NAME
+  # (`test_<DB_NAME>`), so giving this one its own name lets two suites run at the same
+  # time instead of colliding on `test_flarize_docker` — which is most of the wall-clock
+  # cost of this work, since a parity run and a regression run cannot overlap otherwise.
+  test2:
+    <<: *app
+    profiles: ["test"]
+    environment:
+      <<: *app-environment
+      DJANGO_SETTINGS_MODULE: flarize.settings.test
+      DB_NAME: flarize_docker_b
+    entrypoint: ["pytest"]
+    command: ["-q"]
+    restart: "no"
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  pgdata:
