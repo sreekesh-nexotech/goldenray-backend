@@ -919,7 +919,14 @@ class Calculator:
             add("enphase", ENPHASE_SKUS["ct"], 4 if is_three_phase else 0)
             if is_hybrid:
                 add("enphase", ENPHASE_SKUS["controller"], 1)
-                add("enphase", ENPHASE_SKUS["battery"], int(bat_config) if str(bat_config).isdigit() else 0)
+                # The battery is NOT emitted here. version-2's defect D2: "a battery is a
+                # battery, not an `enphase` accessory" (App.jsx:1968-1975). The same
+                # physical product is in the catalog twice -- `battery.bt2` at ₹95,000 and
+                # `enphase.en_flexbat` at ₹135,000 -- and the canonical record wins, so the
+                # spec table, procurement BOM and cost engine all see a battery. Quoting
+                # the alias overcharged every hybrid premium build by ₹40,000 a unit.
+                # The duplicate catalog row is kept for traceability upstream; nothing here
+                # reads it any more.
                 # Four cores on three phase, two on single.
                 add("ug_cable", UG_CABLE_SKUS["3P" if is_three_phase else "1P"], UG_CABLE_METRES)
         else:
@@ -1185,6 +1192,26 @@ class Calculator:
             slot_size = size if (cat.is_panel or cat.slug in downsized or not future) else future
             slot_three_phase = panel_is_three_phase if (cat.slug in downsized and future) else is_three_phase
             qty = evaluate(slot.rule, self._context(slot_size, tier, bat_config, slot_three_phase))
+            # The battery and its protection are decided by the package profile, never by
+            # the template's table (App.jsx:1748-1753). Two defects this closes:
+            #
+            #   D1: battery accessories shipping with no battery -- hybrid *value* quoted
+            #       cabling and a change-over switch for a battery the table said was 0;
+            #   D2: premium emitting its battery outside the `battery` category.
+            #
+            # `premiumBatQty` in the template is all zeros, which is why the legacy design
+            # needed the enphase accessory line at all. The override makes the slot the
+            # single source, so that line goes away (see `_micro_lines`).
+            if self._composite and cat.slug == "battery":
+                qty = int(bat_config) if str(bat_config).isdigit() else 0
+            elif self._composite and cat.slug == "mccb_box":
+                # Enphase protection is INTEGRATED -- the System Controller provides it,
+                # so a premium hybrid needs no MCCB box. Any other battery does.
+                qty = 0 if tier == "premium" else qty
+            # After the overrides, not before: the source checks `qty === 0` only once the
+            # battery slot has been given its profile quantity (App.jsx:1753-1755). Checking
+            # first skips the slot at the template's 0 and the override never runs, which is
+            # how the canonical battery line went missing on the first attempt.
             if not qty:
                 continue
             # A 5 kW single-phase build takes the 2/2 DCDB -- the three-phase-tagged part --
