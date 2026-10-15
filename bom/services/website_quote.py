@@ -1642,6 +1642,29 @@ class Calculator:
                 # Hybrid is priced per module content -- the two differ by ₹38k-₹64k, so a
                 # DCR request must not be answered with a non-DCR rate. A blank on the row
                 # means the price list does not distinguish, and matches either way.
+                #
+                # version-2 DROPPED this segment: its `mrKey` is
+                # `hybrid_{tier}_{batConfig}{upgTag}` with no `dcrTag` (App.jsx:2280-2282),
+                # and its catalog carries 17 keys where ours has 34. The segment is
+                # deliberately kept anyway, and this is the reason:
+                #
+                #   * 60 of our hybrid rows hold REAL prices on DCR-segmented keys
+                #     (hybrid_value_0_dcr at ₹310,000 against _ndcr at ₹272,000);
+                #   * only ONE non-segmented hybrid row is non-zero (hybrid_value_2 at 3
+                #     kW), and version-2's own catalog is zero for every hybrid key but
+                #     that same one.
+                #
+                # So matching version-2's key shape would orphan all 60 prices, every
+                # hybrid quote would miss and fall back to cost-plus, and a ₹310,000 price
+                # point would vanish without an error. That is the "import structure, keep
+                # prices" decision applied in the other direction: the upstream key shape
+                # is not worth adopting when the upstream price list is empty and ours is
+                # not.
+                #
+                # Retiring the segment is a DATA migration -- collapse each _dcr/_ndcr
+                # pair to one key, which is a pricing decision about which of the two
+                # figures survives -- not a code change. Until then the column stays live
+                # rather than dormant, and `MARKET_KEY_RE` keeps parsing it.
                 if row["dcr"] and row["dcr"] != p.get("module_dcr", "dcr"):
                     continue
                 return self._rate(row["value"])
