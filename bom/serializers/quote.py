@@ -117,6 +117,15 @@ class BomQuoteOfferSerializer(serializers.Serializer):
     value = serializers.FloatField()
 
 
+class BomQuoteResolutionWarningSerializer(serializers.Serializer):
+    """A slot whose filters left no candidate, so its line is N/A at zero."""
+
+    pos = serializers.IntegerField()
+    category = serializers.CharField()
+    resolution = serializers.CharField()
+    detail = serializers.CharField()
+
+
 class BomQuoteSerializer(serializers.Serializer):
     bom_lines = BomQuoteLineSerializer(many=True)
     cost_breakdown = BomQuoteCostsSerializer()
@@ -124,6 +133,9 @@ class BomQuoteSerializer(serializers.Serializer):
     pricing = BomQuotePricingSerializer()
     meta = BomQuoteMetaSerializer()
     available_offers = BomQuoteOfferSerializer(many=True)
+    # Not on `BomQuotePublicSerializer`: a customer-facing quote should not explain which
+    # internal filter left a slot empty. The N/A line itself is visible either way.
+    resolution_warnings = BomQuoteResolutionWarningSerializer(many=True, required=False)
 
 
 class BomQuotePublicSerializer(serializers.Serializer):

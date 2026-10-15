@@ -781,6 +781,10 @@ class Calculator:
         self.today = today
         # The view's filter (active + dates), then the size target the platform offers add.
         self.offers = [o for o in snapshot.offers if not (o["start_date"] and o["start_date"] > today) and not (o["end_date"] and o["end_date"] < today)]
+        #: Slots whose filters left no candidate, so the line is quoted as N/A at zero.
+        #: version-2 carries this instead of substituting silently (App.jsx:1866-1873).
+        #: COMPOSITE only, like the fallback removal it accompanies.
+        self.resolution_warnings: list[dict] = []
 
     def compute(self) -> dict:
         if self.p["sys_type"] == "upgrade":
@@ -1075,6 +1079,9 @@ class Calculator:
             # no cost, and an installer working from a public quote needs it. COMPOSITE
             # only, like every other behaviour the port adds (see `_composite`).
             **({"string_config": self._string_config(bom_lines, panel_count)} if composite else {}),
+            # Only when a slot actually went unresolved. Stripped from public responses by
+            # `INTERNAL_KEYS` in any case.
+            **({"resolution_warnings": self.resolution_warnings} if self.resolution_warnings else {}),
         }
 
     def _string_config(self, lines: list, panels: int) -> dict | None:
@@ -1133,6 +1140,34 @@ class Calculator:
                 continue
             item = self._select_item(cat, tier, slot, slot_three_phase, self._size_to_kw(slot_size))
             if not item:
+                # version-2 emits the slot as N/A at zero rather than dropping it, and
+                # records why (App.jsx:1862-1874). A line that silently disappears is the
+                # worst of the three options: the BOM looks complete, the price is quietly
+                # lower, and nothing says a part is missing. Here the gap is on the quote.
+                if self._composite:
+                    self.resolution_warnings.append(
+                        {
+                            "pos": slot.pos,
+                            "category": cat.slug,
+                            "resolution": "NONE",
+                            "detail": f"no candidate {cat.slug} for {self.p['sys_type']}/{tier}/{slot_size}",
+                        }
+                    )
+                    lines.append(
+                        {
+                            "pos": slot.pos,
+                            "name": "N/A",
+                            "brand": "",
+                            "qty": qty,
+                            "unit": "m" if cat.unit_m else "nos",
+                            "unit_price": 0,
+                            "amount": 0,
+                            "gst_pct": slot.gst if slot.gst is not None else cat.gst_default,
+                            "gst_amt": 0,
+                            "section": "",
+                            "is_variable": True,
+                        }
+                    )
                 continue
             # Panel count comes from the module actually chosen, not the template's figure
             # (App.jsx:1169-1174). A 3 kW system is 6 panels of 540 W but 5 of 620 W, and
@@ -1311,23 +1346,11 @@ class Calculator:
         # content was never recorded counts as non-DCR -- matching the source and erring
         # towards NOT promising a subsidy the panel may not qualify for.
         #
-        # Tracked separately from `available` because the gate needs the source's safety
-        # valve: when it empties the list, the line falls back to an ungated item instead
-        # of vanishing. App.jsx:1164 explains why -- "the catalog has no Non-DCR premium
-        # panel, for one" -- and a dropped panel line is far worse than an off-content
-        # one, since the whole quote silently loses its largest cost.
         want_dcr = self._wanted_panel_type()
-        off_content = []
-        cross_tier = []
+        # The one substitution that survives, and only under PER_LINE: see the branch
+        # after the loop.
+        off_content: list[Item] = []
         for item in category.items:
-            # Tracked separately for the same reason as the content gate below: when no
-            # item in the requested tier survives the phase filter, the source falls back
-            # across tiers rather than dropping the line — its `allAvailable`
-            # (App.jsx:1137-1142) keeps the phase and content filters but not the tier.
-            #
-            # The isolator is the live example: the 1P part is base-only and the other is
-            # 3P, so a premium single-phase build has no in-tier match and would otherwise
-            # lose its isolator entirely.
             if not item.tiers:
                 continue
             # Before the tier check, like the source's own filter chain (App.jsx:1813): a
@@ -1359,26 +1382,31 @@ class Calculator:
                 elif "3P" in item.phase:
                     continue
             if category.is_panel and want_dcr is not None and (item.dcr is True) != want_dcr:
-                if in_tier:
+                if in_tier and not self._composite:
                     off_content.append(item)
                 continue
             if in_tier:
                 available.append(item)
-            else:
-                cross_tier.append(item)
-        # Fallbacks in the source's order: the requested tier first, then an off-content
-        # panel, then any tier. Each step keeps the line rather than losing it.
-        if not available:
-            # Everything else passed but the content gate: quote the off-content panel
-            # rather than dropping the line (App.jsx:1164-1167).
-            #
-            # The cross-tier step is COMPOSITE-only. The source does fall back across
-            # tiers (its `allAvailable`, App.jsx:1137-1142), but under PER_LINE this path
-            # serves the public website, where the legacy engine drops the line instead --
-            # and resurrecting it adds a part, and its price, to 728 captured quotes. The
-            # off-content fallback is not gated: it only ever *substitutes* a panel for a
-            # panel, so it cannot add a line that was not already there.
-            available = off_content or (cross_tier if self._composite else [])
+        # version-2 removed both substitutions. When a slot's filters leave nothing, the
+        # line is emitted as N/A at zero with a `resolution_warnings` entry, and nothing
+        # is quoted in its place (App.jsx:1862-1874). Its `allAvailable` pool survives
+        # upstream but is consulted ONLY to resolve a saved manual selection, never to
+        # auto-select -- which is the distinction the port previously got wrong.
+        #
+        # Silent substitution was the original complaint: a premium single-phase build
+        # has no in-tier isolator (the 1P part is base-only, the other is 3P), so it used
+        # to be quoted a base-tier part with nothing saying so. Now the gap is visible.
+        #
+        # PER_LINE keeps the old fallbacks. That path is the public website's live
+        # pricing, and deleting a substitution there does not make a quote more correct --
+        # it removes a line and its price from quotes the legacy engine has always
+        # included. 728 captured cases pin that behaviour.
+        if not available and not self._composite:
+            # PER_LINE keeps only the off-content panel substitution, which is what it
+            # has always done: it swaps a panel for a panel and so cannot add a line that
+            # was not already in the quote. The cross-tier pool it never consulted at all
+            # -- that was COMPOSITE-only, and version-2 removes it -- so the pool is gone.
+            available = off_content
         if not available:
             return None
         if category.is_inverter and any(i.kw for i in available):
@@ -2033,7 +2061,9 @@ def quote(data, *, today: date) -> dict:
 # Business default B-1: the internal cost and margin never reach a public caller. ``quote()`` keeps the full legacy
 # body (byte parity); every PUBLIC response — ``POST /api/public/v1/bom/quote/`` and the ``/legacy/bom/api/calculate/``
 # shim — is filtered through :func:`public_body`. The website reads only ``bom_lines[].name/qty/unit`` and ``pricing.*``.
-INTERNAL_KEYS = ("cost_breakdown", "totals")
+#: `resolution_warnings` is internal for the same reason: a customer-facing quote should
+#: not explain which filter left a slot empty. The N/A line itself is visible either way.
+INTERNAL_KEYS = ("cost_breakdown", "totals", "resolution_warnings")
 
 
 def public_body(result: dict) -> dict:

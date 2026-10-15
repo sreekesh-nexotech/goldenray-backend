@@ -248,6 +248,55 @@ class TestCalculator:
 
         assert _battery_retired(None) is False
 
+    def test_an_unresolvable_slot_is_quoted_as_na_with_a_reason(self, world):
+        """version-2 stopped substituting across tiers; the gap goes on the quote instead.
+
+        The fixture reproduces the live case that made this matter: `3P only` is a
+        three-phase part in no tier but BASE, so a single-phase VALUE quote has nothing
+        in-tier for that slot. The old engine reached across tiers and quoted a base part
+        with nothing saying so; version-2 emits the line as N/A at zero and records why
+        (App.jsx:1862-1874), because a silent substitution is the complaint this change
+        answers.
+
+        Dropping the line would be worse than either: the BOM reads as complete while the
+        price is quietly lower.
+        """
+        from pricing.services.cost_config import put_values
+
+        # PER_LINE first: the legacy engine's behaviour is unchanged, which is the half
+        # that protects the public website.
+        before = quote(_body(size="5tp", tier="value"), today=TODAY)
+        assert "resolution_warnings" not in before
+
+        put_values(user=None, entries=[{"key": "gst.quote_regime", "value": {"mode": "COMPOSITE", "rate_pct": 9}}])
+        after = quote(_body(size="5tp", tier="value"), today=TODAY)
+
+        # The fixture leaves the panel and the DC cable unresolvable at value/5tp. The
+        # panel one is the case that matters: it is the largest cost in a quote, so a
+        # silent substitution there moves the most money.
+        na = [line for line in after["bom_lines"] if line["name"] == "N/A"]
+        assert [line["pos"] for line in na] == [0, 2], [line["name"] for line in after["bom_lines"]]
+        assert all(line["amount"] == 0 and line["unit_price"] == 0 and line["gst_amt"] == 0 for line in na)
+
+        warnings = {w["pos"]: w for w in after["resolution_warnings"]}
+        assert set(warnings) == {0, 2}
+        assert warnings[0]["category"] == "panel" and warnings[2]["category"] == "dc_cable"
+        # The reason names the configuration, so a reader can tell *why* nothing matched
+        # rather than only that nothing did.
+        assert warnings[0]["detail"] == "no candidate panel for ongrid/value/5tp"
+        assert all(w["resolution"] == "NONE" for w in warnings.values())
+
+        # An N/A line contributes nothing, so it cannot quietly move a price.
+        assert after["totals"]["material_ex_gst"] == sum(line["amount"] for line in after["bom_lines"] if line["name"] != "N/A")
+
+    def test_resolution_warnings_never_reach_a_public_caller(self, world):
+        """A customer quote should not explain which internal filter emptied a slot."""
+        from bom.services.website_quote import INTERNAL_KEYS, public_body
+
+        assert "resolution_warnings" in INTERNAL_KEYS
+        body = public_body({"bom_lines": [], "pricing": {}, "resolution_warnings": [{"pos": 1}]})
+        assert "resolution_warnings" not in body
+
     def test_margin_subsidy_structure_and_distance(self, world):
         result = quote(_body(margin_type="flat", margin_val=15000, subsidy_type="ghs", ghs_houses=3, structure_type="elevated", dist_km=175), today=TODAY)
         costs = result["cost_breakdown"]
