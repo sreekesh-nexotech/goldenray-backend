@@ -155,6 +155,18 @@ UPG_SECTION_MAP = {
     "conduit_pipe": "wiring",
     "meter": "inverter",
     "ug_cable": "wiring",
+    # Both were missing against App.jsx:2583-2587. `flexible_pipe` is the one that showed
+    # up: its fixed item carries no explicit section, so an unmapped category fell through
+    # to the "panels" default and the pipe was quoted on an upgrade with `wiring` switched
+    # off -- the section toggles are what a sales person uses to scope the job, so an item
+    # that ignores them bills for work nobody agreed to.
+    "flexible_pipe": "wiring",
+    # `meter_box` belongs to the hybrid-inverter section, NOT `inverter`: on a hybrid
+    # upgrade the box comes with the hybrid inverter, while `meter` above is the ongrid
+    # meter that goes with the ongrid one. Spelled `hybrid_inv` -- the platform's section
+    # keys are snake_case (see DEFAULT_SECTIONS); the source's `hybridInv` would never
+    # match one and would silently drop the row.
+    "meter_box": "hybrid_inv",
 }
 COST_KEYS = {
     "install_rate": "install_rate",
