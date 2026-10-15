@@ -553,7 +553,11 @@ def _legacy_item(component: Component, price: Decimal) -> Item:
         dcr=panel.is_dcr if panel is not None else None,
         sku=component.sku,
         specs=_specs(panel, spec),
-        gst_override=float(component.gst_rate_override * 100) if component.gst_rate_override is not None else None,
+        # `percent_of`, not a bare float(): it returns an int for a whole percentage, and
+        # the corpus compares serialised JSON, so 18.0 and 18 are different values. My
+        # first cut hardcoded float() and put `18.0` on every premium quote's accessory
+        # lines -- 115 standard cases differing on nothing but the type.
+        gst_override=percent_of(component.gst_rate_override),
         battery_retired=_battery_retired(getattr(component, "battery_spec", None)),
     )
 
@@ -1164,7 +1168,12 @@ class Calculator:
                             "amount": 0,
                             "gst_pct": slot.gst if slot.gst is not None else cat.gst_default,
                             "gst_amt": 0,
-                            "section": "",
+                            # `cat.slug`, as a resolved line has. Not "": `panel_count`
+                            # finds the panel by its section, so a blank one made the
+                            # count zero and silently dropped the whole micro-inverter
+                            # accessory set -- the source keeps the count (its `defQty`
+                            # rides on the N/A line) and still emits the IQ8P per panel.
+                            "section": cat.slug,
                             "is_variable": True,
                         }
                     )
