@@ -61,15 +61,35 @@ def size_table(rule: dict, size_key: str, *, tier: str, bat_config: str) -> floa
     return (rule.get("qty") or {}).get(size_key, 0)
 
 
-def upgrade_path(rule: dict, from_kw: float, to_kw: float) -> float:
-    """The legacy upgrade fixed-item quantity: the exact path, else scaled from the closest known path."""
+def _js_round(value: float) -> int:
+    """``Math.round``: nearest integer, ties toward +infinity.
+
+    Inlined rather than imported from ``engines._jscompat``: this module is deliberately
+    free of other imports so the quantity rules can be exercised without Django, and the
+    rule is two lines. ``engines._jscompat.js_round`` is the same function.
+    """
+    floor = math.floor(value)
+    return int(floor + 1 if value - floor >= 0.5 else floor)
+
+
+def upgrade_path(rule: dict, from_kw: float, to_kw: float, panels: int | None = None) -> float:
+    """The legacy upgrade fixed-item quantity: the exact path, else scaled from the closest known path.
+
+    ``panels`` is the panel count the engine actually derived from the chosen module's
+    wattage. Without it this recomputed the pre-selection estimate
+    ``round((to - from) / 0.55)``, which disagrees with the source wherever the chosen
+    module is not 550 W: a 3 -> 6 kW upgrade on a 540 W panel needs
+    ``ceil(3000 / 540) = 6`` panels, and the scaling below then gives 5 end caps where
+    the estimate's 5 panels gives 4. The source scales off its own recomputed
+    ``newPanels`` (App.jsx:2916), not off the estimate.
+    """
     table = rule.get("qty") or {}
     key = path_key(from_kw, to_kw)
     if not table:
         return 0
     if key in table:
         return table[key]
-    wanted = new_panels(from_kw, to_kw)
+    wanted = panels if panels else new_panels(from_kw, to_kw)
 
     def panels_for_key(k: str) -> int:
         if k in KNOWN_PATHS:
@@ -80,10 +100,19 @@ def upgrade_path(rule: dict, from_kw: float, to_kw: float) -> float:
         except (IndexError, ValueError):
             return 4
 
+    # `reduce` keeps the FIRST key on a tie (its comparison is strictly "closer than"),
+    # and dict order is the template's order, so `min` has to be told to do the same --
+    # it already keeps the first minimum, which matches, but spelling it out stops a
+    # later "tidy up" to `sorted()` from silently changing which path is referenced.
     closest = min(table.keys(), key=lambda k: abs(panels_for_key(k) - wanted))
     reference = table.get(closest, 0)
     all_same = len(set(table.values())) == 1
-    return reference if all_same else max(1, round(reference * wanted / panels_for_key(closest)))
+    if all_same:
+        return reference
+    # JS `Math.round` breaks ties upward; Python's rounds to even. The scaled quantity
+    # lands on .5 whenever the reference and wanted counts are both odd multiples, so the
+    # two disagree on real configurations.
+    return max(1, _js_round(reference * wanted / panels_for_key(closest)))
 
 
 def _key_of(number: float) -> str:
@@ -143,7 +172,7 @@ def evaluate(rule: dict | None, ctx: QtyContext) -> float:
     if kind == "upgrade_path":
         if ctx.upgrade_from_kw is None or ctx.upgrade_to_kw is None:
             return 0
-        return upgrade_path(rule, ctx.upgrade_from_kw, ctx.upgrade_to_kw)
+        return upgrade_path(rule, ctx.upgrade_from_kw, ctx.upgrade_to_kw, ctx.panels)
     if kind == "kw_interpolated":
         return kw_interpolated(rule, ctx.kw)
     if kind == "per_kw":

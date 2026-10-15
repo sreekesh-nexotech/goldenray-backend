@@ -1142,7 +1142,16 @@ class Calculator:
             qty = evaluate(slot.rule, self._context(slot_size, tier, bat_config, slot_three_phase))
             if not qty:
                 continue
-            item = self._select_item(cat, tier, slot, slot_three_phase, self._size_to_kw(slot_size))
+            # A 5 kW single-phase build takes the 2/2 DCDB -- the three-phase-tagged part --
+            # "for future upgrade readiness" (App.jsx:1762-1766). It is the one slot whose
+            # phase filter is deliberately not the system's: the larger enclosure has the
+            # inputs for the extra strings a later three-phase conversion brings, so
+            # fitting the 1/1 now would mean replacing it then.
+            #
+            # Selection only. The quantity above still uses the system's real phase, as
+            # the source's does -- `effectiveThreePhase` is built after `qty`.
+            select_three_phase = True if (cat.slug == "dcdb" and size == "5sp" and self._composite) else slot_three_phase
+            item = self._select_item(cat, tier, slot, select_three_phase, self._size_to_kw(slot_size))
             if not item:
                 # version-2 emits the slot as N/A at zero rather than dropping it, and
                 # records why (App.jsx:1862-1874). A line that silently disappears is the
