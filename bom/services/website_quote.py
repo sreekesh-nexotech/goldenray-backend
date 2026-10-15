@@ -1555,7 +1555,12 @@ class Calculator:
 
     def _lookup_market_rate(self) -> float:
         p = self.p
-        sys_type, tier, bat_config, size = p["sys_type"], p["tier"], p["bat_config"], p["size"]
+        sys_type, tier, size = p["sys_type"], p["tier"], p["size"]
+        # The *resolved* band, not the requested one. Under COMPOSITE the package profile
+        # decides how many batteries the BOM carries, so looking the rate up on the request
+        # would price a no-battery package while shipping a battery -- the source derives
+        # the band once and uses that one value everywhere (App.jsx:1690).
+        bat_config = self._battery_band(sys_type, tier)
         # An upgrade-ready build has its own rate, keyed on the future size as well as
         # today's -- `ongrid_value_up5sp` is not `ongrid_value`.
         future = self._future_size()
