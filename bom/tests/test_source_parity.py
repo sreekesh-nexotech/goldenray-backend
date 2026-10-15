@@ -71,7 +71,43 @@ def flarize_world(db):
     # the same way. The key defaults to PER_LINE precisely so a deployment cannot flip
     # the public website's prices; a test asserting source parity has to opt in.
     _set_composite_gst()
+    _seed_captured_offers()
     return results
+
+
+#: The four offers `capture_source.mjs:477-480` invents so the discount engine has
+#: something to exercise. They are not in `catalog.json`, so no importer brings them in --
+#: which left every captured case that selects one reporting `discount_amt: 0` against a
+#: real expected figure. 66 cases, and the engine was right all along: it cannot apply an
+#: offer that was never stored. The fixture has to supply what the capture supplied.
+CAPTURED_OFFERS = (
+    ("syn_pct_all", "10% everything", "PERCENT", 10, "ALL", "ALL"),
+    ("syn_pct_prem", "5% premium only", "PERCENT", 5, "ALL", "PREMIUM"),
+    ("syn_flat_hyb", "Flat 25k hybrid", "FLAT", 25000, "HYBRID", "ALL"),
+    ("syn_flat_upg", "Flat 8k upgrade", "FLAT", 8000, "UPGRADE", "ALL"),
+)
+
+
+def _seed_captured_offers():
+    from pricing.models import Offer
+
+    for code, name, kind, value, system, tier in CAPTURED_OFFERS:
+        Offer.objects.update_or_create(
+            code=code,
+            defaults={
+                "name": name,
+                "type": kind,
+                "value": value,
+                "applies_to_system": system,
+                "applies_to_tier": tier,
+                # Open-ended and ACTIVE, matching the capture's `active: true`. The engine
+                # filters on dates, so a bounded window here would silently drop them
+                # again for any case captured outside it.
+                "starts_on": None,
+                "ends_on": None,
+                "status": "ACTIVE",
+            },
+        )
 
 
 def _set_composite_gst():
