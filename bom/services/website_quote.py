@@ -174,6 +174,10 @@ LEGACY_EXTRA_KM_RATE = 35
 GST_SPLIT_KEYS = ("gst_goods_share", "gst_services_share", "gst_goods_rate", "gst_services_rate")
 INVERTER_TYPES = {"ONGRID": "ongrid", "HYBRID": "hybrid"}
 QUOTABLE = (ComponentStatus.ACTIVE, ComponentStatus.DEPRECATED)  # never a DRAFT or RETIRED component on a website quote
+#: Battery engineering/procurement states that retire a record for good, as opposed to
+#: the PENDING state that merely blocks the configuration (App.jsx:1804-1808).
+PERMANENTLY_REJECTED_ENGINEERING = ("REJECTED", "WITHDRAWN")
+PERMANENTLY_REJECTED_PROCUREMENT = ("INACTIVE", "DISCONTINUED")
 
 
 class QuoteInvalid(DomainError):
@@ -375,6 +379,11 @@ class Item:
     #: against the category's 5%. Taxing those at the category rate under-charges GST on
     #: every premium quote.
     gst_override: float | None = None
+    #: Batteries only: ``True`` when this record may never appear in a BOM again --
+    #: Engineering REJECTED or WITHDRAWN it, or Procurement marked it INACTIVE or
+    #: DISCONTINUED. ``False`` for everything else, *including a battery still pending
+    #: engineering approval*: see `_select_item`.
+    battery_retired: bool = False
 
 
 @dataclass
@@ -501,6 +510,24 @@ def _gst_regime(values: dict) -> tuple[str, float]:
     return "COMPOSITE", float(regime.effective_rate_pct)
 
 
+def _battery_retired(spec) -> bool:
+    """Whether a battery may never be quoted again (App.jsx:1808-1811, `engineeringFilter`).
+
+    Mirrors `engines.battery_compat.is_permanently_unselectable`, which takes the source's
+    JS catalog shape rather than a Django row, so the rule is transcribed here against the
+    model fields instead of adapting one to the other.
+
+    The distinction the source is careful about: only *permanent* states remove a battery.
+    A battery merely PENDING engineering approval is deliberately kept and the
+    configuration blocked by validation instead -- dropping it would emit a hybrid BOM with
+    no battery at all, which is the source's defect D1 and worse than offering one that
+    still needs sign-off.
+    """
+    if spec is None:
+        return False
+    return spec.engineering_status in PERMANENTLY_REJECTED_ENGINEERING or spec.procurement_status in PERMANENTLY_REJECTED_PROCUREMENT
+
+
 def _legacy_item(component: Component, price: Decimal) -> Item:
     spec = getattr(component, "inverter_spec", None)
     panel = getattr(component, "panel_spec", None)
@@ -522,6 +549,7 @@ def _legacy_item(component: Component, price: Decimal) -> Item:
         sku=component.sku,
         specs=_specs(panel, spec),
         gst_override=float(component.gst_rate_override * 100) if component.gst_rate_override is not None else None,
+        battery_retired=_battery_retired(getattr(component, "battery_spec", None)),
     )
 
 
@@ -562,7 +590,7 @@ def _items(category_ids: set[int], extra_component_ids: set[int]) -> tuple[dict[
 
     components = list(
         Component.objects.filter(Q(category_id__in=category_ids) | Q(pk__in=extra_component_ids), status__in=QUOTABLE)
-        .select_related("inverter_spec", "panel_spec")
+        .select_related("inverter_spec", "panel_spec", "battery_spec")
         .prefetch_related("tiers")
         # Catalog order, which is what the source means by `available[0]` -- the first
         # item of the category's array that survives the filters. Ordering by `created_at`
@@ -1296,6 +1324,12 @@ class Calculator:
             # 3P, so a premium single-phase build has no in-tier match and would otherwise
             # lose its isolator entirely.
             if not item.tiers:
+                continue
+            # Before the tier check, like the source's own filter chain (App.jsx:1813): a
+            # battery Engineering has rejected must not reappear through the cross-tier
+            # fallback either. Nothing is substituted -- a rejected battery is simply not
+            # offered. A battery still *pending* approval is kept; see `_battery_retired`.
+            if item.battery_retired:
                 continue
             in_tier = tier in item.tiers
             ft = slot.filter_type

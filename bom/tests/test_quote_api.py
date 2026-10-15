@@ -216,6 +216,38 @@ class TestCalculator:
             quote(_body(panel_type_filter="DCR_ish"), today=TODAY)
         assert "panel_type_filter" in caught.value.errors
 
+    @pytest.mark.parametrize(
+        ("engineering", "procurement", "retired"),
+        [
+            # Permanent: Engineering will not have it, or Procurement cannot buy it.
+            ("REJECTED", "ACTIVE", True),
+            ("WITHDRAWN", "ACTIVE", True),
+            ("APPROVED", "INACTIVE", True),
+            ("APPROVED", "DISCONTINUED", True),
+            # Approved and buyable.
+            ("APPROVED", "ACTIVE", False),
+            # The case the source is explicit about: a battery awaiting sign-off is KEPT.
+            # Dropping it would emit a hybrid BOM with no battery at all (the source's
+            # defect D1), which is worse than quoting one that still needs approval --
+            # engineering validation blocks the configuration instead.
+            ("PENDING_ENGINEERING_APPROVAL", "ACTIVE", False),
+        ],
+    )
+    def test_only_a_permanently_rejected_battery_leaves_the_catalog(self, engineering, procurement, retired):
+        """`engineeringFilter` (App.jsx:1808-1811) removes only what may never be used again."""
+        from types import SimpleNamespace
+
+        from bom.services.website_quote import _battery_retired
+
+        spec = SimpleNamespace(engineering_status=engineering, procurement_status=procurement)
+        assert _battery_retired(spec) is retired
+
+    def test_a_component_with_no_battery_spec_is_not_retired(self):
+        """Every non-battery component reaches this, so the absent case must be permissive."""
+        from bom.services.website_quote import _battery_retired
+
+        assert _battery_retired(None) is False
+
     def test_margin_subsidy_structure_and_distance(self, world):
         result = quote(_body(margin_type="flat", margin_val=15000, subsidy_type="ghs", ghs_houses=3, structure_type="elevated", dist_km=175), today=TODAY)
         costs = result["cost_breakdown"]
