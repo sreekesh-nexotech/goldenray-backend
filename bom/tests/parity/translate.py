@@ -44,6 +44,8 @@ def quote_request(params: dict) -> dict:
         "margin_type": params.get("marginType", "percent"),
         "margin_val": params.get("marginVal", 20),
         "panel_type_filter": _panel_filter(params),
+        # The grade a customer is quoted at, overriding the package profile's default.
+        "struct_grade": params.get("structGrade", "default"),
         "micro_brand": params.get("microBrand", "enphase"),
         "zero_export": params.get("zeroExport", True),
         # Subsidy reaches the BOM in version-2: `dcrFilter` forces DCR panels whenever a

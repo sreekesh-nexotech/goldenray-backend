@@ -55,6 +55,10 @@ VALID_STRUCTURE = ("flatRoof", "elevated", "sheetRoof")
 #: for hybrid it also selects the price list (Flarize quotes DCR and non-DCR apart).
 #: version-2's tri-state panel gate. `module_dcr` stays accepted as the two-state spelling.
 VALID_PANEL_TYPE_FILTER = ("all", "DCR", "NON_DCR")
+#: Structure grade a customer can be quoted at. ``default`` takes the package profile's
+#: grade; the other two override it (App.jsx:2104). The grade only ever changes the tube
+#: RATE -- the structure itself is the same steel either way.
+VALID_STRUCT_GRADE = ("default", "gp", "gi")
 VALID_MODULE_DCR = ("dcr", "ndcr")
 #: The phase of the system AFTER an upgrade. Chosen, not derived from the target size: a
 #: customer going to 5 kW may stay single-phase or move to three.
@@ -168,6 +172,19 @@ UPG_SECTION_MAP = {
     # match one and would silently drop the row.
     "meter_box": "hybrid_inv",
 }
+#: The source spells its section keys in camelCase (`hybridInv`) and stores them on the
+#: fixed items verbatim, so `catalog.json` carries that spelling into `FixedItem.section`.
+#: The platform's toggles are snake_case, so a raw lookup misses and the row is silently
+#: dropped -- which is how the hybrid Meter Box went missing from every hybrid upgrade.
+#: Normalised at the point of use rather than migrated, because the importer will keep
+#: writing whatever the source says.
+SECTION_ALIASES = {"hybridInv": "hybrid_inv"}
+
+
+def _section_key(name: str) -> str:
+    return SECTION_ALIASES.get(name, name)
+
+
 COST_KEYS = {
     "install_rate": "install_rate",
     "service_rate_year": "service_rate_year",
@@ -226,6 +243,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("module_dcr", "module_dcr must be dcr | ndcr"))
     if data.get("panel_type_filter") is not None and not _hashable_in(data.get("panel_type_filter"), VALID_PANEL_TYPE_FILTER):
         messages.append(("panel_type_filter", "panel_type_filter must be all | DCR | NON_DCR"))
+    if not _hashable_in(data.get("struct_grade", "default"), VALID_STRUCT_GRADE):
+        messages.append(("struct_grade", "struct_grade must be default | gp | gi"))
     if not _hashable_in(data.get("upgrade_phase", "1P"), VALID_UPGRADE_PHASE):
         messages.append(("upgrade_phase", "upgrade_phase must be 1P | 3P"))
     if not _hashable_in(data.get("micro_brand") or "enphase", VALID_MICRO_BRAND):
@@ -306,6 +325,7 @@ def _coerce(data: dict) -> dict:
         # Absent means the caller is using the two-state `module_dcr`; see
         # `_wanted_panel_type`.
         "panel_type_filter": data.get("panel_type_filter"),
+        "struct_grade": data.get("struct_grade", "default"),
         # UPGRADE only: the size the installation matrix is keyed on, which upstream is
         # the standard configurator's `size` rather than anything about the upgrade. See
         # the matrix lookup in `_compute_upgrade`'s cost block. Absent falls back to
@@ -422,6 +442,13 @@ class SlotView:
     filter_type: str
     filter_phase: str
     rule: dict
+    #: UPGRADE only, and only on the slots a hybrid selection substitutes in: the section
+    #: toggle that governs the slot, overriding :data:`UPG_SECTION_MAP`. The source carries
+    #: it as `slot._section` (App.jsx:2622-2655).
+    section: str = ""
+    #: UPGRADE only: this is the hybrid DCDB, which filters on the HYB phase tag rather
+    #: than taking the 2/2 part a plain upgrade always uses (App.jsx:2711-2715).
+    hybrid_dcdb: bool = False
 
 
 @dataclass
@@ -1441,6 +1468,14 @@ class Calculator:
         Falls back to the tier rule where no profile is seeded, so a deployment without
         `packageProfiles` keeps the behaviour it has today rather than silently repricing.
         """
+        # An explicit request wins over the package default, which is the whole point of
+        # the control: a customer can be quoted the other grade on the same package
+        # (App.jsx:2104, `customerTubeRate`). `default` means "whatever the package says".
+        requested = self.p.get("struct_grade", "default")
+        if requested == "gp":
+            return self._cost("gp_rate_per_kg")
+        if requested == "gi":
+            return self._cost("gi_rate_per_kg")
         grade = self.s.structure_grades.get(_profile_key(self.p["sys_type"], self.p["tier"]))
         if grade is None:
             grade = "GP" if self.p["tier"] == "base" else "GI"
@@ -1895,6 +1930,7 @@ class Calculator:
         #: `SolarEdge SE5K` had gone missing. Fifth time this gate has stopped a public
         #: re-pricing; the rule holds even when the new behaviour is plainly more correct.
         is_upg_premium_micro = tier == "premium" and not is_hyb_upgrade and self._composite
+        slots = self._upgrade_slots(is_hyb_upgrade, sections)
         # The finished system's phase is the sales person's choice, not a function of its
         # size. The one override: hybrid inverters below 5 kW exist only as single-phase
         # (3P starts at 8 kW), so a 3P pick there is forced back (App.jsx:1837).
@@ -1903,10 +1939,12 @@ class Calculator:
         ctx = QtyContext(size_key=size_key, tier=tier, bat_config="0", kw=to_kw, is_three_phase=is_3p, panels=panels, upgrade=True, upgrade_from_kw=from_kw, upgrade_to_kw=to_kw)
         lines = []
         pos = 0
-        for slot in self.s.slots:
+        for slot in slots:
             cat = slot.category
             cat_slug = cat.slug
-            section = UPG_SECTION_MAP.get(cat_slug, "panels")
+            # A substituted hybrid slot names its own section, as the source's `_section`
+            # does; everything else is mapped by category.
+            section = _section_key(slot.section) if slot.section else UPG_SECTION_MAP.get(cat_slug, "panels")
             effective_section = ("hybrid_inv" if is_hyb_upgrade else "inverter") if cat_slug == "inverter" else section
             if not sections.get(effective_section, False):
                 continue
@@ -1981,6 +2019,12 @@ class Calculator:
         # system" (App.jsx:2817) -- so billing them again would charge the customer twice
         # for hardware they already own.
         pos = self._add_upgrade_micro_lines(lines, tier, panels, is_3p, pos)
+        # Every hybrid upgrade adds a second meter, whatever the phase (App.jsx:2858-2882).
+        # A hybrid runs its own generation meter alongside the existing supply meter, so it
+        # is not part of the system being extended and the template has no slot for it --
+        # the same reason the phase-change parts are added here rather than templated.
+        if is_hyb_upgrade and self._composite:
+            pos = self._add_hybrid_extra_meter(lines, tier, pos)
         if is_3p:
             pos = self._add_phase_change_lines(lines, tier, pos)
         for fi in self.s.fixed_items:
@@ -1994,7 +2038,7 @@ class Calculator:
             # `_calc_structure_cost`, and quoting them as fixed items too would double
             # them. Only the upgrade template carries isTube fixed items, so the two
             # paths cannot collide.
-            section = fi.section or UPG_SECTION_MAP.get(fi.category_slug, "panels")
+            section = _section_key(fi.section) if fi.section else UPG_SECTION_MAP.get(fi.category_slug, "panels")
             if not sections.get(section, False):
                 continue
             item = fi.item
@@ -2183,6 +2227,89 @@ class Calculator:
             pos += 1
         return pos
 
+    def _upgrade_slots(self, is_hyb_upgrade: bool, sections: dict) -> list:
+        """The template's slots, with the hybrid substitutions a hybrid upgrade makes.
+
+        Choosing a hybrid inverter does not add one alongside the on-grid slot -- it
+        *replaces* three slots (App.jsx:2608-2656). The on-grid inverter, DCDB and ACDB
+        come out; hybrid versions go in, in the `hybrid_inv` section with their own GST
+        and filters. Turning the battery section on adds three more.
+
+        This is why a hybrid upgrade with only `hybrid_inv` enabled still emits a DCDB and
+        an ACDB: they are no longer in the `inverter` section the toggle switched off.
+        Without the substitution the engine quoted an on-grid `Sungrow SG5K-D` at ₹30,600
+        where the tool quotes a `Deye Hybrid 1P` at ₹81,730, and dropped both DB boxes.
+        """
+        slots = list(self.s.slots)
+        if not (is_hyb_upgrade and self._composite):
+            return slots
+        categories = {slot.category.slug: slot.category for slot in slots} | self.s.categories_by_slug
+        replaced = ("inverter", "dcdb", "acdb")
+        kept = [slot for slot in slots if slot.category.slug not in replaced]
+
+        def built(slug: str, pos: int, gst: int, *, filter_type: str = "", hybrid_dcdb: bool = False, section: str = "hybrid_inv"):
+            category = categories.get(slug)
+            if category is None:
+                return None
+            return SlotView(
+                pos=pos,
+                variable=True,
+                gst=gst,
+                category=category,
+                filter_type=filter_type,
+                filter_phase="",
+                rule={"type": "fixed", "qty": 1},
+                section=section,
+                hybrid_dcdb=hybrid_dcdb,
+            )
+
+        added = [
+            built("inverter", 100, 5, filter_type="hybrid"),
+            built("dcdb", 104, 18, hybrid_dcdb=True),
+            built("acdb", 105, 18, filter_type="hybrid"),
+        ]
+        if sections.get("battery", False):
+            # A battery on an upgrade brings its own protection and meter, in the battery
+            # section rather than the hybrid one (App.jsx:2639-2655).
+            added += [
+                built("battery", 101, 18, section="battery"),
+                built("mccb_box", 102, 18, section="battery"),
+                built("meter", 103, 18, section="battery"),
+            ]
+        return kept + [slot for slot in added if slot is not None]
+
+    def _add_hybrid_extra_meter(self, lines: list, tier: str, pos: int) -> int:
+        """The extra meter every hybrid upgrade carries (App.jsx:2858-2882).
+
+        Single-phase and in the requested tier, as the source filters it, and always at
+        18 % GST regardless of the category's rate -- the source states that rate
+        outright. In the `hybrid_inv` section, so the section toggle that turns the hybrid
+        inverter on and off takes the meter with it.
+        """
+        category = self.s.categories_by_slug.get("meter")
+        if category is None:
+            return pos
+        item = next((i for i in category.items if tier in i.tiers and i.phase and "1P" in i.phase), None)
+        if item is None:
+            return pos
+        unit_price = float(item.price)
+        lines.append(
+            {
+                "pos": pos,
+                "name": item.name,
+                "brand": item.brand,
+                "qty": 1,
+                "unit": "nos",
+                "unit_price": unit_price,
+                "amount": unit_price,
+                "gst_pct": 18,
+                "gst_amt": round(unit_price * 18 / 100),
+                "section": "hybrid_inv",
+                "is_variable": True,
+            }
+        )
+        return pos + 1
+
     def _add_phase_change_lines(self, lines: list, tier: str, pos: int) -> int:
         """Parts a single-to-three-phase upgrade needs beyond the template (App.jsx:2051-2080).
 
@@ -2241,7 +2368,16 @@ class Calculator:
                 continue
             ft = slot.filter_type
             if ft == "hybrid":
-                if item.inverter_type != "hybrid":
+                # A "hybrid" part is marked one of two ways, and the source accepts either
+                # (App.jsx:2696-2698, `!item.type && !item.phase?.includes('HYB')`):
+                # a hybrid INVERTER carries `inverter_type = HYBRID` and no phase, while a
+                # hybrid ACDB carries `phase = 1P-HYB` and no inverter type. Demanding the
+                # inverter marker alone silently dropped every hybrid ACDB, which on an
+                # upgrade with only the hybrid section on left the quote nearly empty.
+                if item.inverter_type:
+                    if item.inverter_type != "hybrid":
+                        continue
+                elif not (item.phase and "HYB" in item.phase):
                     continue
             elif ft == "ongrid":
                 if item.inverter_type and item.inverter_type != "ongrid":
@@ -2249,7 +2385,9 @@ class Calculator:
             if category.slug == "dcdb":
                 # Hybrid DCDB follows the phase; a plain upgrade DCDB is always the
                 # 3P-tagged 2/2 part and never a hybrid one.
-                if slot.filter_phase == "HYB":
+                # `hybrid_dcdb` is the substituted slot's marker (the source's
+                # `_hybridDcdb`); `filter_phase` is how a templated slot says the same.
+                if slot.hybrid_dcdb or slot.filter_phase == "HYB":
                     if not item.phase or "HYB" not in item.phase:
                         continue
                     if ("3P" in item.phase) != is_3p:
@@ -2260,14 +2398,18 @@ class Calculator:
                     if not item.phase or "3P" not in item.phase:
                         continue
             elif item.phase:
-                if is_3p:
-                    if ft == "hybrid":
-                        if not ("HYB" in item.phase and "3P" in item.phase):
-                            continue
-                    elif "3P" not in item.phase or "HYB" in item.phase:
+                if ft == "hybrid":
+                    # The phase check is just the phase. A hybrid part marks itself EITHER
+                    # by `inverter_type` (the Deye inverters, whose phase is a plain "1P")
+                    # or by a HYB tag in the phase (the ACDBs, at "1P-HYB"), and the
+                    # hybrid-ness was already established above. Demanding a HYB tag here
+                    # as well rejected every Deye hybrid inverter, which is how a hybrid
+                    # upgrade lost the one part it is actually for.
+                    wanted = "3P" if is_3p else "1P"
+                    if wanted not in item.phase:
                         continue
-                elif ft == "hybrid":
-                    if not ("HYB" in item.phase and "1P" in item.phase):
+                elif is_3p:
+                    if "3P" not in item.phase or "HYB" in item.phase:
                         continue
                 elif "3P" in item.phase or "HYB" in item.phase:
                     continue

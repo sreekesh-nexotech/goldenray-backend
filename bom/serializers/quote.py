@@ -28,6 +28,12 @@ class BomQuoteRequestSerializer(serializers.Serializer):
             "claimed, which forces DCR. Supersedes `module_dcr`, which is still accepted."
         ),
     )
+    struct_grade = serializers.ChoiceField(
+        choices=["default", "gp", "gi"],
+        required=False,
+        default="default",
+        help_text="Structure tube grade. `default` uses the package profile's; gp/gi override it.",
+    )
     module_dcr = serializers.ChoiceField(
         choices=["dcr", "ndcr"],
         required=False,
