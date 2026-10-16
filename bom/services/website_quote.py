@@ -71,6 +71,11 @@ VALID_MICRO_BRAND = ("enphase", "hoymiles")
 STRUCTURE_TO_INSTALLATION = {"flatRoof": "FLAT", "sheetRoof": "SHEET", "elevated": "ELEVATED"}
 
 PHASE_CHANGE_CATEGORIES = ("meter", "meter_box", "isolator")
+#: Categories a hybrid upgrade substitutes in, which the upgrade template has no slots for
+#: (App.jsx:2639-2655). They have to be in the snapshot or `_upgrade_slots` finds no
+#: category and silently builds nothing -- which dropped the battery and its MCCB box from
+#: every hybrid upgrade that asked for them.
+HYBRID_UPGRADE_CATEGORIES = ("battery", "mccb_box")
 #: Cable a site can need beyond the standard run, priced at the category's own GST rather
 #: than the composite rate (App.jsx:1321-1322) — the add-on ladder is not the material one.
 EXTRA_CABLE_CATEGORIES = ("dc_cable", "ac_cable", "armoured_cable")
@@ -672,7 +677,7 @@ def load_snapshot(sys_type: str) -> Snapshot:
     # Moving an upgrade to three phase pulls in parts the template has no slot for -- a 3P
     # meter, its box and a 4-pole isolator (App.jsx:2078-2080). They have to be in the
     # snapshot or the branch has nothing to choose from.
-    wanted = EXTRA_CABLE_CATEGORIES + MICRO_CATEGORIES + (PHASE_CHANGE_CATEGORIES if sys_type.lower() == "upgrade" else ())
+    wanted = EXTRA_CABLE_CATEGORIES + MICRO_CATEGORIES + ((PHASE_CHANGE_CATEGORIES + HYBRID_UPGRADE_CATEGORIES) if sys_type.lower() == "upgrade" else ())
     extra = list(Category.objects.filter(slug__in=wanted, deleted_at__isnull=True))
     category_ids = {slot.category_id for slot in slots} | {category.pk for category in extra}
     items_by_category, items_by_id = _items(category_ids, {row.component_id for row in fixed if row.component_id})
@@ -1966,7 +1971,13 @@ class Calculator:
             if cat_slug == "ac_cable":
                 if is_upg_premium_micro:
                     qty = 90 if is_3p else 60
-                elif is_3p and not is_hyb_upgrade:
+                elif is_hyb_upgrade:
+                    # The template carries its own hybrid figure (`hybrid_qty`, 30 m
+                    # against the plain 20) and the source prefers it whenever a hybrid
+                    # inverter is selected (App.jsx:2678). It was imported and sitting in
+                    # the rule unread, so every hybrid upgrade was 10 m of AC cable short.
+                    qty = slot.rule.get("hybrid_qty") or qty
+                elif is_3p:
                     qty = 40
             elif cat_slug == "dc_cable" and is_upg_premium_micro:
                 qty = max(10, math.ceil(panels * 2))
