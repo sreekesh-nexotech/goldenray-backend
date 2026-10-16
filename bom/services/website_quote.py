@@ -79,6 +79,8 @@ HYBRID_UPGRADE_CATEGORIES = ("battery", "mccb_box")
 #: Cable a site can need beyond the standard run, priced at the category's own GST rather
 #: than the composite rate (App.jsx:1321-1322) — the add-on ladder is not the material one.
 EXTRA_CABLE_CATEGORIES = ("dc_cable", "ac_cable", "armoured_cable")
+#: What each add-on is called on the quote (App.jsx:2084-2090).
+EXTRA_CABLE_LABELS = {"dc_cable": "Extra DC Cable", "ac_cable": "Extra AC Cable", "armoured_cable": "Armoured Cable"}
 #: Categories holding micro-inverter accessories. Needed in the snapshot even though no
 #: template slot refers to them — a premium build adds them from the tier, not a slot.
 MICRO_CATEGORIES = ("enphase", "hoymiles", "ug_cable")
@@ -256,6 +258,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("micro_brand", "micro_brand must be enphase | hoymiles"))
     if not _hashable_in(data.get("structure_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
+    if not _hashable_in(data.get("roof_type", "flatRoof"), VALID_STRUCTURE):
+        messages.append(("roof_type", "roof_type must be flatRoof | elevated | sheetRoof"))
     for name in ("dist_km", "margin_val"):
         try:
             float(data.get(name, 0))
@@ -325,6 +329,15 @@ def _coerce(data: dict) -> dict:
         "mode": data.get("mode", "quotation"),
         "dist_km": max(0, dist_km),
         "structure_type": data.get("structure_type", "flatRoof"),
+        # The roof the array sits on, which is what the installation matrix is keyed on
+        # (`installationMatrix[size][roofType]`, App.jsx:2215). Distinct from
+        # `structure_type`: that is the add-on the customer is BUYING -- an elevated
+        # structure over a flat roof -- and the source keeps the two apart
+        # (`addOns.structure` vs `roofType`). Conflating them charged the elevated
+        # installation rate AND the elevated structure add-on on the same quote.
+        # Defaults to `structure_type` so an existing caller that only sends one keeps
+        # working.
+        "roof_type": data.get("roof_type") or data.get("structure_type", "flatRoof"),
         "subsidy_type": data.get("subsidy_type", "none"),
         "module_dcr": data.get("module_dcr", "dcr"),
         # Absent means the caller is using the two-state `module_dcr`; see
@@ -1011,7 +1024,11 @@ class Calculator:
             lines.append(
                 {
                     "pos": next_pos + len(lines),
-                    "name": f"{item.name} (extra)",
+                    # The source names each add-on after what it is, not generically
+                    # (App.jsx:2084-2090): "Extra DC Cable", "Extra AC Cable",
+                    # "Armoured Cable". The name reaches the customer's quote, so a
+                    # generic "(extra)" leaves them reading a line they cannot identify.
+                    "name": f"{item.name} ({EXTRA_CABLE_LABELS.get(row['category'], 'extra')})",
                     "brand": item.brand,
                     "qty": qty,
                     "unit": "m" if category.unit_m else "nos",
@@ -1669,7 +1686,8 @@ class Calculator:
         dist_km = p["dist_km"]
         struct_type = p["structure_type"]
         composite = self._composite
-        install = self._install_cost(kw, size_key, struct_type) if composite else self._cost("install_rate") * kw
+        # The matrix is keyed on the ROOF, not on the structure being sold.
+        install = self._install_cost(kw, size_key, p["roof_type"]) if composite else self._cost("install_rate") * kw
         service = self._cost("service_rate_year") * self._cost("service_years")
         extra_km = max(0, dist_km - int(self.costs["default_dist_km"]))
         transport_extra = extra_km * self.costs["extra_km_rate"]
@@ -2116,7 +2134,7 @@ class Calculator:
             # (it has 5sp/5tp) -- falling through the source's own silent
             # `instMatrixCost || bomKw * installRate` to ₹9,000. A silent fallback is
             # exactly what a parity corpus is for.
-            install = self._install_cost(to_kw - from_kw, p.get("base_size_key") or p["size"], p["structure_type"])
+            install = self._install_cost(to_kw - from_kw, p.get("base_size_key") or p["size"], p["roof_type"])
             extra_km = max(0, p["dist_km"] - int(self.costs["default_dist_km"]))
             transport = extra_km * self.costs["extra_km_rate"]
             office = self._office_cost()

@@ -19,6 +19,14 @@ class BomQuoteRequestSerializer(serializers.Serializer):
     mode = serializers.CharField(required=False, default="quotation", help_text="Accepted and ignored (as by the legacy endpoint).")
     dist_km = serializers.IntegerField(required=False, default=100, min_value=0)
     structure_type = serializers.ChoiceField(choices=QUOTE_STRUCTURE_TYPES, required=False, default="flatRoof")
+    roof_type = serializers.ChoiceField(
+        choices=QUOTE_STRUCTURE_TYPES,
+        required=False,
+        help_text=(
+            "The roof the array sits on, which sets the installation cost. Distinct from "
+            "`structure_type`, the structure being sold. Defaults to `structure_type`."
+        ),
+    )
     subsidy_type = serializers.ChoiceField(choices=["residential", "ghs", "none"], required=False, default="none")
     panel_type_filter = serializers.ChoiceField(
         choices=["all", "DCR", "NON_DCR"],

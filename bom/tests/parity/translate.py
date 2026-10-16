@@ -15,6 +15,8 @@ from __future__ import annotations
 #: "no structure add-on" as flat roof (its templates price everything as a delta over
 #: flatRoof), which is what the platform's default means too.
 STRUCTURE_TYPES = {"elevated": "elevated", "sheetRoof": "sheetRoof"}
+#: `roofType` ("flat" | "sheet" | "elevated") as the platform's structure vocabulary.
+ROOF_TYPES = {"flat": "flatRoof", "sheet": "sheetRoof", "elevated": "elevated"}
 
 
 def _panel_filter(params: dict) -> str:
@@ -53,10 +55,9 @@ def quote_request(params: dict) -> dict:
         # `main` corpus it cannot be pinned off here -- doing so would compare a
         # DCR-restricted source BOM against an unrestricted platform one.
         "subsidy_type": params.get("subsidyType", "none"),
-        # `roofType` is deliberately not sent: version-2 made it a BOM input (installation
-        # cost reads `installationMatrix[size][roofType]`) but the platform has no such
-        # field yet -- that lands in Phase C. Sending an unknown key would be rejected by
-        # the request serializer, so roof-varying cases differ until then.
+        # The roof the array sits on, which the installation matrix is keyed on. Separate
+        # from `structure_type` above, which is the structure add-on being sold.
+        "roof_type": ROOF_TYPES.get(params.get("roofType", "flat"), "flatRoof"),
     }
     # The source names each cable add-on after the category it draws from.
     extra_cable = [
