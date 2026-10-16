@@ -254,6 +254,152 @@ def platform_lines(body: dict) -> list[dict]:
     return sorted(out, key=lambda row: (str(row["name"]), row["qty"] or 0))
 
 
+def source_string(result: dict) -> dict:
+    """The source's ``stringConfig`` reduced to the figures the platform also computes.
+
+    The source returns the whole chosen panel and inverter records alongside the layout;
+    the platform returns the layout and names the parts on their own BOM lines. Only the
+    layout is comparable, so that is what this projects -- the selection itself is already
+    pinned by the `lines` comparison in the standard corpus.
+    """
+    # `.toFixed(1)` returns a STRING in JavaScript, so the three string-voltage figures
+    # arrive quoted ("458.9") while every other field is a number. The platform returns
+    # floats. Compared raw that is 3 differences on all 51 cases and no arithmetic
+    # difference at all, so the figures are coerced here rather than the engine made to
+    # emit strings -- these are volts a person reads, not money, and the platform's own
+    # consumers want a number.
+    # Premium is micro-inverters: one per panel, so there is no string layout and the
+    # source returns null outright. The platform's `_string_config` returns None for the
+    # same reason, so "both say nothing" is agreement, not a crash.
+    if not result:
+        return {}
+
+    def _volts(value):
+        return None if value is None else float(value)
+
+    return {
+        "panels_per_string": result.get("panelsPerString"),
+        "total_strings": result.get("totalStrings"),
+        "strings_per_mppt": result.get("stringsPerMppt"),
+        "mppt_count": result.get("mpptCount"),
+        "max_total_strings": result.get("maxTotalStrings"),
+        "min_panels_per_string": result.get("minPanelsPerString"),
+        "max_panels_per_string": result.get("maxPanelsPerString"),
+        "string_voc_cold": _volts(result.get("stringVocCold")),
+        "string_vmp_hot": _volts(result.get("stringVmpHot")),
+        "string_vmp_stc": _volts(result.get("stringVmpStc")),
+        "dc_cable_recommended_m": result.get("dcCableRecommended"),
+    }
+
+
+def platform_string(body: dict) -> dict:
+    """The same figures off ``string_config`` in a quote response."""
+    sc = body.get("string_config") or {}
+    if not sc:
+        return {}
+    return {key: sc.get(key) for key in (
+        "panels_per_string",
+        "total_strings",
+        "strings_per_mppt",
+        "mppt_count",
+        "max_total_strings",
+        "min_panels_per_string",
+        "max_panels_per_string",
+        "string_voc_cold",
+        "string_vmp_hot",
+        "string_vmp_stc",
+        "dc_cable_recommended_m",
+    )}
+
+
+def source_bill(result: dict) -> dict:
+    """The source's ``billCalc`` reduced to the figures the platform's sizing returns.
+
+    `recommended` is the whole chosen size record upstream and a key here, so only
+    `recommendedKey` is compared. `breakdown` is the bill's own components, which the
+    platform returns under `bill_breakdown` and are compared separately by
+    `test_bill_sizing.py` against the committed tariff.
+    """
+    if not result:
+        return {}
+    return {
+        "bi_monthly_bill": _float(result.get("biMonthlyBill")),
+        "bi_monthly_units": result.get("biMonthlyUnits"),
+        "monthly_units": result.get("monthlyUnits"),
+        "exact_kw": _float(result.get("exactKw")),
+        "recommended_size": result.get("recommendedKey"),
+        "phase_upgrade_needed": result.get("phaseUpgradeNeeded"),
+        "monthly_savings": result.get("monthlySavings"),
+        "annual_savings": result.get("annualSavings"),
+        "payback_years": _float(result.get("paybackYears")),
+        "average_unit_rate": _float(result.get("avgRate")),
+    }
+
+
+def platform_bill(body: dict) -> dict:
+    """The same figures off ``bom.services.bill_sizing.recommend``."""
+    if not body:
+        return {}
+    return {key: body.get(key) for key in (
+        "bi_monthly_bill",
+        "bi_monthly_units",
+        "monthly_units",
+        "exact_kw",
+        "recommended_size",
+        "phase_upgrade_needed",
+        "monthly_savings",
+        "annual_savings",
+        "payback_years",
+        "average_unit_rate",
+    )}
+
+
+def _float(value):
+    """A JS number that may have arrived as a `.toFixed()` string."""
+    return None if value is None else float(value)
+
+
+def source_upgrade_string(result: dict) -> dict:
+    """`computeUpgradeStringConfig`'s own, smaller shape.
+
+    It reports which MPPT each generation of panels lands on, not a single array's
+    voltages -- so none of `source_string`'s fields apply, which is why comparing the two
+    shapes produced 11 differences on every case.
+    """
+    if not result:
+        return {}
+    return {
+        "existing_panels": result.get("existingPanels"),
+        "new_panels": result.get("newPanels"),
+        "panels_per_string": result.get("panelsPerString"),
+        "dc_cable_recommended_m": result.get("dcCableRecommended"),
+        "mppt_allocation": [
+            {
+                "mppt": row.get("mppt"),
+                "label": row.get("label"),
+                "strings": row.get("strings"),
+                "panels_per_string": row.get("panelsPerString"),
+                "total_panels": row.get("totalPanels"),
+            }
+            for row in (result.get("mpptAllocation") or [])
+        ],
+    }
+
+
+def platform_upgrade_string(body: dict) -> dict:
+    """The same off an upgrade quote's ``string_config``."""
+    sc = body.get("string_config") or {}
+    if not sc:
+        return {}
+    return {
+        "existing_panels": sc.get("existing_panels"),
+        "new_panels": sc.get("new_panels"),
+        "panels_per_string": sc.get("panels_per_string"),
+        "dc_cable_recommended_m": sc.get("dc_cable_recommended_m"),
+        "mppt_allocation": sc.get("mppt_allocation") or [],
+    }
+
+
 def source_subsidy(result: dict) -> dict:
     return {
         "discount_amt": result.get("discountAmt"),

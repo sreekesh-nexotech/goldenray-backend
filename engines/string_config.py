@@ -68,6 +68,22 @@ def _number(value: Any) -> float | None:
     return out if math.isfinite(out) else None
 
 
+def cold_hot_voltages(voc: float, vmp: float, temp_coeff: float) -> tuple[float, float]:
+    """``(voc_cold, vmp_hot)`` for one panel.
+
+    A cold morning lifts Voc, which is what can exceed an inverter's input; a hot roof
+    drops Vmp, which is what can fall below its MPPT window. See the module note on the
+    coefficient -- the source uses the Voc coefficient for both, which is replicated.
+
+    Exported because the upgrade layout needs the same two figures
+    (`bom.services.website_quote._upgrade_string_config`) and a second copy of this
+    derivation is a second place for the coefficient convention to drift.
+    """
+    voc_cold = voc * (1 + (temp_coeff / 100) * (T_MIN_CELL_C - T_STC_C))
+    vmp_hot = vmp * (1 + (temp_coeff / 100) * (T_MAX_CELL_C - T_STC_C))
+    return voc_cold, vmp_hot
+
+
 def string_config(*, panel: dict, inverter: dict, panels: int, is_three_phase: bool = False) -> dict | None:
     """The layout for ``panels`` of ``panel`` on ``inverter``, or ``None`` if unknowable.
 
@@ -112,9 +128,7 @@ def string_config(*, panel: dict, inverter: dict, panels: int, is_three_phase: b
     max_system_voltage = _number(panel.get("max_sys_voltage")) or DEFAULT_MAX_SYSTEM_VOLTAGE
     mppt_count = int(mppt_count)
 
-    # Cold morning lifts Voc; hot roof drops Vmp. See the module note on the coefficient.
-    voc_cold = voc * (1 + (temp_coeff / 100) * (T_MIN_CELL_C - T_STC_C))
-    vmp_hot = vmp * (1 + (temp_coeff / 100) * (T_MAX_CELL_C - T_STC_C))
+    voc_cold, vmp_hot = cold_hot_voltages(voc, vmp, temp_coeff)
 
     max_per_string = math.floor(max_input_voltage / voc_cold) if voc_cold else 0
     min_per_string = math.ceil(mppt_min / vmp_hot) if vmp_hot else 0

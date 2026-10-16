@@ -1208,6 +1208,79 @@ class Calculator:
             return None
         return string_config(panel=panel, inverter=inverter, panels=panels, is_three_phase=self.p.get("upgrade_phase") == "3P")
 
+    def _upgrade_string_config(self, lines: list, panels: int, from_kw: float) -> dict | None:
+        """The MPPT split for an upgrade: existing panels on one, new panels on the next.
+
+        A distinct engine upstream (`computeUpgradeStringConfig`, App.jsx:3085-3120) and a
+        distinct answer: a plain string layout describes one array, while an upgrade has
+        two generations of panels sharing an inverter, so what the installer needs is
+        which MPPT each generation lands on. MPPT1 takes the existing system, MPPT2 the
+        expansion; with only one MPPT the new panels take it and there is no split to
+        report.
+
+        `existingPanels` is derived from the old system's kW at the CHOSEN panel's
+        wattage, not at the wattage the old array actually used -- the source does the
+        same (`ceil(fromKw * 1000 / panel.watt)`), because the old panels' spec is not
+        recorded anywhere. It is an estimate for string planning, not an inventory.
+        """
+        panel_line = next((line for line in lines if line["section"] == "panels"), None)
+        inverter_line = next((line for line in lines if line["section"] == "inverter"), None)
+        if panel_line is None or inverter_line is None or not panels:
+            return None
+        panel = self._spec_for(panel_line, "panel")
+        inverter = self._spec_for(inverter_line, "inverter")
+        if panel is None or inverter is None:
+            return None
+        watt = float(panel.get("watt") or 0)
+        from engines.string_config import MPPT_TARGET_SHARE, cold_hot_voltages
+
+        voc_cold, vmp_hot = cold_hot_voltages(
+            float(panel.get("voc") or 0), float(panel.get("vmp") or 0), float(panel.get("temp_coeff_voc") or 0)
+        )
+        # `max_input_voltage`, the key `_specs` emits -- not the model's field name
+        # (`max_pv_voltage_v`). Getting it wrong leaves this zero and the guard below
+        # returns None, which reads in the output as "no layout" rather than as an error.
+        max_input = float(inverter.get("max_input_voltage") or 0)
+        mppt_min = float(inverter.get("mppt_voltage_min") or 0)
+        mppt_max = float(inverter.get("mppt_voltage_max") or 0)
+        mppt_count = int(inverter.get("mppt_count") or 0)
+        vmp = float(panel.get("vmp") or 0)
+        if not (watt and voc_cold and vmp_hot and max_input and vmp and mppt_count):
+            return None
+        max_pps = math.floor(max_input / voc_cold)
+        min_pps = math.ceil(mppt_min / vmp_hot) if vmp_hot else 1
+        # `(min + max) * 0.65` -- 0.65 of the SUM, not a midpoint. Replicated verbatim:
+        # every captured layout depends on exactly this (recorded in the bug table).
+        mppt_mid = (mppt_min + mppt_max) * MPPT_TARGET_SHARE
+        opt_pps = max(min_pps, min(max_pps, round(mppt_mid / vmp)))
+        existing = math.ceil(from_kw * 1000 / watt) if from_kw else 0
+        allocation = []
+        if mppt_count >= 2:
+            if existing:
+                allocation.append({
+                    "mppt": 1,
+                    "label": "Existing System",
+                    "strings": math.ceil(existing / opt_pps) if opt_pps else 0,
+                    "panels_per_string": opt_pps,
+                    "total_panels": existing,
+                })
+            allocation.append({
+                "mppt": 2 if existing else 1,
+                "label": "New Expansion" if existing else "New Panels",
+                "strings": math.ceil(panels / opt_pps) if opt_pps else 0,
+                "panels_per_string": opt_pps,
+                "total_panels": panels,
+            })
+        return {
+            "existing_panels": existing,
+            "new_panels": panels,
+            "panels_per_string": opt_pps,
+            "mppt_allocation": allocation,
+            "dc_cable_recommended_m": 50,
+            "is_valid": True,
+            "warnings": [],
+        }
+
     def _spec_for(self, line: dict, slug: str) -> dict | None:
         """The engineering specs of the item on ``line``, in the engine's field names."""
         category = next((slot.category for slot in self.s.slots if slot.category.slug == slug), None)
@@ -2202,6 +2275,10 @@ class Calculator:
             # The phase actually used, not one inferred from the size -- what the quote
             # reports has to be what it priced.
             "meta": {"system_type": "upgrade", "size": f"{from_kw}→{to_kw}", "tier": tier, "bat_config": "0", "is_three_phase": is_3p, "new_panels": panels},
+            # The MPPT split the installer needs, which the standard layout cannot
+            # express: an upgrade has two generations of panels sharing one inverter.
+            # COMPOSITE only, like everything else the port adds.
+            **({"string_config": self._upgrade_string_config(lines, panels, from_kw)} if self._composite else {}),
             "available_offers": self._applicable_offers(),
         }
 
