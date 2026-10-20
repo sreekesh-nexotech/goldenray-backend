@@ -260,6 +260,9 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
     if not _hashable_in(data.get("roof_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("roof_type", "roof_type must be flatRoof | elevated | sheetRoof"))
+    value = data.get("item_overrides")
+    if value is not None and not isinstance(value, (list, dict)):
+        messages.append(("item_overrides", "item_overrides must be a list of {pos, component} or a mapping"))
     for name in ("dist_km", "margin_val"):
         try:
             float(data.get(name, 0))
@@ -365,11 +368,43 @@ def _coerce(data: dict) -> dict:
         "future_opts": {**DEFAULT_FUTURE_OPTS, **(data.get("future_opts") or {})},
         # Cable the site needed beyond the standard run, charged over the rate.
         "extra_cable": _extra_cable(data.get("extra_cable")),
+        "item_overrides": _item_overrides(data.get("item_overrides")),
         # Premium tier only: which micro-inverter brand, and whether the gateway has to
         # enforce zero export (a KSEB requirement on some connections).
         "micro_brand": data.get("micro_brand") or "enphase",
         "zero_export": bool(data.get("zero_export", True)),
     }
+
+
+def _item_overrides(value) -> dict:
+    """``{pos: sku}`` -- the part a sales person picked for a slot, by catalog SKU.
+
+    Keyed on the slot position rather than the category, because a template can carry two
+    slots of the same category (the DC cable run and its extra length) and they are
+    separately choosable.
+
+    Accepts the list form the Studio sends as well as a plain mapping. Rows that are not
+    a position and a non-empty SKU are dropped rather than rejected: a stale selection
+    for a slot this configuration no longer has is not an error, and refusing the whole
+    quote over one would make the screen unusable while someone changes the size.
+    """
+    rows = value.items() if isinstance(value, dict) else value if isinstance(value, list) else []
+    overrides = {}
+    for row in rows:
+        if isinstance(row, tuple):
+            pos, sku = row
+        elif isinstance(row, dict):
+            pos, sku = row.get("pos"), row.get("component") or row.get("sku")
+        else:
+            continue
+        try:
+            pos = int(pos)
+        except (TypeError, ValueError):
+            continue
+        sku = str(sku or "").strip()
+        if sku:
+            overrides[pos] = sku
+    return overrides
 
 
 def _extra_cable(value) -> list[dict]:
@@ -1345,7 +1380,7 @@ class Calculator:
             # Selection only. The quantity above still uses the system's real phase, as
             # the source's does -- `effectiveThreePhase` is built after `qty`.
             select_three_phase = True if (cat.slug == "dcdb" and size == "5sp" and self._composite) else slot_three_phase
-            item = self._select_item(cat, tier, slot, select_three_phase, self._size_to_kw(slot_size))
+            item, offered = self._slot_candidates(cat, tier, slot, select_three_phase, self._size_to_kw(slot_size))
             if not item:
                 # version-2 emits the slot as N/A at zero rather than dropping it, and
                 # records why (App.jsx:1862-1874). A line that silently disappears is the
@@ -1412,6 +1447,21 @@ class Calculator:
                     "gst_amt": gst_amt,
                     "section": cat.slug,
                     "is_variable": slot.variable,
+                    # What else this slot could be. Only on a slot that is genuinely
+                    # choosable: a fixed slot with one candidate is not a choice, and
+                    # rendering a dropdown of one is worse than rendering none.
+                    **(
+                        {
+                            "component": item.sku,
+                            "options": [
+                                {"component": i.sku, "name": i.name, "brand": i.brand, "unit_price": float(i.price)}
+                                for i in offered
+                                if i.sku
+                            ],
+                        }
+                        if slot.variable and self._composite and len(offered) > 1
+                        else {}
+                    ),
                 }
             )
         return lines
@@ -1576,7 +1626,24 @@ class Calculator:
             grade = "GP" if self.p["tier"] == "base" else "GI"
         return self._cost("gp_rate_per_kg") if grade == "GP" else self._cost("gi_rate_per_kg")
 
+    def _requested_sku(self, pos) -> str:
+        """The SKU this slot was asked for, if any. COMPOSITE only, like every added behaviour."""
+        if not self._composite:
+            return ""
+        return (self.p.get("item_overrides") or {}).get(pos, "")
+
     def _select_item(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
+        """The chosen item, or ``None``. See :meth:`_slot_candidates` for the pool."""
+        return self._slot_candidates(category, tier, slot, is_three_phase, kw_num)[0]
+
+    def _slot_candidates(self, category: CategoryView, tier, slot: SlotView, is_three_phase, kw_num):
+        """``(chosen, offered)`` -- the item the engine picks, and everything it could have picked.
+
+        The source emits both (``available`` / ``allAvailable``, App.jsx:1912) so a sales
+        person can swap a brand on a line without the quote becoming a free-text document.
+        The pool is the filtered one: a part that failed the phase, content or engineering
+        gate is not offered, because offering it would make the gates advisory.
+        """
         available = []
         # Module content gate (App.jsx:1132-1133). Only panels are filtered, and the
         # non-DCR side is `dcr is not True` rather than `is False`, so a panel whose
@@ -1645,10 +1712,31 @@ class Calculator:
             # -- that was COMPOSITE-only, and version-2 removes it -- so the pool is gone.
             available = off_content
         if not available:
-            return None
+            return None, []
+        # The engine's own default, which is what a quote gets when nobody has chosen.
         if category.is_inverter and any(i.kw for i in available):
-            return min(available, key=lambda i: abs(float(i.kw or 0) - kw_num))
-        return available[0]
+            chosen = min(available, key=lambda i: abs(float(i.kw or 0) - kw_num))
+        else:
+            chosen = available[0]
+        # A caller may ask for one of the offered items instead. Only one of them: an
+        # override naming a part the gates rejected would reintroduce by the back door
+        # exactly what `available` exists to prevent, so an unknown sku is recorded as a
+        # warning and the engine's own choice stands.
+        requested = self._requested_sku(slot.pos)
+        if requested:
+            picked = next((i for i in available if i.sku and i.sku == requested), None)
+            if picked is not None:
+                chosen = picked
+            elif self._composite:
+                self.resolution_warnings.append(
+                    {
+                        "pos": slot.pos,
+                        "category": category.slug,
+                        "resolution": "REQUESTED_UNAVAILABLE",
+                        "detail": f"requested {requested} is not offered for {self.p['sys_type']}/{tier}; quoted {chosen.name}",
+                    }
+                )
+        return chosen, available
 
     # ── structure cost ──
 
@@ -2568,8 +2656,22 @@ def dispatch_body(result: dict) -> dict:
         for key, value in public_body(result).items()
         if key not in ("pricing", "available_offers")
     }
-    body["bom_lines"] = [
-        {key: value for key, value in line.items() if key not in DISPATCH_LINE_KEYS}
-        for line in body.get("bom_lines") or []
-    ]
+    body["bom_lines"] = [_dispatch_line(line) for line in body.get("bom_lines") or []]
     return body
+
+
+def _dispatch_line(line: dict) -> dict:
+    """One picking-list line: its own prices gone, and its alternatives' prices with them.
+
+    The second half is the part worth stating. ``options`` carries a ``unit_price`` per
+    alternative so a sales person can see what a swap costs, and stripping only the
+    line's own four money keys would have shipped the whole price list to the warehouse
+    inside the very response that exists to withhold it. The brand names stay -- an
+    installer reading a substitution off the sheet is the point of the list.
+    """
+    stripped = {key: value for key, value in line.items() if key not in DISPATCH_LINE_KEYS}
+    if isinstance(stripped.get("options"), list):
+        stripped["options"] = [
+            {key: value for key, value in option.items() if key != "unit_price"} for option in stripped["options"]
+        ]
+    return stripped
