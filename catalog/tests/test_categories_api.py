@@ -109,3 +109,46 @@ class TestCrud:
         CategoryFactory.create_batch(30)
         with django_assert_max_num_queries(10):
             assert client.get(URL, {"page_size": 100}).json()["count"] == 30
+
+
+class TestCategoryCounts:
+    """`counts/` — what the catalog editor's chips read.
+
+    They cannot be counted from the components the screen holds: with paging that is one
+    page, so every chip would report whatever landed on it. This is also the endpoint
+    that makes a truncated list visible — a catalog of 275 behind a 200-row page cap
+    looked complete until the chips disagreed with it.
+    """
+
+    def test_counts_every_category_including_the_empty_ones(self, client):
+        full = CategoryFactory(slug="has-rows", sku_prefix="HAS")
+        empty = CategoryFactory(slug="no-rows", sku_prefix="NON")
+        ComponentFactory(category=full)
+        ComponentFactory(category=full)
+
+        response = client.get(f"{URL}counts/")
+        assert response.status_code == 200, response.json()
+        by_slug = {row["slug"]: row["count"] for row in response.json()}
+        assert by_slug["has-rows"] == 2
+        # An empty category is reported as 0, not omitted: a chip that vanishes
+        # reads as "deleted" rather than "nothing in it yet".
+        assert by_slug["no-rows"] == 0
+        assert {str(full.uid), str(empty.uid)} <= {row["uid"] for row in response.json()}
+
+    def test_the_total_is_not_capped_by_the_page_size(self, client):
+        """The bug this endpoint exists for. `StandardPagination` caps `page_size` at 200
+        and clamps silently, so a list request cannot report more than 200."""
+        category = CategoryFactory(slug="big", sku_prefix="BIG")
+        ComponentFactory.create_batch(3, category=category)
+        listed = client.get(f"{URL}?page_size=1000")
+        assert listed.status_code == 200
+        assert len(listed.json()["results"]) <= 200
+        counts = {row["slug"]: row["count"] for row in client.get(f"{URL}counts/").json()}
+        assert counts["big"] == 3
+
+    def test_counts_needs_view_not_edit(self, auth_client, make_user):
+        reader = auth_client(make_user(grants={"catalog": ["view"]}, scopes={"catalog": "all"}))
+        assert reader.get(f"{URL}counts/").status_code == 200
+
+    def test_anonymous_is_refused(self, api_client):
+        assert api_client.get(f"{URL}counts/").status_code == 401
