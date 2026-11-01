@@ -16,25 +16,25 @@ class BomQuoteRequestSerializer(serializers.Serializer):
     size = serializers.CharField(help_text="Size key: 3, 5sp, 5tp, 6, 8, 10 (on-grid); 3, 5, 8, 10 (hybrid); the target kW for upgrades.")
     tier = serializers.ChoiceField(choices=["base", "value", "premium"])
     bat_config = serializers.CharField(required=False, default="0", help_text="Hybrid battery band 0/1/2.")
+    battery_override = serializers.ChoiceField(
+        choices=["0", "1", "2"],
+        required=False,
+        allow_blank=True,
+        help_text="Hybrid only: the battery count chosen within the package (0 = no battery). Blank keeps the package's own band.",
+    )
     mode = serializers.CharField(required=False, default="quotation", help_text="Accepted and ignored (as by the legacy endpoint).")
     dist_km = serializers.IntegerField(required=False, default=100, min_value=0)
     structure_type = serializers.ChoiceField(choices=QUOTE_STRUCTURE_TYPES, required=False, default="flatRoof")
     roof_type = serializers.ChoiceField(
         choices=QUOTE_STRUCTURE_TYPES,
         required=False,
-        help_text=(
-            "The roof the array sits on, which sets the installation cost. Distinct from "
-            "`structure_type`, the structure being sold. Defaults to `structure_type`."
-        ),
+        help_text=("The roof the array sits on, which sets the installation cost. Distinct from " "`structure_type`, the structure being sold. Defaults to `structure_type`."),
     )
     subsidy_type = serializers.ChoiceField(choices=["residential", "ghs", "none"], required=False, default="none")
     panel_type_filter = serializers.ChoiceField(
         choices=["all", "DCR", "NON_DCR"],
         required=False,
-        help_text=(
-            "Which module content may be offered. `all` leaves it open unless a subsidy is "
-            "claimed, which forces DCR. Supersedes `module_dcr`, which is still accepted."
-        ),
+        help_text=("Which module content may be offered. `all` leaves it open unless a subsidy is " "claimed, which forces DCR. Supersedes `module_dcr`, which is still accepted."),
     )
     struct_grade = serializers.ChoiceField(
         choices=["default", "gp", "gi"],

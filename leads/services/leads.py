@@ -32,8 +32,9 @@ SNAPSHOT_FIELDS = ("number", "kind", "form", "name", "phone_e164", "email", "pin
 OPEN = frozenset(Lead.OPEN_STATUSES)
 
 
-def leads_queryset():
-    return Lead.objects.select_related("assignee", "customer")
+def leads_queryset(*, include_archived: bool = False):
+    manager = Lead.all_objects if include_archived else Lead.objects
+    return manager.select_related("assignee", "customer")
 
 
 def lead_snapshot(lead: Lead) -> dict:
@@ -230,6 +231,20 @@ def delete_lead(instance: Lead, *, user, expected_version=None) -> None:
     add_event(lead, LeadEvent.Event.ARCHIVED, by=user)
     record("leads.lead_deleted", obj=lead, actor=user, before=lead_snapshot(lead))
     bump(CACHE_NAMESPACE)
+
+
+@transaction.atomic
+def restore_lead(instance: Lead, *, user, expected_version=None) -> Lead:
+    """Bring an archived (hidden) lead back into the list. Idempotent on a live lead."""
+    lead = Lead.all_objects.select_for_update().get(pk=instance.pk)
+    check_version(lead, expected_version)
+    if lead.deleted_at is None:
+        return lead
+    lead.restore(user)
+    add_event(lead, LeadEvent.Event.RESTORED, by=user)
+    record("leads.lead_restored", obj=lead, actor=user, before={"archived": True}, after={"archived": False})
+    bump(CACHE_NAMESPACE)
+    return lead
 
 
 def notes_queryset(lead: Lead):

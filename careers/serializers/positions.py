@@ -21,6 +21,14 @@ SLUG = RegexValidator(SLUG_REGEX, "Use lower-case letters, digits and single hyp
 # One ``SeoIssue`` component for every SEO block: the shape is the seo app's (``SeoFields.seo_status()`` issues).
 
 
+class ScreeningQuestionSerializer(serializers.Serializer):
+    """One Yes/No question of the application form (careers.services.screening validates the list)."""
+
+    key = serializers.CharField(max_length=40, required=False, allow_blank=True, help_text="Stable id; send it back unchanged on edit, omit it for a new question.")
+    question = serializers.CharField(max_length=300)
+    required = serializers.BooleanField(required=False, default=True)
+
+
 class JobPositionListSerializer(serializers.ModelSerializer):
     department = serializers.SlugRelatedField(slug_field="uid", read_only=True)
     department_name = serializers.CharField(source="department.name", read_only=True)
@@ -64,6 +72,7 @@ class JobPositionSerializer(JobPositionListSerializer):
     seo_issues = serializers.SerializerMethodField()
     publish_errors = serializers.SerializerMethodField()
     public_url = serializers.SerializerMethodField(help_text="Site-relative path of the public page.")
+    screening_questions = ScreeningQuestionSerializer(many=True, read_only=True)
 
     class Meta(JobPositionListSerializer.Meta):
         fields = JobPositionListSerializer.Meta.fields + [
@@ -73,6 +82,7 @@ class JobPositionSerializer(JobPositionListSerializer):
             "requirements",
             "benefits",
             "application_instructions",
+            "screening_questions",
             "seo_title",
             "meta_description",
             "canonical_url",
@@ -112,6 +122,7 @@ class _JobPositionWriteSerializer(serializers.Serializer):
     requirements = serializers.CharField(required=False, allow_blank=True, default="", help_text="One per line.")
     benefits = serializers.CharField(required=False, allow_blank=True, default="", help_text="One per line.")
     application_instructions = serializers.CharField(required=False, allow_blank=True, default="")
+    screening_questions = ScreeningQuestionSerializer(many=True, required=False, default=list, help_text="Yes/No questions the application form asks, in order (at most 10).")
     opens_on = serializers.DateField(required=False, allow_null=True, default=None)
     application_deadline = serializers.DateField(required=False, allow_null=True, default=None)
     openings = serializers.IntegerField(required=False, allow_null=True, default=None, min_value=1, max_value=32767)

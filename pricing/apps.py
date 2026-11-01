@@ -10,3 +10,7 @@ class PricingConfig(AppConfig):
         from pricing.services import registrations
 
         registrations.register()
+
+        from pricing.views import change_kinds
+
+        change_kinds.register_kinds()  # what Project Head / Procurement change through approvals

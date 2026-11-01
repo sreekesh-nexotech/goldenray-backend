@@ -46,6 +46,8 @@ class JobPosition(BaseModel, SeoFields):
     requirements = models.TextField(blank=True, default="", help_text="One per line.")
     benefits = models.TextField(blank=True, default="", help_text="One per line.")
     application_instructions = models.TextField(blank=True, default="")
+    # Validated document (careers.services.screening): ordered [{key, question, required}] Yes/No questions on the form.
+    screening_questions = models.JSONField(default=list, blank=True)
     opens_on = models.DateField(null=True, blank=True, help_text="First day applications are accepted (informational).")
     application_deadline = models.DateField(null=True, blank=True, help_text="Last day to apply (PLAN: closes_on); JSON-LD validThrough.")
     openings = models.PositiveSmallIntegerField(null=True, blank=True, help_text="Number of vacancies, when known.")

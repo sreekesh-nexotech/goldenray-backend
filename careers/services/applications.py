@@ -28,6 +28,7 @@ from django.utils import timezone
 from accounts.services.authz import can
 from audit.services import changes, record, snapshot
 from careers.models import GENERAL_APPLICATION, JobApplication, JobApplicationEvent, JobApplicationNote, JobPosition
+from careers.services.screening import answers_for
 from careers.services.validation import download_name
 from core.errors import Conflict, DomainError, NotFound
 from core.models import actor_or_none
@@ -148,6 +149,8 @@ def _discard(stored: list[MediaAsset]) -> None:
 def submit_application(*, data: dict, resume, portfolio=None, ip: str | None = None) -> JobApplication:
     """Create an application from validated public form data (see the module docstring)."""
     position = open_position(data["position_uid"]) if data.get("position_uid") else None
+    # Checked before any file is stored; a general application has no posting, so no questions.
+    data = {**data, "screening_answers": answers_for(position.screening_questions, data.get("screening_answers")) if position else []}
     stored: list[MediaAsset] = []
     try:
         resume_asset = store_candidate_file(resume, candidate=data["name"], kind="resume")
@@ -166,6 +169,7 @@ def submit_application(*, data: dict, resume, portfolio=None, ip: str | None = N
 def _create_application(*, data: dict, position: JobPosition | None, resume: MediaAsset, portfolio: MediaAsset | None, ip: str | None) -> JobApplication:
     values = {name: data[name] for name in CANDIDATE_FIELDS if name in data}
     values["position_label"] = values.get("position_label") or GENERAL_APPLICATION
+    values["screening_answers"] = data.get("screening_answers") or []
     if position is not None and not JobPosition.objects.select_for_update().filter(pk=position.pk, status=JobPosition.Status.PUBLISHED).exists():
         raise _not_open()  # unpublished while the files were being stored (the caller discards them)
     if position is not None:

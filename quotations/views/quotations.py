@@ -14,9 +14,11 @@ from rest_framework.response import Response
 
 from core.serializers import ErrorSerializer
 from core.views import BaseViewSet, ListModelMixin, RetrieveModelMixin
-from quotations.models import DiscountRequest, Phase, Quotation, QuotationStatus, SystemType
+from quotations.models import DiscountRequest, Phase, Quotation, QuotationStatus, SystemType, Tier
 from quotations.serializers.quotations import (
     CancelSerializer,
+    ComponentOptionsQuerySerializer,
+    ComponentOptionsSerializer,
     DiscountCreateSerializer,
     DiscountRequestSerializer,
     HistorySerializer,
@@ -39,6 +41,11 @@ class QuotationFilter(django_filters.FilterSet):
     customer = django_filters.UUIDFilter(field_name="customer__uid")
     owner = django_filters.UUIDFilter(field_name="owner__uid")
     legacy = django_filters.BooleanFilter()
+    # History screen: what the current version quotes, and when the quotation was raised (dates inclusive).
+    system_type = django_filters.ChoiceFilter(field_name="current_version__system_type", choices=SystemType.choices)
+    tier = django_filters.ChoiceFilter(field_name="current_version__tier", choices=Tier.choices)
+    created_from = django_filters.DateFilter(field_name="created_at", lookup_expr="date__gte")
+    created_to = django_filters.DateFilter(field_name="created_at", lookup_expr="date__lte")
 
     class Meta:
         model = Quotation
@@ -56,6 +63,7 @@ class QuotationViewSet(VersionActionsMixin, ListModelMixin, RetrieveModelMixin, 
         "retrieve": "view",
         "create": "create",
         "system_options": "view",
+        "component_options": "view",
         "version_detail": "view",
         "version_update": "edit",
         "preview": "view",
@@ -75,7 +83,7 @@ class QuotationViewSet(VersionActionsMixin, ListModelMixin, RetrieveModelMixin, 
     http_method_names = ["get", "post", "patch"]
     serializer_class = QuotationSerializer
     filterset_class = QuotationFilter
-    search_fields = ["number", "customer__name", "customer__code"]
+    search_fields = ["number", "customer__name", "customer__code", "customer__phone_e164"]
     ordering_fields = ["created_at", "number", "valid_until", "status"]
     ordering = ["-created_at"]
 
@@ -116,6 +124,19 @@ class QuotationViewSet(VersionActionsMixin, ListModelMixin, RetrieveModelMixin, 
         system_type = request.query_params.get("system_type") if request.query_params.get("system_type") in SystemType.values else None
         phase = request.query_params.get("phase") if request.query_params.get("phase") in Phase.values else None
         return Response(SystemOptionsSerializer(options.system_options(system_type=system_type, phase=phase)).data)
+
+    @extend_schema(
+        operation_id="quotations_component_options",
+        parameters=[ComponentOptionsQuerySerializer],
+        responses={200: ComponentOptionsSerializer, **READ_ERRORS, 409: ErrorSerializer},
+        tags=TAGS,
+        description="The parts Sales may choose for one configuration (panel …), as `selections.tier_selections` accepts them. 409 `no_approved_package`.",
+    )
+    @action(detail=False, methods=["get"], url_path="component-options", filter_backends=[], pagination_class=None)
+    def component_options(self, request, *args, **kwargs):
+        query = ComponentOptionsQuerySerializer(data=request.query_params)
+        query.is_valid(raise_exception=True)
+        return Response(ComponentOptionsSerializer(options.component_options(**query.validated_data)).data)
 
     @extend_schema(
         operation_id="quotations_revise",

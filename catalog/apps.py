@@ -15,3 +15,7 @@ class CatalogConfig(AppConfig):
         media_usage.register(Brand, "logo")
         media_usage.register(Component, "datasheet")
         media_usage.register(Component, "primary_image")
+
+        from catalog.views import change_kinds
+
+        change_kinds.register_kinds()  # what Project Head / Procurement change through approvals

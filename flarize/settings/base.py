@@ -49,6 +49,7 @@ LOCAL_APPS = [
     "audit",
     "media",
     "documents",
+    "approvals",
     "company",
     "catalog",
     "pricing",

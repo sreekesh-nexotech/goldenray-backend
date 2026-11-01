@@ -102,6 +102,8 @@ class JobApplication(BaseModel):
     # Private RESUME asset as well; SET_NULL for the same reason.
     portfolio = models.ForeignKey("media.MediaAsset", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     declaration_accepted = models.BooleanField(default=False)
+    # Snapshot of the posting's Yes/No questions as answered: [{key, question, answer}] (careers.services.screening).
+    screening_answers = models.JSONField(default=list, blank=True)
 
     class Meta:
         db_table = "careers_job_application"

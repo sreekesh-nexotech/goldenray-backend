@@ -85,7 +85,14 @@ class JobApplicationEventSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class ScreeningAnswerSerializer(serializers.Serializer):
+    key = serializers.CharField()
+    question = serializers.CharField(help_text="The question as it was asked (snapshot).")
+    answer = serializers.BooleanField(help_text="true = Yes.")
+
+
 class JobApplicationSerializer(JobApplicationListSerializer):
+    screening_answers = ScreeningAnswerSerializer(many=True, read_only=True)
     resume = StoredFileSerializer(read_only=True, allow_null=True, help_text="Download through …/download/resume/.")
     portfolio = StoredFileSerializer(read_only=True, allow_null=True, help_text="Download through …/download/portfolio/.")
     allowed_transitions = serializers.SerializerMethodField()
@@ -109,6 +116,7 @@ class JobApplicationSerializer(JobApplicationListSerializer):
             "availability",
             "cover_letter",
             "declaration_accepted",
+            "screening_answers",
             "resume",
             "portfolio",
             "allowed_transitions",

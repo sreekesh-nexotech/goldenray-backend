@@ -30,6 +30,7 @@ class LeadSerializer(serializers.ModelSerializer):
     assignee = UserRefSerializer(read_only=True, allow_null=True)
     customer = CustomerRefSerializer(read_only=True, allow_null=True)
     page = serializers.CharField(source="source_url", read_only=True)
+    archived_at = serializers.DateTimeField(source="deleted_at", read_only=True, allow_null=True, help_text="Set while the lead is hidden (archived); `restore/` clears it.")
 
     class Meta:
         model = Lead
@@ -51,6 +52,7 @@ class LeadSerializer(serializers.ModelSerializer):
             "assignee",
             "customer",
             "lost_reason",
+            "archived_at",
             "created_at",
             "updated_at",
             "version",
@@ -110,6 +112,10 @@ class LeadLostSerializer(ExpectedVersionMixin, serializers.Serializer):
 
 class LeadSpamSerializer(ExpectedVersionMixin, serializers.Serializer):
     note = serializers.CharField(max_length=2000, required=False, allow_blank=True, default="")
+
+
+class LeadRestoreSerializer(ExpectedVersionMixin, serializers.Serializer):
+    pass
 
 
 class LeadConvertSerializer(ExpectedVersionMixin, serializers.Serializer):

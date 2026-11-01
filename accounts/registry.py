@@ -120,6 +120,15 @@ _SPECS: tuple[ModuleSpec, ...] = (
     ModuleSpec("bom", "CONFIG", "BOM", ("view", "edit")),
     ModuleSpec("packs", "CONFIG", "Packs", ("view", "edit", "submit", "approve", "publish")),
     ModuleSpec("engineering", "CONFIG", "Engineering", ("view", "verify", "approve"), description="verify = run checker; approve = acknowledge/waive."),
+    ModuleSpec(
+        "change_requests",
+        "CONFIG",
+        "Change requests",
+        ("view", "create", "approve"),
+        _SALES_SCOPES,
+        SCOPE_OWNED,
+        "create = ask for a price/configuration change; approve = review and apply (never one's own).",
+    ),
     # SALES
     ModuleSpec("leads", "SALES", "Leads", ("view", "create", "edit", "archive", "manage"), _SALES_SCOPES, SCOPE_OWNED, "manage = assign."),
     ModuleSpec("customers", "SALES", "Customers", ("view", "create", "edit", "archive", "manage"), _SALES_SCOPES, SCOPE_OWNED, "manage = merge."),

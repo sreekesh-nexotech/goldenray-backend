@@ -6,10 +6,12 @@ rules (``goldenray.serializers.job_application_serializer``) exactly; it maps th
 
 from __future__ import annotations
 
+import json
+
 from rest_framework import serializers
 
 from careers.models import GENERAL_APPLICATION, JobApplication
-from careers.services import validation
+from careers.services import screening, validation
 
 # ----------------------------------------------------------------------------------------------------------------
 # Job positions (documentation shapes; the payload is built by careers.services.public)
@@ -53,12 +55,19 @@ class PublicJobSeoSerializer(serializers.Serializer):
     noindex = serializers.BooleanField()
 
 
+class PublicScreeningQuestionSerializer(serializers.Serializer):
+    key = serializers.CharField(help_text="Send the answer back under this key in the application's `screening_answers`.")
+    question = serializers.CharField()
+    required = serializers.BooleanField()
+
+
 class PublicJobDetailDataSerializer(PublicJobCardSerializer):
     description = serializers.CharField(allow_blank=True)
     responsibilities = serializers.ListField(child=serializers.CharField())
     requirements = serializers.ListField(child=serializers.CharField())
     benefits = serializers.ListField(child=serializers.CharField())
     application_instructions = serializers.CharField(allow_blank=True)
+    screening_questions = PublicScreeningQuestionSerializer(many=True, help_text="Yes/No questions to ask on the application form, in order.")
     seo = PublicJobSeoSerializer()
 
 
@@ -112,6 +121,12 @@ class PublicJobApplicationSerializer(serializers.Serializer):
     resume = serializers.FileField(help_text="PDF, DOC or DOCX, at most 10 MB (type checked from the content).")
     portfolio_file = serializers.FileField(required=False, allow_null=True, default=None, help_text="Optional; same rules as the resume.")
     declaration_accepted = serializers.BooleanField(help_text="Must be true.")
+    screening_answers = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        default="",
+        help_text='JSON object answering the posting\'s `screening_questions`: `{"<key>": true|false}` ("yes"/"no" also accepted).',
+    )
     website = serializers.CharField(max_length=255, required=False, allow_blank=True, default="", write_only=True, help_text="Honeypot: leave empty.")
 
     def validate_full_name(self, value):
@@ -162,6 +177,18 @@ class PublicJobApplicationSerializer(serializers.Serializer):
         if not value:
             raise serializers.ValidationError("Please accept the declaration to continue.")
         return value
+
+    def validate_screening_answers(self, value):
+        """Multipart carries the answers as one JSON string; the service checks them against the posting."""
+        if not value.strip():
+            return {}
+        try:
+            answers = json.loads(value)
+        except ValueError:
+            raise serializers.ValidationError("Send a JSON object of question key → yes/no.") from None
+        if not isinstance(answers, dict) or len(answers) > screening.MAX_QUESTIONS:
+            raise serializers.ValidationError("Send a JSON object of question key → yes/no.")
+        return {str(key): answer for key, answer in answers.items()}
 
     def validate(self, attrs):
         if attrs.pop("website", ""):  # honeypot: bots fill every field
