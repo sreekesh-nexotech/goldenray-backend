@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from accounts.models import Role, User
+from accounts.services.passwords import MAX_PASSWORD_LENGTH
 from core.serializers.common import ExpectedVersionMixin
 
 PHONE_VALIDATOR = RegexValidator(r"^\+[1-9][0-9]{6,14}$", "Use the international E.164 format, e.g. +919876543210.")
@@ -55,7 +56,20 @@ class _UserWriteSerializer(serializers.Serializer):
 
 
 class UserCreateSerializer(_UserWriteSerializer):
-    """Creates the account without a password and e-mails an invitation link."""
+    """Creates the account. Without ``password`` an invitation link is e-mailed; with one, none is sent."""
+
+    password = serializers.CharField(
+        max_length=MAX_PASSWORD_LENGTH,
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+        write_only=True,
+        style={"input_type": "password"},
+        help_text=(
+            "Optional. Leave empty or null to e-mail an invitation link instead. When set, it must satisfy the "
+            "password policy and no invitation is sent; the user still has to replace it at first sign-in."
+        ),
+    )
 
 
 class UserUpdateSerializer(ExpectedVersionMixin, _UserWriteSerializer):

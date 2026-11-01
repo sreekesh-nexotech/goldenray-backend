@@ -7,6 +7,7 @@ root_packages =
     audit
     media
     documents
+    approvals
     company
     catalog
     pricing
@@ -54,6 +55,7 @@ forbidden_modules =
     audit
     media
     documents
+    approvals
     company
     catalog
     pricing
@@ -89,10 +91,10 @@ layers =
     customers : leads : quotations : agreements : site_inspections : projects
     bom : packs : engineering
     catalog : pricing : procurement : inventory
-    core : accounts : audit : media : documents
+    core : accounts : audit : media : documents : approvals
 
 [importlinter:contract:platform-is-the-bottom]
-name = The platform (core, accounts, audit, media, documents) imports no product, content, HR, legacy or migration code
+name = The platform (core, accounts, audit, media, documents, approvals) imports no product, content, HR, legacy or migration code
 type = forbidden
 source_modules =
     core
@@ -100,6 +102,7 @@ source_modules =
     audit
     media
     documents
+    approvals
 forbidden_modules =
     company
     catalog
@@ -189,6 +192,7 @@ source_modules =
     audit
     media
     documents
+    approvals
     company
     catalog
     pricing

@@ -9,8 +9,9 @@ Goldens (``careers/tests/legacy/cms_<scenario>.json``) were recorded by ``captur
   intro set).
 
 The CMS rows are loaded through ``careers.services.legacy_import`` and every recorded response is replayed against
-``/api/public/v1/``. The only transformation is the documented one: the legacy integer ``id`` becomes the posting's
-``uid`` (resolved through ``core_legacy_map``). Everything else must be identical.
+``/api/public/v1/``. The only transformations are the documented ones: the legacy integer ``id`` becomes the posting's
+``uid`` (resolved through ``core_legacy_map``), and the detail gains ``screening_questions`` (additive; an imported
+posting has none, so ``[]``). Everything else must be identical.
 """
 
 import json
@@ -58,7 +59,9 @@ def expected(body: dict) -> dict:
         return item
 
     data = body["data"]
-    return {**body, "data": [card(item) for item in data] if isinstance(data, list) else card(data)}
+    if isinstance(data, list):
+        return {**body, "data": [card(item) for item in data]}
+    return {**body, "data": {**card(data), "screening_questions": []}}
 
 
 def new_path(key: str) -> tuple[str, dict]:

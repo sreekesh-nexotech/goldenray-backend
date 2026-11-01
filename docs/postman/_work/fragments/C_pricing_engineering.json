@@ -1,0 +1,6892 @@
+[
+ {
+  "id": "POST /api/v1/engineering/findings/{uid}/acknowledge/",
+  "method": "POST",
+  "path": "/api/v1/engineering/findings/{uid}/acknowledge/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.FindingViewSet",
+  "action": "acknowledge",
+  "source_file": "engineering/views/engineering.py:115",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Findings"
+  ],
+  "summary": "Acknowledge a checker finding",
+  "description": "Acknowledges a WARN/INFO finding or waives a BLOCK one; `reason` is required (blank → 400). The acknowledgement carries over to the same finding (identity + message) in later runs of the subject. Already acknowledged → 409 `finding_already_acknowledged`; optional `expected_version` (the finding's `version`) → 409 `stale_version`. Returns the acknowledgement (201). The finding uid comes from `GET engineering/runs/{uid}/`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.approve",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "engineering_findings_uid",
+    "example": "e2a6c8f4-7d3b-4e19-b0c5-4a8f2d6e1b97",
+    "description": "uid of the finding (from a run's `findings[]`)."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Site survey confirms ventilated roof; derating accepted by chief engineer."
+   },
+   "fields": [
+    {
+     "name": "reason",
+     "type": "string ≤ 2000",
+     "required": true
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "a1f5d9c3-8e2b-4b76-9d40-3c7e5a1f9b68",
+     "acknowledged_by": {
+      "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+      "email": "pricing.manager@goldenray.in"
+     },
+     "reason": "Site survey confirms ventilated roof; derating accepted by chief engineer.",
+     "at": "2026-10-01T10:15:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.approve` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live finding with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`finding_already_acknowledged` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Finding `version` bumped",
+   "Outbox `engineering.finding_acknowledged` {finding_uid, run_uid, subject_type, subject_uid, rule_code, severity}",
+   "Audit `engineering.finding_acknowledged` (or `engineering.finding_waived` for BLOCK)",
+   "Cache bump `engineering`"
+  ],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_findings_acknowledge"
+ },
+ {
+  "id": "GET /api/v1/engineering/rule-sets/",
+  "method": "GET",
+  "path": "/api/v1/engineering/rule-sets/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.RuleSetViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Rule sets"
+  ],
+  "summary": "List engineering rule sets",
+  "description": "Checker rule-set versions per engine (one ACTIVE per engine), with `rule_count`. Rule sets are loaded by import commands, not via the API. Paginated. Captures the first uid.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "engine",
+    "value": "engineeringChecker",
+    "description": "engineeringChecker | engineeringValidation.",
+    "required": false
+   },
+   {
+    "key": "active",
+    "value": "true",
+    "description": "Only the active (true) or inactive (false) sets.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `rules_version`, `note`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "Sort by one of `created_at`, `rules_version` (prefix `-` for descending). Default: `engine`, `-created_at`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "2d7b4f9a-6e1c-4a38-b5d0-9c3e8a1f7b42",
+       "rules_version": "phase1e.1",
+       "engine": "engineeringChecker",
+       "active": true,
+       "activated_at": "2026-10-01T10:15:00+05:30",
+       "note": "",
+       "rule_count": 36,
+       "version": 2,
+       "created_at": "2026-09-01T09:00:00+05:30"
+      },
+      {
+       "uid": "8e1a5c3f-0d7b-4f64-9a2e-6b4d1c9f3e87",
+       "rules_version": "phase1d.3",
+       "engine": "engineeringChecker",
+       "active": false,
+       "activated_at": "2026-06-01T09:00:00+05:30",
+       "note": "",
+       "rule_count": 34,
+       "version": 3,
+       "created_at": "2026-05-20T09:00:00+05:30"
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "engineering_rule_sets_uid",
+    "from": "results.0.uid"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_rule_sets_list"
+ },
+ {
+  "id": "GET /api/v1/engineering/rule-sets/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/engineering/rule-sets/{uid}/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.RuleSetViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Rule sets"
+  ],
+  "summary": "Get an engineering rule set",
+  "description": "One rule set including the full `rules` document (`{engine, version, rules[]}` with severities and parameters).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "engineering_rule_sets_uid",
+    "example": "2d7b4f9a-6e1c-4a38-b5d0-9c3e8a1f7b42",
+    "description": "uid of the rule set."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "2d7b4f9a-6e1c-4a38-b5d0-9c3e8a1f7b42",
+     "rules_version": "phase1e.1",
+     "engine": "engineeringChecker",
+     "active": true,
+     "activated_at": "2026-10-01T10:15:00+05:30",
+     "note": "",
+     "rule_count": 36,
+     "version": 2,
+     "created_at": "2026-09-01T09:00:00+05:30",
+     "rules": {
+      "engine": "engineeringChecker",
+      "version": "phase1e.1",
+      "rules": [
+       {
+        "code": "PBC-D-002",
+        "category": "DC",
+        "severity": "BLOCK",
+        "description": "DC string voltage stays within the inverter MPPT window.",
+        "inputs": [
+         "panel.voc",
+         "inverter.mppt_max_v"
+        ],
+        "source": "Flarize engineering checker",
+        "requiresAcknowledgement": false,
+        "params": {
+         "margin_pct": 5
+        }
+       }
+      ]
+     }
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live rule set with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_rule_sets_retrieve"
+ },
+ {
+  "id": "POST /api/v1/engineering/rule-sets/{uid}/activate/",
+  "method": "POST",
+  "path": "/api/v1/engineering/rule-sets/{uid}/activate/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.RuleSetViewSet",
+  "action": "activate",
+  "source_file": "engineering/views/engineering.py:72",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Rule sets"
+  ],
+  "summary": "Activate an engineering rule set",
+  "description": "Makes this rule set the ACTIVE one of its engine; the previously active set of the same engine is deactivated in the same transaction. The document is validated by the checker first (400 `rule_set_invalid`). 409 `rule_set_already_active`, 409 `rule_set_activation_conflict`, 409 `stale_version` (optional `expected_version`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.approve",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "engineering_rule_sets_uid",
+    "example": "2d7b4f9a-6e1c-4a38-b5d0-9c3e8a1f7b42",
+    "description": "uid of the rule set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Adopt phase1e.1 rules for October packs"
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "2d7b4f9a-6e1c-4a38-b5d0-9c3e8a1f7b42",
+     "rules_version": "phase1e.1",
+     "engine": "engineeringChecker",
+     "active": true,
+     "activated_at": "2026-10-01T10:20:00+05:30",
+     "note": "",
+     "rule_count": 36,
+     "version": 3,
+     "created_at": "2026-09-01T09:00:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` or `rule_set_invalid`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.approve` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live rule set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`rule_set_already_active`, `rule_set_activation_conflict` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `engineering.rule_set_activated` {rule_set_uid, version, engine, previous_version}",
+   "Audit `engineering.rule_set_activated` (+ `engineering.rule_set_deactivated`)",
+   "Cache bump `engineering`"
+  ],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_rule_sets_activate"
+ },
+ {
+  "id": "GET /api/v1/engineering/runs/",
+  "method": "GET",
+  "path": "/api/v1/engineering/runs/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.RunViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Runs"
+  ],
+  "summary": "List engineering checker runs",
+  "description": "Checker runs (newest first). Runs are recorded synchronously by `POST packs/config-versions/<uid>/run-checker/` (and other checker callers), not created here. Paginated. Captures the first uid.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "subject_type",
+    "value": "PACK_CONFIG_VERSION",
+    "description": "PACK_CONFIG_VERSION | PROJECT_BOM | QUOTATION_DRAFT.",
+    "required": false
+   },
+   {
+    "key": "subject_uid",
+    "value": "{{packs_config_versions_uid}}",
+    "description": "uid of the checked subject.",
+    "required": false
+   },
+   {
+    "key": "result",
+    "value": "WARN",
+    "description": "PASS | WARN | FAIL.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `subject_label`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "Sort by one of `created_at` (prefix `-` for descending). Default: `-created_at`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "5f9c2e7a-3b1d-4086-a4e9-1c7f8d2b6a53",
+       "subject_type": "PACK_CONFIG_VERSION",
+       "subject_uid": "9b4e1d7c-2a6f-4c58-8e3b-0d5a9f1c7e26",
+       "subject_label": "Pack config v12",
+       "result": "WARN",
+       "rules_version": "phase1e.1",
+       "summary": {
+        "rulesVersion": "phase1e.1",
+        "counts": {
+         "blocked": 0,
+         "warning": 1,
+         "info": 2
+        },
+        "scopes": {
+         "ongrid_value_3": {
+          "status": "WARN",
+          "counts": {
+           "blocked": 0,
+           "warning": 1,
+           "info": 2
+          },
+          "deterministicKey": "a41c9e…"
+         }
+        }
+       },
+       "created_at": "2026-10-01T10:15:00+05:30"
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "engineering_runs_uid",
+    "from": "results.0.uid"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_runs_list"
+ },
+ {
+  "id": "GET /api/v1/engineering/runs/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/engineering/runs/{uid}/",
+  "app": "engineering",
+  "surface": "staff",
+  "view": "engineering.views.engineering.RunViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Runs"
+  ],
+  "summary": "Get an engineering checker run",
+  "description": "One run with all its findings (sorted), each with its acknowledgement if any. Captures the first finding uid for the acknowledge request.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "engineering.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "engineering_runs_uid",
+    "example": "5f9c2e7a-3b1d-4086-a4e9-1c7f8d2b6a53",
+    "description": "uid of the checker run."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "5f9c2e7a-3b1d-4086-a4e9-1c7f8d2b6a53",
+     "subject_type": "PACK_CONFIG_VERSION",
+     "subject_uid": "9b4e1d7c-2a6f-4c58-8e3b-0d5a9f1c7e26",
+     "subject_label": "Pack config v12",
+     "result": "WARN",
+     "rules_version": "phase1e.1",
+     "summary": {
+      "rulesVersion": "phase1e.1",
+      "counts": {
+       "blocked": 0,
+       "warning": 1,
+       "info": 2
+      },
+      "scopes": {
+       "ongrid_value_3": {
+        "status": "WARN",
+        "counts": {
+         "blocked": 0,
+         "warning": 1,
+         "info": 2
+        },
+        "deterministicKey": "a41c9e…"
+       }
+      }
+     },
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "findings": [
+      {
+       "uid": "e2a6c8f4-7d3b-4e19-b0c5-4a8f2d6e1b97",
+       "rule_code": "PBC-D-002",
+       "severity": "WARN",
+       "message": "String Voc at 10 °C is within 5 % of the inverter MPPT maximum.",
+       "context": {
+        "category": "DC",
+        "componentIds": [
+         "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46"
+        ],
+        "reason": "",
+        "source": "Flarize engineering checker",
+        "inputs": [
+         "panel.voc"
+        ],
+        "pack": "ongrid_value_3"
+       },
+       "identity": "ongrid_value_3|PBC-D-002|4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+       "acknowledgement": null,
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `engineering.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live run with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "engineering_findings_uid",
+    "from": "findings.0.uid"
+   }
+  ],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "engineering_runs_retrieve"
+ },
+ {
+  "id": "GET /api/v1/pricing/cost-config/",
+  "method": "GET",
+  "path": "/api/v1/pricing/cost-config/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.CostConfigView",
+  "action": "get",
+  "source_file": "pricing/views/config.py:47",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Cost config"
+  ],
+  "summary": "Get cost configuration registry and values",
+  "description": "Returns the closed key registry (`keys`: key, group, kind, description, internal) and the current effective row of every key that has a value (`current`). Margin data (`target_gross_margin_by_tier`, the `margin` section of `cost_engine.config`) is redacted unless the caller also holds `pricing_internal.view`: a fully hidden value comes back as `value: null, hidden: true`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min). APIView: no record scope."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "keys": [
+      {
+       "key": "install_rate",
+       "group": "website_bom",
+       "kind": "money",
+       "description": "Installation ₹ per kW (legacy GlobalCosts.install_rate).",
+       "internal": false
+      },
+      {
+       "key": "target_gross_margin_by_tier",
+       "group": "margin",
+       "kind": "document",
+       "description": "Target/minimum gross margin per tier (fractions).",
+       "internal": true
+      }
+     ],
+     "current": [
+      {
+       "uid": "1e4c7a9d-3b6f-4f20-8d1e-5a9c2b7f4e63",
+       "key": "install_rate",
+       "value": 4500,
+       "hidden": false,
+       "effective_from": "2026-10-01",
+       "effective_to": null,
+       "note": "Q3 FY26-27 revision",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "7f2b9e4c-1a6d-4c83-9b5f-0e8d3a6c1f94",
+       "key": "gst_goods_rate",
+       "value": 0.05,
+       "hidden": false,
+       "effective_from": "2026-04-01",
+       "effective_to": null,
+       "note": "",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "6b3e9a1d-4c7f-4e28-8a5d-1f9c3b7e2d40",
+       "key": "target_gross_margin_by_tier",
+       "value": null,
+       "hidden": true,
+       "effective_from": "2026-04-01",
+       "effective_to": null,
+       "note": "",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_cost_config_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/cost-config/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/cost-config/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.CostConfigView",
+  "action": "put",
+  "source_file": "pricing/views/config.py:51",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Cost config"
+  ],
+  "summary": "Set cost configuration values",
+  "description": "Validates every entry against the key registry, then for each **changed** key closes the open row (`effective_to` = new `effective_from`) and appends a new row in one transaction; unchanged values write nothing. `effective_from` defaults to today and may not be in the future (400 `effective_from_in_future`) or before a key's current row (400 `effective_from_before_current`). Unknown key → 400 (serializer choice error); duplicate key → 400. Optional per-entry `current_uid` is an optimistic lock: 409 `stale_version` if the key's current row is no longer that uid (sending `null` asserts the key has no row yet). Writing a margin key (`target_gross_margin_by_tier` or `cost_engine.config`) also needs `pricing_internal.view` (403 `pricing_internal_required`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": null,
+   "notes": "Throttle scope `staff`. Margin keys additionally need `pricing_internal.view`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "entries": [
+     {
+      "key": "install_rate",
+      "value": 4500
+     },
+     {
+      "key": "transport_rate_per_km",
+      "value": 25
+     },
+     {
+      "key": "gst_goods_share",
+      "value": 0.7
+     },
+     {
+      "key": "gst_services_share",
+      "value": 0.3
+     },
+     {
+      "key": "gst_goods_rate",
+      "value": 0.05
+     },
+     {
+      "key": "gst_services_rate",
+      "value": 0.18
+     }
+    ],
+    "note": "Q3 FY26-27 revision"
+   },
+   "fields": [
+    {
+     "name": "entries",
+     "type": "array",
+     "required": true
+    },
+    {
+     "name": "entries[].key",
+     "type": "choice",
+     "required": true
+    },
+    {
+     "name": "entries[].value",
+     "type": "json",
+     "required": true
+    },
+    {
+     "name": "entries[].current_uid",
+     "type": "uuid|null",
+     "required": false
+    },
+    {
+     "name": "effective_from",
+     "type": "date",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "`written` = rows appended (empty when nothing changed); `current` = every current row after the write.",
+    "content_type": "application/json",
+    "example": {
+     "written": [
+      {
+       "uid": "1e4c7a9d-3b6f-4f20-8d1e-5a9c2b7f4e63",
+       "key": "install_rate",
+       "value": 4500,
+       "hidden": false,
+       "effective_from": "2026-10-01",
+       "effective_to": null,
+       "note": "Q3 FY26-27 revision",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "current": [
+      {
+       "uid": "1e4c7a9d-3b6f-4f20-8d1e-5a9c2b7f4e63",
+       "key": "install_rate",
+       "value": 4500,
+       "hidden": false,
+       "effective_from": "2026-10-01",
+       "effective_to": null,
+       "note": "Q3 FY26-27 revision",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "7f2b9e4c-1a6d-4c83-9b5f-0e8d3a6c1f94",
+       "key": "gst_goods_rate",
+       "value": 0.05,
+       "hidden": false,
+       "effective_from": "2026-04-01",
+       "effective_to": null,
+       "note": "",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`). Also 403 `pricing_internal_required` for margin keys without `pricing_internal.view`."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` (a `current_uid` no longer matches) or `cost_config_conflict` (concurrent write)."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.cost_config_set` per written key",
+   "Cache bump `pricing:authoring` (when anything was written)"
+  ],
+  "capture": [],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_cost_config_update"
+ },
+ {
+  "id": "GET /api/v1/pricing/cost-config/history/",
+  "method": "GET",
+  "path": "/api/v1/pricing/cost-config/history/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.CostConfigHistoryViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Cost config"
+  ],
+  "summary": "List cost configuration history",
+  "description": "Every effective row of every key (closed and open), newest first per key. Margin values are redacted (`hidden: true`) without `pricing_internal.view`. Paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "key",
+    "value": "install_rate",
+    "description": "Only rows of this registry key (choice of the cost-config keys).",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-effective_from",
+    "description": "Sort by one of `effective_from`, `created_at` (prefix `-` for descending). Default: `key`, `-effective_from`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "1e4c7a9d-3b6f-4f20-8d1e-5a9c2b7f4e63",
+       "key": "install_rate",
+       "value": 4500,
+       "hidden": false,
+       "effective_from": "2026-10-01",
+       "effective_to": null,
+       "note": "Q3 FY26-27 revision",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "3d8b1f6a-2c9e-4a57-b0d4-8e6c1a3f9b25",
+       "key": "install_rate",
+       "value": 4200,
+       "hidden": false,
+       "effective_from": "2026-04-01",
+       "effective_to": "2026-10-01",
+       "note": "FY start",
+       "source_ref": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "version": 2
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_cost_config_history"
+ },
+ {
+  "id": "GET /api/v1/pricing/current/",
+  "method": "GET",
+  "path": "/api/v1/pricing/current/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.prices.CurrentPriceViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Current prices"
+  ],
+  "summary": "List current prices",
+  "description": "The current (open) price row per component and kind, from the `pricing_current_price` Postgres view. PURCHASE/LANDED rows only with `pricing_internal.view`. Paginated. Also captures a second component uid (`results.1.component.uid`) used by the swap-delta example.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff`. PURCHASE/LANDED rows only with `pricing_internal.view`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "component",
+    "value": "{{catalog_components_uid}}",
+    "description": "Component uid.",
+    "required": false
+   },
+   {
+    "key": "sku",
+    "value": "PNL-WAAREE-540-MONO",
+    "description": "Component SKU (case-insensitive exact).",
+    "required": false
+   },
+   {
+    "key": "kind",
+    "value": "LIST",
+    "description": "PURCHASE | LANDED | LIST; repeat for several.",
+    "required": false
+   },
+   {
+    "key": "category",
+    "value": "panels",
+    "description": "Component category slug.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `component__sku`, `component__name`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-effective_from",
+    "description": "Sort by one of `effective_from`, `amount` (prefix `-` for descending). Default: `component__sku`, `kind`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "6d1f9b3e-2c8a-4e57-9a06-4b7e1d5c3f92",
+       "component": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "sku": "PNL-WAAREE-540-MONO",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "status": "ACTIVE"
+       },
+       "kind": "LIST",
+       "amount": "24500.00",
+       "currency": "INR",
+       "gst_inclusive": false,
+       "per_watt": "45.3704",
+       "effective_from": "2026-10-01",
+       "source": "MANUAL",
+       "source_ref": "",
+       "supplier": {
+        "uid": "a8c4e2f6-7b1d-4093-8e5c-2f6a9d0b1c84",
+        "code": "SUP-KOCHI-01",
+        "name": "Kochi Solar Distributors"
+       },
+       "version_key": "",
+       "created_at": "2026-10-01T10:15:00+05:30"
+      },
+      {
+       "uid": "8c3a1e5f-6d2b-4f97-a0e8-3b9d7c1f5a26",
+       "component": {
+        "uid": "e7a3c9b5-1f2d-4e86-9c40-8b5a6d1e3f27",
+        "sku": "PNL-ADANI-550-TOPCON",
+        "name": "Adani 550 Wp TOPCon panel",
+        "status": "ACTIVE"
+       },
+       "kind": "LIST",
+       "amount": "26200.00",
+       "currency": "INR",
+       "gst_inclusive": false,
+       "per_watt": "47.6364",
+       "effective_from": "2026-10-01",
+       "source": "MANUAL",
+       "source_ref": "",
+       "supplier": null,
+       "version_key": "",
+       "created_at": "2026-10-01T10:15:00+05:30"
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "pricing_swap_to_component_uid",
+    "from": "results.1.component.uid"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_current_list"
+ },
+ {
+  "id": "GET /api/v1/pricing/installation-matrix/",
+  "method": "GET",
+  "path": "/api/v1/pricing/installation-matrix/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "List installation matrix cells",
+  "description": "Exact install cost per (size, phase, installation type) — the cost engine never interpolates a nearest size. `size_key` is the Flarize key (`3`, `5sp`, `5tp`). Paginated; no filters or search.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "ordering",
+    "value": "-size_kw",
+    "description": "Sort by one of `size_kw`, `install_cost` (prefix `-` for descending). Default: `size_kw`, `phase`, `installation_type`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+       "size_kw": "3.00",
+       "phase": "",
+       "size_key": "3",
+       "installation_type": "FLAT",
+       "install_cost": "18000.00",
+       "labour_days": "2.00",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "f4a9c2e6-1b7d-4e38-9c05-6a2d8f1b3e74",
+       "size_kw": "5.00",
+       "phase": "1P",
+       "size_key": "5sp",
+       "installation_type": "FLAT",
+       "install_cost": "26000.00",
+       "labour_days": "3.00",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_installation_matrix_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/installation-matrix/",
+  "method": "POST",
+  "path": "/api/v1/pricing/installation-matrix/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "Create an installation matrix cell",
+  "description": "Adds one install cost cell. `phase` blank = any phase; `installation_type` defaults to FLAT. A live cell with the same size/phase/type → 409 `installation_cell_exists`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "size_kw": "3.00",
+    "phase": "",
+    "installation_type": "FLAT",
+    "install_cost": "18000.00",
+    "labour_days": "2.00"
+   },
+   "fields": [
+    {
+     "name": "size_kw",
+     "type": "decimal(6,2) > 0",
+     "required": true
+    },
+    {
+     "name": "phase",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "",
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "installation_type",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "FLAT",
+      "SHEET",
+      "ELEVATED"
+     ]
+    },
+    {
+     "name": "install_cost",
+     "type": "decimal(14,2) ≥ 0",
+     "required": true
+    },
+    {
+     "name": "labour_days",
+     "type": "decimal(5,2) ≥ 0 | null",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+     "size_kw": "3.00",
+     "phase": "",
+     "size_key": "3",
+     "installation_type": "FLAT",
+     "install_cost": "18000.00",
+     "labour_days": "2.00",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`installation_cell_exists`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.installation_cost_created`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [
+   {
+    "var": "pricing_installation_matrix_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_installation_matrix_create"
+ },
+ {
+  "id": "GET /api/v1/pricing/installation-matrix/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/installation-matrix/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "Get an installation matrix cell",
+  "description": "One cell by uid.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_installation_matrix_uid",
+    "example": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+    "description": "uid of the installation matrix cell."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+     "size_kw": "3.00",
+     "phase": "",
+     "size_key": "3",
+     "installation_type": "FLAT",
+     "install_cost": "18000.00",
+     "labour_days": "2.00",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live installation matrix cell with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_installation_matrix_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/installation-matrix/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/installation-matrix/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (`update` is unmapped → default deny)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_installation_matrix_uid",
+    "example": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/pricing/installation-matrix/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/pricing/installation-matrix/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "Update an installation matrix cell",
+  "description": "Partial update; only changed fields are written. `expected_version` (optional) → 409 `stale_version` when outdated; moving onto an existing cell → 409 `installation_cell_exists`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_installation_matrix_uid",
+    "example": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+    "description": "uid of the installation matrix cell."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "install_cost": "19500.00",
+    "labour_days": "2.50",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "size_kw",
+     "type": "decimal(6,2) > 0",
+     "required": false
+    },
+    {
+     "name": "phase",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "",
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "installation_type",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "FLAT",
+      "SHEET",
+      "ELEVATED"
+     ]
+    },
+    {
+     "name": "install_cost",
+     "type": "decimal(14,2) ≥ 0",
+     "required": false
+    },
+    {
+     "name": "labour_days",
+     "type": "decimal(5,2) ≥ 0 | null",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+     "size_kw": "3.00",
+     "phase": "",
+     "size_key": "3",
+     "installation_type": "FLAT",
+     "install_cost": "19500.00",
+     "labour_days": "2.50",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live installation matrix cell with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` or `installation_cell_exists`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.installation_cost_updated` (only when something changed)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_installation_matrix_update"
+ },
+ {
+  "id": "DELETE /api/v1/pricing/installation-matrix/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/pricing/installation-matrix/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.InstallationMatrixViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Installation matrix"
+  ],
+  "summary": "Delete an installation matrix cell",
+  "description": "Soft-deletes the cell (`deleted_at`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_installation_matrix_uid",
+    "example": "b3e9d1a7-6c2f-4805-9e3b-5a1d7c8f2e60",
+    "description": "uid of the installation matrix cell."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (read from the query string on DELETE); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (soft); no body."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live installation matrix cell with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` is not the row's current version."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.installation_cost_deleted`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_installation_matrix_delete"
+ },
+ {
+  "id": "GET /api/v1/pricing/market-rate-sets/",
+  "method": "GET",
+  "path": "/api/v1/pricing/market-rate-sets/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "List market rate sets",
+  "description": "Market rate sets with child counts (`rate_count`, `swap_delta_count`, `roof_addon_count`). Exactly one set is ACTIVE at a time. Paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "ACTIVE",
+    "description": "DRAFT | ACTIVE | RETIRED; repeat the parameter for several.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `name`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "Sort by one of `created_at`, `name`, `activated_at` (prefix `-` for descending). Default: `-created_at`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+       "name": "Market rates Oct 2026",
+       "status": "DRAFT",
+       "activated_at": null,
+       "retired_at": null,
+       "note": "Post-Onam revision",
+       "rate_count": 0,
+       "swap_delta_count": 0,
+       "roof_addon_count": 0,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      },
+      {
+       "uid": "1a9d3e27-6c4f-48b2-8d15-3e7a0c9f2b64",
+       "name": "Market rates Aug 2026",
+       "status": "ACTIVE",
+       "activated_at": "2026-08-01T09:00:00+05:30",
+       "retired_at": null,
+       "note": "",
+       "rate_count": 96,
+       "swap_delta_count": 12,
+       "roof_addon_count": 8,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 5
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/market-rate-sets/",
+  "method": "POST",
+  "path": "/api/v1/pricing/market-rate-sets/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Create a market rate set",
+  "description": "Creates a DRAFT set. With `copy_from_uid` every live rate, swap delta and roof add-on of that set is copied (the usual way to start a revision from the ACTIVE set). Names are unique case-insensitively among live sets → 409 `market_rate_set_name_taken`; blank name → 400.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "name": "Market rates Oct 2026",
+    "note": "Post-Onam revision"
+   },
+   "fields": [
+    {
+     "name": "name",
+     "type": "string ≤ 120",
+     "required": true
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "copy_from_uid",
+     "type": "uuid|null (market rate set)",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+     "name": "Market rates Oct 2026",
+     "status": "DRAFT",
+     "activated_at": null,
+     "retired_at": null,
+     "note": "Post-Onam revision",
+     "rate_count": 0,
+     "swap_delta_count": 0,
+     "roof_addon_count": 0,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`market_rate_set_name_taken`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.market_rate_set_created` (with copied row count)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [
+   {
+    "var": "pricing_market_rate_sets_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_create"
+ },
+ {
+  "id": "GET /api/v1/pricing/market-rate-sets/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Get a market rate set",
+  "description": "One set with its child counts.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+     "name": "Market rates Oct 2026",
+     "status": "DRAFT",
+     "activated_at": null,
+     "retired_at": null,
+     "note": "Post-Onam revision",
+     "rate_count": 0,
+     "swap_delta_count": 0,
+     "roof_addon_count": 0,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/market-rate-sets/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "update",
+  "source_file": "pricing/views/common.py:35",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Not supported (405): use PATCH",
+  "description": "Routed but never succeeds: 405 PatchOnlyUpdateMixin: PUT refused, use PATCH (403 for callers without the mapped permission). A caller holding the mapped permission gets 405; anyone else gets 403. Edit with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": null,
+   "notes": "`update` maps to market_rates.edit so an editor gets 405 (not 403); callers without it get 403."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 405,
+    "description": "method_not_allowed (caller holds the mapped permission)",
+    "example": {
+     "code": "method_not_allowed",
+     "message": "Method \"PUT\" not allowed.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 403,
+    "description": "permission_denied (caller lacks the permission)"
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "405 PatchOnlyUpdateMixin: PUT refused, use PATCH (403 for callers without the mapped permission)",
+  "flag": null,
+  "auto": true,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/pricing/market-rate-sets/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Rename or annotate a market rate set",
+  "description": "Changes `name` / `note` (allowed in any status). PUT on this URL is refused (405, PatchOnlyUpdateMixin). `expected_version` → 409 `stale_version`; duplicate name → 409 `market_rate_set_name_taken`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "name": "Market rates Oct 2026 (rev 2)",
+    "note": "Adds 5tp hybrid bands",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "name",
+     "type": "string ≤ 120",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+     "name": "Market rates Oct 2026 (rev 2)",
+     "status": "DRAFT",
+     "activated_at": null,
+     "retired_at": null,
+     "note": "Adds 5tp hybrid bands",
+     "rate_count": 0,
+     "swap_delta_count": 0,
+     "roof_addon_count": 0,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` or `market_rate_set_name_taken`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.market_rate_set_updated` (only when something changed)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_update"
+ },
+ {
+  "id": "DELETE /api/v1/pricing/market-rate-sets/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Delete a market rate set",
+  "description": "Soft-deletes the set. Refused for the ACTIVE set (409 `market_rate_set_active`) and for any set a PriceRelease was built from (409 `market_rate_set_released`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (read from the query string on DELETE); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (soft); no body."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`, `market_rate_set_active` or `market_rate_set_released`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.market_rate_set_deleted`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_delete"
+ },
+ {
+  "id": "POST /api/v1/pricing/market-rate-sets/{uid}/activate/",
+  "method": "POST",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/activate/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "activate",
+  "source_file": "pricing/views/market_rates.py:152",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Activate a market rate set",
+  "description": "DRAFT (or RETIRED, for a rollback) → ACTIVE; the previously ACTIVE set becomes RETIRED in the same transaction. The next PriceRelease is built from the ACTIVE set. 409 `market_rate_set_already_active`, 409 `market_rate_set_empty` (no rates), 409 `market_rate_set_activation_conflict`, 409 `stale_version`. Child PUTs bump the set's `version`, so send the current `version` as `expected_version` if you use it (omitted in the example).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.publish",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Go-live for October quotations"
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+     "name": "Market rates Oct 2026",
+     "status": "ACTIVE",
+     "activated_at": "2026-10-01T10:20:00+05:30",
+     "retired_at": null,
+     "note": "Post-Onam revision",
+     "rate_count": 4,
+     "swap_delta_count": 1,
+     "roof_addon_count": 2,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 5
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.publish` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`market_rate_set_already_active`, `market_rate_set_empty`, `market_rate_set_activation_conflict` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `pricing.market_rate_set_activated` {set_uid, previous_set_uid}",
+   "Audit `pricing.market_rate_set_activated` (+ `pricing.market_rate_set_retired` for the previous set)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 70,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_activate"
+ },
+ {
+  "id": "GET /api/v1/pricing/market-rate-sets/{uid}/rates/",
+  "method": "GET",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/rates/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "rates",
+  "source_file": "pricing/views/market_rates.py:113",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "List a set's market rates",
+  "description": "The set's GST-inclusive customer prices, each with its Flarize `key` (`ongrid_value`, `hybrid_base_1_up10`, `upgrade_3_5sp` …). `customer_price_incl_gst` 0 = not set. Paginated (StandardPagination); no filters, search or ordering (filter backends disabled).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "c2b7e4a1-5d93-4f06-8e2a-9b1c7d3f6a08",
+       "key": "ongrid_value",
+       "system_type": "ONGRID",
+       "tier": "VALUE",
+       "battery_config": "",
+       "size_key": "3",
+       "size_kw": "3.00",
+       "phase": "",
+       "from_size_key": "",
+       "future_size_key": "",
+       "variant": "",
+       "customer_price_incl_gst": "189000.00",
+       "sort_order": 1
+      },
+      {
+       "uid": "0c4f8b2e-7a1d-4e93-b6c5-2d8a9e1f3b70",
+       "key": "upgrade_3_5sp",
+       "system_type": "UPGRADE",
+       "tier": "",
+       "battery_config": "",
+       "size_key": "5sp",
+       "size_kw": "5.00",
+       "phase": "1P",
+       "from_size_key": "3",
+       "future_size_key": "",
+       "variant": "",
+       "customer_price_incl_gst": "92000.00",
+       "sort_order": 4
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_rates_list"
+ },
+ {
+  "id": "PUT /api/v1/pricing/market-rate-sets/{uid}/rates/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/rates/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "replace_rates",
+  "source_file": "pricing/views/market_rates.py:118",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Replace a set's market rates",
+  "description": "Bulk replace (DRAFT sets only, else 409 `market_rate_set_not_draft`): rows are upserted by natural key (system_type, tier, battery_config, size_key, from_size_key, future_size_key, variant); live rows left out are soft-deleted. Rules: `size_key` like `3`, `5sp` (1P), `5tp` (3P); ONGRID/HYBRID need `tier`; HYBRID needs `battery_config` 0/1/2, ONGRID none; UPGRADE needs `from_size_key` and no battery/future/variant; `variant` alphanumeric. Row errors → 400 with `rates[i].field` keys; a duplicate row → 400. Any change bumps the set `version` (409 `stale_version` on a stale `expected_version`). Returns the refreshed set + outcome counts.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "rates": [
+     {
+      "system_type": "ONGRID",
+      "tier": "VALUE",
+      "size_key": "3",
+      "customer_price_incl_gst": "189000.00",
+      "sort_order": 1
+     },
+     {
+      "system_type": "ONGRID",
+      "tier": "VALUE",
+      "size_key": "5sp",
+      "customer_price_incl_gst": "265000.00",
+      "sort_order": 2
+     },
+     {
+      "system_type": "HYBRID",
+      "tier": "BASE",
+      "battery_config": "1",
+      "size_key": "5tp",
+      "customer_price_incl_gst": "385000.00",
+      "sort_order": 3
+     },
+     {
+      "system_type": "UPGRADE",
+      "tier": "",
+      "from_size_key": "3",
+      "size_key": "5sp",
+      "customer_price_incl_gst": "92000.00",
+      "sort_order": 4
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    },
+    {
+     "name": "rates",
+     "type": "array",
+     "required": true
+    },
+    {
+     "name": "rates[].system_type",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "ONGRID",
+      "HYBRID",
+      "UPGRADE"
+     ]
+    },
+    {
+     "name": "rates[].tier",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "",
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "rates[].battery_config",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "",
+      "0",
+      "1",
+      "2"
+     ]
+    },
+    {
+     "name": "rates[].size_key",
+     "type": "string ≤ 8",
+     "required": true
+    },
+    {
+     "name": "rates[].from_size_key",
+     "type": "string ≤ 8",
+     "required": false
+    },
+    {
+     "name": "rates[].future_size_key",
+     "type": "string ≤ 8",
+     "required": false
+    },
+    {
+     "name": "rates[].variant",
+     "type": "string ≤ 24",
+     "required": false
+    },
+    {
+     "name": "rates[].customer_price_incl_gst",
+     "type": "decimal(14,2) ≥ 0",
+     "required": true
+    },
+    {
+     "name": "rates[].sort_order",
+     "type": "integer ≥ 0",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026",
+      "status": "DRAFT",
+      "activated_at": null,
+      "retired_at": null,
+      "note": "Post-Onam revision",
+      "rate_count": 4,
+      "swap_delta_count": 0,
+      "roof_addon_count": 0,
+      "created_at": "2026-10-01T10:15:00+05:30",
+      "updated_at": "2026-10-01T10:20:00+05:30",
+      "version": 2
+     },
+     "outcome": {
+      "created": 4,
+      "updated": 0,
+      "unchanged": 0,
+      "deleted": 0
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`market_rate_set_not_draft` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Set `version` bumped when anything changed",
+   "Audit `pricing.market_rates_replaced` (with outcome)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_rates_replace"
+ },
+ {
+  "id": "GET /api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+  "method": "GET",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "roof_addons",
+  "source_file": "pricing/views/market_rates.py:139",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "List a set's roof add-ons",
+  "description": "GST-inclusive add-on per non-flat structure type and size. Paginated (StandardPagination); no filters, search or ordering (filter backends disabled).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "9d2a6f41-3e8c-47b5-a0d9-6f1b2c4e8a73",
+       "structure_type": "ELEVATED",
+       "size_kw": "3.00",
+       "addon_incl_gst": "15000.00"
+      },
+      {
+       "uid": "7b0e3c5a-9d2f-4a61-8e4b-1c6f2a9d5e38",
+       "structure_type": "SHEET_ROOF",
+       "size_kw": "5.00",
+       "addon_incl_gst": "12000.00"
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 64,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_roof_addons_list"
+ },
+ {
+  "id": "PUT /api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/roof-addons/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "replace_roof_addons",
+  "source_file": "pricing/views/market_rates.py:144",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Replace a set's roof add-ons",
+  "description": "Bulk replace (DRAFT sets only, else 409 `market_rate_set_not_draft`), upsert by (structure_type, size_kw); rows left out are soft-deleted. Returns the refreshed set + outcome counts.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "roof_addons": [
+     {
+      "structure_type": "ELEVATED",
+      "size_kw": "3.00",
+      "addon_incl_gst": "15000.00"
+     },
+     {
+      "structure_type": "SHEET_ROOF",
+      "size_kw": "5.00",
+      "addon_incl_gst": "12000.00"
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    },
+    {
+     "name": "roof_addons",
+     "type": "array",
+     "required": true
+    },
+    {
+     "name": "roof_addons[].structure_type",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "FLAT_ROOF",
+      "ELEVATED",
+      "SHEET_ROOF",
+      "GROUND"
+     ]
+    },
+    {
+     "name": "roof_addons[].size_kw",
+     "type": "decimal(6,2) > 0",
+     "required": true
+    },
+    {
+     "name": "roof_addons[].addon_incl_gst",
+     "type": "decimal(14,2) ≥ 0",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026",
+      "status": "DRAFT",
+      "activated_at": null,
+      "retired_at": null,
+      "note": "Post-Onam revision",
+      "rate_count": 4,
+      "swap_delta_count": 1,
+      "roof_addon_count": 2,
+      "created_at": "2026-10-01T10:15:00+05:30",
+      "updated_at": "2026-10-01T10:20:00+05:30",
+      "version": 2
+     },
+     "outcome": {
+      "created": 2,
+      "updated": 0,
+      "unchanged": 0,
+      "deleted": 0
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`market_rate_set_not_draft` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Set `version` bumped when anything changed",
+   "Audit `pricing.roof_addons_replaced`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 65,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_roof_addons_replace"
+ },
+ {
+  "id": "GET /api/v1/pricing/market-rate-sets/{uid}/swap-deltas/",
+  "method": "GET",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/swap-deltas/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "swap_deltas",
+  "source_file": "pricing/views/market_rates.py:126",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "List a set's swap deltas",
+  "description": "GST-inclusive price change of swapping a pack's default component for another (per system type, tier and slot). Paginated (StandardPagination); no filters, search or ordering (filter backends disabled).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "5e8f1c3a-0b7d-4a29-b6e4-2c9d8f1a7e35",
+       "system_type": "ONGRID",
+       "tier": "VALUE",
+       "slot": "panel",
+       "from_component": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "sku": "PNL-WAAREE-540-MONO",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "status": "ACTIVE"
+       },
+       "to_component": {
+        "uid": "e7a3c9b5-1f2d-4e86-9c40-8b5a6d1e3f27",
+        "sku": "PNL-ADANI-550-TOPCON",
+        "name": "Adani 550 Wp TOPCon panel",
+        "status": "ACTIVE"
+       },
+       "delta_incl_gst": "6500.00"
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_swap_deltas_list"
+ },
+ {
+  "id": "PUT /api/v1/pricing/market-rate-sets/{uid}/swap-deltas/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/market-rate-sets/{uid}/swap-deltas/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.market_rates.MarketRateSetViewSet",
+  "action": "replace_swap_deltas",
+  "source_file": "pricing/views/market_rates.py:131",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Market rate sets"
+  ],
+  "summary": "Replace a set's swap deltas",
+  "description": "Bulk replace (DRAFT sets only, else 409 `market_rate_set_not_draft`), upsert by (system_type, tier, slot, from component, to component); rows left out are soft-deleted. Unknown component uid → 400; `from` = `to` → 400. `delta_incl_gst` may be negative (a cheaper swap). The two component uids must differ: the example uses `{{catalog_components_uid}}` and `{{pricing_swap_to_component_uid}}` (captured from `GET pricing/current/`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "market_rates.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_market_rate_sets_uid",
+    "example": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+    "description": "uid of the market rate set."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "swap_deltas": [
+     {
+      "system_type": "ONGRID",
+      "tier": "VALUE",
+      "slot": "panel",
+      "from_component_uid": "{{catalog_components_uid}}",
+      "to_component_uid": "{{pricing_swap_to_component_uid}}",
+      "delta_incl_gst": "6500.00"
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    },
+    {
+     "name": "swap_deltas",
+     "type": "array",
+     "required": true
+    },
+    {
+     "name": "swap_deltas[].system_type",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "ONGRID",
+      "HYBRID",
+      "UPGRADE"
+     ]
+    },
+    {
+     "name": "swap_deltas[].tier",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "swap_deltas[].slot",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "panel",
+      "inverter",
+      "battery"
+     ]
+    },
+    {
+     "name": "swap_deltas[].from_component_uid",
+     "type": "uuid (catalog component)",
+     "required": true
+    },
+    {
+     "name": "swap_deltas[].to_component_uid",
+     "type": "uuid (catalog component)",
+     "required": true
+    },
+    {
+     "name": "swap_deltas[].delta_incl_gst",
+     "type": "decimal(14,2)",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026",
+      "status": "DRAFT",
+      "activated_at": null,
+      "retired_at": null,
+      "note": "Post-Onam revision",
+      "rate_count": 4,
+      "swap_delta_count": 1,
+      "roof_addon_count": 0,
+      "created_at": "2026-10-01T10:15:00+05:30",
+      "updated_at": "2026-10-01T10:20:00+05:30",
+      "version": 2
+     },
+     "outcome": {
+      "created": 1,
+      "updated": 0,
+      "unchanged": 0,
+      "deleted": 0
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `market_rates.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live market rate set with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`market_rate_set_not_draft` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Set `version` bumped when anything changed",
+   "Audit `pricing.swap_deltas_replaced`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 63,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_market_rate_sets_swap_deltas_replace"
+ },
+ {
+  "id": "GET /api/v1/pricing/offers/",
+  "method": "GET",
+  "path": "/api/v1/pricing/offers/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "List offers",
+  "description": "Campaign offers with their transition history. Paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "ACTIVE",
+    "description": "DRAFT | APPROVED | ACTIVE | PAUSED | EXPIRED | ARCHIVED; repeat for several.",
+    "required": false
+   },
+   {
+    "key": "applies_to_system",
+    "value": "ONGRID",
+    "description": "ALL | ONGRID | HYBRID | UPGRADE (exact match).",
+    "required": false
+   },
+   {
+    "key": "applies_to_tier",
+    "value": "ALL",
+    "description": "ALL | BASE | VALUE | PREMIUM (exact match).",
+    "required": false
+   },
+   {
+    "key": "active_on",
+    "value": "2026-10-20",
+    "description": "ACTIVE offers whose start/end dates cover this day (YYYY-MM-DD).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `code`, `name`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-created_at",
+    "description": "Sort by one of `created_at`, `starts_on`, `ends_on`, `code` (prefix `-` for descending). Default: `-created_at`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+       "code": "DIWALI-2026",
+       "name": "Diwali rooftop offer",
+       "type": "FLAT",
+       "value": "5000.00",
+       "applies_to_system": "ONGRID",
+       "applies_to_tier": "ALL",
+       "applies_to_size_key": "",
+       "applies_to_size_kw": null,
+       "starts_on": "2026-10-15",
+       "ends_on": "2026-11-15",
+       "status": "DRAFT",
+       "status_changed_at": "2026-10-01T10:15:00+05:30",
+       "print_on_quotation": true,
+       "stackable": false,
+       "description": "₹5,000 off any on-grid system booked during Diwali.",
+       "content_version": 1,
+       "transitions": [
+        {
+         "from_status": "",
+         "to_status": "DRAFT",
+         "at": "2026-10-01T10:15:00+05:30",
+         "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+         "reason": "Offer created"
+        }
+       ],
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/offers/",
+  "method": "POST",
+  "path": "/api/v1/pricing/offers/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Create an offer",
+  "description": "Creates a DRAFT offer (with a creation transition row). Validated by `engines.offers`: name required, value ≥ 0, PERCENT ≤ 100, `starts_on` ≤ `ends_on`; `applies_to_size_key` must be a valid size key. Blank `code` is generated (`OFFER-<n>`); a taken code (case-insensitive) → 409 `offer_code_taken`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.create",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "code": "DIWALI-2026",
+    "name": "Diwali rooftop offer",
+    "type": "FLAT",
+    "value": "5000.00",
+    "applies_to_system": "ONGRID",
+    "applies_to_tier": "ALL",
+    "applies_to_size_key": "",
+    "starts_on": "2026-10-15",
+    "ends_on": "2026-11-15",
+    "print_on_quotation": true,
+    "stackable": false,
+    "description": "₹5,000 off any on-grid system booked during Diwali."
+   },
+   "fields": [
+    {
+     "name": "code",
+     "type": "string ≤ 50 ([A-Za-z0-9][A-Za-z0-9_.-]*); blank → OFFER-<n>",
+     "required": false
+    },
+    {
+     "name": "name",
+     "type": "string ≤ 120",
+     "required": true
+    },
+    {
+     "name": "type",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "FLAT",
+      "PERCENT"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "decimal(12,2) ≥ 0 (₹ for FLAT, ≤ 100 for PERCENT)",
+     "required": true
+    },
+    {
+     "name": "applies_to_system",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "ALL",
+      "ONGRID",
+      "HYBRID",
+      "UPGRADE"
+     ]
+    },
+    {
+     "name": "applies_to_tier",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "ALL",
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "applies_to_size_key",
+     "type": "string ≤ 8 (3, 5sp, 5tp …; blank = every size)",
+     "required": false
+    },
+    {
+     "name": "starts_on",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "ends_on",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "print_on_quotation",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "stackable",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "5000.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "DRAFT",
+     "status_changed_at": "2026-10-01T10:15:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 1,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.create` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`offer_code_taken`."
+   }
+  ],
+  "side_effects": [
+   "Transition row DRAFT",
+   "Audit `pricing.offer_created`"
+  ],
+  "capture": [
+   {
+    "var": "pricing_offers_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_create"
+ },
+ {
+  "id": "GET /api/v1/pricing/offers/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/offers/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Get an offer",
+  "description": "One offer with its transition history.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "5000.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "DRAFT",
+     "status_changed_at": "2026-10-01T10:15:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 1,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/offers/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/offers/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (`update` is unmapped → default deny)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/pricing/offers/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/pricing/offers/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Update an offer",
+  "description": "DRAFT/APPROVED offers only (else 409 `offer_not_editable`); `code` cannot change. A content change (name, type, value, applies_to_*, dates, description) bumps `content_version` and sends an APPROVED offer back to DRAFT (transition row + `pricing.offer_status_changed`). Same validation as create; `expected_version` → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "value": "7500.00",
+    "description": "₹7,500 off any on-grid system booked during Diwali.",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "name",
+     "type": "string ≤ 120",
+     "required": false
+    },
+    {
+     "name": "type",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "FLAT",
+      "PERCENT"
+     ]
+    },
+    {
+     "name": "value",
+     "type": "decimal(12,2) ≥ 0 (₹ for FLAT, ≤ 100 for PERCENT)",
+     "required": false
+    },
+    {
+     "name": "applies_to_system",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "ALL",
+      "ONGRID",
+      "HYBRID",
+      "UPGRADE"
+     ]
+    },
+    {
+     "name": "applies_to_tier",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "ALL",
+      "BASE",
+      "VALUE",
+      "PREMIUM"
+     ]
+    },
+    {
+     "name": "applies_to_size_key",
+     "type": "string ≤ 8 (3, 5sp, 5tp …; blank = every size)",
+     "required": false
+    },
+    {
+     "name": "starts_on",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "ends_on",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "print_on_quotation",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "stackable",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "7500.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "DRAFT",
+     "status_changed_at": "2026-10-01T10:15:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹7,500 off any on-grid system booked during Diwali.",
+     "content_version": 2,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`offer_not_editable` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.offer_updated`",
+   "If APPROVED → DRAFT: transition row + outbox `pricing.offer_status_changed`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_update"
+ },
+ {
+  "id": "DELETE /api/v1/pricing/offers/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/pricing/offers/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Delete a draft offer",
+  "description": "Soft-deletes a DRAFT offer; any other status → 409 `offer_not_draft` (archive it instead). Needs the `archive` action.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.archive",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (read from the query string on DELETE); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (soft); no body."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.archive` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`offer_not_draft` or `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.offer_deleted`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_delete"
+ },
+ {
+  "id": "POST /api/v1/pricing/offers/{uid}/activate/",
+  "method": "POST",
+  "path": "/api/v1/pricing/offers/{uid}/activate/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "activate",
+  "source_file": "pricing/views/offers.py:93",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Activate an offer",
+  "description": "APPROVED → ACTIVE, or PAUSED → ACTIVE (resume). Refused once `ends_on` has passed (409 `offer_already_ended`). Writes a `pricing_offer_transition` row; invalid moves → 409 `invalid_transition`. Optional `expected_version` → 409 `stale_version` (omitted in the example because earlier steps bump the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.publish",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Diwali campaign live"
+   },
+   "fields": [
+    {
+     "name": "reason",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "7500.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "ACTIVE",
+     "status_changed_at": "2026-10-01T10:20:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 2,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      },
+      {
+       "from_status": "APPROVED",
+       "to_status": "ACTIVE",
+       "at": "2026-10-01T10:20:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Diwali campaign live"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.publish` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition`, `stale_version` or `offer_already_ended`."
+   }
+  ],
+  "side_effects": [
+   "Transition row APPROVED → ACTIVE",
+   "Audit `pricing.offer_activated`",
+   "Outbox `pricing.offer_status_changed` {offer_uid, code, from, to}"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_activate"
+ },
+ {
+  "id": "POST /api/v1/pricing/offers/{uid}/approve/",
+  "method": "POST",
+  "path": "/api/v1/pricing/offers/{uid}/approve/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "approve",
+  "source_file": "pricing/views/offers.py:88",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Approve an offer",
+  "description": "DRAFT → APPROVED (the offer is re-validated first; 400 if invalid). Writes a `pricing_offer_transition` row; invalid moves → 409 `invalid_transition`. Optional `expected_version` → 409 `stale_version` (omitted in the example because earlier steps bump the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.approve",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Approved by sales head"
+   },
+   "fields": [
+    {
+     "name": "reason",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "7500.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "APPROVED",
+     "status_changed_at": "2026-10-01T10:20:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 2,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      },
+      {
+       "from_status": "DRAFT",
+       "to_status": "APPROVED",
+       "at": "2026-10-01T10:20:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Approved by sales head"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.approve` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition`, `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Transition row DRAFT → APPROVED",
+   "Audit `pricing.offer_approved`",
+   "Outbox `pricing.offer_status_changed` {offer_uid, code, from, to}"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_approve"
+ },
+ {
+  "id": "POST /api/v1/pricing/offers/{uid}/archive/",
+  "method": "POST",
+  "path": "/api/v1/pricing/offers/{uid}/archive/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "archive",
+  "source_file": "pricing/views/offers.py:103",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Archive an offer",
+  "description": "Any non-archived status → ARCHIVED (terminal); already archived → 409 `offer_already_archived`. Writes a `pricing_offer_transition` row; invalid moves → 409 `invalid_transition`. Optional `expected_version` → 409 `stale_version` (omitted in the example because earlier steps bump the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.archive",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Campaign over"
+   },
+   "fields": [
+    {
+     "name": "reason",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "7500.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "ARCHIVED",
+     "status_changed_at": "2026-10-01T10:20:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 2,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      },
+      {
+       "from_status": "PAUSED",
+       "to_status": "ARCHIVED",
+       "at": "2026-10-01T10:20:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Campaign over"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.archive` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition`, `stale_version` or `offer_already_archived`."
+   }
+  ],
+  "side_effects": [
+   "Transition row (any) → ARCHIVED",
+   "Audit `pricing.offer_archived`",
+   "Outbox `pricing.offer_status_changed` {offer_uid, code, from, to}"
+  ],
+  "capture": [],
+  "order": 80,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_archive"
+ },
+ {
+  "id": "POST /api/v1/pricing/offers/{uid}/pause/",
+  "method": "POST",
+  "path": "/api/v1/pricing/offers/{uid}/pause/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.offers.OfferViewSet",
+  "action": "pause",
+  "source_file": "pricing/views/offers.py:98",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Offers"
+  ],
+  "summary": "Pause an offer",
+  "description": "ACTIVE → PAUSED. Writes a `pricing_offer_transition` row; invalid moves → 409 `invalid_transition`. Optional `expected_version` → 409 `stale_version` (omitted in the example because earlier steps bump the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "offers.publish",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_offers_uid",
+    "example": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+    "description": "uid of the offer."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "reason": "Paused for stock shortage"
+   },
+   "fields": [
+    {
+     "name": "reason",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "f1d7a3c9-4e2b-4a68-8c05-9b3e6d1f7a24",
+     "code": "DIWALI-2026",
+     "name": "Diwali rooftop offer",
+     "type": "FLAT",
+     "value": "7500.00",
+     "applies_to_system": "ONGRID",
+     "applies_to_tier": "ALL",
+     "applies_to_size_key": "",
+     "applies_to_size_kw": null,
+     "starts_on": "2026-10-15",
+     "ends_on": "2026-11-15",
+     "status": "PAUSED",
+     "status_changed_at": "2026-10-01T10:20:00+05:30",
+     "print_on_quotation": true,
+     "stackable": false,
+     "description": "₹5,000 off any on-grid system booked during Diwali.",
+     "content_version": 2,
+     "transitions": [
+      {
+       "from_status": "",
+       "to_status": "DRAFT",
+       "at": "2026-10-01T10:15:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Offer created"
+      },
+      {
+       "from_status": "ACTIVE",
+       "to_status": "PAUSED",
+       "at": "2026-10-01T10:20:00+05:30",
+       "by": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+       "reason": "Paused for stock shortage"
+      }
+     ],
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 3
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `offers.publish` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live offer with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`invalid_transition`, `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Transition row ACTIVE → PAUSED",
+   "Audit `pricing.offer_paused`",
+   "Outbox `pricing.offer_status_changed` {offer_uid, code, from, to}"
+  ],
+  "capture": [],
+  "order": 63,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_offers_pause"
+ },
+ {
+  "id": "GET /api/v1/pricing/prices/",
+  "method": "GET",
+  "path": "/api/v1/pricing/prices/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.prices.PriceViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Prices"
+  ],
+  "summary": "List price history",
+  "description": "Append-only price rows (PURCHASE, LANDED, LIST) per component. PURCHASE and LANDED rows are excluded unless the caller holds `pricing_internal.view`. Paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff`. PURCHASE/LANDED rows only with `pricing_internal.view`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "component",
+    "value": "{{catalog_components_uid}}",
+    "description": "Component uid.",
+    "required": false
+   },
+   {
+    "key": "sku",
+    "value": "PNL-WAAREE-540-MONO",
+    "description": "Component SKU (case-insensitive exact).",
+    "required": false
+   },
+   {
+    "key": "kind",
+    "value": "LIST",
+    "description": "PURCHASE | LANDED | LIST; repeat for several.",
+    "required": false
+   },
+   {
+    "key": "source",
+    "value": "MANUAL",
+    "description": "BATCH | MANUAL | IMPORT | MARKUP; repeat for several.",
+    "required": false
+   },
+   {
+    "key": "current",
+    "value": "true",
+    "description": "`true`: open rows only (`effective_to` null); `false`: closed rows only.",
+    "required": false
+   },
+   {
+    "key": "effective_on",
+    "value": "2026-10-01",
+    "description": "Rows in force on this date.",
+    "required": false
+   },
+   {
+    "key": "supplier",
+    "value": "{{procurement_suppliers_uid}}",
+    "description": "Supplier uid.",
+    "required": false
+   },
+   {
+    "key": "version_key",
+    "value": "",
+    "description": "Exact version key (procurement batch / import version).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `component__sku`, `component__name`, `version_key`, `source_ref`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-effective_from",
+    "description": "Sort by one of `effective_from`, `created_at`, `amount` (prefix `-` for descending). Default: `component__sku`, `kind`, `-effective_from`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "6d1f9b3e-2c8a-4e57-9a06-4b7e1d5c3f92",
+       "component": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "sku": "PNL-WAAREE-540-MONO",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "status": "ACTIVE"
+       },
+       "kind": "LIST",
+       "amount": "24500.00",
+       "currency": "INR",
+       "gst_inclusive": false,
+       "per_watt": "45.3704",
+       "effective_from": "2026-10-01",
+       "effective_to": null,
+       "is_current": true,
+       "source": "MANUAL",
+       "source_ref": "",
+       "supplier": {
+        "uid": "a8c4e2f6-7b1d-4093-8e5c-2f6a9d0b1c84",
+        "code": "SUP-KOCHI-01",
+        "name": "Kochi Solar Distributors"
+       },
+       "note": "Distributor price list Oct 2026",
+       "version_key": "",
+       "created_at": "2026-10-01T10:15:00+05:30"
+      },
+      {
+       "uid": "2e5a8c1d-7f3b-4b60-8d94-0a6c2e9f5b17",
+       "component": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "sku": "PNL-WAAREE-540-MONO",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "status": "ACTIVE"
+       },
+       "kind": "LIST",
+       "amount": "23800.00",
+       "currency": "INR",
+       "gst_inclusive": false,
+       "per_watt": "44.0741",
+       "effective_from": "2026-07-01",
+       "effective_to": "2026-10-01",
+       "is_current": false,
+       "source": "MANUAL",
+       "source_ref": "",
+       "supplier": {
+        "uid": "a8c4e2f6-7b1d-4093-8e5c-2f6a9d0b1c84",
+        "code": "SUP-KOCHI-01",
+        "name": "Kochi Solar Distributors"
+       },
+       "note": "",
+       "version_key": "",
+       "created_at": "2026-10-01T10:15:00+05:30"
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_prices_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/prices/",
+  "method": "POST",
+  "path": "/api/v1/pricing/prices/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.prices.PriceViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Prices"
+  ],
+  "summary": "Add a manual price row",
+  "description": "Adds a manual LIST or LANDED row for a component and closes its current row of the same kind (`effective_to` = new `effective_from`) in one transaction. PURCHASE prices come from procurement batches only. LANDED also needs `pricing_internal.view` (403 `pricing_internal_required`). `effective_from` defaults to today; future → 400 `effective_from_in_future`; before the current row → 400 `effective_from_before_current`. Retired component → 409 `component_retired`. Optional `expected_current_uid` (the current row the client saw; `null` = none) → 409 `stale_version` when it changed.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff`. kind=LANDED also needs `pricing_internal.view`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "component_uid": "{{catalog_components_uid}}",
+    "kind": "LIST",
+    "amount": "24500.00",
+    "gst_inclusive": false,
+    "per_watt": "45.3704",
+    "supplier_uid": "{{procurement_suppliers_uid}}",
+    "note": "Distributor price list Oct 2026"
+   },
+   "fields": [
+    {
+     "name": "component_uid",
+     "type": "uuid (catalog component)",
+     "required": true
+    },
+    {
+     "name": "kind",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "LIST",
+      "LANDED"
+     ]
+    },
+    {
+     "name": "amount",
+     "type": "decimal(14,2) ≥ 0",
+     "required": true
+    },
+    {
+     "name": "effective_from",
+     "type": "date",
+     "required": false
+    },
+    {
+     "name": "gst_inclusive",
+     "type": "boolean (default false)",
+     "required": false
+    },
+    {
+     "name": "per_watt",
+     "type": "decimal(10,4) ≥ 0 | null",
+     "required": false
+    },
+    {
+     "name": "supplier_uid",
+     "type": "uuid|null (procurement supplier)",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_current_uid",
+     "type": "uuid|null",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "6d1f9b3e-2c8a-4e57-9a06-4b7e1d5c3f92",
+     "component": {
+      "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+      "sku": "PNL-WAAREE-540-MONO",
+      "name": "Waaree 540 Wp Mono PERC panel",
+      "status": "ACTIVE"
+     },
+     "kind": "LIST",
+     "amount": "24500.00",
+     "currency": "INR",
+     "gst_inclusive": false,
+     "per_watt": "45.3704",
+     "effective_from": "2026-10-01",
+     "effective_to": null,
+     "is_current": true,
+     "source": "MANUAL",
+     "source_ref": "",
+     "supplier": {
+      "uid": "a8c4e2f6-7b1d-4093-8e5c-2f6a9d0b1c84",
+      "code": "SUP-KOCHI-01",
+      "name": "Kochi Solar Distributors"
+     },
+     "note": "Distributor price list Oct 2026",
+     "version_key": "",
+     "created_at": "2026-10-01T10:15:00+05:30"
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error`, `price_kind_not_manual`, `effective_from_in_future` or `effective_from_before_current`."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`). Also 403 `pricing_internal_required` for LANDED without `pricing_internal.view`."
+   },
+   {
+    "status": 409,
+    "description": "`component_retired`, `stale_version` or `price_conflict`."
+   }
+  ],
+  "side_effects": [
+   "Previous current row closed",
+   "Audit `pricing.price_set`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [
+   {
+    "var": "pricing_prices_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_prices_create"
+ },
+ {
+  "id": "GET /api/v1/pricing/prices/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/prices/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.prices.PriceViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Prices"
+  ],
+  "summary": "Get a price row",
+  "description": "One price row. PURCHASE/LANDED rows are 404 without `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff`. PURCHASE/LANDED rows only with `pricing_internal.view`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_prices_uid",
+    "example": "6d1f9b3e-2c8a-4e57-9a06-4b7e1d5c3f92",
+    "description": "uid of the price row."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "6d1f9b3e-2c8a-4e57-9a06-4b7e1d5c3f92",
+     "component": {
+      "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+      "sku": "PNL-WAAREE-540-MONO",
+      "name": "Waaree 540 Wp Mono PERC panel",
+      "status": "ACTIVE"
+     },
+     "kind": "LIST",
+     "amount": "24500.00",
+     "currency": "INR",
+     "gst_inclusive": false,
+     "per_watt": "45.3704",
+     "effective_from": "2026-10-01",
+     "effective_to": null,
+     "is_current": true,
+     "source": "MANUAL",
+     "source_ref": "",
+     "supplier": {
+      "uid": "a8c4e2f6-7b1d-4093-8e5c-2f6a9d0b1c84",
+      "code": "SUP-KOCHI-01",
+      "name": "Kochi Solar Distributors"
+     },
+     "note": "Distributor price list Oct 2026",
+     "version_key": "",
+     "created_at": "2026-10-01T10:15:00+05:30"
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live price row (or an internal row you may not see) with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_prices_retrieve"
+ },
+ {
+  "id": "GET /api/v1/pricing/releases/",
+  "method": "GET",
+  "path": "/api/v1/pricing/releases/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "List price releases",
+  "description": "Published PriceReleases, newest number first (payload omitted; `summary` = section counts). Paginated. Captures the newest release `number`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "status",
+    "value": "PUBLISHED",
+    "description": "PUBLISHED | SUPERSEDED.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-number",
+    "description": "Sort by one of `number`, `published_at` (prefix `-` for descending). Default: `-number`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "3c9e7a15-8d2f-4b46-9e1a-6f4b0c8d2a79",
+       "number": 7,
+       "status": "PUBLISHED",
+       "published_at": "2026-10-01T10:15:00+05:30",
+       "published_by": {
+        "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+        "email": "pricing.manager@goldenray.in"
+       },
+       "superseded_at": null,
+       "market_rate_set": {
+        "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+        "name": "Market rates Oct 2026"
+       },
+       "note": "October price revision",
+       "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e",
+       "summary": {
+        "components": 142,
+        "list_prices": 138,
+        "landed_costs": 120,
+        "market_rates": 96,
+        "swap_deltas": 12,
+        "roof_addons": 8,
+        "cost_config_keys": 22,
+        "installation_matrix": 18,
+        "statutory_fees": 6
+       }
+      },
+      {
+       "uid": "d5b1f8a3-2e6c-4d97-b0a4-7c3e9f1d5b28",
+       "number": 6,
+       "status": "SUPERSEDED",
+       "published_at": "2026-08-01T11:00:00+05:30",
+       "published_by": {
+        "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+        "email": "pricing.manager@goldenray.in"
+       },
+       "superseded_at": "2026-10-01T10:15:00+05:30",
+       "market_rate_set": {
+        "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+        "name": "Market rates Oct 2026"
+       },
+       "note": "August revision",
+       "payload_sha256": "1b3d5f7a9c2e4a6b8d0f1e3c5a7b9d2f4e6a8c0b1d3f5e7a9c1b3d5e7f9a1c3b",
+       "summary": {
+        "components": 142,
+        "list_prices": 138,
+        "landed_costs": 120,
+        "market_rates": 96,
+        "swap_deltas": 12,
+        "roof_addons": 8,
+        "cost_config_keys": 22,
+        "installation_matrix": 18,
+        "statutory_fees": 6
+       }
+      }
+     ],
+     "count": 2,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "pricing_releases_number",
+    "from": "results.0.number"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/releases/",
+  "method": "POST",
+  "path": "/api/v1/pricing/releases/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "create",
+  "source_file": "pricing/views/releases.py:66",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "Publish a price release",
+  "description": "Synchronously publishes the next PriceRelease (number = current + 1): writes the immutable payload snapshot (component prices, market rates, swap deltas, roof add-ons, cost config, installation matrix, statutory fees, validity, GST), its lines and sha256, and marks the previous release SUPERSEDED — one transaction. 409 `publish_blocked` while the report has BLOCK items (codes in `errors.report`). Optional `expected_current_number` (the `current_number` you previewed; 0 = none) → 409 `stale_version` if another release was published. Landed costs/margin config in `payload` need `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.publish",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "October price revision"
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string ≤ 2000",
+     "required": false
+    },
+    {
+     "name": "expected_current_number",
+     "type": "integer ≥ 0",
+     "required": false
+    }
+   ],
+   "required": false
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3c9e7a15-8d2f-4b46-9e1a-6f4b0c8d2a79",
+     "number": 8,
+     "status": "PUBLISHED",
+     "published_at": "2026-10-01T10:15:00+05:30",
+     "published_by": {
+      "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+      "email": "pricing.manager@goldenray.in"
+     },
+     "superseded_at": null,
+     "market_rate_set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026"
+     },
+     "note": "October price revision",
+     "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e",
+     "summary": {
+      "components": 142,
+      "list_prices": 138,
+      "landed_costs": 120,
+      "market_rates": 96,
+      "swap_deltas": 12,
+      "roof_addons": 8,
+      "cost_config_keys": 22,
+      "installation_matrix": 18,
+      "statutory_fees": 6
+     },
+     "payload": {
+      "schema": "flarize.price-release/1",
+      "currency": "INR",
+      "market_rate_set": {
+       "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+       "name": "Market rates Oct 2026",
+       "activated_at": "2026-10-01T10:15:00+05:30"
+      },
+      "market_rates": [
+       {
+        "key": "ongrid_value",
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "battery_config": "",
+        "size_key": "3",
+        "size_kw": "3",
+        "phase": "",
+        "from_size_key": "",
+        "future_size_key": "",
+        "variant": "",
+        "customer_price_incl_gst": "189000.00"
+       }
+      ],
+      "market_rates_by_key": {
+       "ongrid_value": {
+        "3": "189000"
+       }
+      },
+      "swap_deltas": [
+       {
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "slot": "panel",
+        "from_sku": "PNL-WAAREE-540-MONO",
+        "to_sku": "PNL-ADANI-550-TOPCON",
+        "delta_incl_gst": "6500.00"
+       }
+      ],
+      "roof_addons": [
+       {
+        "structure_type": "ELEVATED",
+        "size_kw": "3",
+        "addon_incl_gst": "15000.00"
+       }
+      ],
+      "components": {
+       "PNL-WAAREE-540-MONO": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "category": "panels",
+        "status": "ACTIVE",
+        "gst_rate": "0.05",
+        "list_price": "24500.00",
+        "list_price_gst_inclusive": false,
+        "per_watt": "45.3704",
+        "list_effective_from": "2026-10-01"
+       }
+      },
+      "cost_config": {
+       "install_rate": 4500,
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      },
+      "installation_matrix": [
+       {
+        "size_kw": "3",
+        "phase": "",
+        "installation_type": "FLAT",
+        "install_cost": "18000.00",
+        "labour_days": "2"
+       }
+      ],
+      "statutory_fees": [
+       {
+        "kind": "KSEB_REGISTRATION",
+        "label": "KSEB registration up to 5 kW (1P)",
+        "phase": "1P",
+        "capacity_kw_max": "5",
+        "amount": "1180.00",
+        "effective_from": "2026-04-01"
+       }
+      ],
+      "validity_policy": {
+       "key": "QUOTATION",
+       "days": 15,
+       "grace_days": 3,
+       "effective_from": "2026-04-01T00:00:00+05:30",
+       "windows": []
+      },
+      "gst": {
+       "regime": "SOLAR_70_30_COMPOSITE",
+       "effective_rate_pct": "8.9",
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      }
+     },
+     "publish_report": {
+      "can_publish": true,
+      "counts": {
+       "BLOCK": 0,
+       "WARN": 1,
+       "INFO": 0
+      },
+      "items": [
+       {
+        "severity": "WARN",
+        "code": "LANDED_COST_MISSING",
+        "message": "2 active components have no landed cost.",
+        "context": {
+         "skus": [
+          "INV-GROWATT-5KW-1P",
+          "BAT-EXIDE-150AH"
+         ]
+        }
+       }
+      ],
+      "summary": {
+       "components": 142,
+       "list_prices": 138,
+       "landed_costs": 120,
+       "market_rates": 96,
+       "swap_deltas": 12,
+       "roof_addons": 8,
+       "cost_config_keys": 22,
+       "installation_matrix": 18,
+       "statutory_fees": 6
+      },
+      "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e"
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.publish` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`publish_blocked`, `stale_version` or `publish_conflict`."
+   }
+  ],
+  "side_effects": [
+   "Outbox `pricing.release_published` {release_uid, number, previous_number, market_rate_set_uid, payload_sha256} (dedup per number) → packs handler marks open drafts stale",
+   "Cache bump `pricing` (public product prices)",
+   "Audit `pricing.release_published`",
+   "Previous release → SUPERSEDED"
+  ],
+  "capture": [
+   {
+    "var": "pricing_releases_uid",
+    "from": "uid"
+   },
+   {
+    "var": "pricing_releases_number",
+    "from": "number"
+   }
+  ],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_publish"
+ },
+ {
+  "id": "GET /api/v1/pricing/releases/current/",
+  "method": "GET",
+  "path": "/api/v1/pricing/releases/current/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "current",
+  "source_file": "pricing/views/releases.py:79",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "Get the current price release",
+  "description": "The single PUBLISHED release with payload and publish report; 404 `no_current_release` before the first publish. Payload redacted without `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3c9e7a15-8d2f-4b46-9e1a-6f4b0c8d2a79",
+     "number": 7,
+     "status": "PUBLISHED",
+     "published_at": "2026-10-01T10:15:00+05:30",
+     "published_by": {
+      "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+      "email": "pricing.manager@goldenray.in"
+     },
+     "superseded_at": null,
+     "market_rate_set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026"
+     },
+     "note": "October price revision",
+     "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e",
+     "summary": {
+      "components": 142,
+      "list_prices": 138,
+      "landed_costs": 120,
+      "market_rates": 96,
+      "swap_deltas": 12,
+      "roof_addons": 8,
+      "cost_config_keys": 22,
+      "installation_matrix": 18,
+      "statutory_fees": 6
+     },
+     "payload": {
+      "schema": "flarize.price-release/1",
+      "currency": "INR",
+      "market_rate_set": {
+       "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+       "name": "Market rates Oct 2026",
+       "activated_at": "2026-10-01T10:15:00+05:30"
+      },
+      "market_rates": [
+       {
+        "key": "ongrid_value",
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "battery_config": "",
+        "size_key": "3",
+        "size_kw": "3",
+        "phase": "",
+        "from_size_key": "",
+        "future_size_key": "",
+        "variant": "",
+        "customer_price_incl_gst": "189000.00"
+       }
+      ],
+      "market_rates_by_key": {
+       "ongrid_value": {
+        "3": "189000"
+       }
+      },
+      "swap_deltas": [
+       {
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "slot": "panel",
+        "from_sku": "PNL-WAAREE-540-MONO",
+        "to_sku": "PNL-ADANI-550-TOPCON",
+        "delta_incl_gst": "6500.00"
+       }
+      ],
+      "roof_addons": [
+       {
+        "structure_type": "ELEVATED",
+        "size_kw": "3",
+        "addon_incl_gst": "15000.00"
+       }
+      ],
+      "components": {
+       "PNL-WAAREE-540-MONO": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "category": "panels",
+        "status": "ACTIVE",
+        "gst_rate": "0.05",
+        "list_price": "24500.00",
+        "list_price_gst_inclusive": false,
+        "per_watt": "45.3704",
+        "list_effective_from": "2026-10-01"
+       }
+      },
+      "cost_config": {
+       "install_rate": 4500,
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      },
+      "installation_matrix": [
+       {
+        "size_kw": "3",
+        "phase": "",
+        "installation_type": "FLAT",
+        "install_cost": "18000.00",
+        "labour_days": "2"
+       }
+      ],
+      "statutory_fees": [
+       {
+        "kind": "KSEB_REGISTRATION",
+        "label": "KSEB registration up to 5 kW (1P)",
+        "phase": "1P",
+        "capacity_kw_max": "5",
+        "amount": "1180.00",
+        "effective_from": "2026-04-01"
+       }
+      ],
+      "validity_policy": {
+       "key": "QUOTATION",
+       "days": 15,
+       "grace_days": 3,
+       "effective_from": "2026-04-01T00:00:00+05:30",
+       "windows": []
+      },
+      "gst": {
+       "regime": "SOLAR_70_30_COMPOSITE",
+       "effective_rate_pct": "8.9",
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      }
+     },
+     "publish_report": {
+      "can_publish": true,
+      "counts": {
+       "BLOCK": 0,
+       "WARN": 1,
+       "INFO": 0
+      },
+      "items": [
+       {
+        "severity": "WARN",
+        "code": "LANDED_COST_MISSING",
+        "message": "2 active components have no landed cost.",
+        "context": {
+         "skus": [
+          "INV-GROWATT-5KW-1P",
+          "BAT-EXIDE-150AH"
+         ]
+        }
+       }
+      ],
+      "summary": {
+       "components": 142,
+       "list_prices": 138,
+       "landed_costs": 120,
+       "market_rates": 96,
+       "swap_deltas": 12,
+       "roof_addons": 8,
+       "cost_config_keys": 22,
+       "installation_matrix": 18,
+       "statutory_fees": 6
+      },
+      "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e"
+     }
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "`no_current_release`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_current"
+ },
+ {
+  "id": "GET /api/v1/pricing/releases/current/diff/",
+  "method": "GET",
+  "path": "/api/v1/pricing/releases/current/diff/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "diff",
+  "source_file": "pricing/views/releases.py:87",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "Diff the current release",
+  "description": "Section-by-section diff of the current release against `against` (default: the release before it): `added`/`removed` keys and `changed` fields. Non-numeric `against` → 400; unknown number → 404 `release_not_found`; no current release → 404 `no_current_release`. Internal fields are redacted on both sides without `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "against",
+    "value": "6",
+    "description": "Release number to compare with (default: the one before the current).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "current": 7,
+     "against": 6,
+     "sections": {
+      "market_rates": {
+       "added": [
+        "ongrid_value/5sp"
+       ],
+       "removed": [],
+       "changed": [
+        {
+         "key": "ongrid_value/3",
+         "field": "customer_price_incl_gst",
+         "old": "185000.00",
+         "new": "189000.00"
+        }
+       ]
+      },
+      "cost_config": {
+       "added": [],
+       "removed": [],
+       "changed": [
+        {
+         "key": "install_rate",
+         "field": "value",
+         "old": 4200,
+         "new": 4500
+        }
+       ]
+      }
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (against not a number)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "`no_current_release` or `release_not_found`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_current_diff"
+ },
+ {
+  "id": "POST /api/v1/pricing/releases/preview/",
+  "method": "POST",
+  "path": "/api/v1/pricing/releases/preview/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "preview",
+  "source_file": "pricing/views/releases.py:55",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "Preview the next price release",
+  "description": "Builds the next release exactly as publish would, **without writing**, and returns the publish report: every BLOCK/WARN/INFO item, counts, section summary, the payload sha256, `next_number`, `current_number` and per-section change counts against the current release. BLOCK items: no ACTIVE market rate set, GST config missing/inconsistent, nothing changed since the current release. Takes no body. Synchronous.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "can_publish": true,
+     "counts": {
+      "BLOCK": 0,
+      "WARN": 1,
+      "INFO": 0
+     },
+     "items": [
+      {
+       "severity": "WARN",
+       "code": "LANDED_COST_MISSING",
+       "message": "2 active components have no landed cost.",
+       "context": {
+        "skus": [
+         "INV-GROWATT-5KW-1P",
+         "BAT-EXIDE-150AH"
+        ]
+       }
+      }
+     ],
+     "summary": {
+      "components": 142,
+      "list_prices": 138,
+      "landed_costs": 120,
+      "market_rates": 96,
+      "swap_deltas": 12,
+      "roof_addons": 8,
+      "cost_config_keys": 22,
+      "installation_matrix": 18,
+      "statutory_fees": 6
+     },
+     "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e",
+     "next_number": 8,
+     "current_number": 7,
+     "changes": {
+      "components": {
+       "added": 2,
+       "removed": 0,
+       "changed": 5
+      },
+      "market_rates": {
+       "added": 4,
+       "removed": 0,
+       "changed": 12
+      },
+      "cost_config": {
+       "added": 0,
+       "removed": 0,
+       "changed": 1
+      }
+     }
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_preview",
+  "no_body": true
+ },
+ {
+  "id": "GET /api/v1/pricing/releases/{number}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/releases/{number}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.releases.ReleaseViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Releases"
+  ],
+  "summary": "Get a price release by number",
+  "description": "One release (by its integer `number`, not uid) with payload and publish report. Landed costs and margin configuration in `payload` only with `pricing_internal.view`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "number",
+    "type": "int",
+    "variable": "pricing_releases_number",
+    "example": "7",
+    "description": "Release number (positive integer)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "3c9e7a15-8d2f-4b46-9e1a-6f4b0c8d2a79",
+     "number": 7,
+     "status": "PUBLISHED",
+     "published_at": "2026-10-01T10:15:00+05:30",
+     "published_by": {
+      "uid": "0f3b8d62-4a1e-4c97-b5d2-7e9a1c6f8b30",
+      "email": "pricing.manager@goldenray.in"
+     },
+     "superseded_at": null,
+     "market_rate_set": {
+      "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+      "name": "Market rates Oct 2026"
+     },
+     "note": "October price revision",
+     "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e",
+     "summary": {
+      "components": 142,
+      "list_prices": 138,
+      "landed_costs": 120,
+      "market_rates": 96,
+      "swap_deltas": 12,
+      "roof_addons": 8,
+      "cost_config_keys": 22,
+      "installation_matrix": 18,
+      "statutory_fees": 6
+     },
+     "payload": {
+      "schema": "flarize.price-release/1",
+      "currency": "INR",
+      "market_rate_set": {
+       "uid": "7c1e5a90-2f4b-4d3e-9a61-0b8f3c2d4e51",
+       "name": "Market rates Oct 2026",
+       "activated_at": "2026-10-01T10:15:00+05:30"
+      },
+      "market_rates": [
+       {
+        "key": "ongrid_value",
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "battery_config": "",
+        "size_key": "3",
+        "size_kw": "3",
+        "phase": "",
+        "from_size_key": "",
+        "future_size_key": "",
+        "variant": "",
+        "customer_price_incl_gst": "189000.00"
+       }
+      ],
+      "market_rates_by_key": {
+       "ongrid_value": {
+        "3": "189000"
+       }
+      },
+      "swap_deltas": [
+       {
+        "system_type": "ONGRID",
+        "tier": "VALUE",
+        "slot": "panel",
+        "from_sku": "PNL-WAAREE-540-MONO",
+        "to_sku": "PNL-ADANI-550-TOPCON",
+        "delta_incl_gst": "6500.00"
+       }
+      ],
+      "roof_addons": [
+       {
+        "structure_type": "ELEVATED",
+        "size_kw": "3",
+        "addon_incl_gst": "15000.00"
+       }
+      ],
+      "components": {
+       "PNL-WAAREE-540-MONO": {
+        "uid": "4b6e2d18-9a3f-4c71-b8e5-1d0f7a2c9e46",
+        "name": "Waaree 540 Wp Mono PERC panel",
+        "category": "panels",
+        "status": "ACTIVE",
+        "gst_rate": "0.05",
+        "list_price": "24500.00",
+        "list_price_gst_inclusive": false,
+        "per_watt": "45.3704",
+        "list_effective_from": "2026-10-01"
+       }
+      },
+      "cost_config": {
+       "install_rate": 4500,
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      },
+      "installation_matrix": [
+       {
+        "size_kw": "3",
+        "phase": "",
+        "installation_type": "FLAT",
+        "install_cost": "18000.00",
+        "labour_days": "2"
+       }
+      ],
+      "statutory_fees": [
+       {
+        "kind": "KSEB_REGISTRATION",
+        "label": "KSEB registration up to 5 kW (1P)",
+        "phase": "1P",
+        "capacity_kw_max": "5",
+        "amount": "1180.00",
+        "effective_from": "2026-04-01"
+       }
+      ],
+      "validity_policy": {
+       "key": "QUOTATION",
+       "days": 15,
+       "grace_days": 3,
+       "effective_from": "2026-04-01T00:00:00+05:30",
+       "windows": []
+      },
+      "gst": {
+       "regime": "SOLAR_70_30_COMPOSITE",
+       "effective_rate_pct": "8.9",
+       "gst_goods_share": 0.7,
+       "gst_services_share": 0.3,
+       "gst_goods_rate": 0.05,
+       "gst_services_rate": 0.18
+      }
+     },
+     "publish_report": {
+      "can_publish": true,
+      "counts": {
+       "BLOCK": 0,
+       "WARN": 1,
+       "INFO": 0
+      },
+      "items": [
+       {
+        "severity": "WARN",
+        "code": "LANDED_COST_MISSING",
+        "message": "2 active components have no landed cost.",
+        "context": {
+         "skus": [
+          "INV-GROWATT-5KW-1P",
+          "BAT-EXIDE-150AH"
+         ]
+        }
+       }
+      ],
+      "summary": {
+       "components": 142,
+       "list_prices": 138,
+       "landed_costs": 120,
+       "market_rates": 96,
+       "swap_deltas": 12,
+       "roof_addons": 8,
+       "cost_config_keys": 22,
+       "installation_matrix": 18,
+       "statutory_fees": 6
+      },
+      "payload_sha256": "9f2c4e6a8b0d1f3e5a7c9b1d3f5e7a9c1b3d5f7e9a1c3b5d7f9e1a3c5b7d9f1e"
+     }
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live release with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 35,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_releases_retrieve"
+ },
+ {
+  "id": "GET /api/v1/pricing/statutory-fees/",
+  "method": "GET",
+  "path": "/api/v1/pricing/statutory-fees/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "List statutory fees",
+  "description": "KSEB registration / meter / net-meter test fees (current and closed rows). Paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "kind",
+    "value": "KSEB_REGISTRATION",
+    "description": "KSEB_REGISTRATION | KSEB_METER | NET_METER_TEST | OTHER.",
+    "required": false
+   },
+   {
+    "key": "current",
+    "value": "true",
+    "description": "`true`: only open rows (`effective_to` null); `false`: only closed rows.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "",
+    "description": "Case-insensitive search over `label`.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-kind",
+    "description": "Sort by one of `kind`, `capacity_kw_max`, `effective_from` (prefix `-` for descending). Default: `kind`, `phase`, `capacity_kw_max`.",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "25",
+    "description": "Rows per page (default 25, max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "results": [
+      {
+       "uid": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+       "kind": "KSEB_REGISTRATION",
+       "label": "KSEB registration up to 5 kW (1P)",
+       "phase": "1P",
+       "capacity_kw_max": "5.00",
+       "amount": "1180.00",
+       "effective_from": "2026-04-01",
+       "effective_to": null,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ],
+     "count": 1,
+     "next": null,
+     "previous": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_statutory_fees_list"
+ },
+ {
+  "id": "POST /api/v1/pricing/statutory-fees/",
+  "method": "POST",
+  "path": "/api/v1/pricing/statutory-fees/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "Create a statutory fee",
+  "description": "Adds a fee row; `effective_from` defaults to today, `phase`/`capacity_kw_max` null = any. Only one **current** row may exist per (kind, phase, capacity band): close the old one (`effective_to`) first, else 409 `statutory_fee_exists`. `effective_to` before `effective_from` → 400.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "kind": "KSEB_REGISTRATION",
+    "label": "KSEB registration up to 5 kW (1P)",
+    "phase": "1P",
+    "capacity_kw_max": "5.00",
+    "amount": "1180.00",
+    "effective_from": "2026-04-01"
+   },
+   "fields": [
+    {
+     "name": "kind",
+     "type": "choice",
+     "required": true,
+     "choices": [
+      "KSEB_REGISTRATION",
+      "KSEB_METER",
+      "NET_METER_TEST",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "label",
+     "type": "string ≤ 120",
+     "required": true
+    },
+    {
+     "name": "phase",
+     "type": "choice|null",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "capacity_kw_max",
+     "type": "decimal(6,2) > 0 | null",
+     "required": false
+    },
+    {
+     "name": "amount",
+     "type": "decimal(12,2) ≥ 0",
+     "required": true
+    },
+    {
+     "name": "effective_from",
+     "type": "date",
+     "required": false
+    },
+    {
+     "name": "effective_to",
+     "type": "date|null",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+     "kind": "KSEB_REGISTRATION",
+     "label": "KSEB registration up to 5 kW (1P)",
+     "phase": "1P",
+     "capacity_kw_max": "5.00",
+     "amount": "1180.00",
+     "effective_from": "2026-04-01",
+     "effective_to": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`statutory_fee_exists`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.statutory_fee_created`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [
+   {
+    "var": "pricing_statutory_fees_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_statutory_fees_create"
+ },
+ {
+  "id": "GET /api/v1/pricing/statutory-fees/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/pricing/statutory-fees/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "Get a statutory fee",
+  "description": "One fee row by uid.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_statutory_fees_uid",
+    "example": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+    "description": "uid of the statutory fee."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+     "kind": "KSEB_REGISTRATION",
+     "label": "KSEB registration up to 5 kW (1P)",
+     "phase": "1P",
+     "capacity_kw_max": "5.00",
+     "amount": "1180.00",
+     "effective_from": "2026-04-01",
+     "effective_to": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live statutory fee with this identifier (`not_found`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_statutory_fees_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/statutory-fees/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/statutory-fees/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (`update` is unmapped → default deny)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_statutory_fees_uid",
+    "example": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/pricing/statutory-fees/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/pricing/statutory-fees/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "Update a statutory fee",
+  "description": "Partial update (e.g. close a fee with `effective_to`). `expected_version` → 409 `stale_version`; a change that collides with another current fee → 409 `statutory_fee_exists`; `effective_to` before `effective_from` → 400.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_statutory_fees_uid",
+    "example": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+    "description": "uid of the statutory fee."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "amount": "1250.00",
+    "label": "KSEB registration up to 5 kW (1P) — revised",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "kind",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "KSEB_REGISTRATION",
+      "KSEB_METER",
+      "NET_METER_TEST",
+      "OTHER"
+     ]
+    },
+    {
+     "name": "label",
+     "type": "string ≤ 120",
+     "required": false
+    },
+    {
+     "name": "phase",
+     "type": "choice|null",
+     "required": false,
+     "choices": [
+      "1P",
+      "3P"
+     ]
+    },
+    {
+     "name": "capacity_kw_max",
+     "type": "decimal(6,2) > 0 | null",
+     "required": false
+    },
+    {
+     "name": "amount",
+     "type": "decimal(12,2) ≥ 0",
+     "required": false
+    },
+    {
+     "name": "effective_from",
+     "type": "date",
+     "required": false
+    },
+    {
+     "name": "effective_to",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "uid": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+     "kind": "KSEB_REGISTRATION",
+     "label": "KSEB registration up to 5 kW (1P) — revised",
+     "phase": "1P",
+     "capacity_kw_max": "5.00",
+     "amount": "1250.00",
+     "effective_from": "2026-04-01",
+     "effective_to": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:20:00+05:30",
+     "version": 2
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live statutory fee with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` or `statutory_fee_exists`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.statutory_fee_updated` (only when something changed)",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_statutory_fees_update"
+ },
+ {
+  "id": "DELETE /api/v1/pricing/statutory-fees/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/pricing/statutory-fees/{uid}/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.StatutoryFeeViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Statutory fees"
+  ],
+  "summary": "Delete a statutory fee",
+  "description": "Soft-deletes the fee row.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": "ALL only (module has no narrower record scope; a role without the module sees nothing → 404).",
+   "notes": "Throttle scope `staff` (1200/min)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "pricing_statutory_fees_uid",
+    "example": "8a2c6e4f-1d9b-4e37-a5c8-3f0b7d2e9a15",
+    "description": "uid of the statutory fee."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "1",
+    "description": "Optional optimistic lock (read from the query string on DELETE); 409 `stale_version` when outdated.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted (soft); no body."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 404,
+    "description": "No live statutory fee with this identifier (`not_found`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`: `expected_version` is not the row's current version."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.statutory_fee_deleted`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_statutory_fees_delete"
+ },
+ {
+  "id": "GET /api/v1/pricing/validity-policy/",
+  "method": "GET",
+  "path": "/api/v1/pricing/validity-policy/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.ValidityPolicyView",
+  "action": "get",
+  "source_file": "pricing/views/config.py:171",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Validity policy"
+  ],
+  "summary": "Get quotation validity policy",
+  "description": "The DEFAULT quotation validity (`days`, `grace_days`, `effective_from`, `version`) plus every effective window, and `resolved_now` — what a quotation issued now would get (the ACTIVE window containing now with the latest `effective_from`, else the default). All default fields are null and `resolved_now` is null when no policy is configured.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.view",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min). APIView: no record scope."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "key": "QUOTATION",
+     "days": 15,
+     "grace_days": 3,
+     "effective_from": "2026-04-01T00:00:00+05:30",
+     "version_label": "",
+     "note": "Standard quotation validity",
+     "version": 4,
+     "windows": [
+      {
+       "uid": "c6f0a2e8-5b3d-4197-8e4a-2d9c7b1f6e35",
+       "policy_id": "DIWALI-2026",
+       "days": 30,
+       "grace_days": 0,
+       "effective_from": "2026-10-15T00:00:00+05:30",
+       "effective_to": "2026-11-16T00:00:00+05:30",
+       "status": "ACTIVE",
+       "version_label": "v1",
+       "note": "Festival season"
+      }
+     ],
+     "resolved_now": {
+      "days": 15,
+      "grace_days": 3,
+      "source": "DEFAULT",
+      "policy_id": "",
+      "version": ""
+     }
+    }
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.view` (`permission_denied`)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_validity_policy_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/pricing/validity-policy/",
+  "method": "PUT",
+  "path": "/api/v1/pricing/validity-policy/",
+  "app": "pricing",
+  "surface": "staff",
+  "view": "pricing.views.config.ValidityPolicyView",
+  "action": "put",
+  "source_file": "pricing/views/config.py:179",
+  "group": "C_pricing_engineering",
+  "folder": [
+   "Validity policy"
+  ],
+  "summary": "Set quotation validity policy",
+  "description": "Creates or updates the DEFAULT policy (creating needs `days`, else 400). When `windows` is sent it **replaces** the window list: upsert by `policy_id`, windows left out become INACTIVE (never deleted). A window must end after it starts (400); duplicate `policy_id` → 400. `expected_version` (the `version` from GET) → 409 `stale_version` when outdated; the example omits it so a fresh environment works.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "pricing.edit",
+   "scope": null,
+   "notes": "Throttle scope `staff` (1200/min). APIView: no record scope."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "days": 15,
+    "grace_days": 3,
+    "note": "Standard quotation validity",
+    "windows": [
+     {
+      "policy_id": "DIWALI-2026",
+      "days": 30,
+      "grace_days": 0,
+      "effective_from": "2026-10-15T00:00:00+05:30",
+      "effective_to": "2026-11-16T00:00:00+05:30",
+      "status": "ACTIVE",
+      "version_label": "v1",
+      "note": "Festival season"
+     }
+    ]
+   },
+   "fields": [
+    {
+     "name": "days",
+     "type": "integer 1–365",
+     "required": false
+    },
+    {
+     "name": "grace_days",
+     "type": "integer 0–365",
+     "required": false
+    },
+    {
+     "name": "effective_from",
+     "type": "datetime",
+     "required": false
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer ≥ 1",
+     "required": false
+    },
+    {
+     "name": "windows",
+     "type": "array",
+     "required": false
+    },
+    {
+     "name": "windows[].policy_id",
+     "type": "string ≤ 64",
+     "required": true
+    },
+    {
+     "name": "windows[].days",
+     "type": "integer 1–365",
+     "required": true
+    },
+    {
+     "name": "windows[].grace_days",
+     "type": "integer 0–365",
+     "required": false
+    },
+    {
+     "name": "windows[].effective_from",
+     "type": "datetime",
+     "required": true
+    },
+    {
+     "name": "windows[].effective_to",
+     "type": "datetime|null",
+     "required": false
+    },
+    {
+     "name": "windows[].status",
+     "type": "choice",
+     "required": false,
+     "choices": [
+      "ACTIVE",
+      "INACTIVE"
+     ]
+    },
+    {
+     "name": "windows[].version_label",
+     "type": "string ≤ 80",
+     "required": false
+    },
+    {
+     "name": "windows[].note",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "content_type": "application/json",
+    "example": {
+     "key": "QUOTATION",
+     "days": 15,
+     "grace_days": 3,
+     "effective_from": "2026-04-01T00:00:00+05:30",
+     "version_label": "",
+     "note": "Standard quotation validity",
+     "version": 5,
+     "windows": [
+      {
+       "uid": "c6f0a2e8-5b3d-4197-8e4a-2d9c7b1f6e35",
+       "policy_id": "DIWALI-2026",
+       "days": 30,
+       "grace_days": 0,
+       "effective_from": "2026-10-15T00:00:00+05:30",
+       "effective_to": "2026-11-16T00:00:00+05:30",
+       "status": "ACTIVE",
+       "version_label": "v1",
+       "note": "Festival season"
+      }
+     ],
+     "resolved_now": {
+      "days": 15,
+      "grace_days": 3,
+      "source": "DEFAULT",
+      "policy_id": "",
+      "version": ""
+     }
+    }
+   },
+   {
+    "status": 400,
+    "description": "Body fails validation (`validation_error`, field errors in `errors`)."
+   },
+   {
+    "status": 401,
+    "description": "No or invalid bearer JWT (`not_authenticated` / `token_not_valid`)."
+   },
+   {
+    "status": 403,
+    "description": "Caller lacks `pricing.edit` (`permission_denied`)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `pricing.validity_policy_set`",
+   "Cache bump `pricing:authoring`"
+  ],
+  "capture": [],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "pricing_validity_policy_update"
+ }
+]

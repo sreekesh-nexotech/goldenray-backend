@@ -27,6 +27,7 @@ from django.utils import timezone
 
 from audit.services import changes, record, snapshot
 from careers.models import Department, JobApplication, JobPosition
+from careers.services.screening import clean_questions
 from careers.services.slugs import derive_slug
 from core.errors import Conflict, DomainError
 from core.outbox import emit
@@ -49,6 +50,7 @@ CONTENT_FIELDS = (
     "requirements",
     "benefits",
     "application_instructions",
+    "screening_questions",
     "opens_on",
     "application_deadline",
     "openings",
@@ -108,6 +110,13 @@ def _validate(values: dict) -> None:
         raise DomainError("validation_error", "The deadline is before the opening date.", errors={"application_deadline": ["Must be on or after opens_on."]})
 
 
+def _normalised(data) -> dict:
+    """``data`` with its screening questions validated and keyed (before any comparison with the stored row)."""
+    if "screening_questions" not in data:
+        return data
+    return {**data, "screening_questions": clean_questions(data["screening_questions"])}
+
+
 def _derive_slug(title: str) -> str:
     slug = derive_slug(title, 220)
     if not slug:
@@ -117,6 +126,7 @@ def _derive_slug(title: str) -> str:
 
 @transaction.atomic
 def create_position(*, user, data) -> JobPosition:
+    data = _normalised(data)
     values = {name: data[name] for name in EDITABLE_FIELDS if name in data}
     values["slug"] = (values.get("slug") or "").strip() or _derive_slug(values.get("title", ""))
     _validate(values)
@@ -137,6 +147,7 @@ def update_position(instance: JobPosition, *, user, data, expected_version=None)
     position = JobPosition.objects.select_for_update().select_related("department").get(pk=instance.pk)
     check_version(position, expected_version)
     before = position_snapshot(position)
+    data = _normalised(data)
     values = {name: data[name] for name in EDITABLE_FIELDS if name in data and data[name] != getattr(position, name)}
     if "slug" in values and not (values["slug"] or "").strip():
         values["slug"] = _derive_slug(values.get("title", position.title))

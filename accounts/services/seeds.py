@@ -128,14 +128,16 @@ ROLE_SEEDS: tuple[RoleSeed, ...] = (
     RoleSeed(
         "project-head",
         "Project Head",
-        "Catalog, pricing, BOM, packs, engineering, projects, quotation content and inspection approval/release.",
+        "Packs, engineering, projects, quotation content and inspection approval/release; asks an Admin to change catalog, pricing or BOM.",
+        # Catalog, pricing and BOM changes go through change requests (DV-153): view here, apply only after Admin approval.
         grants={
-            "catalog": ["view", "create", "edit", "approve"],
-            "pricing": ["view", "edit"],
+            "catalog": ["view"],
+            "pricing": ["view"],
             "pricing_internal": ["view"],
             "market_rates": ["view", "edit"],
             "procurement": ["view"],
-            "bom": "*",
+            "bom": ["view"],
+            "change_requests": ["view", "create"],
             "packs": ["view", "edit", "submit"],
             "engineering": ["view", "verify"],
             "projects": "*",
@@ -145,6 +147,7 @@ ROLE_SEEDS: tuple[RoleSeed, ...] = (
             "agreements": ["view"],
             "company": ["view"],
         },
+        scopes={"change_requests": "owned"},
     ),
     RoleSeed(
         "engineering",
@@ -169,8 +172,10 @@ ROLE_SEEDS: tuple[RoleSeed, ...] = (
     RoleSeed(
         "procurement",
         "Procurement",
-        "Catalog upkeep, procurement batches including commit, landed costs and stock.",
-        grants={"catalog": ["view", "create", "edit"], "procurement": "*", "pricing_internal": ["view"], "inventory": ["view", "edit"]},
+        "Procurement batches, landed costs and stock; asks an Admin to commit a batch (it sets prices) or change the catalog.",
+        # Committing / reversing a batch writes price versions, so it goes through a change request (DV-155).
+        grants={"catalog": ["view"], "procurement": ["view", "create", "edit"], "pricing_internal": ["view"], "inventory": ["view", "edit"], "change_requests": ["view", "create"]},
+        scopes={"change_requests": "owned"},
     ),
 )
 

@@ -1,0 +1,6004 @@
+[
+ {
+  "id": "GET /media/public/{path}",
+  "method": "GET",
+  "path": "/media/public/{path}",
+  "app": "django",
+  "surface": "dev-media",
+  "view": "django.views.static.serve",
+  "action": null,
+  "source_file": "/usr/local/lib/python3.12/site-packages/django/views/static.py:28",
+  "group": "A_platform",
+  "folder": [
+   "Dev media (DEBUG only)"
+  ],
+  "summary": "Serve a public upload (dev only)",
+  "description": "`django.views.static.serve` over `PUBLIC_MEDIA_ROOT`, routed only when `DEBUG` is on **and** `MEDIA_PUBLIC_BACKEND=local` (the dev default) — staging/prod serve public files from Bunny CDN and this route does not exist. Private files are never served here. `path` is the storage key, e.g. `library/2026/10/<hex>.jpg` (thumbnails: `<key>.thumb.webp`); the media upload request captures it from the asset `url`. Supports `If-Modified-Since` (304). Missing files or directories → 404.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "No auth; DEBUG + MEDIA_PUBLIC_BACKEND=local only."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "path",
+    "type": "str",
+    "variable": "dev_media_path",
+    "example": "library/2026/10/9f2c4e1a7b3d4c6e8a1f2b3c4d5e6f70.jpg",
+    "description": "Storage key under PUBLIC_MEDIA_ROOT (may contain slashes)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The file bytes with a guessed Content-Type (e.g. image/jpeg), Content-Length and Last-Modified.",
+    "example": null,
+    "content_type": "image/jpeg"
+   },
+   {
+    "status": 304,
+    "description": "Not modified (If-Modified-Since)."
+   },
+   {
+    "status": 404,
+    "description": "No such file (directory indexes are off)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": "DEBUG and MEDIA_PUBLIC_BACKEND=local",
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "GET /api/docs/",
+  "method": "GET",
+  "path": "/api/docs/",
+  "app": "core",
+  "surface": "ops",
+  "view": "core.views.docs.SwaggerView",
+  "action": "get",
+  "source_file": "/usr/local/lib/python3.12/site-packages/drf_spectacular/views.py:132",
+  "group": "A_platform",
+  "folder": [
+   "Ops"
+  ],
+  "summary": "Open the Swagger UI",
+  "description": "Swagger UI (HTML) pointing at `/api/schema/v1/`. The only unversioned DRF view (`versioning_class=None`). Same access rule as the schema: `ApiDocsAccess` (open while `API_DOCS_PUBLIC`, otherwise allow-listed IPs only); no JWT — it is a browser navigation. Errors use the JSON envelope.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "ApiDocsAccess: API_DOCS_PUBLIC or client IP in API_DOCS_ALLOWED_NETWORKS."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "HTML page.",
+    "example": "<!DOCTYPE html><html><head><title>Flarize Platform API</title>…swagger-ui…</head></html>",
+    "content_type": "text/html"
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — outside the allow-listed networks."
+   },
+   {
+    "status": 405,
+    "description": "`method_not_allowed` (JSON envelope)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "GET /api/schema/v1/",
+  "method": "GET",
+  "path": "/api/schema/v1/",
+  "app": "core",
+  "surface": "ops",
+  "view": "core.views.docs.SchemaView",
+  "action": "get",
+  "source_file": "/usr/local/lib/python3.12/site-packages/drf_spectacular/views.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Ops"
+  ],
+  "summary": "Download the OpenAPI schema",
+  "description": "drf-spectacular `SpectacularAPIView` for the `v1` surface (default renderer: YAML `application/vnd.oai.openapi`; add `?format=json` or `Accept: application/vnd.oai.openapi+json` for JSON). No JWT: access is `core.permissions.ApiDocsAccess` — open while `API_DOCS_PUBLIC` (default True in base/dev/staging, False in prod), otherwise only from client IPs inside `API_DOCS_ALLOWED_NETWORKS` (empty list = denied to everyone). Errors are rendered as the JSON envelope.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "ApiDocsAccess: API_DOCS_PUBLIC or client IP in API_DOCS_ALLOWED_NETWORKS. No authentication classes."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "format",
+    "value": "json",
+    "description": "`json` or `yaml` (default yaml).",
+    "required": false
+   },
+   {
+    "key": "lang",
+    "value": "en",
+    "description": "Schema language (drf-spectacular).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "OpenAPI 3 document (abridged).",
+    "example": {
+     "openapi": "3.0.3",
+     "info": {
+      "title": "Flarize Platform API",
+      "version": "v1"
+     },
+     "paths": {},
+     "components": {}
+    },
+    "content_type": "application/vnd.oai.openapi+json"
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — docs are restricted to the allow-listed office networks."
+   },
+   {
+    "status": 404,
+    "description": "Unknown version segment."
+   },
+   {
+    "status": 405,
+    "description": "`method_not_allowed` (JSON envelope)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "GET /healthz",
+  "method": "GET",
+  "path": "/healthz",
+  "app": "core",
+  "surface": "ops",
+  "view": "core.views.health.healthz",
+  "action": null,
+  "source_file": "core/views/health.py:12",
+  "group": "A_platform",
+  "folder": [
+   "Ops"
+  ],
+  "summary": "Check instance health",
+  "description": "Plain Django view (no auth, no throttle, `Cache-Control: no-cache` via `never_cache`) polled by the VM cron and the deploy script. Runs every registered check: `database`, `cache` (critical) and `outbox`, `render_queue`, `audit_partitions` (non-critical). `status` is `ok` (all pass), `degraded` (only non-critical checks fail — still HTTP 200) or `fail` (a critical check failed — HTTP 503). A check that raises is reported with `error` (exception class name). Only GET/HEAD; other methods answer 405 `method_not_allowed`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Unauthenticated, unthrottled."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "`ok` or `degraded`.",
+    "example": {
+     "status": "ok",
+     "checks": {
+      "audit_partitions": {
+       "ok": true,
+       "missing": [],
+       "critical": false,
+       "duration_ms": 3
+      },
+      "cache": {
+       "ok": true,
+       "critical": true,
+       "duration_ms": 1
+      },
+      "database": {
+       "ok": true,
+       "critical": true,
+       "duration_ms": 2
+      },
+      "outbox": {
+       "ok": true,
+       "pending": 0,
+       "oldest_age_seconds": 0,
+       "stale_claims": 0,
+       "retrying": 0,
+       "parked": 0,
+       "critical": false,
+       "duration_ms": 4
+      },
+      "render_queue": {
+       "ok": true,
+       "queued": 0,
+       "running": 0,
+       "oldest_queued_age_seconds": 0,
+       "failed_last_24h": 0,
+       "critical": false,
+       "duration_ms": 3
+      }
+     }
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 405,
+    "description": "`method_not_allowed` for anything but GET/HEAD (`Allow: GET, HEAD`)."
+   },
+   {
+    "status": 503,
+    "description": "`status: fail` — a critical check (database, cache) failed; same body shape."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "GET /api/public/v1/company/",
+  "method": "GET",
+  "path": "/api/public/v1/company/",
+  "app": "company",
+  "surface": "public",
+  "view": "company.views.profile.PublicCompanyView",
+  "action": "get",
+  "source_file": "company/views/profile.py:42",
+  "group": "A_platform",
+  "folder": [
+   "Company"
+  ],
+  "summary": "Get the public company details",
+  "description": "Website payload: display name, contact, address, public logo/OG image (only live public assets with a CDN URL, else null), trust stats, social links, careers intro and the quotation offer banner. Never exposes tax ids, bank data, notification recipients or secrets. Cached server-side 300 s (namespaces `company`, `media`), `Cache-Control: public, max-age=60`, `ETag` + `If-None-Match` → 304, `X-Cache: HIT|MISS`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Public (AllowAny, no authentication). Throttle scope `public_read` (600/min per IP)."
+  },
+  "headers": [
+   {
+    "key": "If-None-Match",
+    "value": "",
+    "description": "Optional: ETag from a previous response → 304 when unchanged."
+   }
+  ],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "name": "Goldenray Solar",
+     "legal_name": "Goldenray Solar Solutions Private Limited",
+     "trade_name": "Goldenray Solar",
+     "email": "hello@goldenraysolar.in",
+     "phone": "+914842345678",
+     "website": "https://www.goldenraysolar.in",
+     "address": {
+      "line": "2nd Floor, Pioneer Tower, Marine Drive",
+      "locality": "Kochi",
+      "region": "Kerala",
+      "postal_code": "682031",
+      "country_code": "IN"
+     },
+     "logo": {
+      "url": "https://cdn.goldenraysolar.in/library/2026/10/logo.png",
+      "alternative_text": "Goldenray Solar logo",
+      "width": 512,
+      "height": 512
+     },
+     "default_og_image": null,
+     "default_meta_description": "Rooftop solar for homes and businesses across Kerala — PM Surya Ghar subsidy assistance, KSEB net metering and 25-year warranties.",
+     "trust_stats": [
+      {
+       "label": "Rooftop systems installed",
+       "value": "4,200+",
+       "icon": "solar-panel"
+      },
+      {
+       "label": "MW commissioned",
+       "value": "18.5",
+       "icon": "bolt"
+      }
+     ],
+     "social": {
+      "facebook": "https://www.facebook.com/goldenraysolar",
+      "instagram": "https://www.instagram.com/goldenraysolar"
+     },
+     "careers": {
+      "accepting_general_applications": true,
+      "intro": "Join Kerala's fastest-growing rooftop solar team."
+     },
+     "quotation": {
+      "offer": {
+       "enabled": true,
+       "active": true,
+       "title": "Onam offer",
+       "description": "Free 3-year AMC on every on-grid system booked this season.",
+       "details": "Valid on bookings with 20% advance.",
+       "title_ml": "ഓണം ഓഫർ",
+       "description_ml": "ഈ സീസണിൽ ബുക്ക് ചെയ്യുന്ന എല്ലാ ഓൺ-ഗ്രിഡ് സിസ്റ്റങ്ങൾക്കും 3 വർഷത്തെ സൗജന്യ AMC.",
+       "details_ml": "20% അഡ്വാൻസോടെയുള്ള ബുക്കിംഗുകൾക്ക് മാത്രം.",
+       "valid_from": "2026-08-15",
+       "valid_until": "2026-10-31",
+       "image_src": "https://cdn.goldenraysolar.in/quotation/onam-offer.png"
+      }
+     }
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 304,
+    "description": "Not modified (If-None-Match matched the ETag)."
+   },
+   {
+    "status": 429,
+    "description": "`throttled`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "public_company_retrieve"
+ },
+ {
+  "id": "POST /api/v1/auth/login/",
+  "method": "POST",
+  "path": "/api/v1/auth/login/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.LoginView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Sign in with e-mail and password",
+  "description": "Verifies the credentials and opens a session; returns an RS256 **access** token (15 min, send as `Authorization: Bearer <access>`) and a **refresh** token (rotated on every use; session lasts at most `ACCOUNTS_SESSION_MAX_AGE`, 30 days). Both travel in the JSON body — no cookies. Errors: 401 `invalid_credentials` (wrong e-mail/password, unknown or inactive user — indistinguishable), 403 `password_reset_required` (correct password but the account must set one via the reset/invite link), 429 `login_locked` with `Retry-After` (too many failures per e-mail or IP), 429 throttled. The test script stores `access` → `{{access_token}}` and `refresh` → `{{refresh_token}}`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous: ignores any Authorization header. Throttle scope `login` (10/15min per client IP)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "email": "{{staff_email}}",
+    "password": "{{staff_password}}"
+   },
+   "fields": [
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": true
+    },
+    {
+     "name": "password",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "access": "<access JWT (RS256), returned by the server>",
+     "refresh": "<refresh JWT (RS256), returned by the server>",
+     "token_type": "Bearer",
+     "access_expires_at": "2026-10-01T10:30:00+05:30",
+     "refresh_expires_at": "2026-10-08T10:15:00+05:30",
+     "session_uid": "5e8d2a7c-3f1b-4c9e-a6d4-2b7f0e1c9a83"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`invalid_credentials`."
+   },
+   {
+    "status": 403,
+    "description": "`password_reset_required`."
+   },
+   {
+    "status": 429,
+    "description": "`login_locked` (Retry-After seconds) or `throttled`."
+   }
+  ],
+  "side_effects": [
+   "Creates an accounts_user_session row (refresh jti outstanding) and stamps user.last_login_at",
+   "Audit `accounts.login` (failures: `accounts.login_failed` / `accounts.login_locked` / `accounts.login_blocked`, counted towards the DB lockout)"
+  ],
+  "capture": [
+   {
+    "var": "access_token",
+    "from": "access"
+   },
+   {
+    "var": "refresh_token",
+    "from": "refresh"
+   }
+  ],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_login"
+ },
+ {
+  "id": "POST /api/v1/auth/logout/",
+  "method": "POST",
+  "path": "/api/v1/auth/logout/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.LogoutView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:99",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Sign out (end the session)",
+  "description": "Ends the session the refresh token belongs to and blacklists that token (refresh token in the JSON body, not a cookie). Idempotent: an expired refresh token returns 204 (nothing left to end). 401 `token_invalid` for a forged token or one whose session/user does not match. Run last — the stored tokens stop working.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous; refresh token in the JSON body. Throttle scope `token_refresh`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "refresh": "{{refresh_token}}"
+   },
+   "fields": [
+    {
+     "name": "refresh",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Signed out.",
+    "example": null
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`token_invalid`."
+   },
+   {
+    "status": 429,
+    "description": "`throttled`."
+   }
+  ],
+  "side_effects": [
+   "Session revoked + refresh jti blacklisted",
+   "Audit `accounts.logout`"
+  ],
+  "capture": [],
+  "order": 99,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_logout"
+ },
+ {
+  "id": "GET /api/v1/auth/me/",
+  "method": "GET",
+  "path": "/api/v1/auth/me/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.MeView",
+  "action": "get",
+  "source_file": "accounts/views/auth.py:143",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Get the signed-in user",
+  "description": "Who the caller is and what they may do: the user, their role, the effective `permissions` (`{module: [actions]}`) and record `scopes` (`{module: scope}`) resolved server-side from the role, and the current `session_uid` (from the token's `sid` claim). Open to every signed-in user; no module permission.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "Any authenticated staff user. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "user": {
+      "uid": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+      "email": "rahul.menon@goldenraysolar.in",
+      "first_name": "Rahul",
+      "last_name": "Menon",
+      "full_name": "Rahul Menon",
+      "phone_e164": "+919895012345",
+      "title": "Operations Manager",
+      "last_login_at": "2026-10-01T10:15:00+05:30",
+      "password_changed_at": "2026-09-02T09:30:00+05:30"
+     },
+     "role": {
+      "uid": "0d4b8f2a-6c1e-4a9d-b3f7-5e2c8a1d4b96",
+      "slug": "admin",
+      "name": "Admin",
+      "is_system": true
+     },
+     "permissions": {
+      "customers": [
+       "view",
+       "create",
+       "edit",
+       "archive",
+       "manage"
+      ],
+      "dashboard": [
+       "view"
+      ],
+      "leads": [
+       "view",
+       "create",
+       "edit",
+       "archive",
+       "manage"
+      ],
+      "users": [
+       "view",
+       "create",
+       "edit",
+       "archive",
+       "manage"
+      ]
+     },
+     "scopes": {
+      "customers": "all",
+      "dashboard": "all",
+      "leads": "all",
+      "users": "all"
+     },
+     "session_uid": "5e8d2a7c-3f1b-4c9e-a6d4-2b7f0e1c9a83"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_me"
+ },
+ {
+  "id": "POST /api/v1/auth/password/change/",
+  "method": "POST",
+  "path": "/api/v1/auth/password/change/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.PasswordChangeView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:149",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Change my password",
+  "description": "Changes the caller's own password; keeps the current session and signs out every other one (returns how many). The new password must pass `AUTH_PASSWORD_VALIDATORS` (min 10 chars, not common, not similar to the user) and differ from the current one. 400 `invalid_current_password` counts towards the sign-in lockout (429 `login_locked`). **Running this really changes the password**: set `{{staff_new_password}}` first and update `{{staff_password}}` afterwards (empty variable → 400).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "Any authenticated staff user. Throttle scope `staff`; wrong current password counts towards the DB lockout."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "current_password": "{{staff_password}}",
+    "new_password": "{{staff_new_password}}"
+   },
+   "fields": [
+    {
+     "name": "current_password",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "new_password",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "other_sessions_ended": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`invalid_current_password` or `validation_error` (password policy / same as current)."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 429,
+    "description": "`login_locked` (Retry-After)."
+   }
+  ],
+  "side_effects": [
+   "Other sessions revoked (refresh tokens blacklisted)",
+   "Audit `accounts.password_changed` (+ `accounts.sessions_revoked`)",
+   "E-mail queued: password-changed notice"
+  ],
+  "capture": [],
+  "order": 80,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_password_change"
+ },
+ {
+  "id": "POST /api/v1/auth/password/reset-request/",
+  "method": "POST",
+  "path": "/api/v1/auth/password/reset-request/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.PasswordResetRequestView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:113",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Request a password reset link",
+  "description": "Always 200 with the same message, whether or not the address has an account (no account enumeration; the lookup runs in the Celery task `accounts.tasks.send_password_reset`). For an active account a single-use reset link (valid `ACCOUNTS_PASSWORD_RESET_TTL`, 1 h) is e-mailed as `<ACCOUNTS_PASSWORD_RESET_URL>#token=<token>`; at most `ACCOUNTS_RESET_REQUESTS_PER_HOUR` links per account per hour. The token arrives only by e-mail and is not captured.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous: ignores any Authorization header. Throttle scope `login` (10/15min per client IP)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "email": "{{staff_email}}"
+   },
+   "fields": [
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "detail": "If the address belongs to an active account, a reset link has been sent."
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 429,
+    "description": "`throttled`."
+   }
+  ],
+  "side_effects": [
+   "Celery task accounts.tasks.send_password_reset enqueued on commit (synchronous fallback if the broker is down)",
+   "For an active account: earlier open links voided, new PasswordReset row, audit `accounts.password_reset_requested`, reset e-mail queued"
+  ],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_password_reset_request"
+ },
+ {
+  "id": "POST /api/v1/auth/password/reset/",
+  "method": "POST",
+  "path": "/api/v1/auth/password/reset/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.PasswordResetView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:128",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Set a new password with a reset token",
+  "description": "Completes a password reset or an invitation (new users and force-reset get the same kind of link). `token` is the value after `#token=` in the e-mailed link — set `{{password_reset_token}}` by hand (it only arrives by e-mail). Single use; signs out every session of the account. 400 codes: `reset_token_invalid` (unknown, used, or inactive account), `reset_token_expired`, `validation_error` (password policy).",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous: ignores any Authorization header. Throttle scope `login` (10/15min per client IP)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "token": "{{password_reset_token}}",
+    "new_password": "Kochi-Solar#2026"
+   },
+   "fields": [
+    {
+     "name": "token",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "new_password",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Password set; every session of the account was signed out.",
+    "example": null
+   },
+   {
+    "status": 400,
+    "description": "`reset_token_invalid` · `reset_token_expired` · `validation_error`."
+   },
+   {
+    "status": 429,
+    "description": "`throttled`."
+   }
+  ],
+  "side_effects": [
+   "Password set, must_reset_password cleared, reset row used + other open links voided",
+   "All sessions of the account revoked",
+   "Audit `accounts.password_reset`",
+   "E-mail queued: password-changed notice"
+  ],
+  "capture": [],
+  "order": 70,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_password_reset"
+ },
+ {
+  "id": "POST /api/v1/auth/refresh/",
+  "method": "POST",
+  "path": "/api/v1/auth/refresh/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.RefreshView",
+  "action": "post",
+  "source_file": "accounts/views/auth.py:81",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Rotate the refresh token",
+  "description": "Exchanges the refresh token (JSON body field `refresh`, not a cookie) for a new access + refresh pair; the presented refresh token is blacklisted. The session is re-checked on every refresh. 401 codes: `token_invalid`, `session_revoked`, `session_expired`, `refresh_token_rotated` (an already-rotated token reused inside the grace window — use the latest one), `refresh_token_reused` (replay after the grace window: the session is ended), `user_inactive`; 403 `password_reset_required`. Stores the new pair into `{{access_token}}` / `{{refresh_token}}`.",
+  "auth": {
+   "scheme": "none",
+   "permission": null,
+   "scope": null,
+   "notes": "Anonymous (an expired access token must not block a refresh); refresh token in the JSON body. Throttle scope `token_refresh` (300/15min per IP)."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "refresh": "{{refresh_token}}"
+   },
+   "fields": [
+    {
+     "name": "refresh",
+     "type": "string",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "access": "<access JWT (RS256), returned by the server>",
+     "refresh": "<refresh JWT (RS256), returned by the server>",
+     "token_type": "Bearer",
+     "access_expires_at": "2026-10-01T10:30:00+05:30",
+     "refresh_expires_at": "2026-10-08T10:15:00+05:30",
+     "session_uid": "5e8d2a7c-3f1b-4c9e-a6d4-2b7f0e1c9a83"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`token_invalid` · `session_revoked` · `session_expired` · `refresh_token_rotated` · `refresh_token_reused` · `user_inactive`."
+   },
+   {
+    "status": 403,
+    "description": "`password_reset_required` (the session is ended)."
+   },
+   {
+    "status": 429,
+    "description": "`throttled`."
+   }
+  ],
+  "side_effects": [
+   "Blacklists the old refresh jti, rotates session.refresh_jti/expires_at (version bump), bumps the session cache namespace",
+   "Replay after the grace window: audit `accounts.refresh_token_reused` + session ended"
+  ],
+  "capture": [
+   {
+    "var": "access_token",
+    "from": "access"
+   },
+   {
+    "var": "refresh_token",
+    "from": "refresh"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_refresh"
+ },
+ {
+  "id": "GET /api/v1/auth/sessions/",
+  "method": "GET",
+  "path": "/api/v1/auth/sessions/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.SessionListView",
+  "action": "get",
+  "source_file": "accounts/views/auth.py:181",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "List my active sessions",
+  "description": "The caller's own unrevoked, unexpired sessions, newest first, paginated (StandardPagination; no filters). `current` marks the session making the request. The test script captures `results.1.uid` (the second-newest session) into `{{auth_sessions_uid}}` — index 0 is normally the current session, and revoking that one would sign this collection out. With a single session nothing is captured and the revoke request answers 404.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": "Own sessions only.",
+   "notes": "Any authenticated staff user. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "count": 2,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "5e8d2a7c-3f1b-4c9e-a6d4-2b7f0e1c9a83",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "last_refreshed_at": "2026-10-01T10:20:00+05:30",
+       "expires_at": "2026-10-08T10:20:00+05:30",
+       "ip": "103.42.18.77",
+       "user_agent": "PostmanRuntime/7.43.0",
+       "current": true
+      },
+      {
+       "uid": "9b3c7e1a-6d2f-4a8b-8c5e-4f1a2d3b7c90",
+       "created_at": "2026-09-30T18:05:00+05:30",
+       "last_refreshed_at": "2026-10-01T08:55:00+05:30",
+       "expires_at": "2026-10-07T18:05:00+05:30",
+       "ip": "49.37.201.14",
+       "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0",
+       "current": false
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "auth_sessions_uid",
+    "from": "results.1.uid"
+   }
+  ],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_sessions_list"
+ },
+ {
+  "id": "DELETE /api/v1/auth/sessions/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/auth/sessions/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.auth.SessionDetailView",
+  "action": "delete",
+  "source_file": "accounts/views/auth.py:187",
+  "group": "A_platform",
+  "folder": [
+   "Auth"
+  ],
+  "summary": "Sign out one of my sessions",
+  "description": "Revokes one of the caller's own live sessions (other users' sessions are 404 `session_not_found`). Its refresh token is blacklisted and its access tokens stop working on the next request. Revoking the *current* session signs this client out.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": "Own sessions only.",
+   "notes": "Any authenticated staff user. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "auth_sessions_uid",
+    "example": "9b3c7e1a-6d2f-4a8b-8c5e-4f1a2d3b7c90",
+    "description": "Session uid from GET auth/sessions/ (captured from results.1.uid)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Session signed out.",
+    "example": null
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 404,
+    "description": "`session_not_found` — not one of your live sessions."
+   }
+  ],
+  "side_effects": [
+   "Session revoked_at set, refresh jti blacklisted, session cache namespace bumped",
+   "Audit `accounts.session_revoked`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "auth_sessions_revoke"
+ },
+ {
+  "id": "GET /api/v1/roles/",
+  "method": "GET",
+  "path": "/api/v1/roles/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "List roles",
+  "description": "Live roles with their normalised `permissions`/`scopes` and `user_count` (live holders). Default ordering `name`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_system",
+    "value": "false",
+    "description": "Filter system (seeded) roles; also `filter[is_system]=`.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "sales",
+    "description": "Searches name, slug, description.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "name",
+    "description": "One of name, slug, created_at (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+       "slug": "sales-executive",
+       "name": "Sales Executive",
+       "description": "Field sales: own leads, customers and quotations.",
+       "is_system": false,
+       "permissions": {
+        "customers": [
+         "view",
+         "create",
+         "edit"
+        ],
+        "leads": [
+         "view",
+         "create",
+         "edit"
+        ],
+        "quotations": [
+         "view",
+         "create",
+         "edit",
+         "issue"
+        ]
+       },
+       "scopes": {
+        "customers": "owned",
+        "leads": "owned",
+        "quotations": "owned"
+       },
+       "user_count": 0,
+       "legacy_role": "",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_list"
+ },
+ {
+  "id": "POST /api/v1/roles/",
+  "method": "POST",
+  "path": "/api/v1/roles/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Create a role",
+  "description": "Creates a custom role. `permissions` and `scopes` are validated strictly against the permission registry (`GET roles/registry/`): unknown modules, actions or scopes → 400 `validation_error` listing each entry; a permitted module without a scope gets its narrowest default. 409 `slug_taken` / `slug_reserved` (system role slug). Only a Super Admin may grant Super Admin powers (403 `super_admin_required`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.create",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "slug": "sales-executive-{{$timestamp}}",
+    "name": "Sales Executive {{$timestamp}}",
+    "description": "Field sales: own leads, customers and quotations.",
+    "permissions": {
+     "leads": [
+      "view",
+      "create",
+      "edit"
+     ],
+     "customers": [
+      "view",
+      "create",
+      "edit"
+     ],
+     "quotations": [
+      "view",
+      "create",
+      "edit",
+      "issue"
+     ]
+    },
+    "scopes": {
+     "leads": "owned",
+     "customers": "owned",
+     "quotations": "owned"
+    }
+   },
+   "fields": [
+    {
+     "name": "slug",
+     "type": "string:slug",
+     "required": true
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "permissions",
+     "type": "object {module: [actions]}",
+     "required": false
+    },
+    {
+     "name": "scopes",
+     "type": "object {module: scope}",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "example": {
+     "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+     "slug": "sales-executive",
+     "name": "Sales Executive",
+     "description": "Field sales: own leads, customers and quotations.",
+     "is_system": false,
+     "permissions": {
+      "customers": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "leads": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "quotations": [
+       "view",
+       "create",
+       "edit",
+       "issue"
+      ]
+     },
+     "scopes": {
+      "customers": "owned",
+      "leads": "owned",
+      "quotations": "owned"
+     },
+     "user_count": 0,
+     "legacy_role": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 409,
+    "description": "`slug_taken` · `slug_reserved`."
+   }
+  ],
+  "side_effects": [
+   "Audit `accounts.role_created`"
+  ],
+  "capture": [
+   {
+    "var": "roles_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_create"
+ },
+ {
+  "id": "GET /api/v1/roles/registry/",
+  "method": "GET",
+  "path": "/api/v1/roles/registry/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "registry",
+  "source_file": "accounts/views/roles.py:56",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Get the permission registry",
+  "description": "The closed permission registry the role editor is built from: every action and scope with labels, modules grouped by area (actions, allowed scopes, default scope, `permission_only`), and the `self_action_denied` pairs. Not paginated, no filters.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "Abridged.",
+    "example": {
+     "actions": [
+      {
+       "key": "view",
+       "label": "View"
+      },
+      {
+       "key": "create",
+       "label": "Create"
+      },
+      {
+       "key": "edit",
+       "label": "Edit"
+      }
+     ],
+     "scopes": [
+      {
+       "key": "all",
+       "label": "All records"
+      },
+      {
+       "key": "owned",
+       "label": "Records they own"
+      },
+      {
+       "key": "assigned",
+       "label": "Records assigned to them"
+      },
+      {
+       "key": "office",
+       "label": "Records of their office"
+      },
+      {
+       "key": "self",
+       "label": "Their own record"
+      }
+     ],
+     "groups": [
+      {
+       "key": "GENERAL",
+       "label": "General",
+       "modules": [
+        {
+         "key": "dashboard",
+         "label": "Dashboard",
+         "actions": [
+          "view"
+         ],
+         "scopes": [
+          "all"
+         ],
+         "default_scope": "all",
+         "description": "Gates /api/v1/dashboard/.",
+         "permission_only": true
+        }
+       ]
+      },
+      {
+       "key": "SALES",
+       "label": "Sales",
+       "modules": [
+        {
+         "key": "leads",
+         "label": "Leads",
+         "actions": [
+          "view",
+          "create",
+          "edit",
+          "archive",
+          "manage"
+         ],
+         "scopes": [
+          "all",
+          "owned"
+         ],
+         "default_scope": "owned",
+         "description": "manage = assign.",
+         "permission_only": false
+        }
+       ]
+      }
+     ],
+     "self_action_denied": [
+      {
+       "module": "attendance",
+       "action": "edit"
+      },
+      {
+       "module": "leave",
+       "action": "approve"
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 15,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_registry"
+ },
+ {
+  "id": "GET /api/v1/roles/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/roles/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Get a role",
+  "description": "One live role with `permissions`, `scopes` and `user_count`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "roles_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Role uid (captured by POST roles/)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+     "slug": "sales-executive",
+     "name": "Sales Executive",
+     "description": "Field sales: own leads, customers and quotations.",
+     "is_system": false,
+     "permissions": {
+      "customers": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "leads": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "quotations": [
+       "view",
+       "create",
+       "edit",
+       "issue"
+      ]
+     },
+     "scopes": {
+      "customers": "owned",
+      "leads": "owned",
+      "quotations": "owned"
+     },
+     "user_count": 0,
+     "legacy_role": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/roles/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/roles/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (action `update` unmapped)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "roles_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/roles/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/roles/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Update a role",
+  "description": "Partial update; `permissions`/`scopes` are re-normalised against the registry. System roles keep their slug (409 `system_role_slug_locked`); you cannot change the permissions of the role you hold (403 `own_role_locked`); only a Super Admin may change the Super Admin role (403 `super_admin_required`). 409 `slug_taken`, 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "roles_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Role uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "description": "Field sales (Kochi & Thrissur): own leads, customers and quotations; may issue quotations.",
+    "permissions": {
+     "leads": [
+      "view",
+      "create",
+      "edit"
+     ],
+     "customers": [
+      "view",
+      "create",
+      "edit"
+     ],
+     "quotations": [
+      "view",
+      "create",
+      "edit",
+      "issue"
+     ],
+     "site_inspections": [
+      "view"
+     ]
+    },
+    "scopes": {
+     "leads": "owned",
+     "customers": "owned",
+     "quotations": "owned",
+     "site_inspections": "owned"
+    },
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "slug",
+     "type": "string:slug",
+     "required": false
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "permissions",
+     "type": "object {module: [actions]}",
+     "required": false
+    },
+    {
+     "name": "scopes",
+     "type": "object {module: scope}",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+     "slug": "sales-executive",
+     "name": "Sales Executive",
+     "description": "Field sales: own leads, customers and quotations.",
+     "is_system": false,
+     "permissions": {
+      "customers": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "leads": [
+       "view",
+       "create",
+       "edit"
+      ],
+      "quotations": [
+       "view",
+       "create",
+       "edit",
+       "issue"
+      ]
+     },
+     "scopes": {
+      "customers": "owned",
+      "leads": "owned",
+      "quotations": "owned"
+     },
+     "user_count": 0,
+     "legacy_role": "",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `own_role_locked` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` · `slug_taken` · `system_role_slug_locked`."
+   }
+  ],
+  "side_effects": [
+   "Audit `accounts.role_updated` (changed fields only)",
+   "Holders' cached grants invalidated"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_update"
+ },
+ {
+  "id": "DELETE /api/v1/roles/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/roles/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.roles.RoleViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "A_platform",
+  "folder": [
+   "Roles"
+  ],
+  "summary": "Delete a role",
+  "description": "Soft-deletes a custom role. 409 `system_role_protected` for system roles, 409 `role_in_use` while live users hold it (reassign them first). Optional `?expected_version=` (or body) → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "roles.manage",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "roles_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Role uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "2",
+    "description": "Optional optimistic-lock check.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted.",
+    "example": null
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`role_in_use` · `system_role_protected` · `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `accounts.role_deleted`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "roles_delete"
+ },
+ {
+  "id": "GET /api/v1/users/",
+  "method": "GET",
+  "path": "/api/v1/users/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "List staff users",
+  "description": "Live staff accounts. Default ordering `email`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "is_active",
+    "value": "true",
+    "description": "Filter active/deactivated accounts (also `filter[is_active]=`).",
+    "required": false
+   },
+   {
+    "key": "must_reset_password",
+    "value": "false",
+    "description": "Accounts waiting for a password (invited / force-reset).",
+    "required": false
+   },
+   {
+    "key": "role",
+    "value": "{{roles_uid}}",
+    "description": "Role uid.",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "nair",
+    "description": "Searches email, first_name, last_name, title.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-last_login_at",
+    "description": "One of email, first_name, last_name, created_at, last_login_at (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+       "email": "anjali.nair@goldenraysolar.in",
+       "first_name": "Anjali",
+       "last_name": "Nair",
+       "full_name": "Anjali Nair",
+       "phone_e164": "+919847012345",
+       "title": "Sales Executive – Kochi",
+       "role": {
+        "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+        "slug": "sales-executive",
+        "name": "Sales Executive"
+       },
+       "is_active": true,
+       "must_reset_password": true,
+       "last_login_at": null,
+       "password_changed_at": null,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_list"
+ },
+ {
+  "id": "POST /api/v1/users/",
+  "method": "POST",
+  "path": "/api/v1/users/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Invite a staff user",
+  "description": "Creates the account **without a password** (`must_reset_password: true`) and e-mails an invitation link (valid `ACCOUNTS_INVITE_TTL`, 72 h) to set it via `POST auth/password/reset/`. 409 `email_taken`; 404 `role_not_found`; only a Super Admin may assign the Super Admin role (403 `super_admin_required`). `phone_e164` must be E.164 (+919847012345).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.create",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "email": "anjali.nair+{{$timestamp}}@goldenraysolar.in",
+    "first_name": "Anjali",
+    "last_name": "Nair",
+    "phone_e164": "+919847012345",
+    "title": "Sales Executive – Kochi",
+    "role": "{{roles_uid}}"
+   },
+   "fields": [
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": true
+    },
+    {
+     "name": "first_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "last_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone_e164",
+     "type": "string (E.164)",
+     "required": false
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "role",
+     "type": "uuid (role uid)",
+     "required": true
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847012345",
+     "title": "Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": true,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`role_not_found`."
+   },
+   {
+    "status": 409,
+    "description": "`email_taken`."
+   }
+  ],
+  "side_effects": [
+   "Invitation PasswordReset row issued",
+   "Audit `accounts.user_created`",
+   "E-mail queued: invitation with set-password link"
+  ],
+  "capture": [
+   {
+    "var": "users_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_create"
+ },
+ {
+  "id": "GET /api/v1/users/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/users/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Get a staff user",
+  "description": "One live staff account.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid (captured by POST users/)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847012345",
+     "title": "Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": true,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/users/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/users/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (action `update` unmapped)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/users/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/users/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Update a staff user",
+  "description": "Partial update of profile fields (`users.edit`). Changing `email` or `role` additionally needs `users.manage` (403 `permission_denied`); you cannot change your own role (403 `own_role_change`); only a Super Admin may change a Super Admin or assign that role. An e-mail change voids open reset links and re-sends a pending invitation to the new address. 409 `email_taken`, 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.edit",
+   "scope": null,
+   "notes": "email/role changes also need users.manage."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "title": "Senior Sales Executive – Kochi",
+    "phone_e164": "+919847098765",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "first_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "last_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "phone_e164",
+     "type": "string (E.164)",
+     "required": false
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "role",
+     "type": "uuid (role uid)",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847098765",
+     "title": "Senior Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": true,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `own_role_change` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` · `email_taken`."
+   }
+  ],
+  "side_effects": [
+   "Audit `accounts.user_updated`",
+   "On e-mail change: open reset links voided; pending invitation re-sent (e-mail queued)",
+   "Cached grants invalidated on role change"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_update"
+ },
+ {
+  "id": "DELETE /api/v1/users/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/users/{uid}/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Delete a staff user",
+  "description": "Soft-deletes the account (its e-mail becomes free again) and signs out every session. Not yourself (403 `self_action_denied`); only a Super Admin may delete a Super Admin. Optional `?expected_version=` → 409 `stale_version`. Ordered before the role delete in cleanup so the role is free.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.archive",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "5",
+    "description": "Optional optimistic-lock check.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted.",
+    "example": null
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `self_action_denied` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "All sessions revoked",
+   "Audit `accounts.user_deleted`"
+  ],
+  "capture": [],
+  "order": 85,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_delete"
+ },
+ {
+  "id": "POST /api/v1/users/{uid}/deactivate/",
+  "method": "POST",
+  "path": "/api/v1/users/{uid}/deactivate/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "deactivate",
+  "source_file": "accounts/views/users.py:67",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Deactivate a staff user",
+  "description": "Sets `is_active: false` and signs out every session of the account. No-op when already inactive. You cannot deactivate yourself (403 `self_action_denied`); only a Super Admin may deactivate a Super Admin. Optional `expected_version` → 409 `stale_version` (omitted here because the PATCH above bumped the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.archive",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Left the company on 30 Sep 2026."
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847012345",
+     "title": "Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": false,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `self_action_denied` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "All sessions revoked",
+   "Audit `accounts.user_deactivated`",
+   "Outbox `accounts.user_deactivated` {user_uid, reason}"
+  ],
+  "capture": [],
+  "order": 61,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_deactivate"
+ },
+ {
+  "id": "POST /api/v1/users/{uid}/force-reset/",
+  "method": "POST",
+  "path": "/api/v1/users/{uid}/force-reset/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "force_reset",
+  "source_file": "accounts/views/users.py:77",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Force a password reset",
+  "description": "Invalidates the user's password (`must_reset_password: true`), signs out every session, voids open links and e-mails a fresh set-password link (valid 72 h). Not on yourself (403 `self_action_denied` — change your own password instead). Optional `expected_version` → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.manage",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Password shared over WhatsApp; rotating."
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847012345",
+     "title": "Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": true,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 5
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `self_action_denied` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Password made unusable; all sessions revoked; new PasswordReset issued",
+   "Audit `accounts.user_force_reset`",
+   "E-mail queued: reset link"
+  ],
+  "capture": [],
+  "order": 63,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_force_reset"
+ },
+ {
+  "id": "POST /api/v1/users/{uid}/reactivate/",
+  "method": "POST",
+  "path": "/api/v1/users/{uid}/reactivate/",
+  "app": "accounts",
+  "surface": "staff",
+  "view": "accounts.views.users.UserViewSet",
+  "action": "reactivate",
+  "source_file": "accounts/views/users.py:72",
+  "group": "A_platform",
+  "folder": [
+   "Users"
+  ],
+  "summary": "Reactivate a staff user",
+  "description": "Sets `is_active: true` again (no-op when already active). Only a Super Admin may reactivate a Super Admin. Optional `expected_version` → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "users.archive",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "users_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "User uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "note": "Rejoined after leave."
+   },
+   "fields": [
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+     "email": "anjali.nair@goldenraysolar.in",
+     "first_name": "Anjali",
+     "last_name": "Nair",
+     "full_name": "Anjali Nair",
+     "phone_e164": "+919847012345",
+     "title": "Sales Executive – Kochi",
+     "role": {
+      "uid": "c2d4e6f8-1a3b-4c5d-8e7f-9a0b1c2d3e4f",
+      "slug": "sales-executive",
+      "name": "Sales Executive"
+     },
+     "is_active": true,
+     "must_reset_password": true,
+     "last_login_at": null,
+     "password_changed_at": null,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 4
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `super_admin_required`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `accounts.user_reactivated`",
+   "Outbox `accounts.user_reactivated` {user_uid}"
+  ],
+  "capture": [],
+  "order": 62,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "users_reactivate"
+ },
+ {
+  "id": "GET /api/v1/audit/",
+  "method": "GET",
+  "path": "/api/v1/audit/",
+  "app": "audit",
+  "surface": "staff",
+  "view": "audit.views.audit_log.AuditLogViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "A_platform",
+  "folder": [
+   "Audit log"
+  ],
+  "summary": "Browse the audit log",
+  "description": "Audit rows newest first (`-at`), **cursor**-paginated (`{results, next, previous}`, no `count`; page_size 50, max 200; follow `next`). Filters (plain or `filter[x]=`): `object_type`, `object_uid`, `actor` (user uid), `action` (exact, or prefix ending `*` e.g. `accounts.*`), `from`/`to` (ISO date or date-time; a date-only `to` includes the whole day; naive values read in Asia/Kolkata). No search/ordering params. Bad date → 400.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "audit.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "object_type",
+    "value": "accounts.user",
+    "description": "e.g. `accounts.user`, `company.bankaccount`.",
+    "required": false
+   },
+   {
+    "key": "object_uid",
+    "value": "{{users_uid}}",
+    "description": "Uid of the audited object.",
+    "required": false
+   },
+   {
+    "key": "actor",
+    "value": "{{users_uid}}",
+    "description": "Uid of the acting user.",
+    "required": false
+   },
+   {
+    "key": "action",
+    "value": "accounts.*",
+    "description": "Exact action or prefix ending in `*`.",
+    "required": false
+   },
+   {
+    "key": "from",
+    "value": "2026-09-01",
+    "description": "Earliest `at` (inclusive).",
+    "required": false
+   },
+   {
+    "key": "to",
+    "value": "2026-10-01",
+    "description": "Latest `at` (date-only includes the whole day).",
+    "required": false
+   },
+   {
+    "key": "cursor",
+    "value": "cD0yMDI2LTEwLTAxKzA0JTNBNDUlM0EwMC4wMDAwMDAlMkIwMCUzQTAw",
+    "description": "Opaque cursor from `next`/`previous`.",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "next": "http://127.0.0.1:8000/api/v1/audit/?cursor=cD0yMDI2LTEwLTAxKzA0JTNBNDUlM0EwMC4wMDAwMDAlMkIwMCUzQTAw",
+     "previous": null,
+     "results": [
+      {
+       "at": "2026-10-01T10:15:00+05:30",
+       "action": "accounts.user_created",
+       "actor": {
+        "uid": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+        "email": "rahul.menon@goldenraysolar.in",
+        "name": "Rahul Menon"
+       },
+       "actor_kind": "USER",
+       "request_id": "f1e2d3c4-b5a6-4978-8a9b-0c1d2e3f4a5b",
+       "ip": "103.42.18.77",
+       "object_type": "accounts.user",
+       "object_uid": "7a1e9c3d-2b4f-4e8a-b6c5-0f9d8e7c6b5a",
+       "before": null,
+       "after": {
+        "email": "anjali.nair@goldenraysolar.in",
+        "role": "sales-executive",
+        "is_active": true
+       },
+       "note": ""
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — bad `from`/`to`/uid filter or invalid cursor."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "audit_list"
+ },
+ {
+  "id": "GET /api/v1/company/bank-accounts/",
+  "method": "GET",
+  "path": "/api/v1/company/bank-accounts/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "List company bank accounts",
+  "description": "Live bank accounts, primary first (`-is_primary`, `label`). The account number is never returned in full (`account_number_last4`, `account_number_masked`). No filterset.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "search",
+    "value": "hdfc",
+    "description": "Searches label, bank, account_name, ifsc.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "label",
+    "description": "One of label, created_at (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "e4a1b7c2-9d3f-4e6a-8b2c-5d7f1a3e9b04",
+       "label": "HDFC Current – Kochi",
+       "bank": "HDFC Bank",
+       "account_name": "Goldenray Solar Solutions Private Limited",
+       "account_number_last4": "5678",
+       "account_number_masked": "XXXXXXXXXX5678",
+       "ifsc": "HDFC0001234",
+       "branch": "Edappally, Kochi",
+       "upi_id": "goldenraysolar@hdfcbank",
+       "is_primary": true,
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_list"
+ },
+ {
+  "id": "POST /api/v1/company/bank-accounts/",
+  "method": "POST",
+  "path": "/api/v1/company/bank-accounts/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "create",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:16",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Add a company bank account",
+  "description": "Adds an account printed on quotations/agreements. The first account is always primary; `is_primary: true` moves the primary flag from the current one. IFSC is upper-cased and pattern-checked (e.g. HDFC0001234); account number 9–18 digits (write-only). 409 `label_taken`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "label": "HDFC Current – Kochi {{$timestamp}}",
+    "bank": "HDFC Bank",
+    "account_name": "Goldenray Solar Solutions Private Limited",
+    "account_number": "50200012345678",
+    "ifsc": "HDFC0001234",
+    "branch": "Edappally, Kochi",
+    "upi_id": "goldenraysolar@hdfcbank",
+    "is_primary": false
+   },
+   "fields": [
+    {
+     "name": "label",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "bank",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "account_name",
+     "type": "string",
+     "required": true
+    },
+    {
+     "name": "account_number",
+     "type": "string (9–18 digits, write-only)",
+     "required": true
+    },
+    {
+     "name": "ifsc",
+     "type": "string (IFSC)",
+     "required": true
+    },
+    {
+     "name": "branch",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "upi_id",
+     "type": "string (UPI id)",
+     "required": false
+    },
+    {
+     "name": "is_primary",
+     "type": "boolean",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "example": {
+     "uid": "e4a1b7c2-9d3f-4e6a-8b2c-5d7f1a3e9b04",
+     "label": "HDFC Current – Kochi",
+     "bank": "HDFC Bank",
+     "account_name": "Goldenray Solar Solutions Private Limited",
+     "account_number_last4": "5678",
+     "account_number_masked": "XXXXXXXXXX5678",
+     "ifsc": "HDFC0001234",
+     "branch": "Edappally, Kochi",
+     "upi_id": "goldenraysolar@hdfcbank",
+     "is_primary": true,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 409,
+    "description": "`label_taken`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.bank_account_created` (+ `company.bank_account_updated` on the previous primary when moved)"
+  ],
+  "capture": [
+   {
+    "var": "company_bank_accounts_uid",
+    "from": "uid"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_create"
+ },
+ {
+  "id": "GET /api/v1/company/bank-accounts/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/company/bank-accounts/{uid}/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Get a company bank account",
+  "description": "One live bank account (masked number).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "company_bank_accounts_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Bank account uid (captured by POST company/bank-accounts/)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "e4a1b7c2-9d3f-4e6a-8b2c-5d7f1a3e9b04",
+     "label": "HDFC Current – Kochi",
+     "bank": "HDFC Bank",
+     "account_name": "Goldenray Solar Solutions Private Limited",
+     "account_number_last4": "5678",
+     "account_number_masked": "XXXXXXXXXX5678",
+     "ifsc": "HDFC0001234",
+     "branch": "Edappally, Kochi",
+     "upi_id": "goldenraysolar@hdfcbank",
+     "is_primary": true,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/company/bank-accounts/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/company/bank-accounts/{uid}/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (action `update` unmapped)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "company_bank_accounts_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/company/bank-accounts/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/company/bank-accounts/{uid}/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Update a company bank account",
+  "description": "Partial update of the account details (`is_primary` is changed only through `make-primary/`). 409 `label_taken`, 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "company_bank_accounts_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Bank account uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "branch": "Palarivattom, Kochi",
+    "upi_id": "goldenray.solar@hdfcbank",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "label",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "bank",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "account_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "account_number",
+     "type": "string (9–18 digits, write-only)",
+     "required": false
+    },
+    {
+     "name": "ifsc",
+     "type": "string (IFSC)",
+     "required": false
+    },
+    {
+     "name": "branch",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "upi_id",
+     "type": "string (UPI id)",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "e4a1b7c2-9d3f-4e6a-8b2c-5d7f1a3e9b04",
+     "label": "HDFC Current – Kochi",
+     "bank": "HDFC Bank",
+     "account_name": "Goldenray Solar Solutions Private Limited",
+     "account_number_last4": "5678",
+     "account_number_masked": "XXXXXXXXXX5678",
+     "ifsc": "HDFC0001234",
+     "branch": "Palarivattom, Kochi",
+     "upi_id": "goldenray.solar@hdfcbank",
+     "is_primary": true,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` · `label_taken`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.bank_account_updated`"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_update"
+ },
+ {
+  "id": "DELETE /api/v1/company/bank-accounts/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/company/bank-accounts/{uid}/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Delete a company bank account",
+  "description": "Soft-deletes the account. The primary account cannot be deleted while other accounts exist (409 `primary_account_protected` — make another one primary first; the only remaining account may be deleted). Optional `?expected_version=` → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "company_bank_accounts_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Bank account uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "3",
+    "description": "Optional optimistic-lock check.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted.",
+    "example": null
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`primary_account_protected` · `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.bank_account_deleted`"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_delete"
+ },
+ {
+  "id": "POST /api/v1/company/bank-accounts/{uid}/make-primary/",
+  "method": "POST",
+  "path": "/api/v1/company/bank-accounts/{uid}/make-primary/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.bank_accounts.BankAccountViewSet",
+  "action": "make_primary",
+  "source_file": "company/views/bank_accounts.py:49",
+  "group": "A_platform",
+  "folder": [
+   "Bank accounts"
+  ],
+  "summary": "Make a bank account primary",
+  "description": "Moves the primary flag to this account (the previous primary is cleared). No-op when already primary. Body optional: `expected_version` → 409 `stale_version` (omitted here because the PATCH above bumped the version).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "company_bank_accounts_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Bank account uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "e4a1b7c2-9d3f-4e6a-8b2c-5d7f1a3e9b04",
+     "label": "HDFC Current – Kochi",
+     "bank": "HDFC Bank",
+     "account_name": "Goldenray Solar Solutions Private Limited",
+     "account_number_last4": "5678",
+     "account_number_masked": "XXXXXXXXXX5678",
+     "ifsc": "HDFC0001234",
+     "branch": "Edappally, Kochi",
+     "upi_id": "goldenraysolar@hdfcbank",
+     "is_primary": true,
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.bank_account_made_primary`"
+  ],
+  "capture": [],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_bank_accounts_make_primary"
+ },
+ {
+  "id": "GET /api/v1/company/profile/",
+  "method": "GET",
+  "path": "/api/v1/company/profile/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.profile.CompanyProfileView",
+  "action": "get",
+  "source_file": "company/views/profile.py:21",
+  "group": "A_platform",
+  "folder": [
+   "Profile"
+  ],
+  "summary": "Get the company profile",
+  "description": "The single company profile (legal identity, address, brand assets, website/notification settings, quotation offer). Before the first edit the unsaved defaults are returned with `uid`/`updated_at` null and `version` 1. `blog_revalidate_secret` is never returned — only `blog_revalidate_secret_set`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "a1c3e5f7-2b4d-4f6a-8c0e-9d7b5a3c1e24",
+     "legal_name": "Goldenray Solar Solutions Private Limited",
+     "trade_name": "Goldenray Solar",
+     "gstin": "32AABCG1234F1Z5",
+     "pan": "AABCG1234F",
+     "cin": "U40106KL2015PTC039123",
+     "email": "hello@goldenraysolar.in",
+     "phone_e164": "+914842345678",
+     "website": "https://www.goldenraysolar.in",
+     "address_line": "2nd Floor, Pioneer Tower, Marine Drive",
+     "address_locality": "Kochi",
+     "address_region": "Kerala",
+     "postal_code": "682031",
+     "country_code": "IN",
+     "logo": {
+      "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+      "kind": "IMAGE",
+      "visibility": "PUBLIC",
+      "url": "https://cdn.goldenraysolar.in/library/2026/10/logo.png",
+      "alternative_text": "Goldenray Solar logo",
+      "width": 512,
+      "height": 512,
+      "mime_type": "image/png"
+     },
+     "letterhead": null,
+     "seal": null,
+     "signature": null,
+     "upi_qr": null,
+     "default_og_image": null,
+     "trust_stats": [
+      {
+       "label": "Rooftop systems installed",
+       "value": "4,200+",
+       "icon": "solar-panel"
+      },
+      {
+       "label": "MW commissioned",
+       "value": "18.5",
+       "icon": "bolt"
+      }
+     ],
+     "social": {
+      "facebook": "https://www.facebook.com/goldenraysolar",
+      "instagram": "https://www.instagram.com/goldenraysolar"
+     },
+     "default_meta_description": "Rooftop solar for homes and businesses across Kerala — PM Surya Ghar subsidy assistance, KSEB net metering and 25-year warranties.",
+     "lead_notification_emails": [
+      "sales@goldenraysolar.in"
+     ],
+     "application_notification_emails": [
+      "careers@goldenraysolar.in"
+     ],
+     "notify_on_new_lead": true,
+     "notify_on_new_application": true,
+     "careers_accepting_general_applications": true,
+     "careers_intro": "Join Kerala's fastest-growing rooftop solar team.",
+     "blog_revalidate_url": "https://www.goldenraysolar.in/api/revalidate",
+     "blog_revalidate_secret_set": true,
+     "quotation_offer_enabled": true,
+     "quotation_offer_active": true,
+     "quotation_offer_title": "Onam offer",
+     "quotation_offer_description": "Free 3-year AMC on every on-grid system booked this season.",
+     "quotation_offer_details": "Valid on bookings with 20% advance.",
+     "quotation_offer_title_ml": "ഓണം ഓഫർ",
+     "quotation_offer_description_ml": "ഈ സീസണിൽ ബുക്ക് ചെയ്യുന്ന എല്ലാ ഓൺ-ഗ്രിഡ് സിസ്റ്റങ്ങൾക്കും 3 വർഷത്തെ സൗജന്യ AMC.",
+     "quotation_offer_details_ml": "20% അഡ്വാൻസോടെയുള്ള ബുക്കിംഗുകൾക്ക് മാത്രം.",
+     "quotation_offer_valid_from": "2026-08-15",
+     "quotation_offer_valid_until": "2026-10-31",
+     "quotation_offer_image": null,
+     "quotation_offer_image_url": "",
+     "quotation_offer_image_src": "https://cdn.goldenraysolar.in/quotation/onam-offer.png",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_profile_retrieve"
+ },
+ {
+  "id": "PATCH /api/v1/company/profile/",
+  "method": "PATCH",
+  "path": "/api/v1/company/profile/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.profile.CompanyProfileView",
+  "action": "patch",
+  "source_file": "company/views/profile.py:25",
+  "group": "A_platform",
+  "folder": [
+   "Profile"
+  ],
+  "summary": "Update the company profile",
+  "description": "Every field optional; only changed values are written (the first real edit creates the row). GSTIN/PAN/CIN/country are upper-cased and pattern-checked; `social` keys must be known platforms (facebook, instagram, linkedin, youtube, x, whatsapp, pinterest, threads, google_business) with https URLs; asset fields take media uids of the right kind (logo/default_og_image/quotation_offer_image must be **public IMAGE**, signature a SIGNATURE…) — otherwise 400; `quotation_offer_valid_until` must not precede `valid_from`. `blog_revalidate_secret` is write-only (empty/null clears). Optional `expected_version` → 409 `stale_version` (omitted in the example so reruns stay green; the profile is a singleton).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "company.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "legal_name": "Goldenray Solar Solutions Private Limited",
+    "trade_name": "Goldenray Solar",
+    "gstin": "32AABCG1234F1Z5",
+    "pan": "AABCG1234F",
+    "email": "hello@goldenraysolar.in",
+    "phone_e164": "+914842345678",
+    "website": "https://www.goldenraysolar.in",
+    "address_line": "2nd Floor, Pioneer Tower, Marine Drive",
+    "address_locality": "Kochi",
+    "address_region": "Kerala",
+    "postal_code": "682031",
+    "country_code": "IN",
+    "trust_stats": [
+     {
+      "label": "Rooftop systems installed",
+      "value": "4,200+",
+      "icon": "solar-panel"
+     },
+     {
+      "label": "MW commissioned",
+      "value": "18.5",
+      "icon": "bolt"
+     }
+    ],
+    "social": {
+     "facebook": "https://www.facebook.com/goldenraysolar",
+     "instagram": "https://www.instagram.com/goldenraysolar"
+    },
+    "lead_notification_emails": [
+     "sales@goldenraysolar.in"
+    ],
+    "notify_on_new_lead": true,
+    "quotation_offer_enabled": true,
+    "quotation_offer_title": "Onam offer",
+    "quotation_offer_description": "Free 3-year AMC on every on-grid system booked this season.",
+    "quotation_offer_valid_from": "2026-08-15",
+    "quotation_offer_valid_until": "2026-10-31"
+   },
+   "fields": [
+    {
+     "name": "legal_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "trade_name",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "gstin",
+     "type": "string (GSTIN)",
+     "required": false
+    },
+    {
+     "name": "pan",
+     "type": "string (PAN)",
+     "required": false
+    },
+    {
+     "name": "cin",
+     "type": "string (CIN)",
+     "required": false
+    },
+    {
+     "name": "email",
+     "type": "string:email",
+     "required": false
+    },
+    {
+     "name": "phone_e164",
+     "type": "string (E.164)",
+     "required": false
+    },
+    {
+     "name": "website",
+     "type": "string:url",
+     "required": false
+    },
+    {
+     "name": "address_line",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "address_locality",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "address_region",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "postal_code",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "country_code",
+     "type": "string (ISO alpha-2)",
+     "required": false
+    },
+    {
+     "name": "logo",
+     "type": "uuid|null (public IMAGE)",
+     "required": false
+    },
+    {
+     "name": "letterhead",
+     "type": "uuid|null (IMAGE)",
+     "required": false
+    },
+    {
+     "name": "seal",
+     "type": "uuid|null (IMAGE or SIGNATURE)",
+     "required": false
+    },
+    {
+     "name": "signature",
+     "type": "uuid|null (SIGNATURE)",
+     "required": false
+    },
+    {
+     "name": "upi_qr",
+     "type": "uuid|null (IMAGE)",
+     "required": false
+    },
+    {
+     "name": "default_og_image",
+     "type": "uuid|null (public IMAGE)",
+     "required": false
+    },
+    {
+     "name": "trust_stats",
+     "type": "array [{label, value, icon?}] (max 12)",
+     "required": false
+    },
+    {
+     "name": "social",
+     "type": "object {platform: https URL}",
+     "required": false
+    },
+    {
+     "name": "default_meta_description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "lead_notification_emails",
+     "type": "array[email] (max 20)",
+     "required": false
+    },
+    {
+     "name": "application_notification_emails",
+     "type": "array[email] (max 20)",
+     "required": false
+    },
+    {
+     "name": "notify_on_new_lead",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "notify_on_new_application",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "careers_accepting_general_applications",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "careers_intro",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "blog_revalidate_url",
+     "type": "string:url",
+     "required": false
+    },
+    {
+     "name": "blog_revalidate_secret",
+     "type": "string|null (write-only)",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_enabled",
+     "type": "boolean",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_title",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_description",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_details",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_title_ml",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_description_ml",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_details_ml",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_valid_from",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_valid_until",
+     "type": "date|null",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_image",
+     "type": "uuid|null (public IMAGE)",
+     "required": false
+    },
+    {
+     "name": "quotation_offer_image_url",
+     "type": "string:url",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "a1c3e5f7-2b4d-4f6a-8c0e-9d7b5a3c1e24",
+     "legal_name": "Goldenray Solar Solutions Private Limited",
+     "trade_name": "Goldenray Solar",
+     "gstin": "32AABCG1234F1Z5",
+     "pan": "AABCG1234F",
+     "cin": "U40106KL2015PTC039123",
+     "email": "hello@goldenraysolar.in",
+     "phone_e164": "+914842345678",
+     "website": "https://www.goldenraysolar.in",
+     "address_line": "2nd Floor, Pioneer Tower, Marine Drive",
+     "address_locality": "Kochi",
+     "address_region": "Kerala",
+     "postal_code": "682031",
+     "country_code": "IN",
+     "logo": {
+      "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+      "kind": "IMAGE",
+      "visibility": "PUBLIC",
+      "url": "https://cdn.goldenraysolar.in/library/2026/10/logo.png",
+      "alternative_text": "Goldenray Solar logo",
+      "width": 512,
+      "height": 512,
+      "mime_type": "image/png"
+     },
+     "letterhead": null,
+     "seal": null,
+     "signature": null,
+     "upi_qr": null,
+     "default_og_image": null,
+     "trust_stats": [
+      {
+       "label": "Rooftop systems installed",
+       "value": "4,200+",
+       "icon": "solar-panel"
+      },
+      {
+       "label": "MW commissioned",
+       "value": "18.5",
+       "icon": "bolt"
+      }
+     ],
+     "social": {
+      "facebook": "https://www.facebook.com/goldenraysolar",
+      "instagram": "https://www.instagram.com/goldenraysolar"
+     },
+     "default_meta_description": "Rooftop solar for homes and businesses across Kerala — PM Surya Ghar subsidy assistance, KSEB net metering and 25-year warranties.",
+     "lead_notification_emails": [
+      "sales@goldenraysolar.in"
+     ],
+     "application_notification_emails": [
+      "careers@goldenraysolar.in"
+     ],
+     "notify_on_new_lead": true,
+     "notify_on_new_application": true,
+     "careers_accepting_general_applications": true,
+     "careers_intro": "Join Kerala's fastest-growing rooftop solar team.",
+     "blog_revalidate_url": "https://www.goldenraysolar.in/api/revalidate",
+     "blog_revalidate_secret_set": true,
+     "quotation_offer_enabled": true,
+     "quotation_offer_active": true,
+     "quotation_offer_title": "Onam offer",
+     "quotation_offer_description": "Free 3-year AMC on every on-grid system booked this season.",
+     "quotation_offer_details": "Valid on bookings with 20% advance.",
+     "quotation_offer_title_ml": "ഓണം ഓഫർ",
+     "quotation_offer_description_ml": "ഈ സീസണിൽ ബുക്ക് ചെയ്യുന്ന എല്ലാ ഓൺ-ഗ്രിഡ് സിസ്റ്റങ്ങൾക്കും 3 വർഷത്തെ സൗജന്യ AMC.",
+     "quotation_offer_details_ml": "20% അഡ്വാൻസോടെയുള്ള ബുക്കിംഗുകൾക്ക് മാത്രം.",
+     "quotation_offer_valid_from": "2026-08-15",
+     "quotation_offer_valid_until": "2026-10-31",
+     "quotation_offer_image": null,
+     "quotation_offer_image_url": "",
+     "quotation_offer_image_src": "https://cdn.goldenraysolar.in/quotation/onam-offer.png",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 3
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` (patterns, unknown social platform, wrong asset kind/visibility, offer dates)."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.profile_updated` (`company.profile_created` on first edit)",
+   "Cache namespace `company` bumped (public company payload)",
+   "Outbox `company.profile_updated` {profile_uid, fields}"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "company_profile_update"
+ },
+ {
+  "id": "GET /api/v1/settings/integrations/",
+  "method": "GET",
+  "path": "/api/v1/settings/integrations/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.integrations.IntegrationsView",
+  "action": "get",
+  "source_file": "company/views/integrations.py:20",
+  "group": "A_platform",
+  "folder": [
+   "Integrations"
+  ],
+  "summary": "List provider integrations",
+  "description": "One entry per provider — TWILIO (Verify OTP), BUNNY (storage/CDN), SMTP (e-mail) — even when never configured (`uid`/`version`/`updated_at` null). Non-secret values in `config`; secrets are never returned, only `secrets: {field: is_set}`; `fields` describes the schema. Stored Fernet-encrypted. Not paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "settings.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": [
+     {
+      "key": "TWILIO",
+      "label": "Twilio Verify",
+      "uid": "0e3b7d1f-5a9c-4c2e-8f6a-3b9d1e7c5a28",
+      "is_enabled": false,
+      "config": {
+       "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+       "verify_service_sid": "VAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "secrets": {
+       "auth_token": true
+      },
+      "fields": [
+       {
+        "name": "account_sid",
+        "type": "str",
+        "required": true,
+        "secret": false,
+        "default": null
+       },
+       {
+        "name": "verify_service_sid",
+        "type": "str",
+        "required": true,
+        "secret": false,
+        "default": null
+       },
+       {
+        "name": "auth_token",
+        "type": "str",
+        "required": true,
+        "secret": true,
+        "default": null
+       }
+      ],
+      "version": 1,
+      "updated_at": "2026-10-01T10:15:00+05:30"
+     },
+     {
+      "key": "BUNNY",
+      "label": "Bunny storage / CDN",
+      "uid": null,
+      "is_enabled": false,
+      "config": {
+       "storage_zone": "",
+       "storage_endpoint": "storage.bunnycdn.com",
+       "cdn_base_url": ""
+      },
+      "secrets": {
+       "access_key": false
+      },
+      "fields": [
+       {
+        "name": "storage_zone",
+        "type": "str",
+        "required": true,
+        "secret": false,
+        "default": null
+       },
+       {
+        "name": "storage_endpoint",
+        "type": "host",
+        "required": false,
+        "secret": false,
+        "default": "storage.bunnycdn.com"
+       },
+       {
+        "name": "cdn_base_url",
+        "type": "https_url",
+        "required": true,
+        "secret": false,
+        "default": null
+       },
+       {
+        "name": "access_key",
+        "type": "str",
+        "required": true,
+        "secret": true,
+        "default": null
+       }
+      ],
+      "version": null,
+      "updated_at": null
+     },
+     {
+      "key": "SMTP",
+      "label": "SMTP e-mail",
+      "uid": null,
+      "is_enabled": false,
+      "config": {
+       "host": "",
+       "port": 587,
+       "username": "",
+       "use_tls": true,
+       "use_ssl": false,
+       "from_email": ""
+      },
+      "secrets": {
+       "password": false
+      },
+      "fields": [
+       {
+        "name": "host",
+        "type": "host",
+        "required": true,
+        "secret": false,
+        "default": null
+       },
+       {
+        "name": "port",
+        "type": "int",
+        "required": false,
+        "secret": false,
+        "default": 587
+       },
+       {
+        "name": "username",
+        "type": "str",
+        "required": false,
+        "secret": false,
+        "default": ""
+       },
+       {
+        "name": "password",
+        "type": "str",
+        "required": false,
+        "secret": true,
+        "default": null
+       },
+       {
+        "name": "use_tls",
+        "type": "bool",
+        "required": false,
+        "secret": false,
+        "default": true
+       },
+       {
+        "name": "use_ssl",
+        "type": "bool",
+        "required": false,
+        "secret": false,
+        "default": false
+       },
+       {
+        "name": "from_email",
+        "type": "email_sender",
+        "required": false,
+        "secret": false,
+        "default": ""
+       }
+      ],
+      "version": null,
+      "updated_at": null
+     }
+    ],
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "settings_integrations_list"
+ },
+ {
+  "id": "PUT /api/v1/settings/integrations/",
+  "method": "PUT",
+  "path": "/api/v1/settings/integrations/",
+  "app": "company",
+  "surface": "staff",
+  "view": "company.views.integrations.IntegrationsView",
+  "action": "put",
+  "source_file": "company/views/integrations.py:24",
+  "group": "A_platform",
+  "folder": [
+   "Integrations"
+  ],
+  "summary": "Replace one integration's settings",
+  "description": "Replaces the settings of the integration named by `key`. Non-secret fields: replaced (absent → default/empty). Secret fields (TWILIO `auth_token`, BUNNY `access_key`, SMTP `password`) are write-only: omit to keep, a string to replace, null or '' to clear. Unknown fields are refused; an **enabled** integration must have every required field (400 `validation_error`). Changing SMTP needs a Super Admin (403 `super_admin_required`). Optional `expected_version` → 409 `stale_version`. **Live settings**: in a real environment this changes how OTPs/uploads/e-mail are delivered — the example keeps Twilio disabled.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "settings.edit",
+   "scope": null,
+   "notes": "SMTP changes additionally require a Super Admin."
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "key": "TWILIO",
+    "is_enabled": false,
+    "config": {
+     "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "verify_service_sid": "VAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "auth_token": "your-twilio-auth-token"
+    }
+   },
+   "fields": [
+    {
+     "name": "key",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "TWILIO",
+      "BUNNY",
+      "SMTP"
+     ]
+    },
+    {
+     "name": "is_enabled",
+     "type": "boolean",
+     "required": true
+    },
+    {
+     "name": "config",
+     "type": "object (per-key schema)",
+     "required": true
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "key": "TWILIO",
+     "label": "Twilio Verify",
+     "uid": "0e3b7d1f-5a9c-4c2e-8f6a-3b9d1e7c5a28",
+     "is_enabled": false,
+     "config": {
+      "account_sid": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "verify_service_sid": "VAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     },
+     "secrets": {
+      "auth_token": true
+     },
+     "fields": [
+      {
+       "name": "account_sid",
+       "type": "str",
+       "required": true,
+       "secret": false,
+       "default": null
+      },
+      {
+       "name": "verify_service_sid",
+       "type": "str",
+       "required": true,
+       "secret": false,
+       "default": null
+      },
+      {
+       "name": "auth_token",
+       "type": "str",
+       "required": true,
+       "secret": true,
+       "default": null
+      }
+     ],
+     "version": 1,
+     "updated_at": "2026-10-01T10:15:00+05:30"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — unknown key/field, bad format, missing required field on an enabled integration."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` · `super_admin_required` (SMTP)."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `company.integration_updated` (secret values never logged; only which secret fields changed)",
+   "Platform reads the new config for Bunny uploads / SMTP / Twilio Verify while enabled"
+  ],
+  "capture": [],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "settings_integrations_put"
+ },
+ {
+  "id": "GET /api/v1/dashboard/",
+  "method": "GET",
+  "path": "/api/v1/dashboard/",
+  "app": "core",
+  "surface": "staff",
+  "view": "core.views.dashboard.DashboardView",
+  "action": "get",
+  "source_file": "core/views/dashboard.py:15",
+  "group": "A_platform",
+  "folder": [
+   "Dashboard"
+  ],
+  "summary": "Get dashboard counters",
+  "description": "`{module: {counter: value}}` for every registry module the caller may `view` that has registered counters (leads, customers, quotations, agreements, users, catalog, pricing, packs, hr, attendance, devices, …). Each counter applies the caller's record scope; counters behind a disabled feature flag (e.g. inventory/INVENTORY_STOCK) are left out; a failing counter is skipped.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "dashboard.view",
+   "scope": "Each module's counters apply that module's record scope.",
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "Abridged; counter names per module.",
+    "example": {
+     "modules": {
+      "customers": {
+       "total": 318,
+       "new_30d": 27
+      },
+      "leads": {
+       "new": 4,
+       "open": 17,
+       "affiliate_applications_new": 1,
+       "warranty_requests_open": 2
+      },
+      "users": {
+       "active": 12,
+       "inactive": 2
+      }
+     }
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "dashboard_retrieve"
+ },
+ {
+  "id": "GET /api/v1/settings/flags/",
+  "method": "GET",
+  "path": "/api/v1/settings/flags/",
+  "app": "core",
+  "surface": "staff",
+  "view": "core.views.flags.FeatureFlagView",
+  "action": "get",
+  "source_file": "core/views/flags.py:15",
+  "group": "A_platform",
+  "folder": [
+   "Feature flags"
+  ],
+  "summary": "List feature flags",
+  "description": "Every known feature flag (`FEATURE_FLAG_DEFAULTS`: ADMS_RECEIVER, AGREEMENTS_PRICE_OVERRIDE, INVENTORY_STOCK, LEGACY_API_SHIM) with its effective state, default and override row (`uid`/`version`/`updated_at` null while the default is in force). Not paginated.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "settings.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": [
+     {
+      "key": "ADMS_RECEIVER",
+      "enabled": true,
+      "default": false,
+      "note": "Office terminals push to /iclock/ since go-live",
+      "uid": "4f8a2c6e-1b9d-4e3a-a7c5-8d2f6b1e3a79",
+      "version": 2,
+      "updated_at": "2026-10-01T10:15:00+05:30"
+     },
+     {
+      "key": "AGREEMENTS_PRICE_OVERRIDE",
+      "enabled": false,
+      "default": false,
+      "note": "",
+      "uid": null,
+      "version": null,
+      "updated_at": null
+     },
+     {
+      "key": "INVENTORY_STOCK",
+      "enabled": false,
+      "default": false,
+      "note": "",
+      "uid": null,
+      "version": null,
+      "updated_at": null
+     },
+     {
+      "key": "LEGACY_API_SHIM",
+      "enabled": false,
+      "default": false,
+      "note": "",
+      "uid": null,
+      "version": null,
+      "updated_at": null
+     }
+    ],
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "settings_flags_list"
+ },
+ {
+  "id": "PATCH /api/v1/settings/flags/",
+  "method": "PATCH",
+  "path": "/api/v1/settings/flags/",
+  "app": "core",
+  "surface": "staff",
+  "view": "core.views.flags.FeatureFlagView",
+  "action": "patch",
+  "source_file": "core/views/flags.py:19",
+  "group": "A_platform",
+  "folder": [
+   "Feature flags"
+  ],
+  "summary": "Turn a feature flag on or off",
+  "description": "Sets one known flag (`key`) on/off with an optional note; the first change creates the override row, later ones are versioned (optional `expected_version` → 409 `stale_version`; omitted in the example so reruns stay green). 404 `unknown_flag`. Gated routes answer 404 while their flag is off. **Live switch** in real environments — the example writes INVENTORY_STOCK to its default (off).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "settings.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "key": "INVENTORY_STOCK",
+    "enabled": false,
+    "note": "Stock ledger stays off until the warehouse go-live."
+   },
+   "fields": [
+    {
+     "name": "key",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "ADMS_RECEIVER",
+      "AGREEMENTS_PRICE_OVERRIDE",
+      "INVENTORY_STOCK",
+      "LEGACY_API_SHIM"
+     ]
+    },
+    {
+     "name": "enabled",
+     "type": "boolean",
+     "required": true
+    },
+    {
+     "name": "note",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "key": "INVENTORY_STOCK",
+     "enabled": false,
+     "default": false,
+     "note": "Stock ledger stays off until the warehouse go-live.",
+     "uid": "b7e2d9c4-1a5f-4e8b-9c3d-6f0a2e4b8d17",
+     "version": 1,
+     "updated_at": "2026-10-01T10:15:00+05:30"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`unknown_flag`."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Cache namespace `core:flags` bumped (flag reads cached 60 s)",
+   "Outbox `core.flag_changed` {key, enabled, previous} when the effective value changes",
+   "Audit `core.flag_set`"
+  ],
+  "capture": [],
+  "order": 40,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "settings_flags_update"
+ },
+ {
+  "id": "GET /api/v1/documents/download/{token}/",
+  "method": "GET",
+  "path": "/api/v1/documents/download/{token}/",
+  "app": "documents",
+  "surface": "staff",
+  "view": "documents.views.jobs.DocumentDownloadView",
+  "action": "get",
+  "source_file": "documents/views/jobs.py:61",
+  "group": "A_platform",
+  "folder": [
+   "Render jobs"
+  ],
+  "summary": "Download a rendered PDF",
+  "description": "Redeems a single-use link from `POST documents/jobs/{uid}/download-url/` and streams the PDF as an attachment (`<kind>-<object_uid>-<language>.pdf`; nginx `X-Accel-Redirect` when `USE_X_ACCEL`). No JWT — the signed token is the capability (browser navigation). 403 `signature_invalid` (forged/altered), 410 `link_expired` (older than 10 min) or `link_used` (already redeemed — a second run of this request fails), 404 when the document is gone. Response headers: `Cache-Control: private, no-store`, `Content-Security-Policy: default-src 'none'; sandbox`.",
+  "auth": {
+   "scheme": "signed_link",
+   "permission": null,
+   "scope": null,
+   "notes": "Token issued by POST /api/v1/documents/jobs/{uid}/download-url/ (inside `url`); single use, 10 min. No authentication classes. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "token",
+    "type": "str",
+    "variable": "documents_download_token",
+    "example": "eyJkIjoiN2YzYzE5YjItNGQ1ZS00YTZmLThjOWQtMWUyZjNhNGI1YzZkIn0:1t2XyZ:Qm9ndXNTaWduYXR1cmVFeGFtcGxlMDAwMDAw",
+    "description": "Signed token (TimestampSigner) — the path segment of the issued `url`."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The PDF (`Content-Disposition: attachment`).",
+    "example": null,
+    "content_type": "application/pdf"
+   },
+   {
+    "status": 403,
+    "description": "`signature_invalid`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — document no longer exists."
+   },
+   {
+    "status": 410,
+    "description": "`link_expired` · `link_used`."
+   }
+  ],
+  "side_effects": [
+   "Marks the documents_download row used (used_at, used_ip, used_user_agent)",
+   "Audit `documents.downloaded`"
+  ],
+  "capture": [],
+  "order": 70,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "documents_download"
+ },
+ {
+  "id": "GET /api/v1/documents/jobs/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/documents/jobs/{uid}/",
+  "app": "documents",
+  "surface": "staff",
+  "view": "documents.views.jobs.RenderJobDetailView",
+  "action": "get",
+  "source_file": "documents/views/jobs.py:33",
+  "group": "A_platform",
+  "folder": [
+   "Render jobs"
+  ],
+  "summary": "Get a render job's status",
+  "description": "Status of a PDF render job (`QUEUED` → `RUNNING` → `DONE` | `FAILED`; `error` only for FAILED; `download_available` once DONE with a file). Jobs are created by the owning contexts' endpoints (quotation/agreement PDFs, `site-inspections/{uid}/report/`, attendance report PDFs, pricing publish reports), which return the job uid — poll this until DONE, then ask for a download URL.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": "403 without the record's permission; 404 when the record is outside the caller's record scope (unless they requested the job).",
+   "notes": "Any authenticated staff user; the job inherits the permission of its record (QUOTATION→quotations.view, AGREEMENT→agreements.view, INSPECTION_REPORT→site_inspections.view, ATTENDANCE_REPORT→attendance.export, PUBLISH_REPORT→pricing.view; owning apps may refine per object_type). Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "documents_jobs_uid",
+    "example": "6a9e3c1f-7b2d-4f8a-9e6c-3d1b5a7f2c94",
+    "description": "Render job uid, returned by the owning context's render/report endpoint (e.g. `job_uid`)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "6a9e3c1f-7b2d-4f8a-9e6c-3d1b5a7f2c94",
+     "kind": "QUOTATION",
+     "object_type": "quotations.quotationversion",
+     "object_uid": "2b5d8f1a-9c3e-4a7b-8d6f-1e4a7c2b9d35",
+     "template": "default",
+     "language": "en",
+     "status": "DONE",
+     "page_count": 6,
+     "error": null,
+     "download_available": true,
+     "payload_sha256": "d3a1f9c7e5b2846a0c9e7f1d3b5a8c2e4f6a9b1d3c5e7f9a2b4c6d8e0f1a3b5c",
+     "requested_by": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "started_at": "2026-10-01T10:15:02+05:30",
+     "finished_at": "2026-10-01T10:15:09+05:30",
+     "version": 3
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — missing the record's permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no such job or record not visible."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "documents_job_retrieve"
+ },
+ {
+  "id": "POST /api/v1/documents/jobs/{uid}/download-url/",
+  "method": "POST",
+  "path": "/api/v1/documents/jobs/{uid}/download-url/",
+  "app": "documents",
+  "surface": "staff",
+  "view": "documents.views.jobs.RenderJobDownloadUrlView",
+  "action": "post",
+  "source_file": "documents/views/jobs.py:44",
+  "group": "A_platform",
+  "folder": [
+   "Render jobs"
+  ],
+  "summary": "Issue a single-use PDF download link",
+  "description": "Issues a single-use download URL for a DONE job, valid `DOCUMENTS_DOWNLOAD_TTL_SECONDS` (10 min): `url` = `/api/v1/documents/download/<token>/` (absolute). Each call records a new `documents_download` row. 409 `document_not_ready` until the job is DONE with a file. The test script extracts the `<token>` path segment of `url` into `{{documents_download_token}}` (capture with `regex`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": "403 without the record's permission; 404 when the record is outside the caller's record scope (unless they requested the job).",
+   "notes": "Any authenticated staff user; the job inherits the permission of its record (QUOTATION→quotations.view, AGREEMENT→agreements.view, INSPECTION_REPORT→site_inspections.view, ATTENDANCE_REPORT→attendance.export, PUBLISH_REPORT→pricing.view; owning apps may refine per object_type). Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "documents_jobs_uid",
+    "example": "6a9e3c1f-7b2d-4f8a-9e6c-3d1b5a7f2c94",
+    "description": "Render job uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "example": {
+     "url": "http://127.0.0.1:8000/api/v1/documents/download/eyJkIjoiN2YzYzE5YjItNGQ1ZS00YTZmLThjOWQtMWUyZjNhNGI1YzZkIn0:1t2XyZ:Qm9ndXNTaWduYXR1cmVFeGFtcGxlMDAwMDAw/",
+     "expires_at": "2026-10-01T10:25:00+05:30"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`."
+   },
+   {
+    "status": 409,
+    "description": "`document_not_ready` (`errors.status` = current status)."
+   }
+  ],
+  "side_effects": [
+   "Creates a documents_download row (issued_to, expires_at)",
+   "Audit `documents.download_issued`"
+  ],
+  "capture": [
+   {
+    "var": "documents_download_token",
+    "from": "url",
+    "regex": "/documents/download/([^/]+)/"
+   }
+  ],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "documents_job_download_url",
+  "no_body": true
+ },
+ {
+  "id": "GET /api/v1/media/",
+  "method": "GET",
+  "path": "/api/v1/media/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "list",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:37",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "List media library assets",
+  "description": "Live assets of the media library, newest first. Files in reserved folders owned by other contexts (rendered documents, careers resumes, HR photos, site-inspection photos, agreement acceptances) are invisible here. Private files have `url: null` — use `signed-url/`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [
+   {
+    "key": "visibility",
+    "value": "PUBLIC",
+    "description": "PUBLIC or PRIVATE.",
+    "required": false
+   },
+   {
+    "key": "kind",
+    "value": "IMAGE",
+    "description": "IMAGE, DOCUMENT, SIGNATURE, RESUME, PHOTO.",
+    "required": false
+   },
+   {
+    "key": "folder",
+    "value": "projects/thrissur",
+    "description": "Exact folder.",
+    "required": false
+   },
+   {
+    "key": "mime_type",
+    "value": "image/jpeg",
+    "description": "Exact MIME type.",
+    "required": false
+   },
+   {
+    "key": "created_from",
+    "value": "2026-09-01T00:00:00+05:30",
+    "description": "created_at ≥ (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "created_to",
+    "value": "2026-10-01T23:59:59+05:30",
+    "description": "created_at ≤ (ISO date-time).",
+    "required": false
+   },
+   {
+    "key": "search",
+    "value": "rooftop",
+    "description": "Searches original_filename, alternative_text, caption.",
+    "required": false
+   },
+   {
+    "key": "ordering",
+    "value": "-size_bytes",
+    "description": "One of created_at, size_bytes, original_filename (prefix `-` for descending).",
+    "required": false
+   },
+   {
+    "key": "page",
+    "value": "1",
+    "description": "Page number (StandardPagination, 25 per page).",
+    "required": false
+   },
+   {
+    "key": "page_size",
+    "value": "50",
+    "description": "Rows per page (max 200).",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "count": 1,
+     "next": null,
+     "previous": null,
+     "results": [
+      {
+       "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+       "visibility": "PUBLIC",
+       "kind": "IMAGE",
+       "url": "/media/public/library/2026/10/9f2c4e1a7b3d4c6e8a1f2b3c4d5e6f70.jpg",
+       "thumbnail_url": null,
+       "original_filename": "rooftop-5kw-thrissur.jpg",
+       "mime_type": "image/jpeg",
+       "size_bytes": 482133,
+       "width": 1920,
+       "height": 1080,
+       "captured_at": "2026-09-28T11:42:10+05:30",
+       "checksum_sha256": "4b1d9e0c7a2f5b8e3c6d1a4f7e0b3c6d9a2e5f8b1c4d7a0e3f6b9c2d5e8a1b4c",
+       "alternative_text": "5 kW on-grid rooftop system in Thrissur",
+       "caption": "Commissioned September 2026",
+       "folder": "",
+       "uploaded_by": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+       "created_at": "2026-10-01T10:15:00+05:30",
+       "updated_at": "2026-10-01T10:15:00+05:30",
+       "version": 1
+      }
+     ]
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 10,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_list"
+ },
+ {
+  "id": "GET /api/v1/media/download/{token}/",
+  "method": "GET",
+  "path": "/api/v1/media/download/{token}/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.download.MediaDownloadView",
+  "action": "get",
+  "source_file": "media/views/download.py:24",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Download a private media file",
+  "description": "Serves a PRIVATE asset to whoever holds a valid signed URL from `GET media/{uid}/signed-url/` (no JWT: `<img>` tags and download links cannot send one). Reusable until it expires (10 min) — not single-use. 403 `signature_invalid` (forged/altered), 410 `link_expired`, 404 `not_found` (asset deleted or replaced, or thumbnail missing). Images/PDFs inline, others as attachment; `Cache-Control: private, no-store`; nginx `X-Accel-Redirect` when `USE_X_ACCEL`.",
+  "auth": {
+   "scheme": "signed_link",
+   "permission": null,
+   "scope": null,
+   "notes": "Token issued by GET /api/v1/media/{uid}/signed-url/ (inside `url`); 10 min, reusable. No authentication classes. Throttle scope `staff`."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "token",
+    "type": "str",
+    "variable": "media_download_token",
+    "example": "eyJhIjoiOGQyZjZiMWUtNGE3Yy00ZTliLWIzZDUtNmExYzllMmY3YjQ4IiwiYyI6IjRiMWQ5ZTBjN2EyZjViOGUiLCJ2IjoibyJ9:1t2XyZ:U2lnbmF0dXJlRXhhbXBsZTAwMDAwMDAw",
+    "description": "Signed token (TimestampSigner bound to asset uid, checksum and variant)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "The file bytes with the asset's MIME type (thumbnails: image/webp).",
+    "example": null,
+    "content_type": "application/pdf"
+   },
+   {
+    "status": 403,
+    "description": "`signature_invalid`."
+   },
+   {
+    "status": 404,
+    "description": "`not_found`."
+   },
+   {
+    "status": 410,
+    "description": "`link_expired`."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 70,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_download"
+ },
+ {
+  "id": "POST /api/v1/media/upload/",
+  "method": "POST",
+  "path": "/api/v1/media/upload/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "upload",
+  "source_file": "media/views/assets.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Upload a media file",
+  "description": "Multipart upload; the type is sniffed from the content (not the extension). Limits: IMAGE/PHOTO jpeg, png, webp, heic ≤ 15 MB; DOCUMENT pdf ≤ 20 MB; RESUME pdf/doc/docx ≤ 10 MB and SIGNATURE png ≤ 2 MB (both PRIVATE only → 400 `visibility_not_allowed`). GPS/location metadata is stripped from public images. `folder` is a lowercase path (`projects/thrissur`); reserved folders → 400 `folder_reserved`. Errors: 400 `empty_file`, `unsupported_file_type`, `image_too_large` (pixels), 413 `file_too_large`, 503 `storage_unavailable`. Pick a local file for `file` before sending. Captures `uid` into `{{media_uid}}` (and `{{media_upload_uid}}`) and, on the local dev backend, the storage key into `{{dev_media_path}}`. The variant uploads a PRIVATE pdf for the signed-URL flow.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.create",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [],
+  "query_params": [],
+  "body": {
+   "mode": "formdata",
+   "content_type": "multipart/form-data",
+   "formdata": [
+    {
+     "key": "file",
+     "type": "file",
+     "src": "",
+     "description": "JPEG/PNG/WebP/HEIC image (≤ 15 MB) — choose a file."
+    },
+    {
+     "key": "visibility",
+     "type": "text",
+     "value": "PUBLIC",
+     "description": "PUBLIC (CDN) or PRIVATE (signed URL)."
+    },
+    {
+     "key": "kind",
+     "type": "text",
+     "value": "IMAGE",
+     "description": "IMAGE, DOCUMENT, SIGNATURE, RESUME, PHOTO."
+    },
+    {
+     "key": "folder",
+     "type": "text",
+     "value": "projects/thrissur",
+     "description": "Optional lowercase folder path."
+    },
+    {
+     "key": "alternative_text",
+     "type": "text",
+     "value": "5 kW on-grid rooftop system in Thrissur"
+    },
+    {
+     "key": "caption",
+     "type": "text",
+     "value": "Commissioned September 2026"
+    }
+   ],
+   "fields": [
+    {
+     "name": "file",
+     "type": "file",
+     "required": true
+    },
+    {
+     "name": "visibility",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "PUBLIC",
+      "PRIVATE"
+     ]
+    },
+    {
+     "name": "kind",
+     "type": "string",
+     "required": true,
+     "choices": [
+      "IMAGE",
+      "DOCUMENT",
+      "SIGNATURE",
+      "RESUME",
+      "PHOTO"
+     ]
+    },
+    {
+     "name": "folder",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "alternative_text",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "caption",
+     "type": "string",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 201,
+  "responses": [
+   {
+    "status": 201,
+    "description": "",
+    "example": {
+     "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+     "visibility": "PUBLIC",
+     "kind": "IMAGE",
+     "url": "/media/public/projects/thrissur/2026/10/9f2c4e1a7b3d4c6e8a1f2b3c4d5e6f70.jpg",
+     "thumbnail_url": null,
+     "original_filename": "rooftop-5kw-thrissur.jpg",
+     "mime_type": "image/jpeg",
+     "size_bytes": 482133,
+     "width": 1920,
+     "height": 1080,
+     "captured_at": "2026-09-28T11:42:10+05:30",
+     "checksum_sha256": "4b1d9e0c7a2f5b8e3c6d1a4f7e0b3c6d9a2e5f8b1c4d7a0e3f6b9c2d5e8a1b4c",
+     "alternative_text": "5 kW on-grid rooftop system in Thrissur",
+     "caption": "Commissioned September 2026",
+     "folder": "projects/thrissur",
+     "uploaded_by": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` · `empty_file` · `unsupported_file_type` · `image_too_large` · `visibility_not_allowed` · `folder_reserved`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 413,
+    "description": "`file_too_large`."
+   },
+   {
+    "status": 503,
+    "description": "`storage_unavailable`."
+   }
+  ],
+  "side_effects": [
+   "File stored (local disk in dev, Bunny CDN for PUBLIC in staging/prod; private bucket for PRIVATE)",
+   "Audit `media.asset_uploaded`; cache namespace `media` bumped",
+   "IMAGE/PHOTO/SIGNATURE: Celery `media.tasks.generate_thumbnail` enqueued on commit"
+  ],
+  "capture": [
+   {
+    "var": "media_uid",
+    "from": "uid"
+   },
+   {
+    "var": "media_upload_uid",
+    "from": "uid"
+   },
+   {
+    "var": "dev_media_path",
+    "from": "url",
+    "regex": "/media/public/(.+)$"
+   }
+  ],
+  "order": 20,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_upload",
+  "variants": [
+   {
+    "name": "private PDF document",
+    "body": {
+     "mode": "formdata",
+     "content_type": "multipart/form-data",
+     "formdata": [
+      {
+       "key": "file",
+       "type": "file",
+       "src": "",
+       "description": "A PDF (≤ 20 MB) — choose a file."
+      },
+      {
+       "key": "visibility",
+       "type": "text",
+       "value": "PRIVATE"
+      },
+      {
+       "key": "kind",
+       "type": "text",
+       "value": "DOCUMENT"
+      },
+      {
+       "key": "folder",
+       "type": "text",
+       "value": "contracts/kseb"
+      },
+      {
+       "key": "caption",
+       "type": "text",
+       "value": "KSEB net-metering feasibility letter"
+      }
+     ],
+     "fields": [
+      {
+       "name": "file",
+       "type": "file",
+       "required": true
+      },
+      {
+       "name": "visibility",
+       "type": "string",
+       "required": true,
+       "choices": [
+        "PUBLIC",
+        "PRIVATE"
+       ]
+      },
+      {
+       "name": "kind",
+       "type": "string",
+       "required": true,
+       "choices": [
+        "IMAGE",
+        "DOCUMENT",
+        "SIGNATURE",
+        "RESUME",
+        "PHOTO"
+       ]
+      },
+      {
+       "name": "folder",
+       "type": "string",
+       "required": false
+      },
+      {
+       "name": "alternative_text",
+       "type": "string",
+       "required": false
+      },
+      {
+       "name": "caption",
+       "type": "string",
+       "required": false
+      }
+     ],
+     "required": true
+    },
+    "capture": [
+     {
+      "var": "media_private_uid",
+      "from": "uid"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "GET /api/v1/media/{uid}/",
+  "method": "GET",
+  "path": "/api/v1/media/{uid}/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "retrieve",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:53",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Get a media asset",
+  "description": "One live library asset (reserved-folder assets are 404 here).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "media_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Asset uid (captured by POST media/upload/)."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+     "visibility": "PUBLIC",
+     "kind": "IMAGE",
+     "url": "/media/public/library/2026/10/9f2c4e1a7b3d4c6e8a1f2b3c4d5e6f70.jpg",
+     "thumbnail_url": null,
+     "original_filename": "rooftop-5kw-thrissur.jpg",
+     "mime_type": "image/jpeg",
+     "size_bytes": 482133,
+     "width": 1920,
+     "height": 1080,
+     "captured_at": "2026-09-28T11:42:10+05:30",
+     "checksum_sha256": "4b1d9e0c7a2f5b8e3c6d1a4f7e0b3c6d9a2e5f8b1c4d7a0e3f6b9c2d5e8a1b4c",
+     "alternative_text": "5 kW on-grid rooftop system in Thrissur",
+     "caption": "Commissioned September 2026",
+     "folder": "",
+     "uploaded_by": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 1
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 30,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_retrieve"
+ },
+ {
+  "id": "PUT /api/v1/media/{uid}/",
+  "method": "PUT",
+  "path": "/api/v1/media/{uid}/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:63",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Not supported (403): use PATCH",
+  "description": "Routed by the DRF router but refused for every caller: 403 unmapped action 'update' (default deny, checked before the method). DRF checks permissions in `initial()` before it looks at `http_method_names`, and `core.permissions.HasModulePermission` denies any action the view's `action_permissions` does not map. Edit the record with PATCH instead.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": null,
+   "scope": null,
+   "notes": "No grant makes this succeed (action `update` unmapped)."
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "media_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": ""
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {},
+   "fields": [],
+   "required": false
+  },
+  "success_status": null,
+  "responses": [
+   {
+    "status": 403,
+    "description": "permission_denied (every authenticated caller)",
+    "example": {
+     "code": "permission_denied",
+     "message": "You do not have permission to perform this action.",
+     "errors": null,
+     "error_codes": null
+    }
+   },
+   {
+    "status": 401,
+    "description": "not_authenticated (no/invalid token)"
+   }
+  ],
+  "side_effects": [],
+  "capture": [],
+  "order": 40,
+  "refused": "403 unmapped action 'update' (default deny, checked before the method)",
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": null
+ },
+ {
+  "id": "PATCH /api/v1/media/{uid}/",
+  "method": "PATCH",
+  "path": "/api/v1/media/{uid}/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "partial_update",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:80",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Edit a media asset's alt text/caption",
+  "description": "Only `alternative_text` and `caption` are editable (the file itself is immutable — upload a new one). Unchanged values write nothing. 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.edit",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "media_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Asset uid."
+   }
+  ],
+  "query_params": [],
+  "body": {
+   "mode": "raw",
+   "content_type": "application/json",
+   "raw": {
+    "alternative_text": "5 kW on-grid rooftop solar system on a residence in Thrissur",
+    "caption": "Commissioned 28 September 2026 under PM Surya Ghar",
+    "expected_version": 1
+   },
+   "fields": [
+    {
+     "name": "alternative_text",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "caption",
+     "type": "string",
+     "required": false
+    },
+    {
+     "name": "expected_version",
+     "type": "integer",
+     "required": false
+    }
+   ],
+   "required": true
+  },
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "",
+    "example": {
+     "uid": "1c7e4a9b-3d6f-4b2e-9a8c-7e5d3b1f2a60",
+     "visibility": "PUBLIC",
+     "kind": "IMAGE",
+     "url": "/media/public/library/2026/10/9f2c4e1a7b3d4c6e8a1f2b3c4d5e6f70.jpg",
+     "thumbnail_url": null,
+     "original_filename": "rooftop-5kw-thrissur.jpg",
+     "mime_type": "image/jpeg",
+     "size_bytes": 482133,
+     "width": 1920,
+     "height": 1080,
+     "captured_at": "2026-09-28T11:42:10+05:30",
+     "checksum_sha256": "4b1d9e0c7a2f5b8e3c6d1a4f7e0b3c6d9a2e5f8b1c4d7a0e3f6b9c2d5e8a1b4c",
+     "alternative_text": "5 kW on-grid rooftop solar system on a residence in Thrissur",
+     "caption": "Commissioned 28 September 2026 under PM Surya Ghar",
+     "folder": "",
+     "uploaded_by": "3f6b2c1e-8a4d-4f2b-9c7e-1d2a3b4c5d6e",
+     "created_at": "2026-10-01T10:15:00+05:30",
+     "updated_at": "2026-10-01T10:15:00+05:30",
+     "version": 2
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 400,
+    "description": "`validation_error` — field errors in `errors`."
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`stale_version` — `expected_version` is older than the row's `version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `media.asset_updated`; cache namespace `media` bumped"
+  ],
+  "capture": [],
+  "order": 50,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_update"
+ },
+ {
+  "id": "DELETE /api/v1/media/{uid}/",
+  "method": "DELETE",
+  "path": "/api/v1/media/{uid}/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "destroy",
+  "source_file": "/usr/local/lib/python3.12/site-packages/rest_framework/mixins.py:89",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Delete a media asset",
+  "description": "Soft-deletes the asset and removes the stored file + thumbnail after commit. Refused with 409 `media_in_use` (`errors.references` lists the referencing records) while any live record uses it. Optional `?expected_version=` → 409 `stale_version`.",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.archive",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "media_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Asset uid."
+   }
+  ],
+  "query_params": [
+   {
+    "key": "expected_version",
+    "value": "2",
+    "description": "Optional optimistic-lock check.",
+    "required": false
+   }
+  ],
+  "body": null,
+  "success_status": 204,
+  "responses": [
+   {
+    "status": 204,
+    "description": "Deleted.",
+    "example": null
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   },
+   {
+    "status": 409,
+    "description": "`media_in_use` · `stale_version`."
+   }
+  ],
+  "side_effects": [
+   "Audit `media.asset_deleted`; cache namespace `media` bumped",
+   "Celery `media.tasks.delete_stored_files` enqueued on commit"
+  ],
+  "capture": [],
+  "order": 90,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_delete"
+ },
+ {
+  "id": "GET /api/v1/media/{uid}/signed-url/",
+  "method": "GET",
+  "path": "/api/v1/media/{uid}/signed-url/",
+  "app": "media",
+  "surface": "staff",
+  "view": "media.views.assets.MediaAssetViewSet",
+  "action": "signed_url",
+  "source_file": "media/views/assets.py:80",
+  "group": "A_platform",
+  "folder": [
+   "Library"
+  ],
+  "summary": "Get a download URL for an asset",
+  "description": "Private assets: fresh signed URLs to `/api/v1/media/download/<token>/` (original and, if generated, thumbnail) valid `MEDIA_SIGNED_URL_TTL_SECONDS` (10 min), `expires_at` set. Public assets: their CDN URL with `expires_at: null` (no token). The main request uses `{{media_uid}}` (public image); the variant uses `{{media_private_uid}}` and extracts the token from `url` into `{{media_download_token}}` (capture with `regex`).",
+  "auth": {
+   "scheme": "staff_jwt",
+   "permission": "media.view",
+   "scope": null,
+   "notes": ""
+  },
+  "headers": [],
+  "path_params": [
+   {
+    "name": "uid",
+    "type": "uuid",
+    "variable": "media_uid",
+    "example": "00000000-0000-4000-8000-000000000000",
+    "description": "Asset uid."
+   }
+  ],
+  "query_params": [],
+  "body": null,
+  "success_status": 200,
+  "responses": [
+   {
+    "status": 200,
+    "description": "Private asset.",
+    "example": {
+     "url": "http://127.0.0.1:8000/api/v1/media/download/eyJhIjoiOGQyZjZiMWUtNGE3Yy00ZTliLWIzZDUtNmExYzllMmY3YjQ4IiwiYyI6IjRiMWQ5ZTBjN2EyZjViOGUiLCJ2IjoibyJ9:1t2XyZ:U2lnbmF0dXJlRXhhbXBsZTAwMDAwMDAw/",
+     "thumbnail_url": null,
+     "expires_at": "2026-10-01T10:25:00+05:30"
+    },
+    "content_type": "application/json"
+   },
+   {
+    "status": 401,
+    "description": "`not_authenticated` / `token_not_valid` — missing, expired or revoked access token (`session_revoked` once the session ended)."
+   },
+   {
+    "status": 403,
+    "description": "`permission_denied` — the caller's role lacks the required registry permission."
+   },
+   {
+    "status": 404,
+    "description": "`not_found` — no live row with this uid."
+   }
+  ],
+  "side_effects": [],
+  "capture": [
+   {
+    "var": "media_download_token",
+    "from": "url",
+    "regex": "/media/download/([^/]+)/"
+   }
+  ],
+  "order": 60,
+  "refused": null,
+  "flag": null,
+  "auto": false,
+  "unresolved": [],
+  "operation_id": "media_signed_url",
+  "variants": [
+   {
+    "name": "private asset (signed token)",
+    "path_values": {
+     "uid": "{{media_private_uid}}"
+    },
+    "capture": [
+     {
+      "var": "media_download_token",
+      "from": "url",
+      "regex": "/media/download/([^/]+)/"
+     }
+    ]
+   }
+  ]
+ }
+]

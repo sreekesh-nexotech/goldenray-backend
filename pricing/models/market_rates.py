@@ -61,16 +61,27 @@ class MarketRate(BaseModel):
     from_size_key = models.CharField(max_length=8, blank=True, default="", help_text="UPGRADE: starting size key.")
     from_size_kw = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     future_size_key = models.CharField(max_length=8, blank=True, default="", help_text="Future-ready pack: system size key (Flarize _up<size>).")
+    # Its own column rather than a `variant` suffix, because the three dimensions
+    # co-occur: the live price list holds `hybrid_value_0_dcr_up5_diffBase`, where the
+    # module content precedes the future size. One `variant` string cannot express that
+    # ordering without duplicating `future_size_key` and breaking `natural_key()`.
+    dcr = models.CharField(
+        max_length=4,
+        blank=True,
+        default="",
+        choices=(("dcr", "DCR"), ("ndcr", "Non-DCR")),
+        help_text="HYBRID only: the module content this price is for — the two differ by ₹38k–₹64k. Blank for on-grid, quoted at one price either way.",
+    )
     variant = models.CharField(max_length=24, blank=True, default="", help_text="Any other Flarize key suffix (e.g. diffBase).")
     customer_price_incl_gst = models.DecimalField(max_digits=14, decimal_places=2, help_text="0 = not set.")
     sort_order = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = "pricing_market_rate"
-        ordering = ["set_id", "system_type", "tier", "battery_config", "future_size_key", "variant", "sort_order", "id"]
+        ordering = ["set_id", "system_type", "tier", "battery_config", "dcr", "future_size_key", "variant", "sort_order", "id"]
         constraints = [
             models.UniqueConstraint(
-                fields=["set", "system_type", "tier", "battery_config", "size_key", "from_size_key", "future_size_key", "variant"],
+                fields=["set", "system_type", "tier", "battery_config", "dcr", "size_key", "from_size_key", "future_size_key", "variant"],
                 condition=LIVE,
                 name="pricing_market_rate_cell_uniq",
             ),
@@ -85,6 +96,12 @@ class MarketRate(BaseModel):
                 name="pricing_market_rate_upgrade_shape",
             ),
             models.CheckConstraint(condition=~Q(size_key=""), name="pricing_market_rate_size_key_not_blank"),
+            # Only hybrid is quoted per module content; encoding that here stops anyone
+            # creating a meaningless `ongrid_base_dcr` row.
+            models.CheckConstraint(
+                condition=Q(system_type=SystemType.HYBRID) | Q(dcr=""),
+                name="pricing_market_rate_dcr_hybrid_only",
+            ),
         ]
         indexes = [models.Index(fields=["set", "system_type", "tier"], name="pricing_mr_set_system_tier")]
 

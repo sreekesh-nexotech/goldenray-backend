@@ -86,7 +86,19 @@ TIERS = {"base": Tier.BASE, "value": Tier.VALUE, "premium": Tier.PREMIUM}
 OFFER_SYSTEMS = {"all": OfferSystem.ALL, "ongrid": OfferSystem.ONGRID, "hybrid": OfferSystem.HYBRID, "upgrade": OfferSystem.UPGRADE}
 OFFER_TIERS = {"all": OfferTier.ALL, "base": OfferTier.BASE, "value": OfferTier.VALUE, "premium": OfferTier.PREMIUM}
 OFFER_TYPES = {"flat": OfferType.FLAT, "percent": OfferType.PERCENT, "percentage": OfferType.PERCENT}
-MARKET_KEY_RE = re.compile(r"^(?P<system>ongrid|hybrid)_(?P<tier>base|value|premium)(?:_(?P<bat>[0-9]))?(?:_up(?P<future>[0-9.]+(?:sp|tp)?))?(?:_(?P<variant>[A-Za-z][A-Za-z0-9]*))?$")
+#: A Flarize market-rate key. The segments are ordered as the live price list writes them:
+#: ``hybrid_value_0_dcr_up5_diffBase`` -- tier, battery band, module content, future size,
+#: then any other suffix. The ``dcr`` group was missing until the BOM port measured the
+#: cost: 12 of the 34 live keys could not parse, four of them carrying real prices
+#: (339000, 300616, 468266, 430388), and the loss was reported as a violation and skipped
+#: rather than failing the import.
+MARKET_KEY_RE = re.compile(
+    r"^(?P<system>ongrid|hybrid)_(?P<tier>base|value|premium)"
+    r"(?:_(?P<bat>[0-9]))?"
+    r"(?:_(?P<dcr>n?dcr))?"
+    r"(?:_up(?P<future>[0-9.]+(?:sp|tp)?))?"
+    r"(?:_(?P<variant>[A-Za-z][A-Za-z0-9]*))?$"
+)
 UPGRADE_KEY_RE = re.compile(r"^upgrade_(?P<from>[0-9.]+(?:sp|tp)?)_(?P<to>[0-9.]+(?:sp|tp)?)$")
 
 # bom_globalcosts column → (cost config key, conversion)
@@ -323,23 +335,65 @@ def _upsert_rate(result: ImportRun, rate_set: MarketRateSet, values: dict, *, sy
     clean, errors = market_rates.normalise_rate(values, values.get("sort_order", 0))
     if errors:
         raise BadValue("; ".join(f"{field}: {', '.join(messages)}" for field, messages in errors.items()))
-    lookup = {name: clean[name] for name in ("system_type", "tier", "battery_config", "size_key", "from_size_key", "future_size_key", "variant")}
+    # Mirrors the row's uniqueness key exactly. Leaving `dcr` out would make
+    # `hybrid_value_0_dcr` and `hybrid_value_0_ndcr` look like the same cell, so the second
+    # import would silently overwrite the first — and those two prices differ by ₹38k–₹64k.
+    lookup = {name: clean[name] for name in ("system_type", "tier", "battery_config", "dcr", "size_key", "from_size_key", "future_size_key", "variant")}
     existing = MarketRate.objects.filter(set=rate_set, **lookup).first()
     if existing is not None:
+        # A zero is "not priced", not a price. Golden-Ray-BOM version-2 ships a largely
+        # emptied list -- 3 of 59 cells carry a figure -- because its own decision C3
+        # demotes the market rate to a reference the cost engine never reads. Letting
+        # that overwrite a configured price would silently move every affected quote onto
+        # cost-plus, since the engine falls back to `grand_total` when the rate is 0.
+        # Importing a rate list can add and correct prices; it cannot delete them.
+        if not clean["customer_price_incl_gst"] and existing.customer_price_incl_gst:
+            result.violation(
+                table,
+                source_id,
+                "zero_rate_kept_existing",
+                f"{market_rates.rate_key(existing)} {existing.size_key}: source has no price; kept {existing.customer_price_incl_gst}.",
+                severity="warning",
+                kept=str(existing.customer_price_incl_gst),
+                other="0",
+            )
+            remember(system, table, source_id, existing)
+            return "skipped"
         owners = mapped_from(existing)
         if system == BACKEND and FLARIZE in owners:
-            if existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
+            # The other half of the zero rule, and what makes it order-independent: a
+            # Flarize cell with no price does not get to outrank a real one just because
+            # it was imported first. Without this the two orders disagree on exactly the
+            # cells version-2 emptied -- backend-then-Flarize keeps ₹202,539.30 while
+            # Flarize-then-backend writes 0 and then refuses the real figure as a
+            # "Flarize win". Precedence is about which source is authoritative, not about
+            # which one ran first.
+            if not existing.customer_price_incl_gst and clean["customer_price_incl_gst"]:
                 result.violation(
                     table,
                     source_id,
-                    "d2_flarize_wins",
-                    f"{market_rates.rate_key(existing)} {existing.size_key}: kept Flarize {existing.customer_price_incl_gst}; the main backend has {clean['customer_price_incl_gst']}.",
+                    "zero_rate_kept_existing",
+                    f"{market_rates.rate_key(existing)} {existing.size_key}: catalog.json has no price; took {clean['customer_price_incl_gst']}.",
                     severity="warning",
-                    kept=str(existing.customer_price_incl_gst),
-                    other=str(clean["customer_price_incl_gst"]),
+                    kept=str(clean["customer_price_incl_gst"]),
+                    other="0",
                 )
-            remember(system, table, source_id, existing)
-            return "skipped"
+            else:
+                # Flarize is authoritative for every cell that carries a price, whether or
+                # not the figures agree -- so this is the branch that returns, and the
+                # zero case above is the one exception that falls through to the write.
+                if existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
+                    result.violation(
+                        table,
+                        source_id,
+                        "d2_flarize_wins",
+                        f"{market_rates.rate_key(existing)} {existing.size_key}: kept Flarize {existing.customer_price_incl_gst}; the main backend has {clean['customer_price_incl_gst']}.",
+                        severity="warning",
+                        kept=str(existing.customer_price_incl_gst),
+                        other=str(clean["customer_price_incl_gst"]),
+                    )
+                remember(system, table, source_id, existing)
+                return "skipped"
         if system == FLARIZE and BACKEND in owners and existing.customer_price_incl_gst != clean["customer_price_incl_gst"]:
             result.violation(
                 table,
@@ -462,6 +516,7 @@ def _flarize_market_rates(result: ImportRun, market: dict, *, user) -> None:
                     "battery_config": match.group("bat") or "",
                     "size_key": size,
                     "future_size_key": match.group("future") or "",
+                    "dcr": match.group("dcr") or "",
                     "variant": match.group("variant") or "",
                 }
             values["sort_order"] = index

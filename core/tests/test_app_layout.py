@@ -35,7 +35,7 @@ def test_surface_specific_lists():
 def test_installed_apps_order_and_no_admin():
     assert "django.contrib.admin" not in settings.INSTALLED_APPS
     assert settings.LOCAL_APPS[:2] == ["core", "accounts"]
-    assert len(settings.LOCAL_APPS) == 32
+    assert len(settings.LOCAL_APPS) == 33  # + approvals (DV-153)
     assert "engines" not in settings.INSTALLED_APPS
 
 

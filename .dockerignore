@@ -15,3 +15,9 @@ coverage.xml
 *.key
 docs/
 deploy/nginx/
+# Database dumps (legacy imports: password hashes, customer PII) never enter an image
+*.sql
+*.sql.gz
+*.dump
+*.backup
+deploy/db backups/

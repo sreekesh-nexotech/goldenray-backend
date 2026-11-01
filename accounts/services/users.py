@@ -10,8 +10,13 @@ Escalation guards (standard §3.3 — authority is scoped explicitly, there is n
   password reset is an account takeover); an e-mail change voids every open reset/invitation link (they went to the
   old address) and re-sends a pending invitation to the new one.
 
-There are no passwords in this module: a new account gets an unusable password, ``must_reset_password`` and an
-invitation link (single use, ``ACCOUNTS_INVITE_TTL``); a forced reset does the same for an existing account.
+Passwords on creation are opt-in: by default a new account gets an unusable password, ``must_reset_password``
+and an invitation link (single use, ``ACCOUNTS_INVITE_TTL``) — no password is chosen for someone else, and e-mail
+is the only way in. When the creator supplies one explicitly it is validated against ``AUTH_PASSWORD_VALIDATORS``
+and stored, **no invitation is sent**, and ``must_reset_password`` is left clear so the credentials handed over
+actually work: that flag is a hard login block (``accounts.services.auth``), so setting both would create an
+account nobody can use. The trade-off is deliberate — the creator knows the password until the user changes it,
+which is the price of onboarding without deliverable e-mail. A forced reset issues a fresh link as before.
 """
 
 from __future__ import annotations
@@ -19,9 +24,11 @@ from __future__ import annotations
 import uuid
 
 from django.conf import settings
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
+from django.utils import timezone
 
 from accounts.models import Role, User
 from accounts.services import emails, passwords, sessions
@@ -87,23 +94,40 @@ def _lock(instance: User, expected_version) -> User:
 
 @transaction.atomic
 def create_user(*, user, data) -> User:
-    """Create an account and e-mail an invitation to set its password."""
+    """Create an account: with a supplied password, or (by default) e-mailing an invitation to set one.
+
+    ``password`` is optional. Left out or null, the account gets an unusable password, ``must_reset_password``
+    and an invitation link. Supplied, it is validated against the policy and stored, no invitation goes out, and
+    ``must_reset_password`` stays clear — so an Admin can hand over working credentials when e-mail is not
+    deliverable (the flag blocks sign-in outright, so a password plus the flag would lock the user out).
+    """
     role = data["role"]
     ensure_can_assign_role(user, role)
     email = normalise_email(data["email"])
     if _email_taken(email):
         raise _email_conflict()
-    account = User(email=email, role=role, must_reset_password=True, **{name: data.get(name, "") for name in PROFILE_FIELDS})
-    account.set_unusable_password()
+    raw_password = data.get("password") or None
+    account = User(email=email, role=role, must_reset_password=raw_password is None, **{name: data.get(name, "") for name in PROFILE_FIELDS})
+    if raw_password is None:
+        account.set_unusable_password()
+    else:
+        # Validate before hashing, against the half-built account so the policy can catch a password that merely
+        # echoes the new user's own name or e-mail (UserAttributeSimilarityValidator).
+        passwords.validate_new_password(raw_password, account, field="password")
+        account.password = make_password(raw_password)
+        account.password_changed_at = timezone.now()
     stamp_create(account, user)
     try:
         with transaction.atomic():
             account.save()
     except IntegrityError:
         raise _email_conflict() from None
-    invite = passwords.issue_reset(account, actor=user, ttl=settings.ACCOUNTS_INVITE_TTL)
-    record("accounts.user_created", obj=account, actor=user, after=user_snapshot(account))
-    emails.send_invite(account, invite.link, settings.ACCOUNTS_INVITE_TTL)
+    # "credentials_set_by_creator", not "password_...": the audit layer masks any key containing "password"
+    # (audit.services.recording.SENSITIVE_TERMS), which would reduce this boolean to "***".
+    record("accounts.user_created", obj=account, actor=user, after={**user_snapshot(account), "credentials_set_by_creator": raw_password is not None})
+    if raw_password is None:
+        invite = passwords.issue_reset(account, actor=user, ttl=settings.ACCOUNTS_INVITE_TTL)
+        emails.send_invite(account, invite.link, settings.ACCOUNTS_INVITE_TTL)
     return account
 
 

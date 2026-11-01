@@ -1,0 +1,4569 @@
+{
+ "grep_totals": {
+  "router.register": 201,
+  "path(": 115,
+  "as_view": 111,
+  ".urls": 66,
+  "@action": 174,
+  "re_path(": 4,
+  "include(": 3,
+  "urlpatterns +=": 1,
+  "static(": 1,
+  "url(": 4
+ },
+ "grep_by_file": {
+  "accounts/services/dashboard.py": {
+   "router.register": 1
+  },
+  "accounts/urls.py": {
+   "path(": 9,
+   "router.register": 2,
+   "as_view": 9,
+   ".urls": 2
+  },
+  "accounts/views/roles.py": {
+   "@action": 1
+  },
+  "accounts/views/users.py": {
+   "@action": 3
+  },
+  "agreements/apps.py": {
+   "router.register": 1
+  },
+  "agreements/services/registrations.py": {
+   "router.register": 5
+  },
+  "agreements/services/scoping.py": {
+   "router.register": 1
+  },
+  "agreements/urls.py": {
+   "path(": 1,
+   "router.register": 1,
+   "as_view": 1,
+   ".urls": 2
+  },
+  "agreements/views/agreements.py": {
+   "@action": 7
+  },
+  "attendance/services/dashboard.py": {
+   "router.register": 3
+  },
+  "attendance/services/scopes.py": {
+   "router.register": 2
+  },
+  "attendance/services/sink.py": {
+   "router.register": 1
+  },
+  "attendance/urls.py": {
+   "path(": 18,
+   "router.register": 3,
+   "as_view": 18,
+   ".urls": 2
+  },
+  "attendance/views/process.py": {
+   "@action": 1
+  },
+  "audit/ops.py": {
+   "router.register": 2
+  },
+  "audit/urls.py": {
+   "path(": 1,
+   "as_view": 1,
+   ".urls": 1
+  },
+  "blog/apps.py": {
+   "router.register": 4
+  },
+  "blog/models/entry.py": {
+   "path(": 1
+  },
+  "blog/services/dashboard.py": {
+   "router.register": 1
+  },
+  "blog/urls.py": {
+   "path(": 7,
+   "router.register": 7,
+   "as_view": 7,
+   ".urls": 2
+  },
+  "blog/views/entries.py": {
+   "@action": 1
+  },
+  "blog/views/entry_actions.py": {
+   "@action": 5
+  },
+  "blog/views/schema.py": {
+   "@action": 1
+  },
+  "bom/apps.py": {
+   "router.register": 1
+  },
+  "bom/services/registrations.py": {
+   "router.register": 2
+  },
+  "bom/urls.py": {
+   "path(": 2,
+   "router.register": 7,
+   "as_view": 2,
+   ".urls": 2
+  },
+  "calculators/urls.py": {
+   "path(": 3,
+   "router.register": 1,
+   "as_view": 3,
+   ".urls": 2
+  },
+  "careers/apps.py": {
+   "router.register": 3
+  },
+  "careers/urls.py": {
+   "path(": 4,
+   "router.register": 3,
+   "as_view": 4,
+   ".urls": 2
+  },
+  "careers/views/applications.py": {
+   "@action": 6
+  },
+  "careers/views/positions.py": {
+   "@action": 5
+  },
+  "catalog/apps.py": {
+   "router.register": 4
+  },
+  "catalog/services/__init__.py": {
+   "router.register": 2
+  },
+  "catalog/services/dashboard.py": {
+   "router.register": 2
+  },
+  "catalog/services/usage.py": {
+   "router.register": 1
+  },
+  "catalog/urls.py": {
+   "path(": 6,
+   "router.register": 5,
+   "as_view": 6,
+   ".urls": 2
+  },
+  "catalog/views/components.py": {
+   "@action": 5
+  },
+  "catalog/views/profiles.py": {
+   "@action": 2
+  },
+  "company/apps.py": {
+   "router.register": 1
+  },
+  "company/urls.py": {
+   "path(": 3,
+   "router.register": 1,
+   "as_view": 3,
+   ".urls": 2
+  },
+  "company/views/bank_accounts.py": {
+   "@action": 1
+  },
+  "core/checks.py": {
+   "router.register": 1,
+   ".urls": 1
+  },
+  "core/dashboard.py": {
+   "router.register": 1
+  },
+  "core/health.py": {
+   "router.register": 1
+  },
+  "core/ops_report.py": {
+   "router.register": 1
+  },
+  "core/scopes.py": {
+   "router.register": 1
+  },
+  "core/urls.py": {
+   "path(": 2,
+   "as_view": 2,
+   ".urls": 1
+  },
+  "customers/services/customers.py": {
+   "router.register": 1
+  },
+  "customers/services/dashboard.py": {
+   "router.register": 1
+  },
+  "customers/services/timeline.py": {
+   "router.register": 1
+  },
+  "customers/urls.py": {
+   "path(": 2,
+   "router.register": 1,
+   "as_view": 2,
+   ".urls": 2
+  },
+  "customers/views/customers.py": {
+   "@action": 2
+  },
+  "devices/services/providers.py": {
+   "router.register": 5
+  },
+  "devices/services/punch_sink.py": {
+   "router.register": 1
+  },
+  "devices/urls.py": {
+   "path(": 9,
+   "re_path(": 2,
+   "router.register": 6,
+   "as_view": 9,
+   ".urls": 2
+  },
+  "devices/views/agents.py": {
+   "@action": 4
+  },
+  "devices/views/device_actions.py": {
+   "@action": 6
+  },
+  "devices/views/device_users.py": {
+   "@action": 5
+  },
+  "devices/views/devices.py": {
+   "@action": 2
+  },
+  "devices/views/protocol.py": {
+   "@action": 1
+  },
+  "documents/access.py": {
+   "router.register": 1
+  },
+  "documents/apps.py": {
+   "router.register": 1
+  },
+  "documents/ops.py": {
+   "router.register": 2
+  },
+  "documents/services/downloads.py": {
+   ".urls": 1
+  },
+  "documents/urls.py": {
+   "path(": 3,
+   "as_view": 3,
+   ".urls": 1
+  },
+  "emi/services/pack_release.py": {
+   "router.register": 1
+  },
+  "emi/urls.py": {
+   "path(": 4,
+   "router.register": 1,
+   "as_view": 4,
+   ".urls": 2
+  },
+  "engineering/urls.py": {
+   "router.register": 3,
+   ".urls": 1
+  },
+  "engineering/views/engineering.py": {
+   "@action": 2
+  },
+  "faqs/apps.py": {
+   "router.register": 2
+  },
+  "faqs/urls.py": {
+   "path(": 1,
+   "router.register": 2,
+   "as_view": 1,
+   ".urls": 2
+  },
+  "faqs/views/faqs.py": {
+   "@action": 7
+  },
+  "flarize/settings/base.py": {
+   ".urls": 1
+  },
+  "flarize/urls.py": {
+   "path(": 4,
+   "re_path(": 1,
+   "as_view": 2,
+   "include(": 2,
+   "urlpatterns +=": 1,
+   ".urls": 4,
+   "static(": 1
+  },
+  "flarize/versioning.py": {
+   "re_path(": 1,
+   "include(": 1,
+   ".urls": 5
+  },
+  "hr/apps.py": {
+   "router.register": 1
+  },
+  "hr/services/dashboard.py": {
+   "router.register": 3
+  },
+  "hr/services/scopes.py": {
+   "router.register": 4
+  },
+  "hr/urls.py": {
+   "router.register": 7,
+   ".urls": 1
+  },
+  "hr/views/calendar.py": {
+   "@action": 3
+  },
+  "hr/views/employee_extras.py": {
+   "@action": 4
+  },
+  "hr/views/employees.py": {
+   "@action": 4
+  },
+  "hr/views/setup.py": {
+   "@action": 1
+  },
+  "inventory/apps.py": {
+   "router.register": 2
+  },
+  "inventory/checks.py": {
+   "router.register": 1
+  },
+  "inventory/services/dashboard.py": {
+   "router.register": 1
+  },
+  "inventory/services/usage.py": {
+   "router.register": 1
+  },
+  "inventory/urls.py": {
+   "router.register": 3,
+   ".urls": 1
+  },
+  "leads/apps.py": {
+   "router.register": 1
+  },
+  "leads/services/customer_timeline.py": {
+   "router.register": 2
+  },
+  "leads/services/dashboard.py": {
+   "router.register": 1
+  },
+  "leads/services/scoping.py": {
+   "router.register": 1
+  },
+  "leads/urls.py": {
+   "path(": 7,
+   "router.register": 4,
+   "as_view": 7,
+   ".urls": 2
+  },
+  "leads/views/forms.py": {
+   "@action": 4
+  },
+  "leads/views/leads.py": {
+   "@action": 7
+  },
+  "legacy/urls.py": {
+   "path(": 8,
+   "as_view": 8,
+   ".urls": 1
+  },
+  "media/ops.py": {
+   "router.register": 1
+  },
+  "media/services/signing.py": {
+   ".urls": 1
+  },
+  "media/services/storage.py": {
+   "path(": 1,
+   "url(": 3
+  },
+  "media/urls.py": {
+   "path(": 1,
+   "router.register": 1,
+   "as_view": 1,
+   ".urls": 2
+  },
+  "media/usage.py": {
+   "router.register": 2
+  },
+  "media/views/assets.py": {
+   "@action": 2
+  },
+  "migrations_tools/services/parity.py": {
+   "router.register": 2
+  },
+  "migrations_tools/services/runner.py": {
+   "url(": 1
+  },
+  "packs/apps.py": {
+   "router.register": 1
+  },
+  "packs/services/registrations.py": {
+   "router.register": 3
+  },
+  "packs/urls.py": {
+   "path(": 3,
+   "router.register": 2,
+   "as_view": 3,
+   ".urls": 2
+  },
+  "packs/views/releases.py": {
+   "@action": 3
+  },
+  "packs/views/versions.py": {
+   "@action": 6
+  },
+  "pricing/apps.py": {
+   "router.register": 1
+  },
+  "pricing/services/provider.py": {
+   "router.register": 1
+  },
+  "pricing/services/registrations.py": {
+   "router.register": 5
+  },
+  "pricing/urls.py": {
+   "path(": 2,
+   "router.register": 8,
+   "as_view": 2,
+   ".urls": 2
+  },
+  "pricing/views/market_rates.py": {
+   "@action": 4
+  },
+  "pricing/views/offers.py": {
+   "@action": 4
+  },
+  "pricing/views/releases.py": {
+   "@action": 3
+  },
+  "procurement/apps.py": {
+   "router.register": 1
+  },
+  "procurement/services/registrations.py": {
+   "router.register": 2
+  },
+  "procurement/urls.py": {
+   "router.register": 3,
+   ".urls": 1
+  },
+  "procurement/views/batches.py": {
+   "@action": 5
+  },
+  "projects/services/customer_timeline.py": {
+   "router.register": 1
+  },
+  "projects/urls.py": {
+   "router.register": 1,
+   ".urls": 1
+  },
+  "projects/views/projects.py": {
+   "@action": 5
+  },
+  "quotations/apps.py": {
+   "router.register": 1
+  },
+  "quotations/services/registrations.py": {
+   "router.register": 6
+  },
+  "quotations/services/scoping.py": {
+   "router.register": 1
+  },
+  "quotations/urls.py": {
+   "path(": 1,
+   "router.register": 6,
+   "as_view": 1,
+   ".urls": 2
+  },
+  "quotations/views/content.py": {
+   "@action": 2
+  },
+  "quotations/views/quotations.py": {
+   "@action": 8
+  },
+  "quotations/views/versions.py": {
+   "@action": 6
+  },
+  "reference/urls.py": {
+   "path(": 2,
+   "router.register": 2,
+   "as_view": 2,
+   ".urls": 2
+  },
+  "seo/apps.py": {
+   "router.register": 1
+  },
+  "seo/urls.py": {
+   "path(": 4,
+   "router.register": 2,
+   "as_view": 4,
+   ".urls": 2
+  },
+  "site_inspections/apps.py": {
+   "router.register": 4
+  },
+  "site_inspections/services/customer_timeline.py": {
+   "router.register": 1
+  },
+  "site_inspections/services/scoping.py": {
+   "router.register": 2
+  },
+  "site_inspections/urls.py": {
+   "path(": 4,
+   "router.register": 2,
+   "as_view": 4,
+   ".urls": 2
+  },
+  "site_inspections/views/decisions.py": {
+   "@action": 9
+  },
+  "site_inspections/views/records.py": {
+   "@action": 7
+  },
+  "site_inspections/views/workflow.py": {
+   "@action": 11
+  },
+  "sitepages/apps.py": {
+   "router.register": 3
+  },
+  "sitepages/urls.py": {
+   "path(": 2,
+   "router.register": 2,
+   "as_view": 2,
+   ".urls": 2
+  },
+  "sitepages/views/pages.py": {
+   "@action": 9
+  }
+ },
+ "url_modules": {
+  "accounts/urls.py": {
+   "registers": [
+    {
+     "prefix": "users",
+     "prefix_regex": null,
+     "viewset": "UserViewSet",
+     "line": 21
+    },
+    {
+     "prefix": "roles",
+     "prefix_regex": null,
+     "viewset": "RoleViewSet",
+     "line": 22
+    }
+   ],
+   "views": [
+    {
+     "view": "LoginView",
+     "line": 25,
+     "kind": "path"
+    },
+    {
+     "view": "RefreshView",
+     "line": 26,
+     "kind": "path"
+    },
+    {
+     "view": "LogoutView",
+     "line": 27,
+     "kind": "path"
+    },
+    {
+     "view": "MeView",
+     "line": 28,
+     "kind": "path"
+    },
+    {
+     "view": "PasswordChangeView",
+     "line": 29,
+     "kind": "path"
+    },
+    {
+     "view": "PasswordResetRequestView",
+     "line": 30,
+     "kind": "path"
+    },
+    {
+     "view": "PasswordResetView",
+     "line": 31,
+     "kind": "path"
+    },
+    {
+     "view": "SessionListView",
+     "line": 32,
+     "kind": "path"
+    },
+    {
+     "view": "SessionDetailView",
+     "line": 33,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "auth/login/",
+     "line": 25,
+     "view": "LoginView"
+    },
+    {
+     "route": "auth/refresh/",
+     "line": 26,
+     "view": "RefreshView"
+    },
+    {
+     "route": "auth/logout/",
+     "line": 27,
+     "view": "LogoutView"
+    },
+    {
+     "route": "auth/me/",
+     "line": 28,
+     "view": "MeView"
+    },
+    {
+     "route": "auth/password/change/",
+     "line": 29,
+     "view": "PasswordChangeView"
+    },
+    {
+     "route": "auth/password/reset-request/",
+     "line": 30,
+     "view": "PasswordResetRequestView"
+    },
+    {
+     "route": "auth/password/reset/",
+     "line": 31,
+     "view": "PasswordResetView"
+    },
+    {
+     "route": "auth/sessions/",
+     "line": 32,
+     "view": "SessionListView"
+    },
+    {
+     "route": "auth/sessions/{uid}/",
+     "line": 33,
+     "view": "SessionDetailView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "agreements/urls.py": {
+   "registers": [
+    {
+     "prefix": "agreements",
+     "prefix_regex": null,
+     "viewset": "AgreementViewSet",
+     "line": 13
+    }
+   ],
+   "views": [
+    {
+     "view": "AgreementPriceOverrideView",
+     "line": 16,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "agreements/{uid}/price-override/",
+     "line": 16,
+     "view": "AgreementPriceOverrideView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "attendance/urls.py": {
+   "registers": [
+    {
+     "prefix": "attendance/days",
+     "prefix_regex": null,
+     "viewset": "AttendanceDayViewSet",
+     "line": 24
+    },
+    {
+     "prefix": "attendance/raw",
+     "prefix_regex": null,
+     "viewset": "RawPunchViewSet",
+     "line": 25
+    },
+    {
+     "prefix": "attendance/corrections",
+     "prefix_regex": null,
+     "viewset": "CorrectionViewSet",
+     "line": 26
+    }
+   ],
+   "views": [
+    {
+     "view": "TimelineView",
+     "line": 30,
+     "kind": "path"
+    },
+    {
+     "view": "CalendarView",
+     "line": 31,
+     "kind": "path"
+    },
+    {
+     "view": "RosterView",
+     "line": 32,
+     "kind": "path"
+    },
+    {
+     "view": "DayView",
+     "line": 33,
+     "kind": "path"
+    },
+    {
+     "view": "DateRangesView",
+     "line": 34,
+     "kind": "path"
+    },
+    {
+     "view": "ProcessView",
+     "line": 35,
+     "kind": "path"
+    },
+    {
+     "view": "ProcessAllView",
+     "line": 36,
+     "kind": "path"
+    },
+    {
+     "view": "RecalculateView",
+     "line": 37,
+     "kind": "path"
+    },
+    {
+     "view": "DailyReportView",
+     "line": 38,
+     "kind": "path"
+    },
+    {
+     "view": "WeeklyReportView",
+     "line": 39,
+     "kind": "path"
+    },
+    {
+     "view": "MonthlyReportView",
+     "line": 40,
+     "kind": "path"
+    },
+    {
+     "view": "MonthlyDetailReportView",
+     "line": 41,
+     "kind": "path"
+    },
+    {
+     "view": "MonthlyIndividualReportView",
+     "line": 42,
+     "kind": "path"
+    },
+    {
+     "view": "IndividualReportView",
+     "line": 43,
+     "kind": "path"
+    },
+    {
+     "view": "OfficeReportView",
+     "line": 44,
+     "kind": "path"
+    },
+    {
+     "view": "DashboardSummaryView",
+     "line": 45,
+     "kind": "path"
+    },
+    {
+     "view": "DashboardRecentPunchesView",
+     "line": 46,
+     "kind": "path"
+    },
+    {
+     "view": "DashboardTrendView",
+     "line": 47,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "attendance/employees/{uid}/timeline/",
+     "line": 30,
+     "view": "TimelineView"
+    },
+    {
+     "route": "attendance/calendar/",
+     "line": 31,
+     "view": "CalendarView"
+    },
+    {
+     "route": "attendance/calendar/all/",
+     "line": 32,
+     "view": "RosterView"
+    },
+    {
+     "route": "attendance/day/",
+     "line": 33,
+     "view": "DayView"
+    },
+    {
+     "route": "attendance/date-ranges/",
+     "line": 34,
+     "view": "DateRangesView"
+    },
+    {
+     "route": "attendance/process/",
+     "line": 35,
+     "view": "ProcessView"
+    },
+    {
+     "route": "attendance/process-all/",
+     "line": 36,
+     "view": "ProcessAllView"
+    },
+    {
+     "route": "attendance/recalculate/",
+     "line": 37,
+     "view": "RecalculateView"
+    },
+    {
+     "route": "attendance/reports/daily/",
+     "line": 38,
+     "view": "DailyReportView"
+    },
+    {
+     "route": "attendance/reports/weekly/",
+     "line": 39,
+     "view": "WeeklyReportView"
+    },
+    {
+     "route": "attendance/reports/monthly/",
+     "line": 40,
+     "view": "MonthlyReportView"
+    },
+    {
+     "route": "attendance/reports/monthly-detail/",
+     "line": 41,
+     "view": "MonthlyDetailReportView"
+    },
+    {
+     "route": "attendance/reports/monthly-individual/",
+     "line": 42,
+     "view": "MonthlyIndividualReportView"
+    },
+    {
+     "route": "attendance/reports/individual/",
+     "line": 43,
+     "view": "IndividualReportView"
+    },
+    {
+     "route": "attendance/reports/office/",
+     "line": 44,
+     "view": "OfficeReportView"
+    },
+    {
+     "route": "attendance/dashboard/summary/",
+     "line": 45,
+     "view": "DashboardSummaryView"
+    },
+    {
+     "route": "attendance/dashboard/recent-punches/",
+     "line": 46,
+     "view": "DashboardRecentPunchesView"
+    },
+    {
+     "route": "attendance/dashboard/trend/",
+     "line": 47,
+     "view": "DashboardTrendView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "audit/urls.py": {
+   "registers": [],
+   "views": [
+    {
+     "view": "AuditLogViewSet",
+     "line": 11,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "audit/",
+     "line": 11,
+     "view": "AuditLogViewSet"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "blog/urls.py": {
+   "registers": [
+    {
+     "prefix": "content/collections",
+     "prefix_regex": null,
+     "viewset": "CollectionViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "content/templates",
+     "prefix_regex": null,
+     "viewset": "TemplateViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "content/authors",
+     "prefix_regex": null,
+     "viewset": "AuthorViewSet",
+     "line": 20
+    },
+    {
+     "prefix": "content/categories",
+     "prefix_regex": null,
+     "viewset": "CategoryViewSet",
+     "line": 21
+    },
+    {
+     "prefix": "content/tags",
+     "prefix_regex": null,
+     "viewset": "TagViewSet",
+     "line": 22
+    },
+    {
+     "prefix": "content/badges",
+     "prefix_regex": null,
+     "viewset": "BadgeViewSet",
+     "line": 23
+    },
+    {
+     "prefix": "content/entries",
+     "prefix_regex": null,
+     "viewset": "EntryViewSet",
+     "line": 24
+    }
+   ],
+   "views": [
+    {
+     "view": "TemplateImageGroupViewSet",
+     "line": 30,
+     "kind": "path"
+    },
+    {
+     "view": "TemplateImageGroupViewSet",
+     "line": 31,
+     "kind": "path"
+    },
+    {
+     "view": "TemplateAttributeSlotViewSet",
+     "line": 32,
+     "kind": "path"
+    },
+    {
+     "view": "TemplateAttributeSlotViewSet",
+     "line": 33,
+     "kind": "path"
+    },
+    {
+     "view": "EntryPreviewView",
+     "line": 38,
+     "kind": "path"
+    },
+    {
+     "view": "CollectionDeliveryView",
+     "line": 39,
+     "kind": "path"
+    },
+    {
+     "view": "EntryDeliveryView",
+     "line": 40,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "content/preview/{token}/",
+     "line": 38,
+     "view": "EntryPreviewView"
+    },
+    {
+     "route": "content/{collection}/",
+     "line": 39,
+     "view": "CollectionDeliveryView"
+    },
+    {
+     "route": "content/{collection}/{slug}/",
+     "line": 40,
+     "view": "EntryDeliveryView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "bom/urls.py": {
+   "registers": [
+    {
+     "prefix": "bom/templates",
+     "prefix_regex": null,
+     "viewset": "TemplateViewSet",
+     "line": 13
+    },
+    {
+     "prefix": "bom/slots",
+     "prefix_regex": null,
+     "viewset": "SlotViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "bom/fixed-items",
+     "prefix_regex": null,
+     "viewset": "FixedItemViewSet",
+     "line": 15
+    },
+    {
+     "prefix": "bom/structure-templates",
+     "prefix_regex": null,
+     "viewset": "StructureTemplateViewSet",
+     "line": 16
+    },
+    {
+     "prefix": "bom/structure-items",
+     "prefix_regex": null,
+     "viewset": "StructureItemViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "bom/tube-weights",
+     "prefix_regex": null,
+     "viewset": "TubeWeightViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "bom/package-profiles",
+     "prefix_regex": null,
+     "viewset": "PackageProfileViewSet",
+     "line": 19
+    }
+   ],
+   "views": [
+    {
+     "view": "BuildView",
+     "line": 22,
+     "kind": "path"
+    },
+    {
+     "view": "QuoteView",
+     "line": 26,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "bom/build/",
+     "line": 22,
+     "view": "BuildView"
+    },
+    {
+     "route": "bom/quote/",
+     "line": 26,
+     "view": "QuoteView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "calculators/urls.py": {
+   "registers": [
+    {
+     "prefix": null,
+     "prefix_regex": "calculators/[^/]+",
+     "viewset": "viewset",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "BasicCalculatorView",
+     "line": 19,
+     "kind": "path"
+    },
+    {
+     "view": "BasicV2CalculatorView",
+     "line": 20,
+     "kind": "path"
+    },
+    {
+     "view": "AdvancedCalculatorView",
+     "line": 21,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "calculators/basic/",
+     "line": 19,
+     "view": "BasicCalculatorView"
+    },
+    {
+     "route": "calculators/basic-v2/",
+     "line": 20,
+     "view": "BasicV2CalculatorView"
+    },
+    {
+     "route": "calculators/advanced/",
+     "line": 21,
+     "view": "AdvancedCalculatorView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "careers/urls.py": {
+   "registers": [
+    {
+     "prefix": "careers/departments",
+     "prefix_regex": null,
+     "viewset": "DepartmentViewSet",
+     "line": 16
+    },
+    {
+     "prefix": "careers/positions",
+     "prefix_regex": null,
+     "viewset": "JobPositionViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "careers/applications",
+     "prefix_regex": null,
+     "viewset": "JobApplicationViewSet",
+     "line": 18
+    }
+   ],
+   "views": [
+    {
+     "view": "CareersOverviewView",
+     "line": 21,
+     "kind": "path"
+    },
+    {
+     "view": "PublicJobPositionListView",
+     "line": 25,
+     "kind": "path"
+    },
+    {
+     "view": "PublicJobPositionDetailView",
+     "line": 26,
+     "kind": "path"
+    },
+    {
+     "view": "PublicJobApplicationView",
+     "line": 27,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "careers/overview/",
+     "line": 21,
+     "view": "CareersOverviewView"
+    },
+    {
+     "route": "job-positions/",
+     "line": 25,
+     "view": "PublicJobPositionListView"
+    },
+    {
+     "route": "job-positions/{slug}/",
+     "line": 26,
+     "view": "PublicJobPositionDetailView"
+    },
+    {
+     "route": "job-applications/",
+     "line": 27,
+     "view": "PublicJobApplicationView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "catalog/urls.py": {
+   "registers": [
+    {
+     "prefix": "catalog/brands",
+     "prefix_regex": null,
+     "viewset": "BrandViewSet",
+     "line": 16
+    },
+    {
+     "prefix": "catalog/categories",
+     "prefix_regex": null,
+     "viewset": "CategoryViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "catalog/components",
+     "prefix_regex": null,
+     "viewset": "ComponentViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "catalog/battery-families",
+     "prefix_regex": null,
+     "viewset": "BatteryFamilyViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "catalog/public-profiles",
+     "prefix_regex": null,
+     "viewset": "PublicProfileViewSet",
+     "line": 20
+    }
+   ],
+   "views": [
+    {
+     "view": "ComponentImportView",
+     "line": 24,
+     "kind": "path"
+    },
+    {
+     "view": "ComponentExportView",
+     "line": 25,
+     "kind": "path"
+    },
+    {
+     "view": "PanelListView",
+     "line": 29,
+     "kind": "path"
+    },
+    {
+     "view": "InverterListView",
+     "line": 30,
+     "kind": "path"
+    },
+    {
+     "view": "BatteryListView",
+     "line": 31,
+     "kind": "path"
+    },
+    {
+     "view": "ProductDetailView",
+     "line": 32,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "catalog/components/import/",
+     "line": 24,
+     "view": "ComponentImportView"
+    },
+    {
+     "route": "catalog/components/export/",
+     "line": 25,
+     "view": "ComponentExportView"
+    },
+    {
+     "route": "products/panels/",
+     "line": 29,
+     "view": "PanelListView"
+    },
+    {
+     "route": "products/inverters/",
+     "line": 30,
+     "view": "InverterListView"
+    },
+    {
+     "route": "products/batteries/",
+     "line": 31,
+     "view": "BatteryListView"
+    },
+    {
+     "route": "products/{category}/{slug}/",
+     "line": 32,
+     "view": "ProductDetailView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "company/urls.py": {
+   "registers": [
+    {
+     "prefix": "company/bank-accounts",
+     "prefix_regex": null,
+     "viewset": "BankAccountViewSet",
+     "line": 14
+    }
+   ],
+   "views": [
+    {
+     "view": "CompanyProfileView",
+     "line": 17,
+     "kind": "path"
+    },
+    {
+     "view": "IntegrationsView",
+     "line": 18,
+     "kind": "path"
+    },
+    {
+     "view": "PublicCompanyView",
+     "line": 22,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "company/profile/",
+     "line": 17,
+     "view": "CompanyProfileView"
+    },
+    {
+     "route": "settings/integrations/",
+     "line": 18,
+     "view": "IntegrationsView"
+    },
+    {
+     "route": "company/",
+     "line": 22,
+     "view": "PublicCompanyView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "core/urls.py": {
+   "registers": [],
+   "views": [
+    {
+     "view": "FeatureFlagView",
+     "line": 9,
+     "kind": "path"
+    },
+    {
+     "view": "DashboardView",
+     "line": 10,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "settings/flags/",
+     "line": 9,
+     "view": "FeatureFlagView"
+    },
+    {
+     "route": "dashboard/",
+     "line": 10,
+     "view": "DashboardView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "customers/urls.py": {
+   "registers": [
+    {
+     "prefix": "customers",
+     "prefix_regex": null,
+     "viewset": "CustomerViewSet",
+     "line": 13
+    }
+   ],
+   "views": [
+    {
+     "view": "CustomerNoteViewSet",
+     "line": 16,
+     "kind": "path"
+    },
+    {
+     "view": "CustomerNoteViewSet",
+     "line": 17,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "customers/{customer_uid}/notes/",
+     "line": 16,
+     "view": "CustomerNoteViewSet"
+    },
+    {
+     "route": "customers/{customer_uid}/notes/{note_uid}/",
+     "line": 17,
+     "view": "CustomerNoteViewSet"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "devices/urls.py": {
+   "registers": [
+    {
+     "prefix": "devices/device-users",
+     "prefix_regex": null,
+     "viewset": "DeviceUserViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "devices/agents",
+     "prefix_regex": null,
+     "viewset": "AgentViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "devices/protocol-mappings",
+     "prefix_regex": null,
+     "viewset": "ProtocolMappingViewSet",
+     "line": 20
+    },
+    {
+     "prefix": "devices/adms/requests",
+     "prefix_regex": null,
+     "viewset": "AdmsRequestViewSet",
+     "line": 21
+    },
+    {
+     "prefix": "devices/adms/unknown-devices",
+     "prefix_regex": null,
+     "viewset": "AdmsUnknownDeviceViewSet",
+     "line": 22
+    },
+    {
+     "prefix": "devices",
+     "prefix_regex": null,
+     "viewset": "DeviceViewSet",
+     "line": 23
+    }
+   ],
+   "views": [
+    {
+     "view": "AdmsStatusView",
+     "line": 25,
+     "kind": "path"
+    },
+    {
+     "view": "ConfigView",
+     "line": 28,
+     "kind": "path"
+    },
+    {
+     "view": "HeartbeatView",
+     "line": 29,
+     "kind": "path"
+    },
+    {
+     "view": "AnnounceView",
+     "line": 30,
+     "kind": "path"
+    },
+    {
+     "view": "IdentityMismatchView",
+     "line": 31,
+     "kind": "path"
+    },
+    {
+     "view": "DiscoveryView",
+     "line": 32,
+     "kind": "path"
+    },
+    {
+     "view": "SyncUsersView",
+     "line": 33,
+     "kind": "path"
+    },
+    {
+     "view": "SyncAttendanceView",
+     "line": 34,
+     "kind": "path"
+    },
+    {
+     "view": "SyncStatusView",
+     "line": 35,
+     "kind": "path"
+    },
+    {
+     "view": "receive",
+     "line": 41,
+     "kind": "re_path"
+    },
+    {
+     "view": "receive",
+     "line": 42,
+     "kind": "re_path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "devices/adms/status/",
+     "line": 25,
+     "view": "AdmsStatusView"
+    },
+    {
+     "route": "config/",
+     "line": 28,
+     "view": "ConfigView"
+    },
+    {
+     "route": "heartbeat/",
+     "line": 29,
+     "view": "HeartbeatView"
+    },
+    {
+     "route": "devices/announce/",
+     "line": 30,
+     "view": "AnnounceView"
+    },
+    {
+     "route": "devices/identity-mismatch/",
+     "line": 31,
+     "view": "IdentityMismatchView"
+    },
+    {
+     "route": "devices/discovery/",
+     "line": 32,
+     "view": "DiscoveryView"
+    },
+    {
+     "route": "sync/users/",
+     "line": 33,
+     "view": "SyncUsersView"
+    },
+    {
+     "route": "sync/attendance/",
+     "line": 34,
+     "view": "SyncAttendanceView"
+    },
+    {
+     "route": "sync-status/",
+     "line": 35,
+     "view": "SyncStatusView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "iclock_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "documents/urls.py": {
+   "registers": [],
+   "views": [
+    {
+     "view": "RenderJobDetailView",
+     "line": 12,
+     "kind": "path"
+    },
+    {
+     "view": "RenderJobDownloadUrlView",
+     "line": 13,
+     "kind": "path"
+    },
+    {
+     "view": "DocumentDownloadView",
+     "line": 14,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "documents/jobs/{uid}/",
+     "line": 12,
+     "view": "RenderJobDetailView"
+    },
+    {
+     "route": "documents/jobs/{uid}/download-url/",
+     "line": 13,
+     "view": "RenderJobDownloadUrlView"
+    },
+    {
+     "route": "documents/download/{token}/",
+     "line": 14,
+     "view": "DocumentDownloadView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "emi/urls.py": {
+   "registers": [
+    {
+     "prefix": null,
+     "prefix_regex": "emi/[^/]+",
+     "viewset": "viewset",
+     "line": 14
+    }
+   ],
+   "views": [
+    {
+     "view": "EmiSettingsView",
+     "line": 16,
+     "kind": "path"
+    },
+    {
+     "view": "EmiConfigView",
+     "line": 18,
+     "kind": "path"
+    },
+    {
+     "view": "EmiQuotationView",
+     "line": 19,
+     "kind": "path"
+    },
+    {
+     "view": "EmiCalculateView",
+     "line": 20,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "emi/settings/",
+     "line": 16,
+     "view": "EmiSettingsView"
+    },
+    {
+     "route": "calculators/emi/config/",
+     "line": 18,
+     "view": "EmiConfigView"
+    },
+    {
+     "route": "calculators/emi/quotation/",
+     "line": 19,
+     "view": "EmiQuotationView"
+    },
+    {
+     "route": "calculators/emi/",
+     "line": 20,
+     "view": "EmiCalculateView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "engineering/urls.py": {
+   "registers": [
+    {
+     "prefix": "engineering/rule-sets",
+     "prefix_regex": null,
+     "viewset": "RuleSetViewSet",
+     "line": 11
+    },
+    {
+     "prefix": "engineering/runs",
+     "prefix_regex": null,
+     "viewset": "RunViewSet",
+     "line": 12
+    },
+    {
+     "prefix": "engineering/findings",
+     "prefix_regex": null,
+     "viewset": "FindingViewSet",
+     "line": 13
+    }
+   ],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "faqs/urls.py": {
+   "registers": [
+    {
+     "prefix": "faqs",
+     "prefix_regex": null,
+     "viewset": "FaqViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "faq-categories",
+     "prefix_regex": null,
+     "viewset": "FaqCategoryViewSet",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "PublicFaqListView",
+     "line": 19,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "faqs/",
+     "line": 19,
+     "view": "PublicFaqListView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "flarize/urls.py": {
+   "registers": [],
+   "views": [
+    {
+     "view": "SchemaView",
+     "line": 26,
+     "kind": "re_path"
+    },
+    {
+     "view": "SwaggerView",
+     "line": 29,
+     "kind": "path"
+    },
+    {
+     "view": "healthz",
+     "line": 30,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "api/docs/",
+     "line": 29,
+     "view": "SwaggerView"
+    },
+    {
+     "route": "healthz",
+     "line": 30,
+     "view": "healthz"
+    }
+   ],
+   "lists": [
+    "urlpatterns"
+   ]
+  },
+  "hr/urls.py": {
+   "registers": [
+    {
+     "prefix": "hr/offices",
+     "prefix_regex": null,
+     "viewset": "OfficeViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "hr/shifts",
+     "prefix_regex": null,
+     "viewset": "ShiftViewSet",
+     "line": 15
+    },
+    {
+     "prefix": "hr/employees",
+     "prefix_regex": null,
+     "viewset": "EmployeeViewSet",
+     "line": 16
+    },
+    {
+     "prefix": "hr/holidays",
+     "prefix_regex": null,
+     "viewset": "HolidayViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "hr/leave-types",
+     "prefix_regex": null,
+     "viewset": "LeaveTypeViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "hr/leave",
+     "prefix_regex": null,
+     "viewset": "LeaveViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "hr/attendance-rules",
+     "prefix_regex": null,
+     "viewset": "AttendanceRuleViewSet",
+     "line": 20
+    }
+   ],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "inventory/urls.py": {
+   "registers": [
+    {
+     "prefix": "inventory/locations",
+     "prefix_regex": null,
+     "viewset": "LocationViewSet",
+     "line": 13
+    },
+    {
+     "prefix": "inventory/movements",
+     "prefix_regex": null,
+     "viewset": "MovementViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "inventory/balances",
+     "prefix_regex": null,
+     "viewset": "BalanceViewSet",
+     "line": 15
+    }
+   ],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "leads/urls.py": {
+   "registers": [
+    {
+     "prefix": "leads/affiliate-applications",
+     "prefix_regex": null,
+     "viewset": "AffiliateApplicationViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "leads/warranty-requests",
+     "prefix_regex": null,
+     "viewset": "WarrantyRequestViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "leads/installations",
+     "prefix_regex": null,
+     "viewset": "InstallationViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "leads",
+     "prefix_regex": null,
+     "viewset": "LeadViewSet",
+     "line": 20
+    }
+   ],
+   "views": [
+    {
+     "view": "OtpSendView",
+     "line": 24,
+     "kind": "path"
+    },
+    {
+     "view": "OtpVerifyView",
+     "line": 25,
+     "kind": "path"
+    },
+    {
+     "view": "LeadSubmitView",
+     "line": 26,
+     "kind": "path"
+    },
+    {
+     "view": "AffiliateSubmitView",
+     "line": 27,
+     "kind": "path"
+    },
+    {
+     "view": "WarrantySubmitView",
+     "line": 28,
+     "kind": "path"
+    },
+    {
+     "view": "InstallationStatsView",
+     "line": 29,
+     "kind": "path"
+    },
+    {
+     "view": "PublicInstallationViewSet",
+     "line": 30,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "otp/send/",
+     "line": 24,
+     "view": "OtpSendView"
+    },
+    {
+     "route": "otp/verify/",
+     "line": 25,
+     "view": "OtpVerifyView"
+    },
+    {
+     "route": "leads/",
+     "line": 26,
+     "view": "LeadSubmitView"
+    },
+    {
+     "route": "affiliate-applications/",
+     "line": 27,
+     "view": "AffiliateSubmitView"
+    },
+    {
+     "route": "warranty-requests/",
+     "line": 28,
+     "view": "WarrantySubmitView"
+    },
+    {
+     "route": "installations/stats/",
+     "line": 29,
+     "view": "InstallationStatsView"
+    },
+    {
+     "route": "installations/",
+     "line": 30,
+     "view": "PublicInstallationViewSet"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "legacy/urls.py": {
+   "registers": [],
+   "views": [
+    {
+     "view": "FaqsView",
+     "line": 73,
+     "kind": "path"
+    },
+    {
+     "view": "JobPositionsView",
+     "line": 74,
+     "kind": "path"
+    },
+    {
+     "view": "JobPositionView",
+     "line": 75,
+     "kind": "path"
+    },
+    {
+     "view": "PageContentView",
+     "line": 76,
+     "kind": "path"
+    },
+    {
+     "view": "CollectionView",
+     "line": 77,
+     "kind": "path"
+    },
+    {
+     "view": "CollectionView",
+     "line": 78,
+     "kind": "path"
+    },
+    {
+     "view": "AppendSlashView",
+     "line": 65,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "studio-api/api/faqs",
+     "line": 73,
+     "view": "FaqsView"
+    },
+    {
+     "route": "studio-api/api/job-positions",
+     "line": 74,
+     "view": "JobPositionsView"
+    },
+    {
+     "route": "studio-api/api/job-positions/{slug}",
+     "line": 75,
+     "view": "JobPositionView"
+    },
+    {
+     "route": "studio-api/api/page-content",
+     "line": 76,
+     "view": "PageContentView"
+    },
+    {
+     "route": "studio-api/api/{api_uid}",
+     "line": 77,
+     "view": "CollectionView"
+    },
+    {
+     "route": "studio-api/api/{api_uid}/",
+     "line": 78,
+     "view": "CollectionView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "legacy_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "media/urls.py": {
+   "registers": [
+    {
+     "prefix": "media",
+     "prefix_regex": null,
+     "viewset": "MediaAssetViewSet",
+     "line": 13
+    }
+   ],
+   "views": [
+    {
+     "view": "MediaDownloadView",
+     "line": 16,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "media/download/{token}/",
+     "line": 16,
+     "view": "MediaDownloadView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "migrations_tools/urls.py": {
+   "registers": [],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "packs/urls.py": {
+   "registers": [
+    {
+     "prefix": "packs/config-versions",
+     "prefix_regex": null,
+     "viewset": "ConfigVersionViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "packs/releases",
+     "prefix_regex": null,
+     "viewset": "ReleaseViewSet",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "CompareView",
+     "line": 18,
+     "kind": "path"
+    },
+    {
+     "view": "PublicPackListView",
+     "line": 22,
+     "kind": "path"
+    },
+    {
+     "view": "PublicPackDetailView",
+     "line": 23,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "packs/compare/",
+     "line": 18,
+     "view": "CompareView"
+    },
+    {
+     "route": "packs/",
+     "line": 22,
+     "view": "PublicPackListView"
+    },
+    {
+     "route": "packs/{system_type}/{tier}/{size_kw}/",
+     "line": 23,
+     "view": "PublicPackDetailView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "pricing/urls.py": {
+   "registers": [
+    {
+     "prefix": "pricing/prices",
+     "prefix_regex": null,
+     "viewset": "PriceViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "pricing/current",
+     "prefix_regex": null,
+     "viewset": "CurrentPriceViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "pricing/cost-config/history",
+     "prefix_regex": null,
+     "viewset": "CostConfigHistoryViewSet",
+     "line": 19
+    },
+    {
+     "prefix": "pricing/installation-matrix",
+     "prefix_regex": null,
+     "viewset": "InstallationMatrixViewSet",
+     "line": 20
+    },
+    {
+     "prefix": "pricing/statutory-fees",
+     "prefix_regex": null,
+     "viewset": "StatutoryFeeViewSet",
+     "line": 21
+    },
+    {
+     "prefix": "pricing/market-rate-sets",
+     "prefix_regex": null,
+     "viewset": "MarketRateSetViewSet",
+     "line": 22
+    },
+    {
+     "prefix": "pricing/offers",
+     "prefix_regex": null,
+     "viewset": "OfferViewSet",
+     "line": 23
+    },
+    {
+     "prefix": "pricing/releases",
+     "prefix_regex": null,
+     "viewset": "ReleaseViewSet",
+     "line": 24
+    }
+   ],
+   "views": [
+    {
+     "view": "CostConfigView",
+     "line": 27,
+     "kind": "path"
+    },
+    {
+     "view": "ValidityPolicyView",
+     "line": 28,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "pricing/cost-config/",
+     "line": 27,
+     "view": "CostConfigView"
+    },
+    {
+     "route": "pricing/validity-policy/",
+     "line": 28,
+     "view": "ValidityPolicyView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "procurement/urls.py": {
+   "registers": [
+    {
+     "prefix": "procurement/suppliers",
+     "prefix_regex": null,
+     "viewset": "SupplierViewSet",
+     "line": 13
+    },
+    {
+     "prefix": "procurement/batches",
+     "prefix_regex": null,
+     "viewset": "BatchViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "procurement/price-master",
+     "prefix_regex": null,
+     "viewset": "PriceMasterViewSet",
+     "line": 15
+    }
+   ],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "projects/urls.py": {
+   "registers": [
+    {
+     "prefix": "projects",
+     "prefix_regex": null,
+     "viewset": "ProjectViewSet",
+     "line": 12
+    }
+   ],
+   "views": [],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "quotations/urls.py": {
+   "registers": [
+    {
+     "prefix": "quotation-content/versions",
+     "prefix_regex": null,
+     "viewset": "ContentVersionViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "quotation-content/inclusions",
+     "prefix_regex": null,
+     "viewset": "InclusionViewSet",
+     "line": 15
+    },
+    {
+     "prefix": "quotation-content/tier-names",
+     "prefix_regex": null,
+     "viewset": "TierNameViewSet",
+     "line": 16
+    },
+    {
+     "prefix": "quotation-content/testimonials",
+     "prefix_regex": null,
+     "viewset": "TestimonialViewSet",
+     "line": 17
+    },
+    {
+     "prefix": "quotation-content/campaigns",
+     "prefix_regex": null,
+     "viewset": "CampaignViewSet",
+     "line": 18
+    },
+    {
+     "prefix": "quotations",
+     "prefix_regex": null,
+     "viewset": "QuotationViewSet",
+     "line": 19
+    }
+   ],
+   "views": [
+    {
+     "view": "PublicTestimonialListView",
+     "line": 22,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "testimonials/",
+     "line": 22,
+     "view": "PublicTestimonialListView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "reference/urls.py": {
+   "registers": [
+    {
+     "prefix": "reference/pincodes",
+     "prefix_regex": null,
+     "viewset": "PincodeViewSet",
+     "line": 13
+    },
+    {
+     "prefix": null,
+     "prefix_regex": "reference/[^/]+",
+     "viewset": "viewset",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "PublicPincodeView",
+     "line": 19,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "reference/pincodes/{pincode}/",
+     "line": 19,
+     "view": "PublicPincodeView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "seo/urls.py": {
+   "registers": [
+    {
+     "prefix": "seo/metadata",
+     "prefix_regex": null,
+     "viewset": "PageMetadataViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "seo/redirects",
+     "prefix_regex": null,
+     "viewset": "RedirectViewSet",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "SeoOverviewView",
+     "line": 18,
+     "kind": "path"
+    },
+    {
+     "view": "PublicPageMetadataView",
+     "line": 22,
+     "kind": "path"
+    },
+    {
+     "view": "PublicRedirectViewSet",
+     "line": 23,
+     "kind": "path"
+    },
+    {
+     "view": "SitemapEntriesViewSet",
+     "line": 24,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "seo/overview/",
+     "line": 18,
+     "view": "SeoOverviewView"
+    },
+    {
+     "route": "seo/metadata/{page}/",
+     "line": 22,
+     "view": "PublicPageMetadataView"
+    },
+    {
+     "route": "seo/redirects/",
+     "line": 23,
+     "view": "PublicRedirectViewSet"
+    },
+    {
+     "route": "sitemap/entries/",
+     "line": 24,
+     "view": "SitemapEntriesViewSet"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "site_inspections/urls.py": {
+   "registers": [
+    {
+     "prefix": "engineer/site-inspections",
+     "prefix_regex": null,
+     "viewset": "EngineerQueueViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "site-inspections",
+     "prefix_regex": null,
+     "viewset": "InspectionViewSet",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "ApprovalSummaryView",
+     "line": 26,
+     "kind": "path"
+    },
+    {
+     "view": "ApprovalSendOtpView",
+     "line": 27,
+     "kind": "path"
+    },
+    {
+     "view": "ApprovalRespondView",
+     "line": 28,
+     "kind": "path"
+    }
+   ],
+   "routes": [],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  },
+  "sitepages/urls.py": {
+   "registers": [
+    {
+     "prefix": "pages",
+     "prefix_regex": null,
+     "viewset": "PageViewSet",
+     "line": 14
+    },
+    {
+     "prefix": "career-page",
+     "prefix_regex": null,
+     "viewset": "CareerPageViewSet",
+     "line": 15
+    }
+   ],
+   "views": [
+    {
+     "view": "PublicPageByRouteView",
+     "line": 19,
+     "kind": "path"
+    },
+    {
+     "view": "PublicPageView",
+     "line": 20,
+     "kind": "path"
+    }
+   ],
+   "routes": [
+    {
+     "route": "pages/",
+     "line": 19,
+     "view": "PublicPageByRouteView"
+    },
+    {
+     "route": "pages/{slug}/",
+     "line": 20,
+     "view": "PublicPageView"
+    }
+   ],
+   "lists": [
+    "agent_urlpatterns",
+    "customer_urlpatterns",
+    "public_urlpatterns",
+    "staff_urlpatterns"
+   ]
+  }
+ },
+ "actions": [
+  {
+   "file": "accounts/views/roles.py",
+   "line": 58,
+   "class": "RoleViewSet",
+   "action": "registry",
+   "methods": [
+    "get"
+   ],
+   "url_path": "registry",
+   "detail": false
+  },
+  {
+   "file": "accounts/views/users.py",
+   "line": 69,
+   "class": "UserViewSet",
+   "action": "deactivate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "deactivate",
+   "detail": true
+  },
+  {
+   "file": "accounts/views/users.py",
+   "line": 74,
+   "class": "UserViewSet",
+   "action": "reactivate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reactivate",
+   "detail": true
+  },
+  {
+   "file": "accounts/views/users.py",
+   "line": 85,
+   "class": "UserViewSet",
+   "action": "force_reset",
+   "methods": [
+    "post"
+   ],
+   "url_path": "force-reset",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 116,
+   "class": "AgreementViewSet",
+   "action": "from_quotation",
+   "methods": [
+    "post"
+   ],
+   "url_path": "from-quotation",
+   "detail": false
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 144,
+   "class": "AgreementViewSet",
+   "action": "issue",
+   "methods": [
+    "post"
+   ],
+   "url_path": "issue",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 157,
+   "class": "AgreementViewSet",
+   "action": "supersede",
+   "methods": [
+    "post"
+   ],
+   "url_path": "supersede",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 172,
+   "class": "AgreementViewSet",
+   "action": "cancel",
+   "methods": [
+    "post"
+   ],
+   "url_path": "cancel",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 186,
+   "class": "AgreementViewSet",
+   "action": "record_acceptance",
+   "methods": [
+    "post"
+   ],
+   "url_path": "record-acceptance",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 201,
+   "class": "AgreementViewSet",
+   "action": "document",
+   "methods": [
+    "get"
+   ],
+   "url_path": "document",
+   "detail": true
+  },
+  {
+   "file": "agreements/views/agreements.py",
+   "line": 219,
+   "class": "AgreementViewSet",
+   "action": "render",
+   "methods": [
+    "post"
+   ],
+   "url_path": "render",
+   "detail": true
+  },
+  {
+   "file": "attendance/views/process.py",
+   "line": 134,
+   "class": "CorrectionViewSet",
+   "action": "revoke",
+   "methods": [
+    "post"
+   ],
+   "url_path": "revoke",
+   "detail": true
+  },
+  {
+   "file": "blog/views/entries.py",
+   "line": 87,
+   "class": "EntryViewSet",
+   "action": "check_slug",
+   "methods": [
+    "get"
+   ],
+   "url_path": "check-slug",
+   "detail": false
+  },
+  {
+   "file": "blog/views/entry_actions.py",
+   "line": 72,
+   "class": "EntryActionsMixin",
+   "action": "schedule",
+   "methods": [
+    "post"
+   ],
+   "url_path": "schedule",
+   "detail": true
+  },
+  {
+   "file": "blog/views/entry_actions.py",
+   "line": 82,
+   "class": "EntryActionsMixin",
+   "action": "duplicate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "duplicate",
+   "detail": true
+  },
+  {
+   "file": "blog/views/entry_actions.py",
+   "line": 90,
+   "class": "EntryActionsMixin",
+   "action": "preview",
+   "methods": [
+    "post"
+   ],
+   "url_path": "preview",
+   "detail": true
+  },
+  {
+   "file": "blog/views/entry_actions.py",
+   "line": 98,
+   "class": "EntryActionsMixin",
+   "action": "slug_history",
+   "methods": [
+    "get"
+   ],
+   "url_path": "slug-history",
+   "detail": true
+  },
+  {
+   "file": "blog/views/entry_actions.py",
+   "line": 125,
+   "class": "EntryActionsMixin",
+   "action": "deactivate_alias",
+   "methods": [
+    "post"
+   ],
+   "url_path": "slug-history/(?P<alias_uid>[0-9a-fA-F-]{36})/deactivate",
+   "detail": true
+  },
+  {
+   "file": "blog/views/schema.py",
+   "line": 101,
+   "class": "TemplateViewSet",
+   "action": "duplicate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "duplicate",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 93,
+   "class": "JobApplicationViewSet",
+   "action": "status",
+   "methods": [
+    "post"
+   ],
+   "url_path": "status",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 109,
+   "class": "JobApplicationViewSet",
+   "action": "assign",
+   "methods": [
+    "post"
+   ],
+   "url_path": "assign",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 121,
+   "class": "JobApplicationViewSet",
+   "action": "notes",
+   "methods": [
+    "get"
+   ],
+   "url_path": "notes",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 143,
+   "class": "JobApplicationViewSet",
+   "action": "events",
+   "methods": [
+    "get"
+   ],
+   "url_path": "events",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 150,
+   "class": "JobApplicationViewSet",
+   "action": "restore",
+   "methods": [
+    "post"
+   ],
+   "url_path": "restore",
+   "detail": true
+  },
+  {
+   "file": "careers/views/applications.py",
+   "line": 164,
+   "class": "JobApplicationViewSet",
+   "action": "download",
+   "methods": [
+    "get"
+   ],
+   "url_path": "download/(?P<kind>resume|portfolio)",
+   "detail": true
+  },
+  {
+   "file": "careers/views/positions.py",
+   "line": 98,
+   "class": "JobPositionViewSet",
+   "action": "publish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "publish",
+   "detail": true
+  },
+  {
+   "file": "careers/views/positions.py",
+   "line": 103,
+   "class": "JobPositionViewSet",
+   "action": "unpublish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "unpublish",
+   "detail": true
+  },
+  {
+   "file": "careers/views/positions.py",
+   "line": 108,
+   "class": "JobPositionViewSet",
+   "action": "close",
+   "methods": [
+    "post"
+   ],
+   "url_path": "close",
+   "detail": true
+  },
+  {
+   "file": "careers/views/positions.py",
+   "line": 113,
+   "class": "JobPositionViewSet",
+   "action": "archive",
+   "methods": [
+    "post"
+   ],
+   "url_path": "archive",
+   "detail": true
+  },
+  {
+   "file": "careers/views/positions.py",
+   "line": 118,
+   "class": "JobPositionViewSet",
+   "action": "preview",
+   "methods": [
+    "get"
+   ],
+   "url_path": "preview",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/components.py",
+   "line": 90,
+   "class": "ComponentViewSet",
+   "action": "activate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "activate",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/components.py",
+   "line": 104,
+   "class": "ComponentViewSet",
+   "action": "deprecate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "deprecate",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/components.py",
+   "line": 119,
+   "class": "ComponentViewSet",
+   "action": "retire",
+   "methods": [
+    "post"
+   ],
+   "url_path": "retire",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/components.py",
+   "line": 128,
+   "class": "ComponentViewSet",
+   "action": "history",
+   "methods": [
+    "get"
+   ],
+   "url_path": "history",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/components.py",
+   "line": 136,
+   "class": "ComponentViewSet",
+   "action": "usage",
+   "methods": [
+    "get"
+   ],
+   "url_path": "usage",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/profiles.py",
+   "line": 71,
+   "class": "PublicProfileViewSet",
+   "action": "publish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "publish",
+   "detail": true
+  },
+  {
+   "file": "catalog/views/profiles.py",
+   "line": 76,
+   "class": "PublicProfileViewSet",
+   "action": "unpublish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "unpublish",
+   "detail": true
+  },
+  {
+   "file": "company/views/bank_accounts.py",
+   "line": 51,
+   "class": "BankAccountViewSet",
+   "action": "make_primary",
+   "methods": [
+    "post"
+   ],
+   "url_path": "make-primary",
+   "detail": true
+  },
+  {
+   "file": "customers/views/customers.py",
+   "line": 83,
+   "class": "CustomerViewSet",
+   "action": "merge",
+   "methods": [
+    "post"
+   ],
+   "url_path": "merge",
+   "detail": true
+  },
+  {
+   "file": "customers/views/customers.py",
+   "line": 105,
+   "class": "CustomerViewSet",
+   "action": "timeline",
+   "methods": [
+    "get"
+   ],
+   "url_path": "timeline",
+   "detail": true
+  },
+  {
+   "file": "devices/views/agents.py",
+   "line": 95,
+   "class": "AgentViewSet",
+   "action": "rotate_token",
+   "methods": [
+    "post"
+   ],
+   "url_path": "rotate-token",
+   "detail": true
+  },
+  {
+   "file": "devices/views/agents.py",
+   "line": 109,
+   "class": "AgentViewSet",
+   "action": "revoke",
+   "methods": [
+    "post"
+   ],
+   "url_path": "revoke",
+   "detail": true
+  },
+  {
+   "file": "devices/views/agents.py",
+   "line": 123,
+   "class": "AgentViewSet",
+   "action": "config_download",
+   "methods": [
+    "get"
+   ],
+   "url_path": "config-download",
+   "detail": true
+  },
+  {
+   "file": "devices/views/agents.py",
+   "line": 142,
+   "class": "AgentViewSet",
+   "action": "logs",
+   "methods": [
+    "get"
+   ],
+   "url_path": "logs",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 40,
+   "class": "DeviceActionsMixin",
+   "action": "refresh_employees",
+   "methods": [
+    "post"
+   ],
+   "url_path": "refresh-employees",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 53,
+   "class": "DeviceActionsMixin",
+   "action": "employee_reconciliation",
+   "methods": [
+    "get"
+   ],
+   "url_path": "employee-reconciliation",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 63,
+   "class": "DeviceActionsMixin",
+   "action": "user_reconciliation",
+   "methods": [
+    "get"
+   ],
+   "url_path": "user-reconciliation",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 74,
+   "class": "DeviceActionsMixin",
+   "action": "rehome",
+   "methods": [
+    "post"
+   ],
+   "url_path": "rehome",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 97,
+   "class": "DeviceActionsMixin",
+   "action": "adms_enable",
+   "methods": [
+    "post"
+   ],
+   "url_path": "adms/enable",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_actions.py",
+   "line": 113,
+   "class": "DeviceActionsMixin",
+   "action": "adms_disable",
+   "methods": [
+    "post"
+   ],
+   "url_path": "adms/disable",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_users.py",
+   "line": 81,
+   "class": "DeviceUserViewSet",
+   "action": "link",
+   "methods": [
+    "post"
+   ],
+   "url_path": "link",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_users.py",
+   "line": 96,
+   "class": "DeviceUserViewSet",
+   "action": "auto_link",
+   "methods": [
+    "post"
+   ],
+   "url_path": "auto-link",
+   "detail": false
+  },
+  {
+   "file": "devices/views/device_users.py",
+   "line": 109,
+   "class": "DeviceUserViewSet",
+   "action": "resolve",
+   "methods": [
+    "post"
+   ],
+   "url_path": "resolve",
+   "detail": true
+  },
+  {
+   "file": "devices/views/device_users.py",
+   "line": 135,
+   "class": "DeviceUserViewSet",
+   "action": "map_pin",
+   "methods": [
+    "post"
+   ],
+   "url_path": "map-pin",
+   "detail": false
+  },
+  {
+   "file": "devices/views/device_users.py",
+   "line": 151,
+   "class": "DeviceUserViewSet",
+   "action": "unmapped",
+   "methods": [
+    "get"
+   ],
+   "url_path": "unmapped",
+   "detail": false
+  },
+  {
+   "file": "devices/views/devices.py",
+   "line": 80,
+   "class": "DeviceViewSet",
+   "action": "mapping",
+   "methods": [
+    "get"
+   ],
+   "url_path": "mapping",
+   "detail": false
+  },
+  {
+   "file": "devices/views/devices.py",
+   "line": 87,
+   "class": "DeviceViewSet",
+   "action": "logs",
+   "methods": [
+    "get"
+   ],
+   "url_path": "logs",
+   "detail": true
+  },
+  {
+   "file": "devices/views/protocol.py",
+   "line": 75,
+   "class": "ProtocolMappingViewSet",
+   "action": "observed",
+   "methods": [
+    "get"
+   ],
+   "url_path": "observed",
+   "detail": false
+  },
+  {
+   "file": "engineering/views/engineering.py",
+   "line": 80,
+   "class": "RuleSetViewSet",
+   "action": "activate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "activate",
+   "detail": true
+  },
+  {
+   "file": "engineering/views/engineering.py",
+   "line": 123,
+   "class": "FindingViewSet",
+   "action": "acknowledge",
+   "methods": [
+    "post"
+   ],
+   "url_path": "acknowledge",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 81,
+   "class": "FaqViewSet",
+   "action": "publish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "publish",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 86,
+   "class": "FaqViewSet",
+   "action": "unpublish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "unpublish",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 91,
+   "class": "FaqViewSet",
+   "action": "archive",
+   "methods": [
+    "post"
+   ],
+   "url_path": "archive",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 96,
+   "class": "FaqViewSet",
+   "action": "restore",
+   "methods": [
+    "post"
+   ],
+   "url_path": "restore",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 101,
+   "class": "FaqViewSet",
+   "action": "verify",
+   "methods": [
+    "post"
+   ],
+   "url_path": "verify",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 106,
+   "class": "FaqViewSet",
+   "action": "preview",
+   "methods": [
+    "get"
+   ],
+   "url_path": "preview",
+   "detail": true
+  },
+  {
+   "file": "faqs/views/faqs.py",
+   "line": 111,
+   "class": "FaqViewSet",
+   "action": "reorder",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reorder",
+   "detail": false
+  },
+  {
+   "file": "hr/views/calendar.py",
+   "line": 134,
+   "class": "LeaveViewSet",
+   "action": "approve",
+   "methods": [
+    "post"
+   ],
+   "url_path": "approve",
+   "detail": true
+  },
+  {
+   "file": "hr/views/calendar.py",
+   "line": 139,
+   "class": "LeaveViewSet",
+   "action": "reject",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reject",
+   "detail": true
+  },
+  {
+   "file": "hr/views/calendar.py",
+   "line": 148,
+   "class": "LeaveViewSet",
+   "action": "cancel",
+   "methods": [
+    "post"
+   ],
+   "url_path": "cancel",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employee_extras.py",
+   "line": 40,
+   "class": "EmployeeExtrasMixin",
+   "action": "photo",
+   "methods": [
+    "post"
+   ],
+   "url_path": "photo",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employee_extras.py",
+   "line": 66,
+   "class": "EmployeeExtrasMixin",
+   "action": "device_mappings",
+   "methods": [
+    "get"
+   ],
+   "url_path": "device-mappings",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employee_extras.py",
+   "line": 76,
+   "class": "EmployeeExtrasMixin",
+   "action": "dependencies",
+   "methods": [
+    "get"
+   ],
+   "url_path": "dependencies",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employee_extras.py",
+   "line": 90,
+   "class": "EmployeeExtrasMixin",
+   "action": "reconcile_devices",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reconcile-devices",
+   "detail": false
+  },
+  {
+   "file": "hr/views/employees.py",
+   "line": 105,
+   "class": "EmployeeViewSet",
+   "action": "deactivate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "deactivate",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employees.py",
+   "line": 116,
+   "class": "EmployeeViewSet",
+   "action": "activate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "activate",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employees.py",
+   "line": 135,
+   "class": "EmployeeViewSet",
+   "action": "link_user",
+   "methods": [
+    "post"
+   ],
+   "url_path": "link-user",
+   "detail": true
+  },
+  {
+   "file": "hr/views/employees.py",
+   "line": 151,
+   "class": "EmployeeViewSet",
+   "action": "unlink_user",
+   "methods": [
+    "post"
+   ],
+   "url_path": "unlink-user",
+   "detail": true
+  },
+  {
+   "file": "hr/views/setup.py",
+   "line": 78,
+   "class": "OfficeViewSet",
+   "action": "summary",
+   "methods": [
+    "get"
+   ],
+   "url_path": "summary",
+   "detail": true
+  },
+  {
+   "file": "leads/views/forms.py",
+   "line": 93,
+   "class": "AffiliateApplicationViewSet",
+   "action": "transition",
+   "methods": [
+    "post"
+   ],
+   "url_path": "transition",
+   "detail": true
+  },
+  {
+   "file": "leads/views/forms.py",
+   "line": 98,
+   "class": "AffiliateApplicationViewSet",
+   "action": "assign",
+   "methods": [
+    "post"
+   ],
+   "url_path": "assign",
+   "detail": true
+  },
+  {
+   "file": "leads/views/forms.py",
+   "line": 137,
+   "class": "WarrantyRequestViewSet",
+   "action": "transition",
+   "methods": [
+    "post"
+   ],
+   "url_path": "transition",
+   "detail": true
+  },
+  {
+   "file": "leads/views/forms.py",
+   "line": 142,
+   "class": "WarrantyRequestViewSet",
+   "action": "assign",
+   "methods": [
+    "post"
+   ],
+   "url_path": "assign",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 98,
+   "class": "LeadViewSet",
+   "action": "assign",
+   "methods": [
+    "post"
+   ],
+   "url_path": "assign",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 103,
+   "class": "LeadViewSet",
+   "action": "status",
+   "methods": [
+    "post"
+   ],
+   "url_path": "status",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 108,
+   "class": "LeadViewSet",
+   "action": "mark_lost",
+   "methods": [
+    "post"
+   ],
+   "url_path": "mark-lost",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 113,
+   "class": "LeadViewSet",
+   "action": "mark_spam",
+   "methods": [
+    "post"
+   ],
+   "url_path": "mark-spam",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 127,
+   "class": "LeadViewSet",
+   "action": "convert",
+   "methods": [
+    "post"
+   ],
+   "url_path": "convert",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 142,
+   "class": "LeadViewSet",
+   "action": "notes",
+   "methods": [
+    "get"
+   ],
+   "url_path": "notes",
+   "detail": true
+  },
+  {
+   "file": "leads/views/leads.py",
+   "line": 157,
+   "class": "LeadViewSet",
+   "action": "events",
+   "methods": [
+    "get"
+   ],
+   "url_path": "events",
+   "detail": true
+  },
+  {
+   "file": "media/views/assets.py",
+   "line": 74,
+   "class": "MediaAssetViewSet",
+   "action": "upload",
+   "methods": [
+    "post"
+   ],
+   "url_path": "upload",
+   "detail": false
+  },
+  {
+   "file": "media/views/assets.py",
+   "line": 87,
+   "class": "MediaAssetViewSet",
+   "action": "signed_url",
+   "methods": [
+    "get"
+   ],
+   "url_path": "signed-url",
+   "detail": true
+  },
+  {
+   "file": "packs/views/releases.py",
+   "line": 75,
+   "class": "ReleaseViewSet",
+   "action": "current",
+   "methods": [
+    "get"
+   ],
+   "url_path": "current",
+   "detail": false
+  },
+  {
+   "file": "packs/views/releases.py",
+   "line": 89,
+   "class": "ReleaseViewSet",
+   "action": "packs",
+   "methods": [
+    "get"
+   ],
+   "url_path": "packs",
+   "detail": true
+  },
+  {
+   "file": "packs/views/releases.py",
+   "line": 103,
+   "class": "ReleaseViewSet",
+   "action": "preview",
+   "methods": [
+    "post"
+   ],
+   "url_path": "preview",
+   "detail": false
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 132,
+   "class": "ConfigVersionViewSet",
+   "action": "packs",
+   "methods": [
+    "get"
+   ],
+   "url_path": "packs",
+   "detail": true
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 143,
+   "class": "ConfigVersionViewSet",
+   "action": "pack",
+   "methods": [
+    "get"
+   ],
+   "url_path": "pack",
+   "detail": true
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 176,
+   "class": "ConfigVersionViewSet",
+   "action": "run_checker",
+   "methods": [
+    "post"
+   ],
+   "url_path": "run-checker",
+   "detail": true
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 182,
+   "class": "ConfigVersionViewSet",
+   "action": "submit",
+   "methods": [
+    "post"
+   ],
+   "url_path": "submit",
+   "detail": true
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 189,
+   "class": "ConfigVersionViewSet",
+   "action": "approve",
+   "methods": [
+    "post"
+   ],
+   "url_path": "approve",
+   "detail": true
+  },
+  {
+   "file": "packs/views/versions.py",
+   "line": 197,
+   "class": "ConfigVersionViewSet",
+   "action": "reject",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reject",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/market_rates.py",
+   "line": 115,
+   "class": "MarketRateSetViewSet",
+   "action": "rates",
+   "methods": [
+    "get"
+   ],
+   "url_path": "rates",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/market_rates.py",
+   "line": 128,
+   "class": "MarketRateSetViewSet",
+   "action": "swap_deltas",
+   "methods": [
+    "get"
+   ],
+   "url_path": "swap-deltas",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/market_rates.py",
+   "line": 141,
+   "class": "MarketRateSetViewSet",
+   "action": "roof_addons",
+   "methods": [
+    "get"
+   ],
+   "url_path": "roof-addons",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/market_rates.py",
+   "line": 160,
+   "class": "MarketRateSetViewSet",
+   "action": "activate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "activate",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/offers.py",
+   "line": 90,
+   "class": "OfferViewSet",
+   "action": "approve",
+   "methods": [
+    "post"
+   ],
+   "url_path": "approve",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/offers.py",
+   "line": 95,
+   "class": "OfferViewSet",
+   "action": "activate",
+   "methods": [
+    "post"
+   ],
+   "url_path": "activate",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/offers.py",
+   "line": 100,
+   "class": "OfferViewSet",
+   "action": "pause",
+   "methods": [
+    "post"
+   ],
+   "url_path": "pause",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/offers.py",
+   "line": 105,
+   "class": "OfferViewSet",
+   "action": "archive",
+   "methods": [
+    "post"
+   ],
+   "url_path": "archive",
+   "detail": true
+  },
+  {
+   "file": "pricing/views/releases.py",
+   "line": 63,
+   "class": "ReleaseViewSet",
+   "action": "preview",
+   "methods": [
+    "post"
+   ],
+   "url_path": "preview",
+   "detail": false
+  },
+  {
+   "file": "pricing/views/releases.py",
+   "line": 81,
+   "class": "ReleaseViewSet",
+   "action": "current",
+   "methods": [
+    "get"
+   ],
+   "url_path": "current",
+   "detail": false
+  },
+  {
+   "file": "pricing/views/releases.py",
+   "line": 94,
+   "class": "ReleaseViewSet",
+   "action": "diff",
+   "methods": [
+    "get"
+   ],
+   "url_path": "current/diff",
+   "detail": false
+  },
+  {
+   "file": "procurement/views/batches.py",
+   "line": 105,
+   "class": "BatchViewSet",
+   "action": "lines",
+   "methods": [
+    "get"
+   ],
+   "url_path": "lines",
+   "detail": true
+  },
+  {
+   "file": "procurement/views/batches.py",
+   "line": 119,
+   "class": "BatchViewSet",
+   "action": "charges",
+   "methods": [
+    "get"
+   ],
+   "url_path": "charges",
+   "detail": true
+  },
+  {
+   "file": "procurement/views/batches.py",
+   "line": 144,
+   "class": "BatchViewSet",
+   "action": "preview_allocation",
+   "methods": [
+    "post"
+   ],
+   "url_path": "preview-allocation",
+   "detail": true
+  },
+  {
+   "file": "procurement/views/batches.py",
+   "line": 155,
+   "class": "BatchViewSet",
+   "action": "commit",
+   "methods": [
+    "post"
+   ],
+   "url_path": "commit",
+   "detail": true
+  },
+  {
+   "file": "procurement/views/batches.py",
+   "line": 168,
+   "class": "BatchViewSet",
+   "action": "reverse",
+   "methods": [
+    "post"
+   ],
+   "url_path": "reverse",
+   "detail": true
+  },
+  {
+   "file": "projects/views/projects.py",
+   "line": 119,
+   "class": "ProjectViewSet",
+   "action": "lock_bom",
+   "methods": [
+    "post"
+   ],
+   "url_path": "lock-bom",
+   "detail": true
+  },
+  {
+   "file": "projects/views/projects.py",
+   "line": 127,
+   "class": "ProjectViewSet",
+   "action": "cost_inputs",
+   "methods": [
+    "post"
+   ],
+   "url_path": "cost-inputs",
+   "detail": true
+  },
+  {
+   "file": "projects/views/projects.py",
+   "line": 136,
+   "class": "ProjectViewSet",
+   "action": "commission",
+   "methods": [
+    "post"
+   ],
+   "url_path": "commission",
+   "detail": true
+  },
+  {
+   "file": "projects/views/projects.py",
+   "line": 143,
+   "class": "ProjectViewSet",
+   "action": "close",
+   "methods": [
+    "post"
+   ],
+   "url_path": "close",
+   "detail": true
+  },
+  {
+   "file": "projects/views/projects.py",
+   "line": 150,
+   "class": "ProjectViewSet",
+   "action": "cancel",
+   "methods": [
+    "post"
+   ],
+   "url_path": "cancel",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/content.py",
+   "line": 99,
+   "class": "ContentVersionViewSet",
+   "action": "fit_check",
+   "methods": [
+    "post"
+   ],
+   "url_path": "fit-check",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/content.py",
+   "line": 112,
+   "class": "ContentVersionViewSet",
+   "action": "publish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "publish",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 115,
+   "class": "QuotationViewSet",
+   "action": "system_options",
+   "methods": [
+    "get"
+   ],
+   "url_path": "system-options",
+   "detail": false
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 128,
+   "class": "QuotationViewSet",
+   "action": "revise",
+   "methods": [
+    "post"
+   ],
+   "url_path": "revise",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 144,
+   "class": "QuotationViewSet",
+   "action": "accept",
+   "methods": [
+    "post"
+   ],
+   "url_path": "accept",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 157,
+   "class": "QuotationViewSet",
+   "action": "cancel",
+   "methods": [
+    "post"
+   ],
+   "url_path": "cancel",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 169,
+   "class": "QuotationViewSet",
+   "action": "discount_requests",
+   "methods": [
+    "get"
+   ],
+   "url_path": "discount-requests",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 202,
+   "class": "QuotationViewSet",
+   "action": "approve_discount",
+   "methods": [
+    "post"
+   ],
+   "url_path": "discount-requests/(?P<request_uid>[0-9a-f-]{36})/approve",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 213,
+   "class": "QuotationViewSet",
+   "action": "reject_discount",
+   "methods": [
+    "post"
+   ],
+   "url_path": "discount-requests/(?P<request_uid>[0-9a-f-]{36})/reject",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/quotations.py",
+   "line": 220,
+   "class": "QuotationViewSet",
+   "action": "history",
+   "methods": [
+    "get"
+   ],
+   "url_path": "history",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 48,
+   "class": "VersionActionsMixin",
+   "action": "version_detail",
+   "methods": [
+    "get"
+   ],
+   "url_path": "version_detail",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 77,
+   "class": "VersionActionsMixin",
+   "action": "preview",
+   "methods": [
+    "post"
+   ],
+   "url_path": "preview",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 89,
+   "class": "VersionActionsMixin",
+   "action": "issue",
+   "methods": [
+    "post"
+   ],
+   "url_path": "issue",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 103,
+   "class": "VersionActionsMixin",
+   "action": "document",
+   "methods": [
+    "get"
+   ],
+   "url_path": "document",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 122,
+   "class": "VersionActionsMixin",
+   "action": "render",
+   "methods": [
+    "post"
+   ],
+   "url_path": "render",
+   "detail": true
+  },
+  {
+   "file": "quotations/views/versions.py",
+   "line": 137,
+   "class": "VersionActionsMixin",
+   "action": "send",
+   "methods": [
+    "post"
+   ],
+   "url_path": "send",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 55,
+   "class": "DecisionActionsMixin",
+   "action": "reviews",
+   "methods": [
+    "get"
+   ],
+   "url_path": "reviews",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 75,
+   "class": "DecisionActionsMixin",
+   "action": "decide_review",
+   "methods": [
+    "post"
+   ],
+   "url_path": "decide_review",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 86,
+   "class": "DecisionActionsMixin",
+   "action": "additional_work",
+   "methods": [
+    "get"
+   ],
+   "url_path": "additional-work",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 105,
+   "class": "DecisionActionsMixin",
+   "action": "work_item",
+   "methods": [
+    "patch"
+   ],
+   "url_path": "work_item",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 127,
+   "class": "DecisionActionsMixin",
+   "action": "transition_work",
+   "methods": [
+    "post"
+   ],
+   "url_path": "transition_work",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 138,
+   "class": "DecisionActionsMixin",
+   "action": "approvals",
+   "methods": [
+    "get"
+   ],
+   "url_path": "approvals",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 145,
+   "class": "DecisionActionsMixin",
+   "action": "readiness",
+   "methods": [
+    "get"
+   ],
+   "url_path": "readiness",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 150,
+   "class": "DecisionActionsMixin",
+   "action": "activity",
+   "methods": [
+    "get"
+   ],
+   "url_path": "activity",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/decisions.py",
+   "line": 157,
+   "class": "DecisionActionsMixin",
+   "action": "snapshots",
+   "methods": [
+    "get"
+   ],
+   "url_path": "snapshots",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 56,
+   "class": "RecordActionsMixin",
+   "action": "photos",
+   "methods": [
+    "get"
+   ],
+   "url_path": "photos",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 79,
+   "class": "RecordActionsMixin",
+   "action": "delete_photo",
+   "methods": [
+    "delete"
+   ],
+   "url_path": "delete_photo",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 87,
+   "class": "RecordActionsMixin",
+   "action": "annotations",
+   "methods": [
+    "get"
+   ],
+   "url_path": "annotations",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 110,
+   "class": "RecordActionsMixin",
+   "action": "equipment",
+   "methods": [
+    "get"
+   ],
+   "url_path": "equipment",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 115,
+   "class": "RecordActionsMixin",
+   "action": "equipment_item",
+   "methods": [
+    "get"
+   ],
+   "url_path": "equipment_item",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 145,
+   "class": "RecordActionsMixin",
+   "action": "review_equipment",
+   "methods": [
+    "post"
+   ],
+   "url_path": "review_equipment",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/records.py",
+   "line": 158,
+   "class": "RecordActionsMixin",
+   "action": "observations",
+   "methods": [
+    "get"
+   ],
+   "url_path": "observations",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 54,
+   "class": "WorkflowActionsMixin",
+   "action": "assign",
+   "methods": [
+    "post"
+   ],
+   "url_path": "assign",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 59,
+   "class": "WorkflowActionsMixin",
+   "action": "start",
+   "methods": [
+    "post"
+   ],
+   "url_path": "start",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 64,
+   "class": "WorkflowActionsMixin",
+   "action": "submit",
+   "methods": [
+    "post"
+   ],
+   "url_path": "submit",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 69,
+   "class": "WorkflowActionsMixin",
+   "action": "hold",
+   "methods": [
+    "post"
+   ],
+   "url_path": "hold",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 74,
+   "class": "WorkflowActionsMixin",
+   "action": "resume",
+   "methods": [
+    "post"
+   ],
+   "url_path": "resume",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 79,
+   "class": "WorkflowActionsMixin",
+   "action": "revision",
+   "methods": [
+    "post"
+   ],
+   "url_path": "revision",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 84,
+   "class": "WorkflowActionsMixin",
+   "action": "release",
+   "methods": [
+    "post"
+   ],
+   "url_path": "release",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 89,
+   "class": "WorkflowActionsMixin",
+   "action": "system_type",
+   "methods": [
+    "post"
+   ],
+   "url_path": "system-type",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 100,
+   "class": "WorkflowActionsMixin",
+   "action": "approval_request",
+   "methods": [
+    "post"
+   ],
+   "url_path": "approval/request",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 118,
+   "class": "WorkflowActionsMixin",
+   "action": "approval_paper",
+   "methods": [
+    "post"
+   ],
+   "url_path": "approval/paper",
+   "detail": true
+  },
+  {
+   "file": "site_inspections/views/workflow.py",
+   "line": 134,
+   "class": "WorkflowActionsMixin",
+   "action": "report",
+   "methods": [
+    "get"
+   ],
+   "url_path": "report",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 60,
+   "class": "PageContentActionsMixin",
+   "action": "text_slot",
+   "methods": [
+    "patch"
+   ],
+   "url_path": "text_slot",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 67,
+   "class": "PageContentActionsMixin",
+   "action": "image_slot",
+   "methods": [
+    "patch"
+   ],
+   "url_path": "image_slot",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 74,
+   "class": "PageContentActionsMixin",
+   "action": "seo",
+   "methods": [
+    "get"
+   ],
+   "url_path": "seo",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 86,
+   "class": "PageContentActionsMixin",
+   "action": "preview",
+   "methods": [
+    "get"
+   ],
+   "url_path": "preview",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 93,
+   "class": "PagePublishActionsMixin",
+   "action": "publish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "publish",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 98,
+   "class": "PagePublishActionsMixin",
+   "action": "unpublish",
+   "methods": [
+    "post"
+   ],
+   "url_path": "unpublish",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 105,
+   "class": "PageLifecycleActionsMixin",
+   "action": "archive",
+   "methods": [
+    "post"
+   ],
+   "url_path": "archive",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 110,
+   "class": "PageLifecycleActionsMixin",
+   "action": "restore",
+   "methods": [
+    "post"
+   ],
+   "url_path": "restore",
+   "detail": true
+  },
+  {
+   "file": "sitepages/views/pages.py",
+   "line": 115,
+   "class": "PageLifecycleActionsMixin",
+   "action": "verify",
+   "methods": [
+    "post"
+   ],
+   "url_path": "verify",
+   "detail": true
+  }
+ ],
+ "dynamic_constructs": [
+  {
+   "file": "blog/urls.py",
+   "line": 30,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "blog/urls.py",
+   "line": 31,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "blog/urls.py",
+   "line": 32,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "blog/urls.py",
+   "line": 33,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "calculators/urls.py",
+   "line": 15,
+   "what": "router.register() with computed prefix 'calculators/[^/]+'"
+  },
+  {
+   "file": "emi/urls.py",
+   "line": 14,
+   "what": "router.register() with computed prefix 'emi/[^/]+'"
+  },
+  {
+   "file": "flarize/urls.py",
+   "line": 26,
+   "what": "re_path() with computed route"
+  },
+  {
+   "file": "legacy/urls.py",
+   "line": 64,
+   "what": "path() with view variable 'view' (dict-driven)"
+  },
+  {
+   "file": "legacy/urls.py",
+   "line": 64,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "legacy/urls.py",
+   "line": 65,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "legacy/views/backend.py",
+   "line": 36,
+   "what": "REFERENCE_VIEWS: view classes built with type() in a dict comprehension"
+  },
+  {
+   "file": "legacy/views/backend.py",
+   "line": 83,
+   "what": "CALCULATOR_VIEWS: view classes built with type() in a dict comprehension"
+  },
+  {
+   "file": "reference/urls.py",
+   "line": 15,
+   "what": "router.register() with computed prefix 'reference/[^/]+'"
+  },
+  {
+   "file": "reference/urls.py",
+   "line": 20,
+   "what": "path() with view variable 'view' (dict-driven)"
+  },
+  {
+   "file": "reference/urls.py",
+   "line": 20,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "site_inspections/urls.py",
+   "line": 26,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "site_inspections/urls.py",
+   "line": 27,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "site_inspections/urls.py",
+   "line": 28,
+   "what": "path() with computed route"
+  },
+  {
+   "file": "site_inspections/urls.py",
+   "line": 20,
+   "what": "path() with view variable 'view' (dict-driven)"
+  },
+  {
+   "file": "site_inspections/urls.py",
+   "line": 20,
+   "what": "path() with computed route"
+  }
+ ],
+ "problems": []
+}

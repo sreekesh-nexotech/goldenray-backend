@@ -10,3 +10,7 @@ class ProcurementConfig(AppConfig):
         from procurement.services import registrations
 
         registrations.register()
+
+        from procurement.views import change_kinds
+
+        change_kinds.register_kinds()  # batch commit / reverse go through approvals (DV-155)

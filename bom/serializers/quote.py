@@ -16,10 +16,38 @@ class BomQuoteRequestSerializer(serializers.Serializer):
     size = serializers.CharField(help_text="Size key: 3, 5sp, 5tp, 6, 8, 10 (on-grid); 3, 5, 8, 10 (hybrid); the target kW for upgrades.")
     tier = serializers.ChoiceField(choices=["base", "value", "premium"])
     bat_config = serializers.CharField(required=False, default="0", help_text="Hybrid battery band 0/1/2.")
+    battery_override = serializers.ChoiceField(
+        choices=["0", "1", "2"],
+        required=False,
+        allow_blank=True,
+        help_text="Hybrid only: the battery count chosen within the package (0 = no battery). Blank keeps the package's own band.",
+    )
     mode = serializers.CharField(required=False, default="quotation", help_text="Accepted and ignored (as by the legacy endpoint).")
     dist_km = serializers.IntegerField(required=False, default=100, min_value=0)
     structure_type = serializers.ChoiceField(choices=QUOTE_STRUCTURE_TYPES, required=False, default="flatRoof")
+    roof_type = serializers.ChoiceField(
+        choices=QUOTE_STRUCTURE_TYPES,
+        required=False,
+        help_text=("The roof the array sits on, which sets the installation cost. Distinct from " "`structure_type`, the structure being sold. Defaults to `structure_type`."),
+    )
     subsidy_type = serializers.ChoiceField(choices=["residential", "ghs", "none"], required=False, default="none")
+    panel_type_filter = serializers.ChoiceField(
+        choices=["all", "DCR", "NON_DCR"],
+        required=False,
+        help_text=("Which module content may be offered. `all` leaves it open unless a subsidy is " "claimed, which forces DCR. Supersedes `module_dcr`, which is still accepted."),
+    )
+    struct_grade = serializers.ChoiceField(
+        choices=["default", "gp", "gi"],
+        required=False,
+        default="default",
+        help_text="Structure tube grade. `default` uses the package profile's; gp/gi override it.",
+    )
+    module_dcr = serializers.ChoiceField(
+        choices=["dcr", "ndcr"],
+        required=False,
+        default="dcr",
+        help_text="Module content: which panels may be offered, whether PM Surya Ghar applies, and (hybrid) which price list.",
+    )
     ghs_houses = serializers.IntegerField(required=False, default=1, min_value=1)
     selected_offer_id = serializers.CharField(required=False, allow_null=True)
     custom_discount = serializers.JSONField(required=False, allow_null=True, help_text='{"type": "percent" | "flat", "value": <number>} — a bare number is a 400.')
@@ -59,10 +87,18 @@ class BomQuoteCostsSerializer(serializers.Serializer):
 
 class BomQuoteTotalsSerializer(serializers.Serializer):
     material_ex_gst = serializers.IntegerField()
+    # Under COMPOSITE the whole bill is taxed once, so these three are zero and only
+    # custom items write them; under PER_LINE they are the per-category buckets.
     gst_5 = serializers.IntegerField()
     gst_12 = serializers.IntegerField()
     gst_18 = serializers.IntegerField()
+    gst_total = serializers.IntegerField(help_text="GST on the material, whichever regime produced it.")
     material_with_gst = serializers.IntegerField()
+    # COMPOSITE only: the cost the margin is taken on, and the single GST charge on
+    # (cost + profit). Null under PER_LINE, where margin is taken on a GST-inclusive
+    # subtotal and there is no separate charge on the sale.
+    pre_gst_subtotal = serializers.IntegerField(allow_null=True)
+    gst_on_sale = serializers.IntegerField(allow_null=True)
     subtotal = serializers.IntegerField()
     margin = serializers.IntegerField()
     grand_total = serializers.IntegerField()
@@ -95,6 +131,15 @@ class BomQuoteOfferSerializer(serializers.Serializer):
     value = serializers.FloatField()
 
 
+class BomQuoteResolutionWarningSerializer(serializers.Serializer):
+    """A slot whose filters left no candidate, so its line is N/A at zero."""
+
+    pos = serializers.IntegerField()
+    category = serializers.CharField()
+    resolution = serializers.CharField()
+    detail = serializers.CharField()
+
+
 class BomQuoteSerializer(serializers.Serializer):
     bom_lines = BomQuoteLineSerializer(many=True)
     cost_breakdown = BomQuoteCostsSerializer()
@@ -102,6 +147,9 @@ class BomQuoteSerializer(serializers.Serializer):
     pricing = BomQuotePricingSerializer()
     meta = BomQuoteMetaSerializer()
     available_offers = BomQuoteOfferSerializer(many=True)
+    # Not on `BomQuotePublicSerializer`: a customer-facing quote should not explain which
+    # internal filter left a slot empty. The N/A line itself is visible either way.
+    resolution_warnings = BomQuoteResolutionWarningSerializer(many=True, required=False)
 
 
 class BomQuotePublicSerializer(serializers.Serializer):
@@ -152,3 +200,22 @@ class BomBuildSerializer(serializers.Serializer):
     engineering = serializers.DictField()
     structure = BomBuildStructureSerializer(allow_null=True)
     warnings = BomBuildWarningSerializer(many=True)
+
+
+class BomBillSizingRequestSerializer(serializers.Serializer):
+    """What a customer pays, and the connection they pay it on."""
+
+    sys_type = serializers.ChoiceField(choices=["ongrid", "hybrid"], default="ongrid", required=False)
+    bill = serializers.DecimalField(max_digits=12, decimal_places=2, min_value=1, help_text="The amount on the bill.")
+    frequency = serializers.ChoiceField(
+        choices=["monthly", "bimonthly"],
+        default="bimonthly",
+        required=False,
+        help_text="What the amount covers. KSEB bills bi-monthly; reading a monthly figure as bi-monthly halves the recommendation.",
+    )
+    house_phase = serializers.ChoiceField(
+        choices=["1P", "3P"],
+        default="1P",
+        required=False,
+        help_text="The existing supply. A single-phase house needing more than 5 kW has to apply to KSEB first.",
+    )

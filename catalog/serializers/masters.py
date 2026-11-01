@@ -80,6 +80,14 @@ class CategorySerializer(serializers.ModelSerializer):
         return spec_kind(category)
 
 
+class CategoryCountSerializer(serializers.Serializer):
+    """One category's live component count, for the catalog editor's chips."""
+
+    uid = serializers.UUIDField()
+    slug = serializers.CharField()
+    count = serializers.IntegerField()
+
+
 class CategoryWriteSerializer(serializers.Serializer):
     slug = serializers.SlugField(max_length=50)
     name = serializers.CharField(max_length=100)

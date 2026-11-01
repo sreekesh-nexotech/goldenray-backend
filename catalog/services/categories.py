@@ -13,6 +13,7 @@ from __future__ import annotations
 import re
 
 from django.db import IntegrityError, transaction
+from django.db.models import Count
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 
@@ -59,6 +60,24 @@ def attribute_errors(schema: dict, attributes) -> list[str]:
         path = "/".join(str(part) for part in error.absolute_path)
         messages.append(f"{path}: {error.message}" if path else error.message)
     return messages
+
+
+def category_counts() -> list[dict]:
+    """``[{uid, slug, count}]`` -- live components per category, in one grouped query.
+
+    The editor's chips need a total, not a page: counting the components it has in hand
+    would report whatever the current page happened to hold, which is how a 275-row
+    catalog can show 200 and look complete.
+    """
+    from catalog.models import Component
+
+    counts = dict(
+        Component.objects.values_list("category_id").annotate(n=Count("id")).values_list("category_id", "n")
+    )
+    return [
+        {"uid": category.uid, "slug": category.slug, "count": counts.get(category.pk, 0)}
+        for category in categories_queryset()
+    ]
 
 
 def validate_attributes(category: Category, attributes) -> None:

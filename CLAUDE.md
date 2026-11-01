@@ -30,6 +30,7 @@ Apps (all exist as skeletons from the foundation): core, accounts, audit, media,
 
 Dependency direction (enforced by import-linter in `.importlinter`): core/accounts/audit/media/documents are the platform; product master (catalog, pricing, procurement, inventory) → configuration (bom, packs, engineering) → sales (customers, leads, quotations, agreements, site_inspections, projects). Website content and HR never import sales. Cross-context side effects go through the **outbox** (`core.outbox.emit` + `@core.outbox.handler("event.name")`), never by importing another context's services. Documented reads are allowed (sales reads product master/configuration; calculators read releases).
 
+
 ## Models
 - Every table inherits `core.models.BaseModel`: `id` BigAutoField (never exposed), `uid` UUID (the external id), `created_at`, `updated_at`, `created_by`/`updated_by` (SET_NULL), `deleted_at` soft delete (`objects` = live rows, `all_objects` = everything), `version` (optimistic locking). Append-only/log tables marked *(no base)* in PLAN §2 use plain `models.Model` with `id` BigAutoField.
 - Table names exactly as PLAN §2 (`db_table = "catalog_component"`). Snake_case only.

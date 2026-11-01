@@ -9,6 +9,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from celery.schedules import crontab
+from corsheaders.defaults import default_headers
 from decouple import Csv, config
 from kombu import Queue
 
@@ -48,6 +49,7 @@ LOCAL_APPS = [
     "audit",
     "media",
     "documents",
+    "approvals",
     "company",
     "catalog",
     "pricing",
@@ -279,6 +281,10 @@ REST_FRAMEWORK = {
 JWT_PRIVATE_KEY_PATH = config("JWT_PRIVATE_KEY_PATH", default="")
 JWT_PUBLIC_KEY_PATH = config("JWT_PUBLIC_KEY_PATH", default="")
 JWT_PRIVATE_KEY, JWT_PUBLIC_KEY = load_jwt_keys(JWT_PRIVATE_KEY_PATH, JWT_PUBLIC_KEY_PATH)
+# Content Studio single sign-in: the CMS signs its access tokens (HS256) with its DJANGO_SECRET_KEY. Setting that same
+# value here lets the views that opt in (accounts.authentication.StudioTokenAuthentication) accept a Studio token and
+# resolve the platform user by e-mail. Empty = disabled (those views then accept platform tokens only).
+STUDIO_JWT_SIGNING_KEY = config("STUDIO_JWT_SIGNING_KEY", default="")
 SIMPLE_JWT = {
     "ALGORITHM": "RS256",
     "SIGNING_KEY": JWT_PRIVATE_KEY,
@@ -579,6 +585,8 @@ CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="", cast=Csv())
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ALLOW_CREDENTIALS = False
 CORS_EXPOSE_HEADERS = ["ETag", "Retry-After", "X-Request-ID"]
+# Request headers the API reads beyond the defaults: Idempotency-Key on website POSTs (leads, OTP, careers), X-Request-ID tracing.
+CORS_ALLOW_HEADERS = (*default_headers, "idempotency-key", "x-request-id")
 
 # --------------------------------------------------------------------------------------------------------------------
 # Leads: website OTP (Twilio Verify) and the verification token POST leads requires

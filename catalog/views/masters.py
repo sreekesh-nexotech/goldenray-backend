@@ -8,6 +8,9 @@ from __future__ import annotations
 
 from drf_spectacular.utils import OpenApiResponse, extend_schema, extend_schema_view
 
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 from catalog.filters import BrandFilter, CategoryFilter
 from catalog.serializers.masters import (
     BatteryFamilySerializer,
@@ -16,6 +19,7 @@ from catalog.serializers.masters import (
     BrandSerializer,
     BrandUpdateSerializer,
     BrandWriteSerializer,
+    CategoryCountSerializer,
     CategorySerializer,
     CategoryUpdateSerializer,
     CategoryWriteSerializer,
@@ -67,6 +71,8 @@ class BrandViewSet(_CrudViewSet):
 
 @crud_schema("catalog_categories", CategorySerializer, CategoryWriteSerializer, CategoryUpdateSerializer, "Refused with 409 `category_in_use` while live components belong to it.")
 class CategoryViewSet(_CrudViewSet):
+    # `counts` reads the catalog, so it rides on the same verb the list does.
+    action_permissions = {**CRUD_PERMISSIONS, "counts": "view"}
     services = {"create": categories.create_category, "update": categories.update_category, "destroy": categories.delete_category}
     serializer_class = CategorySerializer
     write_serializers = {"create": CategoryWriteSerializer, "partial_update": CategoryUpdateSerializer}
@@ -77,6 +83,17 @@ class CategoryViewSet(_CrudViewSet):
 
     def base_queryset(self):
         return categories.categories_queryset()
+
+    @extend_schema(
+        operation_id="catalog_categories_counts",
+        responses={200: CategoryCountSerializer(many=True)},
+        tags=TAGS,
+        description="Live component count per category, in one query. The catalog editor's chips read this: counting a page of components would report whatever that page happened to hold.",
+    )
+    @action(detail=False, methods=["get"])
+    def counts(self, request, *args, **kwargs):
+        rows = categories.category_counts()
+        return Response(CategoryCountSerializer(rows, many=True).data)
 
 
 @crud_schema(

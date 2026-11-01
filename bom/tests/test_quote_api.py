@@ -122,6 +122,181 @@ class TestCalculator:
         rupees = quote(_body(custom_discount={"type": "flat", "value": 12345}), today=TODAY)["pricing"]
         assert rupees["discount_label"] == "Custom ₹12,345 discount" and rupees["discount_amt"] == 12345
 
+    def test_module_dcr_picks_the_panel_and_gates_the_subsidy(self, world):
+        """Module content chooses which panels may be offered AND whether PM Surya Ghar applies.
+
+        Golden-Ray-BOM gates the panel dropdown on the picked content (App.jsx:1132) and
+        forfeits the subsidy for non-DCR modules (App.jsx:2411), since that choice is what
+        decides eligibility. Both halves matter together: a quote must never offer a
+        non-DCR module while still promising a subsidy.
+        """
+        from catalog.models.specs import PanelSpec
+        from catalog.tests.factories import PanelSpecFactory
+
+        panel_category = SlotFactory._meta.model.objects.get(key="panel").category
+        existing = panel_category.components.get(name="Panel 540")
+
+        # The fixture records no PanelSpec, so content is unknown. The source counts that
+        # as the non-DCR side (`item.dcr !== true`), so a non-DCR quote offers it and
+        # forfeits the subsidy — erring away from promising one the panel may not earn.
+        assert not PanelSpec.objects.filter(component=existing).exists()
+        unknown = quote(_body(subsidy_type="residential", module_dcr="ndcr"), today=TODAY)
+        assert unknown["bom_lines"][0]["name"] == "Panel 540"
+        assert unknown["pricing"]["subsidy_amt"] == 0
+
+        # A DCR quote finds no DCR panel at all. The line must still be quoted — the
+        # source falls back rather than leaving it out (App.jsx:1164), because losing the
+        # panel silently removes the largest cost in the BOM.
+        no_dcr_available = quote(_body(subsidy_type="residential", module_dcr="dcr"), today=TODAY)
+        assert no_dcr_available["bom_lines"][0]["name"] == "Panel 540"
+
+        PanelSpecFactory(component=existing, wattage_w=540, is_dcr=True)
+        ndcr = ComponentFactory(category=panel_category, name="Panel 550 NDCR", status=ComponentStatus.ACTIVE)
+        for tier in ("BASE", "VALUE", "PREMIUM"):
+            ComponentTierFactory(component=ndcr, tier=tier)
+        PriceFactory(component=ndcr, amount=Decimal("13035.00"))
+        PanelSpecFactory(component=ndcr, wattage_w=550, is_dcr=False)
+
+        dcr = quote(_body(subsidy_type="residential", module_dcr="dcr"), today=TODAY)
+        assert dcr["bom_lines"][0]["name"] == "Panel 540"
+        assert dcr["pricing"]["subsidy_amt"] == 78000
+
+        non_dcr = quote(_body(subsidy_type="residential", module_dcr="ndcr"), today=TODAY)
+        assert non_dcr["bom_lines"][0]["name"] == "Panel 550 NDCR"
+        assert non_dcr["pricing"]["subsidy_amt"] == 0
+        assert non_dcr["pricing"]["subsidy_label"] == "Not eligible — Non-DCR modules"
+        assert non_dcr["pricing"]["price_after_subsidy"] == non_dcr["pricing"]["final_price"]
+
+    def test_module_dcr_is_validated(self, world):
+        with pytest.raises(QuoteInvalid) as caught:
+            quote(_body(module_dcr="maybe"), today=TODAY)
+        assert "module_dcr" in caught.value.errors
+
+    def test_panel_type_filter_is_tri_state_and_subsidy_forces_dcr(self, world):
+        """version-2's tri-state gate, and the one branch that protects real money.
+
+        `module_dcr` could only say DCR or non-DCR. version-2 added `all`, meaning "either
+        content" -- except when a subsidy is claimed, where it still forces DCR
+        (App.jsx:1781-1793), because PM Surya Ghar needs DCR modules and a quote claiming
+        it must not offer a panel that would forfeit it.
+
+        The fixture's own panel carries no PanelSpec, which the source counts as non-DCR,
+        so `all` without a subsidy may offer it while `all` with one must not.
+        """
+        from catalog.tests.factories import PanelSpecFactory
+
+        panel_category = SlotFactory._meta.model.objects.get(key="panel").category
+        existing = panel_category.components.get(name="Panel 540")
+        PanelSpecFactory(component=existing, wattage_w=540, is_dcr=True)
+
+        ndcr = ComponentFactory(category=panel_category, name="Panel 550 NDCR", status=ComponentStatus.ACTIVE)
+        for tier in ("BASE", "VALUE", "PREMIUM"):
+            ComponentTierFactory(component=ndcr, tier=tier)
+        PriceFactory(component=ndcr, amount=Decimal("13035.00"))
+        PanelSpecFactory(component=ndcr, wattage_w=550, is_dcr=False)
+
+        # Explicit content, either spelling of the request.
+        assert quote(_body(panel_type_filter="DCR"), today=TODAY)["bom_lines"][0]["name"] == "Panel 540"
+        assert quote(_body(panel_type_filter="NON_DCR"), today=TODAY)["bom_lines"][0]["name"] == "Panel 550 NDCR"
+
+        # `all` leaves the gate open, so selection falls to catalog order rather than
+        # content -- the point of the tri-state is that neither is excluded.
+        either = quote(_body(panel_type_filter="all", subsidy_type="none"), today=TODAY)
+        assert either["bom_lines"][0]["name"] in ("Panel 540", "Panel 550 NDCR")
+
+        # ...but a claimed subsidy overrides it, and the subsidy is actually paid.
+        # GHS is ₹18,000 *per kW* (3 kW here), not a flat figure; residential hits its cap.
+        for scheme, expected in (("residential", 78000), ("ghs", 54000)):
+            forced = quote(_body(panel_type_filter="all", subsidy_type=scheme), today=TODAY)
+            assert forced["bom_lines"][0]["name"] == "Panel 540", scheme
+            assert forced["pricing"]["subsidy_amt"] == expected, scheme
+
+    def test_panel_type_filter_is_validated(self, world):
+        with pytest.raises(QuoteInvalid) as caught:
+            quote(_body(panel_type_filter="DCR_ish"), today=TODAY)
+        assert "panel_type_filter" in caught.value.errors
+
+    @pytest.mark.parametrize(
+        ("engineering", "procurement", "retired"),
+        [
+            # Permanent: Engineering will not have it, or Procurement cannot buy it.
+            ("REJECTED", "ACTIVE", True),
+            ("WITHDRAWN", "ACTIVE", True),
+            ("APPROVED", "INACTIVE", True),
+            ("APPROVED", "DISCONTINUED", True),
+            # Approved and buyable.
+            ("APPROVED", "ACTIVE", False),
+            # The case the source is explicit about: a battery awaiting sign-off is KEPT.
+            # Dropping it would emit a hybrid BOM with no battery at all (the source's
+            # defect D1), which is worse than quoting one that still needs approval --
+            # engineering validation blocks the configuration instead.
+            ("PENDING_ENGINEERING_APPROVAL", "ACTIVE", False),
+        ],
+    )
+    def test_only_a_permanently_rejected_battery_leaves_the_catalog(self, engineering, procurement, retired):
+        """`engineeringFilter` (App.jsx:1808-1811) removes only what may never be used again."""
+        from types import SimpleNamespace
+
+        from bom.services.website_quote import _battery_retired
+
+        spec = SimpleNamespace(engineering_status=engineering, procurement_status=procurement)
+        assert _battery_retired(spec) is retired
+
+    def test_a_component_with_no_battery_spec_is_not_retired(self):
+        """Every non-battery component reaches this, so the absent case must be permissive."""
+        from bom.services.website_quote import _battery_retired
+
+        assert _battery_retired(None) is False
+
+    def test_an_unresolvable_slot_is_quoted_as_na_with_a_reason(self, world):
+        """version-2 stopped substituting across tiers; the gap goes on the quote instead.
+
+        The fixture reproduces the live case that made this matter: `3P only` is a
+        three-phase part in no tier but BASE, so a single-phase VALUE quote has nothing
+        in-tier for that slot. The old engine reached across tiers and quoted a base part
+        with nothing saying so; version-2 emits the line as N/A at zero and records why
+        (App.jsx:1862-1874), because a silent substitution is the complaint this change
+        answers.
+
+        Dropping the line would be worse than either: the BOM reads as complete while the
+        price is quietly lower.
+        """
+        from pricing.services.cost_config import put_values
+
+        # PER_LINE first: the legacy engine's behaviour is unchanged, which is the half
+        # that protects the public website.
+        before = quote(_body(size="5tp", tier="value"), today=TODAY)
+        assert "resolution_warnings" not in before
+
+        put_values(user=None, entries=[{"key": "gst.quote_regime", "value": {"mode": "COMPOSITE", "rate_pct": 9}}])
+        after = quote(_body(size="5tp", tier="value"), today=TODAY)
+
+        # The fixture leaves the panel and the DC cable unresolvable at value/5tp. The
+        # panel one is the case that matters: it is the largest cost in a quote, so a
+        # silent substitution there moves the most money.
+        na = [line for line in after["bom_lines"] if line["name"] == "N/A"]
+        assert [line["pos"] for line in na] == [0, 2], [line["name"] for line in after["bom_lines"]]
+        assert all(line["amount"] == 0 and line["unit_price"] == 0 and line["gst_amt"] == 0 for line in na)
+
+        warnings = {w["pos"]: w for w in after["resolution_warnings"]}
+        assert set(warnings) == {0, 2}
+        assert warnings[0]["category"] == "panel" and warnings[2]["category"] == "dc_cable"
+        # The reason names the configuration, so a reader can tell *why* nothing matched
+        # rather than only that nothing did.
+        assert warnings[0]["detail"] == "no candidate panel for ongrid/value/5tp"
+        assert all(w["resolution"] == "NONE" for w in warnings.values())
+
+        # An N/A line contributes nothing, so it cannot quietly move a price.
+        assert after["totals"]["material_ex_gst"] == sum(line["amount"] for line in after["bom_lines"] if line["name"] != "N/A")
+
+    def test_resolution_warnings_never_reach_a_public_caller(self, world):
+        """A customer quote should not explain which internal filter emptied a slot."""
+        from bom.services.website_quote import INTERNAL_KEYS, public_body
+
+        assert "resolution_warnings" in INTERNAL_KEYS
+        body = public_body({"bom_lines": [], "pricing": {}, "resolution_warnings": [{"pos": 1}]})
+        assert "resolution_warnings" not in body
+
     def test_margin_subsidy_structure_and_distance(self, world):
         result = quote(_body(margin_type="flat", margin_val=15000, subsidy_type="ghs", ghs_houses=3, structure_type="elevated", dist_km=175), today=TODAY)
         costs = result["cost_breakdown"]
@@ -151,14 +326,55 @@ class TestCalculator:
         MarketRateFactory(
             set=world_rates(), system_type="UPGRADE", tier="", size_key="5", from_size_key="3", from_size_kw=Decimal("3"), size_kw=Decimal("5"), customer_price_incl_gst=Decimal("90000.00")
         )
-        result = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_from_kw": 3, "upgrade_to_kw": 5}, today=TODAY)
+        # The fixture's only 5 kW inverter is three-phase, so this asks for a three-phase
+        # target. The phase is the sales person's choice and defaults to 1P (App.jsx:695)
+        # -- it is NOT inferred from the target size, since a customer going to 5 kW may
+        # well stay single-phase and would then need a 1P inverter.
+        body = {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_from_kw": 3, "upgrade_to_kw": 5, "upgrade_phase": "3P"}
+        result = quote(body, today=TODAY)
         assert [line["name"] for line in result["bom_lines"]] == ["Panel 540", "Inverter 5", "MC4 Pair"]
         assert result["bom_lines"][0]["qty"] == 4 and result["bom_lines"][2]["qty"] == 3 and result["bom_lines"][2]["section"] == "wiring"
         assert result["meta"] == {"system_type": "upgrade", "size": "3.0→5.0", "tier": "base", "bat_config": "0", "is_three_phase": True, "new_panels": 4}
         assert result["pricing"]["market_rate"] == 90000.0 and result["cost_breakdown"]["service"] == 0
-        hybrid = quote({"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_sections": {"panels": False, "hybrid_inv": True, "wiring": False}}, today=TODAY)
-        # hybrid_inv switches the inverter slot on (its own filter still applies); wiring off drops the MC4 row
-        assert [(line["name"], line["section"]) for line in hybrid["bom_lines"]] == [("Inverter 5", "inverter")]
+
+        # Left single-phase, the 3P inverter is not eligible and the line is dropped.
+        single = quote({**body, "upgrade_phase": "1P"}, today=TODAY)
+        assert "Inverter 5" not in [line["name"] for line in single["bom_lines"]]
+        assert single["meta"]["is_three_phase"] is False
+
+        hybrid = quote(
+            {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_phase": "3P", "upgrade_sections": {"panels": False, "hybrid_inv": True, "wiring": False}},
+            today=TODAY,
+        )
+        # hybrid_inv switches the inverter slot on (its own filter still applies); wiring
+        # off drops the MC4 row. The 3P ask is NOT honoured: a 5 kW hybrid is single-phase
+        # only, so the phase is forced back and the 1P inverter is the eligible one.
+        assert [(line["name"], line["section"]) for line in hybrid["bom_lines"]] == [("Inverter 3", "inverter")]
+        assert hybrid["meta"]["is_three_phase"] is False
+
+    def test_hybrid_upgrade_below_5kw_is_forced_single_phase(self, world):
+        """Hybrid inverters up to 5 kW exist only as 1P -- 3P starts at 8 kW (App.jsx:1837).
+
+        A 3P ask there cannot be honoured, so it is forced back rather than quoting a part
+        that does not exist.
+        """
+        upgrade = TemplateFactory(system_type="UPGRADE", name="Upgrade", sizes=[], three_phase_sizes=[])
+        panels = world.slots.get(key="panel").category
+        SlotFactory(template=upgrade, key="panel", category=panels, qty_rule={"type": "new_panels"}, gst_rate=Decimal("0.05"))
+        sections = {"panels": True, "hybrid_inv": True}
+        body = {"sys_type": "upgrade", "size": "5", "tier": "base", "upgrade_phase": "3P", "upgrade_sections": sections}
+
+        forced = quote({**body, "upgrade_from_kw": 3, "upgrade_to_kw": 5}, today=TODAY)
+        assert forced["meta"]["is_three_phase"] is False, "a 5 kW hybrid has no three-phase inverter to quote"
+        # Above the band the same request is honoured.
+        allowed = quote({**body, "size": "8", "upgrade_from_kw": 5, "upgrade_to_kw": 8}, today=TODAY)
+        assert allowed["meta"]["is_three_phase"] is True
+        # An on-grid upgrade at the same size is never forced -- the rule is about hybrids.
+        ongrid = quote(
+            {**body, "upgrade_from_kw": 3, "upgrade_to_kw": 5, "upgrade_sections": {"panels": True, "inverter": True}},
+            today=TODAY,
+        )
+        assert ongrid["meta"]["is_three_phase"] is True
 
     def test_upgrade_fixed_item_without_gst_falls_back_like_the_legacy(self, world):
         # legacy: ``fi.gst or (cat.gst_default if cat else 18)`` with ``cat`` looked up among the slot categories only
