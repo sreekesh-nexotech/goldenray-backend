@@ -6,10 +6,14 @@ pack is not listed."""
 
 from __future__ import annotations
 
+from decimal import Decimal
+
+from core.errors import Conflict, DomainError
 from packs.models import ReleasePack
 from quotations.models import RoofType, SubsidyType, SystemType, TierDisplayName
-from quotations.services.common import ENGINE_SYSTEM
-from quotations.services.inputs import current_pack_release
+from quotations.services import pipeline
+from quotations.services.common import ENGINE_SYSTEM, ENGINE_TIER, phase_for
+from quotations.services.inputs import _template, current_pack_release
 
 SYSTEM_LABELS = {SystemType.ONGRID: "On-grid", SystemType.HYBRID: "Hybrid"}
 
@@ -62,3 +66,61 @@ def system_options(*, system_type: str | None = None, phase: str | None = None) 
         "subsidy_types": list(SubsidyType.values),
         "tier_names": names,
     }
+
+
+def component_options(*, system_type: str, tier: str, size_key: str, phase: str = "", battery_config: str = "", future_size_key: str = "") -> dict:
+    """``GET quotations/component-options/`` — for one configuration of the current PackRelease, the parts Sales may
+    choose per swappable slot (the panel above all) with the pack's default marked.
+
+    The same list :func:`quotations.services.pipeline.validate_selections` checks a quotation's
+    ``selections.tier_selections`` against, so a choice offered here is one a quotation accepts. Prices are not
+    included (Sales rules). 409 ``no_approved_package`` when the release has no such pack.
+    """
+    release = current_pack_release()
+    template = _template(release, system_type)
+    if size_key not in (template.get("sizes") or {}):
+        raise DomainError("validation_error", "Unknown size.", errors={"size_key": [f"Not a size of the {system_type} template."]})
+    phase = phase or phase_for(size_key, template.get("threePhase") or [])
+    battery = battery_config if system_type == SystemType.HYBRID else ""
+    exists = ReleasePack.objects.filter(release=release, system_type=system_type, tier=tier, size_key=size_key, phase=phase, battery_config=battery, future_size_key=future_size_key).exists()
+    if not exists:
+        raise Conflict("no_approved_package", f"PackRelease #{release.number} has no {system_type} {size_key} {tier} {phase} pack{f' with {battery} batteries' if battery else ''}.")
+    request = pipeline.Request(
+        system=ENGINE_SYSTEM[system_type],
+        size=size_key,
+        tier=ENGINE_TIER[tier],
+        phase=phase,
+        battery=int(battery) if battery else None,
+        future=future_size_key or None,
+        roof=RoofType.FLAT,
+        distance_km=Decimal("0"),
+        vehicle=None,
+        tier_selections={},
+        offer_code="",
+        subsidy_type=SubsidyType.NONE,
+        ghs_houses=None,
+        language="en",
+        appliance_rows=None,
+        validity_override_days=None,
+    )
+    try:
+        alternatives = pipeline.approved_alternatives(pipeline.ReleaseContext(release), request, ENGINE_TIER[tier])
+    except pipeline.TierFailure as failure:
+        raise Conflict(failure.code.lower(), failure.message) from None
+    slots = []
+    for category, items in alternatives.items():
+        choices = [
+            {
+                "id": item.get("id"),
+                "name": item.get("name") or item.get("id"),
+                "brand": item.get("brand"),
+                "watt": item.get("watt"),
+                "dcr": item.get("dcr"),
+                "is_default": bool(item.get("isDefault")),
+            }
+            for item in items or []
+            if isinstance(item, dict) and item.get("id")
+        ]
+        if choices:
+            slots.append({"category": category, "default_id": next((c["id"] for c in choices if c["is_default"]), choices[0]["id"]), "options": choices})
+    return {"pack_release": release.number, "system_type": system_type, "tier": tier, "size_key": size_key, "phase": phase, "battery_config": battery, "slots": slots}

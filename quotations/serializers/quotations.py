@@ -47,7 +47,7 @@ class QuotationCustomerRefSerializer(serializers.Serializer):
 class VersionSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Version
-        fields = ["uid", "number", "status", "system_type", "tier", "size_key", "phase", "language", "final_price", "issued_at", "legacy", "version"]
+        fields = ["uid", "number", "status", "system_type", "tier", "size_key", "phase", "battery_config", "language", "final_price", "issued_at", "legacy", "version"]
         read_only_fields = fields
 
 
@@ -276,6 +276,40 @@ class SystemOptionsSerializer(serializers.Serializer):
     transport = serializers.JSONField()
     subsidy_types = serializers.ListField(child=serializers.CharField())
     tier_names = serializers.JSONField()
+
+
+class ComponentOptionsQuerySerializer(serializers.Serializer):
+    system_type = serializers.ChoiceField(choices=SystemType.choices)
+    tier = serializers.ChoiceField(choices=Tier.choices)
+    size_key = serializers.CharField(max_length=10)
+    phase = serializers.ChoiceField(choices=Phase.choices, required=False, allow_blank=True, default="")
+    battery_config = serializers.ChoiceField(choices=BATTERY_CONFIG_CHOICES, required=False, allow_blank=True, default="")
+    future_size_key = serializers.CharField(max_length=10, required=False, allow_blank=True, default="")
+
+
+class ComponentChoiceSerializer(serializers.Serializer):
+    id = serializers.CharField(help_text="Send back as `selections.tier_selections[<tier>][<category>]`.")
+    name = serializers.CharField()
+    brand = serializers.CharField(allow_null=True)
+    watt = serializers.JSONField(allow_null=True)
+    dcr = serializers.JSONField(allow_null=True)
+    is_default = serializers.BooleanField(help_text="The part the pack carries when nothing is chosen.")
+
+
+class ComponentSlotSerializer(serializers.Serializer):
+    category = serializers.CharField(help_text="panel, inverter … — the key in `tier_selections`.")
+    default_id = serializers.CharField()
+    options = ComponentChoiceSerializer(many=True)
+
+
+class ComponentOptionsSerializer(serializers.Serializer):
+    pack_release = serializers.IntegerField()
+    system_type = serializers.CharField()
+    tier = serializers.CharField()
+    size_key = serializers.CharField()
+    phase = serializers.CharField()
+    battery_config = serializers.CharField(allow_blank=True)
+    slots = ComponentSlotSerializer(many=True)
 
 
 class DiscountRequestSerializer(serializers.ModelSerializer):

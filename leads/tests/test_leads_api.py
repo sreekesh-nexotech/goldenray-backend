@@ -127,7 +127,51 @@ class TestCrud:
         assert client.delete(detail(lead)).status_code == 204
         assert not Lead.objects.exists() and Lead.all_objects.get().deleted_at is not None
         assert LeadEvent.objects.filter(lead=lead, event="ARCHIVED").exists()
-        assert client.get(detail(lead)).status_code == 404
+        # Hidden from the list, still readable by uid (so "show hidden" can open it), but not writable until restored.
+        assert client.get(URL).json()["count"] == 0
+        assert client.get(detail(lead)).json()["archived_at"] is not None
+        assert client.post(detail(lead, "status/"), {"status": "CONTACTED"}, format="json").status_code == 404
+        assert client.delete(detail(lead)).status_code == 404
+
+
+class TestHideAndRestore:
+    def test_include_archived_lists_hidden_leads(self, client):
+        live, hidden = LeadFactory(), LeadFactory()
+        assert client.delete(detail(hidden)).status_code == 204
+        assert [row["uid"] for row in client.get(URL).json()["results"]] == [str(live.uid)]
+        rows = {row["uid"]: row for row in client.get(URL, {"include_archived": "true"}).json()["results"]}
+        assert set(rows) == {str(live.uid), str(hidden.uid)}
+        assert rows[str(live.uid)]["archived_at"] is None and rows[str(hidden.uid)]["archived_at"] is not None
+
+    def test_restore_brings_the_lead_back(self, client):
+        lead = LeadFactory()
+        client.delete(detail(lead))
+        response = client.post(detail(lead, "restore/"), {"expected_version": 2}, format="json")
+        assert response.status_code == 200 and response.json()["archived_at"] is None and response.json()["version"] == 3
+        assert Lead.objects.filter(pk=lead.pk).exists()
+        assert LeadEvent.objects.filter(lead=lead, event="RESTORED").exists()
+        assert AuditLog.objects.filter(action="leads.lead_restored").exists()
+        # Restoring a live lead is a no-op.
+        assert client.post(detail(lead, "restore/"), {}, format="json").json()["version"] == 3
+
+    def test_restore_stale_version(self, client):
+        lead = LeadFactory()
+        client.delete(detail(lead))
+        response = client.post(detail(lead, "restore/"), {"expected_version": 1}, format="json")
+        assert response.status_code == 409 and response.json()["code"] == "stale_version"
+
+    def test_restore_needs_the_archive_permission(self, auth_client, make_user):
+        lead = LeadFactory()
+        lead.soft_delete()
+        editor = auth_client(make_user(grants={"leads": ["view", "edit"]}, scopes={"leads": "all"}))
+        assert editor.post(detail(lead, "restore/"), {}, format="json").status_code == 403
+        assert editor.get(URL, {"include_archived": "true"}).json()["count"] == 1
+
+    def test_owned_scope_cannot_restore_someone_elses_lead(self, auth_client, make_user):
+        lead = LeadFactory()
+        lead.soft_delete()
+        owner = auth_client(make_user(grants={"leads": ["view", "archive"]}, scopes={"leads": "owned"}))
+        assert owner.post(detail(lead, "restore/"), {}, format="json").status_code == 404
 
 
 class TestWorkflow:

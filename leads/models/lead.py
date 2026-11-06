@@ -134,6 +134,7 @@ class LeadEvent(models.Model):
         NOTE_ADDED = "NOTE_ADDED", "Note added"
         CONVERTED = "CONVERTED", "Converted"
         ARCHIVED = "ARCHIVED", "Archived"
+        RESTORED = "RESTORED", "Restored"
 
     id = models.BigAutoField(primary_key=True)
     # History belongs to its lead: CASCADE (true child).
@@ -149,7 +150,7 @@ class LeadEvent(models.Model):
         ordering = ["-at", "-id"]
         constraints = [
             models.CheckConstraint(
-                condition=Q(event__in=["CREATED", "IMPORTED", "UPDATED", "ASSIGNED", "STATUS_CHANGED", "NOTE_ADDED", "CONVERTED", "ARCHIVED"]),
+                condition=Q(event__in=["CREATED", "IMPORTED", "UPDATED", "ASSIGNED", "STATUS_CHANGED", "NOTE_ADDED", "CONVERTED", "ARCHIVED", "RESTORED"]),
                 name="leads_lead_event_event_valid",
             )
         ]

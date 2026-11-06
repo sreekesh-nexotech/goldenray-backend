@@ -2,11 +2,16 @@
 
 CRUD + ``assign/`` (leads.manage), ``status/``, ``mark-lost/``, ``mark-spam/``, ``convert/`` (leads.edit; creating the
 customer needs customers.create), ``notes/`` (GET view, POST edit), ``events/`` (cursor).
+
+Hide = ``DELETE`` (archive, a soft delete: the row, notes and timeline are kept) and ``restore/`` (both leads.archive).
+The list hides archived leads unless ``?include_archived=true``; detail, notes, events and ``restore/`` reach them, every
+other write answers 404 until the lead is restored.
 """
 
 from __future__ import annotations
 
-from drf_spectacular.utils import OpenApiResponse, extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema, extend_schema_view
 from rest_framework import status as http_status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -26,6 +31,7 @@ from leads.serializers.staff import (
     LeadLostSerializer,
     LeadNoteCreateSerializer,
     LeadNoteSerializer,
+    LeadRestoreSerializer,
     LeadSerializer,
     LeadSpamSerializer,
     LeadStatusSerializer,
@@ -36,6 +42,9 @@ from leads.services import leads
 TAGS = ["leads"]
 UUID_RE = "[0-9a-fA-F-]{36}"
 _ERRORS = {400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer, 404: ErrorSerializer, 409: ErrorSerializer}
+TRUE = ("1", "true", "yes")
+# Actions that also reach an archived (hidden) lead; the list does so only with ?include_archived=true.
+ARCHIVE_VISIBLE = frozenset({"retrieve", "notes", "events", "restore"})
 
 
 class EventCursorPagination(CreatedAtCursorPagination):
@@ -47,11 +56,20 @@ def _action_schema(operation_id: str, request, description: str = ""):
 
 
 @extend_schema_view(
-    list=extend_schema(operation_id="leads_list", tags=TAGS),
+    list=extend_schema(
+        operation_id="leads_list",
+        parameters=[OpenApiParameter("include_archived", OpenApiTypes.BOOL, description="Also list hidden (archived) leads; they carry `archived_at`.")],
+        tags=TAGS,
+    ),
     retrieve=extend_schema(operation_id="leads_retrieve", responses={200: LeadSerializer, 401: ErrorSerializer, 403: ErrorSerializer, 404: ErrorSerializer}, tags=TAGS),
     create=extend_schema(operation_id="leads_create", request=LeadCreateSerializer, responses={201: LeadSerializer, **_ERRORS}, tags=TAGS, description="A lead entered in Studio (no OTP)."),
     partial_update=extend_schema(operation_id="leads_update", request=LeadUpdateSerializer, responses={200: LeadSerializer, **_ERRORS}, tags=TAGS),
-    destroy=extend_schema(operation_id="leads_delete", responses={204: OpenApiResponse(description="Archived (soft delete)."), **_ERRORS}, tags=TAGS),
+    destroy=extend_schema(
+        operation_id="leads_delete",
+        responses={204: OpenApiResponse(description="Archived (soft delete)."), **_ERRORS},
+        tags=TAGS,
+        description="Hides the lead (archive; never a hard delete). `restore/` brings it back.",
+    ),
 )
 class LeadViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin, BaseViewSet):
     module = "leads"
@@ -61,6 +79,7 @@ class LeadViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateMo
         "create": "create",
         "partial_update": "edit",
         "destroy": "archive",
+        "restore": "archive",
         "assign": "manage",
         "status": "edit",
         "mark_lost": "edit",
@@ -80,7 +99,11 @@ class LeadViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateMo
     ordering = ["-created_at"]
 
     def base_queryset(self):
-        return leads.leads_queryset()
+        if self.action == "list":
+            include_archived = self.request.query_params.get("include_archived", "").lower() in TRUE
+        else:
+            include_archived = self.action in ARCHIVE_VISIBLE
+        return leads.leads_queryset(include_archived=include_archived)
 
     def get_serializer_class(self):
         return {"create": LeadCreateSerializer, "partial_update": LeadUpdateSerializer}.get(self.action, LeadSerializer)
@@ -112,6 +135,15 @@ class LeadViewSet(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateMo
     @action(detail=True, methods=["post"], url_path="mark-spam")
     def mark_spam(self, request, *args, **kwargs):
         return self._run(LeadSpamSerializer, leads.mark_spam)
+
+    @_action_schema("leads_restore", LeadRestoreSerializer, "Brings a hidden (archived) lead back into the list. Needs leads.archive; a live lead is returned unchanged.")
+    @action(detail=True, methods=["post"], url_path="restore")
+    def restore(self, request, *args, **kwargs):
+        lead = self.get_object()
+        serializer = LeadRestoreSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        restored = leads.restore_lead(lead, user=request.user, expected_version=serializer.validated_data.get("expected_version"))
+        return Response(LeadSerializer(leads.leads_queryset().get(pk=restored.pk)).data)
 
     @extend_schema(
         operation_id="leads_convert",

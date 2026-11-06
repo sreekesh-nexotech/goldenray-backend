@@ -66,6 +66,8 @@ VALID_UPGRADE_PHASE = ("1P", "3P")
 #: Premium replaces the string inverter with per-panel micro-inverters; the two brands
 #: carry different accessory sets, so the choice is the caller's.
 VALID_MICRO_BRAND = ("enphase", "hoymiles")
+#: Hybrid battery count a sales person may choose inside a package (`battery_override`).
+VALID_BATTERY_OVERRIDE = ("0", "1", "2")
 #: Categories an upgrade to three phase needs but the template has no slot for.
 #: The request's roof type, as the installation matrix spells it.
 STRUCTURE_TO_INSTALLATION = {"flatRoof": "FLAT", "sheetRoof": "SHEET", "elevated": "ELEVATED"}
@@ -128,8 +130,7 @@ FUTURE_FIXED_PATTERNS = {
         re.IGNORECASE,
     ),
     "cables": re.compile(
-        r"pipe|bend|elbow|saddle|gland|cable tie|sleeve|plug$|lug|tape|insulation|mc4|cable tray"
-        r"|earth|lightning|la .*holder|la base|cb rod|10 swg|terminal strip",
+        r"pipe|bend|elbow|saddle|gland|cable tie|sleeve|plug$|lug|tape|insulation|mc4|cable tray" r"|earth|lightning|la .*holder|la base|cb rod|10 swg|terminal strip",
         re.IGNORECASE,
     ),
     "meter": re.compile(r"meter box", re.IGNORECASE),
@@ -139,6 +140,8 @@ FUTURE_FIXED_PATTERNS = {
 def _future_downsizes_fixed_item(fi: FixedView, opts: dict) -> bool:
     """Whether this consumable is sized for today's panels rather than the future system."""
     return any(not opts.get(option, True) and pattern.search(fi.name or "") for option, pattern in FUTURE_FIXED_PATTERNS.items())
+
+
 MAX_MAGNITUDE = 1e12  # numbers beyond this made the legacy arithmetic overflow or lose every digit
 
 # Category-to-upgrade-section mapping (legacy UPG_SECTION_MAP, mirrors upgSectionMap in App.jsx).
@@ -260,6 +263,8 @@ def _validate(data: dict) -> tuple[list[str], dict]:
         messages.append(("structure_type", "structure_type must be flatRoof | elevated | sheetRoof"))
     if not _hashable_in(data.get("roof_type", "flatRoof"), VALID_STRUCTURE):
         messages.append(("roof_type", "roof_type must be flatRoof | elevated | sheetRoof"))
+    if data.get("battery_override") not in (None, "") and not _hashable_in(data.get("battery_override"), VALID_BATTERY_OVERRIDE):
+        messages.append(("battery_override", "battery_override must be 0 | 1 | 2"))
     value = data.get("item_overrides")
     if value is not None and not isinstance(value, (list, dict)):
         messages.append(("item_overrides", "item_overrides must be a list of {pos, component} or a mapping"))
@@ -329,6 +334,9 @@ def _coerce(data: dict) -> dict:
         "size": str(data["size"]),
         "tier": data["tier"],
         "bat_config": str(data.get("bat_config", "0")),
+        # Hybrid only: the battery count chosen within the package (no battery / one / two).
+        # Blank keeps the package's own band; see `_battery_band`.
+        "battery_override": data.get("battery_override") or "",
         "mode": data.get("mode", "quotation"),
         "dist_km": max(0, dist_km),
         "structure_type": data.get("structure_type", "flatRoof"),
@@ -662,6 +670,7 @@ def _specs(panel, inverter) -> dict | None:
     Returned as plain floats in that engine's vocabulary, so the engine stays free of both
     Django and the catalog's field naming.
     """
+
     def number(value):
         return float(value) if value is not None else None
 
@@ -838,20 +847,14 @@ def _installation_matrix() -> dict[tuple[str, str], float]:
     """Installation cost by (size key, roof type), the way version-2 prices it."""
     from pricing.models import InstallationMatrix
 
-    return {
-        (row.size_key, row.installation_type): float(row.install_cost)
-        for row in InstallationMatrix.objects.all()
-    }
+    return {(row.size_key, row.installation_type): float(row.install_cost) for row in InstallationMatrix.objects.all()}
 
 
 def _structures() -> dict[str, list[StructureItemView]]:
     result: dict[str, list[StructureItemView]] = {}
     for template in StructureTemplate.objects.prefetch_related("items"):
         items = sorted(template.items.all(), key=lambda item: (item.sort_order, item.pk))
-        result[template.slug] = [
-            StructureItemView(item_type=item.item_type, weight_kg=item.weight_kg, price=item.unit_price, rule=item.qty_rule, name=item.name)
-            for item in items
-        ]
+        result[template.slug] = [StructureItemView(item_type=item.item_type, weight_kg=item.weight_kg, price=item.unit_price, rule=item.qty_rule, name=item.name) for item in items]
     return result
 
 
@@ -1269,9 +1272,7 @@ class Calculator:
         watt = float(panel.get("watt") or 0)
         from engines.string_config import MPPT_TARGET_SHARE, cold_hot_voltages
 
-        voc_cold, vmp_hot = cold_hot_voltages(
-            float(panel.get("voc") or 0), float(panel.get("vmp") or 0), float(panel.get("temp_coeff_voc") or 0)
-        )
+        voc_cold, vmp_hot = cold_hot_voltages(float(panel.get("voc") or 0), float(panel.get("vmp") or 0), float(panel.get("temp_coeff_voc") or 0))
         # `max_input_voltage`, the key `_specs` emits -- not the model's field name
         # (`max_pv_voltage_v`). Getting it wrong leaves this zero and the guard below
         # returns None, which reads in the output as "no layout" rather than as an error.
@@ -1292,20 +1293,24 @@ class Calculator:
         allocation = []
         if mppt_count >= 2:
             if existing:
-                allocation.append({
-                    "mppt": 1,
-                    "label": "Existing System",
-                    "strings": math.ceil(existing / opt_pps) if opt_pps else 0,
+                allocation.append(
+                    {
+                        "mppt": 1,
+                        "label": "Existing System",
+                        "strings": math.ceil(existing / opt_pps) if opt_pps else 0,
+                        "panels_per_string": opt_pps,
+                        "total_panels": existing,
+                    }
+                )
+            allocation.append(
+                {
+                    "mppt": 2 if existing else 1,
+                    "label": "New Expansion" if existing else "New Panels",
+                    "strings": math.ceil(panels / opt_pps) if opt_pps else 0,
                     "panels_per_string": opt_pps,
-                    "total_panels": existing,
-                })
-            allocation.append({
-                "mppt": 2 if existing else 1,
-                "label": "New Expansion" if existing else "New Panels",
-                "strings": math.ceil(panels / opt_pps) if opt_pps else 0,
-                "panels_per_string": opt_pps,
-                "total_panels": panels,
-            })
+                    "total_panels": panels,
+                }
+            )
         return {
             "existing_panels": existing,
             "new_panels": panels,
@@ -1453,11 +1458,7 @@ class Calculator:
                     **(
                         {
                             "component": item.sku,
-                            "options": [
-                                {"component": i.sku, "name": i.name, "brand": i.brand, "unit_price": float(i.price)}
-                                for i in offered
-                                if i.sku
-                            ],
+                            "options": [{"component": i.sku, "name": i.name, "brand": i.brand, "unit_price": float(i.price)} for i in offered if i.sku],
                         }
                         if slot.variable and self._composite and len(offered) > 1
                         else {}
@@ -1592,7 +1593,15 @@ class Calculator:
         asked for `bat_config=0` and move the price it is quoted. "More correct" and "safe
         to change silently on a live website" are different claims; this is the fifth time
         that distinction has mattered.
+
+        ``battery_override`` is the explicit exception: a sales person choosing one of the
+        package's battery options (no battery / one / two) for a hybrid. It is a separate
+        field rather than a reading of ``bat_config`` so the public website, which always
+        sends ``bat_config``, keeps the package's band. On-grid ignores it.
         """
+        override = self.p.get("battery_override") or ""
+        if override and sys_type == "hybrid":
+            return override
         requested = str(self.p.get("bat_config", "0"))
         if not self._composite:
             return requested
@@ -2615,9 +2624,14 @@ class Calculator:
         return available[0]
 
 
-def quote(data, *, today: date) -> dict:
-    """The website quote for ``data`` (the legacy ``/bom/api/calculate/`` request body) on ``today``."""
+def quote(data, *, today: date, staff: bool = False) -> dict:
+    """The website quote for ``data`` (the legacy ``/bom/api/calculate/`` request body) on ``today``.
+
+    ``staff`` honours the Studio-only ``battery_override``; a public caller always gets the package's band.
+    """
     params = parse_request(data)
+    if not staff:
+        params["battery_override"] = ""
     snapshot = load_snapshot(params["sys_type"])
     return Calculator(snapshot, params, today).compute()
 
@@ -2651,11 +2665,7 @@ def dispatch_body(result: dict) -> dict:
     ``pricing`` and ``available_offers`` go entirely; ``meta`` and ``string_config`` stay,
     because the installer reads the system size and the string layout off this sheet.
     """
-    body = {
-        key: value
-        for key, value in public_body(result).items()
-        if key not in ("pricing", "available_offers")
-    }
+    body = {key: value for key, value in public_body(result).items() if key not in ("pricing", "available_offers")}
     body["bom_lines"] = [_dispatch_line(line) for line in body.get("bom_lines") or []]
     return body
 
@@ -2671,7 +2681,5 @@ def _dispatch_line(line: dict) -> dict:
     """
     stripped = {key: value for key, value in line.items() if key not in DISPATCH_LINE_KEYS}
     if isinstance(stripped.get("options"), list):
-        stripped["options"] = [
-            {key: value for key, value in option.items() if key != "unit_price"} for option in stripped["options"]
-        ]
+        stripped["options"] = [{key: value for key, value in option.items() if key != "unit_price"} for option in stripped["options"]]
     return stripped

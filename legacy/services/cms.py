@@ -82,7 +82,8 @@ def job_position(slug: str) -> dict:
     except NotFound:
         raise LegacyNotFound("not_found", "This position does not exist.") from None
     ids = _uids_to_ids(JobPosition, [body["data"]["uid"]], "careers_job_position")
-    body["data"] = _card(body["data"], ids)
+    # The legacy contract predates the Yes/No screening questions; old clients get the old shape.
+    body["data"] = _card({key: value for key, value in body["data"].items() if key != "screening_questions"}, ids)
     return body
 
 

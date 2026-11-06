@@ -18,6 +18,8 @@ PLAN_TABLE = {
     "bom": ("CONFIG", ["view", "edit"]),
     "packs": ("CONFIG", ["view", "edit", "submit", "approve", "publish"]),
     "engineering": ("CONFIG", ["view", "verify", "approve"]),
+    # DV-153: change requests (BOM additional features 4.1), not in PLAN §3.2.
+    "change_requests": ("CONFIG", ["view", "create", "approve"]),
     "leads": ("SALES", ["view", "create", "edit", "archive", "manage"]),
     "customers": ("SALES", ["view", "create", "edit", "archive", "manage"]),
     "quotations": ("SALES", ["view", "create", "edit", "issue", "revise", "approve", "archive"]),
@@ -49,7 +51,7 @@ PLAN_TABLE = {
     "audit": ("ADMIN", ["view"]),
 }
 PLAN_SCOPES = {
-    **{module: ("all", "owned") for module in ("customers", "quotations", "agreements", "leads")},
+    **{module: ("all", "owned") for module in ("customers", "quotations", "agreements", "leads", "change_requests")},
     "site_inspections": ("all", "owned", "assigned"),
     **{module: ("all", "office", "self") for module in ("employees", "attendance", "leave")},
 }

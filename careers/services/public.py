@@ -92,6 +92,7 @@ def public_detail(slug: str) -> dict:
             "requirements": lines(position.requirements),
             "benefits": lines(position.benefits),
             "application_instructions": position.application_instructions,
+            "screening_questions": [{"key": q["key"], "question": q["question"], "required": q.get("required", True)} for q in position.screening_questions or []],
             "seo": {
                 "title": position.seo_title or position.title,
                 "description": position.meta_description,

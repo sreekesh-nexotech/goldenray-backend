@@ -91,12 +91,14 @@ EXPECTED = {
     "project-head": (
         "Project Head",
         {
-            "catalog": ["view", "create", "edit", "approve"],
-            "pricing": ["view", "edit"],
+            # DV-153: catalog, pricing and BOM changes go through change requests.
+            "catalog": ["view"],
+            "pricing": ["view"],
             "pricing_internal": ["view"],
             "market_rates": ["view", "edit"],
             "procurement": ["view"],
-            "bom": ["view", "edit"],
+            "bom": ["view"],
+            "change_requests": ["view", "create"],
             "packs": ["view", "edit", "submit"],
             "engineering": ["view", "verify"],
             "quotations": ["view"],
@@ -106,7 +108,7 @@ EXPECTED = {
             "projects": ["view", "create", "edit", "lock", "archive"],
             "company": ["view"],
         },
-        {},
+        {"change_requests": "owned"},
     ),
     "engineering": (
         "Engineering",
@@ -127,8 +129,8 @@ EXPECTED = {
     ),
     "procurement": (
         "Procurement",
-        {"catalog": ["view", "create", "edit"], "pricing_internal": ["view"], "procurement": ["view", "create", "edit", "commit"], "inventory": ["view", "edit"]},
-        {},
+        {"catalog": ["view"], "pricing_internal": ["view"], "procurement": ["view", "create", "edit"], "inventory": ["view", "edit"], "change_requests": ["view", "create"]},
+        {"change_requests": "owned"},
     ),
 }
 

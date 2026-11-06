@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from django.http import HttpResponse
 from django.utils import timezone
-from drf_spectacular.utils import OpenApiResponse, extend_schema
 from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework.response import Response
 
 from accounts.authentication import StudioTokenAuthentication
@@ -14,8 +14,7 @@ from accounts.services.authz import can
 from bom.models import Template
 from bom.serializers.quote import QUOTE_STRUCTURE_TYPES, BomBillSizingRequestSerializer, BomBuildRequestSerializer, BomBuildSerializer, BomQuotePublicSerializer, BomQuoteRequestSerializer
 from bom.services import build as build_service
-from bom.services import quote_csv
-from bom.services import website_quote
+from bom.services import quote_csv, website_quote
 from bom.views.masters import TAGS, WRITE_ERRORS
 from core.errors import DomainError
 from core.serializers import ErrorSerializer
@@ -56,7 +55,7 @@ class StaffQuoteView(BaseAPIView):
         ),
     )
     def post(self, request, *args, **kwargs):
-        result = website_quote.quote(request.data, today=timezone.localdate())
+        result = website_quote.quote(request.data, today=timezone.localdate(), staff=True)
         # The picking list is a different document, so it is a different response: a
         # browser on the warehouse floor is never sent prices it must not display.
         # Checked before the cost gate, since dispatch strips strictly more.
@@ -89,7 +88,13 @@ class QuoteCsvView(BaseAPIView):
     @extend_schema(
         operation_id="bom_quote_csv",
         request=BomQuoteRequestSerializer,
-        responses={(200, "text/csv"): OpenApiResponse(response=OpenApiTypes.STR, description="The BOM as CSV."), 400: ErrorSerializer, 401: ErrorSerializer, 403: ErrorSerializer, 503: ErrorSerializer},
+        responses={
+            (200, "text/csv"): OpenApiResponse(response=OpenApiTypes.STR, description="The BOM as CSV."),
+            400: ErrorSerializer,
+            401: ErrorSerializer,
+            403: ErrorSerializer,
+            503: ErrorSerializer,
+        },
         tags=TAGS,
         description=(
             "The BOM as a CSV attachment. `mode=quotation` (default) carries qty, unit price, amount and the line's GST rate; "
@@ -98,7 +103,7 @@ class QuoteCsvView(BaseAPIView):
     )
     def post(self, request, *args, **kwargs):
         mode = "dispatch" if str(request.data.get("mode") or "").lower() == "dispatch" else "quotation"
-        result = website_quote.quote(request.data, today=timezone.localdate())
+        result = website_quote.quote(request.data, today=timezone.localdate(), staff=True)
         body = website_quote.dispatch_body(result) if mode == "dispatch" else result
         response = HttpResponse(quote_csv.quote_csv(body, mode=mode), content_type="text/csv; charset=utf-8")
         response["Content-Disposition"] = f'attachment; filename="{quote_csv.filename(body, mode=mode)}"'

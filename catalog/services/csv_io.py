@@ -283,7 +283,7 @@ def _payload(row: dict, category: Category | None, *, updating: bool, user, resu
     return data
 
 
-def _import_row(row: dict, line: int, *, user, seen: set[str]) -> RowResult:
+def _import_row(row: dict, line: int, *, user, seen: set[str], check_permissions: bool = True) -> RowResult:
     sku = row.get("sku", "")
     result = RowResult(line=line, sku=sku, action="error")
     if sku and sku.lower() in seen:
@@ -296,7 +296,7 @@ def _import_row(row: dict, line: int, *, user, seen: set[str]) -> RowResult:
     if category is None and existing is None:
         result.errors = {"category": [f"Unknown category {row.get('category')!r}."]}
         return result
-    if existing is not None and not can(user, "catalog", "edit"):
+    if check_permissions and existing is not None and not can(user, "catalog", "edit"):
         result.errors = {"sku": ["Updating existing components needs the catalog.edit permission."]}
         return result
     try:
@@ -327,7 +327,11 @@ def _import_row(row: dict, line: int, *, user, seen: set[str]) -> RowResult:
     return result
 
 
-def import_csv(content: bytes, *, user, dry_run: bool = True, import_token: str | None = None) -> ImportReport:
+def import_csv(content: bytes, *, user, dry_run: bool = True, import_token: str | None = None, check_permissions: bool = True) -> ImportReport:
+    """``check_permissions=False`` (dry run only) validates the file's content without the caller's own catalog.edit:
+    a change request is checked that way when it is made, and the approver's grants apply when it is applied."""
+    if not dry_run and not check_permissions:
+        raise ValueError("A committing import always checks the importing user's permissions.")
     rows = _decode(content)
     if not dry_run:
         check_token(import_token, content, user)
@@ -335,7 +339,7 @@ def import_csv(content: bytes, *, user, dry_run: bool = True, import_token: str 
     try:
         with transaction.atomic():
             seen: set[str] = set()
-            report.rows = [_import_row(row, line, user=user, seen=seen) for line, row in enumerate(rows, start=2)]
+            report.rows = [_import_row(row, line, user=user, seen=seen, check_permissions=check_permissions) for line, row in enumerate(rows, start=2)]
             has_errors = any(row.action == "error" for row in report.rows)
             if dry_run or has_errors:
                 raise _Rollback
