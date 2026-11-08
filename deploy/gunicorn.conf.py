@@ -21,5 +21,5 @@ accesslog = None
 errorlog = "-"
 loglevel = os.environ.get("GUNICORN_LOG_LEVEL", "warning")
 # Django decides which proxies to trust (TRUSTED_PROXIES / SECURE_PROXY_SSL_HEADER); gunicorn stays out of it.
-forwarded_allow_ips = "127.0.0.1"
+forwarded_allow_ips = os.environ.get("FORWARDED_ALLOW_IPS", "*")
 proc_name = "flarize-api"

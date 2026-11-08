@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/*.whl \
 WORKDIR /app
 # Code is root-owned and read-only for the app user; only runtime state is writable.
 COPY . /app
-RUN install -d -o appuser -g appuser /app/var /srv/flarize/media/private
+RUN install -d -m 0777 /app/var /app/staticfiles /app/media /srv/flarize/media/private
 USER appuser
 EXPOSE 8000
 # The api command; workers and beat override it in deploy/docker-compose.yml.
